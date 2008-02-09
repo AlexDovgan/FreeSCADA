@@ -1,0 +1,1911 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DevAge.Core</name>
+    </assembly>
+    <members>
+        <member name="T:DevAge.Text.FixedLength.LineParser">
+            <summary>
+            A class for parsing fixed length string and loading the fields into a class.
+            </summary>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.LineParser.#ctor">
+            <summary>
+            Constructor. Fill the Fields list fot specify the columns.
+            </summary>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.LineParser.#ctor(System.Type)">
+            <summary>
+            Load the parser fields with the properties specified in the type. You must use the FieldAttribute and ParseFormatAttribute to specify additional informations like the field length.
+            </summary>
+            <param name="lineClassType"></param>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.LineParser.Reset">
+            <summary>
+            Reset the parser
+            </summary>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.LineParser.LoadLine(System.String)">
+            <summary>
+            Load the specified line in the parser.
+            </summary>
+            <param name="line"></param>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.LineParser.GetValue(System.String)">
+            <summary>
+            Get a specified field value.
+            </summary>
+            <param name="fieldName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.LineParser.FillLineClass(System.Object)">
+            <summary>
+            Fill the properties of the specified class with the values of the line has defined by the Fields collection.
+            </summary>
+            <param name="schemaClass"></param>
+            <returns>Returns the same class specified in the schemaClass parameter, this is useful if you have struct or value types.</returns>
+        </member>
+        <member name="P:DevAge.Text.FixedLength.LineParser.Fields">
+            <summary>
+            Gets a collection of fields.
+            </summary>
+        </member>
+        <member name="T:DevAge.Data.SqlClient.SqlCommandBuilder">
+            <summary>
+            This class is similar to the System.Data.SqlClient.SqlCommandBuilder, but use only the DataTable to create the required commands.
+            Don't support identity (autoincrement) column and only the base data type. This class don't use the data source to explore the data but only the DataTable informations.
+            So you must populate the PrimaryKeys of the DataSet. I suggest to use GUID column (uniqueidentifier) to replace the identity column.
+            Remember to set the Connection of the generated command.
+            </summary>
+        </member>
+        <member name="M:DevAge.Data.SqlClient.SqlCommandBuilder.#ctor(System.Data.DataTable)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="dataTable">table used to create commands</param>
+        </member>
+        <member name="P:DevAge.Data.SqlClient.SqlCommandBuilder.DataTable">
+            <summary>
+            Table used to create commands
+            </summary>
+        </member>
+        <member name="T:DevAge.DateTimeHelper">
+            <summary>
+            Summary description for DateTimeHelper.
+            </summary>
+        </member>
+        <member name="M:DevAge.DateTimeHelper.YearsDifference(System.DateTime,System.DateTime)">
+            <summary>
+            Calculate the difference in years of 2 dates. Usually used for age calculations. dateA - dateB
+            </summary>
+            <param name="dateA"></param>
+            <param name="dateB"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.DateTimeHelper.MonthsDifference(System.DateTime,System.DateTime)">
+            <summary>
+            Calculate the difference in months of 2 dates. dateA - dateB
+            </summary>
+            <param name="dateA"></param>
+            <param name="dateB"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.Data.FileDataSet">
+            <summary>
+            Summary description for Manager.
+            </summary>
+        </member>
+        <member name="P:DevAge.Data.FileDataSet.SaveDataFormat">
+            <summary>
+            Gets or Sets the format used to save the DataSet
+            </summary>
+        </member>
+        <member name="P:DevAge.Data.FileDataSet.FileDataFormat">
+            <summary>
+            Gets the current format of the File where the data are loaded.
+            </summary>
+        </member>
+        <member name="P:DevAge.Data.FileDataSet.MergeReadedSchema">
+            <summary>
+            Gets or Sets if merge the schema of the file with the schema of the DataSet specified. Use true if the DataSet doesn't have a schema definition. Default is false.
+            </summary>
+        </member>
+        <member name="T:DevAge.DevAgeApplicationException">
+            <summary>
+            Generic DevAge Exception
+            </summary>
+        </member>
+        <member name="M:DevAge.DevAgeApplicationException.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="p_strErrDescription"></param>
+        </member>
+        <member name="M:DevAge.DevAgeApplicationException.#ctor(System.String,System.Exception)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="p_strErrDescription"></param>
+            <param name="p_InnerException"></param>
+        </member>
+        <member name="M:DevAge.DevAgeApplicationException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="p_Info"></param>
+            <param name="p_StreamingContext"></param>
+        </member>
+        <member name="T:DevAge.Text.FixedLength.FieldAttribute">
+            <summary>
+            Required attribute to specify the field position and length
+            </summary>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.FieldAttribute.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="fieldIndex">Index of the field, 0 based. Each field must have a unique progressive index</param>
+            <param name="length">Lenght of the field when readed and writed to the string.</param>
+        </member>
+        <member name="T:DevAge.Text.FixedLength.ParseFormatAttribute">
+            <summary>
+            Attribute used to specify additional parse options
+            </summary>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.ParseFormatAttribute.#ctor">
+            <summary>
+            Constructor. Use one of these properties to customize the format: CultureInfo, DateTimeFormat, NumberFormat, TrimBeforeParse.
+            Default is Invariant culture format.
+            </summary>
+        </member>
+        <member name="T:DevAge.Text.FixedLength.ValueMappingAttribute">
+            <summary>
+            Attribute used to convert a specific value to another value
+            </summary>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.ValueMappingAttribute.#ctor(System.String,System.Object)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="stringValue">String value</param>
+            <param name="fieldValue">Field typed value</param>
+        </member>
+        <member name="T:DevAge.Text.FixedLength.StandardValueAttribute">
+            <summary>
+            Attribute used to specify the standard value (mandatory value) for a specific field.
+            You can use this attribute for example when you want a particular field to only accept one or more standard values.
+            </summary>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.StandardValueAttribute.#ctor(System.Object)">
+            <summary>
+            Construcotr
+            </summary>
+            <param name="standardValue">Required value</param>
+        </member>
+        <member name="T:DevAge.Patterns.IActivity">
+            <summary>
+            An interface to represents a basic activity.
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.IActivity.Start(DevAge.Patterns.IActivityEvents)">
+            <summary>
+            Start the activity and all sub activities.
+            </summary>
+            <param name="events">Interface class that receive the events, can be null if no event class is needed.</param>
+        </member>
+        <member name="M:DevAge.Patterns.IActivity.Cancel">
+            <summary>
+            Cancel the current activity and all sub activities throwing a ActivityCanceledException.
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.IActivity.SubActivities">
+            <summary>
+            Subordinated activities. Are executed after the current activity. If one of these activity throws an exception is propagated to parent activity and the operation is stopped.
+             Note that the sub activities can be async and so can be executed in a parellel mode.
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.IActivity.Status">
+            <summary>
+            Activity status
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.IActivity.Name">
+            <summary>
+            Name of the activity used to describe the class.
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.IActivity.WaitHandle">
+            <summary>
+            Gets the WaitHandle class used to wait for the completition of the activity.
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.IActivity.Exception">
+            <summary>
+            Gets the exception throwed when the activity fail. Null if no exception.
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.IActivity.Parent">
+            <summary>
+            Gets or sets the Activity parent. Null when it is a root activity.
+            Do not set manually the parent activity, but simply add the activity to the SubActivities collection.
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.IActivity.FullName">
+            <summary>
+            Gets the activity full name of the activity, composed by the full name of the parent activity separated with a \ character
+            </summary>
+        </member>
+        <member name="F:DevAge.Patterns.SubActivityWaitMode.DoNotWait">
+            <summary>
+            Don't wait the sub activities to finish (parallel processing, asyncronous)
+            </summary>
+        </member>
+        <member name="F:DevAge.Patterns.SubActivityWaitMode.WaitOnEach">
+            <summary>
+            Wait for each sub activities (syncronous)
+            </summary>
+        </member>
+        <member name="F:DevAge.Patterns.SubActivityWaitMode.WaitAtTheEnd">
+            <summary>
+            Wait all the sub activities at the end (parallel processing but syncronized with the parent)
+            </summary>
+        </member>
+        <member name="T:DevAge.Patterns.ActivityBase">
+            <summary>
+            Base activity class. Override the OnWork method to customize the activity.
+            </summary>
+        </member>
+        <member name="F:DevAge.Patterns.ActivityBase.mActivityCount">
+            <summary>
+            An activity count used only to generate a seguential name
+            </summary>
+        </member>
+        <member name="F:DevAge.Patterns.ActivityBase.mWaitHandle">
+            <summary>
+            Initially set to signaled=true=completed, nonsignaled=false=notcompleted,
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityBase.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityBase.ResetRunningStatus">
+            <summary>
+            Reset the status property to the original values. If the activity is still running an exception is throw.
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityBase.OnWork">
+            <summary>
+            Working method. Abstract. Override this method to provide a specific work for the activity.
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityBase.DoWork">
+            <summary>
+            Internal work method. Call the OnWork method and Start the SubActivities.
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityBase.WaitActivities(DevAge.Patterns.ActivityCollection,System.Int32)">
+            <summary>
+            Wait until or SubActivities are completed. Throw an exception on timeout.
+            </summary>
+            <param name="activities"></param>
+            <param name="timeout"></param>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityBase.WaitActivity(DevAge.Patterns.IActivity,System.Int32)">
+            <summary>
+            Wait until or SubActivities are completed. Throw an exception on timeout.
+            </summary>
+            <param name="activity"></param>
+            <param name="timeout"></param>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityBase.CheckActivitiesException(DevAge.Patterns.ActivityCollection)">
+            <summary>
+            Throw an exception if one of the activities has an exception.
+            </summary>
+            <param name="activities"></param>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityBase.CheckActivityException(DevAge.Patterns.IActivity)">
+            <summary>
+            Throw an exception if one of the activities has an exception.
+            </summary>
+            <param name="activity"></param>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityBase.StartActivity">
+            <summary>
+            Start the activity. NOTE: Usually don't override this method but override the OnWork method to implement the specific activity work.
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityBase.Start(DevAge.Patterns.IActivityEvents)">
+            <summary>
+            Start the activity. If the activity is already running an exception is throw.
+            To override the common working code use the OnWork abstract method.
+            </summary>
+            <param name="events">Interface class that receive the events, can be null if no event class is needed.</param>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityBase.Cancel">
+            <summary>
+            Cancel the current activity and all sub activities throwing a ActivityCanceledException.
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.ActivityBase.SubActivitiesTimeOut">
+            <summary>
+            Gets or sets the time to wait for the sub activities. If the operation is still executing then a TimeOutException is fired. Default is System.Threading.Timeout.Infinite. Default is true.
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.ActivityBase.PropagateException">
+            <summary>
+            Gets or sets if propagate an exception from sub activities to the current activities. Default is true.
+            Only valid SubActivitiesTimeOut is WaitOnEach or WaitAtTheEnd
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.ActivityBase.SubActivityWaitMode">
+            <summary>
+            Gets or sets how the current activity wait the completition of the sub activities.
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.ActivityBase.SubActivities">
+            <summary>
+            Subordinated activities. Are executed after the current activity. If one of these activity throws an exception is propagated to parent activity and the operation is stopped.
+             Note that the sub activities can be async and so can be executed in a parellel mode.
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.ActivityBase.Status">
+            <summary>
+            Activity status
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.ActivityBase.Name">
+            <summary>
+            Name of the activity used to describe the class.
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.ActivityBase.WaitHandle">
+            <summary>
+            Gets the WaitHandle class used to wait for the completition of the activity.
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.ActivityBase.Exception">
+            <summary>
+            Gets the exception throwed when the activity fail. Null if no exception.
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.ActivityBase.Parent">
+            <summary>
+            Gets or sets the Activity parent. Null when it is a root activity.
+            Do not set manually the parent activity, but simply add the activity to the SubActivities collection.
+            </summary>
+        </member>
+        <member name="P:DevAge.Patterns.ActivityBase.FullName">
+            <summary>
+            Gets the activity full name of the activity, composed by the full name of the parent activity separated with a \ character
+            </summary>
+        </member>
+        <member name="T:DevAge.Patterns.Activity">
+            <summary>
+            An activity used as a container for other activities using a syncronized code.
+            </summary>
+        </member>
+        <member name="T:DevAge.Patterns.AsynchronousActivity">
+            <summary>
+            An activity used as a container for other activities using an asynchronous code.
+            Override the OnAsyncWork method for custom asynchronous work.
+            </summary>
+        </member>
+        <member name="T:DevAge.Patterns.AsyncActivityBase">
+            <summary>
+            Base activity class. Override the OnBeginWork and OnEndWork method to customize the activity.
+            This class support an asyncronous activity.
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.AsyncActivityBase.OnBeginWork(System.AsyncCallback)">
+            <summary>
+            Begind working method. Called to start the asyncronous activity. Abstract.
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.AsyncActivityBase.OnEndWork(System.IAsyncResult)">
+            <summary>
+            End working method. Called when the asyncronous operation is finished
+            </summary>
+            <param name="asyncResult">AsyncResult</param>
+        </member>
+        <member name="M:DevAge.Patterns.AsyncActivityBase.OnWork">
+            <summary>
+            Working method.
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.AsyncActivityBase.StartActivity">
+            <summary>
+            Start the activity. NOTE: Usually don't override this method but override the OnBeginWork method to implement the specific activity work.
+            </summary>
+        </member>
+        <member name="T:DevAge.Data.StreamDataSet">
+            <summary>
+            A static class used to serialize a DataSet to and from a stream using a binary or xml format.
+            The xml format use the standard DataSet xml serialization, the binary format use a custom format.
+            </summary>
+        </member>
+        <member name="M:DevAge.Data.StreamDataSet.Write(System.IO.Stream,System.Data.DataSet,DevAge.Data.StreamDataSetFormat)">
+            <summary>
+            Write the dataset to the stream using the specified format.
+            </summary>
+            <param name="destination"></param>
+            <param name="source"></param>
+            <param name="format"></param>
+        </member>
+        <member name="M:DevAge.Data.StreamDataSet.Read(System.IO.Stream,System.Data.DataSet,DevAge.Data.StreamDataSetFormat,System.Boolean)">
+            <summary>
+            Read from the stream and populate the dataset using the specified format.
+            </summary>
+            <param name="source"></param>
+            <param name="destination"></param>
+            <param name="format"></param>
+            <param name="mergeSchema">True to merge the schema, otherwise it is used the schema of the dataset</param>
+        </member>
+        <member name="T:DevAge.Data.StreamDataSetFormat">
+            <summary>
+            Enum to control the serialization format
+            </summary>
+        </member>
+        <member name="F:DevAge.Data.StreamDataSetFormat.XML">
+            <summary>
+            Standard xml format used by the ReadXml and WriteXml of the DataSet 
+            </summary>
+        </member>
+        <member name="F:DevAge.Data.StreamDataSetFormat.Binary">
+            <summary>
+            Custom binary format. More compact of the xml but not human readable
+            </summary>
+        </member>
+        <member name="T:DevAge.Data.BinaryDataSetInvalidException">
+            <summary>
+            Binary data not valid exception
+            </summary>
+        </member>
+        <member name="M:DevAge.Data.BinaryDataSetInvalidException.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Data.BinaryDataSetInvalidException.#ctor(System.Exception)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="p_InnerException"></param>
+        </member>
+        <member name="T:DevAge.Data.BinaryDataSetVersionException">
+            <summary>
+            Version not valid exception
+            </summary>
+        </member>
+        <member name="M:DevAge.Data.BinaryDataSetVersionException.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Data.BinaryDataSetVersionException.#ctor(System.Exception)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="p_InnerException"></param>
+        </member>
+        <member name="T:DevAge.Configuration.CommandLineArgs">
+            <summary>
+            Description résumée de Arguments.
+            </summary>
+        </member>
+        <member name="T:DevAge.ComponentModel.Converter.PercentTypeConverter">
+            <summary>
+            A TypeConverter that support string conversion from and to string with the percent symbol.
+            Support Conversion for Float, Double and Decimal
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Converter.PercentTypeConverter.ConsiderAllStringAsPercent">
+            <summary>
+            If true and the user insert a string with no percent symbel the value is divided by 100, otherwise not.
+            </summary>
+        </member>
+        <member name="T:DevAge.Text.FixedLength.LineWriter">
+            <summary>
+            A class used to create fixed lenght string.
+            </summary>
+        </member>
+        <member name="T:DevAge.IO.StreamPersistence">
+            <summary>
+            A static class to help save and read stream data
+            </summary>
+        </member>
+        <member name="T:DevAge.Configuration.PersistableItemDictionary">
+            <summary>
+            A dictionary with keys of type String and values of type PersistableItem
+            </summary>
+        </member>
+        <member name="M:DevAge.Configuration.PersistableItemDictionary.#ctor">
+            <summary>
+            Initializes a new empty instance of the PersistableItemDictionary class
+            </summary>
+        </member>
+        <member name="M:DevAge.Configuration.PersistableItemDictionary.Add(System.String,DevAge.Configuration.PersistableItem)">
+            <summary>
+            Adds an element with the specified key and value to this PersistableItemDictionary.
+            </summary>
+            <param name="key">
+            The String key of the element to add.
+            </param>
+            <param name="value">
+            The PersistableItem value of the element to add.
+            </param>
+        </member>
+        <member name="M:DevAge.Configuration.PersistableItemDictionary.Contains(System.String)">
+            <summary>
+            Determines whether this PersistableItemDictionary contains a specific key.
+            </summary>
+            <param name="key">
+            The String key to locate in this PersistableItemDictionary.
+            </param>
+            <returns>
+            true if this PersistableItemDictionary contains an element with the specified key;
+            otherwise, false.
+            </returns>
+        </member>
+        <member name="M:DevAge.Configuration.PersistableItemDictionary.ContainsKey(System.String)">
+            <summary>
+            Determines whether this PersistableItemDictionary contains a specific key.
+            </summary>
+            <param name="key">
+            The String key to locate in this PersistableItemDictionary.
+            </param>
+            <returns>
+            true if this PersistableItemDictionary contains an element with the specified key;
+            otherwise, false.
+            </returns>
+        </member>
+        <member name="M:DevAge.Configuration.PersistableItemDictionary.ContainsValue(DevAge.Configuration.PersistableItem)">
+            <summary>
+            Determines whether this PersistableItemDictionary contains a specific value.
+            </summary>
+            <param name="value">
+            The PersistableItem value to locate in this PersistableItemDictionary.
+            </param>
+            <returns>
+            true if this PersistableItemDictionary contains an element with the specified value;
+            otherwise, false.
+            </returns>
+        </member>
+        <member name="M:DevAge.Configuration.PersistableItemDictionary.Remove(System.String)">
+            <summary>
+            Removes the element with the specified key from this PersistableItemDictionary.
+            </summary>
+            <param name="key">
+            The String key of the element to remove.
+            </param>
+        </member>
+        <member name="P:DevAge.Configuration.PersistableItemDictionary.Item(System.String)">
+            <summary>
+            Gets or sets the PersistableItem associated with the given String
+            </summary>
+            <param name="key">
+            The String whose value to get or set.
+            </param>
+        </member>
+        <member name="P:DevAge.Configuration.PersistableItemDictionary.Keys">
+            <summary>
+            Gets a collection containing the keys in this PersistableItemDictionary.
+            </summary>
+        </member>
+        <member name="P:DevAge.Configuration.PersistableItemDictionary.Values">
+            <summary>
+            Gets a collection containing the values in this PersistableItemDictionary.
+            </summary>
+        </member>
+        <member name="T:DevAge.ComponentModel.Converter.CurrencyTypeConverter">
+            <summary>
+            A TypeConverter that support string conversion from and to string with the currency symbol.
+            Support Conversion for Float, Double and Decimal, Int
+            </summary>
+        </member>
+        <member name="T:DevAge.ComponentModel.Converter.NumberTypeConverter">
+            <summary>
+            A TypeConverter that support string conversion from and to string with a custom format number.
+            Support Conversion for Float, Double and Decimal, Int
+            </summary>
+        </member>
+        <member name="T:DevAge.Text.FixedLength.FieldList">
+            <summary>
+            A dictionary with keys of type string and values of type IField
+            </summary>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.FieldList.#ctor">
+            <summary>
+            Initializes a new empty instance of the FieldList class
+            </summary>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.FieldList.Add(DevAge.Text.FixedLength.IField)">
+            <summary>
+            Adds an element with the specified key and value to this FieldList.
+            </summary>
+            <param name="key">
+            The string key of the element to add.
+            </param>
+            <param name="value">
+            The IField value of the element to add.
+            </param>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.FieldList.Contains(System.String)">
+            <summary>
+            Determines whether this FieldList contains a specific key.
+            </summary>
+            <param name="fieldName">
+            The string key to locate in this FieldList.
+            </param>
+            <returns>
+            true if this FieldList contains an element with the specified key;
+            otherwise, false.
+            </returns>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.FieldList.ContainsKey(System.String)">
+            <summary>
+            Determines whether this FieldList contains a specific key.
+            </summary>
+            <param name="key">
+            The string key to locate in this FieldList.
+            </param>
+            <returns>
+            true if this FieldList contains an element with the specified key;
+            otherwise, false.
+            </returns>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.FieldList.ContainsValue(DevAge.Text.FixedLength.IField)">
+            <summary>
+            Determines whether this FieldList contains a specific value.
+            </summary>
+            <param name="value">
+            The IField value to locate in this FieldList.
+            </param>
+            <returns>
+            true if this FieldList contains an element with the specified value;
+            otherwise, false.
+            </returns>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.FieldList.Remove(System.String)">
+            <summary>
+            Removes the element with the specified key from this FieldList.
+            </summary>
+            <param name="fieldName">
+            The string key of the element to remove.
+            </param>
+        </member>
+        <member name="P:DevAge.Text.FixedLength.FieldList.Item(System.String)">
+            <summary>
+            Gets or sets the IField associated with the given string
+            </summary>
+            <param name="key">
+            The string whose value to get or set.
+            </param>
+        </member>
+        <member name="P:DevAge.Text.FixedLength.FieldList.Keys">
+            <summary>
+            Gets a collection containing the keys in this FieldList.
+            </summary>
+        </member>
+        <member name="P:DevAge.Text.FixedLength.FieldList.Values">
+            <summary>
+            Gets a collection containing the values in this FieldList.
+            </summary>
+        </member>
+        <member name="T:DevAge.Shell.Utilities">
+            <summary>
+            Shell utilities
+            </summary>
+        </member>
+        <member name="T:DevAge.Patterns.ActivityCanceledException">
+            <summary>
+            Exception fired when canceling an activity with the Cancel method.
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityCanceledException.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="T:DevAge.Patterns.ActivityStatusNotValidException">
+            <summary>
+            Exception fired when canceling an activity with the Cancel method.
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityStatusNotValidException.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="T:DevAge.Patterns.TimeOutActivityException">
+            <summary>
+            Exception fired when a time out is encountered.
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.TimeOutActivityException.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="T:DevAge.Patterns.SubActivityException">
+            <summary>
+            Exception fired when a time out is encountered.
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.SubActivityException.#ctor(System.String,System.Exception)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="activityName"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:DevAge.IO.IsolatedStorage.IsolatedStorageSettingBase">
+            <summary>
+            Abstract class that help to save settings in the isolated storage
+            </summary>
+        </member>
+        <member name="T:DevAge.ComponentModel.Validator.ValidatorTypeConverter">
+            <summary>
+            A string editor that use a TypeConverter for conversion.
+            </summary>
+        </member>
+        <member name="T:DevAge.ComponentModel.Validator.ValidatorBase">
+            <summary>
+            A base class to support value conversion and validation. This class is used if no conversion is required or as a base class for specialized validator.
+            Naming Legend:
+            Object = an object not yet converted for the current validator, 
+            Value = an object already converted and valid for the current validator, 
+            String = a string that can be used for conversion to and from Value, 
+            DisplayString = a string representation of the Value
+            </summary>
+        </member>
+        <member name="T:DevAge.ComponentModel.ComponentLight">
+            <summary>
+            A IComponent implementation, used as a base class for component derived class. It is similar to the System Component class but doesn't derive from MarshalByRef class, for this reason it is faster and consume less resources.
+            Can be serialized.
+            </summary>
+        </member>
+        <member name="M:DevAge.ComponentModel.ComponentLight.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.ComponentModel.ComponentLight.#ctor(DevAge.ComponentModel.ComponentLight)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="T:DevAge.ComponentModel.Validator.IValidator">
+            <summary>
+            An interface to support value conversion and validation. 
+            Naming Legend:
+            Object = an object not yet converted for the current validator, 
+            Value = an object already converted and valid for the current validator, 
+            String = a string that can be used for conversion to and from Value, 
+            DisplayString = a string representation of the Value
+            </summary>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.IValidator.IsNullString(System.String)">
+            <summary>
+            Returns true if the string is null or if is equals to the NullString
+            </summary>
+            <param name="p_str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.IValidator.ObjectToValue(System.Object)">
+            <summary>
+            Convert an object according to the current ValueType of the validator
+            </summary>
+            <param name="p_Object"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.IValidator.ValueToObject(System.Object,System.Type)">
+            <summary>
+            Convert a value valid for the current validator ValueType to an object with the Type specified. Throw an exception on error.
+            </summary>
+            <param name="p_Value"></param>
+            <param name="p_ReturnObjectType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.IValidator.ValueToString(System.Object)">
+            <summary>
+            Convert a value valid for the current validator ValueType to a string that can be used for other conversions, for example StringToValue method.
+            </summary>
+            <param name="p_Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.IValidator.StringToValue(System.String)">
+            <summary>
+            Converts a string to an object according to the type of the string editor
+            </summary>
+            <param name="p_str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.IValidator.IsStringConversionSupported">
+            <summary>
+            Returns true if string conversion is suported. AllowStringConversion must be true and the current Validator must support string conversion.
+            </summary>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.IValidator.ValueToDisplayString(System.Object)">
+            <summary>
+            Converts a value valid for this validator valuetype to a string representation. The string cannot be used for conversion.
+            If the validator support string conversion this method simply call ValueToString otherwise call Value.ToString()
+            </summary>
+            <param name="p_Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.IValidator.IsValidValue(System.Object)">
+            <summary>
+            Returns true if the value is valid for this type of editor without any conversion.
+            </summary>
+            <param name="p_Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.IValidator.IsValidObject(System.Object)">
+            <summary>
+            Returns true if the object is valid for this type of validator, using conversion functions.
+            </summary>
+            <param name="p_Object"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.IValidator.IsValidObject(System.Object,System.Object@)">
+            <summary>
+            Returns true if the object is valid for this type of validator, using conversion functions. Returns as parameter the value converted.
+            </summary>
+            <param name="p_Object"></param>
+            <param name="p_ValueConverted"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.IValidator.IsValidString(System.String)">
+            <summary>
+            Returns true if the string is valid for this type of editor, using string conversion function.
+            </summary>
+            <param name="p_strValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.IValidator.IsValidString(System.String,System.Object@)">
+            <summary>
+            Returns true if the string is valid for this type of editor, using string conversion function. An returns the object converted.
+            </summary>
+            <param name="p_strValue"></param>
+            <param name="p_ValueConverted"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.IValidator.IsInStandardValues(System.Object)">
+            <summary>
+            Returns true if the value specified is presents in the list StandardValues.
+            </summary>
+            <param name="p_Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.IValidator.StandardValueAtIndex(System.Int32)">
+            <summary>
+            Returns the standard values at the specified index. If StandardValues support IList use simple the indexer method otherwise loop troght the collection.
+            </summary>
+            <param name="p_Index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.IValidator.StandardValuesIndexOf(System.Object)">
+            <summary>
+            Returns the index of the specified standard value. -1 if not found. If StandardValues support IList use simple the indexer method otherwise loop troght the collection.
+            </summary>
+            <param name="p_StandardValue"></param>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.IValidator.AllowNull">
+            <summary>
+            True to allow null object value or NullString string Value
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.IValidator.NullString">
+            <summary>
+            Null string representation. A string is null when is null or when is equals to this string. Default is empty string.
+            Used by ValueToString and StringToValue
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.IValidator.NullDisplayString">
+            <summary>
+            Null string representation. A string is null when is null or when is equals to this string. Default is empty string.
+            Used by ValueToDisplayString
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.IValidator.AllowStringConversion">
+            <summary>
+            Gets or Sets if the string conversion is allowed.
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.IValidator.MinimumValue">
+            <summary>
+            Minimum value allowed. If null no check is performed. The value must derive from IComparable interface to use Minimum or Maximum feature.
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.IValidator.MaximumValue">
+            <summary>
+            Maximum value allowed. If null no check is performed. The value must derive from IComparable interface to use Minimum or Maximum feature.
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.IValidator.ValueType">
+            <summary>
+            Type allowed for the current editor. Cannot be null.
+            </summary>
+        </member>
+        <member name="E:DevAge.ComponentModel.Validator.IValidator.ConvertingObjectToValue">
+            <summary>
+            Fired when converting a object to the value specified. Called from method ObjectToValue and IsValidObject
+            </summary>
+        </member>
+        <member name="E:DevAge.ComponentModel.Validator.IValidator.ConvertingValueToObject">
+            <summary>
+            Fired when converting a object to the value specified. Called from method ObjectToValue and IsValidObject
+            </summary>
+        </member>
+        <member name="E:DevAge.ComponentModel.Validator.IValidator.ConvertingValueToDisplayString">
+            <summary>
+            Fired when converting a value to a display string. Called from method ValueToDisplayString
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.IValidator.DefaultValue">
+            <summary>
+            Default value for this editor, usually is the default value for the specified type.
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.IValidator.StandardValues">
+            <summary>
+            A list of values that this editor can support. If StandardValuesExclusive is true then the editor can only support one of these values.
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.IValidator.StandardValuesExclusive">
+            <summary>
+            If StandardValuesExclusive is true then the editor can only support the list specified in StandardValues.
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.IValidator.CultureInfo">
+            <summary>
+            Culture for conversion. If null the default user culture is used. Default is null.
+            </summary>
+        </member>
+        <member name="E:DevAge.ComponentModel.Validator.IValidator.Changed">
+            <summary>
+            Fired when one of the properties of the Validator change.
+            </summary>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.#ctor">
+            <summary>
+            Constructor. Initialize the class using a null type.
+            </summary>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.#ctor(System.Type)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="type">The type used to validate the values. If null no validation is made.</param>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.IsNullString(System.String)">
+            <summary>
+            Returns true if the string is null or if is equals to the NullString
+            </summary>
+            <param name="p_str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.ObjectToStringForError(System.Object)">
+            <summary>
+            Returns a string used for error description for a specified object. Usually used when printing the object for the error message when there is a conversion error.
+            </summary>
+            <param name="val"></param>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.ObjectToValue(System.Object)">
+            <summary>
+            Convert an object according to the current ValueType of the validator
+            </summary>
+            <param name="p_Object"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.ValueToObject(System.Object,System.Type)">
+            <summary>
+            Convert a value according to the current ValueType to an object with the Type specified. Throw an exception on error.
+            </summary>
+            <param name="p_Value"></param>
+            <param name="p_ReturnObjectType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.ValueToString(System.Object)">
+            <summary>
+            Converts a value object to a string representation
+            </summary>
+            <param name="p_Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.StringToValue(System.String)">
+            <summary>
+            Converts a string to an object according to the type of the string editor
+            </summary>
+            <param name="p_str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.IsStringConversionSupported">
+            <summary>
+            Returns true if string conversion is suported. AllowStringConversion must be true and the current Validator must support string conversion.
+            </summary>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.ValueToDisplayString(System.Object)">
+            <summary>
+            Converts a value valid for this validator valuetype to a string representation. The string cannot be used for conversion.
+            If the validator support string conversion this method simply call ValueToString otherwise call Value.ToString()
+            </summary>
+            <param name="p_Value"></param>
+            <returns></returns>
+        </member>
+        <member name="F:DevAge.ComponentModel.Validator.ValidatorBase.m_ConvertingObjectToValue">
+            <summary>
+            Fired when converting a object to the value specified. Called from method ObjectToValue and IsValidObject
+            </summary>
+        </member>
+        <member name="F:DevAge.ComponentModel.Validator.ValidatorBase.m_ConvertingValueToObject">
+            <summary>
+            Fired when converting a object to the value specified. Called from method ObjectToValue and IsValidObject
+            </summary>
+        </member>
+        <member name="F:DevAge.ComponentModel.Validator.ValidatorBase.m_ConvertingValueToDisplayString">
+            <summary>
+            Fired when converting a value to a display string. Called from method ValueToDisplayString
+            </summary>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.OnConvertingObjectToValue(DevAge.ComponentModel.ConvertingObjectEventArgs)">
+            <summary>
+            Fired when converting a object to the value specified. Called from method ObjectToValue and IsValidObject
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.OnConvertingValueToObject(DevAge.ComponentModel.ConvertingObjectEventArgs)">
+            <summary>
+            Fired when converting a object to the value specified. Called from method ObjectToValue and IsValidObject
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.OnConvertingValueToDisplayString(DevAge.ComponentModel.ConvertingObjectEventArgs)">
+            <summary>
+            Fired when converting a value to a display string. Called from method ValueToDisplayString
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.IsValidValue(System.Object)">
+            <summary>
+            Returns true if the value is valid for this type of editor without any conversion.
+            </summary>
+            <param name="p_Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.IsValidObject(System.Object)">
+            <summary>
+            Returns true if the object is valid for this type of validator, using conversion functions.
+            </summary>
+            <param name="p_Object"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.IsValidObject(System.Object,System.Object@)">
+            <summary>
+            Returns true if the object is valid for this type of validator, using conversion functions. Returns as parameter the value converted.
+            </summary>
+            <param name="p_Object"></param>
+            <param name="p_ValueConverted"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.IsValidString(System.String)">
+            <summary>
+            Returns true if the string is valid for this type of editor, using string conversion function.
+            </summary>
+            <param name="p_strValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.IsValidString(System.String,System.Object@)">
+            <summary>
+            Returns true if the string is valid for this type of editor, using string conversion function. Returns as out parameter the object converted.
+            </summary>
+            <param name="p_strValue"></param>
+            <param name="p_ValueConverted"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.IsInStandardValues(System.Object)">
+            <summary>
+            Returns true if the value specified is presents in the list StandardValues.
+            </summary>
+            <param name="p_Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.StandardValueAtIndex(System.Int32)">
+            <summary>
+            Returns the standard values at the specified index. If StandardValues support IList use simple the indexer method otherwise loop troght the collection.
+            </summary>
+            <param name="p_Index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.StandardValuesIndexOf(System.Object)">
+            <summary>
+            Returns the index of the specified standard value. -1 if not found. If StandardValues support IList use simple the indexer method otherwise loop troght the collection.
+            </summary>
+            <param name="p_StandardValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorBase.OnChanged(System.EventArgs)">
+            <summary>
+            Fired when one of the properties of the Validator change.
+            Call the Changed event.
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValidatorBase.AllowNull">
+            <summary>
+            True to allow null object value or NullString string Value
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValidatorBase.NullString">
+            <summary>
+            Null string representation. A string is null when is null or when is equals to this string. Default is empty string.
+            Used by ValueToString and StringToValue
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValidatorBase.NullDisplayString">
+            <summary>
+            Null string representation. Default is empty string.
+            Used by ValueToDisplayString
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValidatorBase.AllowStringConversion">
+            <summary>
+            Gets or Sets if the string conversion is allowed.
+            </summary>
+        </member>
+        <member name="E:DevAge.ComponentModel.Validator.ValidatorBase.ConvertingObjectToValue">
+            <summary>
+            Fired when converting a object to the value specified. Called from method ObjectToValue and IsValidObject
+            </summary>
+        </member>
+        <member name="E:DevAge.ComponentModel.Validator.ValidatorBase.ConvertingValueToObject">
+            <summary>
+            Fired when converting a object to the value specified. Called from method ObjectToValue and IsValidObject
+            </summary>
+        </member>
+        <member name="E:DevAge.ComponentModel.Validator.ValidatorBase.ConvertingValueToDisplayString">
+            <summary>
+            Fired when converting a value to a display string. Called from method ValueToDisplayString
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValidatorBase.MinimumValue">
+            <summary>
+            Minimum value allowed. If null no check is performed. The value must derive from IComparable interface to use Minimum or Maximum feature.
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValidatorBase.MaximumValue">
+            <summary>
+            Maximum value allowed. If null no check is performed. The value must derive from IComparable interface to use Minimum or Maximum feature.
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValidatorBase.ValueType">
+            <summary>
+            Type allowed for the current editor. Cannot be null.
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValidatorBase.ValueTypeName">
+            <summary>
+            Set the ValueType property using a string value, usually used by designer code generation.
+            The designer for this type is configured to use only this property.
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValidatorBase.DefaultValue">
+            <summary>
+            Default value for this editor, usually is the default value for the specified type.
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValidatorBase.StandardValues">
+            <summary>
+            A list of values that this editor can support. If StandardValuesExclusive is true then the editor can only support one of these values.
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValidatorBase.StandardValuesExclusive">
+            <summary>
+            If StandardValuesExclusive is true then the editor can only support the list specified in StandardValues.
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValidatorBase.CultureInfo">
+            <summary>
+            Culture for conversion. If null the default user culture is used. Default is null.
+            </summary>
+        </member>
+        <member name="E:DevAge.ComponentModel.Validator.ValidatorBase.Changed">
+            <summary>
+            Fired when one of the properties of the Validator change.
+            </summary>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorTypeConverter.#ctor">
+            <summary>
+            Constructor. Initialize the Validator with a null TypeConverter.
+            </summary>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorTypeConverter.#ctor(System.Type)">
+            <summary>
+            Constructor. If the Type doesn't implements a TypeConverter no conversion is made.
+            </summary>
+            <param name="p_Type"></param>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorTypeConverter.#ctor(System.Type,System.ComponentModel.TypeConverter)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="p_Type">Cannot be null.</param>
+            <param name="p_TypeConverter">Can be null to don't allow any conversion.</param>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorTypeConverter.IsStringConversionSupported">
+            <summary>
+            Returns true if string conversion is suported. AllowStringConversion must be true and the current Validator must support string conversion.
+            </summary>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorTypeConverter.OnConvertingObjectToValue(DevAge.ComponentModel.ConvertingObjectEventArgs)">
+            <summary>
+            Fired when converting a object to the value specified. Called from method ObjectToValue and IsValidObject
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValidatorTypeConverter.OnConvertingValueToObject(DevAge.ComponentModel.ConvertingObjectEventArgs)">
+            <summary>
+            Fired when converting a object to the value specified. Called from method ObjectToValue and IsValidObject
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValidatorTypeConverter.TypeConverter">
+            <summary>
+            TypeConverter used for this type editor, cannot be null.
+            </summary>
+        </member>
+        <member name="M:DevAge.Shell.MailToProtocol.FormatMailToCommand(System.String[],System.String[],System.String[],System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="p_To">null if not used</param>
+            <param name="p_Cc">null if not used</param>
+            <param name="p_Bcc">null if not used</param>
+            <param name="p_Subject">null if not used</param>
+            <param name="p_Body">null if not used</param>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.Data.DataSetHelper">
+            <summary>
+            Utilities for DataSet class. Contains some methods to create expression string, for Select and Epression methods and methods for selecting data like SelectDistinct.
+            </summary>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.ExpressionFormat(System.DateTime)">
+            <summary>
+            Create a string with this format: #MM/dd/yyyy# . This is the default format for DataSet expressions. Can be used for example with the DataTable.Select method.
+            </summary>
+            <param name="p_Date"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.ExpressionFormat(System.Int32)">
+            <summary>
+            Create a string with an InvariantCulture format.
+            </summary>
+            <param name="p_data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.ExpressionFormat(System.Int64)">
+            <summary>
+            Create a string with an InvariantCulture format.
+            </summary>
+            <param name="p_data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.ExpressionFormat(System.Single)">
+            <summary>
+            Create a string with an InvariantCulture format.
+            </summary>
+            <param name="p_data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.ExpressionFormat(System.Double)">
+            <summary>
+            Create a string with an InvariantCulture format.
+            </summary>
+            <param name="p_data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.ExpressionFormat(System.Decimal)">
+            <summary>
+            Create a string with an InvariantCulture format.
+            </summary>
+            <param name="p_data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.ExpressionFormat(System.Boolean)">
+            <summary>
+            Create a string with an InvariantCulture format.
+            </summary>
+            <param name="p_data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.ExpressionFormat(System.String)">
+            <summary>
+            Replace any special sql character (like single quote) and replace it with the valid sql equivalent. Then add the appropriate quote if the type require (string).
+            </summary>
+            <param name="p_data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.ExpressionFormat(System.Char)">
+            <summary>
+            Replace any special sql character (like single quote) and replace it with the valid sql equivalent. Then add the appropriate quote if the type require (string).
+            </summary>
+            <param name="p_data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.ExpressionFormat(System.DBNull)">
+            <summary>
+            Return NULL
+            </summary>
+            <param name="p_data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.ExpressionFormat(System.Object)">
+            <summary>
+            Format the specified value in a string that can be used inside an expression.
+            </summary>
+            <param name="pParameterValue"></param>
+            <param name="valueType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.LikeExpression(System.String,System.String)">
+            <summary>
+            Create a like expression for string values, automatically calls FormatValueForExpression
+            </summary>
+            <param name="pFieldName"></param>
+            <param name="pFieldValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.StartWithExpression(System.String,System.String)">
+            <summary>
+            Create a start with expression for stirng value, automatically calls FormatValueForExpression
+            </summary>
+            <param name="pFieldName"></param>
+            <param name="pFieldValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.EqualExpression(System.String,System.Object)">
+            <summary>
+            Create an equal expression, automatically calls FormatValueForExpression
+            </summary>
+            <param name="pFieldName"></param>
+            <param name="pFieldValue"></param>
+            <param name="valueType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.NotEqualExpression(System.String,System.Object)">
+            <summary>
+            Create a Not equal expression, automatically calls FormatValueForExpression
+            </summary>
+            <param name="pFieldName"></param>
+            <param name="pFieldValue"></param>
+            <param name="valueType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.ValEquals(System.Object,System.Object)">
+            <summary>
+            Compares two values to see if they are equal. Also compares DBNULL.Value.
+            Note: If your DataTable contains object fields, then you must extend this
+            function to handle them in a meaningful way if you intend to group on them.
+            </summary>
+            <param name="A"></param>
+            <param name="B"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.Eval(System.String,System.Object[])">
+            <summary>
+            Evaluate the given expression using the Compute method of a empty DataTable. Replace the parameters using the string.Format method ({0} syntax)
+            </summary>
+            <param name="expression"></param>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Data.DataSetHelper.EvalRowExpression(System.Data.DataRow,System.String)">
+            <summary>
+            Evaluate the given expression using the Compute method of an empty DataTable replacing the values of the specified Row.
+            </summary>
+            <param name="row"></param>
+            <param name="expression"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.ComponentModel.EmptyTypeDescriptorContext">
+            <summary>
+            Class used to implement an empty ITypeDescriptorContext.
+            This class seems to be required by the mono framework, ms framework accept null as ITypeDescriptorContext
+            </summary>
+        </member>
+        <member name="F:DevAge.ComponentModel.EmptyTypeDescriptorContext.Empty">
+            <summary>
+            Empty ITypeDescriptorContext instance. For now I use null because mono seems to don't like this class (and throw anyway an exception)
+            </summary>
+        </member>
+        <member name="T:DevAge.Patterns.IActivityEvents">
+            <summary>
+            Interface to receive the callback for the activity events.
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.IActivityEvents.ActivityStarted(DevAge.Patterns.IActivity)">
+            <summary>
+            Fired when the activity is started
+            </summary>
+            <param name="sender">Activity that have sended the event</param>
+        </member>
+        <member name="M:DevAge.Patterns.IActivityEvents.ActivityCompleted(DevAge.Patterns.IActivity)">
+            <summary>
+            Fired when the activity is completed
+            </summary>
+            <param name="sender">Activity that have sended the event</param>
+        </member>
+        <member name="M:DevAge.Patterns.IActivityEvents.ActivityException(DevAge.Patterns.IActivity,System.Exception)">
+            <summary>
+            Fired when the activity or one of its children throws an exception
+            </summary>
+            <param name="sender">Activity that have sended the event</param>
+            <param name="exception"></param>
+        </member>
+        <member name="T:DevAge.IO.IsolatedStorage.IsolatedStorageSettingVersionBase">
+            <summary>
+            Summary description for IsolatedStorageSettingVersionBase.
+            </summary>
+        </member>
+        <member name="T:DevAge.Configuration.PersistableSettings">
+            <summary>
+            Summary description for PersistableSettings.
+            </summary>
+        </member>
+        <member name="M:DevAge.Configuration.PersistableSettings.ReadFromOther(DevAge.Configuration.PersistableSettings)">
+            <summary>
+            Clone all fields using the ValueToString and StringToValue methods
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="T:DevAge.Security.Cryptography.Utilities">
+            <summary>
+            Utilities
+            </summary>
+        </member>
+        <member name="T:DevAge.Security.Cryptography.Utilities.DES">
+            <summary>
+            Crypt and encrypt methods using DES
+            </summary>
+        </member>
+        <member name="M:DevAge.Security.Cryptography.Utilities.DES.EncryptString(System.String,System.String)">
+            <summary>
+            Encrypt the specified string using DES
+            </summary>
+            <param name="p_strInput">String to encrypt</param>
+            <param name="p_Key8chars">Must be of 8 characters length</param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Security.Cryptography.Utilities.DES.DecryptString(System.String,System.String)">
+            <summary>
+            Decrypt the specified string using DES
+            </summary>
+            <param name="p_strInput">String to decrypt</param>
+            <param name="p_Key8chars">Must be of 8 characters length</param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Security.Cryptography.Utilities.DES.EncryptStream(System.IO.Stream,System.IO.Stream,System.String)">
+            <summary>
+            Encrypt the specified stream using DES
+            </summary>
+            <param name="p_StreamInput"></param>
+            <param name="p_StreamOutput"></param>
+            <param name="p_Key8chars">Must be of 8 characters length</param>
+        </member>
+        <member name="M:DevAge.Security.Cryptography.Utilities.DES.DecryptStream(System.IO.Stream,System.IO.Stream,System.String)">
+            <summary>
+            Decrypt the specified stream using DES
+            </summary>
+            <param name="p_StreamInput"></param>
+            <param name="p_StreamOutput"></param>
+            <param name="p_Key8chars">Must be of 8 characters length</param>
+        </member>
+        <member name="T:DevAge.Security.Cryptography.Utilities.SHA1">
+            <summary>
+            Password utilities using SH1 alghoritm
+            </summary>
+        </member>
+        <member name="M:DevAge.Security.Cryptography.Utilities.SHA1.HashPassword(System.String)">
+            <summary>
+            Hash the string p_Password using SH1 alghoritm (SHA1CryptoServiceProvider). 
+            </summary>
+            <param name="p_Password"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.Security.Cryptography.Utilities.XmlDigitalSign">
+            <summary>
+            An utility class with some method to signing and verify xml documents
+            </summary>
+        </member>
+        <member name="M:DevAge.Security.Cryptography.Utilities.XmlDigitalSign.GenerateKeys(System.String@,System.String@)">
+            <summary>
+            Generate the keys (public and private)
+            </summary>
+            <param name="keyPubPri">Public and private key</param>
+            <param name="keyPub">Public key</param>
+        </member>
+        <member name="M:DevAge.Security.Cryptography.Utilities.XmlDigitalSign.CreateSignature(System.Xml.XmlDocument,System.String)">
+            <summary>
+            Create a signature xml element for the specified xml document and private key
+            </summary>
+            <param name="xmlToSign"></param>
+            <param name="keyPubPri">Private+public key</param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Security.Cryptography.Utilities.XmlDigitalSign.CreateSignedDoc(System.Xml.XmlDocument,System.String)">
+            <summary>
+            Create a signed xml document. Add a signature alement to the specified document using the specified private key.
+            </summary>
+            <param name="xmlToSign"></param>
+            <param name="keyPubPri">Private+public key</param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Security.Cryptography.Utilities.XmlDigitalSign.CheckSignature(System.Xml.XmlDocument,System.String)">
+            <summary>
+            Check the signature of the specified signed document (created with CreateSignedDoc) using the specified public key.
+            </summary>
+            <param name="signedDoc"></param>
+            <param name="keyPub">Public key</param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Security.Cryptography.Utilities.XmlDigitalSign.GetSignatureFromSignedDoc(System.Xml.XmlDocument)">
+            <summary>
+            Extract the signature element from the specified signed document.
+            </summary>
+            <param name="signedDoc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Security.Cryptography.Utilities.XmlDigitalSign.CreateDocWithoutSignature(System.Xml.XmlDocument)">
+            <summary>
+            Create a new XmlDocument from the specified signed document removing the signature element.
+            </summary>
+            <param name="signedDoc"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.ComponentModel.Converter.DateTimeTypeConverter">
+            <summary>
+            Summary description for DateTimeTypeConverter.
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Converter.DateTimeTypeConverter.DateTimeStyles">
+            <summary>
+            DateTimeStyle for Parse operations. DefaultValue: AllowInnerWhite|AllowLeadingWhite|AllowTrailingWhite|AllowWhiteSpaces
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Converter.DateTimeTypeConverter.Format">
+            <summary>
+            Format of the Date. Example: G, g, d, D. Default value : G
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Converter.DateTimeTypeConverter.ParseFormats">
+            <summary>
+            Formats to check when parse the string. If null call with no format the parse method. Default value: null
+            </summary>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.FieldStringConvertException.ObjectToStringForError(System.Object)">
+            <summary>
+            Returns a string used for error description for a specified object. Usually used when printing the object for the error message when there is a conversion error.
+            </summary>
+            <param name="val"></param>
+        </member>
+        <member name="T:DevAge.TypeNotSupportedException">
+            <summary>
+            The type specified it is not supported in the current contest
+            </summary>
+        </member>
+        <member name="M:DevAge.TypeNotSupportedException.#ctor(System.Type)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="pType"></param>
+        </member>
+        <member name="M:DevAge.TypeNotSupportedException.#ctor(System.Type,System.Exception)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="pType"></param>
+            <param name="p_InnerException"></param>
+        </member>
+        <member name="T:DevAge.UnrecognizedCommandLineParametersException">
+            <summary>
+            Command line not valid exception
+            </summary>
+        </member>
+        <member name="M:DevAge.UnrecognizedCommandLineParametersException.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="parameter"></param>
+        </member>
+        <member name="M:DevAge.UnrecognizedCommandLineParametersException.#ctor(System.String,System.Exception)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="parameter"></param>
+            <param name="p_InnerException"></param>
+        </member>
+        <member name="T:DevAge.ConversionErrorException">
+            <summary>
+            Conversion exception
+            </summary>
+        </member>
+        <member name="M:DevAge.ConversionErrorException.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="destinationType"></param>
+            <param name="value"></param>
+            <param name="extendedMessage"></param>
+        </member>
+        <member name="M:DevAge.ConversionErrorException.#ctor(System.String,System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="destinationType"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:DevAge.ConversionErrorException.#ctor(System.String,System.String,System.Exception)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="destinationType"></param>
+            <param name="value"></param>
+            <param name="p_InnerException"></param>
+        </member>
+        <member name="T:DevAge.ExceptionEventArgs">
+            <summary>
+            Common EventArgs class used to store and raise events with an Exception associated
+            </summary>
+        </member>
+        <member name="M:DevAge.ExceptionEventArgs.#ctor(System.Exception)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="ex"></param>
+        </member>
+        <member name="P:DevAge.ExceptionEventArgs.Exception">
+            <summary>
+            Exception
+            </summary>
+        </member>
+        <member name="T:DevAge.ExceptionEventHandler">
+            <summary>
+            Common EventHandler class used to raise events with an Exception associated
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.ConvertingObjectEventArgs.DestinationType">
+            <summary>
+            Destination type to convert the Value. Can be null if no destination type is required.
+            </summary>
+        </member>
+        <member name="T:DevAge.Collections.ListByType`1">
+            <summary>
+            A collection of object with a special method that returns an object compatible with a specified Type, GetByType(Type).
+            </summary>
+        </member>
+        <member name="M:DevAge.Collections.ListByType`1.GetByType(System.Type)">
+            <summary>
+            Returns an object of the list that is compatible from the specified type. 
+            The Type is compared using the IsAssignableFrom method. If there isn't a compatible object returns null.
+            </summary>
+            <param name="searchType"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.Runtime.Serialization.Utilities">
+            <summary>
+            Static Class for serialization utilities
+            </summary>
+        </member>
+        <member name="M:DevAge.Runtime.Serialization.Utilities.BinDeserialize(System.IO.Stream)">
+            <summary>
+            Deserialize the stream. Using BinaryFormatter.
+            </summary>
+            <param name="p_Stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Runtime.Serialization.Utilities.BinSerialize(System.IO.Stream,System.Object)">
+            <summary>
+            Serialize the stream. Using BinaryFormatter.
+            </summary>
+            <param name="p_Stream"></param>
+            <param name="p_Object"></param>
+        </member>
+        <member name="M:DevAge.Runtime.Serialization.Utilities.BinDeserialize(System.String)">
+            <summary>
+            Deserialize the specified file. Using BinaryFormatter.
+            </summary>
+            <param name="p_strFileName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Runtime.Serialization.Utilities.BinSerialize(System.String,System.Object)">
+            <summary>
+            Serialize the object to the specified file. Using BinaryFormatter.
+            </summary>
+            <param name="p_strFileName"></param>
+            <param name="p_Object"></param>
+        </member>
+        <member name="T:DevAge.Patterns.IAsyncActivity">
+            <summary>
+            Interface for asyncronuos activity. Extend the IActivity interface
+            </summary>
+        </member>
+        <member name="T:DevAge.Patterns.ActivityCollection">
+            <summary>
+            A collection of elements of type Activity
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityCollection.#ctor(DevAge.Patterns.IActivity)">
+            <summary>
+            Initializes a new empty instance of the ActivityCollection class.
+            </summary>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityCollection.Contains(DevAge.Patterns.IActivity)">
+            <summary>
+            Determines whether a specfic IActivity value is in this ActivityCollection.
+            </summary>
+            <param name="value">
+            The IActivity value to locate in this ActivityCollection.
+            </param>
+            <returns>
+            true if value is found in this ActivityCollection;
+            false otherwise.
+            </returns>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityCollection.IndexOf(DevAge.Patterns.IActivity)">
+            <summary>
+            Return the zero-based index of the first occurrence of a specific value
+            in this ActivityCollection
+            </summary>
+            <param name="value">
+            The IActivity value to locate in the ActivityCollection.
+            </param>
+            <returns>
+            The zero-based index of the first occurrence of the _ELEMENT value if found;
+            -1 otherwise.
+            </returns>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityCollection.Add(DevAge.Patterns.IActivity)">
+            <summary>
+            Adds an instance of type IActivity to the end of this ActivityCollection.
+            </summary>
+            <param name="value">
+            The IActivity to be added to the end of this ActivityCollection.
+            </param>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityCollection.Insert(System.Int32,DevAge.Patterns.IActivity)">
+            <summary>
+            Inserts an element into the ActivityCollection at the specified index
+            </summary>
+            <param name="index">
+            The index at which the IActivity is to be inserted.
+            </param>
+            <param name="value">
+            The IActivity to insert.
+            </param>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityCollection.Remove(DevAge.Patterns.IActivity)">
+            <summary>
+            Removes the first occurrence of a specific IActivity from this ActivityCollection.
+            </summary>
+            <param name="value">
+            The IActivity value to remove from this ActivityCollection.
+            </param>
+        </member>
+        <member name="M:DevAge.Patterns.ActivityCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that can iterate through the elements of this ActivityCollection.
+            </summary>
+            <returns>
+            An object that implements System.Collections.IEnumerator.
+            </returns>        
+        </member>
+        <member name="P:DevAge.Patterns.ActivityCollection.Item(System.Int32)">
+            <summary>
+            Gets or sets the IActivity at the given index in this ActivityCollection.
+            </summary>
+        </member>
+        <member name="T:DevAge.Patterns.ActivityCollection.Enumerator">
+            <summary>
+            Type-specific enumeration class, used by ActivityCollection.GetEnumerator.
+            </summary>
+        </member>
+        <member name="T:DevAge.Text.FixedLength.IField">
+            <summary>
+            Interface for defining a Field in the FixedLength string
+            </summary>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.IField.ValueToString(System.Object)">
+            <summary>
+            Convert the specified value to a string value valid for this field
+            </summary>
+            <param name="val"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Text.FixedLength.IField.StringToValue(System.String)">
+            <summary>
+            Convert the specified string value to a value based on the field format.
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Text.FixedLength.IField.Index">
+            <summary>
+            Index of the field. 0 based.
+            </summary>
+        </member>
+        <member name="P:DevAge.Text.FixedLength.IField.Name">
+            <summary>
+            Name of the field, used for retriving the field by its name.
+            </summary>
+        </member>
+        <member name="T:DevAge.Text.FixedLength.Field">
+            <summary>
+            Class for define a field, implements IField interface.
+            </summary>
+        </member>
+        <member name="T:DevAge.ComponentModel.Validator.ValueMapping">
+            <summary>
+            The ValueMapping class can be used to easily map a value to a string value or a display string for conversion
+            </summary>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValueMapping.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValueMapping.#ctor(DevAge.ComponentModel.Validator.IValidator,System.Collections.IList,System.Collections.IList,System.Collections.IList,System.Type)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="validator"></param>
+            <param name="valueList">A list of valid value. If null an error occurred. The index must match the index of ValueList, ObjectList and DisplayStringList</param>
+            <param name="displayStringList">A list of displayString. Can be null. The index must match the index of ValueList, ObjectList and DisplayStringList</param>
+            <param name="specialList">A list of object that can be converted to value. Can be null. The index must match the index of ValueList, ObjectList and DisplayStringList</param>
+            <param name="specialType">The type of object stored in the specialList collection.</param>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValueMapping.BindValidator(DevAge.ComponentModel.Validator.IValidator)">
+            <summary>
+            Bind the specified validator
+            </summary>
+            <param name="p_Validator"></param>
+        </member>
+        <member name="M:DevAge.ComponentModel.Validator.ValueMapping.UnBindValidator(DevAge.ComponentModel.Validator.IValidator)">
+            <summary>
+            Unbind the specified validator
+            </summary>
+            <param name="p_Validator"></param>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValueMapping.ValueList">
+            <summary>
+            A list of valid value. If null an error occurred. The index must match the index of ValueList and DisplayStringList
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValueMapping.SpecialList">
+            <summary>
+            A list of object that can be converted to value. Can be null. The index must match the index of ValueList and DisplayStringList. Must be a list of object of the type specified in the SpecialType property.
+            Usually this property can be used when performing special conversion of specific type. For example if you want to map an enum value or an id value to a string for a better user experience.
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValueMapping.SpecialType">
+            <summary>
+            Gets or sets the type used for converting an object to a value and a value to an object when populating the SpecialList property. Default is System.String.
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValueMapping.DisplayStringList">
+            <summary>
+            A list of displayString. Can be null. The index must match the index of ValueList and DisplayStringList
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.Validator.ValueMapping.ThrowErrorIfNotFound">
+            <summary>
+            Gets or sets, if throw an error when the value if not found in one of the collections.
+            Default true.
+            </summary>
+        </member>
+    </members>
+</doc>
