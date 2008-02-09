@@ -1,0 +1,340 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SourceGrid.Extensions</name>
+    </assembly>
+    <members>
+        <member name="T:SourceGrid.ListEditor">
+            <summary>
+            Summary description for ListEditor.
+            </summary>
+        </member>
+        <member name="F:SourceGrid.ListEditor.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SourceGrid.ListEditor.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:SourceGrid.ListEditor.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:SourceGrid.DataGridRows">
+            <summary>
+            This class implements a RowsSimpleBase class using a DataView bound mode for row count.
+            </summary>
+        </member>
+        <member name="M:SourceGrid.DataGridRows.IndexToDataSourceIndex(System.Int32)">
+            <summary>
+            Returns the DataSource index for the specified grid row index.
+            </summary>
+            <param name="gridRowIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceGrid.DataGridRows.DataSourceIndexToGridRowIndex(System.Int32)">
+            <summary>
+            Returns the grid index for the specified DataSource index
+            </summary>
+            <param name="gridRowIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceGrid.DataGridRows.IndexToDataSourceRow(System.Int32)">
+            <summary>
+            Returns the DataRowView object for a given grid row index. Return null if not applicable, for example if the DataSource is null or if the row index requested is a FixedRows
+            </summary>
+            <param name="gridRowIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceGrid.DataGridRows.DataSourceRowToIndex(System.Object)">
+            <summary>
+            Returns the index for a given item row. -1 if not valid.
+            </summary>
+            <param name="row"></param>
+            <returns></returns>
+        </member>
+        <member name="P:SourceGrid.DataGridRows.Count">
+            <summary>
+            Gets the number of row of the current DataView. Usually this value is automatically calculated and cannot be changed manually.
+            </summary>
+        </member>
+        <member name="P:SourceGrid.DataGridRows.HeaderHeight">
+            <summary>
+            Gets or sets the header height (row 0)
+            </summary>
+        </member>
+        <member name="M:SourceGrid.DataGridColumns.IndexToPropertyColumn(System.Int32)">
+            <summary>
+            Return the DataColumn object for a given grid column index. Return null if not applicable, for example if the column index requested is a FixedColumns of an unbound column
+            </summary>
+            <param name="gridColumnIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceGrid.DataGridColumns.DataSourceColumnToIndex(System.ComponentModel.PropertyDescriptor)">
+            <summary>
+            Returns the index for a given DataColumn. -1 if not valid.
+            </summary>
+            <param name="column"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SourceGrid.DataGridColumn">
+            <summary>
+            A ColumnInfo derived class used to store column informations for a DataGrid control. 
+            Mantains the cell used on this grid and manage the binding to the DataSource using a DataGridValueModel class.
+            </summary>
+        </member>
+        <member name="M:SourceGrid.DataGridColumn.#ctor(SourceGrid.DataGrid)">
+            <summary>
+            Constructor. Create a DataGridColumn class.
+            </summary>
+            <param name="grid"></param>
+        </member>
+        <member name="M:SourceGrid.DataGridColumn.#ctor(SourceGrid.DataGrid,SourceGrid.Cells.ICellVirtual,SourceGrid.Cells.ICellVirtual,System.String)">
+            <summary>
+            Constructor. Create a DataGridColumn class.
+            </summary>
+        </member>
+        <member name="M:SourceGrid.DataGridColumn.CreateRowHeader(SourceGrid.DataGrid)">
+            <summary>
+            Create a DataGridColumn with special cells used for RowHeader, usually used when FixedColumns is 1 for the first column.
+            </summary>
+            <param name="grid"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceGrid.DataGridColumn.GetDataCell(System.Int32)">
+            <summary>
+            Gets the ICellVirtual for the current column and the specified row.
+            Override this method to provide custom cells, based on the row informations.
+            </summary>
+            <param name="gridRow"></param>
+            <returns></returns>
+        </member>
+        <member name="P:SourceGrid.DataGridColumn.PropertyColumn">
+            <summary>
+            Gets the property column. Can be null if not bound to a datasource Column.
+            This field is used for example to support sorting.
+            </summary>
+        </member>
+        <member name="P:SourceGrid.DataGridColumn.HeaderCell">
+            <summary>
+            Gets or sets the header cell for this column.
+            Typically is an instance of SourceGrid.Cells.DataGrid.ColumnHeader
+            </summary>
+        </member>
+        <member name="P:SourceGrid.DataGridColumn.DataCell">
+            <summary>
+            Gets or sets the cell used for this column for all the rows to disply the data
+            Typically is an instance of SourceGrid.Cells.DataGrid.Cell or other classes of the same namespace
+            </summary>
+        </member>
+        <member name="P:SourceGrid.DataGridColumn.Conditions">
+            <summary>
+            Gets the conditions used to returns different cell based on the data of the row.
+            </summary>
+        </member>
+        <member name="T:SourceGrid.DataGrid">
+            <summary>
+            A grid control that support load from a System.Data.DataView class, usually used for data binding.
+            </summary>
+        </member>
+        <member name="M:SourceGrid.DataGrid.CreateRowsObject">
+            <summary>
+            Method used to create the rows object, in this class of type DataGridRows.
+            </summary>
+        </member>
+        <member name="M:SourceGrid.DataGrid.CreateColumnsObject">
+            <summary>
+            Method used to create the columns object, in this class of type DataGridColumns.
+            </summary>
+        </member>
+        <member name="M:SourceGrid.DataGrid.GetCell(System.Int32,System.Int32)">
+            <summary>
+            Gets a specified Cell by its row and column.
+            </summary>
+            <param name="p_iRow"></param>
+            <param name="p_iCol"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceGrid.DataGrid.CreateColumns">
+            <summary>
+            Automatic create the columns classes based on the specified DataSource.
+            </summary>
+        </member>
+        <member name="M:SourceGrid.DataGrid.DeleteSelectedRows">
+            <summary>
+            Delete all the selected rows.
+            </summary>
+            <returns>Returns true if one or more row is deleted otherwise false.</returns>
+        </member>
+        <member name="M:SourceGrid.DataGrid.AutoSizeCells">
+            <summary>
+            AutoSize the columns based on the visible range and autosize te rows based on the first row. (because there is only one height available)
+            </summary>
+        </member>
+        <member name="M:SourceGrid.DataGrid.BeginEditRow(System.Int32)">
+            <summary>
+            Check if the specified row is the active row (focused), return false if it is not the active row. Then call the BeginEdit on the associated DataRowView. Add a row to the DataView if required. Returns true if the method sucesfully call the BeginEdit and set the EditingRow property.
+            </summary>
+            <param name="gridRow"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceGrid.DataGrid.EndEditingRow(System.Boolean)">
+            <summary>
+            Calls the CancelEdit or the EndEdit on the editing Row and set to null the editing row.
+            </summary>
+            <param name="cancel"></param>
+        </member>
+        <member name="P:SourceGrid.DataGrid.DataSource">
+            <summary>
+            Gets or sets the IBoundList used for data binding.
+            It can be any class that implements the IBoundList interface, usually can be BoundList 
+             (that can be used to bind to a generic List) or BoundDataView (that can be used to bind to a DataView).
+            </summary>
+        </member>
+        <member name="P:SourceGrid.DataGrid.Rows">
+            <summary>
+            Gets the rows information as a DataGridRows object.
+            </summary>
+        </member>
+        <member name="P:SourceGrid.DataGrid.Columns">
+            <summary>
+            Gets the columns informations as a DataGridColumns object.
+            </summary>
+        </member>
+        <member name="P:SourceGrid.DataGrid.SelectedDataRows">
+            <summary>
+            Gets or sets the selected DataRowView.
+            </summary>
+        </member>
+        <member name="P:SourceGrid.DataGrid.EndEditingRowOnValidate">
+            <summary>
+            Gets or sets a property to force an End Editing when the control loose the focus
+            </summary>
+        </member>
+        <member name="P:SourceGrid.DataGrid.DeleteRowsWithDeleteKey">
+            <summary>
+            Gets or sets if enable the delete of the selected rows when pressing Delete key.
+            </summary>
+        </member>
+        <member name="P:SourceGrid.DataGrid.CancelEditingWithEscapeKey">
+            <summary>
+            Gets or sets if enable the Cancel Editing feature when pressing escape key
+            </summary>
+        </member>
+        <member name="P:SourceGrid.DataGrid.DeleteQuestionMessage">
+            <summary>
+            Message showed with the DeleteSelectedRows method. Set to null to not show any message.
+            </summary>
+        </member>
+        <member name="T:SourceGrid.DataGridValueModel">
+            <summary>
+            A Model of type IValueModel used for binding the value to a specified property of the bound object. 
+            Used for the DataGrid control.
+            </summary>
+        </member>
+        <member name="M:SourceGrid.DataGridValueModel.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="T:SourceGrid.Cells.DataGrid.ColumnHeader">
+            <summary>
+            A cell header used for the columns. Usually used in the HeaderCell property of a DataGridColumn.
+            </summary>
+        </member>
+        <member name="T:SourceGrid.Cells.DataGrid.RowHeader">
+            <summary>
+            A cell used as left row selector. Usually used in the DataCell property of a DataGridColumn. If FixedColumns is grater than 0 and the columns are automatically created then the first column is created of this type.
+            </summary>
+        </member>
+        <member name="T:SourceGrid.Cells.DataGrid.Header">
+            <summary>
+            A cell used for the top/left cell when using DataGridRowHeader.
+            </summary>
+        </member>
+        <member name="T:SourceGrid.ArrayGrid">
+            <summary>
+            This class derive from GridVirtual and create a grid bound to an array.
+            </summary>
+        </member>
+        <member name="P:SourceGrid.ArrayGrid.DataSource">
+            <summary>
+            Gets or sets the data source array used to bind the grid.
+            </summary>
+        </member>
+        <member name="P:SourceGrid.ArrayGrid.ColumnHeader">
+            <summary>
+            Gets or sets the cell used for the column headers.  Only used when FixedRows is greater than 0.
+            </summary>
+        </member>
+        <member name="P:SourceGrid.ArrayGrid.RowHeader">
+            <summary>
+            Gets or sets the cell used for the row headers. Only used when FixedColumns is greater than 0.
+            </summary>
+        </member>
+        <member name="P:SourceGrid.ArrayGrid.Header">
+            <summary>
+            Gets or sets the cell used for the left top position header. Only used when FixedRows and FixedColumns are greater than 0.
+            </summary>
+        </member>
+        <member name="T:SourceGrid.ArrayColumnHeader">
+            <summary>
+            A cell header used for the columns. Usually used in the HeaderCell property of a DataGridColumn.
+            </summary>
+        </member>
+        <member name="T:SourceGrid.ArrayRowHeader">
+            <summary>
+            A cell used as left row selector. Usually used in the DataCell property of a DataGridColumn. If FixedColumns is grater than 0 and the columns are automatically created then the first column is created of this type.
+            </summary>
+        </member>
+        <member name="T:SourceGrid.ArrayHeader">
+            <summary>
+            A cell used for the top/left cell when using DataGridRowHeader.
+            </summary>
+        </member>
+        <member name="T:SourceGrid.Planning.PlanningGrid">
+            <summary>
+            Summary description for PlanningGrid.
+            </summary>
+        </member>
+        <member name="F:SourceGrid.Planning.PlanningGrid.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SourceGrid.Planning.PlanningGrid.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:SourceGrid.Planning.PlanningGrid.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:SourceGrid.Planning.PlanningGrid.LoadPlanning(System.DateTime,System.DateTime,System.Int32)">
+            <summary>
+            Load the grid using the parameters specified
+            </summary>
+            <param name="dateTimeStart"></param>
+            <param name="dateTimeEnd"></param>
+            <param name="minAppointmentLength"></param>
+        </member>
+        <member name="P:SourceGrid.Planning.PlanningGrid.Grid">
+            <summary>
+            The grid used internally to display the planning (note that you usually don't need to access directly this class).
+            </summary>
+        </member>
+        <member name="T:SourceGrid.Planning.AppointmentCollection">
+            <summary>
+            A collection of elements of type IAppointment
+            </summary>
+        </member>
+    </members>
+</doc>

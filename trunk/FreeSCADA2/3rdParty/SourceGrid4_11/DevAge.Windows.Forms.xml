@@ -1,0 +1,2232 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DevAge.Windows.Forms</name>
+    </assembly>
+    <members>
+        <member name="T:DevAge.Windows.Forms.ErrorDialog">
+            <summary>
+            A Windows Forms Form that can be used to display a dialog similar to a message box to show an exception.
+            Can be used to show the Exception.Message, call stack and inner exception by clicking on the Details link.
+            </summary>
+        </member>
+        <member name="F:DevAge.Windows.Forms.ErrorDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.ErrorDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.ErrorDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.DevAgeMaskedTextBox">
+            <summary>
+            A TextBox that allows to set the type of value to edit, then you can use the Value property to read and write the specific type.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DevAgeMaskedTextBox.ApplyValidatorRules">
+            <summary>
+            Apply the current Validator rules. This method is automatically fired when the Validator change.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DevAgeMaskedTextBox.IsValidValue(System.Object@)">
+            <summary>
+            Check if the selected value is valid based on the current validator and returns the value.
+            </summary>
+            <param name="convertedValue"></param>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Windows.Forms.DevAgeMaskedTextBox.FormatValue">
+            <summary>
+            Gets or sets a property to enable or disable the automatic format of the Text when validating the control
+            </summary>
+        </member>
+        <member name="P:DevAge.Windows.Forms.DevAgeMaskedTextBox.Validator">
+            <summary>
+            Gets or sets the Validator class useded to validate the value and convert the text when using the Value property.
+            You can use the ApplyValidatorRules method to apply the settings of the Validator directly to the ComboBox, for example the list of values.
+            </summary>
+        </member>
+        <member name="P:DevAge.Windows.Forms.DevAgeMaskedTextBox.Value">
+            <summary>
+            Gets or sets the typed value for the control, using the Validator class.
+            If the Validator is ull the Text property is used.
+            </summary>
+        </member>
+        <member name="T:DevAge.Drawing.VisualElements.VisualElementBase">
+            <summary>
+            VisualElement abstract base class. 
+            You must override the OnDraw, OnMeasureContent and Clone.
+            </summary>
+        </member>
+        <member name="T:DevAge.Drawing.VisualElements.IVisualElement">
+            <summary>
+            Interface for all the VisualElements classes. Inherits from IClonable.
+            Support a deep clone.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.IVisualElement.GetDrawingArea(DevAge.Drawing.MeasureHelper,System.Drawing.RectangleF)">
+            <summary>
+            Gets the area where the visual element will be drawed.
+            </summary>
+            <param name="measure"></param>
+            <param name="area"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.IVisualElement.Measure(DevAge.Drawing.MeasureHelper,System.Drawing.SizeF,System.Drawing.SizeF)">
+            <summary>
+            Measure the current VisualElement using the specified settings.
+            </summary>
+            <param name="measure"></param>
+            <param name="minSize">If Empty is not used.</param>
+            <param name="maxSize">If Empty is not used.</param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.IVisualElement.Draw(DevAge.Drawing.GraphicsCache,System.Drawing.RectangleF)">
+            <summary>
+            Draw the current VisualElement in the specified Graphics object.
+            </summary>
+            <param name="graphics"></param>
+            <param name="area"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.IVisualElement.Draw(DevAge.Drawing.GraphicsCache,System.Drawing.RectangleF,System.Drawing.RectangleF@)">
+            <summary>
+            Draw the current VisualElement in the specified Graphics object.
+            </summary>
+            <param name="graphics"></param>
+            <param name="area"></param>
+            <param name="drawingArea"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.IVisualElement.GetElementsAtPoint(DevAge.Drawing.MeasureHelper,System.Drawing.RectangleF,System.Drawing.PointF)">
+            <summary>
+            Get the element at the specified point. Usually this methods simply return the current element, but an element can return inner elements drawed inside the main elements.
+            Returns a list of elements, where the last element is the upper element and the first element is the background element.
+            </summary>
+            <param name="measure"></param>
+            <param name="area"></param>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.IVisualElement.AnchorArea">
+            <summary>
+            Gets or sets the area where the content must be drawed.
+            You can set to align the content to the left, right, top or bottom using the relative properties (Left, Right, Top, Bottom).
+            You can also set more than one properties to allign the content to more than one side.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.VisualElementBase.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.VisualElementBase.#ctor(DevAge.Drawing.VisualElements.VisualElementBase)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.VisualElementBase.Measure(DevAge.Drawing.MeasureHelper,System.Drawing.SizeF,System.Drawing.SizeF)">
+            <summary>
+            Measure the current VisualElement using the specified settings.
+            </summary>
+            <param name="measure"></param>
+            <param name="minSize">If Empty is not used.</param>
+            <param name="maxSize">If Empty is not used.</param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.VisualElementBase.OnMeasureContent(DevAge.Drawing.MeasureHelper,System.Drawing.SizeF)">
+            <summary>
+            Measure the current content of the VisualElement.
+            </summary>
+            <param name="measure"></param>
+            <param name="maxSize">If empty is not used.</param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.VisualElementBase.Draw(DevAge.Drawing.GraphicsCache,System.Drawing.RectangleF,System.Drawing.RectangleF@)">
+            <summary>
+            Draw the current VisualElement in the specified Graphics object.
+            </summary>
+            <param name="graphics"></param>
+            <param name="area"></param>
+            <param name="drawingArea"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.VisualElementBase.Draw(DevAge.Drawing.GraphicsCache,System.Drawing.RectangleF)">
+            <summary>
+            Draw the current VisualElement in the specified Graphics object.
+            Usually derived class don't override this method but the OnDraw method that automatically check the area to draw.
+            </summary>
+            <param name="graphics"></param>
+            <param name="area"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.VisualElementBase.GetDrawingArea(DevAge.Drawing.MeasureHelper,System.Drawing.RectangleF)">
+            <summary>
+            Gets the area where the visual element will be drawed.
+            </summary>
+            <param name="measure"></param>
+            <param name="area"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.VisualElementBase.OnDraw(DevAge.Drawing.GraphicsCache,System.Drawing.RectangleF)">
+            <summary>
+            Method used to draw the specified content based on the Visual element. 
+            This is the method that you must override to draw. The area used is already calculated based on the AnchorArea property.
+            </summary>
+            <param name="graphics"></param>
+            <param name="area"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.VisualElementBase.GetElementsAtPoint(DevAge.Drawing.MeasureHelper,System.Drawing.RectangleF,System.Drawing.PointF)">
+            <summary>
+            Get the element at the specified point. Usually this methods simply return the current element, but an element can return inner elements drawed inside the main elements.
+            Returns a list of elements, where the last element is the upper element and the first element is the background element.
+            </summary>
+            <param name="measure"></param>
+            <param name="area"></param>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.VisualElementBase.Clone">
+            <summary>
+            Clone the current VisualElement.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.VisualElementBase.AnchorArea">
+            <summary>
+            Gets or sets the area where the content must be drawed.
+            You can set to align the content to the left, right, top or bottom using the relative properties (Left, Right, Top, Bottom).
+            You can also set more than one properties to allign the content to more than one side.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.DropDownButtonBase.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.DropDownButtonBase.#ctor(DevAge.Drawing.VisualElements.DropDownButtonBase)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.DropDownButton.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.DropDownButton.#ctor(DevAge.Drawing.VisualElements.DropDownButton)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.DropDownButton.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.DropDownButtonThemed.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.DropDownButtonThemed.#ctor(DevAge.Drawing.VisualElements.DropDownButtonThemed)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.DropDownButtonThemed.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:DevAge.Drawing.VisualElements.DropDownButtonThemed.mStandardButton">
+            <summary>
+            Standard button used when the XP style are disabled.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.DropDownButtonThemed.GetRenderer(System.Windows.Forms.VisualStyles.VisualStyleElement)">
+            <summary>
+            Gets the System.Windows.Forms.VisualStyles.VisualStyleRenderer to draw the specified element.
+            </summary>
+            <param name="element"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.Windows.Forms.HeaderGroupBox">
+            <summary>
+            Summary description for HeaderGroupBox.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Text.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Text.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Text.#ctor(DevAge.Drawing.VisualElements.Text)">
+            <summary>
+            Copy constructor.
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Text.OnMeasureContent(DevAge.Drawing.MeasureHelper,System.Drawing.SizeF)">
+            <summary>
+            Measure the current content of the VisualElement.
+            </summary>
+            <param name="measure"></param>
+            <param name="maxSize">If empty is not used.</param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Text.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.Text.Font">
+            <summary>
+            Gets or sets the Font of the content. Default is System.Windows.Forms.Control.DefaultFont.
+            </summary>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.Text.ForeColor">
+            <summary>
+            Gets or sets the fore color of the content. System.Windows.Forms.Control.DefaultForeColor
+            </summary>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.Text.Value">
+            <summary>
+            Gets or sets the string to draw. Default is null.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.TextGDI.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.TextGDI.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.TextGDI.#ctor(DevAge.Drawing.VisualElements.TextGDI)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.TextGDI.OnMeasureContent(DevAge.Drawing.MeasureHelper,System.Drawing.SizeF)">
+            <summary>
+            Measure the current content of the VisualElement.
+            </summary>
+            <param name="measure"></param>
+            <param name="maxSize">If empty is not used.</param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.TextGDI.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.TextGDI.StringFormat">
+            <summary>
+            Gets or sets the StringFormat object. 
+            Encapsulates text layout information (such as alignment, orientation and tab stops) display manipulations (such as ellipsis insertion and national digit substitution) and OpenType features.
+            </summary>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.TextGDI.Alignment">
+            <summary>
+            Gets or sets the alignment of the content.
+            </summary>
+        </member>
+        <member name="T:DevAge.Drawing.VisualElements.BackgroundBase">
+            <summary>
+            The background visualelement can be used as a background for a container element.
+            Override the OnDraw, GetBackgroundContentRectangle and GetBackgroundExtent to draw a custom background.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.BackgroundBase.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.BackgroundBase.#ctor(DevAge.Drawing.VisualElements.BackgroundBase)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.BackgroundBase.GetBackgroundContentRectangle(DevAge.Drawing.MeasureHelper,System.Drawing.RectangleF)">
+            <summary>
+            Calculate the client area where the content can be drawed, usually removing the area used by the background, for example removing a border.
+            </summary>
+            <param name="graphics"></param>
+            <param name="backGroundArea"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.BackgroundBase.GetBackgroundExtent(DevAge.Drawing.MeasureHelper,System.Drawing.SizeF)">
+            <summary>
+            Calculate the total area used by the backgound and the content, adding the background area to the content area.
+            </summary>
+            <param name="graphics"></param>
+            <param name="contentSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.HeaderBase.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.HeaderBase.#ctor(DevAge.Drawing.VisualElements.HeaderBase)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.RowHeaderBase.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.RowHeaderBase.#ctor(DevAge.Drawing.VisualElements.RowHeaderBase)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.HeaderThemed.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.HeaderThemed.#ctor(DevAge.Drawing.VisualElements.HeaderThemed)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.HeaderThemed.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:DevAge.Drawing.VisualElements.HeaderThemed.mStandardHeader">
+            <summary>
+            Standard header used when the XP style are disabled.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.HeaderThemed.GetRenderer(System.Windows.Forms.VisualStyles.VisualStyleElement)">
+            <summary>
+            Gets the System.Windows.Forms.VisualStyles.VisualStyleRenderer to draw the specified element.
+            </summary>
+            <param name="element"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ColumnHeaderBase.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ColumnHeaderBase.#ctor(DevAge.Drawing.VisualElements.ColumnHeaderBase)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="T:DevAge.Drawing.VisualElements.BackgroundLinearGradient">
+            <summary>
+            Class used to draw a standard linear gradient background. If FirstColor == SecondColor a solid color is drawed.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.BackgroundLinearGradient.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.BackgroundLinearGradient.#ctor(System.Drawing.Color,System.Drawing.Color,System.Single)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="firstColor"></param>
+            <param name="secondColor"></param>
+            <param name="angle"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.BackgroundLinearGradient.#ctor(DevAge.Drawing.VisualElements.BackgroundLinearGradient)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.BackgroundLinearGradient.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.BackgroundLinearGradient.FirstColor">
+            <summary>
+            Gets or sets the first back color of the content.
+            </summary>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.BackgroundLinearGradient.SecondColor">
+            <summary>
+            Gets or sets the second back color of the content.
+            </summary>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.BackgroundLinearGradient.Angle">
+            <summary>
+            Gets or sets the angle of the gradient
+            </summary>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.BackgroundLinearGradient.BlendFactors">
+            <summary>
+            Gradients are commonly used to smoothly shade the interiors of shapes. A blend pattern is defined by two arrays (Factors and Positions) that each contain the same number of elements. Each element of the Positions array represents a proportion of the distance along the gradient line. Each element of the Factors array represents the proportion of the starting and ending colors in the gradient blend at the position along the gradient line represented by the corresponding element in the Positions array.
+            For example, if corresponding elements of the Positions and Factors arrays are 0.2 and 0.3, respectively, for a linear gradient from blue to red along a 100-pixel line, the color 20 pixels along that line (20 percent of the distance) consists of 30 percent blue and 70 percent red.
+            
+            See System.Drawing.Drawing2D.Blend for details
+            </summary>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.BackgroundLinearGradient.BlendPositions">
+             <summary>
+             Gradients are commonly used to smoothly shade the interiors of shapes. A blend pattern is defined by two arrays (Factors and Positions) that each contain the same number of elements. Each element of the Positions array represents a proportion of the distance along the gradient line. Each element of the Factors array represents the proportion of the starting and ending colors in the gradient blend at the position along the gradient line represented by the corresponding element in the Positions array.
+             For example, if corresponding elements of the Positions and Factors arrays are 0.2 and 0.3, respectively, for a linear gradient from blue to red along a 100-pixel line, the color 20 pixels along that line (20 percent of the distance) consists of 30 percent blue and 70 percent red.
+            
+             See System.Drawing.Drawing2D.Blend for details
+             </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.DevAgeTextBox">
+            <summary>
+            A TextBox that allows to set the type of value to edit, then you can use the Value property to read and write the specific type.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DevAgeTextBox.ApplyValidatorRules">
+            <summary>
+            Apply the current Validator rules. This method is automatically fired when the Validator change.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DevAgeTextBox.IsValidValue(System.Object@)">
+            <summary>
+            Check if the selected value is valid based on the current validator and returns the value.
+            </summary>
+            <param name="convertedValue"></param>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Windows.Forms.DevAgeTextBox.FormatValue">
+            <summary>
+            Gets or sets a property to enable or disable the automatic format of the Text when validating the control
+            </summary>
+        </member>
+        <member name="P:DevAge.Windows.Forms.DevAgeTextBox.Validator">
+            <summary>
+            Gets or sets the Validator class useded to validate the value and convert the text when using the Value property.
+            You can use the ApplyValidatorRules method to apply the settings of the Validator directly to the ComboBox, for example the list of values.
+            </summary>
+        </member>
+        <member name="P:DevAge.Windows.Forms.DevAgeTextBox.Value">
+            <summary>
+            Gets or sets the typed value for the control, using the Validator class.
+            If the Validator is ull the Text property is used.
+            </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.FormBase">
+            <summary>
+            Summary description for FormPosition.
+            </summary>
+        </member>
+        <member name="F:DevAge.Windows.Forms.FormBase.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.FormBase.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.FormBase.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:DevAge.Drawing.VisualElements.SortIndicator">
+            <summary>
+            A class used to draw a generic sort indicator, usually a arrow. Use the SortStyle to customize the sort style (arrow up or arrow down)
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Icon.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Icon.#ctor(System.Drawing.Icon)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Icon.#ctor(DevAge.Drawing.VisualElements.Icon)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.Icon.Value">
+            <summary>
+            Gets or sets the Icon to draw. Default is null.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.SortIndicator.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.SortIndicator.#ctor(DevAge.Drawing.VisualElements.SortIndicator)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.SortIndicator.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.SortIndicatorThemed.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.SortIndicatorThemed.#ctor(DevAge.Drawing.VisualElements.SortIndicatorThemed)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.SortIndicatorThemed.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.SortIndicatorThemed.GetRenderer(System.Windows.Forms.VisualStyles.VisualStyleElement)">
+            <summary>
+            Gets the System.Windows.Forms.VisualStyles.VisualStyleRenderer to draw the specified element.
+            </summary>
+            <param name="element"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.Drawing.IBorder">
+            <summary>
+            Interface for all borders.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.IBorder.Draw(DevAge.Drawing.GraphicsCache,System.Drawing.RectangleF)">
+            <summary>
+            Draw the current VisualElement in the specified Graphics object.
+            </summary>
+            <param name="graphics"></param>
+            <param name="area"></param>
+        </member>
+        <member name="M:DevAge.Drawing.IBorder.GetPointPartType(System.Drawing.RectangleF,System.Drawing.PointF,System.Single@)">
+            <summary>
+            
+            </summary>
+            <param name="area"></param>
+            <param name="point"></param>
+            <param name="distanceFromBorder">Returns the distance of the specified point from the border rectangle. -1 if is not inside the border. Returns a positive value or 0 if inside the border. Consider always the distance from the outer border.</param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.EditablePanelBase.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.EditablePanelBase.#ctor(DevAge.Drawing.VisualElements.EditablePanelBase)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.EditablePanelBase.Draw(DevAge.Drawing.GraphicsCache,System.Drawing.RectangleF)">
+            <summary>
+            Draw the current VisualElement in the specified Graphics object.
+            </summary>
+            <param name="graphics"></param>
+            <param name="area"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.EditablePanelBase.GetPointPartType(System.Drawing.RectangleF,System.Drawing.PointF,System.Single@)">
+            <summary>
+            
+            </summary>
+            <param name="area"></param>
+            <param name="point"></param>
+            <param name="distanceFromBorder">Returns the distance of the specified point from the border rectangle. -1 if is not inside the border. Returns a positive value or 0 if inside the border. Consider always the distance from the outer border.</param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.EditablePanel.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.EditablePanel.#ctor(DevAge.Drawing.VisualElements.EditablePanel)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.EditablePanel.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.CheckBoxBase.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.CheckBoxBase.#ctor(DevAge.Drawing.VisualElements.CheckBoxBase)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.CheckBoxThemed.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.CheckBoxThemed.#ctor(DevAge.Drawing.VisualElements.CheckBoxThemed)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.CheckBoxThemed.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:DevAge.Drawing.VisualElements.CheckBoxThemed.mStandardCheckBox">
+            <summary>
+            Standard checkbox used when the XP style are disabled.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.CheckBoxThemed.GetRenderer(System.Windows.Forms.VisualStyles.VisualStyleElement)">
+            <summary>
+            Gets the System.Windows.Forms.VisualStyles.VisualStyleRenderer to draw the specified element.
+            </summary>
+            <param name="element"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.Drawing.RoundedRectangle">
+            <summary>
+            Rapresents a rounded rectangle, takes a rectangle and a round value from 0 to 1. Can be converted to a GraphicsPath for drawing operations.
+            See also DevAge.Drawing.Utilities.FillRoundedRectangle and DrawRoundedRectangle methods.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.RoundedRectangle.#ctor(System.Drawing.Rectangle,System.Double)">
+            <summary>
+            Costructor
+            </summary>
+            <param name="rect">Content rectangle</param>
+            <param name="roundValue">The amount to round the rectangle. Can be any vavlues from 0 to 1. Set to 0 to draw a standard rectangle, 1 to have a full rounded rectangle.</param>
+        </member>
+        <member name="M:DevAge.Drawing.RoundedRectangle.ToGraphicsPath">
+            <summary>
+            Converts this structure to a GraphicsPath object, used to draw to a Graphics device.
+            Consider that you can create a Region with a GraphicsPath object using one of the Region constructor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Drawing.RoundedRectangle.RoundValue">
+            <summary>
+            The amount to round the rectangle. Can be any values from 0 to 1. Set to 0 to draw a standard rectangle, 1 to have a full rounded rectangle.
+            </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.ButtonMultiSelection">
+            <summary>
+            Summary description for ButtonMultiSelection.
+            </summary>
+        </member>
+        <member name="F:DevAge.Windows.Forms.ButtonMultiSelection.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.ButtonMultiSelection.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.ButtonMultiSelection.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.SubButtonItemCollection">
+            <summary>
+            A collection of elements of type SubButtonItem
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.SubButtonItemCollection.#ctor">
+            <summary>
+            Initializes a new empty instance of the SubButtonItemCollection class.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.SubButtonItemCollection.#ctor(DevAge.Windows.Forms.SubButtonItem[])">
+            <summary>
+            Initializes a new instance of the SubButtonItemCollection class, containing elements
+            copied from an array.
+            </summary>
+            <param name="items">
+            The array whose elements are to be added to the new SubButtonItemCollection.
+            </param>
+        </member>
+        <member name="M:DevAge.Windows.Forms.SubButtonItemCollection.#ctor(DevAge.Windows.Forms.SubButtonItemCollection)">
+            <summary>
+            Initializes a new instance of the SubButtonItemCollection class, containing elements
+            copied from another instance of SubButtonItemCollection
+            </summary>
+            <param name="items">
+            The SubButtonItemCollection whose elements are to be added to the new SubButtonItemCollection.
+            </param>
+        </member>
+        <member name="M:DevAge.Windows.Forms.SubButtonItemCollection.AddRange(DevAge.Windows.Forms.SubButtonItem[])">
+            <summary>
+            Adds the elements of an array to the end of this SubButtonItemCollection.
+            </summary>
+            <param name="items">
+            The array whose elements are to be added to the end of this SubButtonItemCollection.
+            </param>
+        </member>
+        <member name="M:DevAge.Windows.Forms.SubButtonItemCollection.AddRange(DevAge.Windows.Forms.SubButtonItemCollection)">
+            <summary>
+            Adds the elements of another SubButtonItemCollection to the end of this SubButtonItemCollection.
+            </summary>
+            <param name="items">
+            The SubButtonItemCollection whose elements are to be added to the end of this SubButtonItemCollection.
+            </param>
+        </member>
+        <member name="M:DevAge.Windows.Forms.SubButtonItemCollection.Add(DevAge.Windows.Forms.SubButtonItem)">
+            <summary>
+            Adds an instance of type SubButtonItem to the end of this SubButtonItemCollection.
+            </summary>
+            <param name="value">
+            The SubButtonItem to be added to the end of this SubButtonItemCollection.
+            </param>
+        </member>
+        <member name="M:DevAge.Windows.Forms.SubButtonItemCollection.Contains(DevAge.Windows.Forms.SubButtonItem)">
+            <summary>
+            Determines whether a specfic SubButtonItem value is in this SubButtonItemCollection.
+            </summary>
+            <param name="value">
+            The SubButtonItem value to locate in this SubButtonItemCollection.
+            </param>
+            <returns>
+            true if value is found in this SubButtonItemCollection;
+            false otherwise.
+            </returns>
+        </member>
+        <member name="M:DevAge.Windows.Forms.SubButtonItemCollection.IndexOf(DevAge.Windows.Forms.SubButtonItem)">
+            <summary>
+            Return the zero-based index of the first occurrence of a specific value
+            in this SubButtonItemCollection
+            </summary>
+            <param name="value">
+            The SubButtonItem value to locate in the SubButtonItemCollection.
+            </param>
+            <returns>
+            The zero-based index of the first occurrence of the _ELEMENT value if found;
+            -1 otherwise.
+            </returns>
+        </member>
+        <member name="M:DevAge.Windows.Forms.SubButtonItemCollection.Insert(System.Int32,DevAge.Windows.Forms.SubButtonItem)">
+            <summary>
+            Inserts an element into the SubButtonItemCollection at the specified index
+            </summary>
+            <param name="index">
+            The index at which the SubButtonItem is to be inserted.
+            </param>
+            <param name="value">
+            The SubButtonItem to insert.
+            </param>
+        </member>
+        <member name="M:DevAge.Windows.Forms.SubButtonItemCollection.Remove(DevAge.Windows.Forms.SubButtonItem)">
+            <summary>
+            Removes the first occurrence of a specific SubButtonItem from this SubButtonItemCollection.
+            </summary>
+            <param name="value">
+            The SubButtonItem value to remove from this SubButtonItemCollection.
+            </param>
+        </member>
+        <member name="M:DevAge.Windows.Forms.SubButtonItemCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that can iterate through the elements of this SubButtonItemCollection.
+            </summary>
+            <returns>
+            An object that implements System.Collections.IEnumerator.
+            </returns>        
+        </member>
+        <member name="P:DevAge.Windows.Forms.SubButtonItemCollection.Item(System.Int32)">
+            <summary>
+            Gets or sets the SubButtonItem at the given index in this SubButtonItemCollection.
+            </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.SubButtonItemCollection.Enumerator">
+            <summary>
+            Type-specific enumeration class, used by SubButtonItemCollection.GetEnumerator.
+            </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.TextBoxUITypeEditor">
+            <summary>
+            A TextBoxTypedButton that uase the UITypeEditor associated with the type.
+            </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.DevAgeTextBoxButton">
+            <summary>
+            A textBox with a button on the right.
+            </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.EditableControlBase">
+            <summary>
+            Summary description for EditableControlBase.
+            </summary>
+        </member>
+        <member name="F:DevAge.Windows.Forms.EditableControlBase.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.EditableControlBase.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.EditableControlBase.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:DevAge.Windows.Forms.DevAgeTextBoxButton.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DevAgeTextBoxButton.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DevAgeTextBoxButton.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DevAgeTextBoxButton.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DevAgeTextBoxButton.ApplyValidatorRules">
+            <summary>
+            Apply the current Validator rules. This method is automatically fired when the Validator change.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DevAgeTextBoxButton.ShowDialog">
+            <summary>
+            Show the dialog
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DevAgeTextBoxButton.OnDialogOpen(System.EventArgs)">
+            <summary>
+            Fired when showing the drop down
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DevAgeTextBoxButton.OnDialogClosed(System.EventArgs)">
+            <summary>
+            Fired when closing the dropdown
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DevAgeTextBoxButton.IsValidValue(System.Object@)">
+            <summary>
+            Check if the selected value is valid based on the current validator and returns the value.
+            </summary>
+            <param name="convertedValue"></param>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Windows.Forms.DevAgeTextBoxButton.Validator">
+            <summary>
+            Gets or sets the Validator class useded to validate the value and convert the text when using the Value property.
+            You can use the ApplyValidatorRules method to apply the settings of the Validator directly to the ComboBox, for example the list of values.
+            </summary>
+        </member>
+        <member name="P:DevAge.Windows.Forms.DevAgeTextBoxButton.Button">
+            <summary>
+            The button in the right of the editor
+            </summary>
+        </member>
+        <member name="E:DevAge.Windows.Forms.DevAgeTextBoxButton.DialogOpen">
+            <summary>
+            Fired when showing the drop down
+            </summary>
+        </member>
+        <member name="E:DevAge.Windows.Forms.DevAgeTextBoxButton.DialogClosed">
+            <summary>
+            Fired when closing the dropdown
+            </summary>
+        </member>
+        <member name="P:DevAge.Windows.Forms.DevAgeTextBoxButton.Value">
+            <summary>
+            Gets or sets the typed value for the control, using the Validator class.
+            If the Validator is ull the Text property is used.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.TextBoxUITypeEditor.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.TextBoxUITypeEditor.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="P:DevAge.Windows.Forms.TextBoxUITypeEditor.UITypeEditor">
+            <summary>
+            Gets or sets the UITypeEditor to use. If you have specified a validator the TypeDescriptor.GetEditor method is used based on the Validator.ValueType.
+            </summary>
+        </member>
+        <member name="T:DevAge.ComponentModel.BoundDataView">
+            <summary>
+            A class to support list binding to a DataView object.
+            Implement the IBoundList.
+            </summary>
+        </member>
+        <member name="T:DevAge.ComponentModel.IBoundList">
+            <summary>
+            A generic binded list interface. See BoundDataView or BoundList for a concreate implementation.
+            It is used as an abstraction layer for list objects (typically a list can be a DataView or a IList class)
+            Can be used to bind a list control (like SourceGrid).
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.BoundDataView.EditedObject">
+            <summary>
+            Gets the current edited object
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ButtonBase.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ButtonBase.#ctor(DevAge.Drawing.VisualElements.ButtonBase)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ButtonThemed.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ButtonThemed.#ctor(DevAge.Drawing.VisualElements.ButtonThemed)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ButtonThemed.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:DevAge.Drawing.VisualElements.ButtonThemed.mStandardButton">
+            <summary>
+            Standard button used when the XP style are disabled.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ButtonThemed.GetRenderer(System.Windows.Forms.VisualStyles.VisualStyleElement)">
+            <summary>
+            Gets the System.Windows.Forms.VisualStyles.VisualStyleRenderer to draw the specified element.
+            </summary>
+            <param name="element"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.Windows.Forms.DropDown">
+            <summary>
+            Summary description for DropDownCustom.
+            </summary>
+        </member>
+        <member name="F:DevAge.Windows.Forms.DropDown.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DropDown.#ctor(System.Windows.Forms.Control,System.Windows.Forms.Control,System.Windows.Forms.Form)">
+            <summary>
+            Constructor to create a dropdown form used to display the innerControl specified.
+            It is responsability of the caller to dispose the innerControl.
+            </summary>
+            <param name="innerControl"></param>
+            <param name="parentControl"></param>
+            <param name="owner"></param>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DropDown.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DropDown.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:DevAge.Windows.Forms.DropDownFlags.CloseOnEscape">
+            <summary>
+            Close the DropDown whe the user press the escape key, return DialogResult.Cancel
+            </summary>
+        </member>
+        <member name="F:DevAge.Windows.Forms.DropDownFlags.CloseOnEnter">
+            <summary>
+            Close the DropDown whe the user press the enter key, return DialogResult.OK
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.CheckBox.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.CheckBox.#ctor(DevAge.Drawing.VisualElements.CheckBox)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.CheckBox.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Button.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Button.#ctor(DevAge.Drawing.VisualElements.Button)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Button.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.Drawing.BorderLine">
+            <summary>
+            A struct that represents a single border line.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.BorderLine.Equals(System.Object)">
+            <summary>
+            Compare to current border with another border.
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.ComponentModel.BoundList`1">
+            <summary>
+            A class derived from BoundListBase that can be used to bind a list control (like SourceGrid) to a generic IList class.
+            If the IList is an instance of List class then also the Sort is supported.
+            Implement the IBoundList interface used for data binding.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:DevAge.ComponentModel.BoundListBase`1">
+            <summary>
+            An abstract class used for data binding. This class can be used as a base implementation of the IBoundList interface.
+            You can use the concreate classes BoundList or BoundDataView or a custom class.
+            To implement you own bound list class simply derive from this class and implement the abstract methods.
+            </summary>
+        </member>
+        <member name="M:DevAge.ComponentModel.BoundListBase`1.GetItemProperty(System.String,System.StringComparison)">
+            <summary>
+            Get an item property by name
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.BoundListBase`1.OnAddNew">
+            <summary>
+            Create a new item (row) add it at the end of the list and return the new item.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.BoundListBase`1.IndexOf(System.Object)">
+            <summary>
+            Return the index of the specified item
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.ComponentModel.BoundListBase`1.OnRemoveAt(System.Int32)">
+            <summary>
+            Remove the item at the specified position.
+            </summary>
+            <param name="index"></param>
+        </member>
+        <member name="M:DevAge.ComponentModel.BoundListBase`1.ApplySort(System.ComponentModel.ListSortDescriptionCollection)">
+            <summary>
+            Sort the list
+            </summary>
+            <param name="sorts"></param>
+        </member>
+        <member name="P:DevAge.ComponentModel.BoundListBase`1.EditedObject">
+            <summary>
+            Gets the current edited object
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.BoundListBase`1.AllowSort">
+            <summary>
+            Gets or sets if the sort is enabled. Usually is enabled only if the IList is an instance of List class
+            </summary>
+        </member>
+        <member name="P:DevAge.ComponentModel.BoundListBase`1.Item(System.Int32)">
+            <summary>
+            Return the item at the specified position.
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.ComponentModel.BoundListBase`1.Count">
+            <summary>
+            Return the row count of the list
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DevAgeNumericUpDown.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DevAgeNumericUpDown.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.RowHeader.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.RowHeader.#ctor(DevAge.Drawing.VisualElements.RowHeader)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.RowHeader.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.RowHeader.BackColor">
+            <summary>
+            Back Color
+            </summary>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.RowHeader.BackgroundColorStyle">
+            <summary>
+            Draw mode for the header. Default is Linear.
+            </summary>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.RowHeader.Border">
+            <summary>
+            Border
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Image.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Image.#ctor(System.Drawing.Image)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Image.#ctor(DevAge.Drawing.VisualElements.Image)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.Image.Value">
+            <summary>
+            Gets or sets the Image to draw. Default is null.
+            </summary>
+        </member>
+        <member name="T:DevAge.Drawing.VisualElements.ContainerBase">
+            <summary>
+            The base abstract class for all container VisualElements. 
+            Override the GetElements() to get a collection of elements to draw inside the container.
+            Use the Border, Padding and Background properties to customize the container
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ContainerBase.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ContainerBase.#ctor(DevAge.Drawing.VisualElements.ContainerBase)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ContainerBase.GetContentRectangle(DevAge.Drawing.MeasureHelper,System.Drawing.RectangleF)">
+            <summary>
+            Calculate the client area where the content can be drawed, usually removing the area used by the background, for example removing a border.
+            </summary>
+            <param name="graphics"></param>
+            <param name="backGroundArea"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ContainerBase.GetExtent(DevAge.Drawing.MeasureHelper,System.Drawing.SizeF)">
+            <summary>
+            Calculate the total area used by the backgound and the content, adding the background area to the content area.
+            </summary>
+            <param name="graphics"></param>
+            <param name="contentSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ContainerBase.GetElementsAtPoint(DevAge.Drawing.MeasureHelper,System.Drawing.RectangleF,System.Drawing.PointF)">
+            <summary>
+            Get the element at the specified point. Usually this methods simply return the current element, but an element can return inner elements drawed inside the main elements.
+            Returns a list of elements, where the last element is the upper (foremost) element and the first element is the background element.
+            </summary>
+            <param name="measure"></param>
+            <param name="area"></param>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ContainerBase.CalculateRemainingArea(System.Drawing.RectangleF,DevAge.Drawing.AnchorArea,System.Drawing.RectangleF)">
+            <summary>
+            Utility function. Calculates the remaining empty area of a specified area and a given content.
+            </summary>
+            <param name="parentArea"></param>
+            <param name="anchor"></param>
+            <param name="area"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ContainerBase.CalculateSizeWithContent(System.Drawing.SizeF,DevAge.Drawing.AnchorArea,System.Drawing.SizeF)">
+            <summary>
+            Utility function. Calculate the required size adding using the anchor informations of the available area.
+            </summary>
+            <param name="currentSize"></param>
+            <param name="contentAnchor"></param>
+            <param name="contentSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ContainerBase.CalculateSizeWithAnchor(System.Drawing.SizeF,DevAge.Drawing.AnchorArea,System.Drawing.SizeF)">
+            <summary>
+            Add the anchor informations to the element content size
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.ContainerBase.ElementsDrawMode">
+            <summary>
+            Gets or sets a property that specify how to draw the elements.
+            </summary>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.ContainerBase.Background">
+            <summary>
+            The background used to draw
+            </summary>
+        </member>
+        <member name="T:DevAge.Drawing.VisualElements.Container">
+            <summary>
+            A container for other elements
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Container.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Container.#ctor(DevAge.Drawing.VisualElements.Container)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Container.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.Padding.Equals(System.Object)">
+            <summary>
+            Compare to current padding with another padding.
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.Drawing.BrushsCache">
+            <summary>
+            A class used to cache the Brush used by the drawing methods. Use the GetBrush method to retrive or insert new brushes.
+            Remember to call Dispose when you don't need anymore this class to release all graphics resources.
+            Usually you don't need to use this class directly but you can acces it using the GraphicsCache class.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.BrushsCache.#ctor(System.Int32)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="maxCapacity">A positive number that specify the capacity of the cache.</param>
+        </member>
+        <member name="M:DevAge.Drawing.BrushsCache.GetBrush(System.Drawing.Color)">
+            <summary>
+            Returns the existing Brush object if already exist in the cache, otherwise create it and store in the cache.
+            If there aren't anymore free slots (count > capacity) the this method create the pen but don't store it in the cache.
+            </summary>
+            <param name="color"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.BrushsCache.Dispose">
+            <summary>
+            Dispose. Release the graphics resources.
+            </summary>
+        </member>
+        <member name="T:DevAge.Drawing.RectangleBorder">
+            <summary>
+            A struct that represents the borders of a cell. Contains 4 borders: Right, Left, Top, Bottom.
+            If you have 2 adjacent cells and want to create a 1 pixel width border, you must set width 1 for one cell and width 0 for the other. Usually a cell has only Right and Bottom border.
+            The bottom and top border lines are drawed over the right and left lines.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.RectangleBorder.#ctor(DevAge.Drawing.BorderLine)">
+            <summary>
+            Construct a RectangleBorder with the same border on all the side
+            </summary>
+            <param name="p_Border"></param>
+        </member>
+        <member name="M:DevAge.Drawing.RectangleBorder.#ctor(DevAge.Drawing.BorderLine,DevAge.Drawing.BorderLine)">
+            <summary>
+            Construct a RectangleBorder with the specified Right and Bottom border and a 0 Left and Top border
+            </summary>
+            <param name="p_Right"></param>
+            <param name="p_Bottom"></param>
+        </member>
+        <member name="M:DevAge.Drawing.RectangleBorder.#ctor(DevAge.Drawing.BorderLine,DevAge.Drawing.BorderLine,DevAge.Drawing.BorderLine,DevAge.Drawing.BorderLine)">
+            <summary>
+            Construct a RectangleBorder with the specified borders
+            </summary>
+            <param name="p_Top"></param>
+            <param name="p_Bottom"></param>
+            <param name="p_Left"></param>
+            <param name="p_Right"></param>
+        </member>
+        <member name="M:DevAge.Drawing.RectangleBorder.SetColor(System.Drawing.Color)">
+            <summary>
+            Change the color of the current struct instance and return a copy of the modified struct.
+            </summary>
+            <param name="p_Color"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.RectangleBorder.SetDashStyle(System.Drawing.Drawing2D.DashStyle)">
+            <summary>
+            Change the dashStyle of the current struct instance and return a copy of the modified struct.
+            </summary>
+            <param name="dashStyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.RectangleBorder.SetWidth(System.Int32)">
+            <summary>
+            Change the width of the current struct instance and return a copy of the modified struct.
+            </summary>
+            <param name="p_Width"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.RectangleBorder.SetPadding(System.Int32)">
+            <summary>
+            Change the width of the current struct instance and return a copy of the modified struct.
+            </summary>
+            <param name="p_Width"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.RectangleBorder.Equals(System.Object)">
+            <summary>
+            Compare to current border with another border.
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.RectangleBorder.CreateInsetBorder(System.Int32,System.Drawing.Color,System.Drawing.Color)">
+            <summary>
+            Create an Inset border
+            </summary>
+            <param name="p_width"></param>
+            <param name="p_ShadowColor"></param>
+            <param name="p_LightColor"></param>
+        </member>
+        <member name="M:DevAge.Drawing.RectangleBorder.CreateRaisedBorder(System.Int32,System.Drawing.Color,System.Drawing.Color)">
+            <summary>
+            Create a Raised border
+            </summary>
+            <param name="p_width"></param>
+            <param name="p_ShadowColor"></param>
+            <param name="p_LightColor"></param>
+        </member>
+        <member name="M:DevAge.Drawing.RectangleBorder.GetPointPartType(System.Drawing.RectangleF,System.Drawing.PointF,System.Single@)">
+            <summary>
+            
+            </summary>
+            <param name="area"></param>
+            <param name="point"></param>
+            <param name="distanceFromBorder">Returns the distance of the specified point from the border rectangle. -1 if is not inside the border. Returns a positive value or 0 if inside the border. Consider always the distance from the outer border.</param>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.Drawing.AnchorArea">
+            <summary>
+            The AnchorArea class is used to specify the anchor properties of an object.
+            You can set to align the content to the left, right, top or bottom using the relative properties (Left, Right, Top, Bottom).
+            You can also set more than one properties to allign the content to more than one side.
+            Use float.NaN to set a null value for one of the properties.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.AnchorArea.#ctor">
+            <summary>
+            Default is constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.AnchorArea.#ctor(System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean)">
+            <summary>
+            Construct an anchor area object
+            </summary>
+            <param name="left"></param>
+            <param name="top"></param>
+            <param name="right"></param>
+            <param name="bottom"></param>
+            <param name="center"></param>
+            <param name="middle"></param>
+        </member>
+        <member name="M:DevAge.Drawing.AnchorArea.#ctor(DevAge.Drawing.AnchorArea)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.AnchorArea.#ctor(DevAge.Drawing.ContentAlignment,System.Boolean)">
+            <summary>
+            Constructo an anchorarea class based on the aligment and the stretch parameters.
+            </summary>
+            <param name="aligment"></param>
+            <param name="stretch"></param>
+        </member>
+        <member name="M:DevAge.Drawing.AnchorArea.CalculateArea(System.Drawing.RectangleF,System.Drawing.SizeF,DevAge.Drawing.AnchorArea)">
+            <summary>
+            Calculate the destination area of 
+            </summary>
+            <param name="area"></param>
+            <param name="content"></param>
+            <param name="anchor"></param>
+            <returns></returns>
+        </member>
+        <member name="F:DevAge.Windows.Forms.SaveFlags.ActiveMDIMaximized">
+            <summary>
+            Indicates to save all the childs form of a MDI window with the state of the active child window if this window is maximized. This flag allow to reopen all the child form maximized if you close the form MDI parent with a maximized mdi child.
+            </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.PositionRecorderIsolatedStorage">
+            <summary>
+            A class that can be used to save into the isolated storage the position and the state of a Windows Forms control.
+            </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.DevAgeComboBox">
+            <summary>
+            DevAgeComboBox has a typed Value property and the validating features using the Validator property.
+            Set the Validator property and then call the ApplyValidatorRules method.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DevAgeComboBox.IsValidValue(System.Object@)">
+            <summary>
+            Check if the selected value is valid based on the current validator and returns the value.
+            </summary>
+            <param name="convertedValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DevAgeComboBox.ApplyValidatorRules">
+            <summary>
+            Loads the Items from the StandardValues and the DropDownStyle based on the parameters of the validator.
+            Apply the current Validator rules. This method is automatically fired when the Validator change.
+            </summary>
+        </member>
+        <member name="P:DevAge.Windows.Forms.DevAgeComboBox.FormatValue">
+            <summary>
+            Gets or sets a property to enable or disable the automatic format of the Text when validating the control.
+            Default false.
+            </summary>
+        </member>
+        <member name="P:DevAge.Windows.Forms.DevAgeComboBox.Validator">
+            <summary>
+            Gets or sets the Validator class useded to validate the value and convert the text when using the Value property.
+            You can use the ApplyValidatorRules method to apply the settings of the Validator directly to the ComboBox, for example the list of values.
+            </summary>
+        </member>
+        <member name="P:DevAge.Windows.Forms.DevAgeComboBox.Value">
+            <summary>
+            Gets or sets the typed value for the control, using the Validator class.
+            If the Validator is ull the Text property is used.
+            </summary>
+        </member>
+        <member name="T:DevAge.Drawing.PensCache">
+            <summary>
+            A class used to cache the Pens used by the drawing methods. Use the GetPen method to retrive or insert new pens.
+            Remember to call Dispose when you don't need anymore this class to release all graphics resources.
+            Usually you don't need to use this class directly but you can acces it using the GraphicsCache class.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.PensCache.#ctor(System.Int32)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="maxCapacity">A positive number that specify the capacity of the cache.</param>
+        </member>
+        <member name="M:DevAge.Drawing.PensCache.GetPen(System.Drawing.Color,System.Single,System.Drawing.Drawing2D.DashStyle)">
+            <summary>
+            Returns the existing Pen object if already exist in the cache, otherwise create it and store in the cache.
+            If there aren't anymore free slots (count > capacity) the this method create the pen but don't store it in the cache.
+            </summary>
+            <param name="color"></param>
+            <param name="width"></param>
+            <param name="style"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.PensCache.Dispose">
+            <summary>
+            Dipose. Release the graphics resources.
+            </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.ImageNavigator">
+            <summary>
+            Summary description for ImageNavigator.
+            </summary>
+        </member>
+        <member name="F:DevAge.Windows.Forms.ImageNavigator.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.ImageNavigator.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.ImageNavigator.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.DropDownButton">
+            <summary>
+            Summary description for DropDownButton.
+            </summary>
+        </member>
+        <member name="F:DevAge.Windows.Forms.DropDownButton.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DropDownButton.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.DropDownButton.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.ColorPicker">
+            <summary>
+            Summary description for ColorPicker.
+            </summary>
+        </member>
+        <member name="F:DevAge.Windows.Forms.ColorPicker.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.ColorPicker.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.ColorPicker.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ColumnHeader.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ColumnHeader.#ctor(DevAge.Drawing.VisualElements.ColumnHeader)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ColumnHeader.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.ColumnHeader.BackColor">
+            <summary>
+            Back Color
+            </summary>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.ColumnHeader.BackgroundColorStyle">
+            <summary>
+            Draw mode for the header. Default is Linear.
+            </summary>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.ColumnHeader.Border">
+            <summary>
+            Border
+            </summary>
+        </member>
+        <member name="T:DevAge.Drawing.Utilities">
+            <summary>
+            A static class with drawing utilities functions
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.Utilities.DrawRoundedRectangle(System.Drawing.Graphics,DevAge.Drawing.RoundedRectangle,System.Drawing.Pen)">
+            <summary>
+            Draw a rounded rectangle with the specified pen.
+            </summary>
+            <param name="g"></param>
+            <param name="roundRect"></param>
+            <param name="pen"></param>
+        </member>
+        <member name="M:DevAge.Drawing.Utilities.FillRoundedRectangle(System.Drawing.Graphics,DevAge.Drawing.RoundedRectangle,System.Drawing.Brush)">
+            <summary>
+            Fill a rounded rectangle with the specified brush.
+            </summary>
+            <param name="g"></param>
+            <param name="roundRect"></param>
+            <param name="brush"></param>
+        </member>
+        <member name="M:DevAge.Drawing.Utilities.DrawGradient3DBorder(System.Drawing.Graphics,System.Drawing.Rectangle,System.Drawing.Color,System.Drawing.Color,System.Drawing.Color,System.Int32,System.Int32,DevAge.Drawing.Gradient3DBorderStyle)">
+            <summary>
+            Draw a 3D border inside the specified rectangle using a linear gradient border color.
+            </summary>
+            <param name="g"></param>
+            <param name="p_HeaderRectangle"></param>
+            <param name="p_BackColor"></param>
+            <param name="p_DarkColor"></param>
+            <param name="p_LightColor"></param>
+            <param name="p_DarkGradientNumber">The width of the dark border</param>
+            <param name="p_LightGradientNumber">The width of the light border</param>
+            <param name="p_Style"></param>
+        </member>
+        <member name="M:DevAge.Drawing.Utilities.CalculateColorGradient(System.Drawing.Color,System.Drawing.Color,System.Int32)">
+            <summary>
+            Interpolate the specified number of times between start and end color
+            </summary>
+            <param name="p_StartColor"></param>
+            <param name="p_EndColor"></param>
+            <param name="p_NumberOfGradients"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.Utilities.CalculateMiddleColor(System.Drawing.Color,System.Drawing.Color)">
+            <summary>
+            Calculate the middle color between the start and the end color.
+            </summary>
+            <param name="p_StartColor"></param>
+            <param name="p_EndColor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.Utilities.CalculateLightDarkColor(System.Drawing.Color,System.Single)">
+            <summary>
+            Calculate a darker or lighter color using the source specified.
+            A light of 1 is White, a light of -1 is black. All the other values are an interpolation from the source color.
+            </summary>
+            <param name="source"></param>
+            <param name="light"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.Utilities.ImageToBytes(System.Drawing.Image,System.Drawing.Imaging.ImageFormat)">
+            <summary>
+            Converts the specified image to an array of byte using the specified format.
+            </summary>
+            <param name="img"></param>
+            <param name="imgFormat"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.Utilities.BytesToImage(System.Byte[])">
+            <summary>
+            Converts the specified byte array to an Image object.
+            </summary>
+            <param name="bytes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.Utilities.CreateDisabledImage(System.Drawing.Image,System.Drawing.Color)">
+            <summary>
+            Create a disabled version of the image.
+            </summary>
+            <param name="image">The image to convert</param>
+            <param name="background">The Color of the background behind the image. The background parameter is used to calculate the fill color of the disabled image so that it is always visible against the background.</param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.Utilities.SizeFToSize(System.Drawing.SizeF)">
+            <summary>
+            Convert a SizeF structure to a Size structure rounding the value to the largest integer using Ceiling method.
+            </summary>
+            <param name="sizef"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.Drawing.MeasureHelper">
+            <summary>
+            A class to help measure string operations. Remember to call the Dispose method on this class.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.MeasureHelper.#ctor(System.Windows.Forms.Control)">
+            <summary>
+            Create a graphic object from the current control
+            </summary>
+            <param name="control"></param>
+        </member>
+        <member name="M:DevAge.Drawing.MeasureHelper.#ctor(System.Drawing.Graphics)">
+            <summary>
+            
+            </summary>
+            <param name="graphics">This object is not automatically disposed.</param>
+        </member>
+        <member name="M:DevAge.Drawing.MeasureHelper.Dispose">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="T:DevAge.Drawing.GraphicsCache">
+            <summary>
+            A wrapper for the GDI Graphic instance. Contains also a set of class used to cache pens and brushes.
+            </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.LinkLabel">
+            <summary>
+            A LinkLabel with Image support and round border support.
+            </summary>
+        </member>
+        <member name="F:DevAge.Windows.Forms.LinkLabel.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.LinkLabel.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.LinkLabel.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="P:DevAge.Windows.Forms.LinkLabel.Image">
+            <summary>
+            The default image to draw
+            </summary>
+        </member>
+        <member name="P:DevAge.Windows.Forms.LinkLabel.MouseOverImage">
+            <summary>
+            Specifies the image to display when the mouse is inside the link area. If null is used the normal image.
+            </summary>
+        </member>
+        <member name="P:DevAge.Windows.Forms.LinkLabel.DisabledImage">
+            <summary>
+            Specifies the image to display when the link is disabled.
+            </summary>
+        </member>
+        <member name="P:DevAge.Windows.Forms.LinkLabel.BorderWidth">
+            <summary>
+            Gets or sets the width of the border. If 0 no border is drawed.
+            </summary>
+        </member>
+        <member name="P:DevAge.Windows.Forms.LinkLabel.BorderRound">
+            <summary>
+            Round amount. If 0 the border is a not rounded.
+            </summary>
+        </member>
+        <member name="P:DevAge.Windows.Forms.LinkLabel.BorderColor">
+            <summary>
+            Border color.
+            </summary>
+        </member>
+        <member name="T:DevAge.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:DevAge.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:DevAge.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:DevAge.Drawing.ContentAlignment">
+            <summary>
+            Specifies alignment of content on the drawing surface.
+            The same enum as System.Drawing.ContentAlignment. Rewritten for compatibility with the Compact Framework.
+            </summary>
+        </member>
+        <member name="F:DevAge.Drawing.ContentAlignment.BottomCenter">
+            <summary>
+            Content is vertically aligned at the bottom, and horizontally aligned at the center.  
+            </summary>
+        </member>
+        <member name="F:DevAge.Drawing.ContentAlignment.BottomLeft">
+            <summary>
+            Content is vertically aligned at the bottom, and horizontally aligned on the left.  
+            </summary>
+        </member>
+        <member name="F:DevAge.Drawing.ContentAlignment.BottomRight">
+            <summary>
+            Content is vertically aligned at the bottom, and horizontally aligned on the right.
+            </summary>
+        </member>
+        <member name="F:DevAge.Drawing.ContentAlignment.MiddleCenter">
+            <summary>
+            Content is vertically aligned in the middle, and horizontally aligned at the center.  
+            </summary>
+        </member>
+        <member name="F:DevAge.Drawing.ContentAlignment.MiddleLeft">
+            <summary>
+            Content is vertically aligned in the middle, and horizontally aligned on the left.  
+            </summary>
+        </member>
+        <member name="F:DevAge.Drawing.ContentAlignment.MiddleRight">
+            <summary>
+            Content is vertically aligned in the middle, and horizontally aligned on the right. 
+            </summary>
+        </member>
+        <member name="F:DevAge.Drawing.ContentAlignment.TopCenter">
+            <summary>
+            Content is vertically aligned at the top, and horizontally aligned at the center.  
+            </summary>
+        </member>
+        <member name="F:DevAge.Drawing.ContentAlignment.TopLeft">
+            <summary>
+            Content is vertically aligned at the top, and horizontally aligned on the left. 
+            </summary>
+        </member>
+        <member name="F:DevAge.Drawing.ContentAlignment.TopRight">
+            <summary>
+            Content is vertically aligned at the top, and horizontally aligned on the right.
+            </summary>
+        </member>
+        <member name="F:DevAge.Drawing.ElementsDrawMode.Covering">
+            <summary>
+            Draw each element over the previous
+            </summary>
+        </member>
+        <member name="F:DevAge.Drawing.ElementsDrawMode.Align">
+            <summary>
+            Align each element with the previous if an alignment is specified.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.BackgroundSolid.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.BackgroundSolid.BackColor">
+            <summary>
+            Gets or sets the back color of the content.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.RowHeaderThemed.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.RowHeaderThemed.#ctor(DevAge.Drawing.VisualElements.RowHeaderThemed)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.RowHeaderThemed.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:DevAge.Drawing.VisualElements.RowHeaderThemed.mStandardRowHeader">
+            <summary>
+            Standard header used when the XP style are disabled.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.RowHeaderThemed.GetRenderer(System.Windows.Forms.VisualStyles.VisualStyleElement)">
+            <summary>
+            Gets the System.Windows.Forms.VisualStyles.VisualStyleRenderer to draw the specified element.
+            </summary>
+            <param name="element"></param>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.RowHeaderThemed.RotateColHeaderIfNotDefined">
+            <summary>
+            Gets or sets a property to indicate to rotate the standard column header if the row header is not defined in the current theme.
+            This is expecially usefull because for many themes the row header is not defined. Default is true.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Header.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Header.#ctor(DevAge.Drawing.VisualElements.Header)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Header.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Header.GetBackgroundContentRectangle(DevAge.Drawing.MeasureHelper,System.Drawing.RectangleF)">
+            <summary>
+            Calculate the client area where the content can be drawed, usually removing the area used by the background, for example removing a border.
+            </summary>
+            <param name="graphics"></param>
+            <param name="backGroundArea"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.Header.GetBackgroundExtent(DevAge.Drawing.MeasureHelper,System.Drawing.SizeF)">
+            <summary>
+            Calculate the total area used by the backgound and the content, adding the background area to the content area.
+            </summary>
+            <param name="graphics"></param>
+            <param name="contentSize"></param>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.Header.BackColor">
+            <summary>
+            Back Color
+            </summary>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.Header.Border">
+            <summary>
+            Border
+            </summary>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.Header.GradientAngle">
+            <summary>
+            Gradient angle used for linear gradient.
+            </summary>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.Header.BackgroundColorStyle">
+            <summary>
+            Draw mode for the header. Default is Linear.
+            </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.ErrorDialogDetails">
+            <summary>
+            Summary description for ErrorDialogDetails.
+            </summary>
+        </member>
+        <member name="F:DevAge.Windows.Forms.ErrorDialogDetails.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.ErrorDialogDetails.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.ErrorDialogDetails.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.TextRenderer.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.TextRenderer.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.TextRenderer.#ctor(DevAge.Drawing.VisualElements.TextRenderer)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.TextRenderer.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.TextRenderer.OnMeasureContent(DevAge.Drawing.MeasureHelper,System.Drawing.SizeF)">
+            <summary>
+            Measure the current content of the VisualElement.
+            </summary>
+            <param name="measure"></param>
+            <param name="maxSize">If empty is not used.</param>
+            <returns></returns>
+        </member>
+        <member name="P:DevAge.Drawing.VisualElements.TextRenderer.TextFormatFlags">
+            <summary>
+            Gets or sets the TextFormatFlags enum. 
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ColumnHeaderThemed.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ColumnHeaderThemed.#ctor(DevAge.Drawing.VisualElements.ColumnHeaderThemed)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ColumnHeaderThemed.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:DevAge.Drawing.VisualElements.ColumnHeaderThemed.mStandardHeader">
+            <summary>
+            Standard column header used when the XP style are disabled.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.ColumnHeaderThemed.GetRenderer(System.Windows.Forms.VisualStyles.VisualStyleElement)">
+            <summary>
+            Gets the System.Windows.Forms.VisualStyles.VisualStyleRenderer to draw the specified element.
+            </summary>
+            <param name="element"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.Windows.Forms.Utilities">
+            <summary>
+            Summary description for Utilities.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.EditablePanelThemed.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.EditablePanelThemed.#ctor(DevAge.Drawing.VisualElements.EditablePanelThemed)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.EditablePanelThemed.Clone">
+            <summary>
+            Clone
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:DevAge.Drawing.VisualElements.EditablePanelThemed.mStandard">
+            <summary>
+            Standard button used when the XP style are disabled.
+            </summary>
+        </member>
+        <member name="M:DevAge.Drawing.VisualElements.EditablePanelThemed.GetRenderer(System.Windows.Forms.VisualStyles.VisualStyleElement)">
+            <summary>
+            Gets the System.Windows.Forms.VisualStyles.VisualStyleRenderer to draw the specified element.
+            </summary>
+            <param name="element"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DevAge.Windows.Forms.Line">
+            <summary>
+            Summary description for Line.
+            </summary>
+        </member>
+        <member name="F:DevAge.Windows.Forms.Line.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.Line.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:DevAge.Windows.Forms.Line.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:DevAge.Windows.Forms.ControlCursor">
+            <summary>
+            Summary description for ControlCursor.
+            </summary>
+        </member>
+    </members>
+</doc>
