@@ -15,15 +15,11 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		private object value = new object();
 		private object valueLock = new object();
 
-		public enum InternalChannelType { SimpleGeneric, RandomInteger};
-		InternalChannelType internalType;
-
-		public ChannelBase(string name, bool readOnly, Plugin plugin, Type type, InternalChannelType internalType)
+		public ChannelBase(string name, bool readOnly, Plugin plugin, Type type)
 		{
 			this.name = name;
 			this.readOnly = readOnly;
 			this.plugin = plugin;
-			this.InternalType = internalType;
 			this.type = type;
 		}
 
@@ -60,7 +56,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			}
 			set
 			{
-				if (!readOnly)
+				if (!readOnly && plugin.IsConnected)
 					InternalSetValue(value);
 			}
 		}
@@ -79,15 +75,9 @@ namespace FreeSCADA.Communication.SimulatorPlug
 				ValueChanged(this, new EventArgs());
 		}
 
-		public InternalChannelType InternalType
-		{
-			get { return internalType; }
-			set { internalType = value; }
-		}
-
 		protected void InternalSetValue(object value)
 		{
-			if (value.GetType() == type && plugin.IsConnected)
+			if (value.GetType() == type)
 			{
 				bool fire = false;
 				lock (valueLock)

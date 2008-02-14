@@ -2,19 +2,30 @@
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using System.Collections.Generic;
 
 namespace FreeSCADA.Communication.SimulatorPlug
 {
 	public partial class SettingsForm : Form
 	{
-		string[] variableTypeNames = { "Current time", "Random integer", "Simple integer", "Simple string", "Simple float"};
-		enum VariableTypes { CurrentTime, RandomInteger, SimpleInteger, SimpleString, SimpleFloat};
+		Dictionary<string, string> variableTypeNames = new Dictionary<string,string>();
+		List<string> channelNames = new List<string>();
+		//string[] variableTypeNames = { "Current time", "Random integer", "Simple integer", "Simple string", "Simple float"};
+		//enum VariableTypes { CurrentTime, RandomInteger, SimpleInteger, SimpleString, SimpleFloat};
 		Plugin plugin;
 
 		public SettingsForm(Plugin plugin)
 		{
 			InitializeComponent();
 			this.plugin = plugin;
+
+			variableTypeNames[typeof(CurrentTimeChannel).FullName]		= "Current time";
+			variableTypeNames[typeof(RandomIntegerChannel).FullName]	= "Random integer";
+			variableTypeNames[typeof(GenericChannel<int>).FullName]		= "Simple integer";
+			variableTypeNames[typeof(GenericChannel<string>).FullName]	= "Simple string";
+			variableTypeNames[typeof(GenericChannel<float>).FullName]	= "Simple float";
+			foreach (KeyValuePair<string, string> pair in variableTypeNames)
+				channelNames.Add(pair.Value);
 
 			grid.SelectionMode = SourceGrid.GridSelectionMode.Row;
 			grid.Selection.EnableMultiSelection = false;
@@ -39,17 +50,18 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		private void OnAddRow(object sender, EventArgs e)
 		{
 			string variableName = GetUniqueVariableName();
-			AddVariable(variableName, VariableTypes.SimpleInteger, false);
+			AddVariable(variableName, typeof(GenericChannel<int>).FullName, false);
 		}
 
-		private void AddVariable(string variableName, VariableTypes type, bool readOnly)
+		private void AddVariable(string variableName, string type, bool readOnly)
 		{
 			int row = grid.RowsCount;
 			grid.RowsCount++;
 
 			grid[row, 0] = new SourceGrid.Cells.Cell(variableName, typeof(string));
-			SourceGrid.Cells.Editors.ComboBox combo = new SourceGrid.Cells.Editors.ComboBox(typeof(string), variableTypeNames, true);
-			grid[row, 1] = new SourceGrid.Cells.Cell(variableTypeNames[(int)type], combo);
+			
+			SourceGrid.Cells.Editors.ComboBox combo = new SourceGrid.Cells.Editors.ComboBox(typeof(string), channelNames, true);
+			grid[row, 1] = new SourceGrid.Cells.Cell(variableTypeNames[type], combo);
 			SourceGrid.Cells.CheckBox check = new SourceGrid.Cells.CheckBox();
 			check.Checked = readOnly;
 			grid[row, 2] = check;
@@ -101,19 +113,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		private void LoadChannels()
 		{
 			foreach (ChannelBase channel in plugin.Channels)
-			{
-				if (channel.InternalType == ChannelBase.InternalChannelType.SimpleGeneric)
-				{
-					if (channel.Type == typeof(string).Name)
-						AddVariable(channel.Name, VariableTypes.SimpleString, channel.IsReadOnly);
-					else if (channel.Type == typeof(int).Name)
-						AddVariable(channel.Name, VariableTypes.SimpleInteger, channel.IsReadOnly);
-					else if (channel.Type == typeof(float).Name)
-						AddVariable(channel.Name, VariableTypes.SimpleFloat, channel.IsReadOnly);
-				}
-				else if (channel.InternalType == ChannelBase.InternalChannelType.RandomInteger)
-					AddVariable(channel.Name, VariableTypes.RandomInteger, channel.IsReadOnly);
-			}
+				AddVariable(channel.Name, channel.GetType().FullName, channel.IsReadOnly);
 		}
 
 		private void SaveChannels()
@@ -123,14 +123,20 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			{
 				string name = grid[i, 0].DisplayText;
 				bool readOnly = (bool)((SourceGrid.Cells.CheckBox)grid[i, 2]).Checked;
-				if (grid[i, 1].DisplayText == variableTypeNames[(int)VariableTypes.SimpleString])
-					channels[i - 1] = new GenericChannel<string>(name, readOnly, plugin);
-				else if (grid[i, 1].DisplayText == variableTypeNames[(int)VariableTypes.SimpleInteger])
-					channels[i - 1] = new GenericChannel<int>(name, readOnly, plugin);
-				else if (grid[i, 1].DisplayText == variableTypeNames[(int)VariableTypes.SimpleFloat])
-					channels[i - 1] = new GenericChannel<float>(name, readOnly, plugin);
-				else if (grid[i, 1].DisplayText == variableTypeNames[(int)VariableTypes.RandomInteger])
-					channels[i - 1] = new RandomIntegerChannel(name, plugin);
+
+				string type = null;
+				foreach (KeyValuePair<string, string> pair in variableTypeNames)
+				{
+					if(grid[i, 1].DisplayText == pair.Value)
+					{
+						type = pair.Key;
+						break;
+					}
+				}
+				if (type == null)
+					continue;
+
+				channels[i - 1] = ChannelFactory.CreateChannel(type, name, readOnly, plugin);
 			}
 			plugin.Channels = channels;
 			plugin.SaveSettings();

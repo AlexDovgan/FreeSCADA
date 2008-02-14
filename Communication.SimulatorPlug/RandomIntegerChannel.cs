@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace FreeSCADA.Communication.SimulatorPlug
 {
@@ -10,7 +7,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		static Random rnd = new Random();
 
 		public RandomIntegerChannel(string name, Plugin plugin)
-			: base(name, true, plugin, typeof(int), InternalChannelType.RandomInteger)
+			: base(name, true, plugin, typeof(int))
 		{
 		}
 

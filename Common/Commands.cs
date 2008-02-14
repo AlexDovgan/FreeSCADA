@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using FreeSCADA.ShellInterfaces;
 
-namespace FreeSCADA.Designer
+namespace FreeSCADA.Common
 {
 	public class Commands : ICommands
 	{

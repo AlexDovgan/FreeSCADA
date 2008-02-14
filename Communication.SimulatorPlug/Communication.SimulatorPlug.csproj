@@ -56,6 +56,7 @@
     <Compile Include="ChannelBase.cs" />
     <Compile Include="ChannelFactory.cs" />
     <Compile Include="Command.cs" />
+    <Compile Include="CurrentTimeChannel.cs" />
     <Compile Include="RandomIntegerChannel.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

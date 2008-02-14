@@ -1,11 +1,11 @@
 ﻿using FreeSCADA.ShellInterfaces;
 using System.Windows.Forms;
 
-namespace FreeSCADA.Designer
+namespace FreeSCADA.Common
 {
-	public class Environment : IEnvironment
+	public class Env : IEnvironment
 	{
-		static Environment environmentInstance = null;
+		static Env environmentInstance = null;
 
 		Commands commands;
 		Control mainWindow;
@@ -16,7 +16,7 @@ namespace FreeSCADA.Designer
 
 		public static void Initialize(Control mainWindow, MenuStrip mainMenu)
 		{
-			environmentInstance = new Environment();
+			environmentInstance = new Env();
 
 			environmentInstance.commands = new Commands(mainMenu);
 			environmentInstance.mainWindow = mainWindow;
@@ -25,7 +25,7 @@ namespace FreeSCADA.Designer
 			environmentInstance.communicationPlugins.Load();
 		}
 
-		public static Environment Current
+		public static Env Current
 		{
 			get
 			{
@@ -36,7 +36,7 @@ namespace FreeSCADA.Designer
 			}
 		}
 
-		Environment() { }
+		Env() { }
 
 		#endregion
 

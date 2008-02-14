@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using FreeSCADA.ShellInterfaces;
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer
 {
@@ -19,7 +20,7 @@ namespace FreeSCADA.Designer
 
 			SourceGrid.Cells.Views.Cell categoryView = GetCategoryCellView();
 
-			foreach (string plugId in Environment.Current.CommunicationPlugins.PluginIds)
+			foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
 				LoadPlugin(categoryView, plugId);
 
 			AddDummyGroup(categoryView);
@@ -46,7 +47,7 @@ namespace FreeSCADA.Designer
 		{
 			int curRow = channelsGrid.RowsCount;
 			channelsGrid.RowsCount += 2;
-			CommunationPlugs plugs = Environment.Current.CommunicationPlugins;
+			CommunationPlugs plugs = Env.Current.CommunicationPlugins;
 
 			channelsGrid[curRow, 0] = new SourceGrid.Cells.Cell(plugs[plugId].Name);
 			channelsGrid[curRow, 0].ColumnSpan = channelsGrid.ColumnsCount;
@@ -116,12 +117,12 @@ namespace FreeSCADA.Designer
 		{
 			if (enable)
 			{
-				if (Environment.Current.CommunicationPlugins.Connect() == true)
+				if (Env.Current.CommunicationPlugins.Connect() == true)
 					connectionStatusLabel.Text = "Connection status: connected";
 			}
 			else
 			{
-				Environment.Current.CommunicationPlugins.Disconnect();
+				Env.Current.CommunicationPlugins.Disconnect();
 				connectionStatusLabel.Text = "Connection status: disconnected";
 			}
 		}
