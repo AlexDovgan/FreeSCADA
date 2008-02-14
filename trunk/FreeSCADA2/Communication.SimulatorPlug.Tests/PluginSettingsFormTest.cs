@@ -11,18 +11,26 @@ namespace Communication.SimulatorPlug.Tests
 		EnvironmentMock environment;
 		int[] channelchangedNotification;
 		string[] ChannelTypes = { "Current time", "Random integer", "Simple integer", "Simple string", "Simple float" };
+		string projectFile;
 
 		public override void Setup()
 		{
 			environment = new EnvironmentMock();
 			plugin = new Plugin();
 			plugin.Initialize(environment);
+
+			projectFile = System.IO.Path.GetTempFileName();
+
+			if (System.IO.File.Exists(projectFile))
+				System.IO.File.Delete(projectFile);
 		}
 
 		public override void TearDown()
 		{
 			plugin = null;
 			environment = null;
+			System.IO.File.Delete(projectFile);
+
 			System.GC.Collect();
 		}
 
@@ -149,6 +157,27 @@ namespace Communication.SimulatorPlug.Tests
 			}
 
 			okButton.Click();
+		}
+
+		[Test]
+		public void LoadSaveFileChannels()
+		{
+			ExpectModal("SettingsForm", "CreateTestChannels");
+			plugin.ProcessCommand(0); //Plugin should save its channels in the project
+			Assert.AreEqual(ChannelTypes.Length, plugin.Channels.Length);
+			environment.Project.Save(projectFile);
+
+			plugin = new Plugin();
+			environment = new EnvironmentMock();
+			plugin.Initialize(environment);
+			environment.Project.Load(projectFile); //Plugin should load its channels from the project on its loading
+			Assert.AreEqual(ChannelTypes.Length, plugin.Channels.Length);
+			for (int i = 0; i < plugin.Channels.Length; i++)
+			{
+				FreeSCADA.ShellInterfaces.IChannel ch = plugin.Channels[i];
+				Assert.IsNotNull(ch);
+				Assert.AreEqual(string.Format("variable_{0}", i + 1), ch.Name);
+			}
 		}
 	}
 

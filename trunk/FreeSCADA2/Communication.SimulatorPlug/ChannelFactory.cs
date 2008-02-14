@@ -9,6 +9,9 @@ namespace FreeSCADA.Communication.SimulatorPlug
 {
 	sealed class ChannelFactory
 	{
+		//Prevent class reation
+		private ChannelFactory() { }
+
 		public static IChannel CreateChannel(XmlElement node, Plugin plugin)
 		{
 			string type = node.Attributes["type"].Value;

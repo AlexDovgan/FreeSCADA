@@ -9,11 +9,18 @@ namespace FreeSCADA.Common
 	{
 		Dictionary<string, MemoryStream> streams = new Dictionary<string,MemoryStream>();
 
-		public void Load(string filename)
+		public event System.EventHandler LoadEvent;
+
+		~Project()
+		{
+			Clear();
+		}
+
+		public void Load(string fileName)
 		{
 			Clear();
 
-			using (FileStream zipFileStream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
+			using (FileStream zipFileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
 			using (ZipInputStream zipInput = new ZipInputStream(zipFileStream))
 			{
 				ZipEntry entry;
@@ -29,18 +36,23 @@ namespace FreeSCADA.Common
 					streams.Add(entry.Name, ms);
 				}
 			}
+			if (LoadEvent != null)
+				LoadEvent(this, new System.EventArgs());
 		}
 
 		private void Clear()
 		{
 			foreach (KeyValuePair<string, MemoryStream> pair in streams)
+			{
 				pair.Value.Close();
+				pair.Value.Dispose();
+			}
 			streams.Clear();
 		}
 
-		public void Save(string filename)
+		public void Save(string fileName)
 		{
-			using (FileStream zipFileStream = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
+			using (FileStream zipFileStream = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
 			using (ZipOutputStream zipOutput = new ZipOutputStream(zipFileStream))
 			{
 				zipOutput.SetLevel(9);
