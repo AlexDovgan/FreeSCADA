@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer
 {
@@ -11,7 +12,7 @@ namespace FreeSCADA.Designer
 		{
 			InitializeComponent();
 
-			Environment.Initialize(this, mainMenu);
+			Env.Initialize(this, mainMenu);
 
 			projectContentView.Show(dockPanel, DockState.DockLeft);
 		}
@@ -48,7 +49,7 @@ namespace FreeSCADA.Designer
 			fd.RestoreDirectory = true;
 
 			if (fd.ShowDialog() == DialogResult.OK)
-				Environment.Current.Project.Save(fd.FileName);
+				Env.Current.Project.Save(fd.FileName);
 		}
 
 		private void OnMenuLoadClick(object sender, System.EventArgs e)
@@ -60,7 +61,7 @@ namespace FreeSCADA.Designer
 			fd.RestoreDirectory = true;
 
 			if (fd.ShowDialog() == DialogResult.OK)
-				Environment.Current.Project.Load(fd.FileName);
+				Env.Current.Project.Load(fd.FileName);
 		}
 	}
 }

@@ -5,7 +5,7 @@ using System.Reflection;
 using FreeSCADA.ShellInterfaces;
 using FreeSCADA.ShellInterfaces.Plugins;
 
-namespace FreeSCADA.Designer
+namespace FreeSCADA.Common
 {
 	public class CommunationPlugs
 	{
@@ -22,11 +22,11 @@ namespace FreeSCADA.Designer
 					if (t.GetInterface(typeof(ICommunicationPlug).FullName) != null)
 					{
 						ICommunicationPlug plug = (ICommunicationPlug)Activator.CreateInstance(t);
-						InitializePlugin(Environment.Current, plug);
+						InitializePlugin(Env.Current, plug);
 					}
 				}
 			}
-			(Environment.Current.Commands as Commands).PluginCommand += new Commands.PluginCommandHandler(OnCommand);
+			(Env.Current.Commands as Commands).PluginCommand += new Commands.PluginCommandHandler(OnCommand);
 		}
 
 		void OnCommand(object sender, int id, string pluginId)

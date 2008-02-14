@@ -10,6 +10,7 @@ namespace Communication.SimulatorPlug.Tests
 		Plugin plugin;
 		EnvironmentMock environment;
 		int[] channelchangedNotification;
+		string[] ChannelTypes = { "Current time", "Random integer", "Simple integer", "Simple string", "Simple float" };
 
 		public override void Setup()
 		{
@@ -115,6 +116,40 @@ namespace Communication.SimulatorPlug.Tests
 
 			okButton.Click();
 		}
+
+		[Test]
+		public void LoadSaveChannels()
+		{
+			ExpectModal("SettingsForm", "CreateTestChannels");
+			plugin.ProcessCommand(0); //Plugin should save its channels in the project
+			Assert.AreEqual(ChannelTypes.Length, plugin.Channels.Length);
+
+			plugin = new Plugin();
+			plugin.Initialize(environment); //Plugin should load its channels from the project
+			Assert.AreEqual(ChannelTypes.Length, plugin.Channels.Length);
+			for(int i=0;i<plugin.Channels.Length;i++)
+			{
+				FreeSCADA.ShellInterfaces.IChannel ch = plugin.Channels[i];
+				Assert.IsNotNull(ch);
+				Assert.AreEqual(string.Format("variable_{0}", i + 1), ch.Name);
+			}
+		}
+
+		private void CreateTestChannels()
+		{
+			GridTester grid = new GridTester("grid", "SettingsForm");
+			ButtonTester addButton = new ButtonTester("addButton", "SettingsForm");
+			ButtonTester okButton = new ButtonTester("okButton", "SettingsForm");
+
+			for (int i = 0; i < ChannelTypes.Length; i++)
+			{
+				addButton.Click();
+				grid.SetChannelType(i, ChannelTypes[i]);
+				grid.SetChannelName(i, string.Format("variable_{0}", i + 1));
+			}
+
+			okButton.Click();
+		}
 	}
 
 	class GridTester : ControlTester
@@ -136,6 +171,11 @@ namespace Communication.SimulatorPlug.Tests
 		public void SetChannelType(int channelNo, string type)
 		{
 			Control[channelNo + 1, 1].Value = type;
+		}
+
+		public void SetChannelName(int channelNo, string name)
+		{
+			Control[channelNo + 1, 0].Value = name;
 		}
 	}
 }

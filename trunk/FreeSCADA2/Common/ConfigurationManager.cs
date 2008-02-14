@@ -23,7 +23,7 @@ namespace FreeSCADA.Common
 		{
 			get
 			{
-				string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+				string path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
 				path = System.IO.Path.Combine(path, productName);
 				return path;
 			}

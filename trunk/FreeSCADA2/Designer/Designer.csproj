@@ -59,12 +59,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands.cs" />
-    <Compile Include="CommunationPlugs.cs" />
     <Compile Include="DocumentWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Environment.cs" />
     <Compile Include="EventsView.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -2,6 +2,7 @@
 using FreeSCADA.ShellInterfaces;
 using FreeSCADA.ShellInterfaces.Plugins;
 using System.Threading;
+using System.Xml;
 
 namespace FreeSCADA.Communication.SimulatorPlug
 {
@@ -114,42 +115,44 @@ namespace FreeSCADA.Communication.SimulatorPlug
 
 		public void SaveSettings()
 		{
-			//System.IO.MemoryStream ms = plugin.Environment.Project[StringConstants.PluginId + "_channels"];
-			////System.Xml.XmlWriter writter = System.Xml.XmlWriter.Create(ms);
-			//XmlDocument doc = new System.Xml.XmlDocument();
-			//XmlElement root_elem = doc.CreateElement("root");
-			//ShellInterfaces.IChannel[] channels = new ShellInterfaces.IChannel[grid.RowsCount - 1];
-			//for (int i = 1; i < grid.RowsCount; i++)
-			//{
-			//    channels[i-1] = new GenericChannel<int>(grid[i, 0].DisplayText, false, plugin);
-
-			//    XmlElement elem = doc.CreateElement("channel");
-			//    ChannelFactory.SaveChannel(elem, channels[i - 1]);
-			//    root_elem.AppendChild(elem);
-			//}
-			//doc.Save(ms);
-
-			//System.IO.MemoryStream ms = plugin.Environment.Project[StringConstants.PluginId + "_channels"];
-			//System.Xml.XmlWriter writter = System.Xml.XmlWriter.Create(ms);
-			//writter.WriteStartElement("root");
-			//for (int i = 1; i < grid.RowsCount; i++)
-			//{
-
-
-			//    writter.WriteStartElement("channel");
-			//    writter.WriteAttributeString("var_name", grid[i, 0].DisplayText);
-			//    writter.WriteAttributeString("var_type", grid[i, 1].DisplayText);
-			//    writter.WriteEndElement();
-			//}
-			//writter.WriteEndElement();
-			//writter.Flush();
-
-			//using (BinaryWriter binWriter = new BinaryWriter(File.Open(@"d:\temp.txt", FileMode.Create)))
-			//    binWriter.Write(ms.GetBuffer(), 0, (int)ms.Length);
+			System.IO.MemoryStream ms = environment.Project[StringConstants.PluginId + "_channels"];
+			if (ms.Length != 0)
+			{
+				ms.SetLength(0);
+				ms.Seek(0, System.IO.SeekOrigin.Begin);
+			}
+			
+			XmlDocument doc = new System.Xml.XmlDocument();
+			XmlElement root_elem = doc.CreateElement("root");
+			foreach (IChannel ch in channels)
+			{
+				XmlElement elem = doc.CreateElement("channel");
+				ChannelFactory.SaveChannel(elem, ch);
+				root_elem.AppendChild(elem);
+			}
+			doc.AppendChild(root_elem);
+			doc.Save(ms);
+			ms.Flush();
 		}
 
 		void LoadSettings()
 		{
+			channels.Clear();
+			System.IO.MemoryStream ms = environment.Project[StringConstants.PluginId + "_channels"];
+			if (ms.Length == 0)
+				return;
+			XmlDocument doc = new System.Xml.XmlDocument();
+			try
+			{
+				doc.Load(ms);
+			}
+			catch
+			{
+				return;
+			}
+			XmlNodeList nodes = doc.GetElementsByTagName("channel");
+			foreach (XmlElement node in nodes)
+				channels.Add(ChannelFactory.CreateChannel(node, this));
 		}
 	}
 }
