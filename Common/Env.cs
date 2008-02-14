@@ -16,13 +16,21 @@ namespace FreeSCADA.Common
 
 		public static void Initialize(Control mainWindow, MenuStrip mainMenu)
 		{
-			environmentInstance = new Env();
+			if (environmentInstance == null)
+			{
+				environmentInstance = new Env();
 
-			environmentInstance.commands = new Commands(mainMenu);
-			environmentInstance.mainWindow = mainWindow;
-			environmentInstance.communicationPlugins = new CommunationPlugs();
+				environmentInstance.commands = new Commands(mainMenu);
+				environmentInstance.mainWindow = mainWindow;
+				environmentInstance.communicationPlugins = new CommunationPlugs();
 
-			environmentInstance.communicationPlugins.Load();
+				environmentInstance.communicationPlugins.Load();
+			}
+		}
+
+		public static void Deinitialize()
+		{
+			environmentInstance = null;
 		}
 
 		public static Env Current
