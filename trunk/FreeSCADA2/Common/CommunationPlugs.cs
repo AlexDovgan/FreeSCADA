@@ -82,5 +82,18 @@ namespace FreeSCADA.Common
 			foreach (ICommunicationPlug plug in commPlugs)
 				plug.Disconnect();
 		}
+
+		public bool IsConnected
+		{
+			get
+			{
+				foreach (ICommunicationPlug plug in commPlugs)
+				{
+					if (plug.IsConnected == false)
+						return false;
+				}
+				return true;
+			}
+		}
 	}
 }

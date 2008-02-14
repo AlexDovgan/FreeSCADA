@@ -38,7 +38,7 @@ namespace FreeSCADA.Common
 
 			new_item.Tag = cmdId.Id;
 			new_item.Click += new EventHandler(OnItemClick);
-			return 0;
+			return cmdId.Id;
 		}
 
 		private ToolStripMenuItem OpenGroupItem(string group)
