@@ -82,7 +82,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			int baseNumber = 1;
 			for(;;)
 			{
-				string newName = string.Format("{0}{1}", baseName, baseNumber);
+				string newName = string.Format(System.Globalization.CultureInfo.CurrentUICulture, "{0}{1}", baseName, baseNumber);
 				bool exists = false;
 				for (int i = 1; i < grid.RowsCount; i++)
 				{

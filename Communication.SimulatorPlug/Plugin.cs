@@ -45,13 +45,9 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		public void Initialize(IEnvironment environment)
 		{
 			this.environment = environment;
+			environment.Project.LoadEvent += new System.EventHandler(OnProjectLoad);
 
 			LoadSettings();
-
-			//channels.Add(new GenericChannel<string>("Text channel 1", false, this));
-			//channels.Add(new GenericChannel<string>("Text channel 2", true, this));
-			//channels.Add(new GenericChannel<int>("Integer channel 1", false, this));
-			//channels.Add(new GenericChannel<float>("Real channel 1", false, this));
 
 			commands.Add(new PropertyCommand(this));
 		}
@@ -153,6 +149,11 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			XmlNodeList nodes = doc.GetElementsByTagName("channel");
 			foreach (XmlElement node in nodes)
 				channels.Add(ChannelFactory.CreateChannel(node, this));
+		}
+
+		void OnProjectLoad(object sender, System.EventArgs e)
+		{
+			LoadSettings();
 		}
 	}
 }
