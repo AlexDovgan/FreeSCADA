@@ -1,13 +1,13 @@
 ﻿using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using FreeSCADA.Common;
-
+using FreeSCADA.Scheme;
 namespace FreeSCADA.Designer
 {
 	public partial class MainForm : Form
 	{
 		ProjectContentView projectContentView = new ProjectContentView();
-
+        SchemaView currentScheme;
 		public MainForm()
 		{
 			InitializeComponent();
@@ -30,8 +30,9 @@ namespace FreeSCADA.Designer
 
 		private void OnSchemaItemClick(object sender, System.EventArgs e)
 		{
-			SchemaView view = new SchemaView();
+			SchemaView view = new SchemaView(new FSSchemeEditor(FSSchemeDocument.CreateNewScheme()));
 			view.Show(dockPanel, DockState.Document);
+            currentScheme = view;
 		}
 
 		private void OnEventsItemClick(object sender, System.EventArgs e)
@@ -63,5 +64,26 @@ namespace FreeSCADA.Designer
 			if (fd.ShowDialog() == DialogResult.OK)
 				Env.Current.Project.Load(fd.FileName);
 		}
+
+        private void toolStripButton6_Click(object sender, System.EventArgs e)
+        {
+            
+            if(currentScheme!=null)
+                currentScheme.schemeEditor.SelectTool(FreeSCADA.Scheme.Tools.ToolTypes.Select);
+            
+        }
+
+        private void toolStripButton7_Click(object sender, System.EventArgs e)
+        {
+            if (currentScheme != null)
+                currentScheme.schemeEditor.SelectTool(FreeSCADA.Scheme.Tools.ToolTypes.Rectangle);
+
+        }
+
+        private void toolStripButton8_Click(object sender, System.EventArgs e)
+        {
+            if (currentScheme != null)
+                currentScheme.schemeEditor.SelectTool(FreeSCADA.Scheme.Tools.ToolTypes.Ellipse);
+        }
 	}
 }
