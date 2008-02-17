@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Tests", "Common.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communication.SimulatorPlug.Tests", "Communication.SimulatorPlug.Tests\Communication.SimulatorPlug.Tests.csproj", "{C9538A59-0753-462F-87F1-D67E2F042968}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communication.OPCPlug", "Communication.OPCPlug\Communication.OPCPlug.csproj", "{1B03906B-2421-4A52-86EE-842D90CA642C}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchemeModule", "SchemeModule\SchemeModule.csproj", "{84C691AF-AD82-4B99-A407-E83020349EB4}"
 EndProject
 Global
@@ -42,6 +44,10 @@ Global
 		{C9538A59-0753-462F-87F1-D67E2F042968}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9538A59-0753-462F-87F1-D67E2F042968}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9538A59-0753-462F-87F1-D67E2F042968}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B03906B-2421-4A52-86EE-842D90CA642C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B03906B-2421-4A52-86EE-842D90CA642C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B03906B-2421-4A52-86EE-842D90CA642C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B03906B-2421-4A52-86EE-842D90CA642C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{84C691AF-AD82-4B99-A407-E83020349EB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{84C691AF-AD82-4B99-A407-E83020349EB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84C691AF-AD82-4B99-A407-E83020349EB4}.Release|Any CPU.ActiveCfg = Release|Any CPU

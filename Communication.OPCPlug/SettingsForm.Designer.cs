@@ -1,4 +1,4 @@
-﻿namespace FreeSCADA.Communication.SimulatorPlug
+﻿namespace FreeSCADA.Communication.OPCPlug
 {
 	partial class SettingsForm
 	{
@@ -58,7 +58,7 @@
 			this.addButton.TabIndex = 1;
 			this.addButton.Text = "Add";
 			this.addButton.UseVisualStyleBackColor = true;
-			this.addButton.Click += new System.EventHandler(this.OnAddRow);
+			this.addButton.Click += new System.EventHandler(this.OnImport);
 			// 
 			// removeButton
 			// 
@@ -102,7 +102,7 @@
 			this.Controls.Add(this.grid);
 			this.Name = "SettingsForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Simulator settings";
+			this.Text = "SettingsForm";
 			this.ResumeLayout(false);
 
 		}
