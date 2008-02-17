@@ -58,56 +58,7 @@ namespace FreeSCADA.Scheme.Commands
     }
  
     
-    public interface IUndoCommand
-    {
-        /**
-
-        * Re-executes a command.
-
-        */
-        void Redo();
-        /**
-        * Reverses the effect of executing the command.
-        */
-        void Undo();
-   }
-    public class BasicUndoBuffer
-    {
-        public void AddCommand(IUndoCommand command)
-        {
-           // redoStack.Clear();
-            //undoStack.Add(command);
-        }
-        public void UndoCommand()
-        {
-            IUndoCommand cmd = undoStack.Pop();
-            try
-            {
-                cmd.Undo();
-            }
-            finally
-            {
-                redoStack.Push(cmd);
-            }
-        }
-
-
-        public void RedoCommand()
-        {
-            IUndoCommand cmd = redoStack.Pop();
-            try
-            {
-                cmd.Redo();
-            }
-            finally
-            {
-                undoStack.Push(cmd);
-            }
-        }
-
-        private Stack<IUndoCommand> undoStack = new Stack<IUndoCommand>();
-        private Stack<IUndoCommand> redoStack = new Stack<IUndoCommand>();
-    }
+ 
 
  
 

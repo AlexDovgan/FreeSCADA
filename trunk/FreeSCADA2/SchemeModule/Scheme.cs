@@ -11,6 +11,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using FreeSCADA.Scheme.Manipulators;
 using FreeSCADA.Scheme.Tools;
+using FreeSCADA.Scheme.UndoRedo;
 
 namespace FreeSCADA.Scheme
 {
@@ -56,6 +57,7 @@ namespace FreeSCADA.Scheme
         Adorner activeTool;
         Tool [] tools;
         ToolTypes CurrentTool;
+        BasicUndoBuffer undoBuff;
         public FSSchemeEditor(FSSchemeDocument d)
             : base(d)
         {
@@ -64,6 +66,7 @@ namespace FreeSCADA.Scheme
             //Scheme.MainCanvas.MouseLeftButtonDown += new MouseButtonEventHandler(Canvas_MouseDown);
             Scheme.MainCanvas.Loaded += new RoutedEventHandler(MainCanvas_Loaded);
             tools = new Tool[(int)ToolTypes.Max];
+            undoBuff = UndoRedoManager.GetUndoBuffer(Scheme.MainCanvas);
         }
 
         void MainCanvas_Loaded(object sender, RoutedEventArgs e)
@@ -78,7 +81,7 @@ namespace FreeSCADA.Scheme
 
             Tool tool = new SelectionTool(Scheme.MainCanvas);
             tools[(int)ToolTypes.Select] = tool;
-             tool = new RectangleTool(Scheme.MainCanvas);
+            tool = new RectangleTool(Scheme.MainCanvas);
             tools[(int)ToolTypes.Rectangle] = tool;
             tool = new EllipseTool(Scheme.MainCanvas);
 
@@ -90,14 +93,32 @@ namespace FreeSCADA.Scheme
             Scheme.MainCanvas.Focus();
             CurrentTool = ToolTypes.Select;
             adornerLayer.Add(tools[(int)CurrentTool]);
+            tools[(int)CurrentTool].Activate();
+            Scheme.MainCanvas.KeyDown += new KeyEventHandler(MainCanvas_KeyDown);
+
+        }
+
+        void MainCanvas_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Z &&Keyboard.IsKeyDown(Key.LeftCtrl))
+            {
+                undoBuff.UndoCommand();
+            }
+            else if (e.Key == Key.Y && Keyboard.IsKeyDown(Key.LeftCtrl))
+            {
+                undoBuff.RedoCommand();
+            }
+
 
         }
 
         public void SelectTool(ToolTypes tool)
         {
+            tools[(int)CurrentTool].Deactivate();
             AdornerLayer.GetAdornerLayer(Scheme.MainCanvas).Remove(tools[(int)CurrentTool]);
             AdornerLayer.GetAdornerLayer(Scheme.MainCanvas).Add(tools[(int)tool]);
             CurrentTool = tool;
+            tools[(int)CurrentTool].Activate();
         
         }
 

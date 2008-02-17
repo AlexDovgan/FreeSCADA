@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using FreeSCADA.Scheme.Commands;
 using FreeSCADA.Scheme.Manipulators;
 using FreeSCADA.Scheme.Helpers;
+using FreeSCADA.Scheme.UndoRedo;
 
 namespace FreeSCADA.Scheme.Tools
 {
@@ -24,13 +25,46 @@ namespace FreeSCADA.Scheme.Tools
         Max
     }
 
-    public class Tool : Adorner
+    public abstract class Tool : Adorner
     {
         public Manipulator manipulator;
+        public VisualCollection visualChildren;
+        
         public Tool(UIElement adornedElement)
             : base(adornedElement)
         {
+            visualChildren = new VisualCollection(this);
+        
+        }
+        protected override int VisualChildrenCount { get { return visualChildren.Count; } }
+        protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
 
+        public virtual void OnCanvasMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        { }
+        public virtual void OnCanvasMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        { }
+        public virtual void OnCanvasMouseMove(object sender, MouseEventArgs e)
+        { }
+        public virtual void OnCanvasKeyDown(object sender, KeyEventArgs e)
+        { }
+        public virtual void OnCanvasKeyUp(object sender, KeyEventArgs e)
+        { }
+        
+        public void Activate()
+        {
+            AdornedElement.MouseLeftButtonDown += new MouseButtonEventHandler(OnCanvasMouseLeftButtonDown);
+            AdornedElement.MouseLeftButtonUp += new MouseButtonEventHandler(OnCanvasMouseLeftButtonUp);
+            AdornedElement.MouseMove += new MouseEventHandler(OnCanvasMouseMove);
+            AdornedElement.KeyDown += new KeyEventHandler(OnCanvasKeyDown);
+            AdornedElement.KeyUp += new KeyEventHandler(OnCanvasKeyUp);
+        }
+        public void Deactivate()
+        {
+            AdornedElement.MouseLeftButtonDown -= OnCanvasMouseLeftButtonDown;
+            AdornedElement.MouseLeftButtonUp -= OnCanvasMouseLeftButtonUp;
+            AdornedElement.MouseMove -= OnCanvasMouseMove;
+            AdornedElement.KeyDown -= OnCanvasKeyDown;
+            AdornedElement.KeyUp -= OnCanvasKeyUp;
         }
         public delegate void ToolStarted(MouseEventArgs e);
         public delegate void ToolFinished(Manipulator m);
@@ -53,7 +87,7 @@ namespace FreeSCADA.Scheme.Tools
 
     public class SelectionTool : Tool
     {
-        VisualCollection visualChildren;
+
         Point startPos;
         Canvas workCanvas;
         bool ShiftDown;
@@ -61,16 +95,10 @@ namespace FreeSCADA.Scheme.Tools
             : base(adornedElement)
         {
             workCanvas = adornedElement;
-            workCanvas.MouseLeftButtonDown += new MouseButtonEventHandler(SelectionTool_MouseLeftButtonDown);
-            workCanvas.MouseLeftButtonUp += new MouseButtonEventHandler(SelectionTool_MouseLeftButtonUp);
-            workCanvas.MouseMove += new MouseEventHandler(SelectionTool_MouseMove);
-            workCanvas.KeyDown += new KeyEventHandler(workCanvas_KeyDown);
-            workCanvas.KeyUp += new KeyEventHandler(workCanvas_KeyUp);
-            visualChildren = new VisualCollection(this);
-
+            
         }
 
-        void workCanvas_KeyUp(object sender, KeyEventArgs e)
+        public override void OnCanvasKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.LeftShift)
             {
@@ -79,7 +107,7 @@ namespace FreeSCADA.Scheme.Tools
             }
         }
 
-        void workCanvas_KeyDown(object sender, KeyEventArgs e)
+        public override void OnCanvasKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.LeftShift && ShiftDown == false)
             {
@@ -90,10 +118,8 @@ namespace FreeSCADA.Scheme.Tools
 
 
         }
-        protected override int VisualChildrenCount { get { return visualChildren.Count; } }
-        protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
 
-        void SelectionTool_MouseMove(object sender, MouseEventArgs e)
+        public override void OnCanvasMouseMove(object sender, MouseEventArgs e)
         {
             if (visualChildren.Count > 0)
             {
@@ -114,7 +140,7 @@ namespace FreeSCADA.Scheme.Tools
             }
         }
 
-        void SelectionTool_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        public  override void OnCanvasMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (visualChildren.Count > 0)
             {
@@ -124,7 +150,7 @@ namespace FreeSCADA.Scheme.Tools
             workCanvas.ReleaseMouseCapture();
         }
 
-        void SelectionTool_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        public override void OnCanvasMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Point pt = e.GetPosition((UIElement)sender);
             workCanvas.CaptureMouse();
@@ -187,7 +213,7 @@ namespace FreeSCADA.Scheme.Tools
 
     public class RectangleTool : Tool
     {
-        VisualCollection visualChildren;
+        
         Point startPos;
         Canvas workCanvas;
         bool ShiftDown;
@@ -195,16 +221,12 @@ namespace FreeSCADA.Scheme.Tools
             : base(adornedElement)
         {
             workCanvas = adornedElement;
-            workCanvas.MouseLeftButtonDown += new MouseButtonEventHandler(RectangleTool_MouseLeftButtonDown);
-            workCanvas.MouseLeftButtonUp += new MouseButtonEventHandler(RectangleTool_MouseLeftButtonUp);
-            workCanvas.MouseMove += new MouseEventHandler(RectangleTool_MouseMove);
-            visualChildren = new VisualCollection(this);
-
+        
         }
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
 
-        void RectangleTool_MouseMove(object sender, MouseEventArgs e)
+        public override void OnCanvasMouseMove(object sender, MouseEventArgs e)
         {
             if (visualChildren.Count > 0)
             {
@@ -221,12 +243,11 @@ namespace FreeSCADA.Scheme.Tools
                 drawingContext.Close();
                 vis.Opacity = 0.5;
 
-
-
             }
+            
         }
 
-        void RectangleTool_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        public override void OnCanvasMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (visualChildren.Count > 0)
             {
@@ -240,6 +261,8 @@ namespace FreeSCADA.Scheme.Tools
                     r.Height = b.Height;
                     r.Stroke = Brushes.Black;
                     r.Fill = Brushes.Red;
+                    UndoRedoManager.GetUndoBuffer(workCanvas).AddCommand(new AddObject(r, workCanvas));
+
                     workCanvas.Children.Add(r);
                     //AdornerLayer.GetAdornerLayer(AdornedElement).Add(new GeometryEditManipulator(r));
                 }
@@ -250,7 +273,7 @@ namespace FreeSCADA.Scheme.Tools
             workCanvas.ReleaseMouseCapture();
         }
 
-        void RectangleTool_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        public override void OnCanvasMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
 
             workCanvas.CaptureMouse();
@@ -267,7 +290,7 @@ namespace FreeSCADA.Scheme.Tools
     }
     public class EllipseTool : Tool
     {
-        VisualCollection visualChildren;
+
         Point startPos;
         Canvas workCanvas;
         bool ShiftDown;
@@ -275,16 +298,10 @@ namespace FreeSCADA.Scheme.Tools
             : base(adornedElement)
         {
             workCanvas = adornedElement;
-            workCanvas.MouseLeftButtonDown += new MouseButtonEventHandler(EllipseTool_MouseLeftButtonDown);
-            workCanvas.MouseLeftButtonUp += new MouseButtonEventHandler(EllipseTool_MouseLeftButtonUp);
-            workCanvas.MouseMove += new MouseEventHandler(EllipseTool_MouseMove);
-            visualChildren = new VisualCollection(this);
-
         }
-        protected override int VisualChildrenCount { get { return visualChildren.Count; } }
-        protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
+                
 
-        void EllipseTool_MouseMove(object sender, MouseEventArgs e)
+        public override void OnCanvasMouseMove(object sender, MouseEventArgs e)
         {
             if (visualChildren.Count > 0)
             {
@@ -301,12 +318,11 @@ namespace FreeSCADA.Scheme.Tools
                 drawingContext.Close();
                 vis.Opacity = 0.5;
 
-
-
             }
+
         }
 
-        void EllipseTool_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        public override void OnCanvasMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (visualChildren.Count > 0)
             {
@@ -319,7 +335,9 @@ namespace FreeSCADA.Scheme.Tools
                     el.Width = b.Width;
                     el.Height = b.Height;
                     el.Stroke = Brushes.Black;
-                    el.Fill = Brushes.Red; 
+                    el.Fill = Brushes.Red;
+
+                    UndoRedoManager.GetUndoBuffer(workCanvas).AddCommand(new AddObject(el, workCanvas));
                     workCanvas.Children.Add(el);
                     //AdornerLayer.GetAdornerLayer(AdornedElement).Add(new GeometryEditManipulator(r));
                 }
@@ -328,9 +346,10 @@ namespace FreeSCADA.Scheme.Tools
 
             }
             workCanvas.ReleaseMouseCapture();
+
         }
 
-        void EllipseTool_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        public override void OnCanvasMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
 
             workCanvas.CaptureMouse();
