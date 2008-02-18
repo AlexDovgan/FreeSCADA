@@ -61,7 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChannelBase.cs" />
+    <Compile Include="Channel.cs" />
     <Compile Include="ChannelFactory.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="ImportOPCForm.cs">

@@ -42,7 +42,7 @@ namespace FreeSCADA.Communication.OPCPlug
 
 		public static void SaveChannel(XmlElement node, IChannel channel)
 		{
-			ChannelBase channelBase = (ChannelBase)channel;
+			Channel channelBase = (Channel)channel;
 			node.SetAttribute("type", channelBase.GetType().FullName);
 			node.SetAttribute("name", channelBase.Name);
 			node.SetAttribute("readOnly", channelBase.IsReadOnly.ToString());

@@ -93,7 +93,7 @@ namespace FreeSCADA.Communication.OPCPlug
 				for (; ; )
 				{
 					//System.Console.WriteLine("{0} ChannelUpdaterThreadProc: Start loop", System.DateTime.Now);
-					foreach (ChannelBase ch in self.channels)
+					foreach (Channel ch in self.channels)
 						ch.DoUpdate();
 					Thread.Sleep(100);
 				}
