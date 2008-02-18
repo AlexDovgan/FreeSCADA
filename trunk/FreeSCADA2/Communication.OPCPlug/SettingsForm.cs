@@ -8,24 +8,12 @@ namespace FreeSCADA.Communication.OPCPlug
 {
 	public partial class SettingsForm : Form
 	{
-		Dictionary<string, string> variableTypeNames = new Dictionary<string,string>();
-		List<string> channelNames = new List<string>();
-		//string[] variableTypeNames = { "Current time", "Random integer", "Simple integer", "Simple string", "Simple float"};
-		//enum VariableTypes { CurrentTime, RandomInteger, SimpleInteger, SimpleString, SimpleFloat};
 		Plugin plugin;
 
 		public SettingsForm(Plugin plugin)
 		{
 			InitializeComponent();
 			this.plugin = plugin;
-
-			//variableTypeNames[typeof(CurrentTimeChannel).FullName]		= "Current time";
-			//variableTypeNames[typeof(RandomIntegerChannel).FullName]	= "Random integer";
-			//variableTypeNames[typeof(GenericChannel<int>).FullName]		= "Simple integer";
-			//variableTypeNames[typeof(GenericChannel<string>).FullName]	= "Simple string";
-			//variableTypeNames[typeof(GenericChannel<float>).FullName]	= "Simple float";
-			foreach (KeyValuePair<string, string> pair in variableTypeNames)
-				channelNames.Add(pair.Value);
 
 			grid.SelectionMode = SourceGrid.GridSelectionMode.Row;
 			grid.Selection.EnableMultiSelection = false;
@@ -35,11 +23,12 @@ namespace FreeSCADA.Communication.OPCPlug
 			grid.Selection.Border = b;
 			grid.Selection.FocusBackColor = grid.Selection.BackColor;
 
-			grid.ColumnsCount = 3;
+			grid.ColumnsCount = 4;
 			grid.RowsCount = 1;
 			grid[0, 0] = new SourceGrid.Cells.ColumnHeader("Channel name");
-			grid[0, 1] = new SourceGrid.Cells.ColumnHeader("Type");
-			grid[0, 2] = new SourceGrid.Cells.ColumnHeader("Read only");
+			grid[0, 1] = new SourceGrid.Cells.ColumnHeader("OPC channel");
+			grid[0, 2] = new SourceGrid.Cells.ColumnHeader("Server");
+			grid[0, 3] = new SourceGrid.Cells.ColumnHeader("Host");
 
 			LoadChannels();
 
@@ -51,22 +40,23 @@ namespace FreeSCADA.Communication.OPCPlug
 		{
 			ImportOPCForm form = new ImportOPCForm();
 			form.ShowDialog(this);
-			string variableName = GetUniqueVariableName();
-			//AddVariable(variableName, typeof(GenericChannel<int>).FullName, false);
+			
+			foreach (ImportOPCForm.OPCChannelInfo ch in form.Channels)
+			{
+				string variableName = GetUniqueVariableName();
+				AddVariable(variableName, ch.channel, ch.progId, ch.host);
+			}
 		}
 
-		private void AddVariable(string variableName, string type, bool readOnly)
+		private void AddVariable(string variableName, string opcChannel, string server, string host)
 		{
 			int row = grid.RowsCount;
 			grid.RowsCount++;
 
 			grid[row, 0] = new SourceGrid.Cells.Cell(variableName, typeof(string));
-			
-			SourceGrid.Cells.Editors.ComboBox combo = new SourceGrid.Cells.Editors.ComboBox(typeof(string), channelNames, true);
-			grid[row, 1] = new SourceGrid.Cells.Cell(variableTypeNames[type], combo);
-			SourceGrid.Cells.CheckBox check = new SourceGrid.Cells.CheckBox();
-			check.Checked = readOnly;
-			grid[row, 2] = check;
+			grid[row, 1] = new SourceGrid.Cells.Cell(opcChannel, typeof(string));
+			grid[row, 2] = new SourceGrid.Cells.Cell(server, typeof(string));
+			grid[row, 3] = new SourceGrid.Cells.Cell(host, typeof(string));
 
 			grid.Selection.ResetSelection(true);
 			grid.Selection.SelectRow(row, true);
@@ -114,8 +104,8 @@ namespace FreeSCADA.Communication.OPCPlug
 
 		private void LoadChannels()
 		{
-			foreach (ChannelBase channel in plugin.Channels)
-				AddVariable(channel.Name, channel.GetType().FullName, channel.IsReadOnly);
+			foreach (Channel channel in plugin.Channels)
+				AddVariable(channel.Name, channel.OpcChannel, channel.OpcServer, channel.OpcHost);
 		}
 
 		private void SaveChannels()
@@ -123,22 +113,11 @@ namespace FreeSCADA.Communication.OPCPlug
 			ShellInterfaces.IChannel[] channels = new ShellInterfaces.IChannel[grid.RowsCount - 1];
 			for (int i = 1; i < grid.RowsCount; i++)
 			{
-				string name = grid[i, 0].DisplayText;
-				bool readOnly = (bool)((SourceGrid.Cells.CheckBox)grid[i, 2]).Checked;
-
-				string type = null;
-				foreach (KeyValuePair<string, string> pair in variableTypeNames)
-				{
-					if(grid[i, 1].DisplayText == pair.Value)
-					{
-						type = pair.Key;
-						break;
-					}
-				}
-				if (type == null)
-					continue;
-
-				channels[i - 1] = ChannelFactory.CreateChannel(type, name, readOnly, plugin);
+				channels[i-1] = new Channel(	grid[i, 0].DisplayText, 
+												plugin, 
+												grid[i, 1].DisplayText, 
+												grid[i, 2].DisplayText,
+												grid[i, 3].DisplayText);
 			}
 			plugin.Channels = channels;
 			plugin.SaveSettings();

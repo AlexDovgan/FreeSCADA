@@ -3,17 +3,23 @@ using System.Windows.Forms;
 using OpcRcw.Da;
 using OpcRcw.Comn;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace FreeSCADA.Communication.OPCPlug
 {
 	public partial class ImportOPCForm : Form
 	{
-		struct OPCServerInfo
+		public struct OPCChannelInfo
 		{
 			public string progId;
-			public string name;
-			//public override string ToString() { return string.Format("{0} ({1})", name, progId); }
-			public override string ToString() { return progId; }
+			public string host;
+			public string channel;
+		}
+		List<OPCChannelInfo> channels = new List<OPCChannelInfo>();
+
+		public List<OPCChannelInfo> Channels
+		{
+			get { return channels; }
 		}
 
 		public ImportOPCForm()
@@ -47,6 +53,9 @@ namespace FreeSCADA.Communication.OPCPlug
 				channelsTree.Nodes.Clear();
 				ImportOPCChannels(srv, channelsTree.Nodes);
 			}
+
+			groupBox1.Enabled = false;
+			connectButton.Enabled = false;
 		}
 
 		void ImportOPCChannels(IOPCBrowseServerAddressSpace srv, TreeNodeCollection root)
@@ -76,30 +85,37 @@ namespace FreeSCADA.Communication.OPCPlug
 
 				try{srv.BrowseOPCItemIDs(OPCBROWSETYPE.OPC_LEAF, "", 0, 0, out es);}
 				catch(COMException){return;}
-				
-				do 
-				{
-					string[] tmp = new string[100];
-					es.RemoteNext(tmp.Length, tmp, out fetched);
-					for (int i = 0; i < fetched; i++)
-						root.Add(tmp[i]);
-				} while(fetched>0);
+				IterateOPCItems(srv, root, es);
 			}
 			else if(nsType == OPCNAMESPACETYPE.OPC_NS_FLAT)
 			{
 				try { srv.BrowseOPCItemIDs(OPCBROWSETYPE.OPC_FLAT, "", 0, 0, out es); }
 				catch (COMException) { return; }
-
-				int fetched;
-				do
-				{
-					string[] tmp = new string[100];
-					es.RemoteNext(tmp.Length, tmp, out fetched);
-					for (int i = 0; i < fetched; i++)
-						root.Add(tmp[i]);
-				} while (fetched > 0);
+				IterateOPCItems(srv, root, es);
 			}
 			es = null;
+		}
+
+		private void IterateOPCItems(IOPCBrowseServerAddressSpace srv, TreeNodeCollection root, OpcRcw.Da.IEnumString es)
+		{
+			int fetched;
+			do
+			{
+				string[] tmp = new string[100];
+				es.RemoteNext(tmp.Length, tmp, out fetched);
+				for (int i = 0; i < fetched; i++)
+					AddTreeNode(srv, root, tmp[i]);
+			} while (fetched > 0);
+		}
+
+		private void AddTreeNode(IOPCBrowseServerAddressSpace srv, TreeNodeCollection root, string tag)
+		{
+			TreeNode item = root.Add(tag);
+			OPCChannelInfo channel = new OPCChannelInfo();
+			channel.progId = serversComboBox.Text;
+			channel.host = localServerButton.Checked ? "localhost" : serverTextBox.Text;
+			srv.GetItemID(tag, out channel.channel);
+			item.Tag = channel;
 		}
 
 		void FillServerList()
@@ -121,10 +137,10 @@ namespace FreeSCADA.Communication.OPCPlug
 					enumGuids.Next(ids.Length, ids, out fetched);
 					for (int i = 0; i < fetched; i++)
 					{
-						OPCServerInfo info = new OPCServerInfo();
-
-						serverList.GetClassDetails(ref ids[i], out info.progId, out info.name);
-						serversComboBox.Items.Add(info);
+						string progId;
+						string name;
+						serverList.GetClassDetails(ref ids[i], out progId, out name);
+						serversComboBox.Items.Add(progId);
 					}
 				} while (fetched > 0);
 
@@ -153,6 +169,24 @@ namespace FreeSCADA.Communication.OPCPlug
 
 		private void OnCancelClick(object sender, EventArgs e)
 		{
+			Close();
+		}
+
+		void SaveOPCChannels(TreeNodeCollection root)
+		{
+			foreach (TreeNode node in root)
+			{
+				if (node.Nodes.Count > 0)
+					SaveOPCChannels(node.Nodes);
+				else if(node.Checked)
+					channels.Add((OPCChannelInfo)node.Tag);
+			}
+		}
+
+		private void OnOkClick(object sender, EventArgs e)
+		{
+			channels.Clear();
+			SaveOPCChannels(channelsTree.Nodes);
 			Close();
 		}
 	}

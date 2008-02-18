@@ -5,22 +5,26 @@ using System.Text;
 
 namespace FreeSCADA.Communication.OPCPlug
 {
-	abstract class ChannelBase:ShellInterfaces.IChannel
+	class Channel:ShellInterfaces.IChannel
 	{
-		protected string name;
-		protected Type type;
-		protected bool readOnly;
-		protected Plugin plugin;
-		private object tag;
-		private object value = new object();
-		private object valueLock = new object();
+		string name;
+		string opcChannel;
+		string opcServer;
+		string opcHost;
+		Type type;
+		Plugin plugin;
+		object tag;
+		object value = new object();
+		object valueLock = new object();
 
-		public ChannelBase(string name, bool readOnly, Plugin plugin, Type type)
+		public Channel(string name, Plugin plugin, string opcChannel, string opcServer, string opcHost)
 		{
 			this.name = name;
-			this.readOnly = readOnly;
 			this.plugin = plugin;
-			this.type = type;
+			this.type = typeof(Nullable);
+			this.opcChannel = opcChannel;
+			this.opcHost = opcHost;
+			this.opcServer = opcServer;
 		}
 
 		#region IChannel Members
@@ -39,7 +43,7 @@ namespace FreeSCADA.Communication.OPCPlug
 
 		public bool IsReadOnly
 		{
-			get { return readOnly; }
+			get { return false; }
 		}
 
 		public virtual object Value
@@ -56,7 +60,7 @@ namespace FreeSCADA.Communication.OPCPlug
 			}
 			set
 			{
-				if (!readOnly && plugin.IsConnected)
+				if (plugin.IsConnected)
 					InternalSetValue(value);
 			}
 		}
@@ -93,6 +97,20 @@ namespace FreeSCADA.Communication.OPCPlug
 
 		public virtual void DoUpdate()
 		{
+		}
+
+		public string OpcChannel
+		{
+			get { return opcChannel; }
+		}
+		public string OpcServer
+		{
+			get { return opcServer; }
+		}
+
+		public string OpcHost
+		{
+			get { return opcHost; }
 		}
 	}
 }
