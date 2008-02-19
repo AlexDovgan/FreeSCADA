@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Markup;
 using System.Xml;
@@ -12,6 +13,7 @@ using System.Windows.Input;
 using FreeSCADA.Scheme.Manipulators;
 using FreeSCADA.Scheme.Tools;
 using FreeSCADA.Scheme.UndoRedo;
+using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Scheme
 {
@@ -54,48 +56,55 @@ namespace FreeSCADA.Scheme
 
         AdornerLayer adornerLayer;
         GeometryEditManipulator SelectedObject;
-        Adorner activeTool;
-        Tool [] tools;
-        ToolTypes CurrentTool;
         BasicUndoBuffer undoBuff;
+        Tool  activeTool;
+        
+        public List<ITool> toolsList
+        {
+            get
+            {
+                List<ITool> tl = new List<ITool>();
+                tl.Add(new SelectionTool(Scheme.MainCanvas));
+                tl.Add(new RectangleTool(Scheme.MainCanvas));
+                tl.Add(new EllipseTool(Scheme.MainCanvas));
+                return tl;
+
+            }
+
+        }
+        public ITool CurrentTool
+        {
+            get { return activeTool as ITool;}
+            set
+            {
+
+                activeTool.Deactivate();
+                AdornerLayer.GetAdornerLayer(Scheme.MainCanvas).Remove(activeTool);
+                AdornerLayer.GetAdornerLayer(Scheme.MainCanvas).Add(value as Tool);
+                activeTool = value as Tool;
+                activeTool.Activate();
+            }
+        }
+        
+
         public FSSchemeEditor(FSSchemeDocument d)
             : base(d)
         {
             Scheme = d;
 
-            //Scheme.MainCanvas.MouseLeftButtonDown += new MouseButtonEventHandler(Canvas_MouseDown);
+           
             Scheme.MainCanvas.Loaded += new RoutedEventHandler(MainCanvas_Loaded);
-            tools = new Tool[(int)ToolTypes.Max];
             undoBuff = UndoRedoManager.GetUndoBuffer(Scheme.MainCanvas);
+            activeTool = new SelectionTool(Scheme.MainCanvas);
         }
 
         void MainCanvas_Loaded(object sender, RoutedEventArgs e)
         {
             adornerLayer = AdornerLayer.GetAdornerLayer(Scheme.MainCanvas);
-            
-            //activeTool
-            /*
-            selTool.Finished += new Tool.ToolFinished(Tool_Finished);
-            selTool.Started += new Tool.ToolStarted(Tool_Started);*/
-
-
-            Tool tool = new SelectionTool(Scheme.MainCanvas);
-            tools[(int)ToolTypes.Select] = tool;
-            tool = new RectangleTool(Scheme.MainCanvas);
-            tools[(int)ToolTypes.Rectangle] = tool;
-            tool = new EllipseTool(Scheme.MainCanvas);
-
-
-            tools[(int)ToolTypes.Ellipse] = tool;
-            
-            
-            Scheme.MainCanvas.Focusable = true;
-            Scheme.MainCanvas.Focus();
-            CurrentTool = ToolTypes.Select;
-            adornerLayer.Add(tools[(int)CurrentTool]);
-            tools[(int)CurrentTool].Activate();
             Scheme.MainCanvas.KeyDown += new KeyEventHandler(MainCanvas_KeyDown);
-
+            
+            AdornerLayer.GetAdornerLayer(Scheme.MainCanvas).Add(activeTool);
+            activeTool.Activate();
         }
 
         void MainCanvas_KeyDown(object sender, KeyEventArgs e)
@@ -112,16 +121,7 @@ namespace FreeSCADA.Scheme
 
         }
 
-        public void SelectTool(ToolTypes tool)
-        {
-            tools[(int)CurrentTool].Deactivate();
-            AdornerLayer.GetAdornerLayer(Scheme.MainCanvas).Remove(tools[(int)CurrentTool]);
-            AdornerLayer.GetAdornerLayer(Scheme.MainCanvas).Add(tools[(int)tool]);
-            CurrentTool = tool;
-            tools[(int)CurrentTool].Activate();
         
-        }
-
 
         void Tool_Started(MouseEventArgs e)
         {
@@ -206,8 +206,7 @@ namespace FreeSCADA.Scheme
             }
             catch (Exception ex)
             {
-                //System.Windows.Forms.MessageBox.Show("Error: Could not read file. Original error: " + ex.Message);
-
+ 
             }
 
         }

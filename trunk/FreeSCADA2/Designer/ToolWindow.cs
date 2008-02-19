@@ -1,11 +1,10 @@
 ﻿using WeifenLuo.WinFormsUI.Docking;
-using FreeSCADA.Common;
+
 namespace FreeSCADA.Designer
 {
 	class ToolWindow : DockContent
     {
-    
-		public ToolWindow()
+        public ToolWindow()
 		{
 			DockAreas = DockAreas.Float | DockAreas.DockBottom | DockAreas.DockLeft | DockAreas.DockRight;
 			TabText = "ToolWindow";
@@ -23,7 +22,5 @@ namespace FreeSCADA.Designer
             this.ResumeLayout(false);
 
         }
-
-       
 	}
 }
