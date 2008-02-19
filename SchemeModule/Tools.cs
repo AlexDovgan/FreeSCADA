@@ -13,6 +13,7 @@ using FreeSCADA.Scheme.Commands;
 using FreeSCADA.Scheme.Manipulators;
 using FreeSCADA.Scheme.Helpers;
 using FreeSCADA.Scheme.UndoRedo;
+using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Scheme.Tools
 {
@@ -36,6 +37,7 @@ namespace FreeSCADA.Scheme.Tools
             visualChildren = new VisualCollection(this);
         
         }
+        
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
 
@@ -49,7 +51,6 @@ namespace FreeSCADA.Scheme.Tools
         { }
         public virtual void OnCanvasKeyUp(object sender, KeyEventArgs e)
         { }
-        
         public void Activate()
         {
             AdornedElement.MouseLeftButtonDown += new MouseButtonEventHandler(OnCanvasMouseLeftButtonDown);
@@ -85,7 +86,7 @@ namespace FreeSCADA.Scheme.Tools
 
     }
 
-    public class SelectionTool : Tool
+    public class SelectionTool : Tool, ITool 
     {
 
         Point startPos;
@@ -96,6 +97,24 @@ namespace FreeSCADA.Scheme.Tools
         {
             workCanvas = adornedElement;
             
+        }
+
+        public String  ToolName
+        {
+            get{ return "Selection Tool";}
+        }
+
+        public String ToolGroup
+        {
+            get { return "Graphics Tools"; }
+        }
+        public System.Drawing.Bitmap ToolIcon
+        {
+            get
+            {
+
+                return new System.Drawing.Bitmap(10, 10);
+            }
         }
 
         public override void OnCanvasKeyUp(object sender, KeyEventArgs e)
@@ -211,7 +230,7 @@ namespace FreeSCADA.Scheme.Tools
 
     }
 
-    public class RectangleTool : Tool
+    public class RectangleTool : Tool, ITool 
     {
         
         Point startPos;
@@ -222,6 +241,23 @@ namespace FreeSCADA.Scheme.Tools
         {
             workCanvas = adornedElement;
         
+        }
+        public String ToolName
+        {
+            get { return "Rectangle Tool"; }
+        }
+
+        public String ToolGroup
+        {
+            get { return "Graphics Tools"; }
+        }
+        public System.Drawing.Bitmap ToolIcon
+        {
+            get
+            {
+
+                return new System.Drawing.Bitmap(10, 10);
+            }
         }
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
@@ -288,7 +324,7 @@ namespace FreeSCADA.Scheme.Tools
         }
 
     }
-    public class EllipseTool : Tool
+    public class EllipseTool : Tool, ITool 
     {
 
         Point startPos;
@@ -299,8 +335,24 @@ namespace FreeSCADA.Scheme.Tools
         {
             workCanvas = adornedElement;
         }
-                
 
+        public String ToolName
+        {
+            get { return "Ellipse Tool"; }
+        }
+
+        public String ToolGroup
+        {
+            get { return "Graphics Tools"; }
+        }
+        public System.Drawing.Bitmap ToolIcon
+        {
+            get
+            {
+
+                return new System.Drawing.Bitmap(10, 10);
+            }
+        }
         public override void OnCanvasMouseMove(object sender, MouseEventArgs e)
         {
             if (visualChildren.Count > 0)

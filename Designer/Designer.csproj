@@ -129,6 +129,9 @@
     <Compile Include="SchemaView.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ToolBoxView.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ToolWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -138,6 +141,7 @@
     <Compile Include="VariablesForm.Designer.cs">
       <DependentUpon>VariablesForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="WindowManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

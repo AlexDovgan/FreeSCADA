@@ -52,6 +52,7 @@
     <Compile Include="ICommunicationPlug.cs" />
     <Compile Include="IControlPlug.cs" />
     <Compile Include="IEnvironment.cs" />
+    <Compile Include="ITools.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

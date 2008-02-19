@@ -12,4 +12,5 @@ namespace FreeSCADA.Designer
 			TabText = "Project Content";
 		}
 	}
+  
 }

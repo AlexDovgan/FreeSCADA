@@ -6,15 +6,19 @@ namespace FreeSCADA.Designer
 {
 	public partial class MainForm : Form
 	{
-		ProjectContentView projectContentView = new ProjectContentView();
-        SchemaView currentScheme;
+		
 		public MainForm()
 		{
 			InitializeComponent();
 
 			Env.Initialize(this, mainMenu);
-
-			projectContentView.Show(dockPanel, DockState.DockLeft);
+            ToolWindow tw=new ProjectContentView();
+            WindowManager.AddToolWindow("projectTree",tw);
+			tw.Show(dockPanel, DockState.DockLeft);
+            tw=new ToolBoxView();
+            WindowManager.AddToolWindow("toolBox", tw);
+            tw.Show(dockPanel, DockState.DockRightAutoHide);
+            
 		}
 
 		private void OnMenuVariables(object sender, System.EventArgs e)
@@ -32,7 +36,7 @@ namespace FreeSCADA.Designer
 		{
 			SchemaView view = new SchemaView(new FSSchemeEditor(FSSchemeDocument.CreateNewScheme()));
 			view.Show(dockPanel, DockState.Document);
-            currentScheme = view;
+            
 		}
 
 		private void OnEventsItemClick(object sender, System.EventArgs e)
@@ -64,26 +68,6 @@ namespace FreeSCADA.Designer
 			if (fd.ShowDialog() == DialogResult.OK)
 				Env.Current.Project.Load(fd.FileName);
 		}
-
-        private void toolStripButton6_Click(object sender, System.EventArgs e)
-        {
-            
-            if(currentScheme!=null)
-                currentScheme.schemeEditor.SelectTool(FreeSCADA.Scheme.Tools.ToolTypes.Select);
-            
-        }
-
-        private void toolStripButton7_Click(object sender, System.EventArgs e)
-        {
-            if (currentScheme != null)
-                currentScheme.schemeEditor.SelectTool(FreeSCADA.Scheme.Tools.ToolTypes.Rectangle);
-
-        }
-
-        private void toolStripButton8_Click(object sender, System.EventArgs e)
-        {
-            if (currentScheme != null)
-                currentScheme.schemeEditor.SelectTool(FreeSCADA.Scheme.Tools.ToolTypes.Ellipse);
-        }
+        
 	}
 }
