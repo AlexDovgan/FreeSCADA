@@ -140,7 +140,12 @@
 			// dockPanel
 			// 
 			this.dockPanel.ActiveAutoHideContent = null;
+			this.dockPanel.DefaultFloatWindowSize = new System.Drawing.Size(200, 300);
 			this.dockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dockPanel.DockBottomPortion = 0.15;
+			this.dockPanel.DockLeftPortion = 0.15;
+			this.dockPanel.DockRightPortion = 0.15;
+			this.dockPanel.DockTopPortion = 0.15;
 			this.dockPanel.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
 			this.dockPanel.Location = new System.Drawing.Point(0, 49);
 			this.dockPanel.Name = "dockPanel";

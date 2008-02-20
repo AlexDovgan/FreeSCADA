@@ -6,8 +6,14 @@ using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer
 {
+	/// <summary>
+	/// The form displays a complete list of variables from current Project.
+	/// </summary>
 	public partial class VariablesForm : Form
 	{
+		/// <summary>
+		/// Constructor
+		/// </summary>
 		public VariablesForm()
 		{
 			InitializeComponent();

@@ -9,5 +9,13 @@ namespace FreeSCADA.Designer
 			DockAreas = DockAreas.Float | DockAreas.Document;
 			TabText = "Document";
 		}
+
+		public virtual void OnActivated()
+		{
+		}
+
+		public virtual void OnDeactivated()
+		{
+		}
 	}
 }

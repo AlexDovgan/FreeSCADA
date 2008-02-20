@@ -9,19 +9,29 @@ using System.Windows.Forms;
 using FreeSCADA.Common;
 using FreeSCADA.ShellInterfaces;
 
-
 namespace FreeSCADA.Designer
 {
+	/// <summary>
+	/// Represents available tools and manipulators for active document window. Basically used for Schema editing.
+	/// </summary>
     class ToolBoxView : ToolWindow
     {
-        public delegate void ToolActivatedDelegate(Type tool);
-        public event ToolActivatedDelegate ToolActivated;
+		/// <summary>
+		/// Notify that current tool has changed
+		/// </summary>
+		/// <param name="sender">Sender of the event. Typically it is ToolBoxView object instance.</param>
+		/// <param name="tool">Instance of activated tool</param>
+		public delegate void ToolActivatedHandler(Object sender, Type tool);
+		/// <summary>Occurs when user selects a tool from the list</summary>
+		public event ToolActivatedHandler ToolActivated;
 
         public ToolBoxView()
         {
             TabText = "ToolBox";
+			AutoHidePortion = 0.15;
         }
-        public void ToolsCollectionChanged(List<ITool> tools, Type currentTool)
+
+        public void OnToolsCollectionChanged(List<ITool> tools, Type currentTool)
         {
             int pos = 0;
             SuspendLayout();
@@ -56,8 +66,14 @@ namespace FreeSCADA.Designer
                     if (ch != b)
                         ch.Checked = false;
                 }
-                ToolActivated((Type)b.Tag);
+                if(ToolActivated != null)
+					ToolActivated(this, (Type)b.Tag);
             }
         }
+
+		public void Clean()
+		{
+			Controls.Clear();
+		}
     }
 }
