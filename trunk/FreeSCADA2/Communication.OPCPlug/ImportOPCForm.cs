@@ -38,7 +38,7 @@ namespace FreeSCADA.Communication.OPCPlug
 			IOPCBrowseServerAddressSpace srv = (IOPCBrowseServerAddressSpace)obj;
 
 			//IntPtr statusPtr;
-			//srv.GetStatus(out statusPtr);
+			//server.GetStatus(out statusPtr);
 			//OPCSERVERSTATUS status = (OPCSERVERSTATUS)Marshal.PtrToStructure(statusPtr, typeof(OPCSERVERSTATUS));
 			//statusPtr = IntPtr.Zero;
 

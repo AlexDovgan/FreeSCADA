@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Xml;
 using FreeSCADA.ShellInterfaces;
 using FreeSCADA.ShellInterfaces.Plugins;
-using System.Threading;
-using System.Xml;
 
 namespace FreeSCADA.Communication.OPCPlug
 {
@@ -11,7 +10,7 @@ namespace FreeSCADA.Communication.OPCPlug
 		private IEnvironment environment;
 		List<Command> commands = new List<Command>();
 		List<IChannel> channels = new List<IChannel>();
-		Thread channelUpdaterThread;
+		List<ConnectionGroup> connectionGroups = new List<ConnectionGroup>();
 
 		~Plugin()
 		{
@@ -63,45 +62,47 @@ namespace FreeSCADA.Communication.OPCPlug
 
 		public bool IsConnected
 		{
-			get { return channelUpdaterThread != null; }
+			get { return connectionGroups.Count > 0; }
 		}
 
 		public bool Connect()
 		{
-			channelUpdaterThread = new Thread(new ParameterizedThreadStart(ChannelUpdaterThreadProc));
-			channelUpdaterThread.Start(this);
+			if (channels.Count == 0)
+				return false;
+			connectionGroups.Clear();
+			System.GC.Collect();
+
+			List<IChannel> originalChannels = new List<IChannel>();
+			originalChannels.AddRange(channels);
+			do
+			{
+				List<Channel> groupChannels = new List<Channel>();
+				Channel lhc = (Channel)originalChannels[0];
+				groupChannels.Add(lhc);
+				originalChannels.RemoveAt(0);
+				for (int i = originalChannels.Count - 1; i >= 0; i--)
+				{
+					Channel rhc = (Channel)originalChannels[i];
+					if (lhc.OpcServer == rhc.OpcServer && lhc.OpcHost == rhc.OpcHost)
+					{
+						groupChannels.Add(rhc);
+						originalChannels.RemoveAt(i);
+					}
+				}
+				connectionGroups.Add(new ConnectionGroup(lhc.OpcServer, lhc.OpcHost, groupChannels));
+
+			} while (originalChannels.Count > 0);
+
 			return IsConnected;
 		}
 
 		public void Disconnect()
 		{
-			if (channelUpdaterThread != null)
-			{
-				channelUpdaterThread.Abort();
-				channelUpdaterThread.Join();
-				channelUpdaterThread = null;
-			}
+			connectionGroups.Clear();
+			System.GC.Collect();
 		}
 
 		#endregion
-
-		private static void ChannelUpdaterThreadProc(object obj)
-		{
-			try
-			{
-				Plugin self = (Plugin)obj;
-				for (; ; )
-				{
-					//System.Console.WriteLine("{0} ChannelUpdaterThreadProc: Start loop", System.DateTime.Now);
-					foreach (Channel ch in self.channels)
-						ch.DoUpdate();
-					Thread.Sleep(100);
-				}
-			}
-			catch (ThreadAbortException)
-			{
-			}
-		}
 
 		public IEnvironment Environment
 		{

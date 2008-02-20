@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace FreeSCADA.Communication.OPCPlug
 {
@@ -21,7 +18,7 @@ namespace FreeSCADA.Communication.OPCPlug
 		{
 			this.name = name;
 			this.plugin = plugin;
-			this.type = typeof(Nullable);
+			this.type = typeof(object);
 			this.opcChannel = opcChannel;
 			this.opcHost = opcHost;
 			this.opcServer = opcServer;
@@ -81,22 +78,21 @@ namespace FreeSCADA.Communication.OPCPlug
 
 		protected void InternalSetValue(object value)
 		{
-			if (value.GetType() == type)
+			type = value.GetType();
+			bool fire = false;
+			lock (valueLock)
 			{
-				bool fire = false;
-				lock (valueLock)
-				{
-					object old = this.value;
-					this.value = value;
-					fire = !old.Equals(this.value);
-				}
-				if (fire)
-					FireValueChanged();
+				object old = this.value;
+				this.value = value;
+				fire = !old.Equals(this.value);
 			}
+			if (fire)
+				FireValueChanged();
 		}
 
-		public virtual void DoUpdate()
+		public void DoUpdate(object value)
 		{
+			InternalSetValue(value);
 		}
 
 		public string OpcChannel

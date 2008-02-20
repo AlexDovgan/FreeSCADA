@@ -23,9 +23,6 @@ namespace FreeSCADA.Designer
 			foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
 				LoadPlugin(categoryView, plugId);
 
-			AddDummyGroup(categoryView);
-			AddDummyGroup(categoryView);
-
 			channelsGrid.AutoStretchColumnsToFitWidth = true;
 			channelsGrid.AutoSizeCells();
 
@@ -72,34 +69,6 @@ namespace FreeSCADA.Designer
 				channelsGrid.Rows[curRow].Tag = ch;
 				ch.Tag = curRow;
 				ch.ValueChanged += new EventHandler(OnChannelValueChanged);
-			}
-		}
-
-		private void AddDummyGroup(SourceGrid.Cells.Views.Cell categoryView)
-		{
-			int curRow = channelsGrid.RowsCount;
-			channelsGrid.RowsCount += 2;
-
-			channelsGrid[curRow, 0] = new SourceGrid.Cells.Cell("Dummy group");
-			channelsGrid[curRow, 0].ColumnSpan = channelsGrid.ColumnsCount;
-			channelsGrid[curRow, 0].View = categoryView;
-			channelsGrid[curRow, 0].AddController(new SourceGrid.Cells.Controllers.Unselectable());
-			curRow++;
-
-			channelsGrid[curRow, 0] = new SourceGrid.Cells.ColumnHeader("Channel");
-			channelsGrid[curRow, 1] = new SourceGrid.Cells.ColumnHeader("Value");
-			channelsGrid[curRow, 2] = new SourceGrid.Cells.ColumnHeader("Access");
-			channelsGrid[curRow, 3] = new SourceGrid.Cells.ColumnHeader("Type");
-
-			for(int i=0;i<10;i++)
-			{
-				channelsGrid.RowsCount++;
-				curRow++;
-
-				channelsGrid[curRow, 0] = new SourceGrid.Cells.Cell(String.Format("Name {0}",i));
-				channelsGrid[curRow, 1] = new SourceGrid.Cells.Cell(String.Format("Value {0}",i));
-				channelsGrid[curRow, 2] = new SourceGrid.Cells.Cell(String.Format("Access {0}",i));
-				channelsGrid[curRow, 3] = new SourceGrid.Cells.Cell(String.Format("Type {0}",i));
 			}
 		}
 
