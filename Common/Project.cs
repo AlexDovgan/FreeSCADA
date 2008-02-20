@@ -52,6 +52,9 @@ namespace FreeSCADA.Common
 
 		public void Save(string fileName)
 		{
+			if (System.IO.File.Exists(fileName))
+				System.IO.File.Delete(fileName);
+
 			using (FileStream zipFileStream = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
 			using (ZipOutputStream zipOutput = new ZipOutputStream(zipFileStream))
 			{
