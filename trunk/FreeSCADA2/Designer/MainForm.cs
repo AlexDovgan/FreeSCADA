@@ -1,24 +1,23 @@
 ﻿using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using FreeSCADA.Common;
-using FreeSCADA.Scheme;
 namespace FreeSCADA.Designer
 {
+	/// <summary>
+	/// Application main window
+	/// </summary>
 	public partial class MainForm : Form
 	{
-		
+		WindowManager windowManager;
+
+		/// <summary>
+		/// Constructor
+		/// </summary>
 		public MainForm()
 		{
 			InitializeComponent();
-
 			Env.Initialize(this, mainMenu);
-            ToolWindow tw=new ProjectContentView();
-            WindowManager.AddToolWindow("projectTree",tw);
-			tw.Show(dockPanel, DockState.DockLeft);
-            tw=new ToolBoxView();
-            WindowManager.AddToolWindow("toolBox", tw);
-            tw.Show(dockPanel, DockState.DockRightAutoHide);
-            
+			windowManager = new WindowManager(dockPanel);            
 		}
 
 		private void OnMenuVariables(object sender, System.EventArgs e)
@@ -34,9 +33,7 @@ namespace FreeSCADA.Designer
 
 		private void OnSchemaItemClick(object sender, System.EventArgs e)
 		{
-			SchemaView view = new SchemaView(new FSSchemeEditor(FSSchemeDocument.CreateNewScheme()));
-			view.Show(dockPanel, DockState.Document);
-            
+			windowManager.CreateNewSchema();
 		}
 
 		private void OnEventsItemClick(object sender, System.EventArgs e)

@@ -2,28 +2,73 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace FreeSCADA.Designer
 {
-    static class WindowManager
+    class WindowManager
     {
+		WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel;
 
-        static Dictionary<String, ToolWindow> toolsWindows = new Dictionary<String, ToolWindow>();
-        static List<DocumentWindow> documentWindows = new List<DocumentWindow>();
-        static DocumentWindow CurrentDocument = null;
+        List<DocumentWindow> documentWindows = new List<DocumentWindow>();
+        DocumentWindow CurrentDocument;
 
-        static public void  AddToolWindow(String name,ToolWindow wnd)
-        {
-            if (wnd!=null)
-                toolsWindows[name] = wnd;
-            else throw new Exception("Can't add null refference");
-                
-        }
-        static public ToolWindow GetToolWindow(String name)
-        {
-            return toolsWindows[name];
-        }
-        
+		ProjectContentView projectContentView;
+		ToolBoxView toolBoxView;
 
+		public WindowManager(DockPanel dockPanel)
+		{
+			this.dockPanel = dockPanel;
+
+			//Create toolwindows
+			projectContentView = new ProjectContentView();
+			projectContentView.Show(dockPanel, DockState.DockLeft);
+
+			toolBoxView = new ToolBoxView();
+			toolBoxView.Show(dockPanel, DockState.DockRightAutoHide);
+
+			//Connect Windows Manager to heleper events
+			dockPanel.ActiveDocumentChanged += new EventHandler(OnActiveDocumentChanged);
+		}
+
+		public void CreateNewSchema()
+		{
+			SchemaView view = new SchemaView();
+			view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
+			documentWindows.Add(view);
+
+			view.Show(dockPanel, DockState.Document);
+		}
+
+		void OnActiveDocumentChanged(object sender, EventArgs e)
+		{
+			DeactivatingDocument();
+			CurrentDocument = (DocumentWindow)dockPanel.ActiveDocument;
+			ActivatingDocument();
+		}
+
+		private void ActivatingDocument()
+		{
+			//Notify and subscribe document to appropriate tool windows
+			if (CurrentDocument != null)
+			{
+				CurrentDocument.OnActivated();
+				if (CurrentDocument is SchemaView)
+					toolBoxView.ToolActivated += (CurrentDocument as SchemaView).OnToolActivated;
+			}
+			else
+				toolBoxView.Clean();
+		}
+
+		private void DeactivatingDocument()
+		{
+			//Notify and unsubscribe document from all tool windows
+			if (CurrentDocument != null)
+			{
+				CurrentDocument.OnDeactivated();
+				if (CurrentDocument is SchemaView)
+					toolBoxView.ToolActivated -= (CurrentDocument as SchemaView).OnToolActivated;
+			}
+		}
     }
 }

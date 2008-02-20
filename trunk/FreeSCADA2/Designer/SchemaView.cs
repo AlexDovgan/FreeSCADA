@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FreeSCADA.Scheme;
+using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Designer
 {
@@ -10,16 +11,21 @@ namespace FreeSCADA.Designer
     {
         private System.Windows.Forms.Integration.ElementHost wpfContainerHost;
         public FSSchemeEditor schemeEditor;
-        public SchemaView(FSSchemeEditor sch)
+
+		public delegate void ToolsCollectionChangedHandler(List<ITool> tools, Type defaultTool);
+		public event ToolsCollectionChangedHandler ToolsCollectionChanged;
+
+        public SchemaView()
         {
             TabText = "Schema #";
-            schemeEditor = sch;
+			schemeEditor = new FSSchemeEditor(FSSchemeDocument.CreateNewScheme());
             InitializeComponent();
+
+			FreeSCADA.Common.Env.Current.Project.LoadEvent += new EventHandler(OnProjectLoad);
         }
 
         private void InitializeComponent()
         {
-            
             this.SuspendLayout();
             this.wpfContainerHost = new System.Windows.Forms.Integration.ElementHost();
             // 
@@ -40,32 +46,28 @@ namespace FreeSCADA.Designer
             this.Name = "SchemaView";
             this.wpfContainerHost.Child = schemeEditor;
 
-            this.VisibleChanged += new EventHandler(SchemaView_VisibleChanged);
+            //this.VisibleChanged += new EventHandler(SchemaView_VisibleChanged);
             this.ResumeLayout(false);
 
         }
 
-        void SchemaView_VisibleChanged(object sender, EventArgs e)
-        {
-            ToolBoxView tbv = (ToolBoxView)WindowManager.GetToolWindow("toolBox");
-            if (Visible==true)
-            {
-                
-                
-                tbv.ToolsCollectionChanged(schemeEditor.toolsList, schemeEditor.CurrentTool);
-                tbv.ToolActivated += new ToolBoxView.ToolActivatedDelegate(ToolActivated);
-                
-            }
-            else tbv.ToolActivated -= ToolActivated;
+		void OnProjectLoad(object sender, EventArgs e)
+		{
+			//Load schema from project file
+		}
        
-        
-        }
+		public override void  OnActivated()
+		{
+			base.OnActivated();
 
-        void ToolActivated(Type tool)
+			//Notify connected windows about new tools collection
+			if(ToolsCollectionChanged != null)
+				ToolsCollectionChanged(schemeEditor.toolsList, schemeEditor.CurrentTool);
+		}
+
+		public void OnToolActivated(object sender, Type tool)
         {
             schemeEditor.CurrentTool = tool;
         }
-
-        
     }
 }
