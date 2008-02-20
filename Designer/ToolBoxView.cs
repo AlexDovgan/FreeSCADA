@@ -14,14 +14,14 @@ namespace FreeSCADA.Designer
 {
     class ToolBoxView : ToolWindow
     {
-        public delegate void ToolActivatedDelegate(ITool tool);
+        public delegate void ToolActivatedDelegate(Type tool);
         public event ToolActivatedDelegate ToolActivated;
 
         public ToolBoxView()
         {
             TabText = "ToolBox";
         }
-        public void ToolsCollectionChanged(List<ITool> tools, ITool currentTool)
+        public void ToolsCollectionChanged(List<ITool> tools, Type currentTool)
         {
             int pos = 0;
             SuspendLayout();
@@ -31,12 +31,12 @@ namespace FreeSCADA.Designer
 
                 CheckBox b = new CheckBox();
                 b.Text = tool.ToolName;
-                if (tool.GetType() == currentTool.GetType())
+                if (tool.GetType() == currentTool)
                 {
                     b.Checked = true;
                     b.Tag = currentTool;
                 }
-                else b.Tag = tool;
+                else b.Tag = tool.GetType();
                 b.Location = new System.Drawing.Point(2, 7 + pos * 19);
                 b.CheckedChanged += new EventHandler(ToolChanged);
                 Controls.Add(b);
@@ -56,7 +56,7 @@ namespace FreeSCADA.Designer
                     if (ch != b)
                         ch.Checked = false;
                 }
-                ToolActivated((ITool)b.Tag);
+                ToolActivated((Type)b.Tag);
             }
         }
     }
