@@ -60,7 +60,7 @@ namespace FreeSCADA.Designer
         
         }
 
-        void ToolActivated(FreeSCADA.ShellInterfaces.ITool tool)
+        void ToolActivated(Type tool)
         {
             schemeEditor.CurrentTool = tool;
         }

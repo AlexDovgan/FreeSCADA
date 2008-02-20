@@ -29,8 +29,8 @@ namespace FreeSCADA.Scheme
             Scheme = d;
             Content = d.MainCanvas;
             scale = new ScaleTransform();
-             Focusable = false;
-          //  MouseWheel += new MouseWheelEventHandler(FSSchemeViewer_MouseWheel);
+            Focusable = false;
+            MouseWheel += new MouseWheelEventHandler(FSSchemeViewer_MouseWheel);
             
         }
 
@@ -72,16 +72,17 @@ namespace FreeSCADA.Scheme
             }
 
         }
-        public ITool CurrentTool
+        public Type CurrentTool
         {
-            get { return activeTool as ITool;}
+            get { return activeTool.GetType();}
             set
             {
-
                 activeTool.Deactivate();
                 AdornerLayer.GetAdornerLayer(Scheme.MainCanvas).Remove(activeTool);
-                AdornerLayer.GetAdornerLayer(Scheme.MainCanvas).Add(value as Tool);
-                activeTool = value as Tool;
+                object[] a = new object[1];
+                a[0] = Scheme.MainCanvas;
+                activeTool = (Tool)System.Activator.CreateInstance(value, a);
+                AdornerLayer.GetAdornerLayer(Scheme.MainCanvas).Add(activeTool);
                 activeTool.Activate();
             }
         }

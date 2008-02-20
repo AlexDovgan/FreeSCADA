@@ -66,6 +66,9 @@ namespace FreeSCADA.Scheme.Tools
             AdornedElement.MouseMove -= OnCanvasMouseMove;
             AdornedElement.KeyDown -= OnCanvasKeyDown;
             AdornedElement.KeyUp -= OnCanvasKeyUp;
+            if (manipulator != null)
+                AdornerLayer.GetAdornerLayer(AdornedElement).Remove(manipulator);
+
         }
         public delegate void ToolStarted(MouseEventArgs e);
         public delegate void ToolFinished(Manipulator m);
