@@ -30,7 +30,7 @@ namespace FreeSCADA.Scheme
             Content = d.MainCanvas;
             scale = new ScaleTransform();
             Focusable = false;
-            MouseWheel += new MouseWheelEventHandler(FSSchemeViewer_MouseWheel);
+            //MouseWheel += new MouseWheelEventHandler(FSSchemeViewer_MouseWheel);
             
         }
 
@@ -101,9 +101,10 @@ namespace FreeSCADA.Scheme
 
         void MainCanvas_Loaded(object sender, RoutedEventArgs e)
         {
+            Scheme.MainCanvas.Focusable = true;
+            Scheme.MainCanvas.Focus();   
             adornerLayer = AdornerLayer.GetAdornerLayer(Scheme.MainCanvas);
             Scheme.MainCanvas.KeyDown += new KeyEventHandler(MainCanvas_KeyDown);
-            
             AdornerLayer.GetAdornerLayer(Scheme.MainCanvas).Add(activeTool);
             activeTool.Activate();
         }
