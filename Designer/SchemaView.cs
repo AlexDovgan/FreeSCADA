@@ -54,9 +54,10 @@ namespace FreeSCADA.Designer
                 
                 tbv.ToolsCollectionChanged(schemeEditor.toolsList, schemeEditor.CurrentTool);
                 tbv.ToolActivated += new ToolBoxView.ToolActivatedDelegate(ToolActivated);
+                
             }
             else tbv.ToolActivated -= ToolActivated;
-
+       
         
         }
 

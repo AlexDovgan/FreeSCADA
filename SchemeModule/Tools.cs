@@ -35,7 +35,7 @@ namespace FreeSCADA.Scheme.Tools
             : base(adornedElement)
         {
             visualChildren = new VisualCollection(this);
-        
+            adornedElement.Focus();
         }
         
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
@@ -238,7 +238,6 @@ namespace FreeSCADA.Scheme.Tools
         
         Point startPos;
         Canvas workCanvas;
-        bool ShiftDown;
         public RectangleTool(Canvas adornedElement)
             : base(adornedElement)
         {
@@ -332,7 +331,6 @@ namespace FreeSCADA.Scheme.Tools
 
         Point startPos;
         Canvas workCanvas;
-        bool ShiftDown;
         public EllipseTool(Canvas adornedElement)
             : base(adornedElement)
         {
