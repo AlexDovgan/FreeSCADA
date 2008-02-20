@@ -113,11 +113,11 @@ namespace FreeSCADA.Communication.OPCPlug
 			ShellInterfaces.IChannel[] channels = new ShellInterfaces.IChannel[grid.RowsCount - 1];
 			for (int i = 1; i < grid.RowsCount; i++)
 			{
-				channels[i-1] = new Channel(	grid[i, 0].DisplayText, 
-												plugin, 
-												grid[i, 1].DisplayText, 
-												grid[i, 2].DisplayText,
-												grid[i, 3].DisplayText);
+				channels[i-1] = ChannelFactory.CreateChannel(	grid[i, 0].DisplayText, 
+																plugin, 
+																grid[i, 1].DisplayText, 
+																grid[i, 2].DisplayText,
+																grid[i, 3].DisplayText);
 			}
 			plugin.Channels = channels;
 			plugin.SaveSettings();
