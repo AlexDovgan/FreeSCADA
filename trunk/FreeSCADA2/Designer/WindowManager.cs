@@ -29,6 +29,12 @@ namespace FreeSCADA.Designer
 
 			//Connect Windows Manager to heleper events
 			dockPanel.ActiveDocumentChanged += new EventHandler(OnActiveDocumentChanged);
+			FreeSCADA.Common.Env.Current.Project.LoadEvent += new EventHandler(OnProjectLoad);
+		}
+
+		void OnProjectLoad(object sender, EventArgs e)
+		{
+			//Load schema from project file
 		}
 
 		public void CreateNewSchema()

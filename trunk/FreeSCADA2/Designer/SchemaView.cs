@@ -20,8 +20,6 @@ namespace FreeSCADA.Designer
             TabText = "Schema #";
 			schemeEditor = new FSSchemeEditor(FSSchemeDocument.CreateNewScheme());
             InitializeComponent();
-
-			FreeSCADA.Common.Env.Current.Project.LoadEvent += new EventHandler(OnProjectLoad);
         }
 
         private void InitializeComponent()
@@ -46,15 +44,9 @@ namespace FreeSCADA.Designer
             this.Name = "SchemaView";
             this.wpfContainerHost.Child = schemeEditor;
 
-            //this.VisibleChanged += new EventHandler(SchemaView_VisibleChanged);
             this.ResumeLayout(false);
 
         }
-
-		void OnProjectLoad(object sender, EventArgs e)
-		{
-			//Load schema from project file
-		}
        
 		public override void  OnActivated()
 		{
