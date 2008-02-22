@@ -39,11 +39,18 @@ namespace FreeSCADA.Designer
 
 		public void CreateNewSchema()
 		{
-			SchemaView view = new SchemaView();
-			view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
-			documentWindows.Add(view);
+            try
+            {
+                SchemaView view = new SchemaView();
+                view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
+                documentWindows.Add(view);
 
-			view.Show(dockPanel, DockState.Document);
+                view.Show(dockPanel, DockState.Document);
+            }
+            catch (Exception ex)
+            {
+
+            }
 		}
 
 		void OnActiveDocumentChanged(object sender, EventArgs e)

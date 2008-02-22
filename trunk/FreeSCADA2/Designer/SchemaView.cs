@@ -24,7 +24,7 @@ namespace FreeSCADA.Designer
                 schemeEditor = new SchemeEditor(scheme);
                 TabText = scheme.Name;
             }
-            else this.Close();
+            else throw new Exception("Canceled");
             InitializeComponent();
         }
 
