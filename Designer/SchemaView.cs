@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using FreeSCADA.Scheme;
+using FreeSCADA.Schema;
 using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Designer
@@ -10,19 +10,19 @@ namespace FreeSCADA.Designer
     class SchemaView : DocumentWindow
     {
         private System.Windows.Forms.Integration.ElementHost wpfContainerHost;
-        public SchemeEditor schemeEditor;
+        public SchemaEditor schemaEditor;
 
 		public delegate void ToolsCollectionChangedHandler(List<ITool> tools, Type defaultTool);
 		public event ToolsCollectionChangedHandler ToolsCollectionChanged;
 
         public SchemaView()
         {
-            FSScheme scheme;
+            SchemaDocument schema;
 
-            if ((scheme = FSScheme.CreateNewScheme()) != null)
+            if ((schema = SchemaDocument.CreateNewSchema()) != null)
             {
-                schemeEditor = new SchemeEditor(scheme);
-                TabText = scheme.Name;
+                schemaEditor = new SchemaEditor(schema);
+                TabText = schema.Name;
             }
             else throw new Exception("Canceled");
             InitializeComponent();
@@ -48,7 +48,7 @@ namespace FreeSCADA.Designer
             this.ClientSize = new System.Drawing.Size(292, 273);
             this.Controls.Add(this.wpfContainerHost);
             this.Name = "SchemaView";
-            this.wpfContainerHost.Child = schemeEditor;
+            this.wpfContainerHost.Child = schemaEditor;
 
             this.ResumeLayout(false);
 
@@ -60,12 +60,12 @@ namespace FreeSCADA.Designer
 
 			//Notify connected windows about new tools collection
 			if(ToolsCollectionChanged != null)
-				ToolsCollectionChanged(schemeEditor.toolsList, schemeEditor.CurrentTool);
+				ToolsCollectionChanged(schemaEditor.toolsList, schemaEditor.CurrentTool);
 		}
 
 		public void OnToolActivated(object sender, Type tool)
         {
-            schemeEditor.CurrentTool = tool;
+            schemaEditor.CurrentTool = tool;
         }
     }
 }

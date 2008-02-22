@@ -8,11 +8,11 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Shapes;
-using FreeSCADA.Scheme.Manipulators;
+using FreeSCADA.Schema.Manipulators;
 using System.Windows.Input;
-using FreeSCADA.Scheme.Helpers;
+using FreeSCADA.Schema.Helpers;
 
-namespace FreeSCADA.Scheme.Commands
+namespace FreeSCADA.Schema.Commands
 {
     public class UngroupCommand:ICommand
     {

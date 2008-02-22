@@ -11,31 +11,31 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace FreeSCADA.Scheme
+namespace FreeSCADA.Schema
 {
     /// <summary>
-    /// Interaction logic for NewSchemeDialog.xaml
+    /// Interaction logic for NewSchemaDialog.xaml
     /// </summary
     
-    public partial class NewSchemeDialog : Window
+    public partial class NewSchemaDialog : Window
     {
     
-        public class SchemeParams
+        public class SchemaParams
         {
             public string Name;
             public double Width=800;
             public double Height=600;
-            public string SchemeName
+            public string SchemaName
             {
                 get { return Name; }
                 set { Name = value; }
             }
-            public string  SchemeWidth
+            public string  SchemaWidth
             {
                 get{return Convert.ToString(Width);}
                 set {Width=Convert.ToDouble(value);}
             }
-            public string SchemeHeight
+            public string SchemaHeight
             {
                 get { return Convert.ToString(Height); }
                 set { Height = Convert.ToInt32(value); }
@@ -44,7 +44,7 @@ namespace FreeSCADA.Scheme
         }
 
         
-        public NewSchemeDialog()
+        public NewSchemaDialog()
         {
             InitializeComponent();
            
@@ -52,9 +52,9 @@ namespace FreeSCADA.Scheme
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
-            if (SchemeNameTextBox.Text == "")
+            if (SchemaNameTextBox.Text == "")
             {
-                MessageBox.Show("Please enter Scheme name");
+                MessageBox.Show("Please enter Schema name");
             }
             else
             {

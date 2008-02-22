@@ -10,10 +10,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Diagnostics;
-using FreeSCADA.Scheme.Commands;
-using FreeSCADA.Scheme.Helpers;
+using FreeSCADA.Schema.Commands;
+using FreeSCADA.Schema.Helpers;
 
-namespace FreeSCADA.Scheme.Manipulators
+namespace FreeSCADA.Schema.Manipulators
 {
     public class MoveResizeRotateManipulator : BaseManipulator
     {

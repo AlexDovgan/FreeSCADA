@@ -9,26 +9,26 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using FreeSCADA.Scheme.Commands;
-using FreeSCADA.Scheme.Manipulators;
-using FreeSCADA.Scheme.Helpers;
-using FreeSCADA.Scheme.UndoRedo;
+using FreeSCADA.Schema.Commands;
+using FreeSCADA.Schema.Manipulators;
+using FreeSCADA.Schema.Helpers;
+using FreeSCADA.Schema.UndoRedo;
 using FreeSCADA.ShellInterfaces;
 
-namespace FreeSCADA.Scheme.Tools
+namespace FreeSCADA.Schema.Tools
 {
     
     public abstract class BasicTool : Adorner
     {
         public BaseManipulator manipulator;
         public VisualCollection visualChildren;
-        public  FSScheme workedScheme;
+        public  SchemaDocument workedSchema;
         
-        public BasicTool(FSScheme scheme)
-            : base(scheme.MainCanvas)
+        public BasicTool(SchemaDocument schema)
+            : base(schema.MainCanvas)
         {
             visualChildren = new VisualCollection(this);
-            workedScheme = scheme;
+            workedSchema = schema;
         }
 
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }

@@ -9,21 +9,21 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using FreeSCADA.Scheme.Commands;
-using FreeSCADA.Scheme.Manipulators;
-using FreeSCADA.Scheme.Helpers;
-using FreeSCADA.Scheme.UndoRedo;
+using FreeSCADA.Schema.Commands;
+using FreeSCADA.Schema.Manipulators;
+using FreeSCADA.Schema.Helpers;
+using FreeSCADA.Schema.UndoRedo;
 using FreeSCADA.ShellInterfaces;
 
-namespace FreeSCADA.Scheme.Tools
+namespace FreeSCADA.Schema.Tools
 {
     public class SelectionTool : BasicTool, ITool
     {
 
         Point startPos;
         bool ShiftDown;
-        public SelectionTool(FSScheme scheme)
-            : base(scheme)
+        public SelectionTool(SchemaDocument schema)
+            : base(schema)
         {
 
 
@@ -88,25 +88,25 @@ namespace FreeSCADA.Scheme.Tools
                 visualChildren.Remove(visualChildren[0]);
 
             }
-            workedScheme.MainCanvas.ReleaseMouseCapture();
+            workedSchema.MainCanvas.ReleaseMouseCapture();
         }
 
         public override void OnCanvasMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Point pt = e.GetPosition((UIElement)sender);
-            workedScheme.MainCanvas.CaptureMouse();
+            workedSchema.MainCanvas.CaptureMouse();
             //RaisToolStarted(e);
 
 
             // Perform the hit test against a given portion of the visual object tree.
-            HitTestResult result = VisualTreeHelper.HitTest(workedScheme.MainCanvas, pt);
+            HitTestResult result = VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt);
             if (manipulator != null && ShiftDown != true)
             {
                 AdornerLayer.GetAdornerLayer(AdornedElement).Remove(manipulator);
                 manipulator = null;
             }
 
-            if (result.VisualHit == workedScheme.MainCanvas && ShiftDown != true)
+            if (result.VisualHit == workedSchema.MainCanvas && ShiftDown != true)
             {
 
                 startPos = e.GetPosition(this);
@@ -116,9 +116,9 @@ namespace FreeSCADA.Scheme.Tools
                     visualChildren.Add(drawingVisual);
 
             }
-            else if (result.VisualHit != workedScheme.MainCanvas)
+            else if (result.VisualHit != workedSchema.MainCanvas)
             {
-                FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedScheme.MainCanvas, (FrameworkElement)result.VisualHit);
+                FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedSchema.MainCanvas, (FrameworkElement)result.VisualHit);
                 if (ShiftDown != true)
                 {
                     RaiseToolFinished(this, e);
@@ -128,7 +128,7 @@ namespace FreeSCADA.Scheme.Tools
                 {
                     if (!(manipulator is GroupEditManipulator))
                     {
-                        GroupEditManipulator m = new GroupEditManipulator(workedScheme.MainCanvas);
+                        GroupEditManipulator m = new GroupEditManipulator(workedSchema.MainCanvas);
                         AdornerLayer al = AdornerLayer.GetAdornerLayer(AdornedElement);
                         if (manipulator != null)
                         {

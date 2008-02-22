@@ -1,19 +1,19 @@
-﻿<Window x:Class="FreeSCADA.Scheme.NewSchemeDialog"
+﻿<Window x:Class="FreeSCADA.Schema.NewSchemaDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:c="clr-namespace:FreeSCADA.Scheme" 
+    xmlns:c="clr-namespace:FreeSCADA.Schema" 
     Height="209" Width="223" ResizeMode="NoResize" SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterScreen"  Background="LightGray">
 
     <Grid Height="180" Width="216" Opacity="1">
-        <TextBox Height="23" Margin="11,16,98,0" Name="SchemeNameTextBox" VerticalAlignment="Top">
+        <TextBox Height="23" Margin="11,16,98,0" Name="SchemaNameTextBox" VerticalAlignment="Top">
             <TextBox.Text>
-                <Binding Path="SchemeName" UpdateSourceTrigger="PropertyChanged"/>
+                <Binding Path="SchemaName" UpdateSourceTrigger="PropertyChanged"/>
             </TextBox.Text>
         </TextBox>
-        <TextBox Height="23" Margin="11,52,0,0" Name="SchemeWidthTextBox" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80">
+        <TextBox Height="23" Margin="11,52,0,0" Name="SchemaWidthTextBox" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80">
             <TextBox.Text>
-                <Binding Path="SchemeWidth" UpdateSourceTrigger="PropertyChanged">
+                <Binding Path="SchemaWidth" UpdateSourceTrigger="PropertyChanged">
                     <Binding.ValidationRules>
                         <c:DoubleValidation MinMargin="100" MaxMargin="10000" />
                     </Binding.ValidationRules>
@@ -21,9 +21,9 @@
             </TextBox.Text>
         </TextBox>
             
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="11,93,0,0" Name="SchemeHeightTextBox" VerticalAlignment="Top" Width="80">
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="11,93,0,0" Name="SchemaHeightTextBox" VerticalAlignment="Top" Width="80">
             <TextBox.Text>
-                <Binding Path="SchemeHeight" UpdateSourceTrigger="PropertyChanged">
+                <Binding Path="SchemaHeight" UpdateSourceTrigger="PropertyChanged">
                     <Binding.ValidationRules>
                         <c:DoubleValidation MinMargin="100" MaxMargin="10000" />
                     </Binding.ValidationRules>
@@ -32,9 +32,9 @@
         </TextBox>
         <Button Height="23" HorizontalAlignment="Left" Margin="11,0,0,12" Name="buttonOk" VerticalAlignment="Bottom" Width="75" Click="buttonOk_Click">Ok</Button>
         <Button Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="buttonCancel" VerticalAlignment="Bottom" Width="75" IsCancel="True">Cancel</Button>
-        <Label Height="28" HorizontalAlignment="Right" Margin="0,16,0,0" Name="label1" VerticalAlignment="Top" Width="96">Scheme Name</Label>
-        <Label Margin="96,52,0,0" Name="label2" Height="28" VerticalAlignment="Top">Scheme Width</Label>
-        <Label Height="28" Margin="96,0,0,59" Name="label3" VerticalAlignment="Bottom">Scheme Height</Label>
+        <Label Height="28" HorizontalAlignment="Right" Margin="0,16,0,0" Name="label1" VerticalAlignment="Top" Width="96">Schema Name</Label>
+        <Label Margin="96,52,0,0" Name="label2" Height="28" VerticalAlignment="Top">Schema Width</Label>
+        <Label Height="28" Margin="96,0,0,59" Name="label3" VerticalAlignment="Bottom">Schema Height</Label>
     </Grid>
 </Window>
 
