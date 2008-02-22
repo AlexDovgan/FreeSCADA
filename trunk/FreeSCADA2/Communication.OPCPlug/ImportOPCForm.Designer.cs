@@ -72,6 +72,7 @@
 			// 
 			// button3
 			// 
+			this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button3.Image = global::FreeSCADA.Communication.OPCPlug.Properties.Resources.refresh;
 			this.button3.Location = new System.Drawing.Point(419, 47);
 			this.button3.Name = "button3";
@@ -170,6 +171,9 @@
 			this.Controls.Add(this.channelsTree);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.connectButton);
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(494, 478);
 			this.Name = "ImportOPCForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "ImportOPCForm";
