@@ -8,10 +8,10 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Shapes;
-using FreeSCADA.Scheme.Manipulators;
+using FreeSCADA.Schema.Manipulators;
 using System.Windows.Input;
 
-namespace FreeSCADA.Scheme.UndoRedo
+namespace FreeSCADA.Schema.UndoRedo
 {
     public interface IUndoCommand
     {

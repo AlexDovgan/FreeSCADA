@@ -13,13 +13,13 @@ using System.Windows.Input;
 
 
 
-namespace FreeSCADA.Scheme
+namespace FreeSCADA.Schema
 {
-    public class SchemeViewer : ScrollViewer
+    public class SchemaViewer : ScrollViewer
     {
-        public FSScheme Schema;
+        public SchemaDocument Schema;
         ScaleTransform scale;
-        public SchemeViewer(FSScheme d)
+        public SchemaViewer(SchemaDocument d)
             : base()
         {
             BorderBrush = Brushes.Black;
@@ -33,7 +33,7 @@ namespace FreeSCADA.Scheme
         }
 
 
-        void FSSchemeViewer_MouseWheel(object sender, MouseWheelEventArgs e)
+        void FSSchemaViewer_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             scale.ScaleX += e.Delta;
             scale.ScaleY += e.Delta;

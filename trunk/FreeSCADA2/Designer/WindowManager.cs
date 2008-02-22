@@ -14,6 +14,7 @@ namespace FreeSCADA.Designer
         DocumentWindow CurrentDocument;
 
 		ProjectContentView projectContentView;
+        PropertyBrowserView propertyBrowserView;
 		ToolBoxView toolBoxView;
 
 		public WindowManager(DockPanel dockPanel)
@@ -26,6 +27,9 @@ namespace FreeSCADA.Designer
 
 			toolBoxView = new ToolBoxView();
 			toolBoxView.Show(dockPanel, DockState.DockRightAutoHide);
+            
+            propertyBrowserView = new PropertyBrowserView();
+            propertyBrowserView.Show(dockPanel, DockState.DockLeft);
 
 			//Connect Windows Manager to heleper events
 			dockPanel.ActiveDocumentChanged += new EventHandler(OnActiveDocumentChanged);

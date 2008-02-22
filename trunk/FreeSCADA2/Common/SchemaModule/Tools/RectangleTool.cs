@@ -9,28 +9,27 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using FreeSCADA.Scheme.Commands;
-using FreeSCADA.Scheme.Manipulators;
-using FreeSCADA.Scheme.Helpers;
-using FreeSCADA.Scheme.UndoRedo;
+using FreeSCADA.Schema.Commands;
+using FreeSCADA.Schema.Manipulators;
+using FreeSCADA.Schema.Helpers;
+using FreeSCADA.Schema.UndoRedo;
 using FreeSCADA.ShellInterfaces;
 
-namespace FreeSCADA.Scheme.Tools
+namespace FreeSCADA.Schema.Tools
 {
-    public class EllipseTool : BasicTool, ITool
+    public class RectangleTool : BasicTool, ITool
     {
 
         Point startPos;
-        
-        public EllipseTool(FSScheme scheme)
-            : base(scheme)
+        public RectangleTool(SchemaDocument schema)
+            : base(schema)
         {
-           
-        }
+            
 
+        }
         public String ToolName
         {
-            get { return "Ellipse Tool"; }
+            get { return "Rectangle Tool"; }
         }
 
         public String ToolGroup
@@ -45,8 +44,12 @@ namespace FreeSCADA.Scheme.Tools
                 return new System.Drawing.Bitmap(10, 10);
             }
         }
+        protected override int VisualChildrenCount { get { return visualChildren.Count; } }
+        protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
+
         public override void OnCanvasMouseMove(object sender, MouseEventArgs e)
         {
+            base.OnCanvasMouseMove(sender, e);
             if (visualChildren.Count > 0)
             {
                 Vector v = e.GetPosition(this) - startPos;
@@ -56,7 +59,7 @@ namespace FreeSCADA.Scheme.Tools
 
                 // Create a rectangle and draw it in the DrawingContext.
                 Rect rect = new Rect(startPos, v);
-                drawingContext.DrawEllipse(Brushes.Gray, new Pen(Brushes.Black, 0.2), startPos, v.X, v.Y);
+                drawingContext.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 0.2), rect);
 
                 // Persist the drawing content.
                 drawingContext.Close();
@@ -68,33 +71,34 @@ namespace FreeSCADA.Scheme.Tools
 
         public override void OnCanvasMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            base.OnCanvasMouseLeftButtonUp(sender, e);
             if (visualChildren.Count > 0)
             {
                 Rect b = VisualTreeHelper.GetContentBounds(visualChildren[0]);
                 if (!b.IsEmpty)
                 {
-                    Ellipse el = new Ellipse();
-                    Canvas.SetLeft(el, b.X);
-                    Canvas.SetTop(el, b.Y);
-                    el.Width = b.Width;
-                    el.Height = b.Height;
-                    el.Stroke = Brushes.Black;
-                    el.Fill = Brushes.Red;
+                    Rectangle r = new Rectangle();
+                    Canvas.SetLeft(r, b.X);
+                    Canvas.SetTop(r, b.Y);
+                    r.Width = b.Width;
+                    r.Height = b.Height;
+                    r.Stroke = Brushes.Black;
+                    r.Fill = Brushes.Red;
+                    UndoRedoManager.GetUndoBuffer(workedSchema.MainCanvas).AddCommand(new AddObject(r, workedSchema.MainCanvas));
+                    workedSchema.MainCanvas.Children.Add(r);
+                    manipulator = new MoveResizeRotateManipulator(r);
+                    AdornerLayer.GetAdornerLayer(workedSchema.MainCanvas).Add(manipulator);
 
-                    UndoRedoManager.GetUndoBuffer(workedScheme.MainCanvas).AddCommand(new AddObject(el, workedScheme.MainCanvas));
-                    workedScheme.MainCanvas.Children.Add(el);
-                    manipulator = new MoveResizeRotateManipulator(el);
-                    AdornerLayer.GetAdornerLayer(workedScheme.MainCanvas).Add(manipulator);
                 }
                 visualChildren.Remove(visualChildren[0]);
             }
-            workedScheme.MainCanvas.ReleaseMouseCapture();
+            workedSchema.MainCanvas.ReleaseMouseCapture();
         }
 
         public override void OnCanvasMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             base.OnCanvasMouseLeftButtonDown(sender, e);
-            workedScheme.MainCanvas.CaptureMouse();
+            workedSchema.MainCanvas.CaptureMouse();
             //    RaisToolStarted(e);
             startPos = e.GetPosition(this);
 
@@ -106,4 +110,5 @@ namespace FreeSCADA.Scheme.Tools
         }
 
     }
+
 }

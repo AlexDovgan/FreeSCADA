@@ -10,21 +10,21 @@ using System.Windows;
 using System.Windows.Shapes;
 using System.Windows.Documents;
 using System.Windows.Input;
-using FreeSCADA.Scheme.Manipulators;
-using FreeSCADA.Scheme.Tools;
-using FreeSCADA.Scheme.UndoRedo;
+using FreeSCADA.Schema.Manipulators;
+using FreeSCADA.Schema.Tools;
+using FreeSCADA.Schema.UndoRedo;
 using FreeSCADA.ShellInterfaces;
 
-namespace FreeSCADA.Scheme
+namespace FreeSCADA.Schema
 {
-    public class SchemeEditor : SchemeViewer
+    public class SchemaEditor : SchemaViewer
     {
 
         AdornerLayer adornerLayer;
         BasicUndoBuffer undoBuff;
         BasicTool activeTool;
 
-        public delegate void ObjectSelectedDelegate(SchemeEditor editor, UIElement element);
+        public delegate void ObjectSelectedDelegate(SchemaEditor editor, UIElement element);
         public event ObjectSelectedDelegate ObjectSelected;
         #region Properties
         public List<ITool> toolsList
@@ -58,7 +58,7 @@ namespace FreeSCADA.Scheme
         }
         #endregion
 
-        public SchemeEditor(FSScheme d)
+        public SchemaEditor(SchemaDocument d)
             : base(d)
         {
             Schema = d;

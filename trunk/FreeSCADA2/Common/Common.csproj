@@ -64,31 +64,29 @@
     <Compile Include="ITool.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SchemeModule\DoubleValidation.cs" />
-    <Compile Include="SchemeModule\EditorHelpers.cs" />
-    <Compile Include="SchemeModule\Manipulators\BaseManipulator.cs" />
-    <Compile Include="SchemeModule\Manipulators\GroupEditManipulator.cs" />
-    <Compile Include="SchemeModule\Manipulators\MoveResizeRotateManipulator.cs" />
-    <Compile Include="SchemeModule\NewSchemeDialog.xaml.cs">
-      <DependentUpon>NewSchemeDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SchemeModule\Scheme.cs" />
-    <Compile Include="SchemeModule\SchemeCommands.cs" />
-    <Compile Include="SchemeModule\SchemeEditor.cs" />
-    <Compile Include="SchemeModule\SchemeExecutor.cs" />
-    <Compile Include="SchemeModule\SchemeViewer.cs" />
-    <Compile Include="SchemeModule\ShortProp.cs" />
-    <Compile Include="SchemeModule\Tools\BasicTool.cs" />
-    <Compile Include="SchemeModule\Tools\EllipseTool.cs" />
-    <Compile Include="SchemeModule\Tools\RectangleTool.cs" />
-    <Compile Include="SchemeModule\Tools\SelectionTool.cs" />
-    <Compile Include="SchemeModule\UndoRedo.cs" />
+    <Compile Include="SchemaModule\DoubleValidation.cs" />
+    <Compile Include="SchemaModule\EditorHelpers.cs" />
+    <Compile Include="SchemaModule\Manipulators\BaseManipulator.cs" />
+    <Compile Include="SchemaModule\Manipulators\GroupEditManipulator.cs" />
+    <Compile Include="SchemaModule\Manipulators\MoveResizeRotateManipulator.cs" />
+    <Compile Include="SchemaModule\NewSchemaDialog.xaml.cs" />
+    <Compile Include="SchemaModule\SchemaCommands.cs" />
+    <Compile Include="SchemaModule\SchemaDocument.cs" />
+    <Compile Include="SchemaModule\SchemaEditor.cs" />
+    <Compile Include="SchemaModule\SchemaExecutor.cs" />
+    <Compile Include="SchemaModule\SchemaViewer.cs" />
+    <Compile Include="SchemaModule\ShortProp.cs" />
+    <Compile Include="SchemaModule\Tools\BasicTool.cs" />
+    <Compile Include="SchemaModule\Tools\EllipseTool.cs" />
+    <Compile Include="SchemaModule\Tools\RectangleTool.cs" />
+    <Compile Include="SchemaModule\Tools\SelectionTool.cs" />
+    <Compile Include="SchemaModule\UndoRedo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Common.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="SchemeModule\NewSchemeDialog.xaml">
+    <Page Include="SchemaModule\NewSchemaDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

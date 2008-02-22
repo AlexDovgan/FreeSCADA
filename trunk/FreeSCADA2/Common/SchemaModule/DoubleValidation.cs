@@ -4,7 +4,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Globalization;
 
-namespace FreeSCADA.Scheme
+namespace FreeSCADA.Schema
 {
     public class DoubleValidation : ValidationRule
     {

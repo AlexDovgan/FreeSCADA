@@ -10,10 +10,10 @@ using System.Windows;
 using System.Windows.Shapes;
 using System.Windows.Documents;
 using System.Windows.Input;
-using FreeSCADA.Scheme.Manipulators;
-using FreeSCADA.Scheme.Tools;
+using FreeSCADA.Schema.Manipulators;
+using FreeSCADA.Schema.Tools;
 
-namespace FreeSCADA.Scheme.Helpers
+namespace FreeSCADA.Schema.Helpers
 {
     static class EditorHelper
     {
