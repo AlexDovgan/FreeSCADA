@@ -37,6 +37,9 @@
 			// 
 			// grid
 			// 
+			this.grid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.grid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.grid.ColumnsCount = 3;
 			this.grid.FixedRows = 1;
@@ -52,6 +55,7 @@
 			// 
 			// addButton
 			// 
+			this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.addButton.Location = new System.Drawing.Point(12, 341);
 			this.addButton.Name = "addButton";
 			this.addButton.Size = new System.Drawing.Size(75, 23);
@@ -62,6 +66,7 @@
 			// 
 			// removeButton
 			// 
+			this.removeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.removeButton.Location = new System.Drawing.Point(93, 341);
 			this.removeButton.Name = "removeButton";
 			this.removeButton.Size = new System.Drawing.Size(75, 23);
@@ -72,6 +77,7 @@
 			// 
 			// okButton
 			// 
+			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.Location = new System.Drawing.Point(384, 341);
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(75, 23);
@@ -82,6 +88,7 @@
 			// 
 			// cancelButton
 			// 
+			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.cancelButton.Location = new System.Drawing.Point(465, 341);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.Size = new System.Drawing.Size(75, 23);
@@ -100,6 +107,9 @@
 			this.Controls.Add(this.okButton);
 			this.Controls.Add(this.addButton);
 			this.Controls.Add(this.grid);
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(568, 412);
 			this.Name = "SettingsForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Simulator settings";
