@@ -10,15 +10,21 @@ namespace FreeSCADA.Designer
     class SchemaView : DocumentWindow
     {
         private System.Windows.Forms.Integration.ElementHost wpfContainerHost;
-        public FSSchemeEditor schemeEditor;
+        public SchemeEditor schemeEditor;
 
 		public delegate void ToolsCollectionChangedHandler(List<ITool> tools, Type defaultTool);
 		public event ToolsCollectionChangedHandler ToolsCollectionChanged;
 
         public SchemaView()
         {
-            TabText = "Schema #";
-			schemeEditor = new FSSchemeEditor(FSSchemeDocument.CreateNewScheme());
+            FSScheme scheme;
+
+            if ((scheme = FSScheme.CreateNewScheme()) != null)
+            {
+                schemeEditor = new SchemeEditor(scheme);
+                TabText = scheme.Name;
+            }
+            else this.Close();
             InitializeComponent();
         }
 

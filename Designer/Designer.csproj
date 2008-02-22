@@ -97,6 +97,10 @@
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ProjectContentView.resx">
+      <DependentUpon>ProjectContentView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -137,10 +141,6 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{A3D91CED-553F-4433-AD67-8706E0127D8D}</Project>
       <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SchemeModule\SchemeModule.csproj">
-      <Project>{84C691AF-AD82-4B99-A407-E83020349EB4}</Project>
-      <Name>SchemeModule</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
