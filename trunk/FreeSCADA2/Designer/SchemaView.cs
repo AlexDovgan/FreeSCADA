@@ -25,6 +25,7 @@ namespace FreeSCADA.Designer
                 TabText = schema.Name;
             }
             else throw new Exception("Canceled");
+            schemaEditor.ObjectSelected += new SchemaEditor.ObjectSelectedDelegate(objectSelected);
             InitializeComponent();
         }
 
@@ -63,9 +64,15 @@ namespace FreeSCADA.Designer
 				ToolsCollectionChanged(schemaEditor.toolsList, schemaEditor.CurrentTool);
 		}
 
-		public void OnToolActivated(object sender, Type tool)
+		public override void OnToolActivated(object sender, Type tool)
         {
             schemaEditor.CurrentTool = tool;
+        }
+        
+        public void objectSelected(object element)
+        {
+            
+            RaiseObjectSelected(element);
         }
     }
 }

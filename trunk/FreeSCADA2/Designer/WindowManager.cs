@@ -48,7 +48,6 @@ namespace FreeSCADA.Designer
                 SchemaView view = new SchemaView();
                 view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
                 documentWindows.Add(view);
-
                 view.Show(dockPanel, DockState.Document);
             }
             catch (Exception ex)
@@ -69,12 +68,13 @@ namespace FreeSCADA.Designer
 			//Notify and subscribe document to appropriate tool windows
 			if (CurrentDocument != null)
 			{
-				CurrentDocument.OnActivated();
-				if (CurrentDocument is SchemaView)
-					toolBoxView.ToolActivated += (CurrentDocument as SchemaView).OnToolActivated;
+                toolBoxView.Clean(); 
+                CurrentDocument.OnActivated();
+				toolBoxView.ToolActivated += CurrentDocument.OnToolActivated;
+                CurrentDocument.ObjectSelected+=new DocumentWindow.ObjectSelectedDelegate(propertyBrowserView.ShowProperties);
 			}
-			else
-				toolBoxView.Clean();
+			
+			
 		}
 
 		private void DeactivatingDocument()
@@ -83,8 +83,8 @@ namespace FreeSCADA.Designer
 			if (CurrentDocument != null)
 			{
 				CurrentDocument.OnDeactivated();
-				if (CurrentDocument is SchemaView)
-					toolBoxView.ToolActivated -= (CurrentDocument as SchemaView).OnToolActivated;
+				toolBoxView.ToolActivated -= CurrentDocument.OnToolActivated;
+                CurrentDocument.ObjectSelected -= propertyBrowserView.ShowProperties;
 			}
 		}
     }

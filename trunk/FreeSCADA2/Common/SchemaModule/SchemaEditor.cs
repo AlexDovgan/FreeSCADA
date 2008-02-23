@@ -24,7 +24,7 @@ namespace FreeSCADA.Schema
         BasicUndoBuffer undoBuff;
         BasicTool activeTool;
 
-        public delegate void ObjectSelectedDelegate(SchemaEditor editor, UIElement element);
+        public delegate void ObjectSelectedDelegate(object element);
         public event ObjectSelectedDelegate ObjectSelected;
         #region Properties
         public List<ITool> toolsList
@@ -102,14 +102,11 @@ namespace FreeSCADA.Schema
 
         void Tool_Finished(BasicTool tool, EventArgs e)
         {
-            if (ObjectSelected != null)
-                ObjectSelected(this, tool.manipulator.AdornedElement);
+            if (ObjectSelected != null && tool.manipulator!=null)
+                ObjectSelected(tool.manipulator.AdornedElement);
 
         }
 
-        public void SelectObjects(UIElement obj)
-        {
-        }
         public void ImportFile(Stream xamlStream)
         {
             XmlReader xmlReader = XmlReader.Create(xamlStream);
