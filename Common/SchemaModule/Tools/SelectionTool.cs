@@ -138,7 +138,7 @@ namespace FreeSCADA.Schema.Tools
                         }
                         m.Add(el);
                         al.Add(m);
-                        RaiseToolFinished(this, e);
+                        //RaiseToolFinished(this, e);
                         manipulator = m;
                     }
                     else

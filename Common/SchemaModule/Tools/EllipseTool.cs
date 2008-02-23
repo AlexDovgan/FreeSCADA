@@ -89,19 +89,19 @@ namespace FreeSCADA.Schema.Tools
                 visualChildren.Remove(visualChildren[0]);
             }
             workedSchema.MainCanvas.ReleaseMouseCapture();
+            base.OnCanvasMouseLeftButtonUp(sender, e);
         }
 
         public override void OnCanvasMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            base.OnCanvasMouseLeftButtonDown(sender, e);
+         
             workedSchema.MainCanvas.CaptureMouse();
-            //    RaisToolStarted(e);
             startPos = e.GetPosition(this);
 
             DrawingVisual drawingVisual = new DrawingVisual();
             if (visualChildren.Count == 0)
                 visualChildren.Add(drawingVisual);
-
+            base.OnCanvasMouseLeftButtonDown(sender, e);
 
         }
 

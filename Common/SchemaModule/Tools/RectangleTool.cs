@@ -49,7 +49,7 @@ namespace FreeSCADA.Schema.Tools
 
         public override void OnCanvasMouseMove(object sender, MouseEventArgs e)
         {
-            base.OnCanvasMouseMove(sender, e);
+ 
             if (visualChildren.Count > 0)
             {
                 Vector v = e.GetPosition(this) - startPos;
@@ -66,13 +66,12 @@ namespace FreeSCADA.Schema.Tools
                 vis.Opacity = 0.5;
 
             }
-
+            base.OnCanvasMouseMove(sender, e);
         }
 
         public override void OnCanvasMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            base.OnCanvasMouseLeftButtonUp(sender, e);
-            if (visualChildren.Count > 0)
+             if (visualChildren.Count > 0)
             {
                 Rect b = VisualTreeHelper.GetContentBounds(visualChildren[0]);
                 if (!b.IsEmpty)
@@ -93,19 +92,19 @@ namespace FreeSCADA.Schema.Tools
                 visualChildren.Remove(visualChildren[0]);
             }
             workedSchema.MainCanvas.ReleaseMouseCapture();
+            base.OnCanvasMouseLeftButtonUp(sender, e);
         }
 
         public override void OnCanvasMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            base.OnCanvasMouseLeftButtonDown(sender, e);
+            
             workedSchema.MainCanvas.CaptureMouse();
-            //    RaisToolStarted(e);
             startPos = e.GetPosition(this);
 
             DrawingVisual drawingVisual = new DrawingVisual();
             if (visualChildren.Count == 0)
                 visualChildren.Add(drawingVisual);
-
+            base.OnCanvasMouseLeftButtonDown(sender, e);
 
         }
 
