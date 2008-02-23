@@ -14,6 +14,7 @@ using FreeSCADA.Schema.Manipulators;
 using FreeSCADA.Schema.Tools;
 using FreeSCADA.Schema.UndoRedo;
 using FreeSCADA.ShellInterfaces;
+using FreeSCADA.Schema.ShortProperties;
 
 namespace FreeSCADA.Schema
 {
@@ -103,7 +104,7 @@ namespace FreeSCADA.Schema
         void Tool_Finished(BasicTool tool, EventArgs e)
         {
             if (ObjectSelected != null && tool.manipulator!=null)
-                ObjectSelected(tool.manipulator.AdornedElement);
+                ObjectSelected(ShortPropFactory.CreateShortPropFrom(tool.manipulator.AdornedElement));
 
         }
 

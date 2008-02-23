@@ -11,7 +11,6 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using FreeSCADA.Schema.Commands;
 using FreeSCADA.Schema.Manipulators;
-using FreeSCADA.Schema.Helpers;
 using FreeSCADA.Schema.UndoRedo;
 using FreeSCADA.ShellInterfaces;
 

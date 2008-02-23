@@ -10,7 +10,6 @@ using System.Windows;
 using System.Windows.Shapes;
 using FreeSCADA.Schema.Manipulators;
 using System.Windows.Input;
-using FreeSCADA.Schema.Helpers;
 
 namespace FreeSCADA.Schema.Commands
 {
@@ -56,11 +55,4 @@ namespace FreeSCADA.Schema.Commands
 
 
     }
- 
-    
- 
-
- 
-
-
-}
+ }

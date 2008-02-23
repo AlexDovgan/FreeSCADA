@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using FreeSCADA.Schema.ShortProperties;
 
 namespace FreeSCADA.Designer
 {
@@ -42,7 +43,15 @@ namespace FreeSCADA.Designer
         }
         public void ShowProperties(object obj)
         {
+          
             propertyGrid.SelectedObject = obj;
+            if(obj is CommonShortProp)
+                (obj as CommonShortProp).PropertiesChanged += new CommonShortProp.PropertiesChangedDelegate(PropertyBrowserView_PropertiesChanged);
+        }
+
+        void PropertyBrowserView_PropertiesChanged()
+        {
+            propertyGrid.Refresh();
         }
 	}
 

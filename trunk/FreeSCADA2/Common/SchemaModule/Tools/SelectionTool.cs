@@ -11,7 +11,6 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using FreeSCADA.Schema.Commands;
 using FreeSCADA.Schema.Manipulators;
-using FreeSCADA.Schema.Helpers;
 using FreeSCADA.Schema.UndoRedo;
 using FreeSCADA.ShellInterfaces;
 
@@ -121,14 +120,14 @@ namespace FreeSCADA.Schema.Tools
                 FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedSchema.MainCanvas, (FrameworkElement)result.VisualHit);
                 if (ShiftDown != true)
                 {
+                    AdornerLayer.GetAdornerLayer(AdornedElement).Add(manipulator = new MoveResizeRotateManipulator(el,workedSchema));
                     RaiseToolFinished(this, e);
-                    AdornerLayer.GetAdornerLayer(AdornedElement).Add(manipulator = new MoveResizeRotateManipulator(el));
                 }
                 else
                 {
                     if (!(manipulator is GroupEditManipulator))
                     {
-                        GroupEditManipulator m = new GroupEditManipulator(workedSchema.MainCanvas);
+                        GroupEditManipulator m = new GroupEditManipulator(workedSchema.MainCanvas,workedSchema);
                         AdornerLayer al = AdornerLayer.GetAdornerLayer(AdornedElement);
                         if (manipulator != null)
                         {

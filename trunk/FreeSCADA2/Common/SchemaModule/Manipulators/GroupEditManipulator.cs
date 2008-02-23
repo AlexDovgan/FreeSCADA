@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Diagnostics;
 using FreeSCADA.Schema.Commands;
-using FreeSCADA.Schema.Helpers;
+
 
 namespace FreeSCADA.Schema.Manipulators
 {
@@ -27,8 +27,8 @@ namespace FreeSCADA.Schema.Manipulators
         public List<UIElement> selectedElements;
 
 
-        public GroupEditManipulator(UIElement adornedElement)
-            : base(adornedElement)
+        public GroupEditManipulator(UIElement adornedElement,SchemaDocument schema)
+            : base(adornedElement, schema)
         {
             visualChildren = new VisualCollection(this);
             // Call a helper method to initialize the Thumbs
