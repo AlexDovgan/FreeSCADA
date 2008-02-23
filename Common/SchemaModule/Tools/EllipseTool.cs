@@ -11,7 +11,6 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using FreeSCADA.Schema.Commands;
 using FreeSCADA.Schema.Manipulators;
-using FreeSCADA.Schema.Helpers;
 using FreeSCADA.Schema.UndoRedo;
 using FreeSCADA.ShellInterfaces;
 
@@ -82,8 +81,8 @@ namespace FreeSCADA.Schema.Tools
                     el.Fill = Brushes.Red;
 
                     UndoRedoManager.GetUndoBuffer(workedSchema.MainCanvas).AddCommand(new AddObject(el, workedSchema.MainCanvas));
-                    workedSchema.MainCanvas.Children.Add(el);
-                    manipulator = new MoveResizeRotateManipulator(el);
+                    workedSchema.AddObject(el);
+                    manipulator = new MoveResizeRotateManipulator(el,workedSchema);
                     AdornerLayer.GetAdornerLayer(workedSchema.MainCanvas).Add(manipulator);
                 }
                 visualChildren.Remove(visualChildren[0]);

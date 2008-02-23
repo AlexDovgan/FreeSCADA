@@ -11,7 +11,6 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Diagnostics;
 using FreeSCADA.Schema.Commands;
-using FreeSCADA.Schema.Helpers;
 
 namespace FreeSCADA.Schema.Manipulators
 {
@@ -32,8 +31,8 @@ namespace FreeSCADA.Schema.Manipulators
         VisualCollection visualChildren;
 
         // Initialize the ResizingAdorner.
-        public MoveResizeRotateManipulator(UIElement adornedElement)
-            : base(adornedElement)
+        public MoveResizeRotateManipulator(UIElement adornedElement,SchemaDocument schema)
+            : base(adornedElement,schema)
         {
             visualChildren = new VisualCollection(this);
             // Call a helper method to initialize the Thumbs
