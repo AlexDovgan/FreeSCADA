@@ -134,7 +134,7 @@ namespace FreeSCADA.Schema
             Group.Height = g.Height = r.Height;
 
 
-            gm.workSchema.AddObject(Group);
+            gm.workSchema.MainCanvas.Children.Add(Group);
 
             foreach (UIElement ch in gm.selectedElements)
             {

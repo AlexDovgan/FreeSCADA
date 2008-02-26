@@ -75,24 +75,6 @@ namespace FreeSCADA.Schema
 
             }
         }
-        public void AddObject(object obj)
-        {
-            if (obj is FrameworkElement)
-            {
-                FrameworkElement el = obj as FrameworkElement;
-                if (el.Name.Length == 0)
-                {
-                    string[] names = el.GetType().ToString().Split('.');
-                    
-                    el.Name = names[names.Length-1] + Convert.ToString(MainCanvas.Children.Count);
-                }
-                MainCanvas.Children.Add(el);
-            }
-            else throw new Exception("Object of this type can not added to Schema Document");
-
-        }
-
-
     }
 
 }

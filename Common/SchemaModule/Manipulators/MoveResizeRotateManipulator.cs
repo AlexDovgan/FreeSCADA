@@ -279,9 +279,6 @@ namespace FreeSCADA.Schema.Manipulators
             bottomRight.Arrange(new Rect(p.X - topLeft.Width / 2, p.Y - topLeft.Height / 2, topLeft.Width, topLeft.Height));
 
             boundceRect.Arrange(ro);
-            //rotatingShadow.Arrange(ro);
-
-
             // Return the final size.
             return finalSize;
         }
