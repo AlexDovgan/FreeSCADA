@@ -63,8 +63,6 @@ namespace FreeSCADA.Schema
             : base(d)
         {
             Schema = d;
-
-
             Schema.MainCanvas.Loaded += new RoutedEventHandler(MainCanvas_Loaded);
             undoBuff = UndoRedoManager.GetUndoBuffer(Schema.MainCanvas);
             activeTool = new SelectionTool(Schema);
@@ -74,6 +72,7 @@ namespace FreeSCADA.Schema
         {
             Schema.MainCanvas.Focusable = true;
             Schema.MainCanvas.Focus();
+            NameScope.SetNameScope(Schema.MainCanvas, new NameScope());
             adornerLayer = AdornerLayer.GetAdornerLayer(Schema.MainCanvas);
             Schema.MainCanvas.KeyDown += new KeyEventHandler(MainCanvas_KeyDown);
             AdornerLayer.GetAdornerLayer(Schema.MainCanvas).Add(activeTool);
@@ -107,15 +106,14 @@ namespace FreeSCADA.Schema
                 ObjectSelected(ShortPropFactory.CreateShortPropFrom(tool.manipulator.AdornedElement));
 
         }
-
         public void ImportFile(Stream xamlStream)
         {
             XmlReader xmlReader = XmlReader.Create(xamlStream);
             Object obj = XamlReader.Load(xmlReader);
             Schema.MainCanvas.Children.Add(obj as UIElement);
-
-
         }
 
+
+              
     }
 }

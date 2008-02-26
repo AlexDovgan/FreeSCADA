@@ -26,6 +26,7 @@ namespace FreeSCADA.Schema.UndoRedo
         */
         void Undo();
     }
+
     public static class UndoRedoManager
     {
         static UndoRedoManager()
@@ -46,6 +47,7 @@ namespace FreeSCADA.Schema.UndoRedo
     
         static Dictionary<Canvas,BasicUndoBuffer> undoBuffers;
     }
+
     public class BasicUndoBuffer
     {
         public void AddCommand(IUndoCommand command)
