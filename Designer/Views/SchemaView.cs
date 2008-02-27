@@ -5,9 +5,9 @@ using System.Text;
 using FreeSCADA.Schema;
 using FreeSCADA.ShellInterfaces;
 
-namespace FreeSCADA.Designer
+namespace FreeSCADA.Designer.Views
 {
-    class SchemaView : DocumentWindow
+    class SchemaView : DocumentView
     {
         private System.Windows.Forms.Integration.ElementHost wpfContainerHost;
         public SchemaEditor schemaEditor;
@@ -17,6 +17,8 @@ namespace FreeSCADA.Designer
 
         public SchemaView()
         {
+			InitializeComponent();
+
             SchemaDocument schema;
 
             if ((schema = SchemaDocument.CreateNewSchema()) != null)
@@ -26,7 +28,6 @@ namespace FreeSCADA.Designer
             }
             else throw new Exception("Canceled");
             schemaEditor.ObjectSelected += new SchemaEditor.ObjectSelectedDelegate(objectSelected);
-            InitializeComponent();
         }
 
         private void InitializeComponent()

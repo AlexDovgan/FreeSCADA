@@ -1,6 +1,6 @@
-﻿namespace FreeSCADA.Designer
+﻿namespace FreeSCADA.Designer.Dialogs
 {
-	partial class VariablesForm
+	partial class VariablesDialog
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -81,7 +81,7 @@
 			this.connectionStatusLabel.TabIndex = 3;
 			this.connectionStatusLabel.Text = "Connection status";
 			// 
-			// VariablesForm
+			// VariablesDialog
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

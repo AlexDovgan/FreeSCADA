@@ -1,6 +1,8 @@
 ﻿using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using FreeSCADA.Common;
+using FreeSCADA.Designer.Dialogs;
+
 namespace FreeSCADA.Designer
 {
 	/// <summary>
@@ -9,6 +11,7 @@ namespace FreeSCADA.Designer
 	public partial class MainForm : Form
 	{
 		WindowManager windowManager;
+		string projectFileName;
 
 		/// <summary>
 		/// Constructor
@@ -22,13 +25,14 @@ namespace FreeSCADA.Designer
 
 		private void OnMenuVariables(object sender, System.EventArgs e)
 		{
-			VariablesForm frm = new VariablesForm();
+			VariablesDialog frm = new VariablesDialog();
 			frm.ShowDialog(this);
 		}
 
 		private void OnMenuExitClick(object sender, System.EventArgs e)
 		{
-			this.Close();
+			if (windowManager.Close())
+				this.Close();
 		}
 
 		private void OnSchemaItemClick(object sender, System.EventArgs e)
@@ -38,23 +42,29 @@ namespace FreeSCADA.Designer
 
 		private void OnEventsItemClick(object sender, System.EventArgs e)
 		{
-			EventsView view = new EventsView();
-			view.Show(dockPanel, DockState.Document);
+			windowManager.ShowEvents();
 		}
 
-		private void OnMenuSaveClick(object sender, System.EventArgs e)
+		private void OnSaveProjectClick(object sender, System.EventArgs e)
 		{
-			SaveFileDialog fd = new SaveFileDialog();
+			if (projectFileName == "")
+			{
+				SaveFileDialog fd = new SaveFileDialog();
 
-			fd.Filter = "FreeSCADA2 files (*.fs2)|*.fs2|All files (*.*)|*.*";
-			fd.FilterIndex = 0;
-			fd.RestoreDirectory = true;
+				fd.Filter = "FreeSCADA2 files (*.fs2)|*.fs2|All files (*.*)|*.*";
+				fd.FilterIndex = 0;
+				fd.RestoreDirectory = true;
 
-			if (fd.ShowDialog() == DialogResult.OK)
-				Env.Current.Project.Save(fd.FileName);
+				if (fd.ShowDialog() == DialogResult.OK)
+					projectFileName = fd.FileName;
+				else
+					return;
+			}
+			windowManager.SaveAll();
+			Env.Current.Project.Save(projectFileName);
 		}
 
-		private void OnMenuLoadClick(object sender, System.EventArgs e)
+		private void OnLoadProjectClick(object sender, System.EventArgs e)
 		{
 			OpenFileDialog fd = new OpenFileDialog();
 
@@ -63,7 +73,15 @@ namespace FreeSCADA.Designer
 			fd.RestoreDirectory = true;
 
 			if (fd.ShowDialog() == DialogResult.OK)
+			{
 				Env.Current.Project.Load(fd.FileName);
+				projectFileName = fd.FileName;
+			}
+		}
+
+		private void OnSaveFileClick(object sender, System.EventArgs e)
+		{
+			windowManager.Save();
 		}
         
 	}

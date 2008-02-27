@@ -20,21 +20,22 @@ namespace FreeSCADA.Schema
             try
             {
                 SchemaDocument schema = new SchemaDocument();
-                MemoryStream ms= Env.Current.Project["Schemas/"+schemaName+"/xaml"];
-                XmlReader xmlReader = XmlReader.Create(ms);
-                Object obj = XamlReader.Load(xmlReader);
-                if (obj is Canvas)
-                {
-
-                    schema.MainCanvas = obj as Canvas;
-                    schema.Name = schemaName;
-                }
-                else throw (new Exception("This is not FreeSCADA schema"));
+				using (Stream ms = Env.Current.Project.GetData("Schemas/" + schemaName + "/xaml"))
+				using (XmlReader xmlReader = XmlReader.Create(ms))
+				{
+					Object obj = XamlReader.Load(xmlReader);
+					if (obj is Canvas)
+					{
+						schema.MainCanvas = obj as Canvas;
+						schema.Name = schemaName;
+					}
+					else 
+						throw (new Exception("This is not FreeSCADA schema"));
+				}
                 return schema;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
                 return null;
             }
 
@@ -67,10 +68,13 @@ namespace FreeSCADA.Schema
                 XmlWriterSettings settings = new XmlWriterSettings();
                 settings.Indent = true;
                 settings.OmitXmlDeclaration = true;
-                XamlWriter.Save(MainCanvas, XmlWriter.Create(Env.Current.Project["Schemas/" + Name + "/xaml"], settings));
-                
+				using (MemoryStream ms = new MemoryStream())
+				{
+					XamlWriter.Save(MainCanvas, XmlWriter.Create(ms, settings));
+					Env.Current.Project.SetData("Schemas/" + Name + "/xaml", ms);
+				}                
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }

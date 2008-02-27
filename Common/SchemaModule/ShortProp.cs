@@ -190,7 +190,7 @@ namespace FreeSCADA.Schema.ShortProperties
             }
         }
         Shape shape;
-        System.Drawing.Brush brush;
+        //System.Drawing.Brush brush;
     }
 
     static class ShortPropFactory

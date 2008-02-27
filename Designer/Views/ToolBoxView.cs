@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using FreeSCADA.Common;
 using FreeSCADA.ShellInterfaces;
 
-namespace FreeSCADA.Designer
+namespace FreeSCADA.Designer.Views
 {
 	/// <summary>
 	/// Represents available tools and manipulators for active document window. Basically used for Schema editing.
