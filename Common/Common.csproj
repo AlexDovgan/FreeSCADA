@@ -68,8 +68,11 @@
     <Compile Include="SchemaModule\DoubleValidation.cs" />
     <Compile Include="SchemaModule\EditorHelpers.cs" />
     <Compile Include="SchemaModule\Manipulators\BaseManipulator.cs" />
+    <Compile Include="SchemaModule\Manipulators\DragResizeRotate.cs" />
+    <Compile Include="SchemaModule\Manipulators\DragThumb.cs" />
     <Compile Include="SchemaModule\Manipulators\GroupEditManipulator.cs" />
-    <Compile Include="SchemaModule\Manipulators\MoveResizeRotateManipulator.cs" />
+    <Compile Include="SchemaModule\Manipulators\ResizeThumb.cs" />
+    <Compile Include="SchemaModule\Manipulators\RotateThumb.cs" />
     <Compile Include="SchemaModule\NewSchemaDialog.xaml.cs" />
     <Compile Include="SchemaModule\SchemaCommands.cs" />
     <Compile Include="SchemaModule\SchemaDocument.cs" />
@@ -87,6 +90,10 @@
     <None Include="Common.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="SchemaModule\Manipulators\styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SchemaModule\NewSchemaDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -82,7 +82,7 @@ namespace FreeSCADA.Schema.Tools
 
                     UndoRedoManager.GetUndoBuffer(workedSchema.MainCanvas).AddCommand(new AddObject(el, workedSchema.MainCanvas));
                     workedSchema.MainCanvas.Children.Add(el);
-                    manipulator = new MoveResizeRotateManipulator(el,workedSchema);
+                    manipulator = new DragResizeRotate(el, workedSchema);
                     AdornerLayer.GetAdornerLayer(workedSchema.MainCanvas).Add(manipulator);
                 }
                 visualChildren.Remove(visualChildren[0]);
