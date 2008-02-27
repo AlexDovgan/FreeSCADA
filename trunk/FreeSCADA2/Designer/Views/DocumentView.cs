@@ -3,7 +3,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace FreeSCADA.Designer.Views
 {
-	abstract class DocumentView : DockContent
+	class DocumentView : DockContent
 	{
         public delegate void ObjectSelectedDelegate(object sender);
         public event ObjectSelectedDelegate ObjectSelected;
