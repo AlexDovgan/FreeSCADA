@@ -11,7 +11,7 @@ namespace FreeSCADA.Designer
 	public partial class MainForm : Form
 	{
 		WindowManager windowManager;
-		string projectFileName;
+		string projectFileName = "";
 
 		/// <summary>
 		/// Constructor

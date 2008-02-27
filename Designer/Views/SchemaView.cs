@@ -28,6 +28,7 @@ namespace FreeSCADA.Designer.Views
             }
             else throw new Exception("Canceled");
             schemaEditor.ObjectSelected += new SchemaEditor.ObjectSelectedDelegate(objectSelected);
+			wpfContainerHost.Child = schemaEditor;
         }
 
         private void InitializeComponent()
@@ -50,7 +51,6 @@ namespace FreeSCADA.Designer.Views
             this.ClientSize = new System.Drawing.Size(292, 273);
             this.Controls.Add(this.wpfContainerHost);
             this.Name = "SchemaView";
-            this.wpfContainerHost.Child = schemaEditor;
 
             this.ResumeLayout(false);
 
