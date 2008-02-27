@@ -120,7 +120,7 @@ namespace FreeSCADA.Schema.Tools
                 FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedSchema.MainCanvas, (FrameworkElement)result.VisualHit);
                 if (ShiftDown != true)
                 {
-                    AdornerLayer.GetAdornerLayer(AdornedElement).Add(manipulator = new MoveResizeRotateManipulator(el,workedSchema));
+                    AdornerLayer.GetAdornerLayer(AdornedElement).Add(manipulator = new DragResizeRotate(el, workedSchema));
                     RaiseToolFinished(this, e);
                 }
                 else
