@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FreeSCADA.Designer
+namespace FreeSCADA.Designer.Views
 {
-	class EventsView:DocumentWindow
+	class EventsView:DocumentView
 	{
 		public EventsView()
 		{

@@ -111,7 +111,7 @@ namespace FreeSCADA.Schema
                 g.Child = null;
                 parent.Children.Remove(g);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 

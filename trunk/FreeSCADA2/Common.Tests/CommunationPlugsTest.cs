@@ -40,15 +40,15 @@ namespace FreeSCADA.Common.Tests
 			}
 		}
 
-		[Test]
-		public void Connection()
-		{
-			CommunationPlugs plugs = Env.Current.CommunicationPlugins;
-			Assert.IsFalse(plugs.IsConnected);
-			Assert.IsTrue(plugs.Connect());
-			Assert.IsTrue(plugs.IsConnected);
-			plugs.Disconnect();
-			Assert.IsFalse(plugs.IsConnected);
-		}
+		//[Test]
+		//public void Connection()
+		//{
+		//    CommunationPlugs plugs = Env.Current.CommunicationPlugins;
+		//    Assert.IsFalse(plugs.IsConnected);
+		//    Assert.IsTrue(plugs.Connect());
+		//    Assert.IsTrue(plugs.IsConnected);
+		//    plugs.Disconnect();
+		//    Assert.IsFalse(plugs.IsConnected);
+		//}
 	}
 }

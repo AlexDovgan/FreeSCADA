@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using FreeSCADA.Schema.ShortProperties;
 
-namespace FreeSCADA.Designer
+namespace FreeSCADA.Designer.Views
 {
     class PropertyBrowserView : ToolWindow
     {

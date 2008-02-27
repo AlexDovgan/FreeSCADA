@@ -27,49 +27,63 @@ namespace FreeSCADA.Common.Tests
 		public void StreamContent()
 		{
 			Project p = new Project();
-			Assert.AreSame(p["test1"], p["test1"]);
+			Assert.IsNull(p.GetData("test1")); //There is no such entity
 
-			MemoryStream stream = p["test1"];
-			Assert.IsNotNull(stream);
-			Assert.IsTrue(stream.CanRead);
-			Assert.IsTrue(stream.CanWrite);
+			using (MemoryStream stream = new MemoryStream())
+			using (StreamWriter writer = new StreamWriter(stream))
+			{
+				writer.WriteLine("test 1234567890 test");
+				writer.WriteLine("line 2");
+				writer.Flush();
+				p.SetData("test1", stream);
+			}
 
-			StreamWriter writer = new StreamWriter(stream);
-			writer.WriteLine("test 1234567890 test");
-			writer.WriteLine("line 2");
-			writer.Flush();
-			writer = null;
-
-			stream = p["test1"];
-			StreamReader reader = new StreamReader(stream);
-			Assert.AreEqual(reader.ReadLine(), "test 1234567890 test");
-			Assert.AreEqual(reader.ReadLine(), "line 2");
+			using (Stream stream = p.GetData("test1"))
+			using (StreamReader reader = new StreamReader(stream))
+			{
+				Assert.AreEqual(reader.ReadLine(), "test 1234567890 test");
+				Assert.AreEqual(reader.ReadLine(), "line 2");
+			}
 		}
 
 		[Test]
 		public void SaveLoad()
 		{
 			Project p = new Project();
-			StreamWriter writer = new StreamWriter(p["test1"]);
-			writer.WriteLine("line 1");
-			writer.WriteLine("line 2");
-			writer.Flush();
-			writer = null;
+			Assert.IsFalse(p.IsModified);
 
+			using (MemoryStream stream = new MemoryStream())
+			using (StreamWriter writer = new StreamWriter(stream))
+			{
+				writer.WriteLine("line 1");
+				writer.WriteLine("line 2");
+				writer.Flush();
+				p.SetData("test1", stream);
+			}
+
+			Assert.IsTrue(p.IsModified);
 			Assert.IsFalse(System.IO.File.Exists(projectFile));
 			p.Save(projectFile);
 			Assert.IsTrue(System.IO.File.Exists(projectFile));
+			Assert.IsFalse(p.IsModified);
 
 			p = new Project();
 			p.Load(projectFile);
-			StreamReader reader = new StreamReader(p["test1"]);
-			Assert.AreEqual(reader.ReadLine(), "line 1");
-			Assert.AreEqual(reader.ReadLine(), "line 2");
-			
+			using (Stream stream = p.GetData("test1"))
+			using (StreamReader reader = new StreamReader(stream))
+			{
+				Assert.AreEqual(reader.ReadLine(), "line 1");
+				Assert.AreEqual(reader.ReadLine(), "line 2");
+			}
+
 			//Test clearing method
 			p.Load(projectFile);
-			reader = new StreamReader(p["test1"]);
-			Assert.AreEqual(reader.ReadLine(), "line 1");
+			using (Stream stream = p.GetData("test1"))
+			using (StreamReader reader = new StreamReader(stream))
+			{
+				Assert.AreEqual(reader.ReadLine(), "line 1");
+				Assert.AreEqual(reader.ReadLine(), "line 2");
+			}
 		}
 
 		[Test]
@@ -82,11 +96,14 @@ namespace FreeSCADA.Common.Tests
 
 			for (int i = 0; i < files; i++)
 			{
-				StreamWriter writer = new StreamWriter(p[string.Format("file {0}", i)]);
-				for (int j = 0; j < lines; j++)
-					writer.WriteLine(string.Format("Line {0}", j));
-				writer.Flush();
-				writer = null;
+				using (MemoryStream stream = new MemoryStream())
+				using (StreamWriter writer = new StreamWriter(stream))
+				{
+					for (int j = 0; j < lines; j++)
+						writer.WriteLine(string.Format("Line {0}", j));
+					writer.Flush();
+					p.SetData(string.Format("file {0}", i), stream);
+				}
 			}
 			p.Save(projectFile);
 
@@ -94,9 +111,12 @@ namespace FreeSCADA.Common.Tests
 			p.Load(projectFile);
 			for (int i = 0; i < files; i++)
 			{
-				StreamReader reader = new StreamReader(p[string.Format("file {0}", i)]);
-				for (int j = 0; j < lines; j++)
-					Assert.AreEqual(reader.ReadLine(), string.Format("Line {0}", j));
+				using (Stream stream = p.GetData(string.Format("file {0}", i)))
+				using (StreamReader reader = new StreamReader(stream))
+				{
+					for (int j = 0; j < lines; j++)
+						Assert.AreEqual(reader.ReadLine(), string.Format("Line {0}", j));
+				}
 			}
 		}
 	}

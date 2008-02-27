@@ -24,10 +24,9 @@ namespace FreeSCADA.Schema.Commands
                 return true;
             return false;
         }
-        public event EventHandler CanExecuteChanged;
+		public event EventHandler CanExecuteChanged;
         public void Execute(object o)
         {
-
             EditorHelper.BreakGroup((Viewbox)o);
         }
         

@@ -4,17 +4,17 @@ using System.Windows.Forms;
 using FreeSCADA.ShellInterfaces;
 using FreeSCADA.Common;
 
-namespace FreeSCADA.Designer
+namespace FreeSCADA.Designer.Dialogs
 {
 	/// <summary>
 	/// The form displays a complete list of variables from current Project.
 	/// </summary>
-	public partial class VariablesForm : Form
+	public partial class VariablesDialog : Form
 	{
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		public VariablesForm()
+		public VariablesDialog()
 		{
 			InitializeComponent();
 

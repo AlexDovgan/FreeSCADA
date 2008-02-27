@@ -29,7 +29,7 @@ namespace FreeSCADA.ShellInterfaces
 			set;
 		}
 
-		//client's data
+		//client's tmp_buff
 		object Tag
 		{
 			get;

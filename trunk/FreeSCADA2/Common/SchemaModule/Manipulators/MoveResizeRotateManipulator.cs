@@ -106,9 +106,6 @@ namespace FreeSCADA.Schema.Manipulators
 
         void topRightRotate_DragDelta(object sender, DragDeltaEventArgs e)
         {
-
-            double angle = 0;
-
             Point p = AdornedElement.RenderTransform.Inverse.Transform(new Point(((FrameworkElement)AdornedElement).Width, ((FrameworkElement)AdornedElement).Height));
             Point p2 = new Point(e.HorizontalChange, e.VerticalChange);
             Point p3 = AdornedElement.RenderTransform.Transform(new Point(((FrameworkElement)AdornedElement).Width, ((FrameworkElement)AdornedElement).Height));
@@ -116,7 +113,7 @@ namespace FreeSCADA.Schema.Manipulators
 
             Vector vector1 = new Vector((p.Y / 2 - p2.Y), (p.X / 2 + p2.X));
             Vector vector2 = new Vector(p.Y / 2, p.X / 2);
-            //angle = (Math.Atan(p.Y / p.X) - Math.Atan((p.Y / 2 - p2.Y) / (p.X / 2 + p2.X))) * 180 / Math.PI;
+			//double angle = (Math.Atan(p.Y / p.X) - Math.Atan((p.Y / 2 - p2.Y) / (p.X / 2 + p2.X))) * 180 / Math.PI;
 
 
             //Trace.WriteLine(p.X+" "+p.Y+" "+Vector.AngleBetween(vector2, vector1));

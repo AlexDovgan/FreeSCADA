@@ -76,10 +76,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DocumentWindow.cs">
+    <Compile Include="Views\DocumentView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EventsView.cs">
+    <Compile Include="Views\EventsView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.cs">
@@ -89,7 +89,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="ProjectContentView.cs">
+    <Compile Include="Views\ProjectContentView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -102,8 +102,8 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="PropertyBrowserView.resx">
-      <DependentUpon>PropertyBrowserView.cs</DependentUpon>
+    <EmbeddedResource Include="Views\ProjectContentView.resx">
+      <DependentUpon>ProjectContentView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
@@ -120,23 +120,29 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="PropertyBrowserView.cs">
+    <Compile Include="Views\PropertyBrowserView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SchemaView.cs">
+    <Compile Include="Dialogs\SaveDocumentsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ToolBoxView.cs">
+    <Compile Include="Dialogs\SaveDocumentsDialog.Designer.cs">
+      <DependentUpon>SaveDocumentsDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SchemaView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\ToolBoxView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ToolWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="VariablesForm.cs">
+    <Compile Include="Dialogs\VariablesDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="VariablesForm.Designer.cs">
-      <DependentUpon>VariablesForm.cs</DependentUpon>
+    <Compile Include="Dialogs\VariablesDialog.Designer.cs">
+      <DependentUpon>VariablesDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="WindowManager.cs" />
   </ItemGroup>
