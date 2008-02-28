@@ -8,13 +8,17 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Shapes;
-using FreeSCADA.Schema.Manipulators;
 using System.Windows.Input;
-
+using System.Windows.Documents;
+using System.ComponentModel;
 namespace FreeSCADA.Schema.UndoRedo
 {
     public interface IUndoCommand
     {
+        /// <summary>
+        /// exexute command
+        /// </summary>
+        void Do(SchemaDocument doc);
         /**
 
         * Re-executes a command.
@@ -31,29 +35,37 @@ namespace FreeSCADA.Schema.UndoRedo
     {
         static UndoRedoManager()
         {
-            undoBuffers=new Dictionary<Canvas,BasicUndoBuffer>();
+            undoBuffers=new Dictionary<SchemaDocument,BasicUndoBuffer>();
         }
         
 
-        public static BasicUndoBuffer GetUndoBuffer(Canvas c)
+        public static BasicUndoBuffer GetUndoBuffer(SchemaDocument doc)
         {
-            if(!undoBuffers.ContainsKey(c)) 
+            if(!undoBuffers.ContainsKey(doc)) 
             {
-                undoBuffers[c]=new BasicUndoBuffer();
+                undoBuffers[doc]=new BasicUndoBuffer(doc);
 
             }
-            return undoBuffers[c];
+            return undoBuffers[doc];
         }
     
-        static Dictionary<Canvas,BasicUndoBuffer> undoBuffers;
+        static Dictionary<SchemaDocument,BasicUndoBuffer> undoBuffers;
     }
 
     public class BasicUndoBuffer
     {
+        SchemaDocument schemaDocument;
+        
+
+        public BasicUndoBuffer(SchemaDocument doc)
+        {
+            schemaDocument = doc;
+        }
         public void AddCommand(IUndoCommand command)
         {
              redoStack.Clear();
-            undoStack.Push(command);
+             command.Do(schemaDocument);
+             undoStack.Push(command);
         }
         public void UndoCommand()
         {
@@ -92,47 +104,76 @@ namespace FreeSCADA.Schema.UndoRedo
     }
     
     
-    public class AddObject : IUndoCommand
+    public class AddGraphicsObject : IUndoCommand
     {
         UIElement addedObject;
-        Canvas workCanvas;
-        Canvas editedCanvas{
-            get { return workCanvas; }
-        }
-        public AddObject(UIElement el,Canvas c)
+        SchemaDocument schemaDocument;
+        protected bool documentModifiedState;
+        public AddGraphicsObject(UIElement el)
         {
             addedObject = el;
-            workCanvas = c;
+        }
+        public void Do(SchemaDocument doc)
+        {
+
+            schemaDocument = doc;
+            schemaDocument.MainCanvas.Children.Add(addedObject);
+            documentModifiedState = schemaDocument.IsModified;
+            schemaDocument.IsModified = true;
         }
         public void Redo()
         {
-            workCanvas.Children.Add(addedObject);
+            schemaDocument.MainCanvas.Children.Add(addedObject);
+            documentModifiedState = schemaDocument.IsModified;
+            schemaDocument.IsModified = true;
             
         }
         public void Undo()
         {
-            workCanvas.Children.Remove(addedObject);
+            schemaDocument.MainCanvas.Children.Remove(addedObject);
+            schemaDocument.IsModified=documentModifiedState;
+            
         }
 
     }
-    public class ModifyObject : IUndoCommand
+
+    public class ModifyGraphicsObject : IUndoCommand
     {
         UIElement modifiedObject;
-        
-        
-        public ModifyObject(UIElement el)
+        UIElement restoredObject;
+        string objectCopy;
+        SchemaDocument schemaDocument;
+        protected bool documentModifiedState;
+        public ModifyGraphicsObject(UIElement el)
         {
             modifiedObject = el;
          
         }
+        public void Do(SchemaDocument doc)
+        {
+            objectCopy=XamlWriter.Save(modifiedObject);
+            schemaDocument = doc;
+            documentModifiedState = schemaDocument.IsModified;
+            schemaDocument.IsModified = true;
+        }
         public void Redo()
         {
-            
+        
+            restoredObject = (UIElement)XamlReader.Load(new XmlTextReader(new StringReader(objectCopy)));
+            objectCopy = XamlWriter.Save(modifiedObject);
+            EditorHelper.CopyObjects(restoredObject, modifiedObject);
 
+            documentModifiedState = schemaDocument.IsModified;
+            schemaDocument.IsModified = true;
+            AdornerLayer.GetAdornerLayer(modifiedObject).Update();
         }
         public void Undo()
         {
-            
+            restoredObject = (UIElement)XamlReader.Load(new XmlTextReader(new StringReader(objectCopy)));
+            objectCopy = XamlWriter.Save(modifiedObject);
+            EditorHelper.CopyObjects(restoredObject, modifiedObject);
+            schemaDocument.IsModified = documentModifiedState;
+            AdornerLayer.GetAdornerLayer(modifiedObject).Update();
         }
 
     }

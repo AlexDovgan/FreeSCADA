@@ -40,6 +40,14 @@ namespace FreeSCADA.Designer.Views
 		public virtual void OnSave()
 		{
 		}
+        
+        public virtual void OnLoad(string name)
+        {
+        }
+        public virtual void OnCreate()
+        {
+
+        }
 
         public void RaiseObjectSelected(object sender )
         {

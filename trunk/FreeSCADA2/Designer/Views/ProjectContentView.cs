@@ -52,13 +52,39 @@ namespace FreeSCADA.Designer.Views
 
 		void OnProjectLoad(object sender, EventArgs e)
 		{
+            Project project = sender as Project;
+
 			projectTree.Nodes.Clear();
-			TreeNode raw_nodes = projectTree.Nodes.Add("Raw nodes");
+            TreeNode root = projectTree.Nodes.Add(project.ProjectName);
+            
 			foreach (string entity in Env.Current.Project.GetEntities())
 			{
-				TreeNode node = raw_nodes.Nodes.Add(entity);
-				node.Tag = entity;
-			}
+                //filtering schema names
+                TreeNode node = null;
+                string [] splited= entity.Split('/');
+                if (splited.Length>1)
+                {
+
+                    if (root.Nodes.Find(splited[0], false).Length == 0)
+                    {
+                        node = root.Nodes.Add(splited[0]);
+                        node.Tag = splited[0];
+                    }
+                    else node = root.Nodes.Find(splited[0], false)[0];
+                    if (node.Nodes.Find(splited[1],false).Length == 0)
+                    {
+                        node=node.Nodes.Add(splited[1]);
+                        node.Tag = splited[1];
+                    }
+
+                }
+                else
+                {
+                    node = root.Nodes.Add(entity);
+                    node.Tag = entity;
+                }
+                
+            }
 		}
 
 		private void OnNodeDblClick(object sender, TreeNodeMouseClickEventArgs e)

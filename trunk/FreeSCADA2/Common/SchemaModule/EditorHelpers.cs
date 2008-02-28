@@ -12,7 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using FreeSCADA.Schema.Manipulators;
 using FreeSCADA.Schema.Tools;
-
+using System.ComponentModel;
 namespace FreeSCADA.Schema
 {
     static class EditorHelper
@@ -178,7 +178,43 @@ namespace FreeSCADA.Schema
 
             return boundce;
         }
-        
+        public static IList<DependencyProperty> GetSetedProperties(DependencyObject obj)
+        {
+            List<DependencyProperty> seted = new List<DependencyProperty>();
+
+            foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(obj,
+                new Attribute[] { new PropertyFilterAttribute(PropertyFilterOptions.All) }))
+            {
+                DependencyPropertyDescriptor dpd =
+                    DependencyPropertyDescriptor.FromProperty(pd);
+
+                if (dpd != null && obj.ReadLocalValue(dpd.DependencyProperty)!=DependencyProperty.UnsetValue)
+                {
+                    seted.Add(dpd.DependencyProperty);
+                }
+            }
+
+            return seted;
+        }
+        public static void CopyObjects(DependencyObject source,DependencyObject destination)
+        {
+            IList<DependencyProperty> spl = GetSetedProperties(source);
+            IList<DependencyProperty> dpl = GetSetedProperties(destination);
+            foreach (DependencyProperty property in dpl)
+            {
+                if(property.ReadOnly!=true)
+                    destination.SetValue(property, source.ReadLocalValue(property));
+                
+            }
+            /*foreach (DependencyProperty property in spl)
+            {
+                destination.SetValue(property, source.ReadLocalValue(property));
+
+            }*/
+
+
+        }
+
     }
 
 }

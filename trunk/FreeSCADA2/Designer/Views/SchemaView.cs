@@ -19,16 +19,6 @@ namespace FreeSCADA.Designer.Views
         {
 			InitializeComponent();
 
-            SchemaDocument schema;
-
-            if ((schema = SchemaDocument.CreateNewSchema()) != null)
-            {
-                schemaEditor = new SchemaEditor(schema);
-                TabText = schema.Name;
-            }
-            else throw new Exception("Canceled");
-            schemaEditor.ObjectSelected += new SchemaEditor.ObjectSelectedDelegate(objectSelected);
-			wpfContainerHost.Child = schemaEditor;
         }
 
         private void InitializeComponent()
@@ -75,5 +65,41 @@ namespace FreeSCADA.Designer.Views
             
             RaiseObjectSelected(element);
         }
+        public override  void OnSave()
+        {
+            schemaEditor.Schema.SaveSchema();
+        }
+        
+        public override void OnLoad(string name)
+        {
+            SchemaDocument schema;
+            if ((schema = SchemaDocument.LoadSchema(name)) != null)
+            {
+                schemaEditor = new SchemaEditor(schema);
+                TabText = schema.Name;
+            }
+            schemaEditor.ObjectSelected += new SchemaEditor.ObjectSelectedDelegate(objectSelected);
+            wpfContainerHost.Child = schemaEditor;
+       
+        }
+        public override void OnCreate()
+        {
+            SchemaDocument schema;
+
+            if ((schema = SchemaDocument.CreateNewSchema()) != null)
+            {
+                schemaEditor = new SchemaEditor(schema);
+                TabText = schema.Name;
+            }
+            else throw new Exception("Canceled");
+            schemaEditor.ObjectSelected += new SchemaEditor.ObjectSelectedDelegate(objectSelected);
+            wpfContainerHost.Child = schemaEditor;
+        }
+        public override bool IsModified
+        {
+            get { return schemaEditor.Schema.IsModified; }
+        }
+
+
     }
 }
