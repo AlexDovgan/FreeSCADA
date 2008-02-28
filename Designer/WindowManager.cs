@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WeifenLuo.WinFormsUI.Docking;
-using FreeSCADA.Designer.Views;
-using FreeSCADA.Designer.Dialogs;
 using FreeSCADA.Common;
+using FreeSCADA.Designer.Dialogs;
+using FreeSCADA.Designer.Views;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace FreeSCADA.Designer
 {
