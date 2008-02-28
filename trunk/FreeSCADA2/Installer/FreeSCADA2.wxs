@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="{A0692C53-185D-4d97-BF57-6F6AD70D96F1}"
+           Name="FreeSCADA 2"
+           Language="1033"
+           Version="2.0.0.0"
+           Manufacturer="FreeSCADA Project [http://free-scada.sourceforge.net]"
+           UpgradeCode="{3E3F16AD-E81B-482a-968A-77EAD18BFB8E}">
+
+    <Package InstallerVersion="200" Compressed="yes" />
+
+    <PropertyRef Id="NETFRAMEWORK30"/>
+    <Condition Message="The .NET Framework 3.0 must be installed">NETFRAMEWORK30</Condition>
+
+    <Media Id="1" Cabinet="FreeSCADA2.cab" EmbedCab="yes" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="ProgramMenuFolder">
+          <Directory Id="ShortcutFolder" Name="FreeSCADA 2"/>
+        </Directory>
+
+        <Directory Id="INSTALLLOCATION" Name="FreeSCADA 2">
+          <Component Id="Common" Guid="{C5ED9FC1-84B6-462b-AF09-11C6D9D82B5D}">
+            <File Name="$(var.Common.TargetFileName)" Source="$(var.Common.TargetPath)" Vital="yes"/>
+            <File Name="weifenluo.winformsui.docking.dll" Source="..\3rdParty\DockPanel\weifenluo.winformsui.docking.dll" Vital="yes"/>
+            <File Name="icsharpcode.sharpziplib.dll" Source="..\3rdParty\SharpZipLib\icsharpcode.sharpziplib.dll" Vital="yes"/>
+            <File Name="devage.core.dll" Source="..\3rdParty\SourceGrid4_11\devage.core.dll" Vital="yes"/>
+            <File Name="devage.windows.forms.dll" Source="..\3rdParty\SourceGrid4_11\devage.windows.forms.dll" Vital="yes"/>
+            <File Name="sourcegrid.dll" Source="..\3rdParty\SourceGrid4_11\sourcegrid.dll" Vital="yes"/>
+
+            <File Name="license.txt" Source="..\license.txt" Vital="yes"/>
+            <!-- 3rd party licenses:
+            <File Name="sharpziplib_license.rtf" Source="..\3rdParty\SharpZipLib\readme.rtf"/>
+            <File Name="weifenluo_license.txt" Source="..\3rdParty\DockPanel\license.txt"/>
+            <File Name="sourcegrid.license.txt" Source="..\3rdParty\SourceGrid4_11\sourcegrid.license.txt"/>-->
+            
+            <RemoveFolder Id="RemoveShortcutFolder" Directory="ShortcutFolder" On="uninstall"/>
+          </Component>
+
+          <Component Id="Designer" Guid="{F1FDBE57-86BD-4506-9EDB-D829B8A9B072}">
+            <File Name="$(var.Designer.TargetFileName)" Source="$(var.Designer.TargetPath)">
+              <Shortcut Id="DesignerShortcut" Directory="ShortcutFolder" Name="Designer" Advertise="yes"/>
+            </File>
+          </Component>
+
+          <Component Id="CommOPCPlugin" Guid="{4B44C968-ACBB-4c7d-B203-A63B32B960CD}">
+            <File Name="$(var.Communication.OPCPlug.TargetFileName)" Source="$(var.Communication.OPCPlug.TargetPath)"/>
+            <File Name="opcrcw.comn.dll" Source="..\3rdParty\OPC\opcrcw.comn.dll"/>
+            <File Name="opcrcw.da.dll" Source="..\3rdParty\OPC\opcrcw.da.dll"/>
+          </Component>
+
+          <Component Id="CommSimulatorPlugin" Guid="{69CED1CE-5A01-4006-AA65-45F316A05563}">
+            <File Name="$(var.Communication.SimulatorPlug.TargetFileName)" Source="$(var.Communication.SimulatorPlug.TargetPath)"/>
+          </Component>
+
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <Feature Id="ProductFeature" Title="FreeSCADA" Level="1" AllowAdvertise="no" InstallDefault="local" Description="Install the whole product.">
+      <ComponentRef Id="Common" />
+      
+      <Feature Id="DesignerFeature" Title="Designer" Level="1" AllowAdvertise="no" Description="Install component which allows you to create HMI schemas, data connections, events and etc.">
+        <ComponentRef Id="Designer" />
+      </Feature>
+      
+      <Feature Id="CommPluginsFeature" Title="Communication plugins" Level="1" AllowAdvertise="no" Description="Cummunication plugins are used for connection with outer world.">
+        <Feature Id="CommOPCPluginFeature" Title="OPC" Level="1" AllowAdvertise="no" Description="OPC connections support">
+          <ComponentRef Id="CommOPCPlugin" />
+        </Feature>
+        <Feature Id="CommSimulatorPluginFeature" Title="Simulator" Level="1" AllowAdvertise="no" Description="Simulator for real data connections. Useful for studyings.">
+          <ComponentRef Id="CommSimulatorPlugin" />
+        </Feature>
+      </Feature>
+    </Feature>
+
+    <UIRef Id="WixUI_FeatureTree" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+    
+    <WixVariable Id="WixUILicenseRtf" Value="../license.rtf" />
+  </Product>
+</Wix>

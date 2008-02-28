@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FreeSCADA.ShellInterfaces;
 using System.Xml;
+using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Communication.SimulatorPlug
 {

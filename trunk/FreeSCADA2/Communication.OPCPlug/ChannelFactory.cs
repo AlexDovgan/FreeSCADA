@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Xml;
 using FreeSCADA.ShellInterfaces;
-using System.Xml;
 
 namespace FreeSCADA.Communication.OPCPlug
 {
