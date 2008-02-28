@@ -11,16 +11,31 @@ namespace FreeSCADA.Schema
 {
     public class SchemaDocument
     {
+        public delegate void SchemaModifiedDelgate(SchemaDocument doc, bool state);
+        public event SchemaModifiedDelgate SchemaModifiedStateEvent;
+
+        protected bool isModified=false;
+        public bool IsModified
+        {
+            get { return isModified; }
+            set 
+            {
+                if (SchemaModifiedStateEvent != null)
+                    SchemaModifiedStateEvent(this,isModified = value);
+                 
+            }
+        }
+
         public String Name;
         public Canvas MainCanvas=new Canvas(); 
-
+        
       
         public static SchemaDocument LoadSchema(string schemaName)
         {
             try
             {
                 SchemaDocument schema = new SchemaDocument();
-				using (Stream ms = Env.Current.Project.GetData("Schemas/" + schemaName + "/xaml"))
+				using (Stream ms = Env.Current.Project.GetData("Schemas/"+schemaName + "/xaml"))
 				using (XmlReader xmlReader = XmlReader.Create(ms))
 				{
 					Object obj = XamlReader.Load(xmlReader);
@@ -28,6 +43,7 @@ namespace FreeSCADA.Schema
 					{
 						schema.MainCanvas = obj as Canvas;
 						schema.Name = schemaName;
+                        
 					}
 					else 
 						throw (new Exception("This is not FreeSCADA schema"));
@@ -72,7 +88,8 @@ namespace FreeSCADA.Schema
 				{
 					XamlWriter.Save(MainCanvas, XmlWriter.Create(ms, settings));
 					Env.Current.Project.SetData("Schemas/" + Name + "/xaml", ms);
-				}                
+				}
+                IsModified = false;
             }
             catch (Exception)
             {

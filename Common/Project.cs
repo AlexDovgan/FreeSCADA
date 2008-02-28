@@ -11,6 +11,13 @@ namespace FreeSCADA.Common
 		bool modifiedFlag = false;
 
 		public event System.EventHandler LoadEvent;
+        protected string projectName;
+        public string ProjectName
+        {
+            get{return projectName;}
+            set{projectName=value;}
+        }
+
 
 		~Project()
 		{
@@ -41,6 +48,7 @@ namespace FreeSCADA.Common
 					}
 				}
 			}
+            projectName = fileName;
 			if (LoadEvent != null)
 				LoadEvent(this, new System.EventArgs());
 		}
@@ -80,6 +88,10 @@ namespace FreeSCADA.Common
 				zipOutput.Close();
 			}
 			modifiedFlag = false;
+            projectName = fileName;
+            //I think this is temporary 
+            if (LoadEvent != null)
+                LoadEvent(this, new System.EventArgs());
 		}
 
 		/// <summary>

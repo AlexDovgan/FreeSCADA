@@ -44,6 +44,7 @@ namespace FreeSCADA.Designer
             try
             {
                 SchemaView view = new SchemaView();
+                view.OnCreate();
                 view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
                 documentViews.Add(view);
                 view.Show(dockPanel, DockState.Document);
@@ -57,6 +58,11 @@ namespace FreeSCADA.Designer
 		public void OpenProjectEntity(string name)
 		{
 			// Open your schema and other document types here by entity name
+            SchemaView view = new SchemaView();
+            view.OnLoad(name);
+            view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
+            documentViews.Add(view);
+            view.Show(dockPanel, DockState.Document);
 		}
 
 		public void ShowEvents()
@@ -141,8 +147,7 @@ namespace FreeSCADA.Designer
                 toolBoxView.Clean(); 
                 currentDocument.OnActivated();
 				toolBoxView.ToolActivated += currentDocument.OnToolActivated;
-                //currentDocument.ObjectSelected+=new DocumentWindow.ObjectSelectedDelegate(propertyBrowserView.ShowProperties);
-				currentDocument.ObjectSelected += propertyBrowserView.ShowProperties;
+    			currentDocument.ObjectSelected += propertyBrowserView.ShowProperties;
 			}
 		}
 

@@ -7,13 +7,14 @@ using System.Windows.Media;
 using System.Windows;
 using System.Windows.Input;
 using FreeSCADA.Schema.Commands;
+using FreeSCADA.Schema.UndoRedo;
 
 namespace FreeSCADA.Schema.Manipulators
 {
-    class DragResizeRotate:BaseManipulator
+    class DragResizeRotate : BaseManipulator
     {
         VisualCollection visualChildren;
-        DragThumb dragControl=new DragThumb();
+        DragThumb dragControl = new DragThumb();
         RotateThumb rotateTopLeft = new RotateThumb();
         RotateThumb rotateBottomLeft = new RotateThumb();
         RotateThumb rotateTopRight = new RotateThumb();
@@ -26,10 +27,12 @@ namespace FreeSCADA.Schema.Manipulators
         ResizeThumb resizeRight = new ResizeThumb();
         ResizeThumb resizeTop = new ResizeThumb();
         ResizeThumb resizeBottom = new ResizeThumb();
+        
         public DragResizeRotate(FrameworkElement el, SchemaDocument sch)
             : base(el, sch)
         {
-            visualChildren= new VisualCollection(this);
+        
+            visualChildren = new VisualCollection(this);
             if (!(AdornedElement.RenderTransform is TransformGroup))
             {
                 TransformGroup t = new TransformGroup();
@@ -38,17 +41,17 @@ namespace FreeSCADA.Schema.Manipulators
                 AdornedElement.RenderTransform = t;
             }
             //el.RenderTransformOrigin = new Point(0.5, 0.5); ;
-            ThumbsResources tr=new ThumbsResources();
+            ThumbsResources tr = new ThumbsResources();
             tr.InitializeComponent();
-            Resources =tr; 
+            Resources = tr;
 
-            
+
             dragControl.DataContext = el;
             dragControl.VerticalAlignment = VerticalAlignment.Stretch;
             dragControl.HorizontalAlignment = HorizontalAlignment.Stretch;
             dragControl.Cursor = Cursors.SizeAll;
             dragControl.RenderTransform = el.RenderTransform;
-           
+
             visualChildren.Add(dragControl);
 
             rotateTopLeft.DataContext = el;
@@ -97,7 +100,7 @@ namespace FreeSCADA.Schema.Manipulators
             resizeBottomRight.VerticalAlignment = VerticalAlignment.Bottom;
             resizeBottomRight.HorizontalAlignment = HorizontalAlignment.Right;
             visualChildren.Add(resizeBottomRight);
-            
+
             resizeLeft.DataContext = el;
             resizeLeft.Cursor = Cursors.SizeWE;
             resizeLeft.HorizontalAlignment = HorizontalAlignment.Left;
@@ -133,25 +136,38 @@ namespace FreeSCADA.Schema.Manipulators
             mii.CommandParameter = AdornedElement;
             mii.Command = new GroupCommand();
             ContextMenu.Items.Add(mii);
+            foreach (Thumb control in visualChildren)
+            {
+                control.DragStarted += new DragStartedEventHandler(control_DragStarted);
+            }
+
+        }
+
+        
+
+        void control_DragStarted(object sender, DragStartedEventArgs e)
+        {
+            UndoRedoManager.GetUndoBuffer(workSchema).AddCommand(new ModifyGraphicsObject(AdornedElement));
+        
         }
 
         protected override Size ArrangeOverride(Size finalSize)
         {
             Rect ro = new Rect(0, 0, AdornedElement.DesiredSize.Width, AdornedElement.DesiredSize.Height);
-            
+
             foreach (Thumb control in visualChildren)
             {
                 Rect aligmentRect = new Rect();
                 aligmentRect.Width = control.Width;
                 aligmentRect.Height = control.Height;
-           
+
                 switch (control.VerticalAlignment)
                 {
-                    case VerticalAlignment.Top: aligmentRect.Y= 0;
+                    case VerticalAlignment.Top: aligmentRect.Y = 0;
                         break;
-                    case VerticalAlignment.Bottom: aligmentRect.Y= ro.Height ;
+                    case VerticalAlignment.Bottom: aligmentRect.Y = ro.Height;
                         break;
-                    case VerticalAlignment.Center: aligmentRect.Y = ro.Height/2;
+                    case VerticalAlignment.Center: aligmentRect.Y = ro.Height / 2;
                         break;
                     case VerticalAlignment.Stretch: aligmentRect.Height = ro.Height;
                         break;
@@ -162,41 +178,41 @@ namespace FreeSCADA.Schema.Manipulators
                 {
                     case HorizontalAlignment.Left: aligmentRect.X = 0;
                         break;
-                    case HorizontalAlignment.Right: aligmentRect.X = ro.Width ;
+                    case HorizontalAlignment.Right: aligmentRect.X = ro.Width;
                         break;
-                    case HorizontalAlignment.Center: aligmentRect.X = ro.Width/2;
+                    case HorizontalAlignment.Center: aligmentRect.X = ro.Width / 2;
                         break;
-                    case HorizontalAlignment.Stretch: aligmentRect.Width= ro.Width;
+                    case HorizontalAlignment.Stretch: aligmentRect.Width = ro.Width;
                         break;
                     default:
                         break;
                 }
-                Matrix m=AdornedElement.RenderTransform.Value;
+                Matrix m = AdornedElement.RenderTransform.Value;
                 m.OffsetX -= control.RenderTransform.Value.OffsetX;
                 m.OffsetY -= control.RenderTransform.Value.OffsetY;
 
                 Point p = m.Transform(new Point(aligmentRect.X, aligmentRect.Y));
                 aligmentRect.X = p.X - (double.IsNaN(control.Width) ? 0 : control.Width) / 2;
-                aligmentRect.Y = p.Y - (double.IsNaN(control.Height)? 0 : control.Height) / 2;
-                    
+                aligmentRect.Y = p.Y - (double.IsNaN(control.Height) ? 0 : control.Height) / 2;
+
                 control.Arrange(aligmentRect);
             }
- 
+
             return finalSize;
         }
-        
-        
+
+
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
-        
+
         public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
         {
-            Matrix m=AdornedElement.RenderTransform.Value;
+            Matrix m = AdornedElement.RenderTransform.Value;
             TranslateTransform ttr = new TranslateTransform();
-            ttr.X = ((Transform)transform).Value.OffsetX-m.OffsetX;
-            ttr.Y = ((Transform)transform).Value.OffsetY-m.OffsetY;
+            ttr.X = ((Transform)transform).Value.OffsetX - m.OffsetX;
+            ttr.Y = ((Transform)transform).Value.OffsetY - m.OffsetY;
             return ttr;
         }
 
-   }
+    }
 }

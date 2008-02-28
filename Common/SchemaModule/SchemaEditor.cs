@@ -64,7 +64,7 @@ namespace FreeSCADA.Schema
         {
             Schema = d;
             Schema.MainCanvas.Loaded += new RoutedEventHandler(MainCanvas_Loaded);
-            undoBuff = UndoRedoManager.GetUndoBuffer(Schema.MainCanvas);
+            undoBuff = UndoRedoManager.GetUndoBuffer(Schema);
             activeTool = new SelectionTool(Schema);
         }
 

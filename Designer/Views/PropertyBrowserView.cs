@@ -55,6 +55,41 @@ namespace FreeSCADA.Designer.Views
         {
             propertyGrid.Refresh();
         }
+        /*
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+		protected void NotifyPropertyChanged(String info)
+		{
+			System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(NotifyPropertyChangedAsync), this);
+			//NotifyPropertyChangedAsync(this);
+		}
+		protected void NotifyPropertyChangedAsync(Object info)
+		{
+			BaseBoxPrimitive obj = (BaseBoxPrimitive)info;
+			if (obj.PropertyChanged != null)
+				obj.PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(""));
+		}
+
+
+Обработка:
+		delegate void InvokeDelegate();
+		void OnObjectPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			m_PropertyGrid.BeginInvoke(new InvokeDelegate(delegate() { m_PropertyGrid.Refresh(); }));
+		}
+
+		private void OnFocusedObjectChanged(object sender, object primitive)
+		{
+			Object old_obj = m_PropertyGrid.SelectedObject;
+			if (old_obj != null && old_obj is System.ComponentModel.INotifyPropertyChanged)
+				(old_obj as System.ComponentModel.INotifyPropertyChanged).PropertyChanged -= new PropertyChangedEventHandler(OnObjectPropertyChanged);
+
+			m_PropertyGrid.SelectedObject = primitive;
+
+			if (primitive != null && primitive is System.ComponentModel.INotifyPropertyChanged)
+				(primitive as System.ComponentModel.INotifyPropertyChanged).PropertyChanged += new PropertyChangedEventHandler(OnObjectPropertyChanged);
+		}
+
+*/
 	}
 
 }

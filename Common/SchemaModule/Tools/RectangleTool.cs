@@ -82,8 +82,7 @@ namespace FreeSCADA.Schema.Tools
                     r.Height = b.Height;
                     r.Stroke = Brushes.Black;
                     r.Fill = Brushes.Red;
-                    UndoRedoManager.GetUndoBuffer(workedSchema.MainCanvas).AddCommand(new AddObject(r, workedSchema.MainCanvas));
-                    workedSchema.MainCanvas.Children.Add(r);
+                    UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(r));
                     manipulator = new DragResizeRotate(r, workedSchema);
                     AdornerLayer.GetAdornerLayer(workedSchema.MainCanvas).Add(manipulator);
 
