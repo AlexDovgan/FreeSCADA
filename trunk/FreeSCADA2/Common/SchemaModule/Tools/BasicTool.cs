@@ -9,7 +9,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using FreeSCADA.Schema.Commands;
+using FreeSCADA.Schema.Context_Menu;
 using FreeSCADA.Schema.Manipulators;
 using FreeSCADA.Schema.UndoRedo;
 using FreeSCADA.ShellInterfaces;
@@ -27,13 +27,25 @@ namespace FreeSCADA.Schema.Tools
             : base(schema.MainCanvas)
         {
             visualChildren = new VisualCollection(this);
+           
+            DrawingVisual drawingVisual = new DrawingVisual();
+            DrawingContext drawingContext = drawingVisual.RenderOpen();
+            Rect rect = new Rect(new Point(0,0), AdornedElement.DesiredSize);
+
+            drawingContext.DrawRectangle(Brushes.White, new Pen(Brushes.Black, 0.2), rect);
+
+            // Persist the drawing content.
+            drawingContext.Close();
+            drawingVisual.Opacity = 0;
+
+            visualChildren.Add(drawingVisual);
             workedSchema = schema;
         }
 
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
 
-        public virtual void OnCanvasMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        protected override void OnPreviewMouseLeftButtonDown( MouseButtonEventArgs e)
         {
             if(ToolStarted!=null)
                 ToolStarted(this,e);
@@ -43,39 +55,28 @@ namespace FreeSCADA.Schema.Tools
                 manipulator = null;
             }
         }
-        public virtual void OnCanvasMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             if(ToolFinished!=null)
                 ToolFinished(this,e);
         }
-        public virtual void OnCanvasMouseMove(object sender, MouseEventArgs e)
+        protected override void OnPreviewMouseMove(MouseEventArgs e)
         {            
             if(ToolWorked!=null)
                 ToolWorked(this,e);
         }
-        public virtual void OnCanvasKeyDown(object sender, KeyEventArgs e)
-        { }
-        public virtual void OnCanvasKeyUp(object sender, KeyEventArgs e)
-        { }
         public void Activate()
         {
-            AdornedElement.MouseLeftButtonDown += new MouseButtonEventHandler(OnCanvasMouseLeftButtonDown);
-            AdornedElement.MouseLeftButtonUp += new MouseButtonEventHandler(OnCanvasMouseLeftButtonUp);
-            AdornedElement.MouseMove += new MouseEventHandler(OnCanvasMouseMove);
-            AdornedElement.KeyDown += new KeyEventHandler(OnCanvasKeyDown);
-            AdornedElement.KeyUp += new KeyEventHandler(OnCanvasKeyUp);
+            AdornerLayer.GetAdornerLayer(AdornedElement).Add(this);
             AdornedElement.Focus();
+           
         }
         public void Deactivate()
         {
-            AdornedElement.MouseLeftButtonDown -= OnCanvasMouseLeftButtonDown;
-            AdornedElement.MouseLeftButtonUp -= OnCanvasMouseLeftButtonUp;
-            AdornedElement.MouseMove -= OnCanvasMouseMove;
-            AdornedElement.KeyDown -= OnCanvasKeyDown;
-            AdornedElement.KeyUp -= OnCanvasKeyUp;
+            AdornerLayer.GetAdornerLayer(AdornedElement).Remove(this);
             if (manipulator != null)
                 AdornerLayer.GetAdornerLayer(AdornedElement).Remove(manipulator);
-
+            
         }
         public delegate void ToolEvent(BasicTool tool,EventArgs e);
         public event ToolEvent ToolFinished;
@@ -93,7 +94,7 @@ namespace FreeSCADA.Schema.Tools
         {
             ToolWorked(tool, e);
         }
-          
+        
     }
   
 }

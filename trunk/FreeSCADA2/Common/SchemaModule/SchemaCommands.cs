@@ -11,8 +11,28 @@ using System.Windows.Shapes;
 using FreeSCADA.Schema.Manipulators;
 using System.Windows.Input;
 
-namespace FreeSCADA.Schema.Commands
+namespace FreeSCADA.Schema.Context_Menu
 {
+  
+    class SelectToolContextMenu: ContextMenu
+    {
+        public MenuItem unGroupMenuItem = new MenuItem();
+        public MenuItem groupMenuItem = new MenuItem();
+        public SelectToolContextMenu()
+        {
+
+            unGroupMenuItem.Header = "Ungroup";
+            unGroupMenuItem.Command = new UngroupCommand();
+            Items.Add(unGroupMenuItem);
+
+
+            groupMenuItem.Header = "Group";
+            groupMenuItem.Command = new GroupCommand();
+            Items.Add(groupMenuItem);
+        }
+    }
+            
+    
     public class UngroupCommand:ICommand
     {
         public UngroupCommand()

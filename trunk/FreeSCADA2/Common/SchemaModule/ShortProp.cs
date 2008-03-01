@@ -10,7 +10,7 @@ using System.ComponentModel;
 
 namespace FreeSCADA.Schema.ShortProperties
 {
-    public class CommonShortProp
+    public class CommonShortProp 
     {
         public delegate void PropertiesChangedDelegate();
         public event PropertiesChangedDelegate PropertiesChanged;
@@ -73,13 +73,10 @@ namespace FreeSCADA.Schema.ShortProperties
         }
         void propertyValueChanged(object sender, EventArgs e)
         {
-            RaisePropertiesChanged();
+            //RaisePropertiesChanged();
         }
 
-        void frameworkElement_LayoutUpdated(object sender, EventArgs e)
-        {
-            RaisePropertiesChanged();
-        }
+  
         public string Name
         {
             get { return frameworkElement.Name; }

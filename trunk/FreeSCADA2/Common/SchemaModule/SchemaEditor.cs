@@ -21,7 +21,6 @@ namespace FreeSCADA.Schema
     public class SchemaEditor : SchemaViewer
     {
 
-        AdornerLayer adornerLayer;
         BasicUndoBuffer undoBuff;
         BasicTool activeTool;
 
@@ -43,16 +42,25 @@ namespace FreeSCADA.Schema
         }
         public Type CurrentTool
         {
-            get { return activeTool.GetType(); }
+            get 
+            {
+                if (activeTool == null)
+                {
+                    activeTool = new SelectionTool(Schema);
+                    activeTool.Activate();
+                    activeTool.ToolFinished += new BasicTool.ToolEvent(Tool_Finished);
+            
+                }
+                return activeTool.GetType(); 
+                
+            }
             set
             {
                 activeTool.Deactivate();
                 activeTool.ToolFinished -= Tool_Finished;
-                AdornerLayer.GetAdornerLayer(Schema.MainCanvas).Remove(activeTool);
                 object[] a = new object[1];
                 a[0] = Schema;
                 activeTool = (BasicTool)System.Activator.CreateInstance(value, a);
-                AdornerLayer.GetAdornerLayer(Schema.MainCanvas).Add(activeTool);
                 activeTool.Activate();
                 activeTool.ToolFinished += new BasicTool.ToolEvent(Tool_Finished);
             }
@@ -65,7 +73,7 @@ namespace FreeSCADA.Schema
             Schema = d;
             Schema.MainCanvas.Loaded += new RoutedEventHandler(MainCanvas_Loaded);
             undoBuff = UndoRedoManager.GetUndoBuffer(Schema);
-            activeTool = new SelectionTool(Schema);
+         
         }
 
         void MainCanvas_Loaded(object sender, RoutedEventArgs e)
@@ -73,11 +81,8 @@ namespace FreeSCADA.Schema
             Schema.MainCanvas.Focusable = true;
             Schema.MainCanvas.Focus();
             NameScope.SetNameScope(Schema.MainCanvas, new NameScope());
-            adornerLayer = AdornerLayer.GetAdornerLayer(Schema.MainCanvas);
             Schema.MainCanvas.KeyDown += new KeyEventHandler(MainCanvas_KeyDown);
-            AdornerLayer.GetAdornerLayer(Schema.MainCanvas).Add(activeTool);
-            activeTool.Activate();
-            activeTool.ToolFinished += new BasicTool.ToolEvent(Tool_Finished);
+            
         }
 
         void MainCanvas_KeyDown(object sender, KeyEventArgs e)

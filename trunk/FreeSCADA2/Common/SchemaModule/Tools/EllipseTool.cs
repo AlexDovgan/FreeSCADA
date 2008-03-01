@@ -9,7 +9,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using FreeSCADA.Schema.Commands;
+using FreeSCADA.Schema.Context_Menu;
 using FreeSCADA.Schema.Manipulators;
 using FreeSCADA.Schema.UndoRedo;
 using FreeSCADA.ShellInterfaces;
@@ -20,11 +20,13 @@ namespace FreeSCADA.Schema.Tools
     {
 
         Point startPos;
-        
+        bool isDragged;
+        DrawingVisual objectPrview = new DrawingVisual();
         public EllipseTool(SchemaDocument schema)
             : base(schema)
         {
-           
+            objectPrview.Opacity = 0.5;
+            visualChildren.Add(objectPrview);
         }
 
         public String ToolName
@@ -44,32 +46,25 @@ namespace FreeSCADA.Schema.Tools
                 return new System.Drawing.Bitmap(10, 10);
             }
         }
-        public override void OnCanvasMouseMove(object sender, MouseEventArgs e)
+
+        protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
-            if (visualChildren.Count > 0)
+            if (isDragged)
             {
                 Vector v = e.GetPosition(this) - startPos;
-
-                DrawingVisual vis = (DrawingVisual)visualChildren[0];
-                DrawingContext drawingContext = vis.RenderOpen();
-
-                // Create a rectangle and draw it in the DrawingContext.
+                DrawingContext drawingContext = objectPrview.RenderOpen();
                 Rect rect = new Rect(startPos, v);
                 drawingContext.DrawEllipse(Brushes.Gray, new Pen(Brushes.Black, 0.2), startPos, v.X, v.Y);
-
-                // Persist the drawing content.
                 drawingContext.Close();
-                vis.Opacity = 0.5;
-
-            }
+           }
 
         }
 
-        public override void OnCanvasMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
-            if (visualChildren.Count > 0)
+            if (isDragged)
             {
-                Rect b = VisualTreeHelper.GetContentBounds(visualChildren[0]);
+                Rect b = VisualTreeHelper.GetContentBounds(objectPrview);
                 if (!b.IsEmpty)
                 {
                     Ellipse el = new Ellipse();
@@ -84,24 +79,22 @@ namespace FreeSCADA.Schema.Tools
                      manipulator = new DragResizeRotate(el, workedSchema);
                     AdornerLayer.GetAdornerLayer(workedSchema.MainCanvas).Add(manipulator);
                 }
-                visualChildren.Remove(visualChildren[0]);
+                isDragged = false;
+                objectPrview.RenderOpen().Close();
             }
-            workedSchema.MainCanvas.ReleaseMouseCapture();
-            base.OnCanvasMouseLeftButtonUp(sender, e);
+            ReleaseMouseCapture();
+            base.OnPreviewMouseLeftButtonUp(e);
         }
 
-        public override void OnCanvasMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
          
-            workedSchema.MainCanvas.CaptureMouse();
+            CaptureMouse();
             startPos = e.GetPosition(this);
-
-            DrawingVisual drawingVisual = new DrawingVisual();
-            if (visualChildren.Count == 0)
-                visualChildren.Add(drawingVisual);
-            base.OnCanvasMouseLeftButtonDown(sender, e);
+            isDragged = true;
+            base.OnPreviewMouseLeftButtonDown(e);
 
         }
-
+        
     }
 }
