@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Diagnostics;
-using FreeSCADA.Schema.Commands;
+using FreeSCADA.Schema.Context_Menu;
 
 namespace FreeSCADA.Schema.Manipulators
 {

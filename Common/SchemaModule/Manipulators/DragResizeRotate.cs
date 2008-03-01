@@ -6,7 +6,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Input;
-using FreeSCADA.Schema.Commands;
+using FreeSCADA.Schema.Context_Menu;
 using FreeSCADA.Schema.UndoRedo;
 
 namespace FreeSCADA.Schema.Manipulators
@@ -125,17 +125,6 @@ namespace FreeSCADA.Schema.Manipulators
             resizeBottom.VerticalAlignment = VerticalAlignment.Bottom;
             visualChildren.Add(resizeBottom);
 
-            ContextMenu = new ContextMenu();
-            MenuItem mi = new MenuItem();
-            mi.Header = "Ungroup";
-            mi.CommandParameter = AdornedElement;
-            mi.Command = new UngroupCommand();
-            ContextMenu.Items.Add(mi);
-            MenuItem mii = new MenuItem();
-            mii.Header = "Group";
-            mii.CommandParameter = AdornedElement;
-            mii.Command = new GroupCommand();
-            ContextMenu.Items.Add(mii);
             foreach (Thumb control in visualChildren)
             {
                 control.DragStarted += new DragStartedEventHandler(control_DragStarted);
