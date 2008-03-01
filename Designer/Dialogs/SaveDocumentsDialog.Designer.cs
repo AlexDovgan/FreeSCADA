@@ -60,6 +60,7 @@
 			// cancelButton
 			// 
 			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.Location = new System.Drawing.Point(287, 207);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.Size = new System.Drawing.Size(75, 23);
@@ -70,6 +71,7 @@
 			// noButton
 			// 
 			this.noButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.noButton.DialogResult = System.Windows.Forms.DialogResult.No;
 			this.noButton.Location = new System.Drawing.Point(206, 207);
 			this.noButton.Name = "noButton";
 			this.noButton.Size = new System.Drawing.Size(75, 23);
@@ -102,6 +104,7 @@
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "SaveDocumentsDialog";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "SaveDocumentsDialog";
 			this.ResumeLayout(false);
 			this.PerformLayout();

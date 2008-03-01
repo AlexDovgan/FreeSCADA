@@ -65,8 +65,8 @@
 			toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             toolStripButton1,
             toolStripButton2,
-            toolStripButton3,
             this.toolStripSeparator1,
+            toolStripButton3,
             toolStripButton4,
             toolStripButton5});
 			toolStrip1.Location = new System.Drawing.Point(0, 24);
@@ -83,6 +83,7 @@
 			toolStripButton1.Name = "toolStripButton1";
 			toolStripButton1.Size = new System.Drawing.Size(23, 22);
 			toolStripButton1.Text = "toolStripButton1";
+			toolStripButton1.Click += new System.EventHandler(this.OnNewProjectClick);
 			// 
 			// toolStripButton2
 			// 
@@ -173,26 +174,26 @@
 			// saveToolStripMenuItem
 			// 
 			this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-			this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.saveToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
 			this.saveToolStripMenuItem.Text = "Save project";
 			this.saveToolStripMenuItem.Click += new System.EventHandler(this.OnSaveProjectClick);
 			// 
 			// loadToolStripMenuItem
 			// 
 			this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-			this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.loadToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
 			this.loadToolStripMenuItem.Text = "Load project...";
 			this.loadToolStripMenuItem.Click += new System.EventHandler(this.OnLoadProjectClick);
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(146, 6);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-			this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.exitToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
 			this.exitToolStripMenuItem.Text = "Exit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnMenuExitClick);
 			// 
@@ -251,6 +252,7 @@
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds;
 			this.Text = "Designer";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
 			toolStrip1.ResumeLayout(false);
 			toolStrip1.PerformLayout();
 			this.mainMenu.ResumeLayout(false);

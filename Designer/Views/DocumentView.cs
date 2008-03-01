@@ -7,22 +7,38 @@ namespace FreeSCADA.Designer.Views
 	{
         public delegate void ObjectSelectedDelegate(object sender);
         public event ObjectSelectedDelegate ObjectSelected;
+		string documentName="";
+		bool modifiedFlag = false;
+		bool handleModifiedFlagOnClose = true;
 
 		public DocumentView()
 		{
 			DockAreas = DockAreas.Float | DockAreas.Document;
-			TabText = "Document";
+			documentName = "Document";
+			UpdateCaption();
+
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(OnClosing);
 		}
 
+		public string DocumentName
+		{
+			get { return documentName; }
+			set { documentName = value; UpdateCaption();}
+		}
+
+		/// <summary>
+		/// This property should be set to "true" for new documents and set to "false" after saving the document.
+		/// </summary>
 		public virtual bool IsModified
 		{
-			get { return false; }
+			get { return modifiedFlag; }
+			set { modifiedFlag = value; UpdateCaption(); }
 		}
 
-		public virtual string ProjectEntityName
+		public bool HandleModifiedOnClose
 		{
-			get { return TabText; }
-			set { TabText = value; }
+			get { return handleModifiedFlagOnClose; }
+			set { handleModifiedFlagOnClose = value; }
 		}
 
         public virtual void OnToolActivated(object sender, Type tool)
@@ -37,16 +53,34 @@ namespace FreeSCADA.Designer.Views
 		{
 		}
 
-		public virtual void OnSave()
+		public virtual void OnClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
 		{
+			if (handleModifiedFlagOnClose && IsModified)
+			{
+				System.Windows.MessageBoxResult res = System.Windows.MessageBox.Show(	DialogMessages.NotSavedDocument,
+																						DialogMessages.SaveDocumentCaption,
+																						System.Windows.MessageBoxButton.YesNoCancel,
+																						System.Windows.MessageBoxImage.Warning);
+				if (res == System.Windows.MessageBoxResult.Yes)
+					SaveDocument();
+				if (res == System.Windows.MessageBoxResult.Cancel)
+					e.Cancel = true;
+			}
 		}
-        
-        public virtual void OnLoad(string name)
-        {
-        }
-        public virtual void OnCreate()
-        {
 
+		public virtual bool SaveDocument()
+		{
+			return false;
+		}
+
+		public virtual bool LoadDocument(string name)
+        {
+			return false;
+        }
+
+        public virtual bool CreateNewDocument()
+        {
+			return false;
         }
 
         public void RaiseObjectSelected(object sender )
@@ -55,5 +89,11 @@ namespace FreeSCADA.Designer.Views
 				ObjectSelected(sender);
         }
 
+		private void UpdateCaption()
+		{
+			TabText = DocumentName;
+			if (IsModified)
+				TabText += " *";
+		}
 	}
 }

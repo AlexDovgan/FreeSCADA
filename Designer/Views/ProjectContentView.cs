@@ -50,41 +50,47 @@ namespace FreeSCADA.Designer.Views
 			Env.Current.Project.LoadEvent += new EventHandler(OnProjectLoad);
 		}
 
-		void OnProjectLoad(object sender, EventArgs e)
+		public void RefreshContent(Project project)
 		{
-            Project project = sender as Project;
-
 			projectTree.Nodes.Clear();
-            TreeNode root = projectTree.Nodes.Add(project.ProjectName);
-            
+			TreeNode root;
+			
+			if(project.FileName == "")
+				root = projectTree.Nodes.Add(StringResources.UnsavedProjectName);
+			else
+				root = projectTree.Nodes.Add(project.FileName);
+
 			foreach (string entity in Env.Current.Project.GetEntities())
 			{
-                //filtering schema names
-                TreeNode node = null;
-                string [] splited= entity.Split('/');
-                if (splited.Length>1)
-                {
+				//filtering schema names
+				TreeNode node = null;
+				string[] splited = entity.Split('/');
+				if (splited.Length > 1)
+				{
 
-                    if (root.Nodes.Find(splited[0], false).Length == 0)
-                    {
-                        node = root.Nodes.Add(splited[0]);
-                        node.Tag = splited[0];
-                    }
-                    else node = root.Nodes.Find(splited[0], false)[0];
-                    if (node.Nodes.Find(splited[1],false).Length == 0)
-                    {
-                        node=node.Nodes.Add(splited[1]);
-                        node.Tag = splited[1];
-                    }
+					if (root.Nodes.Find(splited[0], false).Length == 0)
+					{
+						node = root.Nodes.Add(splited[0]);
+						node.Tag = splited[0];
+					}
+					else node = root.Nodes.Find(splited[0], false)[0];
+					if (node.Nodes.Find(splited[1], false).Length == 0)
+					{
+						node = node.Nodes.Add(splited[1]);
+						node.Tag = splited[1];
+					}
+				}
+				else
+				{
+					node = root.Nodes.Add(entity);
+					node.Tag = entity;
+				}
+			}
+		}
 
-                }
-                else
-                {
-                    node = root.Nodes.Add(entity);
-                    node.Tag = entity;
-                }
-                
-            }
+		void OnProjectLoad(object sender, EventArgs e)
+		{
+			 RefreshContent((Project)sender);
 		}
 
 		private void OnNodeDblClick(object sender, TreeNodeMouseClickEventArgs e)

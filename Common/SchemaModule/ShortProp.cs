@@ -25,9 +25,16 @@ namespace FreeSCADA.Schema.ShortProperties
         }
         public void RaisePropertiesChanged()
         {
-            if (PropertiesChanged!=null)
-                PropertiesChanged();
+			System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(NotifyPropertyChangedAsync), this);
         }
+
+		protected static void NotifyPropertyChangedAsync(Object info)
+		{
+			CommonShortProp obj = (CommonShortProp)info;
+			if (obj.PropertiesChanged != null)
+				obj.PropertiesChanged();
+		}
+
         object commonObject;
     }
     

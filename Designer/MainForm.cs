@@ -11,7 +11,6 @@ namespace FreeSCADA.Designer
 	public partial class MainForm : Form
 	{
 		WindowManager windowManager;
-		string projectFileName = "";
 
 		/// <summary>
 		/// Constructor
@@ -20,7 +19,8 @@ namespace FreeSCADA.Designer
 		{
 			InitializeComponent();
 			Env.Initialize(this, mainMenu);
-			windowManager = new WindowManager(dockPanel);            
+			windowManager = new WindowManager(dockPanel);
+			UpdateCaption();
 		}
 
 		private void OnMenuVariables(object sender, System.EventArgs e)
@@ -31,8 +31,7 @@ namespace FreeSCADA.Designer
 
 		private void OnMenuExitClick(object sender, System.EventArgs e)
 		{
-			if (windowManager.Close())
-				this.Close();
+			Close();
 		}
 
 		private void OnSchemaItemClick(object sender, System.EventArgs e)
@@ -47,42 +46,44 @@ namespace FreeSCADA.Designer
 
 		private void OnSaveProjectClick(object sender, System.EventArgs e)
 		{
-			if (projectFileName == "")
-			{
-				SaveFileDialog fd = new SaveFileDialog();
-
-				fd.Filter = "FreeSCADA2 files (*.fs2)|*.fs2|All files (*.*)|*.*";
-				fd.FilterIndex = 0;
-				fd.RestoreDirectory = true;
-
-				if (fd.ShowDialog() == DialogResult.OK)
-					projectFileName = fd.FileName;
-				else
-					return;
-			}
-			windowManager.SaveAll();
-			Env.Current.Project.Save(projectFileName);
+			windowManager.SaveProject();
+			UpdateCaption();
 		}
 
 		private void OnLoadProjectClick(object sender, System.EventArgs e)
 		{
-			OpenFileDialog fd = new OpenFileDialog();
-
-			fd.Filter = "FreeSCADA2 files (*.fs2)|*.fs2|All files (*.*)|*.*";
-			fd.FilterIndex = 0;
-			fd.RestoreDirectory = true;
-
-			if (fd.ShowDialog() == DialogResult.OK)
-			{
-				Env.Current.Project.Load(fd.FileName);
-				projectFileName = fd.FileName;
-			}
+			windowManager.LoadProject();
+			UpdateCaption();
 		}
 
 		private void OnSaveFileClick(object sender, System.EventArgs e)
 		{
-			windowManager.Save();
+			windowManager.SaveDocument();
 		}
-        
+
+		private void OnFormClosing(object sender, FormClosingEventArgs e)
+		{
+			e.Cancel = !windowManager.Close();
+		}
+
+		void UpdateCaption()
+		{
+			if (Env.Current.Project.FileName == "")
+				Text = StringResources.MainWindowName;
+			else
+				Text = string.Format(StringResources.MainWindowNameEx, Env.Current.Project.FileName);
+		}
+
+		private void OnNewProjectClick(object sender, System.EventArgs e)
+		{
+			if (windowManager.Close())
+			{
+				windowManager.ForceWindowsClose();
+				Env.Current.CreateNewProject();
+				windowManager = new WindowManager(dockPanel);
+				UpdateCaption();
+				System.GC.Collect();
+			}
+		}
 	}
 }

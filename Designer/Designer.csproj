@@ -48,12 +48,6 @@
       <HintPath>..\3rdParty\SourceGrid4_11\SourceGrid.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -73,6 +67,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DialogMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DialogMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="StringResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StringResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\DocumentView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +94,15 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Dialogs\SaveDocumentsDialog.resx">
+      <DependentUpon>SaveDocumentsDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DialogMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DialogMessages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -97,6 +110,11 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StringResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StringResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ProjectContentView.resx">
@@ -132,7 +150,7 @@
     <Compile Include="Views\ToolBoxView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ToolWindow.cs">
+    <Compile Include="Views\ToolWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Dialogs\VariablesDialog.cs">

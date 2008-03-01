@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ICSharpCode.SharpZipLib.Zip;
 using ICSharpCode.SharpZipLib.Checksums;
+using System.Text.RegularExpressions;
 
 namespace FreeSCADA.Common
 {
@@ -11,13 +12,7 @@ namespace FreeSCADA.Common
 		bool modifiedFlag = false;
 
 		public event System.EventHandler LoadEvent;
-        protected string projectName;
-        public string ProjectName
-        {
-            get{return projectName;}
-            set{projectName=value;}
-        }
-
+        string fileName = "";
 
 		~Project()
 		{
@@ -27,6 +22,11 @@ namespace FreeSCADA.Common
 		public bool IsModified
 		{
 			get { return modifiedFlag; }
+		}
+
+		public string FileName
+		{
+			get { return fileName; }
 		}
 
 		public void Load(string fileName)
@@ -48,7 +48,7 @@ namespace FreeSCADA.Common
 					}
 				}
 			}
-            projectName = fileName;
+            this.fileName = fileName;
 			if (LoadEvent != null)
 				LoadEvent(this, new System.EventArgs());
 		}
@@ -58,6 +58,7 @@ namespace FreeSCADA.Common
 			data.Clear();
 			System.GC.Collect();
 			modifiedFlag = false;
+			fileName = "";
 		}
 
 		public void Save(string fileName)
@@ -88,10 +89,7 @@ namespace FreeSCADA.Common
 				zipOutput.Close();
 			}
 			modifiedFlag = false;
-            projectName = fileName;
-            //I think this is temporary 
-            if (LoadEvent != null)
-                LoadEvent(this, new System.EventArgs());
+            this.fileName = fileName;
 		}
 
 		/// <summary>
@@ -101,7 +99,6 @@ namespace FreeSCADA.Common
 		/// <returns>Return Stream instance or null if there is no entity</returns>
 		public Stream GetData(string name)
 		{
-			name = name.ToLower();
 			if (!data.ContainsKey(name))
 				return null;
 
@@ -120,15 +117,49 @@ namespace FreeSCADA.Common
 			byte[] bytes = new byte[data_block.Length];
 			data_block.Read(bytes, 0, (int)data_block.Length);
 
-			data[name.ToLower()] = bytes;
+			data[name] = bytes;
 			modifiedFlag = true;
 		}
 
+		/// <summary>
+		/// Return all available entities
+		/// </summary>
+		/// <returns>return array of entities</returns>
 		public string[] GetEntities()
 		{
 			string[] entities = new string[data.Keys.Count];
 			data.Keys.CopyTo(entities, 0);
 			return entities;
+		}
+
+		/// <summary>
+		/// Return all available entities
+		/// </summary>
+		/// <returns>return array of entities</returns>
+		public string[] GetSchemas()
+		{
+			List<string> schemas = new List<string>();
+			foreach (string entity in data.Keys)
+			{
+				Regex rx = new Regex(@"^schemas[\/]+(?<name>.*)[\/]+.*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+				Match match = rx.Match(entity);
+				if (match != null)
+				{
+					if (schemas.IndexOf(match.Groups["name"].Value) < 0)
+						schemas.Add(match.Groups["name"].Value);
+				}
+			}
+			return schemas.ToArray();
+		}
+
+		/// <summary>
+		/// Test if provide name is unique schema name
+		/// </summary>
+		/// <param name="name">Schema name for testing</param>
+		/// <returns>Return true if the name is unique</returns>
+		public bool IsSchemaNameUnique(string name)
+		{
+			return System.Array.IndexOf(GetSchemas(), name) < 0;
 		}
 
 		public Stream this[string name]
