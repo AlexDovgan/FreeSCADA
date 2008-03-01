@@ -9,7 +9,7 @@ namespace FreeSCADA.Designer.Dialogs
 		{
 			InitializeComponent();
 			foreach (string doc in documents)
-				documentsListBox.Items.Add(documents);
+				documentsListBox.Items.Add(doc);
 		}
 	}
 }

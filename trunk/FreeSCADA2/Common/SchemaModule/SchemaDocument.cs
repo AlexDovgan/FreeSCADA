@@ -11,18 +11,17 @@ namespace FreeSCADA.Schema
 {
     public class SchemaDocument
     {
-        public delegate void SchemaModifiedDelgate(SchemaDocument doc, bool state);
-        public event SchemaModifiedDelgate SchemaModifiedStateEvent;
+        public event EventHandler IsModifiedChanged;
 
-        protected bool isModified=false;
+        bool isModified=false;
         public bool IsModified
         {
             get { return isModified; }
             set 
             {
-                if (SchemaModifiedStateEvent != null)
-                    SchemaModifiedStateEvent(this,isModified = value);
-                 
+				isModified = value;
+				if (IsModifiedChanged != null)
+					IsModifiedChanged(this, new EventArgs());
             }
         }
 
@@ -56,26 +55,18 @@ namespace FreeSCADA.Schema
             }
 
         }
-        public static SchemaDocument CreateNewSchema()
-        {
+		public static SchemaDocument CreateNewSchema()
+		{
+			SchemaDocument schema = null;
 
-            SchemaDocument schema = null;
-            Window w = new NewSchemaDialog();
-            NewSchemaDialog.SchemaParams schemaParams = new NewSchemaDialog.SchemaParams();
-            w.DataContext = schemaParams;
-            
-            if (w.ShowDialog() == true)
-            {
-                schema = new SchemaDocument();
-                schema.MainCanvas.ClipToBounds = true;
-                schema.MainCanvas.Background = System.Windows.Media.Brushes.White;
-                schema.MainCanvas.Width = schemaParams.Width;
-                schema.MainCanvas.Height =schemaParams.Height ;
-                schema.Name = schemaParams.Name;
-                schema.SaveSchema();
-            }
-            return schema;
-        }
+			schema = new SchemaDocument();
+			schema.MainCanvas.ClipToBounds = true;
+			schema.MainCanvas.Background = System.Windows.Media.Brushes.White;
+			schema.MainCanvas.Width = 800;	//TODO: Get default values from application settings
+			schema.MainCanvas.Height = 600;	//TODO: Get default values from application settings
+			schema.isModified = true;
+			return schema;
+		}
 
         public void SaveSchema()
         {

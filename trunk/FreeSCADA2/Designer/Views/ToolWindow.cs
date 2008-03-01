@@ -1,6 +1,6 @@
 ﻿using WeifenLuo.WinFormsUI.Docking;
 
-namespace FreeSCADA.Designer
+namespace FreeSCADA.Designer.Views
 {
 	class ToolWindow : DockContent
     {

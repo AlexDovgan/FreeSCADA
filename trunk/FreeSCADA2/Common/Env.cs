@@ -10,7 +10,7 @@ namespace FreeSCADA.Common
 		Commands commands;
 		Control mainWindow;
 		CommunationPlugs communicationPlugins;
-		FreeSCADA.Common.Project project = new FreeSCADA.Common.Project();
+		FreeSCADA.Common.Project project;
 
 		#region Initialization and singleton implementation
 
@@ -20,6 +20,7 @@ namespace FreeSCADA.Common
 			{
 				environmentInstance = new Env();
 
+				environmentInstance.CreateNewProject();
 				environmentInstance.commands = new Commands(mainMenu);
 				environmentInstance.mainWindow = mainWindow;
 				environmentInstance.communicationPlugins = new CommunationPlugs();
@@ -70,6 +71,11 @@ namespace FreeSCADA.Common
 		public CommunationPlugs CommunicationPlugins
 		{
 			get { return communicationPlugins; }
+		}
+
+		public void CreateNewProject()
+		{
+			project = new FreeSCADA.Common.Project();
 		}
 	}
 }

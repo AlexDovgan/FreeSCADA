@@ -16,7 +16,6 @@ namespace FreeSCADA.Designer.Views
         public SchemaView()
         {
 			InitializeComponent();
-
         }
 
         private void InitializeComponent()
@@ -43,7 +42,12 @@ namespace FreeSCADA.Designer.Views
             this.ResumeLayout(false);
 
         }
-       
+
+		void OnSchemaIsModifiedChanged(object sender, EventArgs e)
+		{
+			IsModified = ((SchemaDocument)sender).IsModified;
+		}
+
 		public override void  OnActivated()
 		{
 			base.OnActivated();
@@ -60,44 +64,43 @@ namespace FreeSCADA.Designer.Views
         
         public void objectSelected(object element)
         {
-            
             RaiseObjectSelected(element);
         }
-        public override  void OnSave()
+
+        public override bool SaveDocument()
         {
+			schemaEditor.Schema.Name = DocumentName;
             schemaEditor.Schema.SaveSchema();
+			return true;
         }
         
-        public override void OnLoad(string name)
+        public override bool LoadDocument(string name)
         {
             SchemaDocument schema;
-            if ((schema = SchemaDocument.LoadSchema(name)) != null)
-            {
-                schemaEditor = new SchemaEditor(schema);
-                TabText = schema.Name;
-            }
+			if ((schema = SchemaDocument.LoadSchema(name)) == null)
+				return false;
+
+			schemaEditor = new SchemaEditor(schema);
+			DocumentName = schema.Name;
             schemaEditor.ObjectSelected += new SchemaEditor.ObjectSelectedDelegate(objectSelected);
+			schemaEditor.Schema.IsModifiedChanged += new EventHandler(OnSchemaIsModifiedChanged);
             wpfContainerHost.Child = schemaEditor;
-       
+			return true;
         }
-        public override void OnCreate()
+        public override bool CreateNewDocument()
         {
             SchemaDocument schema;
 
-            if ((schema = SchemaDocument.CreateNewSchema()) != null)
-            {
-                schemaEditor = new SchemaEditor(schema);
-                TabText = schema.Name;
-            }
-            else throw new Exception("Canceled");
+            if ((schema = SchemaDocument.CreateNewSchema()) == null)
+				return false;
+
+			schemaEditor = new SchemaEditor(schema);
+			DocumentName = schema.Name;
             schemaEditor.ObjectSelected += new SchemaEditor.ObjectSelectedDelegate(objectSelected);
+			schemaEditor.Schema.IsModifiedChanged += new EventHandler(OnSchemaIsModifiedChanged);
             wpfContainerHost.Child = schemaEditor;
+			IsModified = true;
+			return true;
         }
-        public override bool IsModified
-        {
-            get { return schemaEditor.Schema.IsModified; }
-        }
-
-
     }
 }
