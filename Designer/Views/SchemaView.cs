@@ -1,76 +1,152 @@
 ﻿using System;
+using System.IO;
+using System.Windows.Forms;
 using System.Collections.Generic;
-using FreeSCADA.Schema;
 using FreeSCADA.ShellInterfaces;
-
+using FreeSCADA.Designer.SchemaEditor;
+using FreeSCADA.Common.Schema;
+using FreeSCADA.Designer.SchemaEditor.Tools;
+using FreeSCADA.Designer.SchemaEditor.UndoRedo;
+using FreeSCADA.Designer.SchemaEditor.ShortProperties;
 namespace FreeSCADA.Designer.Views
 {
     class SchemaView : DocumentView
     {
-        private System.Windows.Forms.Integration.ElementHost wpfContainerHost;
-        public SchemaEditor schemaEditor;
+        private WPFShemaContainer wpfSchemaContainer;
+        private BasicUndoBuffer undoBuff;
+        private BaseTool activeTool;
+        
+        public SchemaDocument Schema
+        {
+            get { return wpfSchemaContainer.Document; }
+            set
+            {
+                DocumentName = value.Name;
+                wpfSchemaContainer.Document = value;
+                undoBuff = UndoRedoManager.GetUndoBuffer(Schema);
+            }
+
+        }
 
 		public delegate void ToolsCollectionChangedHandler(List<ITool> tools, Type defaultTool);
 		public event ToolsCollectionChangedHandler ToolsCollectionChanged;
 
+        public List<ITool> toolsList
+        {
+            get
+            {
+                List<ITool> tl = new List<ITool>();
+                tl.Add(new SelectionTool(Schema));
+                tl.Add(new RectangleTool(Schema));
+                tl.Add(new EllipseTool(Schema));
+                return tl;
+
+            }
+
+        }
+        public Type CurrentTool
+        {
+            get
+            {
+                if (activeTool == null)
+                {
+                    activeTool = new SelectionTool(Schema);
+                    activeTool.Activate();
+                    activeTool.ObjectSelected += activeTool_ObjectSelected;
+                }
+                return activeTool.GetType();
+            }
+            set
+            {
+                activeTool.Deactivate();
+                activeTool.ObjectSelected -= activeTool_ObjectSelected;
+                object[] a = new object[1];
+                a[0] = Schema;
+                activeTool = (BaseTool)System.Activator.CreateInstance(value, a);
+                activeTool.ObjectSelected += activeTool_ObjectSelected;
+                activeTool.Activate();
+            }
+        }
+
+           
         public SchemaView()
         {
 			InitializeComponent();
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(SchemaView_KeyDown);
         }
 
+        
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            this.wpfContainerHost = new System.Windows.Forms.Integration.ElementHost();
+            this.wpfSchemaContainer = new WPFShemaContainer();
             // 
             // wpfContainerHost
             // 
-            this.wpfContainerHost.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wpfContainerHost.Location = new System.Drawing.Point(0, 0);
-            this.wpfContainerHost.Name = "wpfContainerHost";
-            this.wpfContainerHost.Size = new System.Drawing.Size(292, 273);
-            this.wpfContainerHost.TabIndex = 0;
-            this.wpfContainerHost.Text = "elementHost1";
-            this.wpfContainerHost.Child = null;
+            this.wpfSchemaContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wpfSchemaContainer.Location = new System.Drawing.Point(0, 0);
+            this.wpfSchemaContainer.Name = "WPFSchemaContainer";
+            this.wpfSchemaContainer.Size = new System.Drawing.Size(292, 273);
+            this.wpfSchemaContainer.TabIndex = 0;
+            this.wpfSchemaContainer.Text = "WPFSchemaContainer";
             // 
             // SchemaView
             // 
             this.ClientSize = new System.Drawing.Size(292, 273);
-            this.Controls.Add(this.wpfContainerHost);
+            this.Controls.Add(this.wpfSchemaContainer);
             this.Name = "SchemaView";
-
+            
             this.ResumeLayout(false);
 
         }
 
+        void SchemaView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Z && e.Control)
+            {
+                undoBuff.UndoCommand();
+            }
+            else if (e.KeyCode == Keys.Y && e.Control)
+            {
+                undoBuff.RedoCommand();
+            }
+
+        }
+        void activeTool_ObjectSelected(System.Windows.UIElement obj)
+        {
+            RaiseObjectSelected(ShortPropFactory.CreateShortPropFrom(obj));
+        }
+
+    
+        public override void OnActivated()
+        {
+            base.OnActivated();
+
+            //Notify connected windows about new tools collection
+            if (ToolsCollectionChanged != null)
+                ToolsCollectionChanged(toolsList, CurrentTool);
+        
+        }
+
+        public override void OnToolActivated(object sender, Type tool)
+        {
+            CurrentTool = tool;
+            Focus();
+        }
+        
+        
 		void OnSchemaIsModifiedChanged(object sender, EventArgs e)
 		{
 			IsModified = ((SchemaDocument)sender).IsModified;
 		}
 
-		public override void  OnActivated()
-		{
-			base.OnActivated();
-
-			//Notify connected windows about new tools collection
-			if(ToolsCollectionChanged != null)
-				ToolsCollectionChanged(schemaEditor.toolsList, schemaEditor.CurrentTool);
-		}
-
-		public override void OnToolActivated(object sender, Type tool)
-        {
-            schemaEditor.CurrentTool = tool;
-        }
-        
-        public void objectSelected(object element)
-        {
-            RaiseObjectSelected(element);
-        }
+		
+		
 
         public override bool SaveDocument()
         {
-			schemaEditor.Schema.Name = DocumentName;
-            schemaEditor.Schema.SaveSchema();
+			Schema.Name = DocumentName;
+            Schema.SaveSchema();
 			return true;
         }
         
@@ -80,13 +156,11 @@ namespace FreeSCADA.Designer.Views
 			if ((schema = SchemaDocument.LoadSchema(name)) == null)
 				return false;
 
-			schemaEditor = new SchemaEditor(schema);
-			DocumentName = schema.Name;
-            schemaEditor.ObjectSelected += new SchemaEditor.ObjectSelectedDelegate(objectSelected);
-			schemaEditor.Schema.IsModifiedChanged += new EventHandler(OnSchemaIsModifiedChanged);
-            wpfContainerHost.Child = schemaEditor;
-			return true;
+            Schema = schema;
+            Schema.IsModifiedChanged += new EventHandler(OnSchemaIsModifiedChanged);
+    		return true;
         }
+        
         public override bool CreateNewDocument()
         {
             SchemaDocument schema;
@@ -94,13 +168,20 @@ namespace FreeSCADA.Designer.Views
             if ((schema = SchemaDocument.CreateNewSchema()) == null)
 				return false;
 
-			schemaEditor = new SchemaEditor(schema);
-			DocumentName = schema.Name;
-            schemaEditor.ObjectSelected += new SchemaEditor.ObjectSelectedDelegate(objectSelected);
-			schemaEditor.Schema.IsModifiedChanged += new EventHandler(OnSchemaIsModifiedChanged);
-            wpfContainerHost.Child = schemaEditor;
-			IsModified = true;
-			return true;
+            Schema = schema;
+            Schema.IsModifiedChanged += new EventHandler(OnSchemaIsModifiedChanged);
+            IsModified = true;
+  		    return true;
         }
+
+        public void ImportFile(Stream xamlStream)
+        {
+            /*XmlReader xmlReader = XmlReader.Create(xamlStream);
+            Object obj = XamlReader.Load(xmlReader);
+            Schema.MainCanvas.Children.Add(obj as UIElement);
+             */
+        }
+
+        
     }
 }

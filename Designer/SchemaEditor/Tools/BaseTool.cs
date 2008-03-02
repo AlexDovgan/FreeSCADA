@@ -9,22 +9,28 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using FreeSCADA.Schema.Context_Menu;
-using FreeSCADA.Schema.Manipulators;
-using FreeSCADA.Schema.UndoRedo;
+using FreeSCADA.Common.Schema;
+using FreeSCADA.Designer.SchemaEditor.Context_Menu;
+using FreeSCADA.Designer.SchemaEditor.Manipulators;
+using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using FreeSCADA.ShellInterfaces;
 
-namespace FreeSCADA.Schema.Tools
+namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
-    
-    public abstract class BaseTool : Adorner
+    /// <summary>
+    /// Base class for tools implementation
+    /// Tool is sutable for objects selection and creation
+    /// when object is selected tool must create manipulator for this object
+    /// each tool have DefaultManipulator for example for Selection tool  default manipulator is DragResizeRotateManipulator
+    /// each tool can work with many types of manipulators but only ONE manipulator can be active
+    /// Base class implement objects single selection by default manipulator of tool instance
+    /// </summary>
+    abstract class BaseTool : Adorner
     {
         protected VisualCollection visualChildren;
         private  BaseManipulator activeManipulator;
-        
         protected SchemaDocument workedSchema;
         protected ToolContextMenu menu;
- 
         public delegate void ToolEvent(BaseTool tool, EventArgs e);
         public event ToolEvent ToolFinished;
         public event ToolEvent ToolStarted;
@@ -32,8 +38,8 @@ namespace FreeSCADA.Schema.Tools
         public delegate void ObjectSeletedDelegate(UIElement obj);
         public event ObjectSeletedDelegate ObjectSelected;
         /// <summary>
-        /// active manipulator upon  selected object created by tool 
-        /// may be as default manipulator as an another manipulator that can be created by tool instance
+        /// active manipulator upon  selected object created by tool
+        /// may be as default manipulator so as an another manipulator that can be created by tool instance
         /// </summary>
         public BaseManipulator ActiveManipulator
         {
@@ -80,18 +86,14 @@ namespace FreeSCADA.Schema.Tools
                 else
                     ActiveManipulator = null;
             }
-             
+
         }
-
-        
-
-
         public BaseTool(SchemaDocument schema)
             : base(schema.MainCanvas)
         {
             workedSchema = schema;
             visualChildren = new VisualCollection(this);
-           
+
             DrawingVisual drawingVisual = new DrawingVisual();
             DrawingContext drawingContext = drawingVisual.RenderOpen();
             Rect rect = new Rect(new Point(0,0), AdornedElement.DesiredSize);
@@ -102,20 +104,14 @@ namespace FreeSCADA.Schema.Tools
             drawingVisual.Opacity = 0;
 
             visualChildren.Add(drawingVisual);
-
-            
-            
-
         }
-
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
-
         protected override void OnPreviewMouseLeftButtonDown( MouseButtonEventArgs e)
         {
             if(ToolStarted!=null)
                 ToolStarted(this,e);
- 
+
             Point pt = e.GetPosition(this);
 
             bool isManipulatorHited;
@@ -132,16 +128,16 @@ namespace FreeSCADA.Schema.Tools
             }
 
             HitTestResult result;
-            if (VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt).VisualHit == workedSchema.MainCanvas)            
+            if (VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt).VisualHit == workedSchema.MainCanvas)
                 ActiveManipulator = null;
-         
+
             else
                 if ((result = VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt)).VisualHit != workedSchema.MainCanvas)
                 {
                     FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedSchema.MainCanvas, (FrameworkElement)result.VisualHit);
                     SelectedObject = el;
                     //e.Handled = true;
-                  
+
                 }
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
         }
@@ -151,49 +147,58 @@ namespace FreeSCADA.Schema.Tools
                 ToolFinished(this,e);
         }
         protected override void OnPreviewMouseMove(MouseEventArgs e)
-        {            
+        {
             if(ToolWorked!=null)
                 ToolWorked(this,e);
         }
-
         protected override Size ArrangeOverride(Size finalSize)
         {
             if (ActiveManipulator != null)
                 ActiveManipulator.Arrange(new Rect(ActiveManipulator.AdornedElement.TranslatePoint(new Point(0, 0), AdornedElement), ActiveManipulator.AdornedElement.RenderSize));
             return finalSize;
         }
-
+        /// <summary>
+        /// tool activating on working  Canvas
+        /// </summary>
         public virtual void Activate()
         {
            AdornerLayer.GetAdornerLayer(AdornedElement).Add(this);
-            AdornedElement.Focus();
-           
+
         }
+        /// <summary>
+        /// tool deactiavaion on working Canvas
+        ///
+        /// </summary>
         public virtual void Deactivate()
         {
             AdornerLayer.GetAdornerLayer(AdornedElement).Remove(this);
-            
+
         }
-        public void RaiseToolFinished(BaseTool tool, EventArgs e)
+        protected  void RaiseToolFinished(BaseTool tool, EventArgs e)
         {
             ToolFinished(tool, e);
         }
-        public void RaiseToolStarted(BaseTool tool, EventArgs e)
+        protected void RaiseToolStarted(BaseTool tool, EventArgs e)
         {
             ToolStarted(tool, e);
         }
-        public void RaiseToolWorked(BaseTool tool, EventArgs e)
+        protected void RaiseToolWorked(BaseTool tool, EventArgs e)
         {
             ToolWorked(tool, e);
         }
+        /// <summary>
+        /// Each tool must implement this method for defaul manipulator creation
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         protected abstract BaseManipulator CrateDefaultManipulator(UIElement element);
         protected virtual void ObjectChanged(UIElement obj)
         {
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
         }
-        
+
 
     }
 
-  
+
 }

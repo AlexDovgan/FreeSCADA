@@ -9,14 +9,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using FreeSCADA.Schema.Context_Menu;
-using FreeSCADA.Schema.Manipulators;
-using FreeSCADA.Schema.UndoRedo;
+using FreeSCADA.Common.Schema;
+using FreeSCADA.Designer.SchemaEditor.Context_Menu;
+using FreeSCADA.Designer.SchemaEditor.Manipulators;
+using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using FreeSCADA.ShellInterfaces;
 
-namespace FreeSCADA.Schema.Tools
+namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
-    public class EllipseTool : BaseTool, ITool
+    /// <summary>
+    /// Ellipse object creation tool
+    /// </summary>
+    /// 
+    class EllipseTool : BaseTool, ITool
     {
 
         Point startPos;
@@ -28,7 +33,7 @@ namespace FreeSCADA.Schema.Tools
             objectPrview.Opacity = 0.5;
             visualChildren.Add(objectPrview);
         }
-
+        #region ITool Implementation
         public String ToolName
         {
             get { return "Ellipse Tool"; }
@@ -46,6 +51,7 @@ namespace FreeSCADA.Schema.Tools
                 return new System.Drawing.Bitmap(10, 10);
             }
         }
+        #endregion
 
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {

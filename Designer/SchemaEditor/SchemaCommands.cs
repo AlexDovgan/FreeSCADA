@@ -8,14 +8,14 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Shapes;
-using FreeSCADA.Schema.Manipulators;
-using FreeSCADA.Schema.Tools;
+using FreeSCADA.Designer.SchemaEditor.Manipulators;
+using FreeSCADA.Designer.SchemaEditor.Tools;
 using System.Windows.Input;
 
-namespace FreeSCADA.Schema.Context_Menu
+namespace FreeSCADA.Designer.SchemaEditor.Context_Menu
 {
   
-    public class ToolContextMenu: ContextMenu
+    class ToolContextMenu: ContextMenu
     {
         public MenuItem unGroupMenuItem = new MenuItem();
         public MenuItem groupMenuItem = new MenuItem();
@@ -34,7 +34,7 @@ namespace FreeSCADA.Schema.Context_Menu
     }
             
     
-    public class UngroupCommand:ICommand
+    class UngroupCommand:ICommand
     {
         SelectionTool tool;
         public UngroupCommand()
@@ -63,7 +63,7 @@ namespace FreeSCADA.Schema.Context_Menu
 
     }
 
-    public class GroupCommand : ICommand
+    class GroupCommand : ICommand
     {
         SelectionTool tool;
         public GroupCommand()

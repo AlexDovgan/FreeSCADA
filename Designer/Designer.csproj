@@ -72,6 +72,21 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DialogMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="SchemaEditor\EditorHelpers.cs" />
+    <Compile Include="SchemaEditor\Manipulators\BaseManipulator.cs" />
+    <Compile Include="SchemaEditor\Manipulators\DragResizeRotateManipulator.cs" />
+    <Compile Include="SchemaEditor\Manipulators\DragThumb.cs" />
+    <Compile Include="SchemaEditor\Manipulators\GeometryHilightManipulator.cs" />
+    <Compile Include="SchemaEditor\Manipulators\ResizeThumb.cs" />
+    <Compile Include="SchemaEditor\Manipulators\RotateThumb.cs" />
+    <Compile Include="SchemaEditor\SchemaCommands.cs" />
+    <Compile Include="SchemaEditor\ShortProp.cs" />
+    <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
+    <Compile Include="SchemaEditor\Tools\EllipseTool.cs" />
+    <Compile Include="SchemaEditor\Tools\RectangleTool.cs" />
+    <Compile Include="SchemaEditor\Tools\SelectionTool.cs" />
+    <Compile Include="SchemaEditor\UndoRedo.cs" />
+    <Compile Include="SchemaEditor\WPFShemaContainer.cs" />
     <Compile Include="StringResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -173,6 +188,12 @@
     <Content Include="Resources\open_file.png" />
     <Content Include="Resources\open_schema.png" />
     <Content Include="Resources\save_file.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="SchemaEditor\Manipulators\styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
