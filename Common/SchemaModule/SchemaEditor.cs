@@ -22,7 +22,7 @@ namespace FreeSCADA.Schema
     {
 
         BasicUndoBuffer undoBuff;
-        BasicTool activeTool;
+        BaseTool activeTool;
 
         public delegate void ObjectSelectedDelegate(object element);
         public event ObjectSelectedDelegate ObjectSelected;
@@ -48,7 +48,7 @@ namespace FreeSCADA.Schema
                 {
                     activeTool = new SelectionTool(Schema);
                     activeTool.Activate();
-                    activeTool.ToolFinished += new BasicTool.ToolEvent(Tool_Finished);
+                    activeTool.ToolFinished += new BaseTool.ToolEvent(Tool_Finished);
             
                 }
                 return activeTool.GetType(); 
@@ -60,9 +60,9 @@ namespace FreeSCADA.Schema
                 activeTool.ToolFinished -= Tool_Finished;
                 object[] a = new object[1];
                 a[0] = Schema;
-                activeTool = (BasicTool)System.Activator.CreateInstance(value, a);
+                activeTool = (BaseTool)System.Activator.CreateInstance(value, a);
                 activeTool.Activate();
-                activeTool.ToolFinished += new BasicTool.ToolEvent(Tool_Finished);
+                activeTool.ToolFinished += new BaseTool.ToolEvent(Tool_Finished);
             }
         }
         #endregion
@@ -101,14 +101,14 @@ namespace FreeSCADA.Schema
 
 
 
-        void Tool_Started(BasicTool tool, EventArgs e)
+        void Tool_Started(BaseTool tool, EventArgs e)
         {
         }
 
-        void Tool_Finished(BasicTool tool, EventArgs e)
+        void Tool_Finished(BaseTool tool, EventArgs e)
         {
-            if (ObjectSelected != null && tool.manipulator!=null)
-                ObjectSelected(ShortPropFactory.CreateShortPropFrom(tool.manipulator.AdornedElement));
+            if (ObjectSelected != null && tool.ActiveManipulator!=null)
+                ObjectSelected(ShortPropFactory.CreateShortPropFrom(tool.ActiveManipulator.AdornedElement));
 
         }
         public void ImportFile(Stream xamlStream)

@@ -16,7 +16,7 @@ using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Schema.Tools
 {
-    public class RectangleTool : BasicTool, ITool
+    public class RectangleTool : BaseTool, ITool
     {
 
         Point startPos;
@@ -81,8 +81,7 @@ namespace FreeSCADA.Schema.Tools
                     r.Stroke = Brushes.Black;
                     r.Fill = Brushes.Red;
                     UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(r));
-                    manipulator = new DragResizeRotate(r, workedSchema);
-                    AdornerLayer.GetAdornerLayer(workedSchema.MainCanvas).Add(manipulator);
+                    SelectedObject = r;
 
                 }
                 isDragged = false;
@@ -95,12 +94,21 @@ namespace FreeSCADA.Schema.Tools
 
         protected override void OnPreviewMouseLeftButtonDown( MouseButtonEventArgs e)
         {
-            
-            CaptureMouse();
-            startPos = e.GetPosition(this);
-            isDragged = true;
-            base.OnPreviewMouseLeftButtonDown(e);
 
+            base.OnPreviewMouseLeftButtonDown(e);
+            if (!e.Handled)
+            {
+                CaptureMouse();
+                startPos = e.GetPosition(this);
+                isDragged = true;
+            }
+
+            e.Handled = false;
+        }
+        protected override BaseManipulator CrateDefaultManipulator(UIElement element)
+        {
+            return new DragResizeRotateManipulator(element as FrameworkElement, workedSchema);
+            //return new GeometryHilightManipulator(element as FrameworkElement, workedSchema);
         }
         
     }

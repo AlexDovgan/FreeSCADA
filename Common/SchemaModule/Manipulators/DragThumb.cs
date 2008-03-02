@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
-using System.Windows.Documents;
+using System.Windows.Input;
 
 namespace FreeSCADA.Schema.Manipulators
 {
@@ -14,6 +14,7 @@ namespace FreeSCADA.Schema.Manipulators
             base.DragDelta += new DragDeltaEventHandler(DragThumb_DragDelta);
             
         }
+     
 
         void DragThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
@@ -33,7 +34,9 @@ namespace FreeSCADA.Schema.Manipulators
 
                 Canvas.SetLeft(item, left + dragDelta.X);
                 Canvas.SetTop(item, top + dragDelta.Y);
+                
             }
+            
         }
     }
 }

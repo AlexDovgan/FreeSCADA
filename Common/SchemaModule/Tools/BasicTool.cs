@@ -17,15 +17,79 @@ using FreeSCADA.ShellInterfaces;
 namespace FreeSCADA.Schema.Tools
 {
     
-    public abstract class BasicTool : Adorner
+    public abstract class BaseTool : Adorner
     {
-        public BaseManipulator manipulator;
-        public VisualCollection visualChildren;
-        public  SchemaDocument workedSchema;
+        protected VisualCollection visualChildren;
+        private  BaseManipulator activeManipulator;
         
-        public BasicTool(SchemaDocument schema)
+        protected SchemaDocument workedSchema;
+        protected ToolContextMenu menu;
+ 
+        public delegate void ToolEvent(BaseTool tool, EventArgs e);
+        public event ToolEvent ToolFinished;
+        public event ToolEvent ToolStarted;
+        public event ToolEvent ToolWorked;
+        public delegate void ObjectSeletedDelegate(UIElement obj);
+        public event ObjectSeletedDelegate ObjectSelected;
+        /// <summary>
+        /// active manipulator upon  selected object created by tool 
+        /// may be as default manipulator as an another manipulator that can be created by tool instance
+        /// </summary>
+        public BaseManipulator ActiveManipulator
+        {
+            get
+            {
+                return activeManipulator;
+            }
+            set
+            {
+                if (activeManipulator != value)
+                {
+                    visualChildren.Remove(activeManipulator);
+                    if ((activeManipulator = value) != null)
+                    {
+                        visualChildren.Add(activeManipulator);
+                        activeManipulator.ObjectChanged += ObjectChanged;
+                        if (ObjectSelected != null)
+                            ObjectSelected(activeManipulator.AdornedElement);
+                    }
+                    AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+                }
+            }
+
+        }
+        /// <summary>
+        /// selected object by active manipulator
+        /// if object selected throw this proprty will be create default manipulator for tool instance
+        /// </summary>
+        public UIElement SelectedObject
+        {
+            get
+            {
+                if (ActiveManipulator != null)
+                    return ActiveManipulator.AdornedElement;
+                else return null;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    if (ActiveManipulator == null || ActiveManipulator.AdornedElement != value)
+                        ActiveManipulator = CrateDefaultManipulator(value);
+                }
+                else
+                    ActiveManipulator = null;
+            }
+             
+        }
+
+        
+
+
+        public BaseTool(SchemaDocument schema)
             : base(schema.MainCanvas)
         {
+            workedSchema = schema;
             visualChildren = new VisualCollection(this);
            
             DrawingVisual drawingVisual = new DrawingVisual();
@@ -34,12 +98,14 @@ namespace FreeSCADA.Schema.Tools
 
             drawingContext.DrawRectangle(Brushes.White, new Pen(Brushes.Black, 0.2), rect);
 
-            // Persist the drawing content.
             drawingContext.Close();
             drawingVisual.Opacity = 0;
 
             visualChildren.Add(drawingVisual);
-            workedSchema = schema;
+
+            
+            
+
         }
 
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
@@ -49,11 +115,35 @@ namespace FreeSCADA.Schema.Tools
         {
             if(ToolStarted!=null)
                 ToolStarted(this,e);
-            if (manipulator != null )
+ 
+            Point pt = e.GetPosition(this);
+
+            bool isManipulatorHited;
+            IInputElement manipulatorHit = null;
+            if (ActiveManipulator != null)
+                manipulatorHit = ActiveManipulator.InputHitTest(e.GetPosition(ActiveManipulator));
+            if (manipulatorHit != null)
+                isManipulatorHited = true;
+            else isManipulatorHited = false;
+            if (isManipulatorHited)
             {
-                AdornerLayer.GetAdornerLayer(AdornedElement).Remove(manipulator);
-                manipulator = null;
+                e.Handled = true;
+                return;
             }
+
+            HitTestResult result;
+            if (VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt).VisualHit == workedSchema.MainCanvas)            
+                ActiveManipulator = null;
+         
+            else
+                if ((result = VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt)).VisualHit != workedSchema.MainCanvas)
+                {
+                    FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedSchema.MainCanvas, (FrameworkElement)result.VisualHit);
+                    SelectedObject = el;
+                    //e.Handled = true;
+                  
+                }
+            AdornerLayer.GetAdornerLayer(AdornedElement).Update();
         }
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
@@ -65,36 +155,45 @@ namespace FreeSCADA.Schema.Tools
             if(ToolWorked!=null)
                 ToolWorked(this,e);
         }
-        public void Activate()
+
+        protected override Size ArrangeOverride(Size finalSize)
         {
-            AdornerLayer.GetAdornerLayer(AdornedElement).Add(this);
+            if (ActiveManipulator != null)
+                ActiveManipulator.Arrange(new Rect(ActiveManipulator.AdornedElement.TranslatePoint(new Point(0, 0), AdornedElement), ActiveManipulator.AdornedElement.RenderSize));
+            return finalSize;
+        }
+
+        public virtual void Activate()
+        {
+           AdornerLayer.GetAdornerLayer(AdornedElement).Add(this);
             AdornedElement.Focus();
            
         }
-        public void Deactivate()
+        public virtual void Deactivate()
         {
             AdornerLayer.GetAdornerLayer(AdornedElement).Remove(this);
-            if (manipulator != null)
-                AdornerLayer.GetAdornerLayer(AdornedElement).Remove(manipulator);
             
         }
-        public delegate void ToolEvent(BasicTool tool,EventArgs e);
-        public event ToolEvent ToolFinished;
-        public event ToolEvent ToolStarted;
-        public event ToolEvent ToolWorked;
-        public void RaiseToolFinished(BasicTool tool, EventArgs e)
+        public void RaiseToolFinished(BaseTool tool, EventArgs e)
         {
             ToolFinished(tool, e);
         }
-        public void RaiseToolStarted(BasicTool tool, EventArgs e)
+        public void RaiseToolStarted(BaseTool tool, EventArgs e)
         {
             ToolStarted(tool, e);
         }
-        public void RaiseToolWorked(BasicTool tool, EventArgs e)
+        public void RaiseToolWorked(BaseTool tool, EventArgs e)
         {
             ToolWorked(tool, e);
         }
+        protected abstract BaseManipulator CrateDefaultManipulator(UIElement element);
+        protected virtual void ObjectChanged(UIElement obj)
+        {
+            AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+        }
         
+
     }
+
   
 }
