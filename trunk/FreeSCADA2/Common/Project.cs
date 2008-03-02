@@ -143,7 +143,7 @@ namespace FreeSCADA.Common
 			{
 				Regex rx = new Regex(@"^schemas[\/]+(?<name>.*)[\/]+.*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 				Match match = rx.Match(entity);
-				if (match != null)
+				if (match.Success)
 				{
 					if (schemas.IndexOf(match.Groups["name"].Value) < 0)
 						schemas.Add(match.Groups["name"].Value);

@@ -64,11 +64,18 @@ namespace FreeSCADA.Common.Tests
 			Assert.IsTrue(p.IsModified);
 			Assert.IsFalse(System.IO.File.Exists(projectFile));
 			p.Save(projectFile);
+			Assert.AreEqual(projectFile, p.FileName);
 			Assert.IsTrue(System.IO.File.Exists(projectFile));
 			Assert.IsFalse(p.IsModified);
 
 			p = new Project();
+
+			bool loadEventCalled = false;
+			p.LoadEvent += new System.EventHandler(new System.EventHandler( delegate(object obj, System.EventArgs args)
+																					{ loadEventCalled = true; Assert.AreSame(p, obj); }));
 			p.Load(projectFile);
+			Assert.IsTrue(loadEventCalled);
+			Assert.AreEqual(projectFile, p.FileName);
 			using (Stream stream = p.GetData("test1"))
 			using (StreamReader reader = new StreamReader(stream))
 			{
@@ -118,6 +125,41 @@ namespace FreeSCADA.Common.Tests
 						Assert.AreEqual(reader.ReadLine(), string.Format("Line {0}", j));
 				}
 			}
+		}
+
+		[Test]
+		public void Entries()
+		{
+			Project p = new Project();
+			string[] test_entries = {	"file 1",
+										"file 2",
+										"dir 1/file 3",
+										"dir 2\\file 4",
+										"Schemas/Schema 1/xaml",
+										"Schemas/Schema 1/actions",
+										"Schemas/Schema 1/triggers",
+										"Schemas/Schema 2/xaml",
+										"Schemas/Schema 2/actions",
+										"Schemas/Schema 2/triggers"
+									};
+			for (int i = 0; i < test_entries.Length; i++)
+			{
+				using (MemoryStream stream = new MemoryStream())
+				using (StreamWriter writer = new StreamWriter(stream))
+				{
+					p[test_entries[i]] = stream;
+				}
+			}
+
+			for (int i = 0; i < test_entries.Length; i++)
+				Assert.Contains(test_entries[i], p.GetEntities());
+
+			Assert.AreEqual(2, p.GetSchemas().Length);
+			Assert.Contains("Schema 1", p.GetSchemas());
+			Assert.Contains("Schema 2", p.GetSchemas());
+
+			Assert.IsFalse(p.IsSchemaNameUnique("Schema 2"));
+			Assert.IsTrue(p.IsSchemaNameUnique("Schema 3"));
 		}
 	}
 }
