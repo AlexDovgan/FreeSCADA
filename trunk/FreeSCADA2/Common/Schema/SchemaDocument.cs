@@ -5,9 +5,8 @@ using System.Xml;
 using System.Windows.Markup;
 using System.Windows.Controls;
 using System.Windows.Media;
-using FreeSCADA.Common;
 
-namespace FreeSCADA.Schema
+namespace FreeSCADA.Common.Schema
 {
     public class SchemaDocument
     {

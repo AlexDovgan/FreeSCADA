@@ -4,13 +4,14 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows;
 
-namespace FreeSCADA.Schema.Manipulators
+namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
-    public class ResizeThumb : Thumb
+    /// <summary>
+    /// resize controll dor DragResizeRotateManipulator
+    /// </summary>
+    class ResizeThumb : Thumb
     {
-        private Point transformOrigin;
-        private double angle;
-
+        
         private FrameworkElement parentItem;
         private FrameworkElement ParentItem
         {

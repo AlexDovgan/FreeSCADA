@@ -8,9 +8,9 @@ using System.Windows.Shapes;
 using System.Windows.Data;
 using System.ComponentModel;
 
-namespace FreeSCADA.Schema.ShortProperties
+namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
 {
-    public class CommonShortProp 
+    class CommonShortProp 
     {
         public delegate void PropertiesChangedDelegate();
         public event PropertiesChangedDelegate PropertiesChanged;
@@ -41,7 +41,7 @@ namespace FreeSCADA.Schema.ShortProperties
     
     
 
-    public class FrameworkElementShortProp : CommonShortProp,IDisposable
+    class FrameworkElementShortProp : CommonShortProp,IDisposable
     {
         
         DependencyPropertyDescriptor dpdW;
@@ -138,7 +138,7 @@ namespace FreeSCADA.Schema.ShortProperties
         }
         FrameworkElement frameworkElement;
     }
-    public class ShapeShortProp : FrameworkElementShortProp
+    class ShapeShortProp : FrameworkElementShortProp
     {
 
         public ShapeShortProp(Shape shp):base(shp)

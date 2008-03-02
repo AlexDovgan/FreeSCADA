@@ -6,9 +6,12 @@ using System.Windows.Media;
 using System;
 
 
-namespace FreeSCADA.Schema.Manipulators
+namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
-    public class RotateThumb : Thumb
+    /// <summary>
+    /// Rotating controll for DragResizeRotateManipulator
+    /// </summary>
+    class RotateThumb : Thumb
     {
         double initialAngle;
         private Vector startVector;
@@ -45,7 +48,6 @@ namespace FreeSCADA.Schema.Manipulators
 
             }
         }
-
 
         public RotateThumb()
         {

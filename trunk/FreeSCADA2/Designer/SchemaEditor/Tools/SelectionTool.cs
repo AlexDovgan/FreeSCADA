@@ -9,14 +9,20 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using FreeSCADA.Schema.Context_Menu;
-using FreeSCADA.Schema.Manipulators;
-using FreeSCADA.Schema.UndoRedo;
+using FreeSCADA.Common.Schema;
+using FreeSCADA.Designer.SchemaEditor.Context_Menu;
+using FreeSCADA.Designer.SchemaEditor.Manipulators;
+using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using FreeSCADA.ShellInterfaces;
 
-namespace FreeSCADA.Schema.Tools
+namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
-    public class SelectionTool : BaseTool, ITool
+    /// <summary>
+    /// Singale and multi selection tool
+    /// multiselection implemented throw left button down and drag
+    /// and throw clicks with shift down
+    /// </summary>
+    class SelectionTool : BaseTool, ITool
     {
         Point startPos;
         bool isDragged = false;

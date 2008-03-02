@@ -6,11 +6,12 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Input;
-using FreeSCADA.Schema.Context_Menu;
-using FreeSCADA.Schema.UndoRedo;
+using FreeSCADA.Common.Schema;
+using FreeSCADA.Designer.SchemaEditor.Context_Menu;
+using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using System.Windows.Documents;
 
-namespace FreeSCADA.Schema.Manipulators
+namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
     class DragResizeRotateManipulator : BaseManipulator
     {

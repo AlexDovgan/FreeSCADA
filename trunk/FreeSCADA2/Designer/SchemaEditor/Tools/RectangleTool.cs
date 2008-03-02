@@ -9,27 +9,36 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using FreeSCADA.Schema.Context_Menu;
-using FreeSCADA.Schema.Manipulators;
-using FreeSCADA.Schema.UndoRedo;
+using FreeSCADA.Common.Schema;
+using FreeSCADA.Designer.SchemaEditor.Context_Menu;
+using FreeSCADA.Designer.SchemaEditor.Manipulators;
+using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using FreeSCADA.ShellInterfaces;
 
-namespace FreeSCADA.Schema.Tools
+namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
-    public class RectangleTool : BaseTool, ITool
+    /// <summary>
+    /// tool for rectangle creation
+    /// </summary>
+    class RectangleTool : BaseTool, ITool
     {
 
         Point startPos;
         bool isDragged;
         DrawingVisual objectPrview = new DrawingVisual();
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="schema"></param>
         public RectangleTool(SchemaDocument schema)
             : base(schema)
         {
             
             objectPrview.Opacity = 0.5;
-            visualChildren.Add(objectPrview);    
+            visualChildren.Add(objectPrview);
 
         }
+        #region ITool implementation
         public String ToolName
         {
             get { return "Rectangle Tool"; }
@@ -47,7 +56,8 @@ namespace FreeSCADA.Schema.Tools
                 return new System.Drawing.Bitmap(10, 10);
             }
         }
-        
+        #endregion
+
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
 

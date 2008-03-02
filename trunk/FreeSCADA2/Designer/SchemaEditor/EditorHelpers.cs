@@ -10,10 +10,12 @@ using System.Windows;
 using System.Windows.Shapes;
 using System.Windows.Documents;
 using System.Windows.Input;
-using FreeSCADA.Schema.Manipulators;
-using FreeSCADA.Schema.Tools;
+using FreeSCADA.Common.Schema;
+using FreeSCADA.Designer.SchemaEditor.Manipulators;
+using FreeSCADA.Designer.SchemaEditor.Tools;
 using System.ComponentModel;
-namespace FreeSCADA.Schema
+
+namespace FreeSCADA.Designer.SchemaEditor
 {
     static class EditorHelper
     {
@@ -176,7 +178,14 @@ namespace FreeSCADA.Schema
 
 
         }
-
+        public static BaseTool GetActiveTool(SchemaDocument doc)
+        {
+            AdornerLayer al = AdornerLayer.GetAdornerLayer(doc.MainCanvas);
+            Adorner[] adorners= al.GetAdorners(doc.MainCanvas);
+            if (adorners.Length> 0 && adorners[0] is BaseTool)
+                return adorners[0] as BaseTool;
+            else return null;
+        }
     }
 
 }

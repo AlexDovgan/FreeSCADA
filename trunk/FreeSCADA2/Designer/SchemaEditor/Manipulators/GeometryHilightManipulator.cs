@@ -5,8 +5,9 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows;
 using System.Windows.Input;
+using FreeSCADA.Common.Schema;
 
-namespace FreeSCADA.Schema.Manipulators
+namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
     class GeometryHilightManipulator:BaseManipulator
     {
