@@ -8,13 +8,14 @@ using System.Windows;
 using System.Windows.Input;
 using FreeSCADA.Schema.Context_Menu;
 using FreeSCADA.Schema.UndoRedo;
+using System.Windows.Documents;
 
 namespace FreeSCADA.Schema.Manipulators
 {
-    class DragResizeRotate : BaseManipulator
+    class DragResizeRotateManipulator : BaseManipulator
     {
-        VisualCollection visualChildren;
-        DragThumb dragControl = new DragThumb();
+        
+        public DragThumb dragControl = new DragThumb();
         RotateThumb rotateTopLeft = new RotateThumb();
         RotateThumb rotateBottomLeft = new RotateThumb();
         RotateThumb rotateTopRight = new RotateThumb();
@@ -28,17 +29,15 @@ namespace FreeSCADA.Schema.Manipulators
         ResizeThumb resizeTop = new ResizeThumb();
         ResizeThumb resizeBottom = new ResizeThumb();
         
-        public DragResizeRotate(FrameworkElement el, SchemaDocument sch)
+        public DragResizeRotateManipulator(FrameworkElement el, SchemaDocument sch)
             : base(el, sch)
         {
-        
-            visualChildren = new VisualCollection(this);
-            if (!(AdornedElement.RenderTransform is TransformGroup))
+            if (!((AdornedElement as FrameworkElement).RenderTransform is TransformGroup))
             {
                 TransformGroup t = new TransformGroup();
                 t.Children.Add(new MatrixTransform());
                 t.Children.Add(new RotateTransform());
-                AdornedElement.RenderTransform = t;
+                (AdornedElement as FrameworkElement).RenderTransform = t;
             }
             //el.RenderTransformOrigin = new Point(0.5, 0.5); ;
             ThumbsResources tr = new ThumbsResources();
@@ -128,30 +127,41 @@ namespace FreeSCADA.Schema.Manipulators
             foreach (Thumb control in visualChildren)
             {
                 control.DragStarted += new DragStartedEventHandler(control_DragStarted);
+                control.DragCompleted += new DragCompletedEventHandler(control_DragCompleted);
+                control.DragDelta += new DragDeltaEventHandler(control_DragDelta);
             }
 
         }
 
+        void control_DragDelta(object sender, DragDeltaEventArgs e)
+        {
+            RaiseObjectChamnedEvent();
+        }
+
+        void control_DragCompleted(object sender, DragCompletedEventArgs e)
+        {
+            RaiseObjectChamnedEvent();
+        }
         
 
         void control_DragStarted(object sender, DragStartedEventArgs e)
         {
-            UndoRedoManager.GetUndoBuffer(workSchema).AddCommand(new ModifyGraphicsObject(AdornedElement));
-        
+            UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new ModifyGraphicsObject(AdornedElement));
+            RaiseObjectChamnedEvent();
         }
 
         protected override Size ArrangeOverride(Size finalSize)
         {
             Rect ro = new Rect(0, 0, AdornedElement.DesiredSize.Width, AdornedElement.DesiredSize.Height);
-
+            
             foreach (Thumb control in visualChildren)
             {
                 Rect aligmentRect = new Rect();
                 aligmentRect.Width = control.Width;
                 aligmentRect.Height = control.Height;
-
+                
                 switch (control.VerticalAlignment)
-                {
+                {   
                     case VerticalAlignment.Top: aligmentRect.Y = 0;
                         break;
                     case VerticalAlignment.Bottom: aligmentRect.Y = ro.Height;
@@ -177,31 +187,19 @@ namespace FreeSCADA.Schema.Manipulators
                         break;
                 }
                 Matrix m = AdornedElement.RenderTransform.Value;
-                m.OffsetX -= control.RenderTransform.Value.OffsetX;
-                m.OffsetY -= control.RenderTransform.Value.OffsetY;
+                m.OffsetX =- control.RenderTransform.Value.OffsetX;
+                m.OffsetY= - control.RenderTransform.Value.OffsetY;
 
                 Point p = m.Transform(new Point(aligmentRect.X, aligmentRect.Y));
+               
                 aligmentRect.X = p.X - (double.IsNaN(control.Width) ? 0 : control.Width) / 2;
                 aligmentRect.Y = p.Y - (double.IsNaN(control.Height) ? 0 : control.Height) / 2;
-
+            
                 control.Arrange(aligmentRect);
             }
-
             return finalSize;
         }
 
-
-        protected override int VisualChildrenCount { get { return visualChildren.Count; } }
-        protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
-
-        public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
-        {
-            Matrix m = AdornedElement.RenderTransform.Value;
-            TranslateTransform ttr = new TranslateTransform();
-            ttr.X = ((Transform)transform).Value.OffsetX - m.OffsetX;
-            ttr.Y = ((Transform)transform).Value.OffsetY - m.OffsetY;
-            return ttr;
-        }
-
+       
     }
 }

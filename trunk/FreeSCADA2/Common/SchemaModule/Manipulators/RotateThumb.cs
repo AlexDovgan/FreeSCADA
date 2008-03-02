@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System;
-using System.Windows.Documents;
+
 
 namespace FreeSCADA.Schema.Manipulators
 {
@@ -59,11 +59,11 @@ namespace FreeSCADA.Schema.Manipulators
         
         void RotateThumb_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            Canvas.SetLeft(DesignerItem, Canvas.GetLeft(DesignerItem) + rotateTransform.Value.OffsetX);
+           Canvas.SetLeft(DesignerItem, Canvas.GetLeft(DesignerItem) + rotateTransform.Value.OffsetX);
             Canvas.SetTop(DesignerItem, Canvas.GetTop(DesignerItem) + rotateTransform.Value.OffsetY);
             rotateTransform.CenterX = 0;
             rotateTransform.CenterY = 0;
-            AdornerLayer.GetAdornerLayer(DesignerItem).Update();               
+            
         }
 
         void RotateThumb_DragStarted(object sender, DragStartedEventArgs e)
@@ -90,7 +90,7 @@ namespace FreeSCADA.Schema.Manipulators
 
                 // check if the DesignerItem already has a RotateTransform set ...
                 initialAngle = ItemRotateTransform.Angle;
-                AdornerLayer.GetAdornerLayer(DesignerItem).Update();
+              
             }
         }
 
@@ -109,9 +109,7 @@ namespace FreeSCADA.Schema.Manipulators
 
                 // and update the transformation
                 rotateTransform.Angle = initialAngle + Math.Round(angle, 0);
-          
-                AdornerLayer.GetAdornerLayer(DesignerItem).Update();
-            }
+           }
         }
     }
 }

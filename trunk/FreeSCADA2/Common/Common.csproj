@@ -70,7 +70,7 @@
     <Compile Include="SchemaModule\Manipulators\BaseManipulator.cs" />
     <Compile Include="SchemaModule\Manipulators\DragResizeRotate.cs" />
     <Compile Include="SchemaModule\Manipulators\DragThumb.cs" />
-    <Compile Include="SchemaModule\Manipulators\GroupEditManipulator.cs" />
+    <Compile Include="SchemaModule\Manipulators\GeometryHilightManipulator.cs" />
     <Compile Include="SchemaModule\Manipulators\ResizeThumb.cs" />
     <Compile Include="SchemaModule\Manipulators\RotateThumb.cs" />
     <Compile Include="SchemaModule\SchemaCommands.cs" />

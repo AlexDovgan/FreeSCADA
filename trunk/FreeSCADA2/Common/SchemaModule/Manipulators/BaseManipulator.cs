@@ -1,22 +1,35 @@
 using System.Windows;
-using System.Windows.Documents;
+using System.Windows.Media;
+
 
 namespace FreeSCADA.Schema.Manipulators
 {
-    public class BaseManipulator : Adorner
+              
+            
+    public class BaseManipulator :FrameworkElement//Adorner
     {
-        public SchemaDocument workSchema;
+        public SchemaDocument workedSchema;
+        public UIElement AdornedElement;
+        protected VisualCollection visualChildren;
         public BaseManipulator(UIElement adornedElement,SchemaDocument schema)
-            : base(adornedElement)
+            //: base(adornedElement)
         {
-            workSchema = schema;
+            workedSchema = schema;
+            AdornedElement = adornedElement;
+            visualChildren = new VisualCollection(this);
         }
-        /*
-        public delegate void ObjectSelectedDelegate(FrameworkElement sender);
-        public delegate void ObjectChangedDelegate(FrameworkElement sender);
-        public event ObjectChangedDelegate Changed;
-        public event ObjectSelectedDelegate Changed;
-        */
+        public delegate void ObjectChangedDelegate(UIElement sender);
+         
+        public event ObjectChangedDelegate ObjectChanged;
+        protected void RaiseObjectChamnedEvent()
+        {
+            if (ObjectChanged != null)
+                ObjectChanged(AdornedElement);
+
+        }
+
+        protected override int VisualChildrenCount { get { return visualChildren.Count; } }
+        protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
     }
 
  }

@@ -16,7 +16,7 @@ using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Schema.Tools
 {
-    public class EllipseTool : BasicTool, ITool
+    public class EllipseTool : BaseTool, ITool
     {
 
         Point startPos;
@@ -76,8 +76,9 @@ namespace FreeSCADA.Schema.Tools
                     el.Fill = Brushes.Red;
 
                     UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(el));
-                     manipulator = new DragResizeRotate(el, workedSchema);
-                    AdornerLayer.GetAdornerLayer(workedSchema.MainCanvas).Add(manipulator);
+                    SelectedObject = el;
+                     //ActiveManipulator = new DragResizeRotateManipulator(el, workedSchema);
+                    //AdornerLayer.GetAdornerLayer(workedSchema.MainCanvas).Add(manipulator);
                 }
                 isDragged = false;
                 objectPrview.RenderOpen().Close();
@@ -88,12 +89,22 @@ namespace FreeSCADA.Schema.Tools
 
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-         
-            CaptureMouse();
-            startPos = e.GetPosition(this);
-            isDragged = true;
-            base.OnPreviewMouseLeftButtonDown(e);
 
+            base.OnPreviewMouseLeftButtonDown(e);
+            if (!e.Handled)
+            {
+                CaptureMouse();
+                startPos = e.GetPosition(this);
+                isDragged = true;
+            }
+
+            e.Handled = false; 
+
+        }
+        protected override BaseManipulator CrateDefaultManipulator(UIElement element)
+        {
+            return new DragResizeRotateManipulator(element as FrameworkElement,workedSchema);
+            //return new GeometryHilightManipulator(element as FrameworkElement, workedSchema);
         }
         
     }

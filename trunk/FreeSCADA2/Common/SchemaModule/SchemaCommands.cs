@@ -9,16 +9,17 @@ using System.Windows.Media;
 using System.Windows;
 using System.Windows.Shapes;
 using FreeSCADA.Schema.Manipulators;
+using FreeSCADA.Schema.Tools;
 using System.Windows.Input;
 
 namespace FreeSCADA.Schema.Context_Menu
 {
   
-    class SelectToolContextMenu: ContextMenu
+    public class ToolContextMenu: ContextMenu
     {
         public MenuItem unGroupMenuItem = new MenuItem();
         public MenuItem groupMenuItem = new MenuItem();
-        public SelectToolContextMenu()
+        public ToolContextMenu()
         {
 
             unGroupMenuItem.Header = "Ungroup";
@@ -35,41 +36,59 @@ namespace FreeSCADA.Schema.Context_Menu
     
     public class UngroupCommand:ICommand
     {
+        SelectionTool tool;
         public UngroupCommand()
         {
         }
         public bool CanExecute(object o)
         {
-            if ((o is Viewbox )&& ((o as Viewbox).Child is Panel)&&((o as Viewbox).Parent is Canvas)) 
+            
+            if (o is SelectionTool)
+                tool = o as SelectionTool;
+            else return false;
+            if((tool.ActiveManipulator!=null )&& (tool.ActiveManipulator.AdornedElement is Viewbox))
                 return true;
             return false;
         }
 		public event EventHandler CanExecuteChanged;
         public void Execute(object o)
         {
-            EditorHelper.BreakGroup((Viewbox)o);
+            EditorHelper.BreakGroup(tool);
         }
-        
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged!=null)
+                CanExecuteChanged(this,new EventArgs());
+        }
 
     }
 
     public class GroupCommand : ICommand
     {
+        SelectionTool tool;
         public GroupCommand()
         {
         }
         public bool CanExecute(object o)
         {
-            if (o is GroupEditManipulator)
-                return true;
+            
+            if (o is SelectionTool)
+                tool = o as SelectionTool;
+            else return false;
+            if (tool.selectedElements.Count > 0) return true;
             return false;
         }
         public event EventHandler CanExecuteChanged;
         public void Execute(object o)
         {
 
-            EditorHelper.CreateGroup(o as GroupEditManipulator);
+            EditorHelper.CreateGroup(tool);
 
+        }
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged!=null)
+                CanExecuteChanged(this, new EventArgs());
         }
 
 

@@ -35,17 +35,7 @@ namespace FreeSCADA.Schema.Manipulators
 
         void ResizeThumb_DragStarted(object sender, DragStartedEventArgs e)
         {
-            if (ParentItem != null)
-            {
-                transformOrigin = ParentItem.RenderTransformOrigin;
-                
-                RotateTransform rotateTransform = (ParentItem.RenderTransform as TransformGroup).Children[1] as RotateTransform;
-                if (rotateTransform != null)
-                    angle = rotateTransform.Angle * Math.PI / 180.0;   //convert degrees to radians
-                else
-                    angle = 0.0d;
-                 
-            }
+            
         }
 
         void ResizeThumb_DragDelta(object sender, DragDeltaEventArgs e)
@@ -90,7 +80,7 @@ namespace FreeSCADA.Schema.Manipulators
                         break;
                 }
             }
-            e.Handled = true;
+            //e.Handled = true;
         }
     }
 }
