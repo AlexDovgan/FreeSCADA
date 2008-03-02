@@ -11,6 +11,7 @@ namespace FreeSCADA.Communication.OPCPlug
 		List<Command> commands = new List<Command>();
 		List<IChannel> channels = new List<IChannel>();
 		List<ConnectionGroup> connectionGroups = new List<ConnectionGroup>();
+		bool connectedFlag = false;
 
 		~Plugin()
 		{
@@ -62,42 +63,48 @@ namespace FreeSCADA.Communication.OPCPlug
 
 		public bool IsConnected
 		{
-			get { return connectionGroups.Count > 0; }
+			get { return connectedFlag; }
 		}
 
 		public bool Connect()
 		{
-			if (channels.Count == 0)
+			if (IsConnected)
 				return false;
+
 			connectionGroups.Clear();
 			System.GC.Collect();
 
-			List<IChannel> originalChannels = new List<IChannel>();
-			originalChannels.AddRange(channels);
-			do
+			if (channels.Count > 0)
 			{
-				List<Channel> groupChannels = new List<Channel>();
-				Channel lhc = (Channel)originalChannels[0];
-				groupChannels.Add(lhc);
-				originalChannels.RemoveAt(0);
-				for (int i = originalChannels.Count - 1; i >= 0; i--)
+				List<IChannel> originalChannels = new List<IChannel>();
+				originalChannels.AddRange(channels);
+				do
 				{
-					Channel rhc = (Channel)originalChannels[i];
-					if (lhc.OpcServer == rhc.OpcServer && lhc.OpcHost == rhc.OpcHost)
+					List<Channel> groupChannels = new List<Channel>();
+					Channel lhc = (Channel)originalChannels[0];
+					groupChannels.Add(lhc);
+					originalChannels.RemoveAt(0);
+					for (int i = originalChannels.Count - 1; i >= 0; i--)
 					{
-						groupChannels.Add(rhc);
-						originalChannels.RemoveAt(i);
+						Channel rhc = (Channel)originalChannels[i];
+						if (lhc.OpcServer == rhc.OpcServer && lhc.OpcHost == rhc.OpcHost)
+						{
+							groupChannels.Add(rhc);
+							originalChannels.RemoveAt(i);
+						}
 					}
-				}
-				connectionGroups.Add(new ConnectionGroup(lhc.OpcServer, lhc.OpcHost, groupChannels));
+					connectionGroups.Add(new ConnectionGroup(lhc.OpcServer, lhc.OpcHost, groupChannels));
 
-			} while (originalChannels.Count > 0);
+				} while (originalChannels.Count > 0);
+			}
 
+			connectedFlag = true;
 			return IsConnected;
 		}
 
 		public void Disconnect()
 		{
+			connectedFlag = false;
 			connectionGroups.Clear();
 			System.GC.Collect();
 		}
