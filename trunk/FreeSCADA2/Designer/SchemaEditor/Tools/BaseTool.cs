@@ -155,8 +155,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         }
         protected override Size ArrangeOverride(Size finalSize)
         {
-            if (ActiveManipulator != null)
-                ActiveManipulator.Arrange(new Rect(ActiveManipulator.AdornedElement.TranslatePoint(new Point(0, 0), AdornedElement), ActiveManipulator.AdornedElement.RenderSize));
+            if (activeManipulator != null)
+            {
+                activeManipulator.Arrange(new Rect(ActiveManipulator.AdornedElement.TranslatePoint(new Point(0, 0), AdornedElement), ActiveManipulator.AdornedElement.RenderSize));
+                
+            }
             return finalSize;
         }
         /// <summary>
@@ -164,6 +167,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// </summary>
         public virtual void Activate()
         {
+            
            AdornerLayer.GetAdornerLayer(AdornedElement).Add(this);
 
         }
@@ -173,6 +177,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// </summary>
         public virtual void Deactivate()
         {
+            ActiveManipulator = null;
             AdornerLayer.GetAdornerLayer(AdornedElement).Remove(this);
 
         }

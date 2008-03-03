@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using System.Windows;
 using System.Windows.Input;
 using FreeSCADA.Common.Schema;
@@ -30,6 +31,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         ResizeThumb resizeRight = new ResizeThumb();
         ResizeThumb resizeTop = new ResizeThumb();
         ResizeThumb resizeBottom = new ResizeThumb();
+        Rectangle visualCopy = new Rectangle();
         
         public DragResizeRotateManipulator(FrameworkElement el, SchemaDocument sch)
             : base(el, sch)

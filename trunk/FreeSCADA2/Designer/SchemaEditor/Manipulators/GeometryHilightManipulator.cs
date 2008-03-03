@@ -16,8 +16,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             : base(element, doc)
         {
             VisualBrush brush = new VisualBrush(AdornedElement);
-            //hilightRect.Opacity = 0.5;
-          //  hilightRect.Fill = brush;
+            hilightRect.Opacity = 0.5;
+            hilightRect.Fill = brush;
             
             visualChildren.Add(hilightRect);
         }
