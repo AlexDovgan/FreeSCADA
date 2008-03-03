@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System;
 
 
-namespace FreeSCADA.Designer.SchemaEditor.Manipulators
+namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
 {
     /// <summary>
     /// Rotating controll for DragResizeRotateManipulator

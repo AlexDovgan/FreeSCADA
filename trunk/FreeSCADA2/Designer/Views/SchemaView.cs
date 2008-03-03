@@ -39,6 +39,7 @@ namespace FreeSCADA.Designer.Views
                 tl.Add(new SelectionTool(Schema));
                 tl.Add(new RectangleTool(Schema));
                 tl.Add(new EllipseTool(Schema));
+                tl.Add(new TextBoxTool(Schema));
                 return tl;
 
             }
