@@ -129,6 +129,13 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
         {
 
             schemaDocument = doc;
+            if (!((addedObject as UIElement).RenderTransform is TransformGroup))
+            {
+                TransformGroup t = new TransformGroup();
+                t.Children.Add(new MatrixTransform());
+                t.Children.Add(new RotateTransform());
+                (addedObject as UIElement).RenderTransform = t;
+            }
             schemaDocument.MainCanvas.Children.Add(addedObject);
             documentModifiedState = schemaDocument.IsModified;
             schemaDocument.IsModified = true;

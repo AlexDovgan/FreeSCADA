@@ -177,7 +177,6 @@
       <DependentUpon>VariablesDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="WindowManager.cs" />
-    <Content Include="Designer.cd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

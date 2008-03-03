@@ -79,6 +79,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     label.BorderBrush = Brushes.Black;
                     label.BorderThickness = new Thickness(1);
                     (label.Content as TextBlock).TextWrapping = TextWrapping.Wrap;
+         
                     UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(label));
                     SelectedObject = label;
 
