@@ -121,7 +121,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             else
                 if ((result = VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt)).VisualHit != workedSchema.MainCanvas)
             {
-                FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedSchema.MainCanvas, (FrameworkElement)result.VisualHit);
+                FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedSchema.MainCanvas, result.VisualHit);
                 if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.None)
                 {
                         SelectedObject = el;    

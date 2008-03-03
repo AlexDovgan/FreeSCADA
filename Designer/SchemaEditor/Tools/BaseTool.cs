@@ -52,6 +52,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 if (activeManipulator != value)
                 {
                     visualChildren.Remove(activeManipulator);
+                    if(activeManipulator is IDisposable)
+                        (activeManipulator as IDisposable).Dispose();
                     if ((activeManipulator = value) != null)
                     {
                         visualChildren.Add(activeManipulator);
@@ -134,7 +136,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             else
                 if ((result = VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt)).VisualHit != workedSchema.MainCanvas)
                 {
-                    FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedSchema.MainCanvas, (FrameworkElement)result.VisualHit);
+                    FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedSchema.MainCanvas, (DependencyObject)result.VisualHit);
                     SelectedObject = el;
                     //e.Handled = true;
 

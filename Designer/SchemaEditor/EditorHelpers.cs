@@ -19,14 +19,14 @@ namespace FreeSCADA.Designer.SchemaEditor
 {
     static class EditorHelper
     {
-        public static UIElement FindTopParentUnder(Canvas c, FrameworkElement el)
+        public static UIElement FindTopParentUnder(Canvas c, DependencyObject el)
         {
-            FrameworkElement top = el;
-            while (top.Parent != c)
+            DependencyObject top = el;
+            while (VisualTreeHelper.GetParent(top) != c)
             {
-                top = (FrameworkElement)top.Parent;
+                top = VisualTreeHelper.GetParent(top);
             }
-            return top;
+            return top as UIElement;
         }
 
         public static void BreakGroup(SelectionTool tool)
@@ -166,8 +166,14 @@ namespace FreeSCADA.Designer.SchemaEditor
             IList<DependencyProperty> dpl = GetSetedProperties(destination);
             foreach (DependencyProperty property in dpl)
             {
-                if (property.ReadOnly != true)
-                    destination.SetValue(property, source.ReadLocalValue(property));
+                try
+                {
+                    if (property.ReadOnly != true)
+                        destination.SetValue(property, source.ReadLocalValue(property));
+                }
+                catch (Exception)
+                {
+                }
 
             }
             /*foreach (DependencyProperty property in spl)

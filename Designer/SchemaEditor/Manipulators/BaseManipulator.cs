@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 using System.Windows.Media;
 using FreeSCADA.Common.Schema;
@@ -38,6 +39,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             AdornedElement = adornedElement;
             visualChildren = new VisualCollection(this);
         }
+        
         /// <summary>
         /// delegate for ObjectChanged event
         /// </summary>

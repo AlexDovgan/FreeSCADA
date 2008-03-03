@@ -10,7 +10,8 @@ using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.SchemaEditor.Context_Menu;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using System.Windows.Documents;
-
+using FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls;
+	
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
     class DragResizeRotateManipulator : BaseManipulator

@@ -4,7 +4,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Input;
 
-namespace FreeSCADA.Designer.SchemaEditor.Manipulators
+namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
 {
     /// <summary>
     /// Drag controll for DragResizeRotateManipulator
