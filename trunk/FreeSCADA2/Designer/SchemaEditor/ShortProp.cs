@@ -23,6 +23,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         {
             get { return commonObject.GetType().ToString(); }
         }
+        
         public void RaisePropertiesChanged()
         {
 			System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(NotifyPropertyChangedAsync), this);
@@ -34,16 +35,18 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
 			if (obj.PropertiesChanged != null)
 				obj.PropertiesChanged();
 		}
-
-        object commonObject;
-    }
-    
-    
-    
-
-    class FrameworkElementShortProp : CommonShortProp,IDisposable
-    {
         
+        object commonObject;
+        
+    }
+
+
+
+
+    class FrameworkElementShortProp : CommonShortProp, IDisposable
+    {
+      
+
         DependencyPropertyDescriptor dpdW;
         DependencyPropertyDescriptor dpdH;
         DependencyPropertyDescriptor dpdX;
@@ -81,6 +84,8 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         void propertyValueChanged(object sender, EventArgs e)
         {
             //RaisePropertiesChanged();
+            
+        
         }
 
   

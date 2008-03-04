@@ -43,7 +43,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 t.Children.Add(new RotateTransform());
                 (AdornedElement as FrameworkElement).RenderTransform = t;
             }
-            //el.RenderTransformOrigin = new Point(0.5, 0.5); ;
+            //el.RenderTransformOrigin = new Point(0.5, 0.5); 
             ThumbsResources tr = new ThumbsResources();
             tr.InitializeComponent();
             Resources = tr;

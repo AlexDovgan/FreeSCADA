@@ -103,12 +103,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             IInputElement manipulatorHit = null;
             if (ActiveManipulator != null)
                 manipulatorHit = ActiveManipulator.InputHitTest(e.GetPosition(ActiveManipulator));
-            
-            
+
+            if (manipulatorHit != null && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.None)
+                return;
             HitTestResult result;
             if (VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt).VisualHit == workedSchema.MainCanvas &&
-                    manipulatorHit==null &&
-                   (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.None)
+                  (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.None)
             {
                 
                 CaptureMouse();
@@ -124,12 +124,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedSchema.MainCanvas, result.VisualHit);
                 if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.None)
                 {
-                        SelectedObject = el;    
-                        //FocusManager.SetFocusedElement(this, (manipulator as DragResizeRotateManipulator).dragControl);
+                        SelectedObject = el;
                         
-                        
-                        //RaiseToolFinished(this, e);
-                    
+                  
                 }
                 else
                 {
