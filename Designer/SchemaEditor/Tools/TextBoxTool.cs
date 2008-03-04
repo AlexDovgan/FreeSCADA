@@ -69,19 +69,19 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 Rect b = VisualTreeHelper.GetContentBounds(objectPrview);
                 if (!b.IsEmpty)
                 {
-                    Label label = new Label();
-                    label.Content = new TextBlock();
-                    Canvas.SetLeft(label, b.X);
-                    Canvas.SetTop(label, b.Y);
+                    Border border = new Border();
+                    border.Child = new TextBlock();
+                    Canvas.SetLeft(border, b.X);
+                    Canvas.SetTop(border, b.Y);
           
-                    label.Width = b.Width;
-                    label.Height = b.Height;
-                    label.BorderBrush = Brushes.Black;
-                    label.BorderThickness = new Thickness(1);
-                    (label.Content as TextBlock).TextWrapping = TextWrapping.Wrap;
+                    border.Width = b.Width;
+                    border.Height = b.Height;
+                    border.BorderBrush = Brushes.Black;
+                    border.BorderThickness = new Thickness(1);
+                    (border.Child as TextBlock).TextWrapping = TextWrapping.Wrap;
          
-                    UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(label));
-                    SelectedObject = label;
+                    UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(border));
+                    SelectedObject = border;
 
                 }
                 isDragged = false;
@@ -108,7 +108,16 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         protected override BaseManipulator CrateDefaultManipulator(UIElement element)
         {
             //return new DragResizeRotateManipulator(element as FrameworkElement, workedSchema);
-            return new TextBoxManipulator (element as FrameworkElement, workedSchema);
+            try
+            {
+                return new TextBoxManipulator(element as FrameworkElement, workedSchema);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            
+
         }
 
 

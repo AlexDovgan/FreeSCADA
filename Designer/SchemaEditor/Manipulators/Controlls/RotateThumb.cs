@@ -61,7 +61,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
         
         void RotateThumb_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-           Canvas.SetLeft(DesignerItem, Canvas.GetLeft(DesignerItem) + rotateTransform.Value.OffsetX);
+            Canvas.SetLeft(DesignerItem, Canvas.GetLeft(DesignerItem) + rotateTransform.Value.OffsetX);
             Canvas.SetTop(DesignerItem, Canvas.GetTop(DesignerItem) + rotateTransform.Value.OffsetY);
             rotateTransform.CenterX = 0;
             rotateTransform.CenterY = 0;

@@ -109,9 +109,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         }
         protected override BaseManipulator CrateDefaultManipulator(UIElement element)
         {
-            //return new DragResizeRotateManipulator(element as FrameworkElement,workedSchema);
-            //return new GeometryHilightManipulator(element as FrameworkElement, workedSchema);
-            return null;
+           //return new DragResizeRotateManipulator(element as FrameworkElement,workedSchema);
+            return new GeometryHilightManipulator(element as FrameworkElement, workedSchema);
+
         }
         
     }

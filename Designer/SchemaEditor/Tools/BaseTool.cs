@@ -57,7 +57,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     if ((activeManipulator = value) != null)
                     {
                         visualChildren.Add(activeManipulator);
-                        activeManipulator.ObjectChanged += ObjectChanged;
+                        activeManipulator.ObjectChanged += ManipulatorChanged;
                         if (ObjectSelected != null)
                             ObjectSelected(activeManipulator.AdornedElement);
                     }
@@ -104,11 +104,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             drawingContext.Close();
             drawingVisual.Opacity = 0;
-
+            AdornedElement.Focus();
             visualChildren.Add(drawingVisual);
         }
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
+        
         protected override void OnPreviewMouseLeftButtonDown( MouseButtonEventArgs e)
         {
             if(ToolStarted!=null)
@@ -138,6 +139,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 {
                     FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedSchema.MainCanvas, (DependencyObject)result.VisualHit);
                     SelectedObject = el;
+                    
                     //e.Handled = true;
 
                 }
@@ -199,7 +201,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// <param name="element"></param>
         /// <returns></returns>
         protected abstract BaseManipulator CrateDefaultManipulator(UIElement element);
-        protected virtual void ObjectChanged(UIElement obj)
+        protected virtual void ManipulatorChanged(UIElement obj)
         {
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
         }

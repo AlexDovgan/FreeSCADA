@@ -1,5 +1,5 @@
 ﻿using System;
-//using FreeSCADA.Schema.ShortProperties;
+using FreeSCADA.Designer.SchemaEditor.ShortProperties;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -41,8 +41,8 @@ namespace FreeSCADA.Designer.Views
                 (propertyGrid.SelectedObject as IDisposable).Dispose();
 
             propertyGrid.SelectedObject = obj;
-          //  if(obj is CommonShortProp)
-           //     (obj as CommonShortProp).PropertiesChanged += new CommonShortProp.PropertiesChangedDelegate(PropertyBrowserView_PropertiesChanged);
+            if(obj is CommonShortProp)
+                (obj as CommonShortProp).PropertiesChanged += new CommonShortProp.PropertiesChangedDelegate(PropertyBrowserView_PropertiesChanged);
         }
         
 		delegate void InvokeDelegate();
