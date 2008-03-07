@@ -85,6 +85,7 @@
     <Compile Include="SchemaEditor\ShortProp.cs" />
     <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
     <Compile Include="SchemaEditor\Tools\EllipseTool.cs" />
+    <Compile Include="SchemaEditor\Tools\PolylineTool.cs" />
     <Compile Include="SchemaEditor\Tools\RectangleTool.cs" />
     <Compile Include="SchemaEditor\Tools\SelectionTool.cs" />
     <Compile Include="SchemaEditor\Tools\TextBoxTool.cs" />

@@ -60,7 +60,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 Vector v = e.GetPosition(this) - startPos;
                 DrawingContext drawingContext = objectPrview.RenderOpen();
                 Rect rect = new Rect(startPos, v);
-                drawingContext.DrawEllipse(Brushes.Gray, new Pen(Brushes.Black, 0.2), startPos, v.X, v.Y);
+                drawingContext.DrawEllipse(Brushes.Gray, new Pen(Brushes.Black, 1), startPos, v.X, v.Y);
                 drawingContext.Close();
            }
 
@@ -79,15 +79,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     el.Width = b.Width;
                     el.Height = b.Height;
                     el.Stroke = Brushes.Black;
-                    el.Fill = Brushes.Red;
+                    el.Fill = Brushes.Gray;
                     ObjectDescriptor desc = new ObjectDescriptor();
                     desc.DefaultManipulatorType = typeof(GeometryHilightManipulator);
                     desc.DefaultShortPropType = typeof(ShortProperties.ShapeShortProp);
                     el.Tag = desc;
                     UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(el));
                     SelectedObject = el;
-                     //ActiveManipulator = new DragResizeRotateManipulator(el, workedSchema);
-                    //AdornerLayer.GetAdornerLayer(workedSchema.MainCanvas).Add(manipulator);
+                    
                 }
                 isDragged = false;
                 objectPrview.RenderOpen().Close();

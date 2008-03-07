@@ -40,6 +40,7 @@ namespace FreeSCADA.Designer.Views
                 tl.Add(new RectangleTool(Schema));
                 tl.Add(new EllipseTool(Schema));
                 tl.Add(new TextBoxTool(Schema));
+                tl.Add(new PolylineTool(Schema));
                 return tl;
 
             }
@@ -74,6 +75,7 @@ namespace FreeSCADA.Designer.Views
         {
 			InitializeComponent();
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(SchemaView_KeyDown);
+    
         }
 
         

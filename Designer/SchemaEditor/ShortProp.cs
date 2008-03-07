@@ -185,7 +185,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             }
             set
             {
-                shape.Stroke = shape.Fill.Clone();
+                shape.Stroke = shape.Stroke.Clone();
                 (shape.Stroke as SolidColorBrush).Color = Color.FromArgb(value.A, value.R, value.G, value.B); ;
 
             }
