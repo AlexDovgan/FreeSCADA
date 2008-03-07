@@ -69,7 +69,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 Vector v = e.GetPosition(this) - startPos;
                 DrawingContext drawingContext = objectPrview.RenderOpen();
                 Rect rect = new Rect(startPos, v);
-                drawingContext.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 0.2), rect);
+                drawingContext.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 1), rect);
            
                 drawingContext.Close();
             }
@@ -89,7 +89,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     r.Width = b.Width;
                     r.Height = b.Height;
                     r.Stroke = Brushes.Black;
-                    r.Fill = Brushes.Red;
+                    r.Fill = Brushes.Gray;
                     ObjectDescriptor desc = new ObjectDescriptor();
                     desc.DefaultManipulatorType = typeof(GeometryHilightManipulator);
                     desc.DefaultShortPropType = typeof(ShortProperties.ShapeShortProp);
