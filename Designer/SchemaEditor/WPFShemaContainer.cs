@@ -4,6 +4,7 @@ using System.Text;
 using FreeSCADA.Common.Schema;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows;
 namespace FreeSCADA.Designer.SchemaEditor
 {
     
@@ -22,6 +23,7 @@ namespace FreeSCADA.Designer.SchemaEditor
                 document=value;
                 (Child as ScrollViewer).Content=document.MainCanvas;
                 document.MainCanvas.Focusable = false;
+
                 document.MainCanvas.Background = resources["GridBackgroundBrush"] as DrawingBrush;
                
             }
@@ -32,9 +34,10 @@ namespace FreeSCADA.Designer.SchemaEditor
         {
             
             Child = new ScrollViewer();
-            Child.Focusable = false;
+            //Child.Focusable = false;
             resources.InitializeComponent();
-             
+            NameScope.SetNameScope(Child, new NameScope());
+            Child.SnapsToDevicePixels = true;
         }
 
     }

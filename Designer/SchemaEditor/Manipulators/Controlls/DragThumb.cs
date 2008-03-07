@@ -39,7 +39,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
                 Canvas.SetTop(item, top + dragDelta.Y);
                 
             }
-            
+            e.Handled = false;
         }
     }
 }

@@ -141,6 +141,13 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             set { ((frameworkElement.RenderTransform as TransformGroup).Children[1] as RotateTransform).Angle = value;}
 
         }
+        [Description("Object's Opacity"), Category("Appearence")]
+        public double Opacity
+        {
+            get { return frameworkElement.Opacity ; }
+            set { frameworkElement.Opacity = value; }
+
+        }
         FrameworkElement frameworkElement;
     }
     class ShapeShortProp : FrameworkElementShortProp
@@ -202,16 +209,4 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         //System.Drawing.Brush brush;
     }
 
-    static class ShortPropFactory
-    {
-        public static CommonShortProp CreateShortPropFrom(object obj)
-        {
-            if (obj is Shape)
-                return new ShapeShortProp(obj as Shape);
-            else if (obj is FrameworkElement)
-                return new FrameworkElementShortProp(obj as FrameworkElement);
-            return new CommonShortProp(obj);
-
-        }
-   }
 }

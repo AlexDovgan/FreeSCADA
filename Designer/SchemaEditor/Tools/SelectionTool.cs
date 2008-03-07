@@ -26,10 +26,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     {
         Point startPos;
         bool isDragged = false;
-        public List<UIElement> selectedElements=new List<UIElement>();
+        public List<UIElement> selectedElements = new List<UIElement>();
         Rectangle boundceRect = new Rectangle();
         DrawingVisual selectionRectangle = new DrawingVisual();
-        
+
         public SelectionTool(SchemaDocument schema)
             : base(schema)
         {
@@ -47,7 +47,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             menu.groupMenuItem.CommandParameter = this;
             menu.unGroupMenuItem.CommandParameter = this;
             
-            
+
         }
         #region ITool implementation
         public String ToolName
@@ -80,7 +80,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
                 drawingContext.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 0.2), rect);
                 drawingContext.Close();
- 
+
 
             }
             e.Handled = false;
@@ -89,7 +89,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             selectionRectangle.RenderOpen().Close();
-            isDragged=false;
+            if (isDragged)
+                SelectedObject = null;
+            isDragged = false;
             ReleaseMouseCapture();
             e.Handled = false;
         }
@@ -99,40 +101,50 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             //base.OnPreviewMouseLeftButtonDown(e);
             Point pt = e.GetPosition(this);
             
-            
             IInputElement manipulatorHit = null;
             if (ActiveManipulator != null)
                 manipulatorHit = ActiveManipulator.InputHitTest(e.GetPosition(ActiveManipulator));
 
-            if (manipulatorHit != null && (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.None)
-                return;
-            HitTestResult result;
-            if (VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt).VisualHit == workedSchema.MainCanvas &&
-                  (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.None)
+            DependencyObject documentHit;
+            documentHit=VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt).VisualHit;
+            if (manipulatorHit != null)
             {
-                
+                if (e.ClickCount > 1)
+                {
+                    UIElement tmp = SelectedObject;
+                    SelectedObject = null;
+                    SelectedObject =tmp; 
+                }
+            }
+            else if (documentHit == workedSchema.MainCanvas)
+            {
+
                 CaptureMouse();
-                ActiveManipulator = null;
+                //ActiveManipulator = null;
                 startPos = e.GetPosition(this);
                 isDragged = true;
                 selectedElements.Clear();
-                
+
             }
-            else
-                if ((result = VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt)).VisualHit != workedSchema.MainCanvas)
+            else if (documentHit != workedSchema.MainCanvas)
             {
-                FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedSchema.MainCanvas, result.VisualHit);
+                FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedSchema.MainCanvas, documentHit);
                 if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.None)
                 {
-                        SelectedObject = el;
-                        
-                  
+
+                    ActiveManipulator = new DragResizeRotateManipulator(el);
+                    SelectedObject = el;
+
                 }
                 else
                 {
-                    SelectedObject = null;
+                    if (SelectedObject != null)
+                    {
+                        selectedElements.Add(SelectedObject);
+                        SelectedObject = null;
+                    }
                     selectedElements.Add(el);
-                
+
                 }
 
             }
@@ -141,9 +153,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
             e.Handled = false;
         }
-        
-        
-        
+
+
+
 
         protected override Size ArrangeOverride(Size finalSize)
         {
@@ -154,16 +166,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 boundceRect.Visibility = Visibility.Visible;
                 boundceRect.Arrange(r);
             }
-            else 
+            else
                 boundceRect.Visibility = Visibility.Hidden;
             return finalSize;
         }
-        protected override BaseManipulator CrateDefaultManipulator(UIElement element)
-        {
-            return new DragResizeRotateManipulator(element as FrameworkElement, workedSchema);
 
-        }
-        
+
     }
 
 }

@@ -23,15 +23,15 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
     {
         RichTextBox textEditor = new RichTextBox();
         TextBlock textBlock;
-        public TextBoxManipulator(UIElement element, SchemaDocument doc)
-            : base(element, doc)
+        public TextBoxManipulator(UIElement element)
+            : base(element)
         {
 
             if (!(element is Border) && !((element as Border).Child is TextBlock) )
                 throw new Exception("This manipulator can't aply for object of this type");
-
-            textEditor.BorderThickness = new Thickness(0) ;
-            textEditor.BorderBrush = null;//Brushes.Black;
+           
+            textEditor.BorderThickness = (element as Border).BorderThickness;
+            textEditor.BorderBrush = (element as Border).BorderBrush;
             textBlock = (element as Border).Child as TextBlock;
 
             Paragraph pargraph = new Paragraph();
@@ -56,15 +56,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 textBlock.Inlines.Add(paragraph.Inlines.FirstInline);
 
             }
-            
-            
-            
-
         }
         protected override Size ArrangeOverride(Size finalSize)
         {
 
-            textEditor.Arrange(new Rect(new Point(0, 0), AdornedElement.DesiredSize));
+            MatrixTransform m = (MatrixTransform)AdornedElement.TransformToVisual(this);
+
+            Point p= m.Transform(new Point(0, 0));
+            textEditor.Arrange(new Rect(p, AdornedElement.DesiredSize));
             return finalSize;
         }
     }

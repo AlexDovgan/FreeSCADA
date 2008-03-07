@@ -57,10 +57,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     if ((activeManipulator = value) != null)
                     {
                         visualChildren.Add(activeManipulator);
-                        activeManipulator.ObjectChanged += ManipulatorChanged;
-                        if (ObjectSelected != null)
-                            ObjectSelected(activeManipulator.AdornedElement);
+                        //activeManipulator.ObjectChanged += ManipulatorChanged;
+                        activeManipulator.ObjectChangedPreview += ManipulatorChangedPreview;
+                        
                     }
+                    
+
                     AdornerLayer.GetAdornerLayer(AdornedElement).Update();
                 }
             }
@@ -83,10 +85,16 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 if (value != null)
                 {
                     if (ActiveManipulator == null || ActiveManipulator.AdornedElement != value)
-                        ActiveManipulator = CrateDefaultManipulator(value);
-                }
+                    {
+                        ActiveManipulator = ObjectsFactory.CreateDefaultManipulator(value);
+                        ActiveManipulator.InvalidateArrange();
+                    }
+                        
+                }   
                 else
                     ActiveManipulator = null;
+                if (ObjectSelected != null)
+                    ObjectSelected(SelectedObject);
             }
 
         }
@@ -104,7 +112,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             drawingContext.Close();
             drawingVisual.Opacity = 0;
-            AdornedElement.Focus();
             visualChildren.Add(drawingVisual);
         }
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
@@ -114,7 +121,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             if(ToolStarted!=null)
                 ToolStarted(this,e);
-
             Point pt = e.GetPosition(this);
 
             bool isManipulatorHited;
@@ -132,7 +138,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             HitTestResult result;
             if (VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt).VisualHit == workedSchema.MainCanvas)
-                ActiveManipulator = null;
+                SelectedObject = null;
 
             else
                 if ((result = VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt)).VisualHit != workedSchema.MainCanvas)
@@ -145,6 +151,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 }
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
         }
+    
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             if(ToolFinished!=null)
@@ -159,8 +166,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             if (activeManipulator != null)
             {
-                activeManipulator.Arrange(new Rect(ActiveManipulator.AdornedElement.TranslatePoint(new Point(0, 0), AdornedElement), ActiveManipulator.AdornedElement.RenderSize));
-                
+                //activeManipulator.Arrange(new Rect(ActiveManipulator.AdornedElement.TranslatePoint(new Point(0, 0), AdornedElement), ActiveManipulator.AdornedElement.RenderSize));
+                activeManipulator.Arrange(new Rect(finalSize));
             }
             return finalSize;
         }
@@ -195,18 +202,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             ToolWorked(tool, e);
         }
-        /// <summary>
-        /// Each tool must implement this method for defaul manipulator creation
-        /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
-        protected abstract BaseManipulator CrateDefaultManipulator(UIElement element);
-        protected virtual void ManipulatorChanged(UIElement obj)
+        
+        protected virtual void ManipulatorChangedPreview(UIElement obj)
         {
-            AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+            
+            UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new ModifyGraphicsObject(obj));           
         }
-
-
     }
 
 
