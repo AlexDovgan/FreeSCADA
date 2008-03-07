@@ -15,6 +15,8 @@ using FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls;
 	
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
+    //TODO:reimplement this manipulator on transform whith aplying changens on DragCompleted
+
     class DragResizeRotateManipulator : BaseManipulator
     {
         
@@ -32,18 +34,18 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         ResizeThumb resizeTop = new ResizeThumb();
         ResizeThumb resizeBottom = new ResizeThumb();
         Rectangle visualCopy = new Rectangle();
+
         
-        public DragResizeRotateManipulator(FrameworkElement el, SchemaDocument sch)
-            : base(el, sch)
+        public DragResizeRotateManipulator(FrameworkElement el)
+            : base(el)
         {
             if (!((AdornedElement as FrameworkElement).RenderTransform is TransformGroup))
             {
                 TransformGroup t = new TransformGroup();
                 t.Children.Add(new MatrixTransform());
                 t.Children.Add(new RotateTransform());
-                (AdornedElement as FrameworkElement).RenderTransform = t;
+                (AdornedElement as FrameworkElement).RenderTransform= t;
             }
-            //el.RenderTransformOrigin = new Point(0.5, 0.5); 
             ThumbsResources tr = new ThumbsResources();
             tr.InitializeComponent();
             Resources = tr;
@@ -140,37 +142,42 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         void control_DragDelta(object sender, DragDeltaEventArgs e)
         {
             RaiseObjectChamnedEvent();
+            InvalidateArrange();
         }
 
         void control_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            RaiseObjectChamnedEvent();
+            
+  
+            InvalidateArrange();
         }
         
 
         void control_DragStarted(object sender, DragStartedEventArgs e)
         {
-            UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new ModifyGraphicsObject(AdornedElement));
-            RaiseObjectChamnedEvent();
+        
+            InvalidateArrange();
+            RaiseObjectChamnedPrevewEvent();
         }
 
         protected override Size ArrangeOverride(Size finalSize)
         {
             Rect ro = new Rect(0, 0, AdornedElement.DesiredSize.Width, AdornedElement.DesiredSize.Height);
-            
+            //Rect ro = LayoutInformation.GetLayoutSlot(AdornedElement as FrameworkElement);
             foreach (Thumb control in visualChildren)
             {
                 Rect aligmentRect = new Rect();
                 aligmentRect.Width = control.Width;
                 aligmentRect.Height = control.Height;
-                
+                aligmentRect.Y = ro.Y;
+                aligmentRect.X = ro.X;
                 switch (control.VerticalAlignment)
                 {   
-                    case VerticalAlignment.Top: aligmentRect.Y = 0;
+                    case VerticalAlignment.Top: aligmentRect.Y += 0;
                         break;
-                    case VerticalAlignment.Bottom: aligmentRect.Y = ro.Height;
+                    case VerticalAlignment.Bottom: aligmentRect.Y += ro.Height;
                         break;
-                    case VerticalAlignment.Center: aligmentRect.Y = ro.Height / 2;
+                    case VerticalAlignment.Center: aligmentRect.Y += ro.Height / 2;
                         break;
                     case VerticalAlignment.Stretch: aligmentRect.Height = ro.Height;
                         break;
@@ -179,26 +186,27 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 }
                 switch (control.HorizontalAlignment)
                 {
-                    case HorizontalAlignment.Left: aligmentRect.X = 0;
+                    case HorizontalAlignment.Left: aligmentRect.X += 0;
                         break;
-                    case HorizontalAlignment.Right: aligmentRect.X = ro.Width;
+                    case HorizontalAlignment.Right: aligmentRect.X += ro.Width;
                         break;
-                    case HorizontalAlignment.Center: aligmentRect.X = ro.Width / 2;
+                    case HorizontalAlignment.Center: aligmentRect.X += ro.Width / 2;
                         break;
-                    case HorizontalAlignment.Stretch: aligmentRect.Width = ro.Width;
+                    case HorizontalAlignment.Stretch: aligmentRect.Width =ro.Width;
                         break;
                     default:
                         break;
                 }
-                Matrix m = AdornedElement.RenderTransform.Value;
-                m.OffsetX =- control.RenderTransform.Value.OffsetX;
-                m.OffsetY= - control.RenderTransform.Value.OffsetY;
-
-                Point p = m.Transform(new Point(aligmentRect.X, aligmentRect.Y));
                
-                aligmentRect.X = p.X - (double.IsNaN(control.Width) ? 0 : control.Width) / 2;
-                aligmentRect.Y = p.Y - (double.IsNaN(control.Height) ? 0 : control.Height) / 2;
-            
+                Point p = AdornedElement.TransformToVisual(this).Transform(new Point(aligmentRect.X, aligmentRect.Y));
+                p.X -= control.RenderTransform.Value.OffsetX;
+                p.Y -= control.RenderTransform.Value.OffsetY;
+                
+                aligmentRect.X =p.X-  (double.IsNaN(control.Width) ? 0 : control.Width) / 2;
+                aligmentRect.Y =p.Y-  (double.IsNaN(control.Height) ? 0 : control.Height) / 2;
+                
+                //aligmentRect.X -= (double.IsNaN(control.Width) ? 0 : control.Width) / 2;
+                //aligmentRect.Y -= (double.IsNaN(control.Height) ? 0 : control.Height) / 2; 
                 control.Arrange(aligmentRect);
             }
             return finalSize;

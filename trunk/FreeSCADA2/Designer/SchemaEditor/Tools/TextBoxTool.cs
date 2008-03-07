@@ -79,7 +79,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     border.BorderBrush = Brushes.Black;
                     border.BorderThickness = new Thickness(1);
                     (border.Child as TextBlock).TextWrapping = TextWrapping.Wrap;
-         
+                    ObjectDescriptor desc = new ObjectDescriptor();
+                    desc.DefaultManipulatorType = typeof(TextBoxManipulator);
+                    desc.DefaultShortPropType = typeof(ShortProperties.FrameworkElementShortProp);
+                    border.Tag = desc;
                     UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(border));
                     SelectedObject = border;
 
@@ -105,21 +108,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             e.Handled = false;
         }
-        protected override BaseManipulator CrateDefaultManipulator(UIElement element)
-        {
-            //return new DragResizeRotateManipulator(element as FrameworkElement, workedSchema);
-            try
-            {
-                return new TextBoxManipulator(element as FrameworkElement, workedSchema);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-            
-
-        }
-
+        
 
     }
 }

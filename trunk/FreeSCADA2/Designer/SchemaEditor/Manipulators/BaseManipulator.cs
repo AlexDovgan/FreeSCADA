@@ -13,10 +13,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         
     class BaseManipulator :FrameworkElement//Adorner
     {
-        /// <summary>
-        /// Shcema document wich manipulator  belong
-        /// </summary>
-        public SchemaDocument workedSchema;
+        
         /// <summary>
         /// Element that manipulator is decorate
         /// </summary>
@@ -31,12 +28,20 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         /// </summary>
         /// <param name="adornedElement"></param>
         /// 
-        /// <param name="schema"></param>
-        public BaseManipulator(UIElement adornedElement,SchemaDocument schema)
+  
+        public BaseManipulator(UIElement adornedElement)
             //: base(adornedElement)
         {
-            workedSchema = schema;
+            
             AdornedElement = adornedElement;
+            if (!(AdornedElement .RenderTransform is TransformGroup))
+            {
+                TransformGroup t = new TransformGroup();
+                t.Children.Add(new MatrixTransform());
+                t.Children.Add(new RotateTransform());
+                AdornedElement.RenderTransform = t;
+            }
+            AdornedElement.RenderTransformOrigin = new Point(0.5, 0.5); 
             visualChildren = new VisualCollection(this);
         }
         
@@ -49,9 +54,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
          /// event thet emit when decorated element is changed
          /// </summary>
         public event ObjectChangedDelegate ObjectChanged;
-        /// <summary>
-        /// method for raising ObjectChanged event
-        /// </summary>
+        public event ObjectChangedDelegate ObjectChangedPreview;
+        
+        protected void  RaiseObjectChamnedPrevewEvent()
+        {
+            if (ObjectChangedPreview != null)
+                ObjectChangedPreview(AdornedElement);
+        }
         protected void RaiseObjectChamnedEvent()
         {
             if (ObjectChanged != null)

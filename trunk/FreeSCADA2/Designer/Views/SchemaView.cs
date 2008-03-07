@@ -115,7 +115,10 @@ namespace FreeSCADA.Designer.Views
         }
         void activeTool_ObjectSelected(System.Windows.UIElement obj)
         {
-            RaiseObjectSelected(ShortPropFactory.CreateShortPropFrom(obj));
+            
+       
+                RaiseObjectSelected(ObjectsFactory.CreateShortProp(obj));
+
         }
 
     

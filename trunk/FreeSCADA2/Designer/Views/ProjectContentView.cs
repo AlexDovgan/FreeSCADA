@@ -68,16 +68,19 @@ namespace FreeSCADA.Designer.Views
 				if (splited.Length > 1)
 				{
 
-					if (root.Nodes.Find(splited[0], false).Length == 0)
-					{
-						node = root.Nodes.Add(splited[0]);
-						node.Tag = splited[0];
-					}
-					else node = root.Nodes.Find(splited[0], false)[0];
-					if (node.Nodes.Find(splited[1], false).Length == 0)
+                    if (root.Nodes.Find(splited[0], true).Length == 0)
+                    {
+                        node = root.Nodes.Add(splited[0]);
+                        node.Name = splited[0];
+                    }
+                    else
+                        node = root.Nodes.Find(splited[0], true)[0];
+					
+                    if (node.Nodes.Find(splited[1], false).Length == 0)
 					{
 						node = node.Nodes.Add(splited[1]);
 						node.Tag = splited[1];
+                        node.Name = splited[1];
 					}
 				}
 				else
@@ -95,7 +98,7 @@ namespace FreeSCADA.Designer.Views
 
 		private void OnNodeDblClick(object sender, TreeNodeMouseClickEventArgs e)
 		{
-			if (OpenEntity != null)
+            if (OpenEntity != null && e.Node.Tag!=null)
 				OpenEntity((string)e.Node.Tag);
 		}
 	}

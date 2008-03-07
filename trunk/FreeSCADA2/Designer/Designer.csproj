@@ -80,6 +80,7 @@
     <Compile Include="SchemaEditor\Manipulators\Controlls\RotateThumb.cs" />
     <Compile Include="SchemaEditor\Manipulators\DragResizeRotateManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\GeometryHilightManipulator.cs" />
+    <Compile Include="SchemaEditor\ObjectsFactory.cs" />
     <Compile Include="SchemaEditor\SchemaCommands.cs" />
     <Compile Include="SchemaEditor\ShortProp.cs" />
     <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
@@ -188,8 +189,8 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="SchemaEditor\StylesForCanvas.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

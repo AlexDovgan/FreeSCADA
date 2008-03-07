@@ -13,8 +13,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
     {
         Rectangle hilightRect = new Rectangle();
         Path path = new Path();
-        public GeometryHilightManipulator(UIElement element, SchemaDocument doc)
-            : base(element, doc)
+        public GeometryHilightManipulator(UIElement element)
+            : base(element)
         {
             VisualBrush brush = new VisualBrush(AdornedElement);
             hilightRect.Opacity = 0.5;
@@ -31,10 +31,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         protected override Size ArrangeOverride(Size finalSize)
         {
 
-            Rect r=AdornedElement.TransformToVisual(this).TransformBounds(new Rect(new Point(0, 0), AdornedElement.DesiredSize));
-            path.Arrange(r);
-            r.X = 0;
-            r.Y = 0;
+
+            MatrixTransform m = (MatrixTransform)AdornedElement.TransformToVisual(this);
+            
+            Rect r= m.TransformBounds(new Rect(new Point(0, 0), AdornedElement.DesiredSize));
             hilightRect.Arrange(r);
             
             return finalSize;

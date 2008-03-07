@@ -61,10 +61,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
         
         void RotateThumb_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            Canvas.SetLeft(DesignerItem, Canvas.GetLeft(DesignerItem) + rotateTransform.Value.OffsetX);
-            Canvas.SetTop(DesignerItem, Canvas.GetTop(DesignerItem) + rotateTransform.Value.OffsetY);
-            rotateTransform.CenterX = 0;
-            rotateTransform.CenterY = 0;
             
         }
 
@@ -75,16 +71,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
             {
                 // the RenderTransformOrigin property of DesignerItem defines
                 // transformation center relative to its bounds
+              
                 centerPoint = DesignerItem.TranslatePoint(
-                    new Point(DesignerItem.Width /2,
-                              DesignerItem.Height/2),
+                    new Point(DesignerItem.Width * DesignerItem.RenderTransformOrigin.X,
+                              DesignerItem.Height * DesignerItem.RenderTransformOrigin.Y),
                                canvas);
-                Point p = ItemMatrixTransform.Transform(new Point(DesignerItem.Width / 2, DesignerItem.Height / 2));
-                ItemRotateTransform.CenterX = p.X;
-                ItemRotateTransform.CenterY = p.Y;
-                
-                Canvas.SetLeft(DesignerItem, Canvas.GetLeft(DesignerItem) - ItemRotateTransform.Value.OffsetX);
-                Canvas.SetTop(DesignerItem, Canvas.GetTop(DesignerItem) - ItemRotateTransform.Value.OffsetY);
+            
             
                 // calculate startVector, that is the vector from centerPoint to startPoint
                 Point startPoint = Mouse.GetPosition(canvas);
