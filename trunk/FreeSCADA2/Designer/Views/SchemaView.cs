@@ -75,9 +75,7 @@ namespace FreeSCADA.Designer.Views
         {
 			InitializeComponent();
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(SchemaView_KeyDown);
-    
         }
-
         
         private void InitializeComponent()
         {
@@ -187,12 +185,23 @@ namespace FreeSCADA.Designer.Views
             Schema.MainCanvas.Children.Add(obj as UIElement);
              */
         }
-        protected override void  OnClosed(EventArgs e)
+        protected override void OnClosed(EventArgs e)
         {
- 	            base.OnClosed(e);
-                UndoRedoManager.ReleaseUndoBuffer(Schema);
-        }
+            RaiseObjectSelected(null);
+            if (wpfSchemaContainer != null && wpfSchemaContainer.Document != null)
+            {
+                wpfSchemaContainer.Document.IsModifiedChanged -= new EventHandler(OnSchemaIsModifiedChanged);
+                UndoRedoManager.ReleaseUndoBuffer(wpfSchemaContainer.Document);
+            }
+            if (activeTool != null)
+            {
+                activeTool.Deactivate();
+                activeTool.ObjectSelected -= activeTool_ObjectSelected;
+            }
+            wpfSchemaContainer.Dispose();
+            wpfSchemaContainer = null;
 
-        
+            base.OnClosed(e);
+        }
     }
 }

@@ -42,6 +42,8 @@ namespace FreeSCADA.Designer
 		{
 			foreach (DocumentView doc in documentViews)
 				doc.Close();
+			documentViews.Clear();
+
 			projectContentView.Close();
 			toolBoxView.Close();
 			propertyBrowserView.Close();
@@ -80,8 +82,30 @@ namespace FreeSCADA.Designer
 			}
 
 			view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
+			view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
 			documentViews.Add(view);
 			view.Show(dockPanel, DockState.Document);
+		}
+
+		void OnDocumentWindowClosing(object sender, FormClosingEventArgs e)
+		{
+			DocumentView doc = (DocumentView)sender;
+			if (doc.HandleModifiedOnClose && doc.IsModified)
+			{
+				System.Windows.MessageBoxResult res = System.Windows.MessageBox.Show(	DialogMessages.NotSavedDocument,
+																						DialogMessages.SaveDocumentCaption,
+																						System.Windows.MessageBoxButton.YesNoCancel,
+																						System.Windows.MessageBoxImage.Warning);
+				if (res == System.Windows.MessageBoxResult.Yes)
+					doc.SaveDocument();
+				if (res == System.Windows.MessageBoxResult.Cancel)
+				{
+					e.Cancel = true;
+					return;
+				}
+			}
+            doc.FormClosing -= new FormClosingEventHandler(OnDocumentWindowClosing);
+			documentViews.Remove(doc);
 		}
 
 		public void OnOpenProjectEntity(string name)
@@ -215,12 +239,12 @@ namespace FreeSCADA.Designer
 				System.Windows.Forms.DialogResult res = dlg.ShowDialog(Env.Current.MainWindow);
 				if (res == System.Windows.Forms.DialogResult.No)
 				{
-					foreach (DocumentView doc in documentViews)
+					while (documentViews.Count > 0)
 					{
+						DocumentView doc = documentViews[0];
 						doc.HandleModifiedOnClose = false;
-						doc.Close();
+						doc.Close(); //this window should be removed from documentViews on closing
 					}
-					documentViews.Clear();
 					return true;
 				}
 				if (res == System.Windows.Forms.DialogResult.Cancel)
