@@ -33,7 +33,7 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			System.Windows.Forms.ToolStripButton toolStripButton2;
 			System.Windows.Forms.ToolStripButton toolStripButton3;
-			System.Windows.Forms.ToolStripButton toolStripButton4;
+			System.Windows.Forms.ToolStripButton toolStripButtonNewSchema;
 			System.Windows.Forms.ToolStripButton toolStripButton5;
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -53,7 +53,7 @@
 			toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			toolStripButton2 = new System.Windows.Forms.ToolStripButton();
 			toolStripButton3 = new System.Windows.Forms.ToolStripButton();
-			toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+			toolStripButtonNewSchema = new System.Windows.Forms.ToolStripButton();
 			toolStripButton5 = new System.Windows.Forms.ToolStripButton();
 			toolStrip1.SuspendLayout();
 			this.mainMenu.SuspendLayout();
@@ -67,7 +67,7 @@
             toolStripButton2,
             this.toolStripSeparator1,
             toolStripButton3,
-            toolStripButton4,
+            toolStripButtonNewSchema,
             toolStripButton5});
 			toolStrip1.Location = new System.Drawing.Point(0, 24);
 			toolStrip1.Name = "toolStrip1";
@@ -95,6 +95,11 @@
 			toolStripButton2.Text = "toolStripButton2";
 			toolStripButton2.Click += new System.EventHandler(this.OnLoadProjectClick);
 			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+			// 
 			// toolStripButton3
 			// 
 			toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -105,20 +110,15 @@
 			toolStripButton3.Text = "toolStripButton3";
 			toolStripButton3.Click += new System.EventHandler(this.OnSaveFileClick);
 			// 
-			// toolStripSeparator1
+			// toolStripButtonNewSchema
 			// 
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-			// 
-			// toolStripButton4
-			// 
-			toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			toolStripButton4.Image = global::FreeSCADA.Designer.Properties.Resources.open_schema;
-			toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
-			toolStripButton4.Name = "toolStripButton4";
-			toolStripButton4.Size = new System.Drawing.Size(23, 22);
-			toolStripButton4.Text = "toolStripButton4";
-			toolStripButton4.Click += new System.EventHandler(this.OnSchemaItemClick);
+			toolStripButtonNewSchema.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			toolStripButtonNewSchema.Image = global::FreeSCADA.Designer.Properties.Resources.open_schema;
+			toolStripButtonNewSchema.ImageTransparentColor = System.Drawing.Color.Magenta;
+			toolStripButtonNewSchema.Name = "toolStripButtonNewSchema";
+			toolStripButtonNewSchema.Size = new System.Drawing.Size(23, 22);
+			toolStripButtonNewSchema.Text = "toolStripButton4";
+			toolStripButtonNewSchema.Click += new System.EventHandler(this.OnSchemaItemClick);
 			// 
 			// toolStripButton5
 			// 
@@ -252,6 +252,7 @@
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds;
 			this.Text = "Designer";
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
 			toolStrip1.ResumeLayout(false);
 			toolStrip1.PerformLayout();

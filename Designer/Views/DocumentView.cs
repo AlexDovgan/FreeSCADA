@@ -16,8 +16,6 @@ namespace FreeSCADA.Designer.Views
 			DockAreas = DockAreas.Float | DockAreas.Document;
 			documentName = "Document";
 			UpdateCaption();
-
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(OnClosing);
 		}
 
 		public string DocumentName
@@ -51,21 +49,6 @@ namespace FreeSCADA.Designer.Views
 
 		public virtual void OnDeactivated()
 		{
-		}
-
-		public virtual void OnClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
-		{
-			if (handleModifiedFlagOnClose && IsModified)
-			{
-				System.Windows.MessageBoxResult res = System.Windows.MessageBox.Show(	DialogMessages.NotSavedDocument,
-																						DialogMessages.SaveDocumentCaption,
-																						System.Windows.MessageBoxButton.YesNoCancel,
-																						System.Windows.MessageBoxImage.Warning);
-				if (res == System.Windows.MessageBoxResult.Yes)
-					SaveDocument();
-				if (res == System.Windows.MessageBoxResult.Cancel)
-					e.Cancel = true;
-			}
 		}
 
 		public virtual bool SaveDocument()

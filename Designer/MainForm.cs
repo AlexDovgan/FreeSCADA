@@ -66,6 +66,11 @@ namespace FreeSCADA.Designer
 			e.Cancel = !windowManager.Close();
 		}
 
+		private void OnFormClosed(object sender, FormClosedEventArgs e)
+		{
+			Env.Deinitialize();
+		}
+
 		void UpdateCaption()
 		{
 			if (Env.Current.Project.FileName == "")
