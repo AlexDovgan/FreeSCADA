@@ -187,6 +187,11 @@ namespace FreeSCADA.Designer.Views
             Schema.MainCanvas.Children.Add(obj as UIElement);
              */
         }
+        protected override void  OnClosed(EventArgs e)
+        {
+ 	            base.OnClosed(e);
+                UndoRedoManager.ReleaseUndoBuffer(Schema);
+        }
 
         
     }

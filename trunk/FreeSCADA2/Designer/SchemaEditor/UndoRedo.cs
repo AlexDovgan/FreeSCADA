@@ -55,7 +55,14 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
             }
             return undoBuffers[doc];
         }
-    
+        public static void ReleaseUndoBuffer(SchemaDocument doc)
+        {
+            if (!undoBuffers.ContainsKey(doc))
+            {
+                undoBuffers.Remove(doc);
+  
+            }
+        }
         static Dictionary<SchemaDocument,BasicUndoBuffer> undoBuffers;
     }
     /// <summary>
