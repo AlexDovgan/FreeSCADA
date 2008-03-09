@@ -28,9 +28,7 @@ namespace FreeSCADA.Designer.Views
 
         }
 
-		public delegate void ToolsCollectionChangedHandler(List<ITool> tools, Type defaultTool);
-		public event ToolsCollectionChangedHandler ToolsCollectionChanged;
-
+		
         public List<ITool> toolsList
         {
             get
@@ -74,9 +72,8 @@ namespace FreeSCADA.Designer.Views
         public SchemaView()
         {
 			InitializeComponent();
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(SchemaView_KeyDown);
+            
         }
-        
         private void InitializeComponent()
         {
             this.SuspendLayout();
@@ -100,9 +97,9 @@ namespace FreeSCADA.Designer.Views
             this.ResumeLayout(false);
 
         }
-
-        void SchemaView_KeyDown(object sender, KeyEventArgs e)
+        protected override void OnKeyDown(KeyEventArgs e)
         {
+            
             if (e.KeyCode == Keys.Z && e.Control)
             {
                 undoBuff.UndoCommand();
@@ -111,7 +108,7 @@ namespace FreeSCADA.Designer.Views
             {
                 undoBuff.RedoCommand();
             }
-
+            base.OnKeyDown(e);
         }
         void activeTool_ObjectSelected(System.Windows.UIElement obj)
         {
@@ -127,8 +124,8 @@ namespace FreeSCADA.Designer.Views
             base.OnActivated();
 
             //Notify connected windows about new tools collection
-            if (ToolsCollectionChanged != null)
-                ToolsCollectionChanged(toolsList, CurrentTool);
+            
+            RaiseToolsCollectionChanged(toolsList, CurrentTool);
         
         }
 
@@ -187,7 +184,7 @@ namespace FreeSCADA.Designer.Views
         }
         protected override void OnClosed(EventArgs e)
         {
-            RaiseObjectSelected(null);
+ 
             if (wpfSchemaContainer != null && wpfSchemaContainer.Document != null)
             {
                 wpfSchemaContainer.Document.IsModifiedChanged -= new EventHandler(OnSchemaIsModifiedChanged);
@@ -197,7 +194,10 @@ namespace FreeSCADA.Designer.Views
             {
                 activeTool.Deactivate();
                 activeTool.ObjectSelected -= activeTool_ObjectSelected;
+                activeTool = null;
             }
+            
+            
             wpfSchemaContainer.Dispose();
             wpfSchemaContainer = null;
 
