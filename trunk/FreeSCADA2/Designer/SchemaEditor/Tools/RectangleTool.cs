@@ -90,10 +90,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     r.Height = b.Height;
                     r.Stroke = Brushes.Black;
                     r.Fill = Brushes.Gray;
-                    ObjectDescriptor desc = new ObjectDescriptor();
-                    desc.DefaultManipulatorType = typeof(GeometryHilightManipulator);
-                    desc.DefaultShortPropType = typeof(ShortProperties.ShapeShortProp);
-                    r.Tag = desc;
                     UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(r));
                     SelectedObject = r;
 

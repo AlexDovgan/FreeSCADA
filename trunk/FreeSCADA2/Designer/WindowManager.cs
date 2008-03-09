@@ -211,6 +211,21 @@ namespace FreeSCADA.Designer
 			Env.Current.Project.Load(fd.FileName);
 			return true;
 		}
+        public bool ImportSchema()
+        {
+            if(!(currentDocument is SchemaView)) 
+                return false;
+            OpenFileDialog fd = new OpenFileDialog();
+
+            fd.Filter = StringResources.FileImportDialogFilter;
+            fd.FilterIndex = 0;
+            fd.RestoreDirectory = true;
+
+            if (fd.ShowDialog() != DialogResult.OK )
+                return false;
+            return  (currentDocument as SchemaView).ImportFile(fd.FileName);
+            
+        }
 
 		/// <summary>
 		/// Close project. If there are unsaved open documents, an appropriate dialog will be show. User will be able 
@@ -293,5 +308,6 @@ namespace FreeSCADA.Designer
                 currentDocument.ObjectSelected -= propertyBrowserView.ShowProperties;
 			}
 		}
+        
     }
 }

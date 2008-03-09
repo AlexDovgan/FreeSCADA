@@ -105,11 +105,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 poly.Height = b.Height;
                 poly.Stroke = Brushes.Black;
                 poly.Fill = Brushes.Transparent;
-                
-                ObjectDescriptor desc = new ObjectDescriptor();
-                desc.DefaultManipulatorType = typeof(GeometryHilightManipulator);
-                desc.DefaultShortPropType = typeof(ShortProperties.ShapeShortProp);
-                poly.Tag = desc;
                 poly.Stretch = Stretch.Fill;
                 UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(poly));
                 SelectedObject = poly;

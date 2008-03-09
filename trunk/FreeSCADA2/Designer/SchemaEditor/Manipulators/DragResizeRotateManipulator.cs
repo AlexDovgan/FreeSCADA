@@ -56,6 +56,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             dragControl.HorizontalAlignment = HorizontalAlignment.Stretch;
             dragControl.Cursor = Cursors.SizeAll;
             dragControl.RenderTransform = el.RenderTransform;
+                //(el.RenderTransform as TransformGroup).Children[1];
 
             visualChildren.Add(dragControl);
 
@@ -179,7 +180,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                         break;
                     case VerticalAlignment.Center: aligmentRect.Y += ro.Height / 2;
                         break;
-                    case VerticalAlignment.Stretch: aligmentRect.Height = ro.Height;
+                    case VerticalAlignment.Stretch: aligmentRect.Height = ro.Height;// *Math.Abs((AdornedElement.RenderTransform as TransformGroup).Children[0].Value.M22);
                         break;
                     default:
                         break;
@@ -192,7 +193,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                         break;
                     case HorizontalAlignment.Center: aligmentRect.X += ro.Width / 2;
                         break;
-                    case HorizontalAlignment.Stretch: aligmentRect.Width =ro.Width;
+                    case HorizontalAlignment.Stretch: aligmentRect.Width = ro.Width;// *Math.Abs((AdornedElement.RenderTransform as TransformGroup).Children[0].Value.M11);
                         break;
                     default:
                         break;

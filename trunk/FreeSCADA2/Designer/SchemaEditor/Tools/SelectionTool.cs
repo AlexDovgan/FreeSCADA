@@ -171,7 +171,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             return finalSize;
         }
 
-
+        protected override BaseManipulator CreateToolManipulator(UIElement obj)
+        {
+            return new DragResizeRotateManipulator(obj as FrameworkElement);
+        }
     }
 
 }
