@@ -51,18 +51,19 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             {
                 if (activeManipulator != value)
                 {
-                    visualChildren.Remove(activeManipulator);
-                    if(activeManipulator is IDisposable)
-                        (activeManipulator as IDisposable).Dispose();
-                    if ((activeManipulator = value) != null)
+                    if (activeManipulator != null)
                     {
+                        activeManipulator.ObjectChangedPreview -= ObjectChangedPreview;
+                        visualChildren.Remove(activeManipulator);
+                        if (activeManipulator is IDisposable)
+                        (activeManipulator as IDisposable).Dispose();
+                    }
+                    if ((activeManipulator=value) != null)
+                    { 
                         visualChildren.Add(activeManipulator);
-                        //activeManipulator.ObjectChanged += ManipulatorChanged;
-                        activeManipulator.ObjectChangedPreview += ManipulatorChangedPreview;
+                        activeManipulator.ObjectChangedPreview += ObjectChangedPreview;
                         
                     }
-                    
-
                     AdornerLayer.GetAdornerLayer(AdornedElement).Update();
                 }
             }
@@ -86,7 +87,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 {
                     if (ActiveManipulator == null || ActiveManipulator.AdornedElement != value)
                     {
-                        ActiveManipulator = ObjectsFactory.CreateDefaultManipulator(value);
+                        ActiveManipulator = CreateToolManipulator(value);
                         ActiveManipulator.InvalidateArrange();
                     }
                         
@@ -123,14 +124,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 ToolStarted(this,e);
             Point pt = e.GetPosition(this);
 
-            bool isManipulatorHited;
+            
             IInputElement manipulatorHit = null;
             if (ActiveManipulator != null)
                 manipulatorHit = ActiveManipulator.InputHitTest(e.GetPosition(ActiveManipulator));
-            if (manipulatorHit != null)
-                isManipulatorHited = true;
-            else isManipulatorHited = false;
-            if (isManipulatorHited)
+     
+            if (manipulatorHit!=null)
             {
                 e.Handled = true;
                 return;
@@ -203,10 +202,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             ToolWorked(tool, e);
         }
         
-        protected virtual void ManipulatorChangedPreview(UIElement obj)
+        protected virtual void ObjectChangedPreview(UIElement obj)
         {
             
             UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new ModifyGraphicsObject(obj));           
+        }
+        protected virtual BaseManipulator CreateToolManipulator(UIElement obj)
+        {
+            return new GeometryHilightManipulator(obj);
         }
     }
 

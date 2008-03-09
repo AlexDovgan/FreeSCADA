@@ -90,5 +90,10 @@ namespace FreeSCADA.Designer
 				System.GC.Collect();
 			}
 		}
+
+        private void importSchemaToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            windowManager.ImportSchema();
+        }
 	}
 }

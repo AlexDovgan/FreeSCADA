@@ -70,6 +70,15 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to XAML  files (*.xaml)|*.xaml|svg files (*.svg)|*.svg|All files (*.*)|*.*.
+        /// </summary>
+        internal static string FileImportDialogFilter {
+            get {
+                return ResourceManager.GetString("FileImportDialogFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Designer.
         /// </summary>
         internal static string MainWindowName {

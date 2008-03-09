@@ -45,11 +45,27 @@ namespace FreeSCADA.Designer.SchemaEditor
                     System.Windows.FrameworkElement child = gc.Children[0] as System.Windows.FrameworkElement;
 
                     //this code need for ungrouping not stretched shapes
+                    child.SetValue(System.Windows.Controls.Panel.MarginProperty, System.Windows.DependencyProperty.UnsetValue);
+                    //Rect b=VisualTreeHelper.GetContentBounds(child);
+                    Rect b = VisualTreeHelper.GetDescendantBounds(child);
+                    double left = Canvas.GetLeft(child);
+                    double top = Canvas.GetTop(child);
 
-                    //Rect b = VisualTreeHelper.GetDescendantBounds(child);
-                    //child.SetValue(System.Windows.Controls.Panel.MarginProperty, System.Windows.DependencyProperty.UnsetValue);
-                    //child.SetValue(System.Windows.Shapes.Shape.StretchProperty, System.Windows.Media.Stretch.Fill);
+                    left = double.IsNaN(left) ? 0 : left;
+                    top = double.IsNaN(top) ? 0 : top;
+
                     
+                    if ((child is Shape)&&child.ReadLocalValue(System.Windows.Shapes.Shape.StretchProperty).Equals(System.Windows.DependencyProperty.UnsetValue))
+                    {
+                        child.Width = b.Width;
+                        child.Height = b.Height;
+                        Canvas.SetLeft(child,left + b.X);
+                        Canvas.SetTop(child, top + b.Y);
+
+                        
+                        child.SetValue(System.Windows.Shapes.Shape.StretchProperty, System.Windows.Media.Stretch.Fill);
+                        gc.UpdateLayout();
+                    }
                     Matrix matrGtr = ((Transform)child.TransformToVisual(parent)).Value;
 
 
@@ -65,6 +81,8 @@ namespace FreeSCADA.Designer.SchemaEditor
                     gtr.Children.Add(new MatrixTransform(matrGtr));
                     gtr.Children.Add(rt);
                     child.RenderTransform = gtr;
+                    
+                    child.RenderTransformOrigin = new Point(0.5, 0.5);
                     
                     Point pO = new Point(child.Width * child.RenderTransformOrigin.X, child.Height * child.RenderTransformOrigin.Y);
                     Point p = gtr.Transform(pO);
@@ -111,13 +129,6 @@ namespace FreeSCADA.Designer.SchemaEditor
             }
             Group.Child = g;
             Canvas.SetTop(g, 0); Canvas.SetLeft(g, 0);
-            Group.Tag = new ObjectDescriptor();
-            ObjectDescriptor desc = new ObjectDescriptor();
-            desc.DefaultManipulatorType = typeof(DragResizeRotateManipulator);
-            desc.DefaultShortPropType = typeof(ShortProperties.FrameworkElementShortProp);
-            Group.Tag = desc;
-                 
-            
             workCanvas.Children.Add(Group);
             tool.selectedElements.Clear();
             tool.AdornedElement.UpdateLayout();

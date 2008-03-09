@@ -27,13 +27,17 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             : base(element)
         {
 
-            if (!(element is Border) && !((element as Border).Child is TextBlock) )
+            /*if (!(element is Border) && !((element as Border).Child is TextBlock) )
                 throw new Exception("This manipulator can't aply for object of this type");
            
             textEditor.BorderThickness = (element as Border).BorderThickness;
             textEditor.BorderBrush = (element as Border).BorderBrush;
             textBlock = (element as Border).Child as TextBlock;
+            */
+            if (!(element is TextBlock))
+                throw new Exception("This manipulator can't aply for object of this type");
 
+            textBlock = element as TextBlock;
             Paragraph pargraph = new Paragraph();
 
             while (textBlock.Inlines.Count > 0)

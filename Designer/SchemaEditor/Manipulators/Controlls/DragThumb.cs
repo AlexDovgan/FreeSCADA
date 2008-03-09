@@ -27,7 +27,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
             {
                 Point dragDelta = new Point(e.HorizontalChange, e.VerticalChange);
 
-                dragDelta = item.RenderTransform.Transform(dragDelta);
+                dragDelta = RenderTransform.Transform(dragDelta);
 
                 double left = Canvas.GetLeft(item);
                 double top = Canvas.GetTop(item);

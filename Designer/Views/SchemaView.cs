@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Xml;
+using System.Windows.Markup;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using FreeSCADA.ShellInterfaces;
@@ -8,6 +10,7 @@ using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using FreeSCADA.Designer.SchemaEditor.ShortProperties;
+
 namespace FreeSCADA.Designer.Views
 {
     class SchemaView : DocumentView
@@ -175,12 +178,13 @@ namespace FreeSCADA.Designer.Views
   		    return true;
         }
 
-        public void ImportFile(Stream xamlStream)
+        public bool ImportFile(String filename)
         {
-            /*XmlReader xmlReader = XmlReader.Create(xamlStream);
+
+            XmlReader xmlReader = XmlReader.Create(filename);
             Object obj = XamlReader.Load(xmlReader);
-            Schema.MainCanvas.Children.Add(obj as UIElement);
-             */
+            Schema.MainCanvas.Children.Add(obj as System.Windows.UIElement);
+            return true;
         }
         protected override void OnClosed(EventArgs e)
         {

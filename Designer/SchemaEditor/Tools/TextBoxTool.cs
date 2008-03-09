@@ -69,22 +69,19 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 Rect b = VisualTreeHelper.GetContentBounds(objectPrview);
                 if (!b.IsEmpty)
                 {
-                    Border border = new Border();
-                    border.Child = new TextBlock();
-                    Canvas.SetLeft(border, b.X);
-                    Canvas.SetTop(border, b.Y);
+                 //   Border text = new Border();
+                    TextBlock text = new TextBlock();
+                    Canvas.SetLeft(text, b.X);
+                    Canvas.SetTop(text, b.Y);
           
-                    border.Width = b.Width;
-                    border.Height = b.Height;
-                    border.BorderBrush = Brushes.Black;
-                    border.BorderThickness = new Thickness(1);
-                    (border.Child as TextBlock).TextWrapping = TextWrapping.Wrap;
-                    ObjectDescriptor desc = new ObjectDescriptor();
-                    desc.DefaultManipulatorType = typeof(TextBoxManipulator);
-                    desc.DefaultShortPropType = typeof(ShortProperties.FrameworkElementShortProp);
-                    border.Tag = desc;
-                    UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(border));
-                    SelectedObject = border;
+                    text.Width = b.Width;
+                    text.Height = b.Height;
+                    text.Text = "You can write text here"; 
+                   // text.BorderBrush = Brushes.Black;
+                    //text.BorderThickness = new Thickness(1);
+                    text.TextWrapping = TextWrapping.Wrap;
+                    UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(text));
+                    SelectedObject = text;
 
                 }
                 isDragged = false;
@@ -108,7 +105,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             e.Handled = false;
         }
-        
+        protected override BaseManipulator CreateToolManipulator(UIElement obj)
+        {
+            return new TextBoxManipulator(obj);
+        }
 
     }
 }
