@@ -30,6 +30,7 @@ namespace FreeSCADA.Designer.Views
             int pos = 0;
             SuspendLayout();
             Controls.Clear();
+            if(tools!=null)
             foreach (ITool tool in tools)
             {
 

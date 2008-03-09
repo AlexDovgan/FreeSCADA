@@ -80,7 +80,7 @@ namespace FreeSCADA.Designer
 					break;
 				}
 			}
-
+            
 			view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
 			view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
 			documentViews.Add(view);
@@ -104,8 +104,10 @@ namespace FreeSCADA.Designer
 					return;
 				}
 			}
+            //doc.ToolsCollectionChanged -= toolBoxView.OnToolsCollectionChanged;
             doc.FormClosing -= new FormClosingEventHandler(OnDocumentWindowClosing);
 			documentViews.Remove(doc);
+           
 		}
 
 		public void OnOpenProjectEntity(string name)
@@ -259,7 +261,7 @@ namespace FreeSCADA.Designer
 					documentViews.Clear();
 				}
 			}
-			return true;
+		return true;
 		}
 
 		void OnActiveDocumentChanged(object sender, EventArgs e)
