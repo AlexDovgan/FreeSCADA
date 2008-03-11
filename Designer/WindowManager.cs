@@ -40,8 +40,8 @@ namespace FreeSCADA.Designer
 
 		public void ForceWindowsClose()
 		{
-			foreach (DocumentView doc in documentViews)
-				doc.Close();
+			while (documentViews.Count > 0)
+				documentViews[0].Close();
 			documentViews.Clear();
 
 			projectContentView.Close();
@@ -271,8 +271,8 @@ namespace FreeSCADA.Designer
 					if (SaveProject() == false)
 						return false;
 
-					foreach (DocumentView doc in documentViews)
-						doc.Close();
+					while (documentViews.Count > 0)
+						documentViews[0].Close();
 					documentViews.Clear();
 				}
 			}
