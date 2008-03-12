@@ -65,6 +65,10 @@
     <Compile Include="ITool.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Schema\Actions\BaseAction.cs" />
+    <Compile Include="Schema\Actions\ActionsCollection.cs" />
+    <Compile Include="Schema\Actions\MoveAction.cs" />
+    <Compile Include="Schema\Actions\RotateAction.cs" />
     <Compile Include="Schema\SchemaDocument.cs" />
   </ItemGroup>
   <ItemGroup>

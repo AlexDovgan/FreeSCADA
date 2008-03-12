@@ -34,7 +34,7 @@ namespace FreeSCADA.Designer.Views
             foreach (ITool tool in tools)
             {
 
-                CheckBox b = new CheckBox();
+                RadioButton b = new RadioButton();
                 b.Text = tool.ToolName;
                 if (tool.GetType() == currentTool)
                 {
@@ -53,14 +53,10 @@ namespace FreeSCADA.Designer.Views
 
         void ToolChanged(object sender, EventArgs e)
         {
-            CheckBox b = (CheckBox)sender;
+            RadioButton b = (RadioButton)sender;
             if (b.Checked)
             {
-                foreach (CheckBox ch in Controls)
-                {
-                    if (ch != b)
-                        ch.Checked = false;
-                }
+                
                 if(ToolActivated != null)
 					ToolActivated(this, (Type)b.Tag);
             }
