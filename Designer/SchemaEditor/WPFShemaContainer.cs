@@ -36,7 +36,6 @@ namespace FreeSCADA.Designer.SchemaEditor
             Child = new ScrollViewer();
             //Child.Focusable = false;
             resources.InitializeComponent();
-            NameScope.SetNameScope(Child, new NameScope());
             Child.SnapsToDevicePixels = true;
         }
 

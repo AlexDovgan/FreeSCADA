@@ -30,7 +30,7 @@ namespace FreeSCADA.Designer.SchemaEditor
         static ObjectsFactory()
         {
             descriptorsDictionary[typeof(FrameworkElement)]=new ObjectDescriptor(typeof(DragResizeRotateManipulator), typeof(FrameworkElementShortProp));
-            descriptorsDictionary[typeof(TextBox)] = new ObjectDescriptor(typeof(TextBoxManipulator), typeof(FrameworkElementShortProp));
+            descriptorsDictionary[typeof(TextBlock)] = new ObjectDescriptor(typeof(TextBoxManipulator), typeof(FrameworkElementShortProp));
             descriptorsDictionary[typeof(Shape)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator), typeof(ShapeShortProp));
         }
         private static ObjectDescriptor FindDescriptor(Type type)

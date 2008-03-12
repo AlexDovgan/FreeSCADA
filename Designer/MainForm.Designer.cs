@@ -43,13 +43,13 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.importSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectContentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.variablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
-            this.importSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStrip1 = new System.Windows.Forms.ToolStrip();
             toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             toolStripButton2 = new System.Windows.Forms.ToolStripButton();
@@ -176,26 +176,33 @@
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.saveToolStripMenuItem.Text = "Save project";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.OnSaveProjectClick);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.loadToolStripMenuItem.Text = "Load project...";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.OnLoadProjectClick);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(154, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(158, 6);
+            // 
+            // importSchemaToolStripMenuItem
+            // 
+            this.importSchemaToolStripMenuItem.Name = "importSchemaToolStripMenuItem";
+            this.importSchemaToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.importSchemaToolStripMenuItem.Text = "Import Graphics";
+            this.importSchemaToolStripMenuItem.Click += new System.EventHandler(this.importSchemaToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnMenuExitClick);
             // 
@@ -239,13 +246,6 @@
             this.mainMenu.Size = new System.Drawing.Size(599, 24);
             this.mainMenu.TabIndex = 0;
             this.mainMenu.Text = "menuStrip1";
-            // 
-            // importSchemaToolStripMenuItem
-            // 
-            this.importSchemaToolStripMenuItem.Name = "importSchemaToolStripMenuItem";
-            this.importSchemaToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.importSchemaToolStripMenuItem.Text = "Import Schema";
-            this.importSchemaToolStripMenuItem.Click += new System.EventHandler(this.importSchemaToolStripMenuItem_Click);
             // 
             // MainForm
             // 

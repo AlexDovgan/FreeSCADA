@@ -66,6 +66,9 @@ namespace FreeSCADA.Designer.SchemaEditor
                         child.SetValue(System.Windows.Shapes.Shape.StretchProperty, System.Windows.Media.Stretch.Fill);
                         gc.UpdateLayout();
                     }
+                    // excluding rotate from common matrix
+                    // need to separate scale*skew matrix on scale and transform transformations
+ 
                     Matrix matrGtr = ((Transform)child.TransformToVisual(parent)).Value;
 
 

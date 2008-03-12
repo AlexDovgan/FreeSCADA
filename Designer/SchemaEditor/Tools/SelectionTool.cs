@@ -111,9 +111,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             {
                 if (e.ClickCount > 1)
                 {
-                    UIElement tmp = SelectedObject;
-                    SelectedObject = null;
-                    SelectedObject =tmp; 
+                    ActiveManipulator = ObjectsFactory.CreateDefaultManipulator(SelectedObject);
                 }
             }
             else if (documentHit == workedSchema.MainCanvas)

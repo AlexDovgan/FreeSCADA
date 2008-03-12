@@ -42,6 +42,7 @@ namespace FreeSCADA.Designer.Views
                 tl.Add(new EllipseTool(Schema));
                 tl.Add(new TextBoxTool(Schema));
                 tl.Add(new PolylineTool(Schema));
+                tl.Add(new ActionEditTool(Schema));
                 return tl;
 
             }
@@ -115,9 +116,9 @@ namespace FreeSCADA.Designer.Views
         }
         void activeTool_ObjectSelected(System.Windows.UIElement obj)
         {
-            
-       
-                RaiseObjectSelected(ObjectsFactory.CreateShortProp(obj));
+
+
+            RaiseObjectSelected(obj);//ObjectsFactory.CreateShortProp(obj));
 
         }
 

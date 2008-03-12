@@ -95,5 +95,24 @@ namespace FreeSCADA.Common
 				return true;
 			}
 		}
+        
+        public IChannel GetChannel(string name)
+        {
+                
+            string[] splited = name.Split('.');
+            if(splited.Length>1)
+            {
+                ICommunicationPlug plug;
+                if( (plug=this[splited[0]])!=null)
+                {
+                    foreach (IChannel chanel in plug.Channels)
+                    {
+                        if(chanel.Name==splited[1])
+                            return chanel;
+                    }
+                } return null;
+            } return null;
+            
+        }
 	}
 }

@@ -83,6 +83,7 @@
     <Compile Include="SchemaEditor\ObjectsFactory.cs" />
     <Compile Include="SchemaEditor\SchemaCommands.cs" />
     <Compile Include="SchemaEditor\ShortProp.cs" />
+    <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
     <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
     <Compile Include="SchemaEditor\Tools\EllipseTool.cs" />
     <Compile Include="SchemaEditor\Tools\PolylineTool.cs" />
