@@ -60,9 +60,12 @@ namespace FreeSCADA.Common.Schema.Actions
         {
 
         }
-        public  virtual bool CheckActionFor(FrameworkElement obj)
+        public  virtual bool CheckActionFor(UIElement obj)
         {
-            return true;
+            if (obj is FrameworkElement)
+                return true;
+            
+            return false;
         }
         
     }

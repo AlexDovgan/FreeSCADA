@@ -14,6 +14,7 @@ namespace FreeSCADA.Common.Schema.Actions
     [ContentProperty("ActionsList")]
     public class ActionsCollection:DependencyObject
     {
+        public static Type [] ActionsTypes = { typeof(MoveAction), typeof(RotateAction) };
 
         List<BaseAction> actionsList = new List<BaseAction>();
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]

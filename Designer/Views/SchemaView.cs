@@ -114,11 +114,12 @@ namespace FreeSCADA.Designer.Views
             }
             base.OnKeyDown(e);
         }
-        void activeTool_ObjectSelected(System.Windows.UIElement obj)
+        void activeTool_ObjectSelected(Object obj)
         {
-
-
-            RaiseObjectSelected(obj);//ObjectsFactory.CreateShortProp(obj));
+            CommonShortProp csp;
+            if ((csp = ObjectsFactory.CreateShortProp(obj)) != null)
+                RaiseObjectSelected(csp);
+            else RaiseObjectSelected(obj);
 
         }
 
