@@ -46,47 +46,35 @@ namespace FreeSCADA.Designer.SchemaEditor
 
         }
 
-        public static BaseManipulator CreateDefaultManipulator( UIElement element)
+        public static BaseManipulator CreateDefaultManipulator( Object obj )
         {
-            FrameworkElement frameworkElement=element as FrameworkElement;
+            FrameworkElement frameworkElement=obj as FrameworkElement;
             ObjectDescriptor desctiptor;
             if (frameworkElement!=null)
             {
-                /*
-                if(descriptorsDictionary.ContainsKey(frameworkElement.GetType()))
-                    desctiptor = descriptorsDictionary[frameworkElement.GetType()];
-                else   
-                    desctiptor = descriptorsDictionary[typeof(FrameworkElement)];
-                */
                 desctiptor =FindDescriptor(frameworkElement.GetType());
                 if (desctiptor.ObjectManipulatorType.IsSubclassOf(typeof(BaseManipulator)))
                 {
                     object[] a = new object[1];
-                    a[0] = element;
+                    a[0] = frameworkElement;
                     return (BaseManipulator)System.Activator.CreateInstance(desctiptor.ObjectManipulatorType, a);
                 }
 
             }
             return null;
         }
-        public static CommonShortProp CreateShortProp(UIElement element)
+        public static CommonShortProp CreateShortProp(Object obj)
         {
-            FrameworkElement frameworkElement = element as FrameworkElement;
+            FrameworkElement frameworkElement = obj as FrameworkElement;
             ObjectDescriptor desctiptor;
             if (frameworkElement != null)
             {
-                /*
-                if (descriptorsDictionary.ContainsKey(frameworkElement.GetType()))
-                    desctiptor = descriptorsDictionary[frameworkElement.GetType()];
-                else 
-                    desctiptor = descriptorsDictionary[typeof(FrameworkElement)];
-                */
                 desctiptor = FindDescriptor(frameworkElement.GetType());
 
                 if (desctiptor.ObjectShortPropType.IsSubclassOf(typeof(CommonShortProp)))
                 {
                     object[] a = new object[1];
-                    a[0] = element;
+                    a[0] = frameworkElement;
                     return (CommonShortProp)System.Activator.CreateInstance(desctiptor.ObjectShortPropType, a);
                 }
                 

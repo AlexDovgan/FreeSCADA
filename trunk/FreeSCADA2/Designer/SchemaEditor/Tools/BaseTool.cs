@@ -35,7 +35,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         public event ToolEvent ToolFinished;
         public event ToolEvent ToolStarted;
         public event ToolEvent ToolWorked;
-        public delegate void ObjectSeletedDelegate(UIElement obj);
+        public delegate void ObjectSeletedDelegate(Object obj);
         public event ObjectSeletedDelegate ObjectSelected;
         /// <summary>
         /// active manipulator upon  selected object created by tool
@@ -73,7 +73,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// selected object by active manipulator
         /// if object selected throw this proprty will be create default manipulator for tool instance
         /// </summary>
-        public UIElement SelectedObject
+        public  UIElement SelectedObject
         {
             get
             {
@@ -94,8 +94,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 }   
                 else
                     ActiveManipulator = null;
-                if (ObjectSelected != null)
-                    ObjectSelected(SelectedObject);
+                RaiseObjectSelected(SelectedObject);
             }
 
         }
@@ -210,6 +209,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         protected virtual BaseManipulator CreateToolManipulator(UIElement obj)
         {
             return new GeometryHilightManipulator(obj);
+        }
+        protected void RaiseObjectSelected(Object obj)
+        {
+            if (ObjectSelected != null)
+                ObjectSelected(obj);
         }
     }
 
