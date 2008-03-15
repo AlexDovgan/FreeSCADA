@@ -97,6 +97,24 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Button Tool.
+        /// </summary>
+        internal static string ToolButtonName {
+            get {
+                return ResourceManager.GetString("ToolButtonName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Content Tools.
+        /// </summary>
+        internal static string ToolContentGroupName {
+            get {
+                return ResourceManager.GetString("ToolContentGroupName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {unsaved project file}.
         /// </summary>
         internal static string UnsavedProjectName {

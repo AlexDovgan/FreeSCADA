@@ -10,111 +10,119 @@ using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
-    class ButtonTool : BaseTool, ITool
-    {
-        Point startPos;
-        bool isDragging;
-        //DrawingVisual objectPrview = new DrawingVisual();
-        Button objectPrview;
+	class ButtonTool : BaseTool, ITool
+	{
+		Point startPos;
+		bool isDragging;
+		Button buttonObject;
 
-        public ButtonTool(SchemaDocument doc)
-            : base(doc)
-        {
+		public ButtonTool(SchemaDocument doc)
+			: base(doc)
+		{
+		}
 
-            //objectPrview.Children.Add(new Button());
+		#region ITool implementation
+		public String ToolName
+		{
+			get { return StringResources.ToolButtonName; }
+		}
 
-        }
-
-        #region ITool implementation
-        public String ToolName
-        {
-            get { return "BootonTool"; }
-        }
-
-        public String ToolGroup
-        {
-            get { return "Controlls"; }
-        }
-        public System.Drawing.Bitmap ToolIcon
-        {
-            get
-            {
-                return new System.Drawing.Bitmap(10, 10);
-            }
-        }
-        #endregion
+		public String ToolGroup
+		{
+			get { return StringResources.ToolContentGroupName; }
+		}
+		public System.Drawing.Bitmap ToolIcon
+		{
+			get
+			{
+				return new System.Drawing.Bitmap(10, 10);
+			}
+		}
+		#endregion
 
 
-        protected override void OnPreviewMouseMove(MouseEventArgs e)
-        {
-            if (visualChildren.Contains(objectPrview))
-            {
-                Point p = e.GetPosition(this);
-                Canvas.SetLeft(objectPrview, p.X);
-                Canvas.SetTop(objectPrview, p.Y);
+		protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
+		{
+			base.OnPreviewMouseLeftButtonDown(e);
+			if (!e.Handled)
+			{
+				startPos = e.GetPosition(this);
 
-                InvalidateArrange();
-            }
-            base.OnPreviewMouseMove(e);
-        }
+				buttonObject = new Button();
+				buttonObject.Opacity = 0.75;
+				Canvas.SetLeft(buttonObject, startPos.X);
+				Canvas.SetTop(buttonObject, startPos.Y);
+				buttonObject.Width = 0;
+				buttonObject.Height = 0;
+				buttonObject.Content = "Button";
 
-        protected override void OnPreviewMouseRightButtonUp(MouseButtonEventArgs e)
-        {
+				visualChildren.Add(buttonObject);
 
-            if (visualChildren.Contains(objectPrview))
-            {
-                visualChildren.Remove(objectPrview);
-            }
-        }
+				isDragging = true;
+				CaptureMouse();
 
-        protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnPreviewMouseLeftButtonDown(e);
-            if (!visualChildren.Contains(objectPrview))
-            {
-                objectPrview = new Button();
-                objectPrview.Opacity = 0.5;
-                Point p = e.GetPosition(this);
-                Canvas.SetLeft(objectPrview, p.X);
-                Canvas.SetTop(objectPrview, p.Y);
+				e.Handled = true;
+			}
+		}
 
-                objectPrview.Width = 60;
-                objectPrview.Height = 20;
-                objectPrview.Content = "Button";
+		protected override void OnPreviewMouseMove(MouseEventArgs e)
+		{
+			if (isDragging)
+			{
+				Vector v = e.GetPosition(this) - startPos;
+				buttonObject.Width = v.X;
+				buttonObject.Height = v.Y;
 
-                visualChildren.Add(objectPrview);
-                CaptureMouse();
-            }
-            else
-            {
-                   visualChildren.Remove(objectPrview);
-                   objectPrview.Opacity = 1;    
-                UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(objectPrview));
-                    SelectedObject = objectPrview;
-                    
-                ReleaseMouseCapture();
-            }
-            e.Handled = false;
-        }
+				InvalidateArrange();
 
-        protected override Size MeasureOverride(Size finalSize)
-        {
-            base.MeasureOverride(finalSize);
-            if (objectPrview != null)
-                objectPrview.Measure(finalSize);
-            return finalSize;
-        }
-        protected override Size ArrangeOverride(Size finalSize)
-        {
-            base.ArrangeOverride(finalSize);
-            if (objectPrview != null)
-            {
-                double x = Canvas.GetLeft(objectPrview);
-                double y = Canvas.GetTop(objectPrview);
-                objectPrview.Arrange(new Rect(new Point(x, y), objectPrview.DesiredSize));
-            }
+				e.Handled = true;
+			}
 
-            return finalSize;
-        }
-    }
+			base.OnPreviewMouseMove(e);
+		}
+
+		protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
+		{
+			if(isDragging)
+			{
+				visualChildren.Remove(buttonObject);
+				buttonObject.Opacity = 1;
+				
+				if (buttonObject.Width < 10)
+					buttonObject.Width = 10;
+				if (buttonObject.Height < 10)
+					buttonObject.Height = 10;
+
+				UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(buttonObject));
+				SelectedObject = buttonObject;
+
+				isDragging = false;
+				buttonObject = null;
+				ReleaseMouseCapture();
+
+				e.Handled = true;
+			}
+			base.OnPreviewMouseLeftButtonUp(e);
+		}
+
+		protected override Size MeasureOverride(Size finalSize)
+		{
+			base.MeasureOverride(finalSize);
+			if (buttonObject != null)
+				buttonObject.Measure(finalSize);
+			return finalSize;
+		}
+		protected override Size ArrangeOverride(Size finalSize)
+		{
+			base.ArrangeOverride(finalSize);
+			if (buttonObject != null)
+			{
+				double x = Canvas.GetLeft(buttonObject);
+				double y = Canvas.GetTop(buttonObject);
+				buttonObject.Arrange(new Rect(new Point(x, y), buttonObject.DesiredSize));
+			}
+
+			return finalSize;
+		}
+	}
 }

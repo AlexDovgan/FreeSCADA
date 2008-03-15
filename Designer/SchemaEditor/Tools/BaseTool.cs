@@ -18,11 +18,11 @@ using FreeSCADA.ShellInterfaces;
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
     /// <summary>
-    /// Base class for tools implementation
-    /// Tool is sutable for objects selection and creation
-    /// when object is selected tool must create manipulator for this object
-    /// each tool have DefaultManipulator for example for Selection tool  default manipulator is DragResizeRotateManipulator
-    /// each tool can work with many types of manipulators but only ONE manipulator can be active
+    /// Base class for tools implementation.
+    /// A tool is applicable for objects selection and creation.
+    /// When an object is selected tool should create some manipulator for this object.
+    /// Each tool has DefaultManipulator. For example Selection tool has default manipulator DragResizeRotateManipulator.
+    /// Each tool can work with many types of manipulators but the only ONE manipulator can be active.
     /// Base class implement objects single selection by default manipulator of tool instance
     /// </summary>
     abstract class BaseTool : Adorner
@@ -31,12 +31,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         private  BaseManipulator activeManipulator;
         protected SchemaDocument workedSchema;
         protected ToolContextMenu menu;
-        public delegate void ToolEvent(BaseTool tool, EventArgs e);
-        public event ToolEvent ToolFinished;
-        public event ToolEvent ToolStarted;
-        public event ToolEvent ToolWorked;
+        
+        public event EventHandler ToolFinished;
+		public event EventHandler ToolStarted;
+		public event EventHandler ToolWorking;
         public delegate void ObjectSeletedDelegate(Object obj);
         public event ObjectSeletedDelegate ObjectSelected;
+
         /// <summary>
         /// active manipulator upon  selected object created by tool
         /// may be as default manipulator so as an another manipulator that can be created by tool instance
@@ -119,8 +120,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         
         protected override void OnPreviewMouseLeftButtonDown( MouseButtonEventArgs e)
         {
-            if(ToolStarted!=null)
-                ToolStarted(this,e);
+			NotifyToolStarted();
             Point pt = e.GetPosition(this);
 
             
@@ -152,13 +152,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
-            if(ToolFinished!=null)
-                ToolFinished(this,e);
+			NotifyToolFinished();
         }
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
-            if(ToolWorked!=null)
-                ToolWorked(this,e);
+			NotifyToolWorking();
         }
         protected override Size ArrangeOverride(Size finalSize)
         {
@@ -186,19 +184,21 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             ActiveManipulator = null;
             AdornerLayer.GetAdornerLayer(AdornedElement).Remove(this);
-
         }
-        protected  void RaiseToolFinished(BaseTool tool, EventArgs e)
+        protected  void NotifyToolFinished()
         {
-            ToolFinished(tool, e);
+			if(ToolFinished != null)
+				ToolFinished(this, new EventArgs());
         }
-        protected void RaiseToolStarted(BaseTool tool, EventArgs e)
+        protected void NotifyToolStarted()
         {
-            ToolStarted(tool, e);
+			if (ToolStarted != null)
+				ToolStarted(this, new EventArgs());
         }
-        protected void RaiseToolWorked(BaseTool tool, EventArgs e)
+        protected void NotifyToolWorking()
         {
-            ToolWorked(tool, e);
+			if (ToolWorking != null)
+				ToolWorking(this, new EventArgs());
         }
         
         protected virtual void ObjectChangedPreview(UIElement obj)
