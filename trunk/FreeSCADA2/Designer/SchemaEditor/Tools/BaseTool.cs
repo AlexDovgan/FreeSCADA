@@ -150,7 +150,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
         }
     
-        protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
+        protected override void OnPreviewMouseRightButtonUp(MouseButtonEventArgs e)
         {
 			NotifyToolFinished();
         }
