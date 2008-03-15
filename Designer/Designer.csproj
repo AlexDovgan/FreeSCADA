@@ -75,6 +75,7 @@
     <Compile Include="SchemaEditor\EditorHelpers.cs" />
     <Compile Include="SchemaEditor\Manipulators\ActionsEditManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\BaseManipulator.cs" />
+    <Compile Include="SchemaEditor\Manipulators\PolylineEditManipulantor.cs" />
     <Compile Include="SchemaEditor\Manipulators\TextBoxManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\Controlls\DragThumb.cs" />
     <Compile Include="SchemaEditor\Manipulators\Controlls\ResizeThumb.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="SchemaEditor\ShortProp.cs" />
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
     <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
+    <Compile Include="SchemaEditor\Tools\ButtonTool.cs" />
     <Compile Include="SchemaEditor\Tools\EllipseTool.cs" />
     <Compile Include="SchemaEditor\Tools\PolylineTool.cs" />
     <Compile Include="SchemaEditor\Tools\RectangleTool.cs" />

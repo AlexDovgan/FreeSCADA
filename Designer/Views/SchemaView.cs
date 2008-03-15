@@ -43,6 +43,7 @@ namespace FreeSCADA.Designer.Views
                 tl.Add(new TextBoxTool(Schema));
                 tl.Add(new PolylineTool(Schema));
                 tl.Add(new ActionEditTool(Schema));
+                tl.Add(new ButtonTool(Schema));
                 return tl;
 
             }
