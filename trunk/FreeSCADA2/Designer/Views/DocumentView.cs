@@ -86,16 +86,18 @@ namespace FreeSCADA.Designer.Views
 			if (IsModified)
 				TabText += " *";
 		}
-        protected void RaiseToolsCollectionChanged(List<ITool> tools,Type  currentTool)
+
+        protected void NotifyToolsCollectionChanged(List<ITool> tools,Type  currentTool)
         {
             if (ToolsCollectionChanged != null)
                 ToolsCollectionChanged(tools,currentTool);
         }
-        protected   override void OnClosed(EventArgs e)
+
+        protected override void OnClosed(EventArgs e)
         {
             
             RaiseObjectSelected(null);
-            RaiseToolsCollectionChanged(null, null);
+            NotifyToolsCollectionChanged(null, null);
             ObjectSelected = null;
             ToolsCollectionChanged = null;
             base.OnClosed(e);

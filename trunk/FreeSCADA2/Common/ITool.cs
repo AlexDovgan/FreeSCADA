@@ -4,6 +4,10 @@ namespace FreeSCADA.ShellInterfaces
 {
     public interface ITool
     {
+		event EventHandler ToolFinished;
+		event EventHandler ToolStarted;
+		event EventHandler ToolWorking;
+
         String ToolName
         {
             get;

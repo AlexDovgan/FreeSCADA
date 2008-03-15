@@ -69,7 +69,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 Rect b = VisualTreeHelper.GetContentBounds(objectPrview);
                 if (!b.IsEmpty)
                 {
-                 //   Border text = new Border();
+                 //   Border button = new Border();
                     TextBlock text = new TextBlock();
                     Canvas.SetLeft(text, b.X);
                     Canvas.SetTop(text, b.Y);
@@ -77,8 +77,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     text.Width = b.Width;
                     text.Height = b.Height;
                     text.Text = "You can write text here"; 
-                   // text.BorderBrush = Brushes.Black;
-                    //text.BorderThickness = new Thickness(1);
+                   // button.BorderBrush = Brushes.Black;
+                    //button.BorderThickness = new Thickness(1);
                     text.TextWrapping = TextWrapping.Wrap;
                     UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(text));
                     SelectedObject = text;

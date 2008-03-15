@@ -129,6 +129,12 @@
   <data name="MainWindowNameEx" xml:space="preserve">
     <value>[{0}] - Designer</value>
   </data>
+  <data name="ToolButtonName" xml:space="preserve">
+    <value>Button Tool</value>
+  </data>
+  <data name="ToolContentGroupName" xml:space="preserve">
+    <value>Content Tools</value>
+  </data>
   <data name="UnsavedProjectName" xml:space="preserve">
     <value>{unsaved project file}</value>
   </data>
