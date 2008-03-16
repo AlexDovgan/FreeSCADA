@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Media;
 using FreeSCADA.Common.Schema;
+using FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
@@ -32,6 +33,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         public BaseManipulator(UIElement adornedElement)
             //: base(adornedElement)
         {
+            ThumbsResources tr = new ThumbsResources();
+            tr.InitializeComponent();
+            Resources = tr;
+
             
             AdornedElement = adornedElement;
             if (!(AdornedElement .RenderTransform is TransformGroup))

@@ -12,7 +12,7 @@ using FreeSCADA.Designer.SchemaEditor.Context_Menu;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using System.Windows.Documents;
 using FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls;
-	
+
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
     //TODO:reimplement this manipulator on transform whith aplying changens on DragCompleted
@@ -46,9 +46,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 t.Children.Add(new RotateTransform());
                 (AdornedElement as FrameworkElement).RenderTransform= t;
             }
-            ThumbsResources tr = new ThumbsResources();
-            tr.InitializeComponent();
-            Resources = tr;
 
 
             dragControl.DataContext = el;

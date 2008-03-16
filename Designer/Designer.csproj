@@ -75,6 +75,8 @@
     <Compile Include="SchemaEditor\EditorHelpers.cs" />
     <Compile Include="SchemaEditor\Manipulators\ActionsEditManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\BaseManipulator.cs" />
+    <Compile Include="SchemaEditor\Manipulators\Controlls\PointDragThumb.cs" />
+    <Compile Include="SchemaEditor\Manipulators\PolylineEditManipulantor.cs" />
     <Compile Include="SchemaEditor\Manipulators\TextBoxManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\Controlls\DragThumb.cs" />
     <Compile Include="SchemaEditor\Manipulators\Controlls\ResizeThumb.cs" />

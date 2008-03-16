@@ -41,6 +41,16 @@
             </Setter.Value>
         </Setter>
     </Style>
-
+    <Style TargetType="{x:Type s:PointDragThumb}">
+        <Setter Property="Width" Value="10"/>
+        <Setter Property="Height" Value="10"/>
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type s:PointDragThumb}">
+                    <Ellipse Fill="Blue" Stretch="Fill" ></Ellipse>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 </ResourceDictionary>

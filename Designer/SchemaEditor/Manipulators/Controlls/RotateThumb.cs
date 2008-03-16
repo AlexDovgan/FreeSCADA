@@ -73,8 +73,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
                 // transformation center relative to its bounds
               
                 centerPoint = DesignerItem.TranslatePoint(
-                    new Point(DesignerItem.Width * DesignerItem.RenderTransformOrigin.X,
-                              DesignerItem.Height * DesignerItem.RenderTransformOrigin.Y),
+                    new Point(DesignerItem.DesiredSize.Width * DesignerItem.RenderTransformOrigin.X,
+                              DesignerItem.DesiredSize.Height * DesignerItem.RenderTransformOrigin.Y),
                                canvas);
             
             
