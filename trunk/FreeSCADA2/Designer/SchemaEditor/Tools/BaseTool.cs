@@ -143,14 +143,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 {
                     FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedSchema.MainCanvas, (DependencyObject)result.VisualHit);
                     SelectedObject = el;
-                    
                     //e.Handled = true;
 
                 }
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
         }
     
-        protected override void OnPreviewMouseRightButtonUp(MouseButtonEventArgs e)
+        protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
 			NotifyToolFinished();
         }

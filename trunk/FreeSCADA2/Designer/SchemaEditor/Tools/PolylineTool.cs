@@ -74,7 +74,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             //ReleaseMouseCapture();
-            base.OnPreviewMouseLeftButtonUp(e);
+            //base.OnPreviewMouseLeftButtonUp(e);
         }
 
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -98,6 +98,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             {
                 Rect b = VisualTreeHelper.GetContentBounds(objectPrview);
                 Polyline poly = new Polyline();
+                for (int i = 0; i < pointsCollection.Count; i++)
+                {
+                    Point p=pointsCollection[i];
+                    p.X -= b.X;
+                    p.Y -= b.Y;
+                    pointsCollection[i] = p;
+                }
                 poly.Points = pointsCollection.Clone();
                 Canvas.SetLeft(poly, b.X);
                 Canvas.SetTop(poly, b.Y);
@@ -111,6 +118,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             }
             pointsCollection.Clear();
             objectPrview.RenderOpen().Close();
+        }
+        protected override BaseManipulator CreateToolManipulator(UIElement obj)
+        {
+            if (obj is Polyline)
+                return new PolylineEditManipulantor(obj as Polyline);
+            else return base.CreateToolManipulator(obj);
         }
 
     }

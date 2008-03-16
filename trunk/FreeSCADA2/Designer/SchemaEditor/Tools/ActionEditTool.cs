@@ -72,7 +72,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             RaiseObjectSelected(a);
         }
-
+        protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
+        {
+            //ReleaseMouseCapture();
+            //base.OnPreviewMouseLeftButtonUp(e);
+        }
  
     }
 }
