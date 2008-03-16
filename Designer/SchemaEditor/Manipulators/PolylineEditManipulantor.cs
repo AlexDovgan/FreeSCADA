@@ -55,7 +55,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 p.Y -= b.Y;
                 poly.Points[i] = p;
             }
-                
+            poly.UpdateLayout();
         }
         void pointDragDelta(object sender, DragDeltaEventArgs e)
         {
