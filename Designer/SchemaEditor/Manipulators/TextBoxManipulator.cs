@@ -49,7 +49,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             textEditor.RenderTransform = AdornedElement.RenderTransform;
             
             visualChildren.Add(textEditor);
-            textEditor.Focus();
+            //textEditor.Focus();
         }
         public void Dispose()
         {
