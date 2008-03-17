@@ -51,8 +51,8 @@ namespace FreeSCADA.Common.Schema.Actions
 
             //MatrixTransform m = (actionedObject.RenderTransform as MatrixTransform).Clone();
             //m.Matrix.Rotate(20);
-
-            actionedObject.RenderTransform = new RotateTransform((double)(int)actionChannel.Value );
+            double a = (((double)actionChannel.Value) - minChannelValue) * (maxAngle - minAngle) / (maxChannelValue - minChannelValue) + minAngle;
+            actionedObject.RenderTransform = new RotateTransform(a);
 
         }
 
