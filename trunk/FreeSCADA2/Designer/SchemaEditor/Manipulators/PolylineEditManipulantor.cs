@@ -37,8 +37,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             poly.SetValue(FrameworkElement.WidthProperty, DependencyProperty.UnsetValue);
             poly.SetValue(FrameworkElement.HeightProperty, DependencyProperty.UnsetValue);
 
-            poly.SetValue(UIElement.RenderTransformProperty, DependencyProperty.UnsetValue);
-           
+            //poly.SetValue(UIElement.RenderTransformProperty, DependencyProperty.UnsetValue);
+            TransformGroup t = new TransformGroup();
+            t.Children.Add(new MatrixTransform());
+            t.Children.Add(new RotateTransform());
+            poly.RenderTransform = t;
         }
         public void Dispose()
         {

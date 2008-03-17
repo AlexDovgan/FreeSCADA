@@ -134,8 +134,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 return;
             }
 
-            HitTestResult result;
-            if (VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt).VisualHit == workedSchema.MainCanvas)
+            HitTestResult result = VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt);
+            if (result == null || result.VisualHit == workedSchema.MainCanvas)
                 SelectedObject = null;
 
             else
