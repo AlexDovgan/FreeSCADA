@@ -19,7 +19,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
     /// Description of Class1.
     /// </summary>
     
-    class TextBoxManipulator : BaseManipulator, IDisposable
+    class TextBoxManipulator : BaseManipulator
     {
         RichTextBox textEditor = new RichTextBox();
         TextBlock textBlock;
@@ -27,32 +27,30 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             : base(element)
         {
 
-            /*if (!(element is Border) && !((element as Border).Child is TextBlock) )
-                throw new Exception("This manipulator can't aply for object of this type");
-           
-            textEditor.BorderThickness = (element as Border).BorderThickness;
-            textEditor.BorderBrush = (element as Border).BorderBrush;
-            textBlock = (element as Border).Child as TextBlock;
-            */
-            if (!(element is TextBlock))
-                throw new Exception("This manipulator can't aply for object of this type");
-
-            textBlock = element as TextBlock;
+            
+        }
+        public override void Activate()
+        {
+            base.Activate();
+            if (!(AdornedElement  is TextBlock)) return;
+            textBlock = AdornedElement as TextBlock;
             Paragraph pargraph = new Paragraph();
 
             while (textBlock.Inlines.Count > 0)
             {
-                
+
                 pargraph.Inlines.Add(textBlock.Inlines.FirstInline);
             }
             textEditor.Document = new FlowDocument(pargraph);
             textEditor.RenderTransform = AdornedElement.RenderTransform;
-            
+
             visualChildren.Add(textEditor);
-            //textEditor.Focus();
+    
         }
-        public void Dispose()
+
+        public override void Deactivate()
         {
+            base.Deactivate();
             textBlock.Inlines.Clear();
             Paragraph paragraph = textEditor.Document.Blocks.FirstBlock as Paragraph;
             while(paragraph.Inlines.Count>0)

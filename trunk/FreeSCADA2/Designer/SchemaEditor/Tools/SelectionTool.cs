@@ -106,7 +106,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 manipulatorHit = ActiveManipulator.InputHitTest(e.GetPosition(ActiveManipulator));
 
             DependencyObject documentHit;
-            documentHit=VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt).VisualHit;
+            documentHit = VisualTreeHelper.HitTest(AdornedElement, pt).VisualHit;
             if (manipulatorHit != null)
             {
                 if (e.ClickCount > 1)
@@ -114,7 +114,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     ActiveManipulator = ObjectsFactory.CreateDefaultManipulator(SelectedObject);
                 }
             }
-            else if (documentHit == workedSchema.MainCanvas)
+            else if (documentHit == AdornedElement)
             {
 
                 CaptureMouse();
@@ -124,9 +124,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 selectedElements.Clear();
 
             }
-            else if (documentHit != workedSchema.MainCanvas)
+            else if (documentHit != AdornedElement)
             {
-                FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedSchema.MainCanvas, documentHit);
+                FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(AdornedElement, documentHit);
                 if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.None)
                 {
 

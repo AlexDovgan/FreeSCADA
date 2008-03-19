@@ -10,16 +10,25 @@ using System.Windows.Controls.Primitives;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
-    class PolylineEditManipulantor:BaseManipulator,IDisposable
+    class PolylineEditManipulantor:BaseManipulator
     {
         List<PointDragThumb> pointsDrags =new List<PointDragThumb>();
         public PolylineEditManipulantor(Polyline poly)
             : base(poly)
         {
             
+         
+        }
+        public override void Activate()
+        {
+            base.Activate();
+            if (!(AdornedElement is Polyline)) return;
+
+            Polyline poly = AdornedElement as Polyline;
+            
             foreach (Point p in poly.Points)
             {
-                PointDragThumb pd=new PointDragThumb();
+                PointDragThumb pd = new PointDragThumb();
                 pointsDrags.Add(pd);
                 pd.DragDelta += pointDragDelta;
                 visualChildren.Add(pd);
@@ -28,7 +37,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             for (int i = 0; i < poly.Points.Count; i++)
             {
                 Point p = poly.GeometryTransform.Transform(poly.Points[i]);
-                p=poly.TranslatePoint(p,(UIElement)this.Parent);
+                p = poly.TranslatePoint(p, (UIElement)this.Parent);
                 poly.Points[i] = p;
             }
             poly.Stretch = Stretch.None;
@@ -42,9 +51,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             t.Children.Add(new MatrixTransform());
             t.Children.Add(new RotateTransform());
             poly.RenderTransform = t;
-        }
-        public void Dispose()
+        } 
+        public override void Deactivate()
         {
+            base.Deactivate();
             Polyline poly = AdornedElement as Polyline;
             Rect b = VisualTreeHelper.GetContentBounds(poly);
             poly.Stretch = Stretch.Fill;
