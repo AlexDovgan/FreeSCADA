@@ -1,6 +1,12 @@
 ﻿
 namespace FreeSCADA.ShellInterfaces
 {
+	public enum EnvironmentMode
+	{
+		Designer,
+		Runtime
+	}
+
 	public interface IEnvironment
 	{
 		ICommands Commands
@@ -14,6 +20,11 @@ namespace FreeSCADA.ShellInterfaces
 		}
 
 		FreeSCADA.Common.Project Project
+		{
+			get;
+		}
+
+		EnvironmentMode Mode
 		{
 			get;
 		}

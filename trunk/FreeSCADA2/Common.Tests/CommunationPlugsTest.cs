@@ -12,7 +12,7 @@ namespace FreeSCADA.Common.Tests
 		public void Init()
 		{
 			menu = new MenuStrip();
-			Env.Initialize(new Control(), menu);
+			Env.Initialize(new Control(), menu, FreeSCADA.ShellInterfaces.EnvironmentMode.Designer);
 		}
 		[TearDown]
 		public void DeInit()

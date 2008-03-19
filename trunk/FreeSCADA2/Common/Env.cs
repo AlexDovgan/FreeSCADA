@@ -11,15 +11,17 @@ namespace FreeSCADA.Common
 		Control mainWindow;
 		CommunationPlugs communicationPlugins;
 		FreeSCADA.Common.Project project;
+		EnvironmentMode mode;
 
 		#region Initialization and singleton implementation
 
-		public static void Initialize(Control mainWindow, MenuStrip mainMenu)
+		public static void Initialize(Control mainWindow, MenuStrip mainMenu, EnvironmentMode mode)
 		{
 			if (environmentInstance == null)
 			{
 				environmentInstance = new Env();
 
+				environmentInstance.mode = mode;
 				environmentInstance.CreateNewProject();
 				environmentInstance.commands = new Commands(mainMenu);
 				environmentInstance.mainWindow = mainWindow;
@@ -64,6 +66,11 @@ namespace FreeSCADA.Common
 		public FreeSCADA.Common.Project Project
 		{
 			get { return project; }
+		}
+
+		public EnvironmentMode Mode
+		{
+			get { return mode; }
 		}
 
 		#endregion
