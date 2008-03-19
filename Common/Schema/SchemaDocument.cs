@@ -12,7 +12,8 @@ namespace FreeSCADA.Common.Schema
     public class SchemaDocument
     {
         public event EventHandler IsModifiedChanged;
-
+        
+            
         bool isModified = false;
         public bool IsModified
         {
@@ -27,7 +28,7 @@ namespace FreeSCADA.Common.Schema
 
         public String Name;
         public Canvas MainCanvas = new Canvas();
-
+        
         public static SchemaDocument LoadSchema(string schemaName)
         {
             try
@@ -41,7 +42,7 @@ namespace FreeSCADA.Common.Schema
                     {
                         schema.MainCanvas = obj as Canvas;
                         schema.Name = schemaName;
-
+                           
                     }
                     else
                         throw (new Exception("This is not FreeSCADA schema"));

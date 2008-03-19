@@ -35,6 +35,8 @@ namespace FreeSCADA.Designer.Views
 					toolsList.Add(new PolylineTool(Schema));
 					toolsList.Add(new ActionEditTool(Schema));
 					toolsList.Add(new ButtonTool(Schema));
+                    toolsList.Add(new GuegeTool(Schema));
+                    toolsList.Add(new ThermoTool(Schema)); 
 				}
 				return toolsList; 
 			}

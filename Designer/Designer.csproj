@@ -90,10 +90,12 @@
     <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
     <Compile Include="SchemaEditor\Tools\ButtonTool.cs" />
     <Compile Include="SchemaEditor\Tools\EllipseTool.cs" />
+    <Compile Include="SchemaEditor\Tools\GuageTool.cs" />
     <Compile Include="SchemaEditor\Tools\PolylineTool.cs" />
     <Compile Include="SchemaEditor\Tools\RectangleTool.cs" />
     <Compile Include="SchemaEditor\Tools\SelectionTool.cs" />
     <Compile Include="SchemaEditor\Tools\TextBoxTool.cs" />
+    <Compile Include="SchemaEditor\Tools\ThermoTool.cs" />
     <Compile Include="SchemaEditor\UndoRedo.cs" />
     <Compile Include="SchemaEditor\WPFShemaContainer.cs" />
     <Compile Include="StringResources.Designer.cs">
