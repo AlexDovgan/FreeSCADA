@@ -18,7 +18,7 @@ namespace FreeSCADA.Designer
 		public MainForm()
 		{
 			InitializeComponent();
-			Env.Initialize(this, mainMenu);
+			Env.Initialize(this, mainMenu, FreeSCADA.ShellInterfaces.EnvironmentMode.Designer);
 			windowManager = new WindowManager(dockPanel);
 			UpdateCaption();
 		}

@@ -3,7 +3,7 @@
   <Product Id="{A0692C53-185D-4d97-BF57-6F6AD70D96F1}"
            Name="FreeSCADA 2"
            Language="1033"
-           Version="2.0.0.0"
+           Version="2.0.0.1"
            Manufacturer="FreeSCADA Project [http://free-scada.sourceforge.net]"
            UpgradeCode="{3E3F16AD-E81B-482a-968A-77EAD18BFB8E}">
 
@@ -44,6 +44,12 @@
             </File>
           </Component>
 
+          <Component Id="Runtime" Guid="{80622C67-50FA-4595-8E59-7BD47601E9E8}">
+            <File Name="$(var.RunTime.TargetFileName)" Source="$(var.RunTime.TargetPath)">
+              <Shortcut Id="RuntimeShortcut" Directory="ShortcutFolder" Name="Runtime" Advertise="yes"/>
+            </File>
+          </Component>
+
           <Component Id="CommOPCPlugin" Guid="{4B44C968-ACBB-4c7d-B203-A63B32B960CD}">
             <File Name="$(var.Communication.OPCPlug.TargetFileName)" Source="$(var.Communication.OPCPlug.TargetPath)"/>
             <File Name="opcrcw.comn.dll" Source="..\3rdParty\OPC\opcrcw.comn.dll"/>
@@ -63,6 +69,10 @@
       
       <Feature Id="DesignerFeature" Title="Designer" Level="1" AllowAdvertise="no" Description="Install component which allows you to create HMI schemas, data connections, events and etc.">
         <ComponentRef Id="Designer" />
+      </Feature>
+
+      <Feature Id="RuntimeFeature" Title="Runtime" Level="1" AllowAdvertise="no" Description="Install component which allows you to view and execute HMI schemas created by Designer.">
+        <ComponentRef Id="Runtime" />
       </Feature>
       
       <Feature Id="CommPluginsFeature" Title="Communication plugins" Level="1" AllowAdvertise="no" Description="Cummunication plugins are used for connection with outer world.">

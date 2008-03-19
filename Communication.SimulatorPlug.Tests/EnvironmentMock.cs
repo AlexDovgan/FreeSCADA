@@ -22,5 +22,10 @@ namespace Communication.SimulatorPlug.Tests
 		{
 			get { return project; }
 		}
+
+		public EnvironmentMode Mode
+		{
+			get { return EnvironmentMode.Designer; }
+		}
 	}
 }

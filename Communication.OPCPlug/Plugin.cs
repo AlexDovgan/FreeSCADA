@@ -49,7 +49,8 @@ namespace FreeSCADA.Communication.OPCPlug
 
 			LoadSettings();
 
-			commands.Add(new PropertyCommand(this));
+			if(environment.Mode == EnvironmentMode.Designer)
+				commands.Add(new PropertyCommand(this));
 		}
 
 		public void ProcessCommand(int commandId)
