@@ -1,0 +1,12 @@
+<Viewbox Stretch="Fill" Height="201" Width="423"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:SwordfishCharts="clr-namespace:Swordfish.WPF.Charts;assembly=Swordfish.WPF.Charts">
+
+    <Viewbox.Child>
+
+        <SwordfishCharts:TestPage/>
+
+    </Viewbox.Child>
+
+</Viewbox>

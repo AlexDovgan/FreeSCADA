@@ -56,13 +56,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     {
                         activeManipulator.ObjectChangedPreview -= ObjectChangedPreview;
                         visualChildren.Remove(activeManipulator);
-                        if (activeManipulator is IDisposable)
-                        (activeManipulator as IDisposable).Dispose();
+                        activeManipulator.Deactivate();
                     }
                     if ((activeManipulator=value) != null)
                     { 
                         visualChildren.Add(activeManipulator);
                         activeManipulator.ObjectChangedPreview += ObjectChangedPreview;
+                        activeManipulator.Activate();
                         
                     }
                     AdornerLayer.GetAdornerLayer(AdornedElement).Update();
@@ -91,7 +91,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                         ActiveManipulator = CreateToolManipulator(value);
                         ActiveManipulator.InvalidateArrange();
                     }
-                        
+                         
                 }   
                 else
                     ActiveManipulator = null;
@@ -134,14 +134,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 return;
             }
 
-            HitTestResult result = VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt);
-            if (result == null || result.VisualHit == workedSchema.MainCanvas)
+            HitTestResult result = VisualTreeHelper.HitTest(AdornedElement, pt);
+            if (result == null || result.VisualHit == AdornedElement)
                 SelectedObject = null;
 
             else
-                if ((result = VisualTreeHelper.HitTest(workedSchema.MainCanvas, pt)).VisualHit != workedSchema.MainCanvas)
+                if ((result = VisualTreeHelper.HitTest(AdornedElement, pt)).VisualHit != AdornedElement)
                 {
-                    FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(workedSchema.MainCanvas, (DependencyObject)result.VisualHit);
+                    FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(AdornedElement, (DependencyObject)result.VisualHit);
                     SelectedObject = el;
                     //e.Handled = true;
 

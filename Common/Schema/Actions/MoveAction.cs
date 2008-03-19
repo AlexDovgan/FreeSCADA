@@ -6,31 +6,31 @@ namespace FreeSCADA.Common.Schema.Actions
 {
     public class MoveAction:BaseAction
     {
-        double minXmove = 0;
-        double maxXmove = 360;
-        double minXChannelValue = 0;
-        double maxXChannelValue = 100;
+        double minMove = 0;
+        double maxMove = 100;
+        double minChannelValue = 0;
+        double maxChannelValue = 100;
 
 
-        public double MinXMove
+        public double MinMove
         {
-            get { return minXmove; }
-            set { minXmove = value; }
+            get { return minMove; }
+            set { minMove = value; }
         }
-        public double MaxXMove
+        public double MaxMove
         {
-            get { return maxXmove; }
-            set { maxXmove = value; }
+            get { return maxMove; }
+            set { maxMove = value; }
         }
-        public double MinXChannelValue
+        public double MinChannelValue
         {
-            get { return minXChannelValue; }
-            set { minXChannelValue = value; }
+            get { return minChannelValue; }
+            set { minChannelValue = value; }
         }
         public double MaxXChannelValue
         {
-            get { return maxXChannelValue; }
-            set { maxXChannelValue = value; }
+            get { return maxChannelValue; }
+            set { maxChannelValue = value; }
         }
 
    

@@ -74,6 +74,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         }
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
+        public virtual void Activate()
+        {
+        }
+        public virtual void Deactivate()
+        {
+        }
+
+
     }
 
  }

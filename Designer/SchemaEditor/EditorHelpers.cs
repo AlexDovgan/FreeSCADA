@@ -20,13 +20,15 @@ namespace FreeSCADA.Designer.SchemaEditor
 {
     static class EditorHelper
     {
+
         public static FreeSCADA.Common.Schema.CustomElements.ElementsTemplates TemplateResources = new FreeSCADA.Common.Schema.CustomElements.ElementsTemplates();
         static  EditorHelper()
         {
             TemplateResources.InitializeComponent();
         }
             
-        public static UIElement FindTopParentUnder(Canvas c, DependencyObject el)
+        public static UIElement FindTopParentUnder(DependencyObject c, DependencyObject el)
+
         {
             DependencyObject top = el;
             while (VisualTreeHelper.GetParent(top) != c)

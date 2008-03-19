@@ -70,30 +70,32 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             }
 
         }
-
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             //ReleaseMouseCapture();
             //base.OnPreviewMouseLeftButtonUp(e);
+            
         }
-
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
 
-            base.OnPreviewMouseLeftButtonDown(e);
-            if (!e.Handled)
+            
+            if (SelectedObject==null)
             {
                 CaptureMouse();
                 pointsCollection.Add(e.GetPosition(this));
 
             }
-
+            if(pointsCollection.Count==0)
+                 base.OnPreviewMouseLeftButtonDown(e);
             e.Handled = false;
 
         }
         protected override void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
         {
             ReleaseMouseCapture();
+            if (pointsCollection.Count == 0)
+                NotifyToolFinished();
             if (pointsCollection.Count > 1)
             {
                 Rect b = VisualTreeHelper.GetContentBounds(objectPrview);
@@ -106,6 +108,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     pointsCollection[i] = p;
                 }
                 poly.Points = pointsCollection.Clone();
+                pointsCollection.Clear();
                 Canvas.SetLeft(poly, b.X);
                 Canvas.SetTop(poly, b.Y);
                 poly.Width = b.Width;

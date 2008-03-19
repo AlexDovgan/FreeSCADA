@@ -17,7 +17,7 @@ namespace FreeSCADA.Designer.SchemaEditor
 				(Child as ScrollViewer).Content = document.MainCanvas;
 				document.MainCanvas.Focusable = false;
 
-				document.MainCanvas.Background = resources["GridBackgroundBrush"] as DrawingBrush;
+				//document.MainCanvas.Ba    ckground = resources["GridBackgroundBrush"] as DrawingBrush;
 
 			}
 
@@ -30,6 +30,7 @@ namespace FreeSCADA.Designer.SchemaEditor
 			//Child.Focusable = false;
 			resources.InitializeComponent();
 			Child.SnapsToDevicePixels = true;
+            (Child as ScrollViewer).HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
 		}
 
 	}

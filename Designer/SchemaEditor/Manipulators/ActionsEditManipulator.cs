@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using FreeSCADA.Common.Schema.Actions;
 
@@ -80,6 +81,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         {
             if (ActionSelected!=null)
                 ActionSelected(((RadioButton)sender).Tag as BaseAction);
+            if (((RadioButton)sender).Tag is MoveAction)
+                AdornerLayer.GetAdornerLayer(AdornedElement).Add(new Tools.PolylineTool(null));
         }
         protected override Size MeasureOverride(Size finalSize)
         {
