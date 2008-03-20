@@ -210,9 +210,10 @@ namespace FreeSCADA.Designer.Views
                 rsettings.ProhibitDtd = false;
                 rsettings.ConformanceLevel = ConformanceLevel.Fragment;
                 XmlReader reader = XmlReader.Create(filename, rsettings);
-                reader.MoveToContent();
+                
                 try
                 {
+                    reader.MoveToContent();
                     XslCompiledTransform xslt = new XslCompiledTransform(true);
                     xslt.Load("resources/svg2xaml.xsl", new XsltSettings(true, true), null);
 
