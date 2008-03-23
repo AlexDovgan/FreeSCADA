@@ -126,4 +126,7 @@
   <data name="MainWindowNameEx" xml:space="preserve">
     <value>[{0}] - RunTime</value>
   </data>
+  <data name="SchemasItemName" xml:space="preserve">
+    <value>Schemas</value>
+  </data>
 </root>

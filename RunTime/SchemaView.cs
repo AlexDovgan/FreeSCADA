@@ -52,7 +52,7 @@ namespace FreeSCADA.RunTime
 			SchemaDocument schema;
 			if ((schema = SchemaDocument.LoadSchema(name)) == null)
 				return false;
-
+			schema.LinkActions();
 			Schema = schema;
 			return true;
 		}

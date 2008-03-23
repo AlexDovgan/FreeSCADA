@@ -34,5 +34,21 @@ namespace FreeSCADA.RunTime
 		{
 			Close();
 		}
+
+		private void OnRunClick(object sender, System.EventArgs e)
+		{
+			if (Env.Current.CommunicationPlugins.Connect())
+			{
+				runButton.Enabled = false;
+				stopButton.Enabled = true;
+			}
+		}
+
+		private void OnStopClick(object sender, System.EventArgs e)
+		{
+			Env.Current.CommunicationPlugins.Disconnect();
+			runButton.Enabled = true;
+			stopButton.Enabled = false;
+		}
 	}
 }
