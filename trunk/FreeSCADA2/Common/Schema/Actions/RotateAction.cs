@@ -48,12 +48,9 @@ namespace FreeSCADA.Common.Schema.Actions
         delegate void RotateDelegate();
         void Rotate()
         {
-
-            //MatrixTransform m = (actionedObject.RenderTransform as MatrixTransform).Clone();
-            //m.Matrix.Rotate(20);
-            double a = (((double)actionChannel.Value) - minChannelValue) * (maxAngle - minAngle) / (maxChannelValue - minChannelValue) + minAngle;
+			double val = Convert.ToDouble(actionChannel.Value);
+			double a = (val - minChannelValue) * (maxAngle - minAngle) / (maxChannelValue - minChannelValue) + minAngle;
             actionedObject.RenderTransform = new RotateTransform(a);
-
         }
 
         protected override void Execute(object sender, EventArgs e)

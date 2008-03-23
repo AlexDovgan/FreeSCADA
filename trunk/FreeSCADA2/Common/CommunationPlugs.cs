@@ -97,8 +97,7 @@ namespace FreeSCADA.Common
 		}
         
         public IChannel GetChannel(string name)
-        {
-                
+        {                
             string[] splited = name.Split('.');
             if(splited.Length>1)
             {
@@ -110,9 +109,9 @@ namespace FreeSCADA.Common
                         if(chanel.Name==splited[1])
                             return chanel;
                     }
-                } return null;
-            } return null;
-            
+                } 
+            } 
+			return null;
         }
 	}
 }
