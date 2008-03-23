@@ -86,5 +86,14 @@ namespace FreeSCADA.RunTime {
                 return ResourceManager.GetString("MainWindowNameEx", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schemas.
+        /// </summary>
+        internal static string SchemasItemName {
+            get {
+                return ResourceManager.GetString("SchemasItemName", resourceCulture);
+            }
+        }
     }
 }

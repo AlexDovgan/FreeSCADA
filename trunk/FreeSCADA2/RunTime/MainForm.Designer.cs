@@ -30,23 +30,71 @@
 		{
 			System.Windows.Forms.ToolStrip toolStrip1;
 			System.Windows.Forms.ToolStripButton toolStripButton1;
-			System.Windows.Forms.ToolStripButton toolStripButton3;
-			System.Windows.Forms.ToolStripButton toolStripButtonNewSchema;
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.runButton = new System.Windows.Forms.ToolStripButton();
+			this.stopButton = new System.Windows.Forms.ToolStripButton();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.mainMenu = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
 			toolStrip1 = new System.Windows.Forms.ToolStrip();
 			toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-			toolStripButton3 = new System.Windows.Forms.ToolStripButton();
-			toolStripButtonNewSchema = new System.Windows.Forms.ToolStripButton();
-			this.mainMenu.SuspendLayout();
 			toolStrip1.SuspendLayout();
+			this.mainMenu.SuspendLayout();
 			this.SuspendLayout();
+			// 
+			// toolStrip1
+			// 
+			toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            toolStripButton1,
+            this.toolStripSeparator1,
+            this.runButton,
+            this.stopButton});
+			toolStrip1.Location = new System.Drawing.Point(0, 24);
+			toolStrip1.Name = "toolStrip1";
+			toolStrip1.Size = new System.Drawing.Size(513, 25);
+			toolStrip1.TabIndex = 9;
+			toolStrip1.Text = "mainToolbar";
+			// 
+			// toolStripButton1
+			// 
+			toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			toolStripButton1.Image = global::FreeSCADA.RunTime.Properties.Resources.open_file;
+			toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+			toolStripButton1.Name = "toolStripButton1";
+			toolStripButton1.Size = new System.Drawing.Size(23, 22);
+			toolStripButton1.Text = "toolStripButton1";
+			toolStripButton1.Click += new System.EventHandler(this.OnLoadProjectClick);
+			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+			// 
+			// runButton
+			// 
+			this.runButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.runButton.Image = global::FreeSCADA.RunTime.Properties.Resources.run;
+			this.runButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.runButton.Name = "runButton";
+			this.runButton.Size = new System.Drawing.Size(23, 22);
+			this.runButton.Text = "toolStripButton3";
+			this.runButton.Click += new System.EventHandler(this.OnRunClick);
+			// 
+			// stopButton
+			// 
+			this.stopButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.stopButton.Enabled = false;
+			this.stopButton.Image = global::FreeSCADA.RunTime.Properties.Resources.stop;
+			this.stopButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.stopButton.Name = "stopButton";
+			this.stopButton.Size = new System.Drawing.Size(23, 22);
+			this.stopButton.Text = "toolStripButton4";
+			this.stopButton.Click += new System.EventHandler(this.OnStopClick);
 			// 
 			// statusStrip1
 			// 
@@ -96,53 +144,6 @@
 			this.exitToolStripMenuItem.Text = "Exit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnMenuExitClick);
 			// 
-			// toolStrip1
-			// 
-			toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-			toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            toolStripButton1,
-            this.toolStripSeparator1,
-            toolStripButton3,
-            toolStripButtonNewSchema});
-			toolStrip1.Location = new System.Drawing.Point(0, 24);
-			toolStrip1.Name = "toolStrip1";
-			toolStrip1.Size = new System.Drawing.Size(513, 25);
-			toolStrip1.TabIndex = 9;
-			toolStrip1.Text = "mainToolbar";
-			// 
-			// toolStripButton1
-			// 
-			toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			toolStripButton1.Image = global::FreeSCADA.RunTime.Properties.Resources.open_file;
-			toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-			toolStripButton1.Name = "toolStripButton1";
-			toolStripButton1.Size = new System.Drawing.Size(23, 22);
-			toolStripButton1.Text = "toolStripButton1";
-			toolStripButton1.Click += new System.EventHandler(this.OnLoadProjectClick);
-			// 
-			// toolStripSeparator1
-			// 
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-			// 
-			// toolStripButton3
-			// 
-			toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			toolStripButton3.Image = global::FreeSCADA.RunTime.Properties.Resources.run;
-			toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-			toolStripButton3.Name = "toolStripButton3";
-			toolStripButton3.Size = new System.Drawing.Size(23, 22);
-			toolStripButton3.Text = "toolStripButton3";
-			// 
-			// toolStripButtonNewSchema
-			// 
-			toolStripButtonNewSchema.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			toolStripButtonNewSchema.Image = global::FreeSCADA.RunTime.Properties.Resources.stop;
-			toolStripButtonNewSchema.ImageTransparentColor = System.Drawing.Color.Magenta;
-			toolStripButtonNewSchema.Name = "toolStripButtonNewSchema";
-			toolStripButtonNewSchema.Size = new System.Drawing.Size(23, 22);
-			toolStripButtonNewSchema.Text = "toolStripButton4";
-			// 
 			// dockPanel
 			// 
 			this.dockPanel.ActiveAutoHideContent = null;
@@ -170,10 +171,10 @@
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds;
 			this.Text = "RunTime";
-			this.mainMenu.ResumeLayout(false);
-			this.mainMenu.PerformLayout();
 			toolStrip1.ResumeLayout(false);
 			toolStrip1.PerformLayout();
+			this.mainMenu.ResumeLayout(false);
+			this.mainMenu.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -189,6 +190,8 @@
 		private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel;
+		private System.Windows.Forms.ToolStripButton runButton;
+		private System.Windows.Forms.ToolStripButton stopButton;
 	}
 }
 
