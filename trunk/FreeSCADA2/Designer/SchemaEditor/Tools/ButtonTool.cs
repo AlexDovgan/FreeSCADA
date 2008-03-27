@@ -16,8 +16,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 		bool isDragging;
 		Button buttonObject;
 
-		public ButtonTool(SchemaDocument doc)
-			: base(doc)
+		public ButtonTool(UIElement element)
+            : base(element)
 		{
 		}
 
@@ -93,7 +93,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 				if (buttonObject.Height < 10)
 					buttonObject.Height = 10;
 
-				UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(buttonObject));
+                NotifyObjectCreated(buttonObject);
 				SelectedObject = buttonObject;
 
 				isDragging = false;

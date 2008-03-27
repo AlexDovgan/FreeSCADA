@@ -16,8 +16,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 		bool isDragging;
 
         ProgressBar guageObject;
-        public GuegeTool(SchemaDocument doc)
-			: base(doc)
+        public GuegeTool(UIElement element)
+			: base(element)
 		{
 		}
 
@@ -95,7 +95,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 				if (guageObject.Height < 10)
 					guageObject.Height = 10;
 
-				UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(guageObject));
+                NotifyObjectCreated(guageObject);
 				SelectedObject = guageObject;
 
 				isDragging = false;

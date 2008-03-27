@@ -13,9 +13,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
     {
         Rectangle hilightRect = new Rectangle();
         Path path = new Path();
-        public GeometryHilightManipulator(UIElement element)
-            : base(element)
+        public GeometryHilightManipulator(UIElement el)
+            : base(el)
         {
+            
             VisualBrush brush = new VisualBrush(AdornedElement);
             hilightRect.Opacity = 0.5;
             hilightRect.Fill = brush;
@@ -26,6 +27,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 
             visualChildren.Add(hilightRect);
             visualChildren.Add(path);
+             
         }
         
         protected override Size ArrangeOverride(Size finalSize)

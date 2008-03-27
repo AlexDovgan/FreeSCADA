@@ -36,110 +36,101 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         Rectangle visualCopy = new Rectangle();
 
         
-        public DragResizeRotateManipulator(FrameworkElement el)
-            : base(el)
+        public DragResizeRotateManipulator(UIElement element)
+            : base(element)
         {
-            if (!((AdornedElement as FrameworkElement).RenderTransform is TransformGroup))
-            {
-                TransformGroup t = new TransformGroup();
-                t.Children.Add(new MatrixTransform());
-                t.Children.Add(new RotateTransform());
-                (AdornedElement as FrameworkElement).RenderTransform= t;
-            }
+            
 
-
-            dragControl.DataContext = el;
+            
             dragControl.VerticalAlignment = VerticalAlignment.Stretch;
             dragControl.HorizontalAlignment = HorizontalAlignment.Stretch;
             dragControl.Cursor = Cursors.SizeAll;
-            dragControl.RenderTransform = el.RenderTransform;
-                //(el.RenderTransform as TransformGroup).Children[1];
-
             visualChildren.Add(dragControl);
 
-            rotateTopLeft.DataContext = el;
+            
             rotateTopLeft.VerticalAlignment = VerticalAlignment.Top;
             rotateTopLeft.HorizontalAlignment = HorizontalAlignment.Left;
             visualChildren.Add(rotateTopLeft);
 
-            rotateBottomLeft.DataContext = el;
-            //rotateBottomLeft.RenderTransform = new RotateTransform(270);
+            
             rotateBottomLeft.VerticalAlignment = VerticalAlignment.Bottom;
             rotateBottomLeft.HorizontalAlignment = HorizontalAlignment.Left;
             visualChildren.Add(rotateBottomLeft);
 
-            rotateTopRight.DataContext = el;
-            //rotateTopRight.RenderTransform = new RotateTransform(90);
+            
             rotateTopRight.VerticalAlignment = VerticalAlignment.Top;
             rotateTopRight.HorizontalAlignment = HorizontalAlignment.Right;
             visualChildren.Add(rotateTopRight);
 
-            rotateBottomRight.DataContext = el;
-            //rotateBottomRight.RenderTransform = new RotateTransform(180);
+            
             rotateBottomRight.VerticalAlignment = VerticalAlignment.Bottom;
             rotateBottomRight.HorizontalAlignment = HorizontalAlignment.Right;
             visualChildren.Add(rotateBottomRight);
 
-            resizeTopLeft.DataContext = el;
             resizeTopLeft.Cursor = Cursors.SizeNWSE;
             resizeTopLeft.VerticalAlignment = VerticalAlignment.Top;
             resizeTopLeft.HorizontalAlignment = HorizontalAlignment.Left;
             visualChildren.Add(resizeTopLeft);
 
-            resizeBottomLeft.DataContext = el;
             resizeBottomLeft.Cursor = Cursors.SizeNESW;
             resizeBottomLeft.VerticalAlignment = VerticalAlignment.Bottom;
             resizeBottomLeft.HorizontalAlignment = HorizontalAlignment.Left;
             visualChildren.Add(resizeBottomLeft);
 
-            resizeTopRight.DataContext = el;
             resizeTopRight.Cursor = Cursors.SizeNESW;
             resizeTopRight.VerticalAlignment = VerticalAlignment.Top;
             resizeTopRight.HorizontalAlignment = HorizontalAlignment.Right;
             visualChildren.Add(resizeTopRight);
 
-            resizeBottomRight.DataContext = el;
             resizeBottomRight.Cursor = Cursors.SizeNWSE;
             resizeBottomRight.VerticalAlignment = VerticalAlignment.Bottom;
             resizeBottomRight.HorizontalAlignment = HorizontalAlignment.Right;
             visualChildren.Add(resizeBottomRight);
 
-            resizeLeft.DataContext = el;
             resizeLeft.Cursor = Cursors.SizeWE;
             resizeLeft.HorizontalAlignment = HorizontalAlignment.Left;
             resizeLeft.VerticalAlignment = VerticalAlignment.Center;
             visualChildren.Add(resizeLeft);
 
-            resizeRight.DataContext = el;
             resizeRight.Cursor = Cursors.SizeWE;
             resizeRight.HorizontalAlignment = HorizontalAlignment.Right;
             resizeRight.VerticalAlignment = VerticalAlignment.Center;
             visualChildren.Add(resizeRight);
 
-            resizeTop.DataContext = el;
             resizeTop.Cursor = Cursors.SizeNS;
             resizeTop.HorizontalAlignment = HorizontalAlignment.Center;
             resizeTop.VerticalAlignment = VerticalAlignment.Top;
             visualChildren.Add(resizeTop);
 
-            resizeBottom.DataContext = el;
             resizeBottom.Cursor = Cursors.SizeNS;
             resizeBottom.HorizontalAlignment = HorizontalAlignment.Center;
             resizeBottom.VerticalAlignment = VerticalAlignment.Bottom;
             visualChildren.Add(resizeBottom);
+            Activate();
+
+        }
+        public override void Activate()
+        {
+            if (!(AdornedElement is FrameworkElement))
+                throw new Exception("This is not FrameworkElement");
 
             foreach (Thumb control in visualChildren)
             {
+
+                control.DataContext = AdornedElement;
                 control.DragStarted += new DragStartedEventHandler(control_DragStarted);
                 control.DragCompleted += new DragCompletedEventHandler(control_DragCompleted);
                 control.DragDelta += new DragDeltaEventHandler(control_DragDelta);
-            }
+                if (control.Cursor == Cursors.SizeAll) control.RenderTransform = AdornedElement.RenderTransform;
 
+            }
+            base.Activate();
+            
         }
 
         void control_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            RaiseObjectChamnedEvent();
+            RaiseObjectChangedEvent();
             InvalidateArrange();
         }
 
@@ -155,11 +146,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         {
         
             InvalidateArrange();
-            RaiseObjectChamnedPrevewEvent();
+            RaiseObjectChangedPrevewEvent();
         }
 
         protected override Size ArrangeOverride(Size finalSize)
         {
+            //if (Visibility == Visibility.Hidden) return finalSize;
             Rect ro = new Rect(0, 0, AdornedElement.DesiredSize.Width, AdornedElement.DesiredSize.Height);
             //Rect ro = LayoutInformation.GetLayoutSlot(AdornedElement as FrameworkElement);
             foreach (Thumb control in visualChildren)
@@ -196,7 +188,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                         break;
                 }
                
-                Point p = AdornedElement.TransformToVisual(this).Transform(new Point(aligmentRect.X, aligmentRect.Y));
+                //Point p = AdornedElement.TransformToVisual(this).Transform(new Point(aligmentRect.X, aligmentRect.Y));
+                Point p = AdornedElement.TranslatePoint(new Point(aligmentRect.X, aligmentRect.Y), this);
                 p.X -= control.RenderTransform.Value.OffsetX;
                 p.Y -= control.RenderTransform.Value.OffsetY;
                 
@@ -208,6 +201,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 control.Arrange(aligmentRect);
             }
             return finalSize;
+        }
+        protected override void OnPreviewMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
         }
 
        

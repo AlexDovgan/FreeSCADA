@@ -27,8 +27,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         Point startPos;
         bool isDragged;
         DrawingVisual objectPrview = new DrawingVisual();
-        public EllipseTool(SchemaDocument schema)
-            : base(schema)
+        public EllipseTool(UIElement element)
+            : base(element)
         {
             objectPrview.Opacity = 0.5;
             visualChildren.Add(objectPrview);
@@ -80,7 +80,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     el.Height = b.Height;
                     el.Stroke = Brushes.Black;
                     el.Fill = Brushes.Gray;
-                    UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(el));
+                    NotifyObjectCreated(el);
                     SelectedObject = el;
                     
                 }

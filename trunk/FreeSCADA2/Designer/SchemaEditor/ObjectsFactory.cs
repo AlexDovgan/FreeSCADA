@@ -58,7 +58,7 @@ namespace FreeSCADA.Designer.SchemaEditor
                 {
                     object[] a = new object[1];
                     a[0] = frameworkElement;
-                    return (BaseManipulator)System.Activator.CreateInstance(desctiptor.ObjectManipulatorType, a);
+                    return (BaseManipulator)System.Activator.CreateInstance(desctiptor.ObjectManipulatorType,a);
                 }
 
             }

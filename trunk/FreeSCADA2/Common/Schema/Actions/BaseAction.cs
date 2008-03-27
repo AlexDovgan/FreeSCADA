@@ -17,6 +17,14 @@ namespace FreeSCADA.Common.Schema.Actions
         protected string objectName;
         protected IChannel actionChannel;
         protected bool isLinked=false;
+        
+        System.Windows.Media.Geometry helperObject;
+
+        public System.Windows.Media.Geometry HelperObject
+        {
+            get { return helperObject; }
+            set { helperObject = value; }
+        }
 
         public string ActionChannelName
         {
@@ -67,6 +75,7 @@ namespace FreeSCADA.Common.Schema.Actions
             
             return false;
         }
+        
         
     }
 }

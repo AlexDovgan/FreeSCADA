@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Windows;
+using System.Windows.Controls;
+
 
 namespace FreeSCADA.Common.Schema.Actions
 {
@@ -12,7 +15,7 @@ namespace FreeSCADA.Common.Schema.Actions
         double maxAngle = 360;
         double minChannelValue = 0;
         double maxChannelValue = 100;
-
+        RotateTransform rotate = new RotateTransform();
 
         public double MinAngle
         {
@@ -40,7 +43,15 @@ namespace FreeSCADA.Common.Schema.Actions
             base.PrepareExecute();
             if (isLinked)
             {
-                actionedObject.RenderTransform = new MatrixTransform(actionedObject.RenderTransform.Value);
+                if (isLinked)
+                {
+                    TransformGroup tg = new TransformGroup();
+                    tg.Children.Add(rotate);
+                    tg.Children.Add(actionedObject.RenderTransform);
+                    
+                    actionedObject.RenderTransform = tg;
+
+                }
 
             }
         }
@@ -50,7 +61,7 @@ namespace FreeSCADA.Common.Schema.Actions
         {
 			double val = Convert.ToDouble(actionChannel.Value);
 			double a = (val - minChannelValue) * (maxAngle - minAngle) / (maxChannelValue - minChannelValue) + minAngle;
-            actionedObject.RenderTransform = new RotateTransform(a);
+            rotate.Angle=a;
         }
 
         protected override void Execute(object sender, EventArgs e)

@@ -1,6 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Documents;
 using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls;
 
@@ -12,42 +13,64 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
     /// 
     /// /// </summary>
         
-    class BaseManipulator :FrameworkElement//Adorner
+    class BaseManipulator :Adorner
     {
         
         /// <summary>
         /// Element that manipulator is decorate
         /// </summary>
-        public UIElement AdornedElement;
+        protected UIElement adornedElement;
         /// <summary>
         /// Container for manipulator controlls
         /// </summary>
         protected VisualCollection visualChildren;
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="adornedElement"></param>
-        /// 
-  
-        public BaseManipulator(UIElement adornedElement)
-            //: base(adornedElement)
+        public  UIElement AdornedElement
         {
-            ThumbsResources tr = new ThumbsResources();
-            tr.InitializeComponent();
-            Resources = tr;
+            get { return adornedElement; }
+            /*set
+            {
+                if (adornedElement == value) return;
+                if (adornedElement!=null) Deactivate();
 
-            
-            AdornedElement = adornedElement;
-            if (!(AdornedElement .RenderTransform is TransformGroup))
+                adornedElement = value;
+                if (adornedElement != null)
+                {
+                    if (!(adornedElement.RenderTransform is TransformGroup))
+                    {
+                        TransformGroup t = new TransformGroup();
+                        t.Children.Add(new MatrixTransform());
+                        t.Children.Add(new RotateTransform());
+                        adornedElement.RenderTransform = t;
+                        adornedElement.RenderTransformOrigin = new Point(0.5, 0.5);
+
+                    }
+ 
+                    Activate();
+                }
+      
+            }*/
+        }
+
+        public BaseManipulator(UIElement element)
+            : base(element)
+        {
+            adornedElement = element;
+            if (!(adornedElement.RenderTransform is TransformGroup))
             {
                 TransformGroup t = new TransformGroup();
                 t.Children.Add(new MatrixTransform());
                 t.Children.Add(new RotateTransform());
-                AdornedElement.RenderTransform = t;
+                adornedElement.RenderTransform = t;
+                adornedElement.RenderTransformOrigin = new Point(0.5, 0.5);
+
             }
-            AdornedElement.RenderTransformOrigin = new Point(0.5, 0.5); 
+            ThumbsResources tr = new ThumbsResources();
+            tr.InitializeComponent();
+            Resources = tr;
+            this.Visibility = Visibility.Collapsed;                       
             visualChildren = new VisualCollection(this);
+            
         }
         
         /// <summary>
@@ -61,12 +84,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         public event ObjectChangedDelegate ObjectChanged;
         public event ObjectChangedDelegate ObjectChangedPreview;
         
-        protected void  RaiseObjectChamnedPrevewEvent()
+        protected void  RaiseObjectChangedPrevewEvent()
         {
             if (ObjectChangedPreview != null)
                 ObjectChangedPreview(AdornedElement);
         }
-        protected void RaiseObjectChamnedEvent()
+        protected void RaiseObjectChangedEvent()
         {
             if (ObjectChanged != null)
                 ObjectChanged(AdornedElement);
@@ -74,13 +97,27 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         }
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
+
+        
+
         public virtual void Activate()
         {
+            this.Visibility = Visibility.Visible;
+            //UpdateLayout();
+            InvalidateMeasure();
+            InvalidateArrange();
         }
         public virtual void Deactivate()
         {
+            this.Visibility = Visibility.Collapsed;
+            //UpdateLayout();
+            InvalidateMeasure();
+            InvalidateArrange();
         }
-
+        public virtual bool IsSelactable(UIElement el)
+        {
+            return true;
+        }
 
     }
 

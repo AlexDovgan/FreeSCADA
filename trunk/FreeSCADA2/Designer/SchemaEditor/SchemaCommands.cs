@@ -46,7 +46,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Context_Menu
             if (o is SelectionTool)
                 tool = o as SelectionTool;
             else return false;
-            if((tool.ActiveManipulator!=null )&& (tool.ActiveManipulator.AdornedElement is Viewbox))
+            if((tool.ToolManipulator!=null )&& (tool.ToolManipulator.AdornedElement is Viewbox))
                 return true;
             return false;
         }

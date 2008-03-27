@@ -16,8 +16,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 		bool isDragging;
 
         ProgressBar thermoObject;
-        public ThermoTool(SchemaDocument doc)
-			: base(doc)
+        public ThermoTool(UIElement element)
+            : base(element)
 		{
 		}
 
@@ -72,6 +72,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 			if (isDragging)
 			{
 				Vector v = e.GetPosition(this) - startPos;
+                
 				thermoObject.Width = v.X;
 				thermoObject.Height = v.Y;
 
@@ -95,7 +96,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 				if (thermoObject.Height < 10)
 					thermoObject.Height = 10;
 
-				UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(thermoObject));
+                NotifyObjectCreated(thermoObject);
 				SelectedObject = thermoObject;
 
 				isDragging = false;

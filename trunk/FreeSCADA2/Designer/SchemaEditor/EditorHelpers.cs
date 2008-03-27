@@ -148,7 +148,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             
         }
 
-        public static Rect CalculateBoundce(List<UIElement> elList, Canvas parent)
+        public static Rect CalculateBoundce(List<UIElement> elList, UIElement parent)
         {
             Rect boundce = Rect.Empty;
             foreach (UIElement el in elList)

@@ -36,33 +36,16 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         }
         #endregion
 
-        public ActionEditTool(SchemaDocument doc)
-            : base(doc)
+        public ActionEditTool(UIElement elemnet)
+            : base(elemnet)
         {
-
-        }
-        protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-
-            base.OnPreviewMouseLeftButtonDown(e);
-            /*if (SelectedObject != null)
-            {
-                RotateAction a = new RotateAction();
-                a.ActionChannelName = "data_simulator_plug.Test1";
-                if(a.CheckActionFor(SelectedObject as FrameworkElement))
-                    ActionsCollection.GetActions((SelectedObject as FrameworkElement)).ActionsList.Add(a);
-                workedSchema.LinkActions();
-                Env.Current.CommunicationPlugins.Connect();
-            }
-            */
             
-            e.Handled = false;
         }
         protected override BaseManipulator CreateToolManipulator(UIElement obj)
         {
             ActionsEditManipulator manipulator;
-            if (ActiveManipulator != null)
-                (ActiveManipulator as ActionsEditManipulator).ActionSelected -= manipulator_ActionSelected;
+            if (ToolManipulator != null)
+                (ToolManipulator as ActionsEditManipulator).ActionSelected -= manipulator_ActionSelected;
             manipulator=new ActionsEditManipulator(obj);
             manipulator.ActionSelected += new ActionsEditManipulator.ActionSelectedDelegate(manipulator_ActionSelected);
             return manipulator;
@@ -76,6 +59,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             //ReleaseMouseCapture();
             //base.OnPreviewMouseLeftButtonUp(e);
+        }
+        protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnPreviewMouseLeftButtonDown(e);
+            e.Handled = false;
         }
  
     }
