@@ -30,8 +30,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// Constructor
         /// </summary>
         /// <param name="schema"></param>
-        public RectangleTool(SchemaDocument schema)
-            : base(schema)
+        public RectangleTool(UIElement element)
+            : base(element)
         {
             
             objectPrview.Opacity = 0.5;
@@ -90,7 +90,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     r.Height = b.Height;
                     r.Stroke = Brushes.Black;
                     r.Fill = Brushes.Gray;
-                    UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(r));
+                    NotifyObjectCreated(r);
                     SelectedObject = r;
 
                 }

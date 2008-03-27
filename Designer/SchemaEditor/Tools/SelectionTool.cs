@@ -30,8 +30,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         Rectangle boundceRect = new Rectangle();
         DrawingVisual selectionRectangle = new DrawingVisual();
 
-        public SelectionTool(SchemaDocument schema)
-            : base(schema)
+        public SelectionTool(UIElement element)
+            : base(element)
         {
             boundceRect.Stroke = Brushes.Black;
             boundceRect.Opacity = 0.25;
@@ -46,7 +46,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             menu.groupMenuItem.CommandParameter = this;
             menu.unGroupMenuItem.CommandParameter = this;
-            
 
         }
         #region ITool implementation
@@ -102,8 +101,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             Point pt = e.GetPosition(this);
             
             IInputElement manipulatorHit = null;
-            if (ActiveManipulator != null)
-                manipulatorHit = ActiveManipulator.InputHitTest(e.GetPosition(ActiveManipulator));
+            if (ToolManipulator != null)
+                manipulatorHit = ToolManipulator.InputHitTest(e.GetPosition(ToolManipulator));
 
             DependencyObject documentHit;
             documentHit = VisualTreeHelper.HitTest(AdornedElement, pt).VisualHit;
@@ -111,14 +110,16 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             {
                 if (e.ClickCount > 1)
                 {
-                    ActiveManipulator = ObjectsFactory.CreateDefaultManipulator(SelectedObject);
+                    UIElement so = SelectedObject;
+                    SelectedObject = null;
+                    ToolManipulator = ObjectsFactory.CreateDefaultManipulator(so);
+                    SelectedObject = so;
                 }
             }
             else if (documentHit == AdornedElement)
             {
 
                 CaptureMouse();
-                //ActiveManipulator = null;
                 startPos = e.GetPosition(this);
                 isDragged = true;
                 selectedElements.Clear();
@@ -129,8 +130,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(AdornedElement, documentHit);
                 if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.None)
                 {
-
-                    ActiveManipulator = new DragResizeRotateManipulator(el);
+                    
+                    //ToolManipulator = new DragResizeRotateManipulator(el);
                     SelectedObject = el;
 
                 }
@@ -158,7 +159,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         protected override Size ArrangeOverride(Size finalSize)
         {
             base.ArrangeOverride(finalSize);
-            Rect r = EditorHelper.CalculateBoundce(selectedElements, (Canvas)AdornedElement);
+            Rect r = EditorHelper.CalculateBoundce(selectedElements, AdornedElement);
             if (!r.IsEmpty)
             {
                 boundceRect.Visibility = Visibility.Visible;

@@ -22,10 +22,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
         {
             get
             {
-                if (designerItem == null)
-                {
-                    designerItem = this.DataContext as FrameworkElement;;
-                }
+                designerItem = this.DataContext as FrameworkElement;;
+                
                 return designerItem;
             }
         }
@@ -102,7 +100,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
                 double angle = Vector.AngleBetween(startVector, deltaVector);
 
                 // and update the transformation
-                rotateTransform.Angle = initialAngle + Math.Round(angle, 0);
+                ItemRotateTransform.Angle = initialAngle + Math.Round(angle, 0);
            }
         }
     }

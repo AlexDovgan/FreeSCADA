@@ -18,13 +18,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         bool isDragged;
         DrawingVisual objectPrview = new DrawingVisual();
 
-        public TextBoxTool(SchemaDocument doc)
-            : base(doc)
+        public TextBoxTool(UIElement element)
+            : base(element)
         {
 
             objectPrview.Opacity = 0.5;
             visualChildren.Add(objectPrview);
-
+            
         }
         #region ITool implementation
         public String ToolName
@@ -77,7 +77,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     text.Height = b.Height;
                     text.Text = "You can write text here"; 
                     text.TextWrapping = TextWrapping.Wrap;
-                    UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(text));
+                    NotifyObjectCreated(text);
                     SelectedObject = text;
 
                 }

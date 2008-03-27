@@ -27,14 +27,15 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     /// </summary>
     abstract class BaseTool : Adorner
     {
+        BaseManipulator toolManipulator;
         protected VisualCollection visualChildren;
-        private  BaseManipulator activeManipulator;
-        protected SchemaDocument workedSchema;
+        protected UIElement workedLayer;
         protected ToolContextMenu menu;
         
         public event EventHandler ToolFinished;
 		public event EventHandler ToolStarted;
 		public event EventHandler ToolWorking;
+        public event EventHandler ObjectCreated;
         public delegate void ObjectSeletedDelegate(Object obj);
         public event ObjectSeletedDelegate ObjectSelected;
 
@@ -42,27 +43,27 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// active manipulator upon  selected object created by tool
         /// may be as default manipulator so as an another manipulator that can be created by tool instance
         /// </summary>
-        public BaseManipulator ActiveManipulator
+        public BaseManipulator ToolManipulator
         {
             get
             {
-                return activeManipulator;
+                return toolManipulator;
             }
             set
             {
-                if (activeManipulator != value)
+                if (toolManipulator != value)
                 {
-                    if (activeManipulator != null)
+                    if (toolManipulator != null)
                     {
-                        activeManipulator.ObjectChangedPreview -= ObjectChangedPreview;
-                        visualChildren.Remove(activeManipulator);
-                        activeManipulator.Deactivate();
+                        toolManipulator.ObjectChangedPreview -= ObjectChangedPreview;
+                        visualChildren.Remove(toolManipulator);
+                        toolManipulator.Deactivate();
                     }
-                    if ((activeManipulator=value) != null)
+                    if ((toolManipulator=value) != null)
                     { 
-                        visualChildren.Add(activeManipulator);
-                        activeManipulator.ObjectChangedPreview += ObjectChangedPreview;
-                        activeManipulator.Activate();
+                        visualChildren.Add(toolManipulator);
+                        toolManipulator.ObjectChangedPreview += ObjectChangedPreview;
+                        //toolManipulator.Activate();
                         
                     }
                     AdornerLayer.GetAdornerLayer(AdornedElement).Update();
@@ -78,31 +79,32 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             get
             {
-                if (ActiveManipulator != null)
-                    return ActiveManipulator.AdornedElement;
+                if (ToolManipulator != null)
+                    return ToolManipulator.AdornedElement;
                 else return null;
             }
             set
             {
                 if (value != null)
                 {
-                    if (ActiveManipulator == null || ActiveManipulator.AdornedElement != value)
+                    if (ToolManipulator == null || ToolManipulator.AdornedElement != value)
                     {
-                        ActiveManipulator = CreateToolManipulator(value);
-                        ActiveManipulator.InvalidateArrange();
+                        ToolManipulator = CreateToolManipulator(value);
+                        ToolManipulator.InvalidateArrange();
                     }
                          
                 }   
                 else
-                    ActiveManipulator = null;
+                    ToolManipulator = null;
                 RaiseObjectSelected(SelectedObject);
             }
 
         }
-        public BaseTool(SchemaDocument schema)
-            : base(schema.MainCanvas)
+
+        public BaseTool(UIElement element)
+            : base(element)
         {
-            workedSchema = schema;
+            workedLayer = element;
             visualChildren = new VisualCollection(this);
 
             DrawingVisual drawingVisual = new DrawingVisual();
@@ -125,8 +127,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             
             IInputElement manipulatorHit = null;
-            if (ActiveManipulator != null)
-                manipulatorHit = ActiveManipulator.InputHitTest(e.GetPosition(ActiveManipulator));
+            if (ToolManipulator != null)
+                manipulatorHit = ToolManipulator.InputHitTest(e.GetPosition(ToolManipulator));
      
             if (manipulatorHit!=null)
             {
@@ -159,10 +161,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         }
         protected override Size ArrangeOverride(Size finalSize)
         {
-            if (activeManipulator != null)
+            if (toolManipulator != null)
             {
-                //activeManipulator.Arrange(new Rect(ActiveManipulator.AdornedElement.TranslatePoint(new Point(0, 0), AdornedElement), ActiveManipulator.AdornedElement.RenderSize));
-                activeManipulator.Arrange(new Rect(finalSize));
+        
+                toolManipulator.Arrange(new Rect(finalSize));
             }
             return finalSize;
         }
@@ -181,7 +183,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// </summary>
         public virtual void Deactivate()
         {
-            ActiveManipulator = null;
+            SelectedObject=null;
             AdornerLayer.GetAdornerLayer(AdornedElement).Remove(this);
         }
         protected  void NotifyToolFinished()
@@ -199,11 +201,15 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 			if (ToolWorking != null)
 				ToolWorking(this, new EventArgs());
         }
-        
-        protected virtual void ObjectChangedPreview(UIElement obj)
+        protected void NotifyObjectCreated(UIElement obj)
         {
-            
-            UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new ModifyGraphicsObject(obj));           
+            if(ObjectCreated!=null)
+                ObjectCreated(obj,new EventArgs());
+
+        }
+        protected void ObjectChangedPreview(UIElement obj)
+        {
+
         }
         protected virtual BaseManipulator CreateToolManipulator(UIElement obj)
         {

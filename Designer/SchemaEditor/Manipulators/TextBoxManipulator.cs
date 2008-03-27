@@ -23,16 +23,16 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
     {
         RichTextBox textEditor = new RichTextBox();
         TextBlock textBlock;
-        public TextBoxManipulator(UIElement element)
-            : base(element)
+        public TextBoxManipulator(UIElement el)
+            : base(el)
         {
 
-            
+            Activate();
         }
         public override void Activate()
         {
-            base.Activate();
-            if (!(AdornedElement  is TextBlock)) return;
+         
+            
             textBlock = AdornedElement as TextBlock;
             Paragraph pargraph = new Paragraph();
 
@@ -45,12 +45,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             textEditor.RenderTransform = AdornedElement.RenderTransform;
 
             visualChildren.Add(textEditor);
-    
+            base.Activate();
         }
 
         public override void Deactivate()
         {
-            base.Deactivate();
+            
             textBlock.Inlines.Clear();
             Paragraph paragraph = textEditor.Document.Blocks.FirstBlock as Paragraph;
             while(paragraph.Inlines.Count>0)
@@ -58,6 +58,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 textBlock.Inlines.Add(paragraph.Inlines.FirstInline);
 
             }
+            base.Deactivate();
         }
         protected override Size ArrangeOverride(Size finalSize)
         {
@@ -67,6 +68,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             Point p= m.Transform(new Point(0, 0));
             textEditor.Arrange(new Rect(p, AdornedElement.DesiredSize));
             return finalSize;
+        }
+        public override bool IsSelactable(UIElement el)
+        {
+            if (el is TextBlock)
+                return true;
+            else return false;
         }
     }
 }

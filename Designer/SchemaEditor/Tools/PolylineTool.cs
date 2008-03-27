@@ -24,10 +24,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         PointCollection pointsCollection = new PointCollection();
 
 
-        public PolylineTool(SchemaDocument schema)
-            : base(schema)
+        public PolylineTool(UIElement element)
+            : base(element)
         {
-            objectPrview.Opacity = 0.5;
             visualChildren.Add(objectPrview);
         }
 
@@ -79,15 +78,15 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
 
-            
+            if (pointsCollection.Count == 0)
+                base.OnPreviewMouseLeftButtonDown(e);
             if (SelectedObject==null)
             {
                 CaptureMouse();
                 pointsCollection.Add(e.GetPosition(this));
 
             }
-            if(pointsCollection.Count==0)
-                 base.OnPreviewMouseLeftButtonDown(e);
+            
             e.Handled = false;
 
         }
@@ -116,7 +115,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 poly.Stroke = Brushes.Black;
                 poly.Fill = Brushes.Transparent;
                 poly.Stretch = Stretch.Fill;
-                UndoRedoManager.GetUndoBuffer(workedSchema).AddCommand(new AddGraphicsObject(poly));
+                NotifyObjectCreated(poly);
                 SelectedObject = poly;
             }
             pointsCollection.Clear();

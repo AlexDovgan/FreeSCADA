@@ -8,45 +8,71 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using FreeSCADA.Common.Schema.Actions;
-
+using System.Windows.Shapes;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
-    class ActionsEditManipulator:BaseManipulator
+    class ActionsEditManipulator : BaseManipulator
     {
 
         StackPanel AddActionPanel = new StackPanel();
         StackPanel ActionsPanel = new StackPanel();
         public delegate void ActionSelectedDelegate(BaseAction a);
         public event ActionSelectedDelegate ActionSelected;
-
-        public ActionsEditManipulator(UIElement el)
-            : base(el)
+        Tools.BaseTool helperTool;
+        
+        DrawingVisual helperObject= new DrawingVisual();
+        public ActionsEditManipulator(UIElement element)
+            : base(element)
         {
-            
+
             AddActionPanel.Orientation = Orientation.Vertical;
-            foreach(Type actionType in ActionsCollection.ActionsTypes)
+            foreach (Type actionType in ActionsCollection.ActionsTypes)
             {
 
                 Button b = new Button();
-                b.Content = "Add"+actionType.Name;
+                b.Content = "Add" + actionType.Name;
                 AddActionPanel.Children.Add(b);
-                BaseAction a = (BaseAction)System.Activator.CreateInstance(actionType);
-                if (a != null && !a.CheckActionFor(AdornedElement))
-                    b.IsEnabled = false;
-                else b.Tag = actionType;
+                b.Tag = actionType;
                 b.Click += new RoutedEventHandler(AddEventClick);
 
             }
             AddActionPanel.HorizontalAlignment = HorizontalAlignment.Left;
             AddActionPanel.VerticalAlignment = VerticalAlignment.Top;
-            
-            FillActions();
             ActionsPanel.HorizontalAlignment = HorizontalAlignment.Right;
             ActionsPanel.VerticalAlignment = VerticalAlignment.Top;
 
             visualChildren.Add(AddActionPanel);
             visualChildren.Add(ActionsPanel);
+            Activate();
+
+        }
+
+        public override void Activate()
+        {
+            foreach (Button b in AddActionPanel.Children)
+            {
+
+                BaseAction a = (BaseAction)System.Activator.CreateInstance(b.Tag as Type);
+                if (a != null && !a.CheckActionFor(AdornedElement))
+                    b.IsEnabled = false;
+                else b.IsEnabled = true;
+
+            }
+            FillActions();
+            visualChildren.Add(helperObject);
+            base.Activate();
+        }
+        public override void Deactivate()
+        {
+            
+            if (helperTool != null)
+            {
+                helperTool.Deactivate();
+                helperTool = null;
+            }
+
+            base.Deactivate();
         }
 
         void AddEventClick(object sender, RoutedEventArgs e)
@@ -61,6 +87,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         void FillActions()
         {
             ActionsPanel.Children.Clear();
+
             foreach (BaseAction action in ActionsCollection.GetActions(AdornedElement as FrameworkElement).ActionsList)
             {
                 RadioButton b = new RadioButton();
@@ -75,21 +102,77 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 b.Click += new RoutedEventHandler(ActionClicked);
                 b.Tag = action;
             }
-         
+
+        }
+        protected void helperSelected(Object obj)
+        {
+            Shape shape;
+            if (obj is Shape)
+            {
+                shape = obj as Shape;
+
+                foreach (RadioButton b in ActionsPanel.Children)
+                {
+                    if (b.IsChecked.Value /*&& (b.Tag is MoveAction)*/)
+                    {
+
+                        (b.Tag as BaseAction).HelperObject = shape.RenderedGeometry; ;
+                        (b.Tag as BaseAction).HelperObject.Transform = (Transform)shape.TransformToVisual((Panel)VisualTreeHelper.GetParent(AdornedElement));
+                        (b.Tag as BaseAction).HelperObject = (b.Tag as BaseAction).HelperObject.GetFlattenedPathGeometry();
+                        //PathGeometry.CreateFromGeometry((b.Tag as BaseAction).HelperObject);
+                        ((Panel)VisualTreeHelper.GetParent(AdornedElement)).Children.Remove(shape);
+                        ((Panel)VisualTreeHelper.GetParent(AdornedElement)).UpdateLayout();
+
+                        DrawingContext c = helperObject.RenderOpen();
+                        c.DrawGeometry(null, new Pen(Brushes.Black, 1), (b.Tag as BaseAction).HelperObject);
+                        c.Close();
+                        InvalidateVisual();
+                        break;
+                    }
+                }
+            }
+            helperTool.ObjectSelected -= helperSelected;
+            helperTool.Deactivate();
+            helperTool = null;
+
         }
         void ActionClicked(object sender, RoutedEventArgs e)
         {
-            if (ActionSelected!=null)
+            if (ActionSelected != null)
                 ActionSelected(((RadioButton)sender).Tag as BaseAction);
-            if (((RadioButton)sender).Tag is MoveAction)
-                AdornerLayer.GetAdornerLayer(AdornedElement).Add(new Tools.PolylineTool(null));
+
+            if (helperTool != null)
+            {
+                helperTool.Deactivate();
+                helperTool.ObjectSelected -= helperSelected;
+                helperTool = null;
+            }
+
+            if ((((RadioButton)sender).Tag as BaseAction).HelperObject == null)
+            {
+                helperTool = new Tools.SelectionTool((UIElement)VisualTreeHelper.GetParent(AdornedElement));
+                helperTool.Activate();
+                helperTool.ObjectSelected += helperSelected;
+            }
+            else 
+            {
+                if(!((((RadioButton)sender).Tag as BaseAction).HelperObject is PathGeometry))
+                    (((RadioButton)sender).Tag as BaseAction).HelperObject= PathGeometry.CreateFromGeometry((((RadioButton)sender).Tag as BaseAction).HelperObject);
+                DrawingContext c = helperObject.RenderOpen();
+                c.DrawGeometry(null, new Pen(Brushes.Black, 1), (((RadioButton)sender).Tag as BaseAction).HelperObject);
+                
+                c.Close();
+                InvalidateVisual();
+            }
+            
         }
         protected override Size MeasureOverride(Size finalSize)
         {
             //Rect ro = LayoutInformation.GetLayoutSlot(AdornedElement as FrameworkElement);
-            foreach (UIElement control in visualChildren)
+            foreach (Visual v in visualChildren)
             {
-                control.Measure(finalSize);
+                if (v is FrameworkElement)
+                    (v as FrameworkElement).Measure(finalSize);
             }
             return finalSize;
         }
@@ -97,16 +180,20 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         {
             //Rect ro = new Rect(0, 0, AdornedElement.DesiredSize.Width, AdornedElement.DesiredSize.Height);
             Rect ro = LayoutInformation.GetLayoutSlot(AdornedElement as FrameworkElement);
-            
-           foreach (StackPanel control in visualChildren)
+            FrameworkElement control;
+            foreach (Visual v in visualChildren)
             {
+                if (v is FrameworkElement)
+                    control = v as FrameworkElement;
+                else continue;
+
                 Rect aligmentRect = new Rect();
-                aligmentRect.Width=control.DesiredSize.Width;
+                aligmentRect.Width = control.DesiredSize.Width;
                 aligmentRect.Height = control.DesiredSize.Height;
                 aligmentRect.Y = ro.Y;
                 aligmentRect.X = ro.X;
                 switch (control.VerticalAlignment)
-                {   
+                {
                     case VerticalAlignment.Top: aligmentRect.Y += 0;
                         break;
                     case VerticalAlignment.Bottom: aligmentRect.Y += ro.Height;
@@ -132,8 +219,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                         break;
                 }
 
-                
-                    
+          
+
                 control.Arrange(aligmentRect);
             }
             return finalSize;

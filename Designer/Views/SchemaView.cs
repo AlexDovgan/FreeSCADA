@@ -29,15 +29,15 @@ namespace FreeSCADA.Designer.Views
                 if (toolsList == null)
                 {
                     toolsList = new List<ITool>();
-                    toolsList.Add(new SelectionTool(Schema));
-                    toolsList.Add(new RectangleTool(Schema));
-                    toolsList.Add(new EllipseTool(Schema));
-                    toolsList.Add(new TextBoxTool(Schema));
-                    toolsList.Add(new PolylineTool(Schema));
-                    toolsList.Add(new ActionEditTool(Schema));
-                    toolsList.Add(new ButtonTool(Schema));
-                    toolsList.Add(new GuegeTool(Schema));
-                    toolsList.Add(new ThermoTool(Schema));
+                    toolsList.Add(new SelectionTool(Schema.MainCanvas));
+                    toolsList.Add(new RectangleTool(Schema.MainCanvas));
+                    toolsList.Add(new EllipseTool(Schema.MainCanvas));
+                    toolsList.Add(new TextBoxTool(Schema.MainCanvas));
+                    toolsList.Add(new PolylineTool(Schema.MainCanvas));
+                    toolsList.Add(new ActionEditTool(Schema.MainCanvas));
+                    toolsList.Add(new ButtonTool(Schema.MainCanvas));
+                    toolsList.Add(new GuegeTool(Schema.MainCanvas));
+                    toolsList.Add(new ThermoTool(Schema.MainCanvas));
                 }
                 return toolsList;
             }
@@ -89,10 +89,11 @@ namespace FreeSCADA.Designer.Views
             {
                 if (activeTool == null)
                 {
-                    activeTool = (BaseTool)System.Activator.CreateInstance(defaultTool, new object[] { Schema });
+                    activeTool = (BaseTool)System.Activator.CreateInstance(defaultTool, new object[] { Schema.MainCanvas });
                     activeTool.Activate();
                     activeTool.ObjectSelected += activeTool_ObjectSelected;
                     activeTool.ToolFinished += new EventHandler(activeTool_ToolFinished);
+                    activeTool.ObjectCreated += new EventHandler(activeTool_ObjectCreated);
                 }
                 return activeTool.GetType();
             }
@@ -104,18 +105,24 @@ namespace FreeSCADA.Designer.Views
 
                     activeTool.ObjectSelected -= activeTool_ObjectSelected;
                     activeTool.ToolFinished -= new EventHandler(activeTool_ToolFinished);
+                    activeTool.ObjectCreated -= new EventHandler(activeTool_ObjectCreated);
                 }
 
                 if (value != null)
                 {
-                    activeTool = (BaseTool)System.Activator.CreateInstance(value, new object[] { Schema });
+                    activeTool = (BaseTool)System.Activator.CreateInstance(value, new object[] { Schema.MainCanvas });
 
                     activeTool.ObjectSelected += activeTool_ObjectSelected;
                     activeTool.ToolFinished += new EventHandler(activeTool_ToolFinished);
-
+                    activeTool.ObjectCreated += new EventHandler(activeTool_ObjectCreated);
                     activeTool.Activate();
                 }
             }
+        }
+
+        void activeTool_ObjectCreated(object sender, EventArgs e)
+        {
+            undoBuff.AddCommand(new AddGraphicsObject(sender as System.Windows.UIElement));
         }
 
         void activeTool_ToolFinished(object sender, EventArgs e)
@@ -158,6 +165,11 @@ namespace FreeSCADA.Designer.Views
         {
             CurrentTool = tool;
             Focus();
+        }
+
+        void OnObjectChenged(object sender, EventArgs e)
+        {
+            //UndoRedoManager.GetUndoBuffer(workedLayer).AddCommand(new ModifyGraphicsObject(obj));           
         }
 
         void OnSchemaIsModifiedChanged(object sender, EventArgs e)
