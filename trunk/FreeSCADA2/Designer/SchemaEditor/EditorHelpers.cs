@@ -164,7 +164,6 @@ namespace FreeSCADA.Designer.SchemaEditor
                 }
                 else
                     r = el.TransformToVisual(parent).TransformBounds(VisualTreeHelper.GetDescendantBounds(el));
-                //r = LayoutInformation.GetLayoutSlot(el as FrameworkElement);
                 if (boundce.IsEmpty)
                     boundce = r;
                 else

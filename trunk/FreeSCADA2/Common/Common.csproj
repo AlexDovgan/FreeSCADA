@@ -68,7 +68,9 @@
     <Compile Include="Schema\Actions\BaseAction.cs" />
     <Compile Include="Schema\Actions\ActionsCollection.cs" />
     <Compile Include="Schema\Actions\MoveAction.cs" />
+    <Compile Include="Schema\Actions\ValueAction.cs" />
     <Compile Include="Schema\Actions\RotateAction.cs" />
+    <Compile Include="Schema\Actions\ShowAction.cs" />
     <Compile Include="Schema\SchemaDocument.cs" />
   </ItemGroup>
   <ItemGroup>

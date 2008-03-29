@@ -158,6 +158,40 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
         }
 
     }
+    class DeleteGraphicsObject : IUndoCommand
+    {
+        UIElement deletedObject;
+        SchemaDocument schemaDocument;
+        protected bool documentModifiedState;
+
+        public DeleteGraphicsObject(UIElement el)
+        {
+            deletedObject = el;
+        }
+        public void Do(SchemaDocument doc)
+        {
+
+            schemaDocument = doc;
+            schemaDocument.MainCanvas.Children.Remove(deletedObject);
+            documentModifiedState = schemaDocument.IsModified;
+            schemaDocument.IsModified = true;
+        }
+        public void Redo()
+        {
+            schemaDocument.MainCanvas.Children.Remove(deletedObject);
+            documentModifiedState = schemaDocument.IsModified;
+            schemaDocument.IsModified = true;
+
+        }
+        public void Undo()
+        {
+            BaseTool activeTool;
+            schemaDocument.MainCanvas.Children.Add(deletedObject);
+            schemaDocument.IsModified = documentModifiedState;
+
+        }
+
+    }
     /// <summary>
     /// modify object command for undo redo buffer 
     /// must added to buffer before object whill be changed

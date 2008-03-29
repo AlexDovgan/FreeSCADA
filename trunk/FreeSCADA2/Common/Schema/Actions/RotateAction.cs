@@ -15,7 +15,7 @@ namespace FreeSCADA.Common.Schema.Actions
         double maxAngle = 360;
         double minChannelValue = 0;
         double maxChannelValue = 100;
-        RotateTransform rotate = new RotateTransform();
+        RotateTransform rotate;
 
         public double MinAngle
         {
@@ -45,11 +45,7 @@ namespace FreeSCADA.Common.Schema.Actions
             {
                 if (isLinked)
                 {
-                    TransformGroup tg = new TransformGroup();
-                    tg.Children.Add(rotate);
-                    tg.Children.Add(actionedObject.RenderTransform);
-                    
-                    actionedObject.RenderTransform = tg;
+                    rotate = (RotateTransform)((TransformGroup)actionedObject.RenderTransform).Children[3];
 
                 }
 
