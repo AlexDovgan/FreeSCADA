@@ -5,6 +5,7 @@ using System.Text;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
 using FreeSCADA.Designer.SchemaEditor.ShortProperties;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Shapes;
 
 namespace FreeSCADA.Designer.SchemaEditor
@@ -33,6 +34,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             descriptorsDictionary[typeof(TextBlock)] = new ObjectDescriptor(typeof(TextBoxManipulator), typeof(FrameworkElementShortProp));
             descriptorsDictionary[typeof(Shape)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator), typeof(ShapeShortProp));
             descriptorsDictionary[typeof(Polyline)] = new ObjectDescriptor(typeof(PolylineEditManipulantor), typeof(ShapeShortProp));
+            descriptorsDictionary[typeof(RangeBase)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator), typeof(RangeBaseShortProp));
         }
         private static ObjectDescriptor FindDescriptor(Type type)
         {

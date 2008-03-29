@@ -36,6 +36,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 		public event EventHandler ToolStarted;
 		public event EventHandler ToolWorking;
         public event EventHandler ObjectCreated;
+        public event EventHandler ObjectChanged;
         public delegate void ObjectSeletedDelegate(Object obj);
         public event ObjectSeletedDelegate ObjectSelected;
 
@@ -55,14 +56,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 {
                     if (toolManipulator != null)
                     {
-                        toolManipulator.ObjectChangedPreview -= ObjectChangedPreview;
+                        toolManipulator.ObjectChangedPreview -= OnObjectChanged;
                         visualChildren.Remove(toolManipulator);
                         toolManipulator.Deactivate();
                     }
                     if ((toolManipulator=value) != null)
                     { 
                         visualChildren.Add(toolManipulator);
-                        toolManipulator.ObjectChangedPreview += ObjectChangedPreview;
+                        toolManipulator.ObjectChangedPreview += OnObjectChanged;
                         //toolManipulator.Activate();
                         
                     }
@@ -177,6 +178,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
            AdornerLayer.GetAdornerLayer(AdornedElement).Add(this);
 
         }
+        public void Update()
+        {
+            if (ToolManipulator != null)
+            {
+                ToolManipulator.InvalidateMeasure();
+                ToolManipulator.InvalidateArrange();
+            }
+        }
         /// <summary>
         /// tool deactiavaion on working Canvas
         ///
@@ -207,8 +216,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 ObjectCreated(obj,new EventArgs());
 
         }
-        protected void ObjectChangedPreview(UIElement obj)
+        protected void OnObjectChanged(UIElement obj)
         {
+            if (ObjectChanged != null)
+                ObjectChanged(obj, new EventArgs()); 
 
         }
         protected virtual BaseManipulator CreateToolManipulator(UIElement obj)
@@ -220,6 +231,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             if (ObjectSelected != null)
                 ObjectSelected(obj);
         }
+       
     }
 
 

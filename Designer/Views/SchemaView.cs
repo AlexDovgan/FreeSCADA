@@ -61,6 +61,7 @@ namespace FreeSCADA.Designer.Views
             this.wpfSchemaContainer.Size = new System.Drawing.Size(292, 273);
             this.wpfSchemaContainer.TabIndex = 0;
             this.wpfSchemaContainer.Text = "WPFSchemaContainer";
+            this.wpfSchemaContainer.Child.KeyDown += new System.Windows.Input.KeyEventHandler(WpfKeyDown);
             // 
             // SchemaView
             // 
@@ -71,6 +72,8 @@ namespace FreeSCADA.Designer.Views
             this.ResumeLayout(false);
 
         }
+
+        
 
         public SchemaDocument Schema
         {
@@ -92,8 +95,9 @@ namespace FreeSCADA.Designer.Views
                     activeTool = (BaseTool)System.Activator.CreateInstance(defaultTool, new object[] { Schema.MainCanvas });
                     activeTool.Activate();
                     activeTool.ObjectSelected += activeTool_ObjectSelected;
-                    activeTool.ToolFinished += new EventHandler(activeTool_ToolFinished);
-                    activeTool.ObjectCreated += new EventHandler(activeTool_ObjectCreated);
+                    activeTool.ToolFinished += activeTool_ToolFinished;
+                    activeTool.ObjectCreated +=activeTool_ObjectCreated;
+                    activeTool.ObjectChanged += OnObjectChenged;
                 }
                 return activeTool.GetType();
             }
@@ -101,11 +105,13 @@ namespace FreeSCADA.Designer.Views
             {
                 if (activeTool != null)
                 {
-                    activeTool.Deactivate();
+                    
 
                     activeTool.ObjectSelected -= activeTool_ObjectSelected;
-                    activeTool.ToolFinished -= new EventHandler(activeTool_ToolFinished);
-                    activeTool.ObjectCreated -= new EventHandler(activeTool_ObjectCreated);
+                    activeTool.ToolFinished -= activeTool_ToolFinished;
+                    activeTool.ObjectCreated -= activeTool_ObjectCreated;
+                    activeTool.ObjectChanged -= OnObjectChenged;
+                    activeTool.Deactivate();
                 }
 
                 if (value != null)
@@ -113,12 +119,15 @@ namespace FreeSCADA.Designer.Views
                     activeTool = (BaseTool)System.Activator.CreateInstance(value, new object[] { Schema.MainCanvas });
 
                     activeTool.ObjectSelected += activeTool_ObjectSelected;
-                    activeTool.ToolFinished += new EventHandler(activeTool_ToolFinished);
-                    activeTool.ObjectCreated += new EventHandler(activeTool_ObjectCreated);
+                    activeTool.ToolFinished += activeTool_ToolFinished;
+                    activeTool.ObjectCreated += activeTool_ObjectCreated;
+                    activeTool.ObjectChanged += OnObjectChenged;
                     activeTool.Activate();
                 }
             }
         }
+
+        
 
         void activeTool_ObjectCreated(object sender, EventArgs e)
         {
@@ -129,21 +138,30 @@ namespace FreeSCADA.Designer.Views
         {
             NotifyToolsCollectionChanged(AvailableTools, defaultTool);
         }
-
-        protected override void OnKeyDown(KeyEventArgs e)
+        void WpfKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-
-            if (e.KeyCode == Keys.Z && e.Control)
+            if (e.Key== System.Windows.Input.Key.Z &&
+                (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
             {
                 undoBuff.UndoCommand();
+                //activeTool.SelectedObject = null;
+
             }
-            else if (e.KeyCode == Keys.Y && e.Control)
+            else if (e.Key == System.Windows.Input.Key.Y &&
+                (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
             {
                 undoBuff.RedoCommand();
             }
-            base.OnKeyDown(e);
-        }
+            else if (e.Key == System.Windows.Input.Key.Delete)
+            {
 
+                undoBuff.AddCommand(new DeleteGraphicsObject(activeTool.SelectedObject));
+                activeTool.SelectedObject = null;
+            }
+            Schema.MainCanvas.UpdateLayout();
+            activeTool.Update();
+        }
+        
         void activeTool_ObjectSelected(Object obj)
         {
             CommonShortProp csp;
@@ -169,7 +187,7 @@ namespace FreeSCADA.Designer.Views
 
         void OnObjectChenged(object sender, EventArgs e)
         {
-            //UndoRedoManager.GetUndoBuffer(workedLayer).AddCommand(new ModifyGraphicsObject(obj));           
+            undoBuff.AddCommand(new ModifyGraphicsObject((System.Windows.UIElement)sender));           
         }
 
         void OnSchemaIsModifiedChanged(object sender, EventArgs e)
@@ -267,6 +285,7 @@ namespace FreeSCADA.Designer.Views
             if (wpfSchemaContainer != null && wpfSchemaContainer.Document != null)
             {
                 wpfSchemaContainer.Document.IsModifiedChanged -= new EventHandler(OnSchemaIsModifiedChanged);
+                wpfSchemaContainer.Child.KeyDown -= new System.Windows.Input.KeyEventHandler(WpfKeyDown);
                 UndoRedoManager.ReleaseUndoBuffer(wpfSchemaContainer.Document);
             }
 

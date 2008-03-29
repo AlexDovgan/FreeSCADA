@@ -12,8 +12,8 @@ namespace FreeSCADA.Common.Schema
     public class SchemaDocument
     {
         public event EventHandler IsModifiedChanged;
-        
-            
+
+
         bool isModified = false;
         public bool IsModified
         {
@@ -28,7 +28,7 @@ namespace FreeSCADA.Common.Schema
 
         public String Name;
         public Canvas MainCanvas = new Canvas();
-        
+
         public static SchemaDocument LoadSchema(string schemaName)
         {
             try
@@ -42,7 +42,7 @@ namespace FreeSCADA.Common.Schema
                     {
                         schema.MainCanvas = obj as Canvas;
                         schema.Name = schemaName;
-                           
+
                     }
                     else
                         throw (new Exception("This is not FreeSCADA schema"));
@@ -76,7 +76,9 @@ namespace FreeSCADA.Common.Schema
             settings.OmitXmlDeclaration = true;
             using (MemoryStream ms = new MemoryStream())
             {
-                XamlWriter.Save(MainCanvas, XmlWriter.Create(ms, settings));
+                XamlDesignerSerializationManager dsm=new XamlDesignerSerializationManager(XmlWriter.Create(ms, settings));
+                dsm.XamlWriterMode = XamlWriterMode.Expression;
+                XamlWriter.Save(MainCanvas, dsm);
                 Env.Current.Project.SetData("Schemas/" + Name + "/xaml", ms);
             }
             IsModified = false;
@@ -85,6 +87,15 @@ namespace FreeSCADA.Common.Schema
         {
             foreach (FrameworkElement el in MainCanvas.Children)
             {
+                TransformGroup tg = new TransformGroup();
+                tg.Children.Add(el.RenderTransform);
+                tg.Children.Add(new ScaleTransform());
+                tg.Children.Add(new SkewTransform());
+                tg.Children.Add(new RotateTransform());
+                tg.Children.Add(new TranslateTransform());
+                el.RenderTransform = tg;
+
+
                 ActionsCollection ac = ActionsCollection.GetActions(el);
                 foreach (BaseAction a in ac.ActionsList)
                 {

@@ -18,8 +18,10 @@
                 <Setter Property="FontSize" Value="11" />
                 <Setter Property="Foreground" Value="Black" />
             </Style>
+            
+
         </ControlTemplate.Resources>
-        <Viewbox  Stretch="Fill">
+        <Viewbox Stretch="Fill">
             <Border Width="270" Height="120"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
@@ -53,15 +55,19 @@
                     <Polygon Points="5 5 5 -5 -75 0"
                              Stroke="Black" Fill="Red">
                         <Polygon.RenderTransform>
-                            <RotateTransform
-                                Angle="{Binding ElementName=PART_Indicator,
-                                                Path=ActualWidth}" />
-                        </Polygon.RenderTransform>
+                            <RotateTransform>
+                            <RotateTransform.Angle>
+                                <Binding ElementName="PART_Indicator"
+                                                    Path="ActualWidth"/>
+                                </RotateTransform.Angle>
+                            </RotateTransform>
+                        </Polygon.RenderTransform>      
                     </Polygon>
                 </Canvas>
             </Border>
         </Viewbox>
     </ControlTemplate>
+    
     <ControlTemplate x:Key="thermoTemplate"
                          TargetType="{x:Type ProgressBar}">
 
@@ -82,70 +88,70 @@
         </ControlTemplate.Resources>
 
         <!-- Two-row Grid divides thermometer into stem and bowl -->
-        
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
 
-                <!-- Second grid divides stem area in three columns -->
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="25*" />
-                        <ColumnDefinition Width="50*" />
-                        <ColumnDefinition Width="25*" />
-                    </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-                    <!-- This border displays the stem -->
-                    <Border Grid.Column="1" BorderBrush="SteelBlue"
+            <!-- Second grid divides stem area in three columns -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="25*" />
+                    <ColumnDefinition Width="50*" />
+                    <ColumnDefinition Width="25*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- This border displays the stem -->
+                <Border Grid.Column="1" BorderBrush="SteelBlue"
                             BorderThickness="3 3 3 0"
                             CornerRadius="6 6 0 0" >
 
-                        <!-- Track and Indicator elements -->
-                        <Decorator Name="PART_Track">
-                            <Border Name="PART_Indicator"
+                    <!-- Track and Indicator elements -->
+                    <Decorator Name="PART_Track">
+                        <Border Name="PART_Indicator"
                                     CornerRadius="6 6 0 0"
                                     VerticalAlignment="Bottom"
                                     Background="{StaticResource brushStem}" />
-                        </Decorator>
-                    </Border>
-                </Grid>
+                    </Decorator>
+                </Border>
+            </Grid>
 
-                <!-- The bowl outline goes in the main Grid second row -->
-                <Ellipse Grid.Row="1"
+            <!-- The bowl outline goes in the main Grid second row -->
+            <Ellipse Grid.Row="1"
                          Width="{TemplateBinding Width}"
                          Height="{TemplateBinding Width}"
                          Stroke="SteelBlue" StrokeThickness="3" />
 
-                <!-- Another grid goes in the same cell -->
-                <Grid Grid.Row="1" >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50*" />
-                        <RowDefinition Height="50*" />
-                    </Grid.RowDefinitions>
+            <!-- Another grid goes in the same cell -->
+            <Grid Grid.Row="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50*" />
+                    <RowDefinition Height="50*" />
+                </Grid.RowDefinitions>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="25*" />
-                        <ColumnDefinition Width="50*" />
-                        <ColumnDefinition Width="25*" />
-                    </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="25*" />
+                    <ColumnDefinition Width="50*" />
+                    <ColumnDefinition Width="25*" />
+                </Grid.ColumnDefinitions>
 
-                    <!-- This is to close up the gap between bowl and stem -->
-                    <Border Grid.Row="0" Grid.Column="1"
+                <!-- This is to close up the gap between bowl and stem -->
+                <Border Grid.Row="0" Grid.Column="1"
                             BorderBrush="SteelBlue"
                             BorderThickness="3 0 3 0"
                             Background="{StaticResource brushStem}" />
-                </Grid>
+            </Grid>
 
-                <!-- Another ellipse to fill up the bowl -->
-                <Ellipse Grid.Row="1"
+            <!-- Another ellipse to fill up the bowl -->
+            <Ellipse Grid.Row="1"
                          Width="{TemplateBinding Width}"
                          Height="{TemplateBinding Width}"
                          Stroke="Transparent" StrokeThickness="6"
                          Fill="{StaticResource brushBowl}" />
-            </Grid>
-        
+        </Grid>
+
     </ControlTemplate>
 
 

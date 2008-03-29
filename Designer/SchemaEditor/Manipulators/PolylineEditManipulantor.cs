@@ -33,7 +33,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             for (int i = 0; i < poly.Points.Count; i++)
             {
                 Point p = poly.GeometryTransform.Transform(poly.Points[i]);
-                p = poly.TranslatePoint(p, (UIElement)this.Parent);
+                p = poly.TranslatePoint(p, (UIElement)poly.Parent);
                 poly.Points[i] = p;
             }
             poly.Stretch = Stretch.None;

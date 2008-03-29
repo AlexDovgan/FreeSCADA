@@ -61,7 +61,7 @@ namespace FreeSCADA.Common.Schema.Actions
         
         protected virtual void PrepareExecute()
         {
-
+            
         }
 
         protected virtual void Execute(object sender,EventArgs e)

@@ -13,7 +13,7 @@ namespace FreeSCADA.Common.Schema.Actions
     {
         double minChannelValue = 0;
         double maxChannelValue = 100;
-        TranslateTransform move = new TranslateTransform();
+        TranslateTransform move;
         
         public double MinChannelValue
         {
@@ -32,11 +32,8 @@ namespace FreeSCADA.Common.Schema.Actions
             base.PrepareExecute();
             if (isLinked)
             {
-                TransformGroup tg=new TransformGroup();
-                tg.Children.Add(actionedObject.RenderTransform);
-                tg.Children.Add(move);
-                actionedObject.RenderTransform = tg;
-                
+
+                move = (TranslateTransform)((TransformGroup)actionedObject.RenderTransform).Children[4];
             }
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Data;
@@ -208,5 +209,31 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         Shape shape;
         //System.Drawing.Brush brush;
     }
+    class RangeBaseShortProp : FrameworkElementShortProp
+    {
+        public RangeBaseShortProp(RangeBase rb)
+            : base(rb)
+        {
+            rangebase = rb;
+        }
+        [Description("Minimum Scale Value"), Category("Appearence")]
+        public double MinValue
+        {
+            get { return rangebase.Minimum; }
+            set { rangebase.Minimum = value; }
+        }
+        [Description("Maximum Scale Value"), Category("Appearence")]
+        public double MaxValue
+        {
+            get { return rangebase.Maximum; }
+            set { rangebase.Maximum = value; }
+        }
+        public double Value
+        {
+            get { return rangebase.Value; }
+            set { rangebase.Value = value; }
+        }
+        RangeBase rangebase;
 
+    }
 }
