@@ -15,16 +15,48 @@ using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using System.ComponentModel;
-
+using System.Windows.Data;
 namespace FreeSCADA.Designer.SchemaEditor
 {
+    
+    class BindingConvertor : ExpressionConverter
+    {
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            //return base.CanConvertTo(context, destinationType);
+            if(destinationType==typeof(MarkupExtension))
+                return true;
+            else return false;
+        }
+        public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+        {
+            if (destinationType == typeof(MarkupExtension))
+            {
+                BindingExpression bindingExpression = value as BindingExpression;
+                if (bindingExpression == null)
+                    throw new Exception();
+                return  bindingExpression.ParentBinding;
+            }
+            
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+    }
+    
     static class EditorHelper
     {
+        public static void Register<T, TC>()
+        {
+            Attribute[] attr = new Attribute[1];
+            TypeConverterAttribute vConv = new TypeConverterAttribute(typeof(TC));
+            attr[0] = vConv;
+            TypeDescriptor.AddAttributes(typeof(T), attr);
+        }
 
         public static FreeSCADA.Common.Schema.CustomElements.ElementsTemplates TemplateResources = new FreeSCADA.Common.Schema.CustomElements.ElementsTemplates();
         static  EditorHelper()
         {
             TemplateResources.InitializeComponent();
+            Register<BindingExpression,BindingConvertor>();
         }
             
         public static UIElement FindTopParentUnder(DependencyObject c, DependencyObject el)

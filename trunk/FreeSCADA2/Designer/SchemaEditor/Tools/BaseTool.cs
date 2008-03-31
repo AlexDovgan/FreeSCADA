@@ -39,7 +39,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         public event EventHandler ObjectChanged;
         public delegate void ObjectSeletedDelegate(Object obj);
         public event ObjectSeletedDelegate ObjectSelected;
-
+      
         /// <summary>
         /// active manipulator upon  selected object created by tool
         /// may be as default manipulator so as an another manipulator that can be created by tool instance
@@ -112,11 +112,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             DrawingContext drawingContext = drawingVisual.RenderOpen();
             Rect rect = new Rect(new Point(0,0), AdornedElement.DesiredSize);
 
-            drawingContext.DrawRectangle(Brushes.White, new Pen(Brushes.Black, 0.2), rect);
+            drawingContext.DrawRectangle(Brushes.Black, new Pen(Brushes.Black, 0.2), rect);
 
             drawingContext.Close();
             drawingVisual.Opacity = 0;
             visualChildren.Add(drawingVisual);
+            
         }
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
