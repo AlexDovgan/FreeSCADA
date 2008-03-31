@@ -129,6 +129,9 @@
   <data name="MainWindowNameEx" xml:space="preserve">
     <value>[{0}] - Designer</value>
   </data>
+  <data name="SchemasItemName" xml:space="preserve">
+    <value>Schemas</value>
+  </data>
   <data name="ToolButtonName" xml:space="preserve">
     <value>Button Tool</value>
   </data>

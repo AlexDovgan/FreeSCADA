@@ -3,7 +3,7 @@
   <Product Id="{A0692C53-185D-4d97-BF57-6F6AD70D96F1}"
            Name="FreeSCADA 2"
            Language="1033"
-           Version="2.0.0.1"
+           Version="2.0.0.2"
            Manufacturer="FreeSCADA Project [http://free-scada.sourceforge.net]"
            UpgradeCode="{3E3F16AD-E81B-482a-968A-77EAD18BFB8E}">
 
@@ -21,6 +21,7 @@
         </Directory>
 
         <Directory Id="INSTALLLOCATION" Name="FreeSCADA 2">
+
           <Component Id="Common" Guid="{C5ED9FC1-84B6-462b-AF09-11C6D9D82B5D}">
             <File Name="$(var.Common.TargetFileName)" Source="$(var.Common.TargetPath)" Vital="yes"/>
             <File Name="weifenluo.winformsui.docking.dll" Source="..\3rdParty\DockPanel\weifenluo.winformsui.docking.dll" Vital="yes"/>
@@ -34,7 +35,7 @@
             <File Name="sharpziplib_license.rtf" Source="..\3rdParty\SharpZipLib\readme.rtf"/>
             <File Name="weifenluo_license.txt" Source="..\3rdParty\DockPanel\license.txt"/>
             <File Name="sourcegrid.license.txt" Source="..\3rdParty\SourceGrid4_11\sourcegrid.license.txt"/>-->
-            
+
             <RemoveFolder Id="RemoveShortcutFolder" Directory="ShortcutFolder" On="uninstall"/>
           </Component>
 
@@ -60,21 +61,42 @@
             <File Name="$(var.Communication.SimulatorPlug.TargetFileName)" Source="$(var.Communication.SimulatorPlug.TargetPath)"/>
           </Component>
 
+          <Directory Id="SamplesDir" Name="Samples">
+            <Component Id="Samples" Guid="{7F40F8DD-969A-453e-BB60-33CB249A6050}">
+              <File Name="Chart.xaml" Source="..\Samples\Chart.xaml"/>
+              <File Name="clinton.svg" Source="..\Samples\clinton.svg"/>
+              <File Name="lion.svg" Source="..\Samples\lion.svg"/>
+              <File Name="picasso.svg" Source="..\Samples\picasso.svg"/>
+              <File Name="tiger.svg" Source="..\Samples\tiger.svg"/>
+              <File Name="water.svg" Source="..\Samples\water.svg"/>
+            </Component>
+          </Directory>
+          <Directory Id="ResourceDir" Name="Resources">
+            <Component Id="DesignerResources" Guid="{27EDA75F-AD2A-4f9a-ADF9-AAEC94DA50AC}">
+              <File Name="colors.xml" Source="..\Designer\Resources\colors.xml"/>
+              <File Name="svg2xaml.xsl" Source="..\Designer\Resources\svg2xaml.xsl"/>
+            </Component>
+          </Directory>
         </Directory>
       </Directory>
     </Directory>
 
     <Feature Id="ProductFeature" Title="FreeSCADA" Level="1" AllowAdvertise="no" InstallDefault="local" Description="Install the whole product.">
       <ComponentRef Id="Common" />
-      
+
       <Feature Id="DesignerFeature" Title="Designer" Level="1" AllowAdvertise="no" Description="Install component which allows you to create HMI schemas, data connections, events and etc.">
         <ComponentRef Id="Designer" />
+        <ComponentRef Id="DesignerResources" />
       </Feature>
 
       <Feature Id="RuntimeFeature" Title="Runtime" Level="1" AllowAdvertise="no" Description="Install component which allows you to view and execute HMI schemas created by Designer.">
         <ComponentRef Id="Runtime" />
       </Feature>
-      
+
+      <Feature Id="SamplesFeature" Title="Samples" Level="1" AllowAdvertise="no" Description="Install few samples to start with.">
+        <ComponentRef Id="Samples" />
+      </Feature>
+
       <Feature Id="CommPluginsFeature" Title="Communication plugins" Level="1" AllowAdvertise="no" Description="Cummunication plugins are used for connection with outer world.">
         <Feature Id="CommOPCPluginFeature" Title="OPC" Level="1" AllowAdvertise="no" Description="OPC connections support">
           <ComponentRef Id="CommOPCPlugin" />
@@ -87,7 +109,7 @@
 
     <UIRef Id="WixUI_FeatureTree" />
     <UIRef Id="WixUI_ErrorProgressText" />
-    
+
     <WixVariable Id="WixUILicenseRtf" Value="../license.rtf" />
   </Product>
 </Wix>

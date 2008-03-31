@@ -97,6 +97,15 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Schemas.
+        /// </summary>
+        internal static string SchemasItemName {
+            get {
+                return ResourceManager.GetString("SchemasItemName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Button Tool.
         /// </summary>
         internal static string ToolButtonName {
