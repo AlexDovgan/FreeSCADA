@@ -60,34 +60,12 @@ namespace FreeSCADA.Designer.Views
 			else
 				root = projectTree.Nodes.Add(project.FileName);
 
-			foreach (string entity in Env.Current.Project.GetEntities())
+			TreeNode schemas = root.Nodes.Add(StringResources.SchemasItemName);
+			foreach (string entity in Env.Current.Project.GetSchemas())
 			{
-				//filtering schema names
-				TreeNode node = null;
-				string[] splited = entity.Split('/');
-				if (splited.Length > 1)
-				{
-
-                    if (root.Nodes.Find(splited[0], true).Length == 0)
-                    {
-                        node = root.Nodes.Add(splited[0]);
-                        node.Name = splited[0];
-                    }
-                    else
-                        node = root.Nodes.Find(splited[0], true)[0];
-					
-                    if (node.Nodes.Find(splited[1], false).Length == 0)
-					{
-						node = node.Nodes.Add(splited[1]);
-						node.Tag = splited[1];
-                        node.Name = splited[1];
-					}
-				}
-				else
-				{
-					node = root.Nodes.Add(entity);
-					node.Tag = entity;
-				}
+				TreeNode node = schemas.Nodes.Add(entity);
+				node.Tag = entity;
+				node.EnsureVisible();
 			}
 		}
 

@@ -50,5 +50,10 @@ namespace FreeSCADA.RunTime
 			runButton.Enabled = true;
 			stopButton.Enabled = false;
 		}
+
+		private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			Env.Current.CommunicationPlugins.Disconnect();
+		}
 	}
 }

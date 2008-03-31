@@ -171,6 +171,7 @@
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds;
 			this.Text = "RunTime";
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
 			toolStrip1.ResumeLayout(false);
 			toolStrip1.PerformLayout();
 			this.mainMenu.ResumeLayout(false);

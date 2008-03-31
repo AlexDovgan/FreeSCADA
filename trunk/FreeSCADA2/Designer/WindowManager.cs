@@ -32,7 +32,7 @@ namespace FreeSCADA.Designer
 			toolBoxView.Show(dockPanel, DockState.DockRight);
             
             propertyBrowserView = new PropertyBrowserView();
-            propertyBrowserView.Show(dockPanel, DockState.DockLeft);
+			propertyBrowserView.Show(toolBoxView.Pane, DockAlignment.Bottom, 0.6);
 
 			//Connect Windows Manager to heleper events
 			dockPanel.ActiveDocumentChanged += new EventHandler(OnActiveDocumentChanged);
