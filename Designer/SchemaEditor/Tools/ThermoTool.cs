@@ -49,7 +49,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 				startPos = e.GetPosition(this);
 
                 thermoObject = new ProgressBar();
-
+                thermoObject.Orientation = Orientation.Vertical;
                 thermoObject.Template = (ControlTemplate)EditorHelper.TemplateResources["thermoTemplate"];
 				thermoObject.Opacity = 0.75;
 				Canvas.SetLeft(thermoObject, startPos.X);

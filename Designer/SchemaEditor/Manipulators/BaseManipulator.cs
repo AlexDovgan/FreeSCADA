@@ -13,7 +13,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
     /// 
     /// /// </summary>
         
-    class BaseManipulator :Adorner
+    class BaseManipulator :FrameworkElement//Adorner
     {
         
         /// <summary>
@@ -53,7 +53,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         }
 
         public BaseManipulator(UIElement element)
-            : base(element)
+            //: base(element)
         {
             adornedElement = element;
             if (!(adornedElement.RenderTransform is TransformGroup))

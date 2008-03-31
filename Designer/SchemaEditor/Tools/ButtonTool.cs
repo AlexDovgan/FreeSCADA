@@ -10,7 +10,7 @@ using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
-	class ButtonTool : BaseTool, ITool
+    class ButtonTool : BaseTool, ITool
 	{
 		Point startPos;
 		bool isDragging;

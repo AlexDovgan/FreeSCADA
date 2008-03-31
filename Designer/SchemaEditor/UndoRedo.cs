@@ -185,7 +185,7 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
         }
         public void Undo()
         {
-            BaseTool activeTool;
+         
             schemaDocument.MainCanvas.Children.Add(deletedObject);
             schemaDocument.IsModified = documentModifiedState;
 

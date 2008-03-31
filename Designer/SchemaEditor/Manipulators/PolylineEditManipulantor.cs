@@ -32,7 +32,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             poly.UpdateLayout();
             for (int i = 0; i < poly.Points.Count; i++)
             {
-                Point p = poly.GeometryTransform.Transform(poly.Points[i]);
+                Matrix m= poly.GeometryTransform.Value;
+                
+                Point p = m.Transform(poly.Points[i]);
                 p = poly.TranslatePoint(p, (UIElement)poly.Parent);
                 poly.Points[i] = p;
             }
