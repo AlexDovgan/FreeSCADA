@@ -35,9 +35,15 @@ namespace FreeSCADA.Designer.Views
                     toolsList.Add(new TextBoxTool(Schema.MainCanvas));
                     toolsList.Add(new PolylineTool(Schema.MainCanvas));
                     toolsList.Add(new ActionEditTool(Schema.MainCanvas));
-                    toolsList.Add(new ButtonTool(Schema.MainCanvas));
-                    toolsList.Add(new GuegeTool(Schema.MainCanvas));
-                    toolsList.Add(new ThermoTool(Schema.MainCanvas));
+                    //toolsList.Add(new ButtonTool(Schema.MainCanvas));
+                   // toolsList.Add(new GuegeTool(Schema.MainCanvas));
+                   // toolsList.Add(new ThermoTool(Schema.MainCanvas));
+                    toolsList.Add(new ControlCreateTool<System.Windows.Controls.Button>(Schema.MainCanvas));
+                    toolsList.Add(new ControlCreateTool<System.Windows.Controls.ProgressBar>(Schema.MainCanvas));
+                    toolsList.Add(new ControlCreateTool<System.Windows.Controls.Primitives.ScrollBar>(Schema.MainCanvas));
+                    toolsList.Add(new ControlCreateTool<System.Windows.Controls.ContentControl>(Schema.MainCanvas));
+                    toolsList.Add(new ControlCreateTool<System.Windows.Controls.Slider>(Schema.MainCanvas));
+
                 }
                 return toolsList;
             }
@@ -245,7 +251,7 @@ namespace FreeSCADA.Designer.Views
                 {
                     reader.MoveToContent();
                     XslCompiledTransform xslt = new XslCompiledTransform(true);
-                    xslt.Load("resources/svg2xaml.xsl", new XsltSettings(true, true), null);
+                    xslt.Load("resources\\svg2xaml.xsl", new XsltSettings(true, true), null);
 
                     //XmlReader.Create(new StringReader (StringResources.svg2xaml))
                     

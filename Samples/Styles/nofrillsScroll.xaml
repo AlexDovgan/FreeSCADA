@@ -1,0 +1,43 @@
+<Style   TargetType="ScrollBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" >
+
+    <Setter Property="Orientation" Value="Horizontal" />
+    <Setter Property="Control.Template">
+        <Setter.Value>
+
+            <ControlTemplate  TargetType="ScrollBar">
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <RepeatButton Grid.Column="0"
+                              Command="ScrollBar.LineLeftCommand"
+                              FontFamily="Wingdings" Content="E" />
+
+                    <Track Grid.Column="1" Name="PART_Track">
+                        <Track.DecreaseRepeatButton>
+                            <RepeatButton Command="ScrollBar.PageLeftCommand" />
+                        </Track.DecreaseRepeatButton>
+
+                        <Track.IncreaseRepeatButton>
+                            <RepeatButton Command="ScrollBar.PageRightCommand" />
+                        </Track.IncreaseRepeatButton>
+
+                        <Track.Thumb>
+                            <Thumb />
+                        </Track.Thumb>
+                    </Track>
+
+                    <RepeatButton Grid.Column="2"
+                              Command="ScrollBar.LineRightCommand"
+                              FontFamily="Wingdings" Content="F" />
+                </Grid>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+</Style>

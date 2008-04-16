@@ -49,9 +49,14 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="ToolBox, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\toolbox\ToolBox.dll</HintPath>
+    </Reference>
     <Reference Include="UIAutomationProvider">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -88,14 +93,12 @@
     <Compile Include="SchemaEditor\ShortProp.cs" />
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
     <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
-    <Compile Include="SchemaEditor\Tools\ButtonTool.cs" />
+    <Compile Include="SchemaEditor\Tools\ControlCreateTool.cs" />
     <Compile Include="SchemaEditor\Tools\EllipseTool.cs" />
-    <Compile Include="SchemaEditor\Tools\GuageTool.cs" />
     <Compile Include="SchemaEditor\Tools\PolylineTool.cs" />
     <Compile Include="SchemaEditor\Tools\RectangleTool.cs" />
     <Compile Include="SchemaEditor\Tools\SelectionTool.cs" />
     <Compile Include="SchemaEditor\Tools\TextBoxTool.cs" />
-    <Compile Include="SchemaEditor\Tools\ThermoTool.cs" />
     <Compile Include="SchemaEditor\UndoRedo.cs" />
     <Compile Include="SchemaEditor\WPFShemaContainer.cs" />
     <Compile Include="StringResources.Designer.cs">

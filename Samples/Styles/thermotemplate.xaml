@@ -1,0 +1,99 @@
+<Style x:Name="ThermoStyle"
+               TargetType="ProgressBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" >
+
+    <Setter Property="Orientation" Value="Vertical" />
+    <Setter Property="Control.Template">
+        <Setter.Value>
+
+            <ControlTemplate x:Name="thermoTemplate"
+                         TargetType="ProgressBar">
+
+
+                <!-- Define two brushes for the thermometer liquid -->
+                <ControlTemplate.Resources>
+                    <LinearGradientBrush x:Key="brushStem"
+                                     StartPoint="0 0" EndPoint="1 0">
+                        <GradientStop Offset="0" Color="Red" />
+                        <GradientStop Offset="0.3" Color="Pink" />
+                        <GradientStop Offset="1" Color="Red" />
+                    </LinearGradientBrush>
+
+                    <RadialGradientBrush x:Key="brushBowl"
+                                     GradientOrigin="0.3 0.3">
+                        <GradientStop Offset="0" Color="Pink" />
+                        <GradientStop Offset="1" Color="Red" />
+                    </RadialGradientBrush>
+                </ControlTemplate.Resources>
+
+                <!-- Two-row Grid divides thermometer into stem and bowl -->
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Second grid divides stem area in three columns -->
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="25*" />
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="25*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- This border displays the stem -->
+                        <Border Grid.Column="1" BorderBrush="SteelBlue"
+                            BorderThickness="3 3 3 0"
+                            CornerRadius="6 6 0 0" >
+
+                            <!-- Track and Indicator elements -->
+                            <Decorator Name="PART_Track">
+                                <Border Name="PART_Indicator"
+                                    CornerRadius="6 6 0 0"
+                                    VerticalAlignment="Bottom"
+                                    Background="{StaticResource brushStem}" />
+                            </Decorator>
+                        </Border>
+                    </Grid>
+
+                    <!-- The bowl outline goes in the main Grid second row -->
+                    <Ellipse Grid.Row="1"
+                         Width="{TemplateBinding Width}"
+                         Height="{TemplateBinding Width}"
+                         Stroke="SteelBlue" StrokeThickness="3" />
+
+                    <!-- Another grid goes in the same cell -->
+                    <Grid Grid.Row="1" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50*" />
+                            <RowDefinition Height="50*" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="25*" />
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="25*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- This is to close up the gap between bowl and stem -->
+                        <Border Grid.Row="0" Grid.Column="1"
+                            BorderBrush="SteelBlue"
+                            BorderThickness="3 0 3 0"
+                            Background="{StaticResource brushStem}" />
+                    </Grid>
+
+                    <!-- Another ellipse to fill up the bowl -->
+                    <Ellipse Grid.Row="1"
+                         Width="{TemplateBinding Width}"
+                         Height="{TemplateBinding Width}"
+                         Stroke="Transparent" StrokeThickness="6"
+                         Fill="{StaticResource brushBowl}" />
+                </Grid>
+
+            </ControlTemplate>
+
+        </Setter.Value>
+    </Setter>
+</Style>

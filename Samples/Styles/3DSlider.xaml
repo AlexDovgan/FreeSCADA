@@ -1,0 +1,189 @@
+        <Style x:Name="styleSlider3D"
+               TargetType="Slider"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" >
+
+            <Setter Property="Orientation" Value="Vertical" />
+            <Setter Property="Control.Template">
+              <Setter.Value>
+
+        <ControlTemplate x:Name="templateSlider3D" TargetType="Slider">
+
+
+            <!-- Border properties are probably unused -->
+            <Border BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Background="{TemplateBinding Background}">
+
+                <!-- Grid layout accomodates two TickBars and Track -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- TickBars are collapsed (invisible) by default) -->
+                    <TickBar Grid.Column="0" Name="LeftTick"
+                             Width="10" Placement="Left" Visibility="Collapsed"
+                             Fill="{TemplateBinding Foreground}" />
+
+                    <TickBar Grid.Column="2" Name="RightTick"
+                             Width="10" Placement="Right" Visibility="Collapsed"
+                             Fill="{TemplateBinding Foreground}" />
+
+                    <!-- The groove image is provided by this Border -->
+                    <Border Grid.Column="1"
+                            Margin="21 22 21 22" CornerRadius="2 2 2 2"
+                            BorderBrush="Black" BorderThickness="1"
+                            Background="LightGray" />
+
+                    <!-- That same Grid cell is occupied by the Track -->
+                    <Track Grid.Column="1" Name="PART_Track">
+                        <Track.DecreaseRepeatButton>
+
+                            <!-- The two RepeatButtons are transparent -->
+                            <RepeatButton Command="Slider.DecreaseLarge"
+                                          IsTabStop="False" Focusable="False">
+                                <RepeatButton.Template>
+                                    <ControlTemplate>
+                                        <Border Background="Transparent" />
+                                    </ControlTemplate>
+                                </RepeatButton.Template>
+                            </RepeatButton>
+                        </Track.DecreaseRepeatButton>
+
+                        <Track.IncreaseRepeatButton>
+                            <RepeatButton Command="Slider.IncreaseLarge"
+                                          IsTabStop="False" Focusable="False">
+                                <RepeatButton.Template>
+                                    <ControlTemplate>
+                                        <Border Background="Transparent" />
+                                    </ControlTemplate>
+                                </RepeatButton.Template>
+                            </RepeatButton>
+                        </Track.IncreaseRepeatButton>
+
+                        <!-- The Thumb is basically a Visual3D element -->
+                        <Track.Thumb>
+                            <Thumb Height="50">
+                                <Thumb.Template>
+                                    <ControlTemplate>
+                                        <Border Background="Transparent">
+                                            <Viewport3D>
+
+    <!-- Shift the rest of this left to avoid excessive indents -->
+    <ModelVisual3D>
+        <ModelVisual3D.Content>
+            <GeometryModel3D>
+                <GeometryModel3D.Geometry>
+
+                    <!-- Description of the lever for the Slider -->
+                    <!-- I believe it's a "rectangular pyramidal frustum" -->
+                    <MeshGeometry3D
+                        Positions="-2 -1 0, -1 -0.25 4, -2 1 0, -1 0.25 4,
+                                    2 -1 0,  1 -0.25 4,  2 1 0,  1 0.25 4"
+
+                        TriangleIndices="0 1 2, 1 3 2, 0 2 4, 2 6 4,
+                                         0 4 1, 1 4 5, 1 5 7, 1 7 3,
+                                         4 6 5, 7 5 6, 2 3 6, 3 7 6"
+
+                        TextureCoordinates="0 1, 0.2 0.6, 0 0, 0.2 0.4,
+                                            1 1, 0.8 0.6, 1 0, 0.8 0.4" />
+                </GeometryModel3D.Geometry>
+
+                <!-- The Material covers the surface of the 3D object -->
+                <GeometryModel3D.Material>
+                    <DiffuseMaterial>
+                        <DiffuseMaterial.Brush>
+                            <DrawingBrush>
+                                <DrawingBrush.Drawing>
+                                    <!-- Basically a light-gray surface with
+                                            black lines for the edges -->
+                                    <GeometryDrawing Brush="LightGray"
+                                        Geometry="F 1 M 0 0 L 1 0 L 1 1 L 0 1 Z
+                                                  M 0.2 0.4
+                                                  L 0.8 0.4 0.8 0.6 0.2 0.6 Z
+                                                  M 0 0 L 0.2 0.4
+                                                  M 1 0 L 0.8 0.4
+                                                  M 1 1 L 0.8 0.6
+                                                  M 0 1 L 0.2 0.6">
+                                        <GeometryDrawing.Pen>
+                                            <Pen Brush="DarkGray"
+                                                 Thickness=".05" />
+                                        </GeometryDrawing.Pen>
+                                    </GeometryDrawing>
+                                </DrawingBrush.Drawing>
+                            </DrawingBrush>
+                        </DiffuseMaterial.Brush>
+                    </DiffuseMaterial>
+                </GeometryModel3D.Material>
+            </GeometryModel3D>
+        </ModelVisual3D.Content>
+    </ModelVisual3D>
+
+    <!-- Use DirectionalLight so it seems like a real object -->
+    <ModelVisual3D>
+        <ModelVisual3D.Content>
+            <DirectionalLight Color="White" Direction="2 -2 -1" />
+                </ModelVisual3D.Content>
+    </ModelVisual3D>
+
+    <!-- Avoid over-contrastiness with some ambient light -->
+    <ModelVisual3D>
+        <ModelVisual3D.Content>
+            <AmbientLight Color="Gray" />
+        </ModelVisual3D.Content>
+    </ModelVisual3D>
+
+    <!-- Set up the camera looking head on down the Z axis -->
+    <Viewport3D.Camera>
+        <PerspectiveCamera Position="0 0 50" LookDirection="0 0 -1"
+                           UpDirection="0 1 0" FieldOfView="5">
+            <PerspectiveCamera.Transform>
+                <RotateTransform3D>
+                    <RotateTransform3D.Rotation>
+
+                        <!-- Bind rotation angle to Value property -->
+                        <AxisAngleRotation3D Axis="1 0 0"
+                            Angle="{Binding RelativeSource={RelativeSource
+                                AncestorType={x:Type Slider}}, Path=Value}" />
+                    </RotateTransform3D.Rotation>
+                </RotateTransform3D>
+            </PerspectiveCamera.Transform>
+        </PerspectiveCamera>
+    </Viewport3D.Camera>
+
+                                            <!-- Back to normal indenting -->
+                                            </Viewport3D>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Thumb.Template>
+                            </Thumb>
+                        </Track.Thumb>
+                    </Track>
+                </Grid>
+            </Border>
+
+            <!-- Define triggers to make the TickBars visible -->
+            <ControlTemplate.Triggers>
+                <Trigger Property="Slider.TickPlacement" Value="TopLeft">
+                    <Setter TargetName="LeftTick" Property="Visibility"
+                                                  Value="Visible" />
+                </Trigger>
+                <Trigger Property="Slider.TickPlacement" Value="BottomRight">
+                    <Setter TargetName="RightTick" Property="Visibility"
+                                                   Value="Visible" />
+                </Trigger>
+                <Trigger Property="Slider.TickPlacement" Value="Both">
+                    <Setter TargetName="LeftTick" Property="Visibility"
+                                                  Value="Visible" />
+                    <Setter TargetName="RightTick" Property="Visibility"
+                                                   Value="Visible" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        </Setter.Value>
+        </Setter>
+
+</Style>
