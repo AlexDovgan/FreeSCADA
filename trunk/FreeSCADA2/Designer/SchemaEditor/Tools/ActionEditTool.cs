@@ -24,7 +24,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
         public String ToolGroup
         {
-            get { return "Actions Tools"; }
+            get { return "Editor Tools"; }
         }
         public System.Drawing.Bitmap ToolIcon
         {

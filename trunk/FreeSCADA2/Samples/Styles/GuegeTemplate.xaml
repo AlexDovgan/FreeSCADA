@@ -1,0 +1,75 @@
+<Style x:Name="GuageStyle"
+               TargetType="ProgressBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" >
+
+    <Setter Property="Orientation" Value="Horizontal" />
+    <Setter Property="Control.Template">
+        <Setter.Value>
+            <ControlTemplate x:Name="guageTemplate"
+                         TargetType="ProgressBar">
+
+                <ControlTemplate.Resources>
+                    <Style TargetType="Line">
+                        <Setter Property="Stroke" Value="Black" />
+                        <Setter Property="StrokeThickness" Value="1" />
+                        <Setter Property="X1" Value="-85" />
+                        <Setter Property="X2" Value="-95" />
+                    </Style>
+
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontSize" Value="11" />
+                        <Setter Property="Foreground" Value="Black" />
+                    </Style>
+
+
+                </ControlTemplate.Resources>
+                <Viewbox Stretch="Fill">
+                    <Border Width="270" Height="120"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Background="{TemplateBinding Background}">
+
+                        <Canvas Width="0" Height="0"
+                        RenderTransform="1 0 0 1 0 50" >
+
+                            <Rectangle Name="PART_Track" Width="180" />
+                            <Rectangle Name="PART_Indicator" />
+
+                            <Line LayoutTransform=" 1.00 0.00 -0.00 1.00 0 0" />
+                            <Line LayoutTransform=" 0.95 0.31 -0.31 0.95 0 0" />
+                            <Line LayoutTransform=" 0.81 0.59 -0.59 0.81 0 0" />
+                            <Line LayoutTransform=" 0.59 0.81 -0.81 0.59 0 0" />
+                            <Line LayoutTransform=" 0.31 0.95 -0.95 0.31 0 0" />
+                            <Line LayoutTransform=" 0.00 1.00 -1.00 0.00 0 0" />
+                            <Line LayoutTransform="-0.31 0.95  0.95 0.31 0 0" />
+                            <Line LayoutTransform="-0.59 0.81  0.81 0.59 0 0" />
+                            <Line LayoutTransform="-0.81 0.59  0.59 0.81 0 0" />
+                            <Line LayoutTransform="-0.95 0.31  0.31 0.95 0 0" />
+                            <Line LayoutTransform="-1.00 0.00  0.00 1.00 0 0" />
+
+                            <TextBlock Text="0%" Canvas.Left="-115" Canvas.Top="-6" />
+                    <TextBlock Text="20%" Canvas.Left="-104" Canvas.Top="-65" />
+                    <TextBlock Text="40%" Canvas.Left="-42" Canvas.Top="-105" />
+                    <TextBlock Text="60%" Canvas.Left="25" Canvas.Top="-105" />
+                    <TextBlock Text="80%" Canvas.Left="82" Canvas.Top="-65" />
+                    <TextBlock Text="100%" Canvas.Left="100" Canvas.Top="-6" />
+
+                    <Polygon Points="5 5 5 -5 -75 0"
+                             Stroke="Black" Fill="Red">
+                        <Polygon.RenderTransform>
+                            <RotateTransform>
+                            <RotateTransform.Angle>
+                                <Binding ElementName="PART_Indicator"
+                                                    Path="ActualWidth"/>
+                                </RotateTransform.Angle>
+                            </RotateTransform>
+                        </Polygon.RenderTransform>
+                    </Polygon>
+                </Canvas>
+                    </Border>
+                </Viewbox>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+</Style>

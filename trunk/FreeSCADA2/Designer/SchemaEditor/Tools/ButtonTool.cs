@@ -29,7 +29,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
 		public String ToolGroup
 		{
-			get { return StringResources.ToolContentGroupName; }
+			get { return StringResources.ToolControlsGroupName; }
 		}
 		public System.Drawing.Bitmap ToolIcon
 		{

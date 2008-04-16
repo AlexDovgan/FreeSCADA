@@ -115,11 +115,11 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Content Tools.
+        ///   Looks up a localized string similar to Controls Tools.
         /// </summary>
-        internal static string ToolContentGroupName {
+        internal static string ToolControlsGroupName {
             get {
-                return ResourceManager.GetString("ToolContentGroupName", resourceCulture);
+                return ResourceManager.GetString("ToolControlsGroupName", resourceCulture);
             }
         }
         

@@ -135,8 +135,8 @@
   <data name="ToolButtonName" xml:space="preserve">
     <value>Button Tool</value>
   </data>
-  <data name="ToolContentGroupName" xml:space="preserve">
-    <value>Content Tools</value>
+  <data name="ToolControlsGroupName" xml:space="preserve">
+    <value>Controls Tools</value>
   </data>
   <data name="UnsavedProjectName" xml:space="preserve">
     <value>{unsaved project file}</value>

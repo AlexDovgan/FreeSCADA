@@ -155,7 +155,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
-			NotifyToolFinished();
+		//	NotifyToolFinished();
         }
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
@@ -225,7 +225,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         }
         protected virtual BaseManipulator CreateToolManipulator(UIElement obj)
         {
-            return new GeometryHilightManipulator(obj);
+            return new DragResizeRotateManipulator(obj);//GeometryHilightManipulator(obj);
         }
         protected void RaiseObjectSelected(Object obj)
         {
