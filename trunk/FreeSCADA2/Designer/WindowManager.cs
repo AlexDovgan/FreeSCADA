@@ -308,6 +308,25 @@ namespace FreeSCADA.Designer
                 currentDocument.ObjectSelected -= propertyBrowserView.ShowProperties;
 			}
 		}
-        
+
+        public void zoom_in()
+        {
+            if (currentDocument != null) ((SchemaView)currentDocument).zoom_in();
+        }
+
+        public void zoom_out()
+        {
+            if (currentDocument != null) ((SchemaView)currentDocument).zoom_out();
+        }
+
+        public void zoom_level(double level)
+        {
+            if (currentDocument != null) ((SchemaView)currentDocument).zoom_level(level);
+        }
+
+        public void SetCurrentDocumentFocus()
+        {
+            if (currentDocument != null) currentDocument.Focus();
+        }
     }
 }

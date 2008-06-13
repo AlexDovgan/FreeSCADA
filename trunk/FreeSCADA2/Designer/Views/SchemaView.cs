@@ -3,6 +3,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Xsl;
 using System.Windows.Markup;
+using System.Windows.Media;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using FreeSCADA.ShellInterfaces;
@@ -20,6 +21,7 @@ namespace FreeSCADA.Designer.Views
         private BasicUndoBuffer undoBuff;
         private BaseTool activeTool;
         private Type defaultTool = typeof(SelectionTool);
+        private ScaleTransform scale = new ScaleTransform();
         List<ITool> toolsList;
 
         public List<ITool> AvailableTools
@@ -301,6 +303,27 @@ namespace FreeSCADA.Designer.Views
             wpfSchemaContainer = null;
 
             base.OnClosed(e);
+        }
+
+        public void zoom_in()
+        {
+            scale.ScaleX *= 1.05;
+            scale.ScaleY *= 1.05;
+            Schema.MainCanvas.RenderTransform = scale;
+        }
+
+        public void zoom_out()
+        {
+            scale.ScaleX /= 1.05;
+            scale.ScaleY /= 1.05;
+            Schema.MainCanvas.RenderTransform = scale;
+        }
+
+        public void zoom_level(double level)
+        {
+            scale.ScaleX = level;
+            scale.ScaleY = level;
+            Schema.MainCanvas.RenderTransform = scale;
         }
     }
 }
