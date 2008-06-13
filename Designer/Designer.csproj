@@ -210,6 +210,8 @@
     <Content Include="Resources\open_file.png" />
     <Content Include="Resources\open_schema.png" />
     <Content Include="Resources\save_file.png" />
+    <Content Include="Resources\zoom_in.png" />
+    <None Include="Resources\zoom_out.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
