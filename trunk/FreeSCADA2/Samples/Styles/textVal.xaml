@@ -10,7 +10,7 @@
                <ControlTemplate TargetType="ProgressBar">
                         <Viewbox Stretch="Fill">
                         <TextBlock HorizontalAlignment="Center"
-                                   Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Value,Converter={con:FormatConverter {}{0:D2F2}} }"/>
+                                   Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Value,Converter={con:FormatConverter {}{0:F2}} }"/>
                         </Viewbox>
                 </ControlTemplate>
         </Setter.Value>
