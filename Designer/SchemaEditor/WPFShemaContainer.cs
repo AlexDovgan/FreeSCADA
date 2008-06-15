@@ -7,7 +7,7 @@ namespace FreeSCADA.Designer.SchemaEditor
 	class WPFShemaContainer : System.Windows.Forms.Integration.ElementHost
 	{
 		SchemaDocument document;
-		CanvasResources resources = new CanvasResources();
+		
 		public SchemaDocument Document
 		{
 			get { return document; }
@@ -16,8 +16,11 @@ namespace FreeSCADA.Designer.SchemaEditor
 				document = value;
 				(Child as ScrollViewer).Content = document.MainCanvas;
 				document.MainCanvas.Focusable = false;
-
-				//document.MainCanvas.Ba    ckground = resources["GridBackgroundBrush"] as DrawingBrush;
+                if (!(document.MainCanvas.RenderTransform is System.Windows.Media.ScaleTransform))
+                    document.MainCanvas.RenderTransform = new System.Windows.Media.ScaleTransform();
+                    
+                
+				//document.MainCanvas.Background = resources["GridBackgroundBrush"] as DrawingBrush;
 
 			}
 
@@ -28,7 +31,7 @@ namespace FreeSCADA.Designer.SchemaEditor
 
 			Child = new ScrollViewer();
 			//Child.Focusable = false;
-			resources.InitializeComponent();
+			
 			Child.SnapsToDevicePixels = true;
             (Child as ScrollViewer).HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
 		}
