@@ -261,6 +261,7 @@ namespace FreeSCADA.Designer
 						DocumentView doc = documentViews[0];
 						doc.HandleModifiedOnClose = false;
 						doc.Close(); //this window should be removed from documentViews on closing
+                        documentViews.Remove(doc);
 					}
 					return true;
 				}
@@ -271,9 +272,14 @@ namespace FreeSCADA.Designer
 					if (SaveProject() == false)
 						return false;
 
-					while (documentViews.Count > 0)
-						documentViews[0].Close();
-					documentViews.Clear();
+                    while (documentViews.Count > 0)
+                    {
+                        DocumentView doc = documentViews[0];
+                        doc.HandleModifiedOnClose = false;
+                        doc.Close();
+                        documentViews.Remove(doc);
+                    }
+                    documentViews.Clear();
 				}
 			}
 		return true;
