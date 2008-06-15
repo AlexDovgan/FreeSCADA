@@ -60,8 +60,10 @@ namespace FreeSCADA.Designer
 
 		private void OnSaveFileClick(object sender, System.EventArgs e)
 		{
-			windowManager.SaveDocument();
-		}
+			//windowManager.SaveDocument();
+            windowManager.SaveProject();
+            UpdateCaption();
+        }
 
 		private void OnFormClosing(object sender, FormClosingEventArgs e)
 		{

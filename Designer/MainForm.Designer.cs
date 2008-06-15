@@ -37,6 +37,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.zoomOutButton = new System.Windows.Forms.ToolStripButton();
             this.zoomInButton = new System.Windows.Forms.ToolStripButton();
+            this.zoomLevelComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -51,7 +52,6 @@
             this.projectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.variablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
-            this.zoomLevelComboBox = new System.Windows.Forms.ToolStripComboBox();
             toolStrip1 = new System.Windows.Forms.ToolStrip();
             toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             toolStripButton2 = new System.Windows.Forms.ToolStripButton();
@@ -88,7 +88,7 @@
             toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButton1.Name = "toolStripButton1";
             toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            toolStripButton1.Text = "toolStripButton1";
+            toolStripButton1.Text = "New Project";
             toolStripButton1.Click += new System.EventHandler(this.OnNewProjectClick);
             // 
             // toolStripButton2
@@ -98,7 +98,7 @@
             toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButton2.Name = "toolStripButton2";
             toolStripButton2.Size = new System.Drawing.Size(23, 22);
-            toolStripButton2.Text = "toolStripButton2";
+            toolStripButton2.Text = "Open Project";
             toolStripButton2.Click += new System.EventHandler(this.OnLoadProjectClick);
             // 
             // toolStripSeparator1
@@ -113,7 +113,7 @@
             toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButton3.Name = "toolStripButton3";
             toolStripButton3.Size = new System.Drawing.Size(23, 22);
-            toolStripButton3.Text = "toolStripButton3";
+            toolStripButton3.Text = "Save Project";
             toolStripButton3.Click += new System.EventHandler(this.OnSaveFileClick);
             // 
             // toolStripButtonNewSchema
@@ -123,7 +123,7 @@
             toolStripButtonNewSchema.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButtonNewSchema.Name = "toolStripButtonNewSchema";
             toolStripButtonNewSchema.Size = new System.Drawing.Size(23, 22);
-            toolStripButtonNewSchema.Text = "toolStripButton4";
+            toolStripButtonNewSchema.Text = "New Schema";
             toolStripButtonNewSchema.Click += new System.EventHandler(this.OnSchemaItemClick);
             // 
             // toolStripButton5
@@ -133,7 +133,7 @@
             toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButton5.Name = "toolStripButton5";
             toolStripButton5.Size = new System.Drawing.Size(23, 22);
-            toolStripButton5.Text = "toolStripButton5";
+            toolStripButton5.Text = "New Event List";
             toolStripButton5.Click += new System.EventHandler(this.OnEventsItemClick);
             // 
             // zoomOutButton
@@ -155,6 +155,18 @@
             this.zoomInButton.Size = new System.Drawing.Size(23, 22);
             this.zoomInButton.Text = "Zoom In";
             this.zoomInButton.Click += new System.EventHandler(this.zoomInButton_Click);
+            // 
+            // zoomLevelComboBox
+            // 
+            this.zoomLevelComboBox.Items.AddRange(new object[] {
+            "Home (100%)",
+            "50%",
+            "150%"});
+            this.zoomLevelComboBox.Name = "zoomLevelComboBox";
+            this.zoomLevelComboBox.Size = new System.Drawing.Size(121, 25);
+            this.zoomLevelComboBox.ToolTipText = "Zoom Level";
+            this.zoomLevelComboBox.SelectedIndexChanged += new System.EventHandler(this.zoomLevelComboBox_SelectedIndexChanged);
+            this.zoomLevelComboBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.zoomLevelComboBox_KeyUp);
             // 
             // statusStrip1
             // 
@@ -273,18 +285,6 @@
             this.mainMenu.Size = new System.Drawing.Size(599, 24);
             this.mainMenu.TabIndex = 0;
             this.mainMenu.Text = "menuStrip1";
-            // 
-            // zoomLevelComboBox
-            // 
-            this.zoomLevelComboBox.Items.AddRange(new object[] {
-            "Home (100%)",
-            "50%",
-            "150%"});
-            this.zoomLevelComboBox.Name = "zoomLevelComboBox";
-            this.zoomLevelComboBox.Size = new System.Drawing.Size(121, 25);
-            this.zoomLevelComboBox.ToolTipText = "Zoom Level";
-            this.zoomLevelComboBox.SelectedIndexChanged += new System.EventHandler(this.zoomLevelComboBox_SelectedIndexChanged);
-            this.zoomLevelComboBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.zoomLevelComboBox_KeyUp);
             // 
             // MainForm
             // 
