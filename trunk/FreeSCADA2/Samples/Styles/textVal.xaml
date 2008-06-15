@@ -1,0 +1,18 @@
+<Style x:Name="ThermoStyle"
+               TargetType="ProgressBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:con="clr-namespace:Kent.Boogaart.Converters.Markup;assembly=Kent.Boogaart.Converters">
+
+    <Setter Property="Orientation" Value="Horizontal" />
+    <Setter Property="Control.Template">
+        <Setter.Value>
+               <ControlTemplate TargetType="ProgressBar">
+                        <Viewbox Stretch="Fill">
+                        <TextBlock HorizontalAlignment="Center"
+                                   Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Value,Converter={con:FormatConverter {}{0:D2F2}} }"/>
+                        </Viewbox>
+                </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+</Style>

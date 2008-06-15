@@ -37,6 +37,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\SharpZipLib\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Kent.Boogaart.Converters, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc96fa93a217f7a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\DataConverters\Kent.Boogaart.Converters.dll</HintPath>
+    </Reference>
+    <Reference Include="Kent.Boogaart.HelperTrinity, Version=1.1.0.0, Culture=neutral, PublicKeyToken=cc96fa93a217f7a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\DataConverters\Kent.Boogaart.HelperTrinity.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -71,16 +79,11 @@
     <Compile Include="Schema\Actions\ValueAction.cs" />
     <Compile Include="Schema\Actions\RotateAction.cs" />
     <Compile Include="Schema\Actions\ShowAction.cs" />
+    <Compile Include="Schema\ChannelsDataSource.cs" />
     <Compile Include="Schema\SchemaDocument.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Common.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Schema\CustomElements\ElementsTemplates.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

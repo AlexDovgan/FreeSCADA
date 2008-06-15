@@ -52,10 +52,10 @@ namespace FreeSCADA.Designer.SchemaEditor
             TypeDescriptor.AddAttributes(typeof(T), attr);
         }
 
-        public static FreeSCADA.Common.Schema.CustomElements.ElementsTemplates TemplateResources = new FreeSCADA.Common.Schema.CustomElements.ElementsTemplates();
+        //public static FreeSCADA.Common.Schema.CustomElements.ElementsTemplates TemplateResources = new FreeSCADA.Common.Schema.CustomElements.ElementsTemplates();
         static  EditorHelper()
         {
-            TemplateResources.InitializeComponent();
+          //  TemplateResources.InitializeComponent();
             Register<BindingExpression,BindingConvertor>();
         }
             
@@ -65,7 +65,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             DependencyObject top = el;
             while (VisualTreeHelper.GetParent(top) != c)
             {
-                top = VisualTreeHelper.GetParent(top);
+                top = VisualTreeHelper.GetParent(top);  
             }
             return top as UIElement;
         }

@@ -311,17 +311,17 @@ namespace FreeSCADA.Designer
 
         public void zoom_in()
         {
-            if (currentDocument != null) ((SchemaView)currentDocument).zoom_in();
+            if (currentDocument != null) ((SchemaView)currentDocument).ZoomIn();
         }
 
         public void zoom_out()
         {
-            if (currentDocument != null) ((SchemaView)currentDocument).zoom_out();
+            if (currentDocument != null) ((SchemaView)currentDocument).ZoomOut();
         }
 
         public void zoom_level(double level)
         {
-            if (currentDocument != null) ((SchemaView)currentDocument).zoom_level(level);
+            if (currentDocument != null) ((SchemaView)currentDocument).SetZoomLevel(level);
         }
 
         public void SetCurrentDocumentFocus()

@@ -243,7 +243,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
                     return control.Style.GetType().Name;
                 }
                 else return "";
-            }
+            }   
             set
             {
                 Style st=(Style)XamlReader.Load(File.Open(value,FileMode.Open));

@@ -21,7 +21,7 @@ namespace FreeSCADA.Designer.Views
         private BasicUndoBuffer undoBuff;
         private BaseTool activeTool;
         private Type defaultTool = typeof(SelectionTool);
-        private ScaleTransform scale = new ScaleTransform();
+        private ScaleTransform SchemaScale = new ScaleTransform();
         List<ITool> toolsList;
 
         public List<ITool> AvailableTools
@@ -166,6 +166,17 @@ namespace FreeSCADA.Designer.Views
                 undoBuff.AddCommand(new DeleteGraphicsObject(activeTool.SelectedObject));
                 activeTool.SelectedObject = null;
             }
+            else if (e.Key == System.Windows.Input.Key.Add)
+            {
+                ZoomIn();
+
+            }
+            else if (e.Key == System.Windows.Input.Key.Subtract)
+            {
+                ZoomOut();
+            }
+
+
             Schema.MainCanvas.UpdateLayout();
             activeTool.Update();
         }
@@ -268,8 +279,9 @@ namespace FreeSCADA.Designer.Views
                     System.Windows.Controls.Canvas obj = (System.Windows.Controls.Canvas)XamlReader.Load(xmlReader);
                     System.Windows.Controls.Viewbox v = new System.Windows.Controls.Viewbox();
                     v.Child = obj;
-                    v.Width = 800;
-                    v.Height = 600;
+                    v.Width = 640;
+                    v.Height = 480;
+                    v.Stretch = System.Windows.Media.Stretch.Fill;
                     Schema.MainCanvas.Children.Add(v);
                     reader.Close();
 
@@ -305,25 +317,29 @@ namespace FreeSCADA.Designer.Views
             base.OnClosed(e);
         }
 
-        public void zoom_in()
+        public void ZoomIn()
         {
-            scale.ScaleX *= 1.05;
-            scale.ScaleY *= 1.05;
-            Schema.MainCanvas.RenderTransform = scale;
+            SchemaScale.ScaleX *= 1.05;
+            SchemaScale.ScaleY *= 1.05;
+            
+            Schema.MainCanvas.LayoutTransform= SchemaScale;
+            
         }
 
-        public void zoom_out()
+        public void ZoomOut()
         {
-            scale.ScaleX /= 1.05;
-            scale.ScaleY /= 1.05;
-            Schema.MainCanvas.RenderTransform = scale;
+            SchemaScale.ScaleX /= 1.05;
+            SchemaScale.ScaleY /= 1.05;
+            
+            Schema.MainCanvas.LayoutTransform = SchemaScale;
         }
 
-        public void zoom_level(double level)
+        public void SetZoomLevel(double level)
         {
-            scale.ScaleX = level;
-            scale.ScaleY = level;
-            Schema.MainCanvas.RenderTransform = scale;
+            SchemaScale.ScaleX = level;
+            SchemaScale.ScaleY = level;
+            
+            Schema.MainCanvas.LayoutTransform = SchemaScale;
         }
     }
 }
