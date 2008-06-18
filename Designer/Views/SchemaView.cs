@@ -59,7 +59,7 @@ namespace FreeSCADA.Designer.Views
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            this.wpfSchemaContainer = new WPFShemaContainer();
+            this.wpfSchemaContainer = new WPFShemaContainer(this);
             // 
             // wpfContainerHost
             // 
@@ -80,8 +80,6 @@ namespace FreeSCADA.Designer.Views
             this.ResumeLayout(false);
 
         }
-
-        
 
         public SchemaDocument Schema
         {
@@ -134,8 +132,6 @@ namespace FreeSCADA.Designer.Views
                 }
             }
         }
-
-        
 
         void activeTool_ObjectCreated(object sender, EventArgs e)
         {
@@ -319,19 +315,32 @@ namespace FreeSCADA.Designer.Views
 
         public void ZoomIn()
         {
+            ZoomIn(0.0, 0.0);
+        }
+
+        public void ZoomIn(double CenterX, double CenterY)
+        {
+            myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
             SchemaScale.ScaleX *= 1.05;
             SchemaScale.ScaleY *= 1.05;
-            
-            Schema.MainCanvas.LayoutTransform= SchemaScale;
-            
+            Schema.MainCanvas.LayoutTransform = SchemaScale;
+            msv.ScrollToVerticalOffset(msv.VerticalOffset * 1.05 + CenterY * 0.05);
+            msv.ScrollToHorizontalOffset(msv.HorizontalOffset * 1.05 + CenterX * 0.05);
         }
 
         public void ZoomOut()
         {
+            ZoomOut(0.0, 0.0);
+        }
+
+        public void ZoomOut(double CenterX, double CenterY)
+        {
+            myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
             SchemaScale.ScaleX /= 1.05;
             SchemaScale.ScaleY /= 1.05;
-            
             Schema.MainCanvas.LayoutTransform = SchemaScale;
+            msv.ScrollToVerticalOffset(msv.VerticalOffset / 1.05 - CenterY * 0.05);
+            msv.ScrollToHorizontalOffset(msv.HorizontalOffset / 1.05 - CenterX * 0.05);
         }
 
         public void SetZoomLevel(double level)
