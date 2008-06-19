@@ -13,7 +13,8 @@ namespace FreeSCADA.Designer
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MainForm());
+			Application.Run(mf = new MainForm());
 		}
-	}
+        public static MainForm mf;
+    }
 }

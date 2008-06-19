@@ -326,6 +326,7 @@ namespace FreeSCADA.Designer.Views
             Schema.MainCanvas.LayoutTransform = SchemaScale;
             msv.ScrollToVerticalOffset(msv.VerticalOffset * 1.05 + CenterY * 0.05);
             msv.ScrollToHorizontalOffset(msv.HorizontalOffset * 1.05 + CenterX * 0.05);
+            Program.mf.zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
         }
 
         public void ZoomOut()
@@ -341,14 +342,20 @@ namespace FreeSCADA.Designer.Views
             Schema.MainCanvas.LayoutTransform = SchemaScale;
             msv.ScrollToVerticalOffset(msv.VerticalOffset / 1.05 - CenterY * 0.05);
             msv.ScrollToHorizontalOffset(msv.HorizontalOffset / 1.05 - CenterX * 0.05);
+            Program.mf.zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
         }
 
         public void SetZoomLevel(double level)
         {
             SchemaScale.ScaleX = level;
             SchemaScale.ScaleY = level;
-            
+
             Schema.MainCanvas.LayoutTransform = SchemaScale;
+        }
+
+        public double GetZoomLevel()
+        {
+            return SchemaScale.ScaleX;
         }
     }
 }
