@@ -7,7 +7,7 @@ using FreeSCADA.Designer.Dialogs;
 
 namespace FreeSCADA.Designer
 {
-	/// <summary>
+    /// <summary>
 	/// Application main window
 	/// </summary>
 	public partial class MainForm : Form
@@ -124,7 +124,7 @@ namespace FreeSCADA.Designer
                 percentage = int.Parse(matches[0].Value);
                 windowManager.zoom_level((double)percentage / 100.0);
             }
-            catch (Exception ex)
+            catch
             {
                 // do nothing
             }
@@ -145,12 +145,21 @@ namespace FreeSCADA.Designer
                     percentage = int.Parse(matches[0].Value);
                     windowManager.zoom_level((double)percentage / 100.0);
                 }
-                catch (Exception ex)
+                catch
                 {
                     // do nothing
                 }
                 windowManager.SetCurrentDocumentFocus();
             }
+        }
+        /// <summary>
+        /// Zoom level visualuzation
+        /// </summary>
+        public void zoomLevelComboBox_SetZoomLevelTxt(double level)
+        {
+            int percentage = (int)(level * 100);
+            string txt = "Zoom " + percentage.ToString() + "%";
+            zoomLevelComboBox.Text = txt;
         }
     }
 }

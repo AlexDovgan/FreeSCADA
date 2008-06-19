@@ -29,7 +29,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="schema"></param>
+        /// <param name="element"></param>
         public RectangleTool(UIElement element)
             : base(element)
         {
