@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using FreeSCADA.Common;
 using WeifenLuo.WinFormsUI.Docking;
+using System;
 
 namespace FreeSCADA.RunTime
 {
@@ -12,6 +13,8 @@ namespace FreeSCADA.RunTime
 		List<DockContent> documentViews = new List<DockContent>();
 		ProjectContentView projectContentView;
 
+        DockContent currentDocument;
+
 		public WindowManager(DockPanel dockPanel)
 		{
 			this.dockPanel = dockPanel;
@@ -20,7 +23,9 @@ namespace FreeSCADA.RunTime
 			projectContentView = new ProjectContentView();
 			projectContentView.Show(dockPanel, DockState.DockLeft);
 			projectContentView.OpenEntity += new ProjectContentView.OpenEntityHandler(OnOpenProjectEntity);
-		}
+            //Connect Windows Manager to heleper events
+            dockPanel.ActiveDocumentChanged += new EventHandler(OnActiveDocumentChanged);
+        }
 
 		public void Close()
 		{
@@ -54,9 +59,19 @@ namespace FreeSCADA.RunTime
 
 			documentViews.Add(view);
 			view.Show(dockPanel, DockState.Document);
-		}
+            currentDocument = (DockContent)dockPanel.ActiveDocument;
+        }
 
-		/// <summary>
+        void OnActiveDocumentChanged(object sender, EventArgs e)
+        {
+            currentDocument = (DockContent)dockPanel.ActiveDocument;
+            if (currentDocument == null)
+                Program.mf.zoomLevelComboBox_SetZoomLevelTxt(1.0);
+            else
+                Program.mf.zoomLevelComboBox_SetZoomLevelTxt((currentDocument as SchemaView).GetZoomLevel());
+        }
+
+        /// <summary>
 		/// Load a project. Asks user for a file.
 		/// </summary>
 		/// <returns>Returns true if project was successfully loaded</returns>
@@ -74,5 +89,25 @@ namespace FreeSCADA.RunTime
 			Env.Current.Project.Load(fd.FileName);
 			return true;
 		}
+
+        public void zoom_in()
+        {
+            if (currentDocument != null) ((SchemaView)currentDocument).ZoomIn();
+        }
+
+        public void zoom_out()
+        {
+            if (currentDocument != null) ((SchemaView)currentDocument).ZoomOut();
+        }
+
+        public void zoom_level(double level)
+        {
+            if (currentDocument != null) ((SchemaView)currentDocument).SetZoomLevel(level);
+        }
+
+        public void SetCurrentDocumentFocus()
+        {
+            if (currentDocument != null) currentDocument.Focus();
+        }
     }
 }

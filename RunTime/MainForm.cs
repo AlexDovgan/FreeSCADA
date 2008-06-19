@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using FreeSCADA.Common;
+using System.Text.RegularExpressions;
 
 
 namespace FreeSCADA.RunTime
@@ -55,5 +56,66 @@ namespace FreeSCADA.RunTime
 		{
 			Env.Current.CommunicationPlugins.Disconnect();
 		}
-	}
+        private void zoomOutButton_Click(object sender, System.EventArgs e)
+        {
+            windowManager.zoom_out();
+            windowManager.SetCurrentDocumentFocus();
+        }
+
+        private void zoomInButton_Click(object sender, System.EventArgs e)
+        {
+            windowManager.zoom_in();
+            windowManager.SetCurrentDocumentFocus();
+        }
+
+        private void zoomLevelComboBox_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            int percentage;
+            string txt = ((ToolStripComboBox)sender).SelectedItem.ToString();
+            //MessageBox.Show(txt);
+
+            try
+            {
+                MatchCollection matches = Regex.Matches(txt, @"\d+");
+                percentage = int.Parse(matches[0].Value);
+                windowManager.zoom_level((double)percentage / 100.0);
+            }
+            catch
+            {
+                // do nothing
+            }
+            windowManager.SetCurrentDocumentFocus();
+        }
+
+        private void zoomLevelComboBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            int percentage;
+            string txt = ((ToolStripComboBox)sender).Text;
+            //MessageBox.Show(e.KeyCode.ToString());
+            if (e.KeyCode == Keys.Return)
+            {
+                try
+                {
+                    //MessageBox.Show(txt);
+                    MatchCollection matches = Regex.Matches(txt, @"\d+");
+                    percentage = int.Parse(matches[0].Value);
+                    windowManager.zoom_level((double)percentage / 100.0);
+                }
+                catch
+                {
+                    // do nothing
+                }
+                windowManager.SetCurrentDocumentFocus();
+            }
+        }
+        /// <summary>
+        /// Zoom level visualuzation
+        /// </summary>
+        public void zoomLevelComboBox_SetZoomLevelTxt(double level)
+        {
+            int percentage = (int)(level * 100);
+            string txt = "Zoom " + percentage.ToString() + "%";
+            zoomLevelComboBox.Text = txt;
+        }
+    }
 }
