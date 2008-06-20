@@ -64,11 +64,16 @@ namespace FreeSCADA.RunTime
 
         void OnActiveDocumentChanged(object sender, EventArgs e)
         {
+            if (currentDocument != null)
+                (currentDocument as SchemaView).OnDeactivated();
             currentDocument = (DockContent)dockPanel.ActiveDocument;
             if (currentDocument == null)
                 Program.mf.zoomLevelComboBox_SetZoomLevelTxt(1.0);
             else
-                Program.mf.zoomLevelComboBox_SetZoomLevelTxt((currentDocument as SchemaView).GetZoomLevel());
+            {
+                Program.mf.zoomLevelComboBox_SetZoomLevelTxt((currentDocument as SchemaView).ZoomLevel);
+                (currentDocument as SchemaView).OnActivated();
+            }
         }
 
         /// <summary>
@@ -102,7 +107,7 @@ namespace FreeSCADA.RunTime
 
         public void zoom_level(double level)
         {
-            if (currentDocument != null) ((SchemaView)currentDocument).SetZoomLevel(level);
+            if (currentDocument != null) ((SchemaView)currentDocument).ZoomLevel = level;
         }
 
         public void SetCurrentDocumentFocus()

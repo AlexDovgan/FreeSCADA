@@ -9,6 +9,7 @@ namespace FreeSCADA.RunTime
 	{
 		private WPFShemaContainer wpfSchemaContainer;
         private ScaleTransform SchemaScale = new ScaleTransform();
+        private System.Windows.Point SavedScrollPosition;
 
 		public SchemaView()
 		{
@@ -37,7 +38,8 @@ namespace FreeSCADA.RunTime
 
 			this.ResumeLayout(false);
 
-		}
+            this.SavedScrollPosition = new System.Windows.Point(0.0, 0.0);
+        }
 
 		public SchemaDocument Schema
 		{
@@ -59,7 +61,23 @@ namespace FreeSCADA.RunTime
 			return true;
 		}
 
-		protected override void OnClosed(EventArgs e)
+        public void OnActivated()
+        {
+            // Scroll to saved position
+            myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
+            msv.ScrollToVerticalOffset(SavedScrollPosition.Y);
+            msv.ScrollToHorizontalOffset(SavedScrollPosition.X);
+        }
+
+        public void OnDeactivated()
+        {
+            // Save scroll position
+            myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
+            SavedScrollPosition.Y = msv.VerticalOffset;
+            SavedScrollPosition.X = msv.HorizontalOffset;
+        }
+        
+        protected override void OnClosed(EventArgs e)
 		{
 			wpfSchemaContainer.Dispose();
 			wpfSchemaContainer = null;
@@ -99,17 +117,18 @@ namespace FreeSCADA.RunTime
             Program.mf.zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
         }
 
-        public void SetZoomLevel(double level)
+        public double ZoomLevel
         {
-            SchemaScale.ScaleX = level;
-            SchemaScale.ScaleY = level;
-
-            Schema.MainCanvas.LayoutTransform = SchemaScale;
-        }
-
-        public double GetZoomLevel()
-        {
-            return SchemaScale.ScaleX;
+            get
+            {
+                return SchemaScale.ScaleX;
+            }
+            set
+            {
+                SchemaScale.ScaleX = value;
+                SchemaScale.ScaleY = value;
+                Schema.MainCanvas.LayoutTransform = SchemaScale;
+            }
         }
     }
 }
