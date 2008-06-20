@@ -22,6 +22,7 @@ namespace FreeSCADA.Designer.Views
         private BaseTool activeTool;
         private Type defaultTool = typeof(SelectionTool);
         private ScaleTransform SchemaScale = new ScaleTransform();
+        private System.Windows.Point SavedScrollPosition;
         List<ITool> toolsList;
 
         public List<ITool> AvailableTools
@@ -78,7 +79,7 @@ namespace FreeSCADA.Designer.Views
             this.Name = "SchemaView";
 
             this.ResumeLayout(false);
-
+            this.SavedScrollPosition = new System.Windows.Point(0.0, 0.0);
         }
 
         public SchemaDocument Schema
@@ -192,6 +193,20 @@ namespace FreeSCADA.Designer.Views
 
             //Notify connected windows about new tool collection
             NotifyToolsCollectionChanged(AvailableTools, CurrentTool);
+            // Scroll to saved position
+            myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
+            msv.ScrollToVerticalOffset(SavedScrollPosition.Y);
+            msv.ScrollToHorizontalOffset(SavedScrollPosition.X);
+        }
+
+        public override void OnDeactivated()
+        {
+            base.OnDeactivated();
+
+            // Save scroll position
+            myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
+            SavedScrollPosition.Y = msv.VerticalOffset;
+            SavedScrollPosition.X = msv.HorizontalOffset;
         }
 
         public override void OnToolActivated(object sender, Type tool)
@@ -345,17 +360,17 @@ namespace FreeSCADA.Designer.Views
             Program.mf.zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
         }
 
-        public void SetZoomLevel(double level)
+        public double ZoomLevel
         {
-            SchemaScale.ScaleX = level;
-            SchemaScale.ScaleY = level;
-
-            Schema.MainCanvas.LayoutTransform = SchemaScale;
-        }
-
-        public double GetZoomLevel()
-        {
-            return SchemaScale.ScaleX;
+            get {
+                return SchemaScale.ScaleX;
+            }
+            set
+            {
+                SchemaScale.ScaleX = value;
+                SchemaScale.ScaleY = value;
+                Schema.MainCanvas.LayoutTransform = SchemaScale;
+            }
         }
     }
 }

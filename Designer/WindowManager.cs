@@ -292,7 +292,7 @@ namespace FreeSCADA.Designer
             if (currentDocument == null)
                 Program.mf.zoomLevelComboBox_SetZoomLevelTxt(1.0);
             else
-                Program.mf.zoomLevelComboBox_SetZoomLevelTxt((currentDocument as SchemaView).GetZoomLevel());
+                Program.mf.zoomLevelComboBox_SetZoomLevelTxt((currentDocument as SchemaView).ZoomLevel);
 			ActivatingDocument();
 		}
 
@@ -331,7 +331,7 @@ namespace FreeSCADA.Designer
 
         public void zoom_level(double level)
         {
-            if (currentDocument != null) ((SchemaView)currentDocument).SetZoomLevel(level);
+            if (currentDocument != null) ((SchemaView)currentDocument).ZoomLevel = level;
         }
 
         public void SetCurrentDocumentFocus()

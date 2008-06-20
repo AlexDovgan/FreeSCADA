@@ -31,18 +31,18 @@
             System.Windows.Forms.ToolStrip toolStrip1;
             System.Windows.Forms.ToolStripButton toolStripButton1;
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.mainMenu = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.zoomInButton = new System.Windows.Forms.ToolStripButton();
-            this.zoomLevelComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.runButton = new System.Windows.Forms.ToolStripButton();
             this.stopButton = new System.Windows.Forms.ToolStripButton();
             this.zoomOutButton = new System.Windows.Forms.ToolStripButton();
+            this.zoomInButton = new System.Windows.Forms.ToolStripButton();
+            this.zoomLevelComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.mainMenu = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             toolStrip1 = new System.Windows.Forms.ToolStrip();
             toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             toolStrip1.SuspendLayout();
@@ -66,10 +66,73 @@
             toolStrip1.TabIndex = 9;
             toolStrip1.Text = "mainToolbar";
             // 
+            // toolStripButton1
+            // 
+            toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            toolStripButton1.Image = global::FreeSCADA.RunTime.Properties.Resources.open_file;
+            toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            toolStripButton1.Name = "toolStripButton1";
+            toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            toolStripButton1.Text = "toolStripButton1";
+            toolStripButton1.Click += new System.EventHandler(this.OnLoadProjectClick);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // runButton
+            // 
+            this.runButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.runButton.Image = global::FreeSCADA.RunTime.Properties.Resources.run;
+            this.runButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.runButton.Name = "runButton";
+            this.runButton.Size = new System.Drawing.Size(23, 22);
+            this.runButton.Text = "toolStripButton3";
+            this.runButton.Click += new System.EventHandler(this.OnRunClick);
+            // 
+            // stopButton
+            // 
+            this.stopButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.stopButton.Enabled = false;
+            this.stopButton.Image = global::FreeSCADA.RunTime.Properties.Resources.stop;
+            this.stopButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.stopButton.Name = "stopButton";
+            this.stopButton.Size = new System.Drawing.Size(23, 22);
+            this.stopButton.Text = "toolStripButton4";
+            this.stopButton.Click += new System.EventHandler(this.OnStopClick);
+            // 
+            // zoomOutButton
+            // 
+            this.zoomOutButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.zoomOutButton.Image = global::FreeSCADA.RunTime.Properties.Resources.zoom_out;
+            this.zoomOutButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.zoomOutButton.Name = "zoomOutButton";
+            this.zoomOutButton.Size = new System.Drawing.Size(23, 22);
+            this.zoomOutButton.Text = "Zoom Out";
+            this.zoomOutButton.Click += new System.EventHandler(this.zoomOutButton_Click);
+            // 
+            // zoomInButton
+            // 
+            this.zoomInButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.zoomInButton.Image = global::FreeSCADA.RunTime.Properties.Resources.zoom_in;
+            this.zoomInButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.zoomInButton.Name = "zoomInButton";
+            this.zoomInButton.Size = new System.Drawing.Size(23, 22);
+            this.zoomInButton.Text = "Zoom In";
+            this.zoomInButton.Click += new System.EventHandler(this.zoomInButton_Click);
+            // 
+            // zoomLevelComboBox
+            // 
+            this.zoomLevelComboBox.Items.AddRange(new object[] {
+            "Home (100%)",
+            "50%",
+            "150%"});
+            this.zoomLevelComboBox.Name = "zoomLevelComboBox";
+            this.zoomLevelComboBox.Size = new System.Drawing.Size(121, 25);
+            this.zoomLevelComboBox.ToolTipText = "Zoom Level";
+            this.zoomLevelComboBox.SelectedIndexChanged += new System.EventHandler(this.zoomLevelComboBox_SelectedIndexChanged);
+            this.zoomLevelComboBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.zoomLevelComboBox_KeyUp);
             // 
             // statusStrip1
             // 
@@ -99,6 +162,14 @@
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
+            // loadToolStripMenuItem
+            // 
+            this.loadToolStripMenuItem.Image = global::FreeSCADA.RunTime.Properties.Resources.open_file;
+            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.loadToolStripMenuItem.Text = "Load project...";
+            this.loadToolStripMenuItem.Click += new System.EventHandler(this.OnLoadProjectClick);
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -125,77 +196,6 @@
             this.dockPanel.Name = "dockPanel";
             this.dockPanel.Size = new System.Drawing.Size(513, 275);
             this.dockPanel.TabIndex = 10;
-            // 
-            // zoomInButton
-            // 
-            this.zoomInButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.zoomInButton.Image = global::FreeSCADA.RunTime.Properties.Resources.zoom_out;
-            this.zoomInButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.zoomInButton.Name = "zoomInButton";
-            this.zoomInButton.Size = new System.Drawing.Size(23, 22);
-            this.zoomInButton.Text = "Zoom In";
-            this.zoomInButton.Click += new System.EventHandler(this.zoomInButton_Click);
-            // 
-            // zoomLevelComboBox
-            // 
-            this.zoomLevelComboBox.Items.AddRange(new object[] {
-            "Home (100%)",
-            "50%",
-            "150%"});
-            this.zoomLevelComboBox.Name = "zoomLevelComboBox";
-            this.zoomLevelComboBox.Size = new System.Drawing.Size(121, 25);
-            this.zoomLevelComboBox.ToolTipText = "Zoom Level";
-            this.zoomLevelComboBox.SelectedIndexChanged += new System.EventHandler(this.zoomLevelComboBox_SelectedIndexChanged);
-            this.zoomLevelComboBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.zoomLevelComboBox_KeyUp);
-            // 
-            // toolStripButton1
-            // 
-            toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            toolStripButton1.Image = global::FreeSCADA.RunTime.Properties.Resources.open_file;
-            toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            toolStripButton1.Name = "toolStripButton1";
-            toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            toolStripButton1.Text = "toolStripButton1";
-            toolStripButton1.Click += new System.EventHandler(this.OnLoadProjectClick);
-            // 
-            // runButton
-            // 
-            this.runButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.runButton.Image = global::FreeSCADA.RunTime.Properties.Resources.run;
-            this.runButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.runButton.Name = "runButton";
-            this.runButton.Size = new System.Drawing.Size(23, 22);
-            this.runButton.Text = "toolStripButton3";
-            this.runButton.Click += new System.EventHandler(this.OnRunClick);
-            // 
-            // stopButton
-            // 
-            this.stopButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.stopButton.Enabled = false;
-            this.stopButton.Image = global::FreeSCADA.RunTime.Properties.Resources.stop;
-            this.stopButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.stopButton.Name = "stopButton";
-            this.stopButton.Size = new System.Drawing.Size(23, 22);
-            this.stopButton.Text = "toolStripButton4";
-            this.stopButton.Click += new System.EventHandler(this.OnStopClick);
-            // 
-            // zoomOutButton
-            // 
-            this.zoomOutButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.zoomOutButton.Image = global::FreeSCADA.RunTime.Properties.Resources.zoom_in;
-            this.zoomOutButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.zoomOutButton.Name = "zoomOutButton";
-            this.zoomOutButton.Size = new System.Drawing.Size(23, 22);
-            this.zoomOutButton.Text = "Zoom Out";
-            this.zoomOutButton.Click += new System.EventHandler(this.zoomOutButton_Click);
-            // 
-            // loadToolStripMenuItem
-            // 
-            this.loadToolStripMenuItem.Image = global::FreeSCADA.RunTime.Properties.Resources.open_file;
-            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.loadToolStripMenuItem.Text = "Load project...";
-            this.loadToolStripMenuItem.Click += new System.EventHandler(this.OnLoadProjectClick);
             // 
             // MainForm
             // 
