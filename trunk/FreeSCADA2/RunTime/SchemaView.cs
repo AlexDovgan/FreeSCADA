@@ -72,9 +72,15 @@ namespace FreeSCADA.RunTime
         public void OnDeactivated()
         {
             // Save scroll position
-            myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
-            SavedScrollPosition.Y = msv.VerticalOffset;
-            SavedScrollPosition.X = msv.HorizontalOffset;
+            if (wpfSchemaContainer != null)
+            {
+                myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
+                if (msv != null)
+                {
+                    SavedScrollPosition.Y = msv.VerticalOffset;
+                    SavedScrollPosition.X = msv.HorizontalOffset;
+                }
+            }
         }
         
         protected override void OnClosed(EventArgs e)

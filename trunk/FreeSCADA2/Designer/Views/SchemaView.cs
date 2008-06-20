@@ -204,9 +204,15 @@ namespace FreeSCADA.Designer.Views
             base.OnDeactivated();
 
             // Save scroll position
-            myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
-            SavedScrollPosition.Y = msv.VerticalOffset;
-            SavedScrollPosition.X = msv.HorizontalOffset;
+            if (wpfSchemaContainer != null)
+            {
+                myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
+                if (msv != null)
+                {
+                    SavedScrollPosition.Y = msv.VerticalOffset;
+                    SavedScrollPosition.X = msv.HorizontalOffset;
+                }
+            }
         }
 
         public override void OnToolActivated(object sender, Type tool)
