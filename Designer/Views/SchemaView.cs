@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using FreeSCADA.ShellInterfaces;
 using FreeSCADA.Designer.SchemaEditor;
 using FreeSCADA.Common.Schema;
+using FreeSCADA.Common;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using FreeSCADA.Designer.SchemaEditor.ShortProperties;
@@ -194,7 +195,7 @@ namespace FreeSCADA.Designer.Views
             //Notify connected windows about new tool collection
             NotifyToolsCollectionChanged(AvailableTools, CurrentTool);
             // Scroll to saved position
-            myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
+            ZoomViewer msv = (ZoomViewer)wpfSchemaContainer.Child;
             msv.ScrollToVerticalOffset(SavedScrollPosition.Y);
             msv.ScrollToHorizontalOffset(SavedScrollPosition.X);
         }
@@ -206,7 +207,7 @@ namespace FreeSCADA.Designer.Views
             // Save scroll position
             if (wpfSchemaContainer != null)
             {
-                myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
+                ZoomViewer msv = (ZoomViewer)wpfSchemaContainer.Child;
                 if (msv != null)
                 {
                     SavedScrollPosition.Y = msv.VerticalOffset;
@@ -341,13 +342,13 @@ namespace FreeSCADA.Designer.Views
 
         public void ZoomIn(double CenterX, double CenterY)
         {
-            myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
+            ZoomViewer msv = (ZoomViewer)wpfSchemaContainer.Child;
             SchemaScale.ScaleX *= 1.05;
             SchemaScale.ScaleY *= 1.05;
             Schema.MainCanvas.LayoutTransform = SchemaScale;
             msv.ScrollToVerticalOffset(msv.VerticalOffset * 1.05 + CenterY * 0.05);
             msv.ScrollToHorizontalOffset(msv.HorizontalOffset * 1.05 + CenterX * 0.05);
-            Program.mf.zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
+            (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
         }
 
         public void ZoomOut()
@@ -357,13 +358,13 @@ namespace FreeSCADA.Designer.Views
 
         public void ZoomOut(double CenterX, double CenterY)
         {
-            myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
+            ZoomViewer msv = (ZoomViewer)wpfSchemaContainer.Child;
             SchemaScale.ScaleX /= 1.05;
             SchemaScale.ScaleY /= 1.05;
             Schema.MainCanvas.LayoutTransform = SchemaScale;
             msv.ScrollToVerticalOffset(msv.VerticalOffset / 1.05 - CenterY * 0.05);
             msv.ScrollToHorizontalOffset(msv.HorizontalOffset / 1.05 - CenterX * 0.05);
-            Program.mf.zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
+            (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
         }
 
         public double ZoomLevel
