@@ -289,10 +289,14 @@ namespace FreeSCADA.Designer
 		{
 			DeactivatingDocument();
 			currentDocument = (DocumentView)dockPanel.ActiveDocument;
-            if (currentDocument == null)
-                Program.mf.zoomLevelComboBox_SetZoomLevelTxt(1.0);
-            else
-                Program.mf.zoomLevelComboBox_SetZoomLevelTxt((currentDocument as SchemaView).ZoomLevel);
+            try
+            {
+                if (currentDocument == null)
+                    (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt(1.0);
+                else
+                    (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt((currentDocument as SchemaView).ZoomLevel);
+            }
+            catch {};
 			ActivatingDocument();
 		}
 

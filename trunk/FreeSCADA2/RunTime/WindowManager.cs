@@ -68,10 +68,10 @@ namespace FreeSCADA.RunTime
                 (currentDocument as SchemaView).OnDeactivated();
             currentDocument = (DockContent)dockPanel.ActiveDocument;
             if (currentDocument == null)
-                Program.mf.zoomLevelComboBox_SetZoomLevelTxt(1.0);
+                (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt(1.0);
             else
             {
-                Program.mf.zoomLevelComboBox_SetZoomLevelTxt((currentDocument as SchemaView).ZoomLevel);
+                (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt((currentDocument as SchemaView).ZoomLevel);
                 (currentDocument as SchemaView).OnActivated();
             }
         }

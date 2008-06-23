@@ -1,4 +1,5 @@
 ﻿using System;
+using FreeSCADA.Common;
 using FreeSCADA.Common.Schema;
 using WeifenLuo.WinFormsUI.Docking;
 using System.Windows.Media;
@@ -104,7 +105,7 @@ namespace FreeSCADA.RunTime
             Schema.MainCanvas.LayoutTransform = SchemaScale;
             msv.ScrollToVerticalOffset(msv.VerticalOffset * 1.05 + CenterY * 0.05);
             msv.ScrollToHorizontalOffset(msv.HorizontalOffset * 1.05 + CenterX * 0.05);
-            Program.mf.zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
+            (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
         }
 
         public void ZoomOut()
@@ -120,7 +121,7 @@ namespace FreeSCADA.RunTime
             Schema.MainCanvas.LayoutTransform = SchemaScale;
             msv.ScrollToVerticalOffset(msv.VerticalOffset / 1.05 - CenterY * 0.05);
             msv.ScrollToHorizontalOffset(msv.HorizontalOffset / 1.05 - CenterX * 0.05);
-            Program.mf.zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
+            (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
         }
 
         public double ZoomLevel
