@@ -17,6 +17,16 @@ namespace FreeSCADA.RunTime
 			UpdateCaption();
 		}
 
+        public MainForm(string fileToLoad)
+        {
+            InitializeComponent();
+            Env.Initialize(this, mainMenu, FreeSCADA.ShellInterfaces.EnvironmentMode.Runtime);
+            windowManager = new WindowManager(dockPanel);
+            if (fileToLoad != "")
+                windowManager.LoadProject(fileToLoad);
+            UpdateCaption();
+        }
+
 		void UpdateCaption()
 		{
 			if (Env.Current.Project.FileName == "")
@@ -40,8 +50,9 @@ namespace FreeSCADA.RunTime
 		{
 			if (Env.Current.CommunicationPlugins.Connect())
 			{
-				runButton.Enabled = false;
-				stopButton.Enabled = true;
+                runButton.Enabled = false;
+                refreshButton.Enabled = false;
+                stopButton.Enabled = true;
 			}
 		}
 
@@ -49,7 +60,8 @@ namespace FreeSCADA.RunTime
 		{
 			Env.Current.CommunicationPlugins.Disconnect();
 			runButton.Enabled = true;
-			stopButton.Enabled = false;
+            refreshButton.Enabled = true;
+            stopButton.Enabled = false;
 		}
 
 		private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -116,6 +128,12 @@ namespace FreeSCADA.RunTime
             int percentage = (int)(level * 100);
             string txt = "Zoom " + percentage.ToString() + "%";
             zoomLevelComboBox.Text = txt;
+        }
+
+        private void refreshButton_Click(object sender, System.EventArgs e)
+        {
+            windowManager.LoadProject(Env.Current.Project.FileName);
+            UpdateCaption();
         }
     }
 }

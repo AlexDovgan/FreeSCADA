@@ -29,11 +29,15 @@ namespace FreeSCADA.RunTime
 
 		public void Close()
 		{
-			while (documentViews.Count > 0)
-				documentViews[0].Close();
+            while (documentViews.Count > 0)
+            {
+                DockContent doc = documentViews[0];
+                doc.Close();
+                documentViews.Remove(doc);
+            }
 			documentViews.Clear();
 
-			projectContentView.Close();
+			//projectContentView.Close();
 		}
 
 		void OnDocumentWindowClosing(object sender, FormClosingEventArgs e)
@@ -77,23 +81,34 @@ namespace FreeSCADA.RunTime
         }
 
         /// <summary>
-		/// Load a project. Asks user for a file.
-		/// </summary>
-		/// <returns>Returns true if project was successfully loaded</returns>
-		public bool LoadProject()
-		{
-			OpenFileDialog fd = new OpenFileDialog();
+        /// Load a project. Asks user for a file.
+        /// </summary>
+        /// <returns>Returns true if project was successfully loaded</returns>
+        public bool LoadProject()
+        {
+            OpenFileDialog fd = new OpenFileDialog();
 
-			fd.Filter = StringResources.FileDialogFilter;
-			fd.FilterIndex = 0;
-			fd.RestoreDirectory = true;
+            fd.Filter = StringResources.FileDialogFilter;
+            fd.FilterIndex = 0;
+            fd.RestoreDirectory = true;
 
-			if (fd.ShowDialog() != DialogResult.OK)
-				return false;
+            if (fd.ShowDialog() != DialogResult.OK)
+                return false;
+            Close();
+            Env.Current.Project.Load(fd.FileName);
+            return true;
+        }
 
-			Env.Current.Project.Load(fd.FileName);
-			return true;
-		}
+        /// <summary>
+        /// Load a project, taking filename from command line argument.
+        /// </summary>
+        /// <returns>Returns true if project was successfully loaded</returns>
+        public bool LoadProject(string fileToLoad)
+        {
+            Close();
+            Env.Current.Project.Load(fileToLoad);
+            return true;
+        }
 
         public void zoom_in()
         {

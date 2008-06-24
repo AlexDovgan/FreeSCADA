@@ -29,8 +29,14 @@ namespace FreeSCADA.Common
 			get { return fileName; }
 		}
 
-		public void Load(string fileName)
-		{
+        public void LoadNew()
+        {
+            if (LoadEvent != null)
+                LoadEvent(this, new System.EventArgs());
+        }
+
+   		public void Load(string fileName)
+        {
 			Clear();
 
 			using (FileStream zipFileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))

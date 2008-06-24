@@ -196,6 +196,10 @@
       <Project>{A3D91CED-553F-4433-AD67-8706E0127D8D}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RunTime\RunTime.csproj">
+      <Project>{047EED80-A3C6-4A7F-BB4C-E4A64F96B210}</Project>
+      <Name>RunTime</Name>
+    </ProjectReference>
     <Page Include="SchemaEditor\Manipulators\Controlls\styles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -206,6 +210,7 @@
     <Content Include="Resources\open_events.png" />
     <Content Include="Resources\open_file.png" />
     <Content Include="Resources\open_schema.png" />
+    <None Include="Resources\run.png" />
     <Content Include="Resources\save_file.png" />
     <Content Include="Resources\zoom_in.png" />
     <None Include="Resources\zoom_out.png" />
