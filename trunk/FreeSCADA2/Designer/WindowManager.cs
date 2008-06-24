@@ -40,9 +40,14 @@ namespace FreeSCADA.Designer
 
 		public void ForceWindowsClose()
 		{
-			while (documentViews.Count > 0)
-				documentViews[0].Close();
-			documentViews.Clear();
+            while (documentViews.Count > 0)
+            {
+                DocumentView doc = documentViews[0];
+                //doc.HandleModifiedOnClose = false;
+                doc.Close(); //this window should be removed from documentViews on closing
+                documentViews.Remove(doc);
+            }
+            documentViews.Clear();
 
 			projectContentView.Close();
 			toolBoxView.Close();
@@ -208,6 +213,7 @@ namespace FreeSCADA.Designer
 			if (fd.ShowDialog() != DialogResult.OK)
 				return false;
 
+            Close();
 			Env.Current.Project.Load(fd.FileName);
 			return true;
 		}
@@ -235,8 +241,10 @@ namespace FreeSCADA.Designer
 		/// should prevent application closing.</returns>
 		public bool Close()
 		{
-			List<string> unsaved_documents = new List<string>();
-			if (Env.Current.Project.IsModified)
+            List<string> unsaved_documents = new List<string>();
+            List<DocumentView> other_documents = new List<DocumentView>();
+
+            if (Env.Current.Project.IsModified)
 			{
 				if(Env.Current.Project.FileName == "")
 					unsaved_documents.Add(StringResources.UnsavedProjectName);
@@ -246,9 +254,17 @@ namespace FreeSCADA.Designer
 
 			foreach (DocumentView documentWindow in documentViews)
 			{
-				if (documentWindow != null && documentWindow.IsModified)
-					unsaved_documents.Add(documentWindow.DocumentName);
+                if (documentWindow != null && documentWindow.IsModified)
+                    unsaved_documents.Add(documentWindow.DocumentName);
+                else
+                    other_documents.Add(documentWindow);
 			}
+
+            foreach (DocumentView documentWindow in other_documents)
+            {
+                documentWindow.Close();
+                documentViews.Remove(documentWindow);
+            }
 
 			if (unsaved_documents.Count > 0)
 			{
@@ -323,17 +339,17 @@ namespace FreeSCADA.Designer
 			}
 		}
 
-        public void zoom_in()
+        public void ZoomIn()
         {
             if (currentDocument != null) ((SchemaView)currentDocument).ZoomIn();
         }
 
-        public void zoom_out()
+        public void ZoomOut()
         {
             if (currentDocument != null) ((SchemaView)currentDocument).ZoomOut();
         }
 
-        public void zoom_level(double level)
+        public void ZoomLevel(double level)
         {
             if (currentDocument != null) ((SchemaView)currentDocument).ZoomLevel = level;
         }

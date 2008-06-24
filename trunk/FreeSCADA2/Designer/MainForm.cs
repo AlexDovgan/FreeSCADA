@@ -1,7 +1,9 @@
 ﻿using System.Windows.Forms;
 using System;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using WeifenLuo.WinFormsUI.Docking;
+using FreeSCADA;
 using FreeSCADA.Common;
 using FreeSCADA.Designer.Dialogs;
 
@@ -90,7 +92,8 @@ namespace FreeSCADA.Designer
 				windowManager.ForceWindowsClose();
 				Env.Current.CreateNewProject();
 				windowManager = new WindowManager(dockPanel);
-				UpdateCaption();
+                Env.Current.Project.LoadNew();
+                UpdateCaption();
 				System.GC.Collect();
 			}
 		}
@@ -102,13 +105,13 @@ namespace FreeSCADA.Designer
 
         private void zoomOutButton_Click(object sender, System.EventArgs e)
         {
-            windowManager.zoom_out();
+            windowManager.ZoomOut();
             windowManager.SetCurrentDocumentFocus();
         }
 
         private void zoomInButton_Click(object sender, System.EventArgs e)
         {
-            windowManager.zoom_in();
+            windowManager.ZoomIn();
             windowManager.SetCurrentDocumentFocus();
         }
 
@@ -122,7 +125,7 @@ namespace FreeSCADA.Designer
             {
                 MatchCollection matches = Regex.Matches(txt, @"\d+");
                 percentage = int.Parse(matches[0].Value);
-                windowManager.zoom_level((double)percentage / 100.0);
+                windowManager.ZoomLevel((double)percentage / 100.0);
             }
             catch
             {
@@ -143,7 +146,7 @@ namespace FreeSCADA.Designer
                     //MessageBox.Show(txt);
                     MatchCollection matches = Regex.Matches(txt, @"\d+");
                     percentage = int.Parse(matches[0].Value);
-                    windowManager.zoom_level((double)percentage / 100.0);
+                    windowManager.ZoomLevel((double)percentage / 100.0);
                 }
                 catch
                 {
@@ -160,6 +163,13 @@ namespace FreeSCADA.Designer
             int percentage = (int)(level * 100);
             string txt = "Zoom " + percentage.ToString() + "%";
             zoomLevelComboBox.Text = txt;
+        }
+
+        private void runButton_Click(object sender, EventArgs e)
+        {
+            ProcessStartInfo psi = new ProcessStartInfo(@"RunTime.exe");
+            psi.Arguments = Env.Current.Project.FileName;
+            Process.Start(psi);
         }
     }
 }

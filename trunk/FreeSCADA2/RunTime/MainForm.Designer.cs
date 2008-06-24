@@ -30,6 +30,7 @@
 		{
             System.Windows.Forms.ToolStrip toolStrip1;
             System.Windows.Forms.ToolStripButton toolStripButton1;
+            this.refreshButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.runButton = new System.Windows.Forms.ToolStripButton();
             this.stopButton = new System.Windows.Forms.ToolStripButton();
@@ -54,6 +55,7 @@
             toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             toolStripButton1,
+            this.refreshButton,
             this.toolStripSeparator1,
             this.runButton,
             this.stopButton,
@@ -73,8 +75,18 @@
             toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             toolStripButton1.Name = "toolStripButton1";
             toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            toolStripButton1.Text = "toolStripButton1";
+            toolStripButton1.Text = "Open Project";
             toolStripButton1.Click += new System.EventHandler(this.OnLoadProjectClick);
+            // 
+            // refreshButton
+            // 
+            this.refreshButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.refreshButton.Image = global::FreeSCADA.RunTime.Properties.Resources.refresh;
+            this.refreshButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.refreshButton.Name = "refreshButton";
+            this.refreshButton.Size = new System.Drawing.Size(23, 22);
+            this.refreshButton.Text = "Refresh";
+            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
             // toolStripSeparator1
             // 
@@ -88,7 +100,7 @@
             this.runButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.runButton.Name = "runButton";
             this.runButton.Size = new System.Drawing.Size(23, 22);
-            this.runButton.Text = "toolStripButton3";
+            this.runButton.Text = "Start Project";
             this.runButton.Click += new System.EventHandler(this.OnRunClick);
             // 
             // stopButton
@@ -99,7 +111,7 @@
             this.stopButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.stopButton.Name = "stopButton";
             this.stopButton.Size = new System.Drawing.Size(23, 22);
-            this.stopButton.Text = "toolStripButton4";
+            this.stopButton.Text = "Stop Project";
             this.stopButton.Click += new System.EventHandler(this.OnStopClick);
             // 
             // zoomOutButton
@@ -234,6 +246,7 @@
         private System.Windows.Forms.ToolStripButton zoomOutButton;
         private System.Windows.Forms.ToolStripButton zoomInButton;
         private System.Windows.Forms.ToolStripComboBox zoomLevelComboBox;
+        private System.Windows.Forms.ToolStripButton refreshButton;
 	}
 }
 

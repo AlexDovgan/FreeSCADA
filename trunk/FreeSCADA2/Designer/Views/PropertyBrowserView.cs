@@ -40,7 +40,7 @@ namespace FreeSCADA.Designer.Views
             if (propertyGrid.SelectedObject is IDisposable)
                 (propertyGrid.SelectedObject as IDisposable).Dispose();
 
-            propertyGrid.SelectedObject = obj;
+            if (obj != null) propertyGrid.SelectedObject = obj;
             if(obj is CommonShortProp)
                 (obj as CommonShortProp).PropertiesChanged += new CommonShortProp.PropertiesChangedDelegate(PropertyBrowserView_PropertiesChanged);
         }
