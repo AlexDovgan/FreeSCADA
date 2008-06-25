@@ -3,7 +3,7 @@
   <Product Id="{A0692C53-185D-4d97-BF57-6F6AD70D96F1}"
            Name="FreeSCADA 2"
            Language="1033"
-           Version="2.0.0.2"
+           Version="2.0.0.3"
            Manufacturer="FreeSCADA Project [http://free-scada.sourceforge.net]"
            UpgradeCode="{3E3F16AD-E81B-482a-968A-77EAD18BFB8E}">
 
