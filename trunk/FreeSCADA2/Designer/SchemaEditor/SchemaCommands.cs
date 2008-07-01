@@ -19,6 +19,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Context_Menu
     {
         public MenuItem unGroupMenuItem = new MenuItem();
         public MenuItem groupMenuItem = new MenuItem();
+        public MenuItem copyMenuItem = new MenuItem();
+        public MenuItem cutMenuItem = new MenuItem();
+        public MenuItem pasteMenuItem = new MenuItem();
+        
+
         public ToolContextMenu()
         {
 
@@ -30,6 +35,19 @@ namespace FreeSCADA.Designer.SchemaEditor.Context_Menu
             groupMenuItem.Header = "Group";
             groupMenuItem.Command = new GroupCommand();
             Items.Add(groupMenuItem);
+            
+            copyMenuItem.Header = "Copy";
+            copyMenuItem.Command = new CopyCommand();
+            Items.Add(copyMenuItem);
+            
+            cutMenuItem.Header = "Cut";
+            cutMenuItem.Command = new CutCommand();
+            Items.Add(cutMenuItem);
+
+            pasteMenuItem.Header = "Paste";
+            pasteMenuItem.Command = new PasteCommand();
+            Items.Add(pasteMenuItem);
+
         }
     }
             
@@ -93,4 +111,106 @@ namespace FreeSCADA.Designer.SchemaEditor.Context_Menu
 
 
     }
+    
+    class CopyCommand : ICommand
+    {
+        SelectionTool tool;
+        public CopyCommand()
+        {
+        }
+        public bool CanExecute(object o)
+        {
+
+            if (o is SelectionTool)
+                tool = o as SelectionTool;
+            else return false;
+            if (tool.SelectedObject != null)
+                return true;
+            return false;
+            
+        }
+        public event EventHandler CanExecuteChanged;
+        public void Execute(object o)
+        {
+
+            string xaml = XamlWriter.Save((o as SelectionTool).SelectedObject );
+            Clipboard.SetText(xaml, TextDataFormat.Xaml);
+  
+        }
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged!=null)
+                CanExecuteChanged(this, new EventArgs());
+        }
+    }
+    class CutCommand : ICommand
+    {
+        SelectionTool tool;
+        public CutCommand()
+        {
+        }
+        public bool CanExecute(object o)
+        {
+            if (o is SelectionTool)
+                tool = o as SelectionTool;
+            else return false;
+            if (tool.ToolManipulator != null)
+                return true;
+            return false;
+        }
+        public event EventHandler CanExecuteChanged;
+        public void Execute(object o)
+        {
+
+
+        }
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, new EventArgs());
+        }
+    }
+    class PasteCommand : ICommand
+    {
+        SelectionTool tool;
+        public PasteCommand()
+        {
+        }
+        public bool CanExecute(object o)
+        {
+            if (o is SelectionTool)
+                tool = o as SelectionTool;
+            else return false;
+            if (Clipboard.ContainsText(TextDataFormat.Xaml))
+                return true;
+            return false;
+        }
+        public event EventHandler CanExecuteChanged;
+        public void Execute(object o)
+        {
+            string xaml = Clipboard.GetText(TextDataFormat.Xaml);
+            if (xaml != null)
+            {
+                using (MemoryStream stream = new MemoryStream(xaml.Length))
+                {
+                    using (StreamWriter sw = new StreamWriter(stream))
+                    {
+                        sw.Write(xaml);
+                        sw.Flush();
+                        stream.Seek(0, SeekOrigin.Begin);
+                        UIElement el = XamlReader.Load(stream) as UIElement;
+                        Canvas.SetLeft(el, Mouse.GetPosition(tool).X);
+                        Canvas.SetTop(el, Mouse.GetPosition(tool).Y);
+                        tool.NotifyObjectCreated(el);
+                     }
+                }
+            }
+        }
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, new EventArgs());
+        }
+    }
+  
  }

@@ -211,7 +211,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 			if (ToolWorking != null)
 				ToolWorking(this, new EventArgs());
         }
-        protected void NotifyObjectCreated(UIElement obj)
+        public void NotifyObjectCreated(UIElement obj)
         {
             if(ObjectCreated!=null)
                 ObjectCreated(obj,new EventArgs());
@@ -231,6 +231,15 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             if (ObjectSelected != null)
                 ObjectSelected(obj);
+        }
+        public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
+        {
+            Matrix m = new Matrix();
+            m.OffsetX = ((MatrixTransform)transform).Matrix.OffsetX;
+            m.OffsetY = ((MatrixTransform)transform).Matrix.OffsetY;
+
+            return transform;//new MatrixTransform(m); //this code neded for right manipulators zooming
+
         }
        
     }

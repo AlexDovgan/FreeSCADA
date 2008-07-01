@@ -168,7 +168,7 @@ namespace FreeSCADA.Designer
         private void runButton_Click(object sender, EventArgs e)
         {
             ProcessStartInfo psi = new ProcessStartInfo(@"RunTime.exe");
-            psi.Arguments = Env.Current.Project.FileName;
+            psi.Arguments = "\""+Env.Current.Project.FileName+"\"";
             Process.Start(psi);
         }
     }

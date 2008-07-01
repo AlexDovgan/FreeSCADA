@@ -43,10 +43,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             visualChildren.Add(selectionRectangle);
 
             ContextMenu = menu = new ToolContextMenu();
-
-            menu.groupMenuItem.CommandParameter = this;
+            //need in  refectoring
+            menu.groupMenuItem.CommandParameter = this; 
             menu.unGroupMenuItem.CommandParameter = this;
-
+            menu.copyMenuItem.CommandParameter = this;
+            menu.pasteMenuItem.CommandParameter = this;
+            //need in refectoring 
         }
         #region ITool implementation
         public String ToolName
@@ -87,12 +89,30 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
-            selectionRectangle.RenderOpen().Close();
+            
             if (isDragged)
                 SelectedObject = null;
             isDragged = false;
             ReleaseMouseCapture();
             e.Handled = false;
+            Rect b = VisualTreeHelper.GetContentBounds(selectionRectangle);
+            foreach (FrameworkElement el in (AdornedElement as Canvas).Children)
+            {
+                Rect itemRect = VisualTreeHelper.GetDescendantBounds(el);
+                Rect itemBounds = el.TransformToAncestor
+                        (AdornedElement).TransformBounds(itemRect);
+
+                if (b.Contains(itemBounds))
+                {
+                    
+                    selectedElements.Add(el);
+                }
+
+            }
+            selectionRectangle.RenderOpen().Close();
+            AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+            (menu.groupMenuItem.Command as GroupCommand).RaiseCanExecuteChanged();
+            
         }
 
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -104,8 +124,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             if (ToolManipulator != null)
                 manipulatorHit = ToolManipulator.InputHitTest(e.GetPosition(ToolManipulator));
 
-            DependencyObject documentHit;
-            documentHit = VisualTreeHelper.HitTest(AdornedElement, pt).VisualHit;
+            DependencyObject documentHit=null;
+            if(VisualTreeHelper.HitTest(AdornedElement, pt)!=null)
+                documentHit = VisualTreeHelper.HitTest(AdornedElement, pt).VisualHit;
             if (manipulatorHit != null)
             {
                 if (e.ClickCount > 1)
@@ -123,6 +144,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 startPos = e.GetPosition(this);
                 isDragged = true;
                 selectedElements.Clear();
+                SelectedObject = null;
 
             }
             else if (documentHit != AdornedElement)
@@ -149,6 +171,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             }
             (menu.groupMenuItem.Command as GroupCommand).RaiseCanExecuteChanged();
             (menu.unGroupMenuItem.Command as UngroupCommand).RaiseCanExecuteChanged();
+            (menu.copyMenuItem.Command as CopyCommand).RaiseCanExecuteChanged();
+            (menu.pasteMenuItem.Command as PasteCommand).RaiseCanExecuteChanged();
+
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
             e.Handled = false;
         }
