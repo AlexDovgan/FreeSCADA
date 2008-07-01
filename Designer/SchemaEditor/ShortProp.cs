@@ -148,6 +148,14 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             set { ((frameworkElement.RenderTransform as TransformGroup).Children[1] as RotateTransform).Angle = value; }
 
         }
+        [Description("Object's Z-Order"), Category("Layout")]
+        public int ZOrder
+        {
+            get { return Canvas.GetZIndex(frameworkElement); }
+            set { Canvas.SetZIndex(frameworkElement, value); }
+
+        }
+
         [Description("Object's Opacity"), Category("Appearence")]
         public double Opacity
         {

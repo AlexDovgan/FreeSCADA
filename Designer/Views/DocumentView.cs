@@ -4,7 +4,7 @@ using WeifenLuo.WinFormsUI.Docking;
 using FreeSCADA.ShellInterfaces;
 namespace FreeSCADA.Designer.Views
 {
-	class DocumentView : DockContent
+	abstract class DocumentView : DockContent
 	{
         public delegate void ObjectSelectedDelegate(object sender);
         public event ObjectSelectedDelegate ObjectSelected;
