@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows;
 using System.Windows.Shapes;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
+using FreeSCADA.Common;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using System.Windows.Input;
 
@@ -22,6 +23,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Context_Menu
         public MenuItem copyMenuItem = new MenuItem();
         public MenuItem cutMenuItem = new MenuItem();
         public MenuItem pasteMenuItem = new MenuItem();
+        public MenuItem viewXamlMenuItem = new MenuItem();
         
 
         public ToolContextMenu()
@@ -48,6 +50,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Context_Menu
             pasteMenuItem.Command = new PasteCommand();
             Items.Add(pasteMenuItem);
 
+            viewXamlMenuItem.Header = "XAML representation";
+            viewXamlMenuItem.Command = new XamlViewCommand();
+            Items.Add(viewXamlMenuItem);
         }
     }
             
@@ -213,4 +218,46 @@ namespace FreeSCADA.Designer.SchemaEditor.Context_Menu
         }
     }
   
+    class XamlViewCommand : ICommand
+    {
+        SelectionTool tool;
+        public XamlViewCommand()
+        {
+        }
+        public bool CanExecute(object o)
+        {
+
+            if (o is SelectionTool)
+                tool = o as SelectionTool;
+            else return false;
+            if (tool.SelectedObject != null)
+                return true;
+            return false;
+            
+        }
+        public event EventHandler CanExecuteChanged;
+        public void Execute(object o)
+        {
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+            settings.OmitXmlDeclaration = true;
+            XamlDesignerSerializationManager dsm=new XamlDesignerSerializationManager(XmlWriter.Create(sb, settings));
+            dsm.XamlWriterMode = XamlWriterMode.Expression;
+            XamlWriter.Save((o as SelectionTool).SelectedObject, dsm);
+            //string xaml = XamlWriter.Save((o as SelectionTool).selectedElements);
+            Views.XamlInPlaceWiew xw = new Views.XamlInPlaceWiew();
+            xw.XAMLtextBox.Text = sb.ToString();
+            xw.Owner = (System.Windows.Forms.Form)Env.Current.MainWindow;
+            object[] transferdata = { o, (o as SelectionTool).SelectedObject };
+            xw.Tag = transferdata;
+            xw.Show();
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged!=null)
+                CanExecuteChanged(this, new EventArgs());
+        }
+    }
  }

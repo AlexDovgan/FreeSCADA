@@ -379,5 +379,11 @@ namespace FreeSCADA.Designer.Views
                 Schema.MainCanvas.LayoutTransform = SchemaScale;
             }
         }
+
+        public void ChangeGraphicsObject(System.Windows.UIElement old, System.Windows.UIElement el)
+        {
+            MessageBox.Show("SchemaView: " + el.ToString());
+            undoBuff.AddCommand(new ChangeGraphicsObject(old, el));
+        }
     }
 }

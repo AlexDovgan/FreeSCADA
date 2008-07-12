@@ -185,5 +185,10 @@ namespace FreeSCADA.Designer
                 UpdateCaption();
             }
         }
+
+        public void ChangeGraphicsObject(System.Windows.UIElement old, System.Windows.UIElement el)
+        {
+            windowManager.ChangeGraphicsObject(old, el);
+        }
     }
 }

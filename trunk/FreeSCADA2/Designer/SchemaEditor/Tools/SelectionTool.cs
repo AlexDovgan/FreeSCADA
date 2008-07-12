@@ -48,6 +48,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             menu.unGroupMenuItem.CommandParameter = this;
             menu.copyMenuItem.CommandParameter = this;
             menu.pasteMenuItem.CommandParameter = this;
+            menu.viewXamlMenuItem.CommandParameter = this;
             //need in refectoring 
         }
         #region ITool implementation
@@ -173,6 +174,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             (menu.unGroupMenuItem.Command as UngroupCommand).RaiseCanExecuteChanged();
             (menu.copyMenuItem.Command as CopyCommand).RaiseCanExecuteChanged();
             (menu.pasteMenuItem.Command as PasteCommand).RaiseCanExecuteChanged();
+            (menu.viewXamlMenuItem.Command as XamlViewCommand).RaiseCanExecuteChanged();
 
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
             e.Handled = false;
