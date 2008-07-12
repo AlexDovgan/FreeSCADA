@@ -171,5 +171,19 @@ namespace FreeSCADA.Designer
             psi.Arguments = "\""+Env.Current.Project.FileName+"\"";
             Process.Start(psi);
         }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+
+            sfd.FileName = Env.Current.Project.FileName;
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                Env.Current.Project.SaveAsFileName = sfd.FileName;
+                windowManager.SaveProject();
+                UpdateCaption();
+            }
+        }
     }
 }
