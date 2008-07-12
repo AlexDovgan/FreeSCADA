@@ -151,6 +151,10 @@
       <DependentUpon>ProjectContentView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\XamlInPlaceWiew.resx">
+      <DependentUpon>XamlInPlaceWiew.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -188,6 +192,12 @@
     </Compile>
     <Compile Include="Dialogs\VariablesDialog.Designer.cs">
       <DependentUpon>VariablesDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\XamlInPlaceWiew.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\XamlInPlaceWiew.Designer.cs">
+      <DependentUpon>XamlInPlaceWiew.cs</DependentUpon>
     </Compile>
     <Compile Include="WindowManager.cs" />
   </ItemGroup>

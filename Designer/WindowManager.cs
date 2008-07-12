@@ -358,5 +358,10 @@ namespace FreeSCADA.Designer
         {
             if (currentDocument != null) currentDocument.Focus();
         }
+
+        public void ChangeGraphicsObject(System.Windows.UIElement old, System.Windows.UIElement el)
+        {
+            if (currentDocument != null) ((SchemaView)currentDocument).ChangeGraphicsObject(old, el);
+        }
     }
 }

@@ -217,7 +217,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 ObjectCreated(obj,new EventArgs());
 
         }
-        protected void OnObjectChanged(UIElement obj)
+        public void OnObjectChanged(UIElement obj)
         {
             if (ObjectChanged != null)
                 ObjectChanged(obj, new EventArgs()); 
