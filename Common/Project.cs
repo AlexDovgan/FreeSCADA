@@ -24,10 +24,15 @@ namespace FreeSCADA.Common
 			get { return modifiedFlag; }
 		}
 
-		public string FileName
-		{
-			get { return fileName; }
-		}
+        public string FileName
+        {
+            get { return fileName; }
+        }
+
+        public string SaveAsFileName
+        {
+            set { fileName = value; }
+        }
 
         public void LoadNew()
         {
