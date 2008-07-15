@@ -1,0 +1,20 @@
+Some global todo points.
+
+1. Refactoring of Zoming Code. First goal of this point in implementation of  mechanism like toolbox and tools in toolbar. What I mean  - I mean that the any designer window(document type) can have an own set of  toolbar buttons.As example - editor view have an zoomIn, ZoomOut, Scale Rate box,Undo, Redo,copy,paste etc... Events view must have something like add event, delete event, copy event, paste event etc... And go on with anothe documents type. For this we must to implement all commands as ICommand realisation and transfer them to  MainView throw WindowManager with common mechanism for all Documents type.
+
+2. Archiving Plugin. I think this point does not need in description but there are some minds about this... ADO.NET + MSSQL Express - this is that we need. About interfaces and classes I'm not ready to talk about this. I think Michael is more familar with this. 
+
+3. Actions refectoring. This is  the most difficult point. By this time I can not decide how  our dinamics must be implemented. If we whant make this point in XAML standard  we must implement Actions as bindings "Channel Value - Xaml Object Property". It is not difficult but we lose an possibility to make a complex dynamics (as an example Move by traectory wich implemented on this time). From another side current implementation can bring some problems with implemnting Web browser part with Silverlight. May be we need to have both implementation? Also binding implementation has another advantage - we give a simple decission with actions editing in designer.
+ 
+4. Triggers has the same problems as an actions.
+
+5. Trends(charting) module. On my mind trends must be implemented as a part of the schema but I almost agreed with a Michael that on the first stage we may implement trends as separate module but they must be implemented on WPF...
+
+6. Reporting. I think that we need to mechanism of reporting representation - first as tables and statics charts on schemas and exporting data to excel. And as in trends we may implement this at first as separate module.
+
+All of this points are need to be  discused and more complex architecture palning so I invite all  users and developers who can see this file to take a part in this process.
+
+
+
+ 
+
