@@ -12,8 +12,9 @@ using FreeSCADA.Designer.SchemaEditor.Manipulators;
 using FreeSCADA.Common;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using System.Windows.Input;
+using FreeSCADA.Designer.Views;
 
-namespace FreeSCADA.Designer.SchemaEditor.Context_Menu
+namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 {
   
     class ToolContextMenu: ContextMenu
@@ -260,4 +261,52 @@ namespace FreeSCADA.Designer.SchemaEditor.Context_Menu
                 CanExecuteChanged(this, new EventArgs());
         }
     }
- }
+
+    class ZoomLevelCommand : ICommand
+    {
+        double Level;
+        public ZoomLevelCommand(double level)
+        {
+            Level = level;
+        }
+        public bool CanExecute(object o)
+        {
+            if (o is SchemaView) return true;
+            return false;
+        }
+        public event EventHandler CanExecuteChanged;
+        public void Execute(object o)
+        {
+            if (o is SchemaView) ((SchemaView)o).ZoomLevel = Level;
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, new EventArgs());
+        }
+    }
+
+    class ZoomInCommand : ICommand
+    {
+        public ZoomInCommand()
+        {
+        }
+        public bool CanExecute(object o)
+        {
+            if (o is SchemaView) return true;
+            return false;
+        }
+        public event EventHandler CanExecuteChanged;
+        public void Execute(object o)
+        {
+            if (o is SchemaView) ((SchemaView)o).ZoomIn();
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, new EventArgs());
+        }
+    }
+}

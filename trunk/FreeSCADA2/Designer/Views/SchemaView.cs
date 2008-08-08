@@ -24,7 +24,12 @@ namespace FreeSCADA.Designer.Views
         private Type defaultTool = typeof(SelectionTool);
         private ScaleTransform SchemaScale = new ScaleTransform();
         private System.Windows.Point SavedScrollPosition;
+        private SelectionTool selectionTool;
         List<ITool> toolsList;
+
+        public SelectionTool SchemaViewSelectionTool {
+            get { return selectionTool; }
+        }
 
         public List<ITool> AvailableTools
         {
@@ -33,7 +38,8 @@ namespace FreeSCADA.Designer.Views
                 if (toolsList == null)
                 {
                     toolsList = new List<ITool>();
-                    toolsList.Add(new SelectionTool(Schema.MainCanvas));
+                    selectionTool = new SelectionTool(Schema.MainCanvas);
+                    toolsList.Add(selectionTool);
                     toolsList.Add(new RectangleTool(Schema.MainCanvas));
                     toolsList.Add(new EllipseTool(Schema.MainCanvas));
                     toolsList.Add(new TextBoxTool(Schema.MainCanvas));
@@ -385,5 +391,6 @@ namespace FreeSCADA.Designer.Views
             MessageBox.Show("SchemaView: " + el.ToString());
             undoBuff.AddCommand(new ChangeGraphicsObject(old, el));
         }
+
     }
 }

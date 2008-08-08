@@ -102,5 +102,5 @@ namespace FreeSCADA.Designer.Views
             ToolsCollectionChanged = null;
             base.OnClosed(e);
         }
-	}
+    }
 }
