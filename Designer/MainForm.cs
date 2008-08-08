@@ -6,6 +6,7 @@ using WeifenLuo.WinFormsUI.Docking;
 using FreeSCADA;
 using FreeSCADA.Common;
 using FreeSCADA.Designer.Dialogs;
+using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
 
 namespace FreeSCADA.Designer
 {
@@ -125,7 +126,7 @@ namespace FreeSCADA.Designer
             {
                 MatchCollection matches = Regex.Matches(txt, @"\d+");
                 percentage = int.Parse(matches[0].Value);
-                windowManager.ZoomLevel((double)percentage / 100.0);
+                windowManager.ExecuteCommand(new ZoomLevelCommand((double)percentage / 100.0));
             }
             catch
             {
@@ -146,7 +147,7 @@ namespace FreeSCADA.Designer
                     //MessageBox.Show(txt);
                     MatchCollection matches = Regex.Matches(txt, @"\d+");
                     percentage = int.Parse(matches[0].Value);
-                    windowManager.ZoomLevel((double)percentage / 100.0);
+                    windowManager.ExecuteCommand(new ZoomLevelCommand((double)percentage / 100.0));
                 }
                 catch
                 {
@@ -189,6 +190,11 @@ namespace FreeSCADA.Designer
         public void ChangeGraphicsObject(System.Windows.UIElement old, System.Windows.UIElement el)
         {
             windowManager.ChangeGraphicsObject(old, el);
+        }
+
+        private void copyButton_Click(object sender, EventArgs e)
+        {
+           // windowManager.ExecuteCommand((new PasteCommand()).Execute(windowManager.
         }
     }
 }

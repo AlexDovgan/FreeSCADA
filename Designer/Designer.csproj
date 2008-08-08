@@ -216,12 +216,19 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\cut.png" />
+    <None Include="Resources\disk.png" />
     <Content Include="Resources\new_file.png" />
     <Content Include="Resources\open_events.png" />
     <Content Include="Resources\open_file.png" />
     <Content Include="Resources\open_schema.png" />
     <None Include="Resources\run.png" />
+    <None Include="Resources\page_copy.png" />
+    <None Include="Resources\paste_plain.png" />
+    <None Include="Resources\page_add.png" />
+    <None Include="Resources\page_white_add.png" />
     <Content Include="Resources\save_file.png" />
+    <None Include="Resources\table_add.png" />
     <Content Include="Resources\zoom_in.png" />
     <None Include="Resources\zoom_out.png" />
   </ItemGroup>

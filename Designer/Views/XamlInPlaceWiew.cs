@@ -37,13 +37,20 @@ namespace FreeSCADA.Designer.Views
             {
                 using (StreamWriter sw = new StreamWriter(stream))
                 {
-                    sw.Write(this.XAMLtextBox.Text);
-                    sw.Flush();
-                    stream.Seek(0, SeekOrigin.Begin);
-                    UIElement el = XamlReader.Load(stream) as UIElement;
-                    object[] arr = (object[])this.Tag;
-                    UIElement oldel = (UIElement)arr[1];
-                    (Env.Current.MainWindow as MainForm).ChangeGraphicsObject(oldel, el);
+                    try
+                    {
+                        sw.Write(this.XAMLtextBox.Text);
+                        sw.Flush();
+                        stream.Seek(0, SeekOrigin.Begin);
+                        UIElement el = XamlReader.Load(stream) as UIElement;
+                        object[] arr = (object[])this.Tag;
+                        UIElement oldel = (UIElement)arr[1];
+                        if (el != null && oldel != null)
+                        {
+                            (Env.Current.MainWindow as MainForm).ChangeGraphicsObject(oldel, el);
+                        }
+                    }
+                    catch { };
                 }
             }
             this.Close();

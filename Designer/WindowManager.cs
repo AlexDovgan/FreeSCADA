@@ -5,6 +5,7 @@ using FreeSCADA.Common;
 using FreeSCADA.Designer.Dialogs;
 using FreeSCADA.Designer.Views;
 using WeifenLuo.WinFormsUI.Docking;
+using System.Windows.Input;
 
 namespace FreeSCADA.Designer
 {
@@ -349,11 +350,6 @@ namespace FreeSCADA.Designer
             if (currentDocument != null) ((SchemaView)currentDocument).ZoomOut();
         }
 
-        public void ZoomLevel(double level)
-        {
-            if (currentDocument != null) ((SchemaView)currentDocument).ZoomLevel = level;
-        }
-
         public void SetCurrentDocumentFocus()
         {
             if (currentDocument != null) currentDocument.Focus();
@@ -362,6 +358,11 @@ namespace FreeSCADA.Designer
         public void ChangeGraphicsObject(System.Windows.UIElement old, System.Windows.UIElement el)
         {
             if (currentDocument != null) ((SchemaView)currentDocument).ChangeGraphicsObject(old, el);
+        }
+
+        public void ExecuteCommand(ICommand Command)
+        {
+            if (currentDocument != null) Command.Execute(currentDocument);
         }
     }
 }

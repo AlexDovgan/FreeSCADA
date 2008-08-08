@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using FreeSCADA.Common.Schema;
-using FreeSCADA.Designer.SchemaEditor.Context_Menu;
+using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using FreeSCADA.ShellInterfaces;
