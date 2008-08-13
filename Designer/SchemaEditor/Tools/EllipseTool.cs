@@ -47,8 +47,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             get
             {
-
-                return new System.Drawing.Bitmap(10, 10);
+                return global::FreeSCADA.Designer.Properties.Resources.shape_ellipse_add;
             }
         }
         #endregion

@@ -138,7 +138,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -218,6 +218,8 @@
   <ItemGroup>
     <None Include="Resources\cut.png" />
     <None Include="Resources\disk.png" />
+    <Content Include="Resources\cog_edit.png" />
+    <Content Include="Resources\cursor.png" />
     <Content Include="Resources\new_file.png" />
     <Content Include="Resources\open_events.png" />
     <Content Include="Resources\open_file.png" />
@@ -229,6 +231,12 @@
     <None Include="Resources\page_white_add.png" />
     <Content Include="Resources\save_file.png" />
     <None Include="Resources\table_add.png" />
+    <Content Include="Resources\shape_ellipse_add.png" />
+    <Content Include="Resources\shape_group.png" />
+    <Content Include="Resources\shape_line_add.png" />
+    <Content Include="Resources\shape_square_add.png" />
+    <Content Include="Resources\shape_ungroup.png" />
+    <Content Include="Resources\textfield_add.png" />
     <Content Include="Resources\zoom_in.png" />
     <None Include="Resources\zoom_out.png" />
   </ItemGroup>

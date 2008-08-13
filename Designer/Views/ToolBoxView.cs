@@ -32,8 +32,10 @@ namespace FreeSCADA.Designer.Views
 
 		public void OnToolsCollectionChanged(List<ITool> tools, Type currentTool)
 		{
-            
-            
+
+            ToolBoxTab tbtoselect = null;
+            ToolBoxItem tbitoselect = null;
+
 			if (toolsList != tools)
 			{
 				toolsList = tools;
@@ -41,9 +43,11 @@ namespace FreeSCADA.Designer.Views
 				SuspendLayout();
 
                 toolBox.DeleteAllTabs(true);
-                            
+                toolBox.SmallImageList = new ImageList();
+                
     			if (tools != null)
 				{
+                    int imgnum = 0;
 					foreach (ITool tool in tools)
 					{
                         ToolBoxTab tbt;
@@ -53,14 +57,17 @@ namespace FreeSCADA.Designer.Views
                             tbt = new ToolBoxTab(tool.ToolGroup, -1);
                             toolBox.AddTab(tbt);
                         }
-                        tbi=new ToolBoxItem(tool.ToolName,-1);
+                        tbi=new ToolBoxItem(tool.ToolName,imgnum++);
+                        toolBox.SmallImageList.Images.Add(tool.ToolIcon);
                         tbt.AddItem(tbi);
 
                         tbi.Selected = false;
 						if (tool.GetType() == currentTool)
 						{
-							tbi.Selected = true;
-							tbi.Object = currentTool;
+                            tbi.Selected = true;
+                            tbtoselect = tbt;
+                            tbitoselect = tbi;
+                            tbi.Object = currentTool;
 							NotifyToolActivated((Type)tbi.Object);
 						}
 						else
@@ -71,7 +78,16 @@ namespace FreeSCADA.Designer.Views
 					}
 				}
 				ResumeLayout(false);
-			}
+                if (tbtoselect != null)
+                {
+                    tbtoselect.Selected = true;
+                    if (tbitoselect != null)
+                    {
+                        tbitoselect.Selected = true;
+                        tbtoselect.SelectedItem = tbitoselect;
+                    }
+                }
+            }
 			else
 			{
 			/*	foreach (Control control in Controls)
@@ -94,11 +110,21 @@ namespace FreeSCADA.Designer.Views
 
 		void ToolChanged(object sender, EventArgs e)
 		{
-            ToolBoxItem tbi = (ToolBoxItem)sender;
-            if (tbi.Selected)
+            if (sender is ToolBoxTab)
             {
-               
-                NotifyToolActivated((Type)tbi.Object);
+                ToolBoxTab tbt = (ToolBoxTab)sender;
+                if (tbt.SelectedItem != null)
+                   NotifyToolActivated((Type)tbt.SelectedItem.Object);
+                //tbt.SelectedItem = null;
+            }
+            else
+            {
+                ToolBoxItem tbi = (ToolBoxItem)sender;
+                if (tbi.Selected)
+                {
+                    NotifyToolActivated((Type)tbi.Object);
+                }
+                //MessageBox.Show(sender.ToString());
             }
 		}
 
@@ -128,11 +154,9 @@ namespace FreeSCADA.Designer.Views
             toolBox.ItemSelectedColor = System.Drawing.Color.Linen;
 
             toolBox.Name = "_toolBox";
-            toolBox.ItemSelectionChanged+=new ItemSelectionChangedHandler(ToolChanged);
+            toolBox.ItemSelectionChanged += new ItemSelectionChangedHandler(ToolChanged);
+            toolBox.TabSelectionChanged += new TabSelectionChangedHandler(ToolChanged);
             Controls.Add(toolBox);
-
-            
         }
-
 	}
 }

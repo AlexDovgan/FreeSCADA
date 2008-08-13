@@ -41,7 +41,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             get
             {
 
-                return new System.Drawing.Bitmap(10, 10);
+                return global::FreeSCADA.Designer.Properties.Resources.textfield_add;
             }
         }
         #endregion
