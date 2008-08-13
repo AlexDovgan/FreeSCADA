@@ -106,13 +106,13 @@ namespace FreeSCADA.Designer
 
         private void zoomOutButton_Click(object sender, System.EventArgs e)
         {
-            windowManager.ZoomOut();
+            windowManager.ExecuteCommand(new ZoomOutCommand());
             windowManager.SetCurrentDocumentFocus();
         }
 
         private void zoomInButton_Click(object sender, System.EventArgs e)
         {
-            windowManager.ZoomIn();
+            windowManager.ExecuteCommand(new ZoomInCommand());
             windowManager.SetCurrentDocumentFocus();
         }
 
@@ -187,6 +187,9 @@ namespace FreeSCADA.Designer
             }
         }
 
+        /// <summary>
+        /// Change graphics object
+        /// </summary>
         public void ChangeGraphicsObject(System.Windows.UIElement old, System.Windows.UIElement el)
         {
             windowManager.ChangeGraphicsObject(old, el);
@@ -196,5 +199,6 @@ namespace FreeSCADA.Designer
         {
            // windowManager.ExecuteCommand((new PasteCommand()).Execute(windowManager.
         }
+
     }
 }

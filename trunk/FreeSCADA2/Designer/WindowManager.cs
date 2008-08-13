@@ -340,16 +340,6 @@ namespace FreeSCADA.Designer
 			}
 		}
 
-        public void ZoomIn()
-        {
-            if (currentDocument != null) ((SchemaView)currentDocument).ZoomIn();
-        }
-
-        public void ZoomOut()
-        {
-            if (currentDocument != null) ((SchemaView)currentDocument).ZoomOut();
-        }
-
         public void SetCurrentDocumentFocus()
         {
             if (currentDocument != null) currentDocument.Focus();

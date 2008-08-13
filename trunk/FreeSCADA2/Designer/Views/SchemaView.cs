@@ -180,6 +180,12 @@ namespace FreeSCADA.Designer.Views
                 ZoomOut();
             }
 
+           // else if (e.Key == System.Windows.Input.Key.Escape)
+           // {
+                //activeTool = SchemaViewSelectionTool;
+           //     MessageBox.Show(activeTool.ToString());
+                //((MainForm)Env.Current.MainWindow).SetDefaultTool();
+           // }
 
             Schema.MainCanvas.UpdateLayout();
             activeTool.Update();

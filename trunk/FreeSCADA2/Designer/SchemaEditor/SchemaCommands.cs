@@ -309,4 +309,27 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
                 CanExecuteChanged(this, new EventArgs());
         }
     }
+
+    class ZoomOutCommand : ICommand
+    {
+        public ZoomOutCommand()
+        {
+        }
+        public bool CanExecute(object o)
+        {
+            if (o is SchemaView) return true;
+            return false;
+        }
+        public event EventHandler CanExecuteChanged;
+        public void Execute(object o)
+        {
+            if (o is SchemaView) ((SchemaView)o).ZoomOut();
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, new EventArgs());
+        }
+    }
 }
