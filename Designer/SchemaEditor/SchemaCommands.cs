@@ -13,6 +13,7 @@ using FreeSCADA.Common;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using System.Windows.Input;
 using FreeSCADA.Designer.Views;
+using System.Drawing;
 
 namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 {
@@ -38,11 +39,11 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             groupMenuItem.Header = "Group";
             groupMenuItem.Command = new GroupCommand();
             Items.Add(groupMenuItem);
-            
+
             copyMenuItem.Header = "Copy";
             copyMenuItem.Command = new CopyCommand();
             Items.Add(copyMenuItem);
-            
+
             cutMenuItem.Header = "Cut";
             cutMenuItem.Command = new CutCommand();
             Items.Add(cutMenuItem);
@@ -51,13 +52,33 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             pasteMenuItem.Command = new PasteCommand();
             Items.Add(pasteMenuItem);
 
-            viewXamlMenuItem.Header = "XAML representation";
             viewXamlMenuItem.Command = new XamlViewCommand();
+            viewXamlMenuItem.Header = ((ICommandData)viewXamlMenuItem.Command).CommandName;
+            //viewXamlMenuItem.Image = ((ICommandData)viewXamlMenuItem.Tag).CommandIcon;
             Items.Add(viewXamlMenuItem);
         }
     }
-            
-    
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface ICommandData
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        string CommandName
+        {
+            get;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        Bitmap CommandIcon
+        {
+            get;
+        }
+    }
+
     class UngroupCommand:ICommand
     {
         SelectionTool tool;
@@ -77,7 +98,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 		public event EventHandler CanExecuteChanged;
         public void Execute(object o)
         {
-            EditorHelper.BreakGroup(tool);
+            EditorHelper.BreakGroup(o as SelectionTool);
         }
         public void RaiseCanExecuteChanged()
         {
@@ -106,7 +127,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public void Execute(object o)
         {
 
-            EditorHelper.CreateGroup(tool);
+            EditorHelper.CreateGroup(o as SelectionTool);
 
         }
         public void RaiseCanExecuteChanged()
@@ -140,7 +161,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
 
             string xaml = XamlWriter.Save((o as SelectionTool).SelectedObject );
-            Clipboard.SetText(xaml, TextDataFormat.Xaml);
+            System.Windows.Clipboard.SetText(xaml, System.Windows.TextDataFormat.Xaml);
   
         }
         public void RaiseCanExecuteChanged()
@@ -187,14 +208,14 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             if (o is SelectionTool)
                 tool = o as SelectionTool;
             else return false;
-            if (Clipboard.ContainsText(TextDataFormat.Xaml))
+            if (System.Windows.Clipboard.ContainsText(System.Windows.TextDataFormat.Xaml))
                 return true;
             return false;
         }
         public event EventHandler CanExecuteChanged;
         public void Execute(object o)
         {
-            string xaml = Clipboard.GetText(TextDataFormat.Xaml);
+            string xaml = System.Windows.Clipboard.GetText(System.Windows.TextDataFormat.Xaml);
             if (xaml != null)
             {
                 using (MemoryStream stream = new MemoryStream(xaml.Length))
@@ -218,8 +239,8 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
                 CanExecuteChanged(this, new EventArgs());
         }
     }
-  
-    class XamlViewCommand : ICommand
+
+    class XamlViewCommand : ICommand, ICommandData
     {
         SelectionTool tool;
         public XamlViewCommand()
@@ -227,7 +248,8 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         }
         public bool CanExecute(object o)
         {
-
+            if (o is SchemaView)
+                o = ((SchemaView)o).SchemaViewSelectionTool;
             if (o is SelectionTool)
                 tool = o as SelectionTool;
             else return false;
@@ -239,6 +261,9 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public event EventHandler CanExecuteChanged;
         public void Execute(object o)
         {
+            if (o is SchemaView)
+                o = ((SchemaView)o).SchemaViewSelectionTool;
+            //object o = (((MainForm)Env.Current.MainWindow).windowManager.currentDocument as SchemaView).SchemaViewSelectionTool;
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
@@ -259,6 +284,17 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             if (CanExecuteChanged!=null)
                 CanExecuteChanged(this, new EventArgs());
+        }
+        public string CommandName
+        {
+            get { return "XAML representation";}
+        }
+
+        public Bitmap CommandIcon
+        {
+            get { 
+                return global::FreeSCADA.Designer.Properties.Resources.shape_ellipse_add;
+            }
         }
     }
 

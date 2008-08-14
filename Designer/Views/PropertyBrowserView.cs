@@ -37,12 +37,16 @@ namespace FreeSCADA.Designer.Views
         
         public void ShowProperties(object obj)
         {
-            if (propertyGrid.SelectedObject is IDisposable)
-                (propertyGrid.SelectedObject as IDisposable).Dispose();
+            try
+            {
+                if (propertyGrid.SelectedObject is IDisposable)
+                    (propertyGrid.SelectedObject as IDisposable).Dispose();
 
-            if (obj != null) propertyGrid.SelectedObject = obj;
-            if(obj is CommonShortProp)
-                (obj as CommonShortProp).PropertiesChanged += new CommonShortProp.PropertiesChangedDelegate(PropertyBrowserView_PropertiesChanged);
+                if (obj != null) propertyGrid.SelectedObject = obj;
+                if (obj is CommonShortProp)
+                    (obj as CommonShortProp).PropertiesChanged += new CommonShortProp.PropertiesChangedDelegate(PropertyBrowserView_PropertiesChanged);
+            }
+            catch { };
         }
         
 		delegate void InvokeDelegate();

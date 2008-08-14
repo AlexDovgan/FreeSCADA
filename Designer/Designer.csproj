@@ -90,7 +90,8 @@
     <Compile Include="SchemaEditor\Manipulators\DragResizeRotateManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\GeometryHilightManipulator.cs" />
     <Compile Include="SchemaEditor\ObjectsFactory.cs" />
-    <Compile Include="SchemaEditor\SchemaCommands.cs" />
+    <Compile Include="SchemaEditor\SchemaCommands.cs">
+    </Compile>
     <Compile Include="SchemaEditor\ShortProp.cs" />
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
     <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
@@ -138,7 +139,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -229,6 +230,7 @@
     <None Include="Resources\paste_plain.png" />
     <None Include="Resources\page_add.png" />
     <None Include="Resources\page_white_add.png" />
+    <None Include="Resources\page_white_code_red.png" />
     <Content Include="Resources\save_file.png" />
     <None Include="Resources\table_add.png" />
     <Content Include="Resources\shape_ellipse_add.png" />

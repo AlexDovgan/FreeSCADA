@@ -6,6 +6,7 @@ using FreeSCADA.Designer.Dialogs;
 using FreeSCADA.Designer.Views;
 using WeifenLuo.WinFormsUI.Docking;
 using System.Windows.Input;
+using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Designer
 {
@@ -57,7 +58,7 @@ namespace FreeSCADA.Designer
 
 		public void CreateNewSchema()
 		{
-			SchemaView view = new SchemaView();
+			SchemaView view = new SchemaView(this);
 			if(view.CreateNewDocument() == false)
 			{
 				System.Windows.MessageBox.Show( DialogMessages.CannotCreateSchema,
@@ -119,7 +120,7 @@ namespace FreeSCADA.Designer
 		public void OnOpenProjectEntity(string name)
 		{
 			// Open your schema and other document types here by entity name
-            SchemaView view = new SchemaView();
+            SchemaView view = new SchemaView(this);
 			if (view.LoadDocument(name) == false)
 			{
 				System.Windows.MessageBox.Show(DialogMessages.CannotLoadSchema,
@@ -322,7 +323,7 @@ namespace FreeSCADA.Designer
 			//Notify and subscribe document to appropriate tool windows
 			if (currentDocument != null)
 			{
-                toolBoxView.Clean(); 
+                //toolBoxView.Clean(); 
                 currentDocument.OnActivated();
 				toolBoxView.ToolActivated += currentDocument.OnToolActivated;
     			currentDocument.ObjectSelected += propertyBrowserView.ShowProperties;
@@ -350,9 +351,22 @@ namespace FreeSCADA.Designer
             if (currentDocument != null) ((SchemaView)currentDocument).ChangeGraphicsObject(old, el);
         }
 
-        public void ExecuteCommand(ICommand Command)
+        public void ExecuteCommand(ICommand Command, Object param)
         {
-            if (currentDocument != null) Command.Execute(currentDocument);
+            if (param == null)
+            {
+                if (currentDocument != null)
+                    Command.Execute(currentDocument);
+            }
+            else
+            {
+                Command.Execute(param);
+            }
+        }
+        
+        public void SetCurrentTool(List<ITool> tools, Type toolToSet)
+        {
+            toolBoxView.SetCurrentTool(tools, toolToSet);        
         }
     }
 }

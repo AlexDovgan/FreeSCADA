@@ -22,7 +22,7 @@ namespace FreeSCADA.Designer.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "2.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resources {
+    internal class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace FreeSCADA.Designer.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FreeSCADA.Designer.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace FreeSCADA.Designer.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -59,208 +59,169 @@ namespace FreeSCADA.Designer.Properties {
                 resourceCulture = value;
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap cog_edit {
+        
+        internal static System.Drawing.Bitmap cog_edit {
             get {
                 object obj = ResourceManager.GetObject("cog_edit", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap cursor {
+        
+        internal static System.Drawing.Bitmap cursor {
             get {
                 object obj = ResourceManager.GetObject("cursor", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap cut {
+        
+        internal static System.Drawing.Bitmap cut {
             get {
                 object obj = ResourceManager.GetObject("cut", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap disk {
+        
+        internal static System.Drawing.Bitmap disk {
             get {
                 object obj = ResourceManager.GetObject("disk", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap new_file {
+        
+        internal static System.Drawing.Bitmap new_file {
             get {
                 object obj = ResourceManager.GetObject("new_file", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap open_events {
+        
+        internal static System.Drawing.Bitmap open_events {
             get {
                 object obj = ResourceManager.GetObject("open_events", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap open_file {
+        
+        internal static System.Drawing.Bitmap open_file {
             get {
                 object obj = ResourceManager.GetObject("open_file", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap open_schema {
+        
+        internal static System.Drawing.Bitmap open_schema {
             get {
                 object obj = ResourceManager.GetObject("open_schema", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap page_add {
+        
+        internal static System.Drawing.Bitmap page_add {
             get {
                 object obj = ResourceManager.GetObject("page_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap page_copy {
+        
+        internal static System.Drawing.Bitmap page_copy {
             get {
                 object obj = ResourceManager.GetObject("page_copy", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap page_white_add {
+        
+        internal static System.Drawing.Bitmap page_white_add {
             get {
                 object obj = ResourceManager.GetObject("page_white_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap paste_plain {
+        
+        internal static System.Drawing.Bitmap page_white_code_red {
+            get {
+                object obj = ResourceManager.GetObject("page_white_code_red", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap paste_plain {
             get {
                 object obj = ResourceManager.GetObject("paste_plain", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap run {
+        
+        internal static System.Drawing.Bitmap run {
             get {
                 object obj = ResourceManager.GetObject("run", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap save_file {
+        
+        internal static System.Drawing.Bitmap save_file {
             get {
                 object obj = ResourceManager.GetObject("save_file", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap shape_ellipse_add {
+        
+        internal static System.Drawing.Bitmap shape_ellipse_add {
             get {
                 object obj = ResourceManager.GetObject("shape_ellipse_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap shape_group {
+        
+        internal static System.Drawing.Bitmap shape_group {
             get {
                 object obj = ResourceManager.GetObject("shape_group", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap shape_line_add {
+        
+        internal static System.Drawing.Bitmap shape_line_add {
             get {
                 object obj = ResourceManager.GetObject("shape_line_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap shape_square_add {
+        
+        internal static System.Drawing.Bitmap shape_square_add {
             get {
                 object obj = ResourceManager.GetObject("shape_square_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap shape_ungroup {
+        
+        internal static System.Drawing.Bitmap shape_ungroup {
             get {
                 object obj = ResourceManager.GetObject("shape_ungroup", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap table_add {
+        
+        internal static System.Drawing.Bitmap table_add {
             get {
                 object obj = ResourceManager.GetObject("table_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap textfield_add {
+        
+        internal static System.Drawing.Bitmap textfield_add {
             get {
                 object obj = ResourceManager.GetObject("textfield_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap zoom_in {
+        
+        internal static System.Drawing.Bitmap zoom_in {
             get {
                 object obj = ResourceManager.GetObject("zoom_in", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static System.Drawing.Bitmap zoom_out {
+        
+        internal static System.Drawing.Bitmap zoom_out {
             get {
                 object obj = ResourceManager.GetObject("zoom_out", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));

@@ -30,6 +30,28 @@ namespace FreeSCADA.Designer.Views
             
 		}
 
+        public void SetCurrentTool(List<ITool> tools, Type toolToSet)
+        {
+            if (tools != null)
+            {
+                foreach (ITool tool in tools)
+                {
+                    if (tool.GetType() == toolToSet) {
+                        ToolBoxTab tbt;
+                        ToolBoxItem tbi;
+                        tbt = toolBox[tool.ToolGroup];
+                        tbt.Selected = true;
+                        tbi = tbt[tool.ToolName];
+                        tbi.Selected = true;
+                        tbt.SelectedItem = tbi;
+                        //NotifyToolActivated(toolToSet);
+                        ToolChanged(tbi, null);
+                    }
+                }
+            }
+            //OnToolsCollectionChanged(tools, toolToSet);
+        }
+
 		public void OnToolsCollectionChanged(List<ITool> tools, Type currentTool)
 		{
 
