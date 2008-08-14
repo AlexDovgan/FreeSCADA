@@ -20,7 +20,6 @@ namespace FreeSCADA.ShellInterfaces
         {
             get;
         }
-
     }
 }
 

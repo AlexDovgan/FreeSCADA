@@ -106,13 +106,13 @@ namespace FreeSCADA.Designer
 
         private void zoomOutButton_Click(object sender, System.EventArgs e)
         {
-            windowManager.ExecuteCommand(new ZoomOutCommand());
+            windowManager.ExecuteCommand(new ZoomOutCommand(), null);
             windowManager.SetCurrentDocumentFocus();
         }
 
         private void zoomInButton_Click(object sender, System.EventArgs e)
         {
-            windowManager.ExecuteCommand(new ZoomInCommand());
+            windowManager.ExecuteCommand(new ZoomInCommand(), null);
             windowManager.SetCurrentDocumentFocus();
         }
 
@@ -126,7 +126,7 @@ namespace FreeSCADA.Designer
             {
                 MatchCollection matches = Regex.Matches(txt, @"\d+");
                 percentage = int.Parse(matches[0].Value);
-                windowManager.ExecuteCommand(new ZoomLevelCommand((double)percentage / 100.0));
+                windowManager.ExecuteCommand(new ZoomLevelCommand((double)percentage / 100.0), null);
             }
             catch
             {
@@ -147,7 +147,7 @@ namespace FreeSCADA.Designer
                     //MessageBox.Show(txt);
                     MatchCollection matches = Regex.Matches(txt, @"\d+");
                     percentage = int.Parse(matches[0].Value);
-                    windowManager.ExecuteCommand(new ZoomLevelCommand((double)percentage / 100.0));
+                    windowManager.ExecuteCommand(new ZoomLevelCommand((double)percentage / 100.0), null);
                 }
                 catch
                 {
@@ -197,7 +197,32 @@ namespace FreeSCADA.Designer
 
         private void copyButton_Click(object sender, EventArgs e)
         {
-           // windowManager.ExecuteCommand((new PasteCommand()).Execute(windowManager.
+            windowManager.ExecuteCommand((new CopyCommand()), (sender as ToolStripItem).Tag);
+        }
+
+        private void xamlViewButton_Click(object sender, EventArgs e)
+        {
+            windowManager.ExecuteCommand((new XamlViewCommand()), (sender as ToolStripItem).Tag);
+        }
+
+        private void cutButton_Click(object sender, EventArgs e)
+        {
+            windowManager.ExecuteCommand((new CutCommand()), (sender as ToolStripItem).Tag);
+        }
+
+        private void pasteButton_Click(object sender, EventArgs e)
+        {
+            windowManager.ExecuteCommand((new PasteCommand()), (sender as ToolStripItem).Tag);
+        }
+
+        private void groupButton_Click(object sender, EventArgs e)
+        {
+            windowManager.ExecuteCommand((new GroupCommand()), (sender as ToolStripItem).Tag);
+        }
+
+        private void ungroupButton_Click(object sender, EventArgs e)
+        {
+            windowManager.ExecuteCommand((new UngroupCommand()), (sender as ToolStripItem).Tag);
         }
 
     }

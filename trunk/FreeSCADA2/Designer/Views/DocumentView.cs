@@ -12,7 +12,7 @@ namespace FreeSCADA.Designer.Views
         public delegate void ToolsCollectionChangedHandler(List<ITool> tools, Type defaultTool);
         public event ToolsCollectionChangedHandler ToolsCollectionChanged;
 
-		string documentName="";
+        string documentName = "";
 		bool modifiedFlag = false;
 		bool handleModifiedFlagOnClose = true;
 

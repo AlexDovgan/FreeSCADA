@@ -25,10 +25,14 @@ namespace FreeSCADA.Designer.Views
         private ScaleTransform SchemaScale = new ScaleTransform();
         private System.Windows.Point SavedScrollPosition;
         private SelectionTool selectionTool;
+        private WindowManager windowManager;
         List<ITool> toolsList;
 
         public SelectionTool SchemaViewSelectionTool {
-            get { return selectionTool; }
+            get { 
+                //return selectionTool; 
+                return (SelectionTool)toolsList[0];
+            }
         }
 
         public List<ITool> AvailableTools
@@ -59,8 +63,9 @@ namespace FreeSCADA.Designer.Views
             }
         }
 
-        public SchemaView()
+        public SchemaView(WindowManager wm)
         {
+            windowManager = wm;
             InitializeComponent();
         }
 
@@ -180,12 +185,14 @@ namespace FreeSCADA.Designer.Views
                 ZoomOut();
             }
 
-           // else if (e.Key == System.Windows.Input.Key.Escape)
-           // {
-                //activeTool = SchemaViewSelectionTool;
-           //     MessageBox.Show(activeTool.ToString());
-                //((MainForm)Env.Current.MainWindow).SetDefaultTool();
-           // }
+            else if (e.Key == System.Windows.Input.Key.Escape)
+            {
+                CurrentTool = null;
+                selectionTool.SelectedObject = null;
+                activeTool = selectionTool;
+                activeTool.Update();
+                windowManager.SetCurrentTool(AvailableTools, defaultTool);
+            }
 
             Schema.MainCanvas.UpdateLayout();
             activeTool.Update();
