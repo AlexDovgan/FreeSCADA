@@ -225,5 +225,15 @@ namespace FreeSCADA.Designer
             windowManager.ExecuteCommand((new UngroupCommand()), (sender as ToolStripItem).Tag);
         }
 
+        private void redoButton_Click(object sender, EventArgs e)
+        {
+            windowManager.ExecuteCommand((new RedoCommand()), (sender as ToolStripItem).Tag);
+        }
+
+        private void undoButton_Click(object sender, EventArgs e)
+        {
+            windowManager.ExecuteCommand((new UndoCommand()), (sender as ToolStripItem).Tag);
+        }
+
     }
 }

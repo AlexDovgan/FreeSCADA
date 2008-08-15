@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using WeifenLuo.WinFormsUI.Docking;
 using FreeSCADA.ShellInterfaces;
+using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 namespace FreeSCADA.Designer.Views
 {
 	abstract class DocumentView : DockContent
 	{
+
+        public BasicUndoBuffer undoBuff;
+
         public delegate void ObjectSelectedDelegate(object sender);
         public event ObjectSelectedDelegate ObjectSelected;
 

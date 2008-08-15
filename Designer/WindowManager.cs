@@ -327,7 +327,9 @@ namespace FreeSCADA.Designer
                 currentDocument.OnActivated();
 				toolBoxView.ToolActivated += currentDocument.OnToolActivated;
     			currentDocument.ObjectSelected += propertyBrowserView.ShowProperties;
-			}
+                (Env.Current.MainWindow as MainForm).undoButton.Tag = currentDocument;
+                (Env.Current.MainWindow as MainForm).redoButton.Tag = currentDocument;
+            }
 		}
 
 		private void DeactivatingDocument()

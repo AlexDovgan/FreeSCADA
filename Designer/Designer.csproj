@@ -219,6 +219,8 @@
   <ItemGroup>
     <None Include="Resources\cut.png" />
     <None Include="Resources\disk.png" />
+    <None Include="Resources\arrow_undo.png" />
+    <None Include="Resources\arrow_redo.png" />
     <Content Include="Resources\cog_edit.png" />
     <Content Include="Resources\cursor.png" />
     <Content Include="Resources\new_file.png" />

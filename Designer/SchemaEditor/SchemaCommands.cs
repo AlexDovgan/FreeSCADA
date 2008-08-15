@@ -228,7 +228,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
                         UIElement el = XamlReader.Load(stream) as UIElement;
                         Canvas.SetLeft(el, Mouse.GetPosition(tool).X);
                         Canvas.SetTop(el, Mouse.GetPosition(tool).Y);
-                        tool.NotifyObjectCreated(el);
+                        (o as SelectionTool).NotifyObjectCreated(el);
                      }
                 }
             }
@@ -261,23 +261,27 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public event EventHandler CanExecuteChanged;
         public void Execute(object o)
         {
-            if (o is SchemaView)
-                o = ((SchemaView)o).SchemaViewSelectionTool;
-            //object o = (((MainForm)Env.Current.MainWindow).windowManager.currentDocument as SchemaView).SchemaViewSelectionTool;
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
-            settings.OmitXmlDeclaration = true;
-            XamlDesignerSerializationManager dsm=new XamlDesignerSerializationManager(XmlWriter.Create(sb, settings));
-            dsm.XamlWriterMode = XamlWriterMode.Expression;
-            XamlWriter.Save((o as SelectionTool).SelectedObject, dsm);
-            //string xaml = XamlWriter.Save((o as SelectionTool).selectedElements);
-            Views.XamlInPlaceWiew xw = new Views.XamlInPlaceWiew();
-            xw.XAMLtextBox.Text = sb.ToString();
-            xw.Owner = (System.Windows.Forms.Form)Env.Current.MainWindow;
-            object[] transferdata = { o, (o as SelectionTool).SelectedObject };
-            xw.Tag = transferdata;
-            xw.Show();
+            try
+            {
+                if (o is SchemaView)
+                    o = ((SchemaView)o).SchemaViewSelectionTool;
+                //object o = (((MainForm)Env.Current.MainWindow).windowManager.currentDocument as SchemaView).SchemaViewSelectionTool;
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.Indent = true;
+                settings.OmitXmlDeclaration = true;
+                XamlDesignerSerializationManager dsm = new XamlDesignerSerializationManager(XmlWriter.Create(sb, settings));
+                dsm.XamlWriterMode = XamlWriterMode.Expression;
+                XamlWriter.Save((o as SelectionTool).SelectedObject, dsm);
+                //string xaml = XamlWriter.Save((o as SelectionTool).selectedElements);
+                Views.XamlInPlaceWiew xw = new Views.XamlInPlaceWiew();
+                xw.XAMLtextBox.Text = sb.ToString();
+                xw.Owner = (System.Windows.Forms.Form)Env.Current.MainWindow;
+                object[] transferdata = { o, (o as SelectionTool).SelectedObject };
+                xw.Tag = transferdata;
+                xw.Show();
+            }
+            catch { }
         }
 
         public void RaiseCanExecuteChanged()
@@ -360,6 +364,56 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public void Execute(object o)
         {
             if (o is SchemaView) ((SchemaView)o).ZoomOut();
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, new EventArgs());
+        }
+    }
+
+    class UndoCommand : ICommand
+    {
+        public UndoCommand()
+        {
+        }
+        public bool CanExecute(object o)
+        {
+            if (o is DocumentView)
+                if ((o as DocumentView).undoBuff.CanUndo())
+                    return true;
+            return false;
+        }
+        public event EventHandler CanExecuteChanged;
+        public void Execute(object o)
+        {
+            if (o is DocumentView) ((DocumentView)o).undoBuff.UndoCommand();
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, new EventArgs());
+        }
+    }
+
+    class RedoCommand : ICommand
+    {
+        public RedoCommand()
+        {
+        }
+        public bool CanExecute(object o)
+        {
+            if (o is DocumentView)
+                if ((o as DocumentView).undoBuff.CanRedo())
+                    return true;
+            return false;
+        }
+        public event EventHandler CanExecuteChanged;
+        public void Execute(object o)
+        {
+            if (o is DocumentView) ((DocumentView)o).undoBuff.RedoCommand();
         }
 
         public void RaiseCanExecuteChanged()
