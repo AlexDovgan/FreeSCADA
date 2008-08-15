@@ -13,6 +13,7 @@ using System.Windows.Documents;
 using System.ComponentModel;
 using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.SchemaEditor.Tools;
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
 {
@@ -82,6 +83,8 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
              redoStack.Clear();
              command.Do(schemaDocument);
              undoStack.Push(command);
+            (Env.Current.MainWindow as MainForm).undoButton.Enabled = true;
+            (Env.Current.MainWindow as MainForm).redoButton.Enabled = false;
         }
         public void UndoCommand()
         {
@@ -92,10 +95,12 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
             try
             {
                 cmd.Undo();
+                if (!CanUndo()) (Env.Current.MainWindow as MainForm).undoButton.Enabled = false;
             }
             finally
             {
                 redoStack.Push(cmd);
+                (Env.Current.MainWindow as MainForm).redoButton.Enabled = true;
             }
         }
 
@@ -108,11 +113,23 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
             try
             {
                 cmd.Redo();
+                if (!CanRedo()) (Env.Current.MainWindow as MainForm).redoButton.Enabled = false;
             }
             finally
             {
                 undoStack.Push(cmd);
+                (Env.Current.MainWindow as MainForm).undoButton.Enabled = true;
             }
+        }
+
+        public bool CanUndo()
+        {
+            return undoStack.Count > 0;
+        }
+
+        public bool CanRedo()
+        {
+            return redoStack.Count > 0;
         }
 
         private Stack<IUndoCommand> undoStack = new Stack<IUndoCommand>();

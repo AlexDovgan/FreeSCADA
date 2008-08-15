@@ -19,7 +19,6 @@ namespace FreeSCADA.Designer.Views
     class SchemaView : DocumentView
     {
         private WPFShemaContainer wpfSchemaContainer;
-        private BasicUndoBuffer undoBuff;
         private BaseTool activeTool;
         private Type defaultTool = typeof(SelectionTool);
         private ScaleTransform SchemaScale = new ScaleTransform();
