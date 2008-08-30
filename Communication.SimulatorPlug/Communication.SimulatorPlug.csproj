@@ -53,6 +53,9 @@
     <Compile Include="ChannelBase.cs" />
     <Compile Include="ChannelFactory.cs" />
     <Compile Include="Command.cs" />
+    <Compile Include="SinusDoubleChannel.cs" />
+    <Compile Include="RampIntegerChannel.cs" />
+    <Compile Include="SawIntegerChannel.cs" />
     <Compile Include="CurrentTimeChannel.cs" />
     <Compile Include="RandomIntegerChannel.cs" />
     <Compile Include="Plugin.cs" />
