@@ -156,7 +156,8 @@ namespace FreeSCADA.Designer.Views
         }
         void WpfKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (e.Key== System.Windows.Input.Key.Z &&
+            //MessageBox.Show("WpfKeyDown here " + e.Key);
+            if (e.Key == System.Windows.Input.Key.Z &&
                 (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
             {
                 undoBuff.UndoCommand();
@@ -192,7 +193,36 @@ namespace FreeSCADA.Designer.Views
                 activeTool.Update();
                 windowManager.SetCurrentTool(AvailableTools, defaultTool);
             }
+            else if (activeTool is SelectionTool)
+            {
+                List<System.Windows.UIElement> lst;
+                if (e.Key == System.Windows.Input.Key.Left)
+                {
+                    lst = (activeTool as SelectionTool).MoveHelper(-1, 0);
+                    foreach (System.Windows.UIElement el in lst)
+                        undoBuff.AddCommand(new ModifyGraphicsObject(el));
+                }
+                if (e.Key == System.Windows.Input.Key.Right)
+                {
+                    lst = (activeTool as SelectionTool).MoveHelper(1, 0);
+                    foreach (System.Windows.UIElement el in lst)
+                        undoBuff.AddCommand(new ModifyGraphicsObject(el));
+                }
+                if (e.Key == System.Windows.Input.Key.Up)
+                {
+                    lst = (activeTool as SelectionTool).MoveHelper(0, -1);
+                    foreach (System.Windows.UIElement el in lst)
+                        undoBuff.AddCommand(new ModifyGraphicsObject(el));
+                }
+                if (e.Key == System.Windows.Input.Key.Down)
+                {
+                    lst = (activeTool as SelectionTool).MoveHelper(0, 1);
+                    foreach (System.Windows.UIElement el in lst)
+                        undoBuff.AddCommand(new ModifyGraphicsObject(el));
+                }
+            }
 
+            e.Handled = true;
             Schema.MainCanvas.UpdateLayout();
             activeTool.Update();
         }

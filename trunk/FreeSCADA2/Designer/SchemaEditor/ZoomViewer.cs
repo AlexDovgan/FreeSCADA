@@ -82,5 +82,16 @@ namespace FreeSCADA.Designer.SchemaEditor
                 e.Handled = false;
             }
         }
+
+       protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if ((e.Key == System.Windows.Input.Key.Left || e.Key == System.Windows.Input.Key.Right || e.Key == System.Windows.Input.Key.Up || e.Key == System.Windows.Input.Key.Down) &&
+                (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) == System.Windows.Input.ModifierKeys.None)
+            {
+                e.Handled = false;
+            }
+            else 
+                base.OnKeyDown(e);
+        }
     }
 }

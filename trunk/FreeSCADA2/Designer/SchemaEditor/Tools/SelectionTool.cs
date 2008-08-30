@@ -15,6 +15,7 @@ using FreeSCADA.Designer.SchemaEditor.Manipulators;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using FreeSCADA.ShellInterfaces;
 using FreeSCADA.Common;
+using FreeSCADA.Designer.SchemaEditor.ShortProperties;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
@@ -26,6 +27,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     class SelectionTool : BaseTool, ITool
     {
         Point startPos;
+        //Vector finalSize;
         bool isDragged = false;
         public List<UIElement> selectedElements = new List<UIElement>();
         Rectangle boundceRect = new Rectangle();
@@ -84,8 +86,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 DrawingContext drawingContext = selectionRectangle.RenderOpen();
 
                 // Create a rectangle and draw it in the DrawingContext.
-                Vector v = e.GetPosition(this) - startPos;
-                Rect rect = new Rect(startPos, v);
+                Vector finalSize;
+                finalSize = e.GetPosition(this) - startPos;
+                Rect rect = new Rect(startPos, finalSize);
 
                 drawingContext.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 0.2), rect);
                 drawingContext.Close();
@@ -93,6 +96,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             }
             e.Handled = false;
+            // Update PropertyView
+            RaiseObjectSelected(SelectedObject);
         }
 
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
@@ -208,9 +213,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             e.Handled = false;
         }
 
-
-
-
         protected override Size ArrangeOverride(Size finalSize)
         {
             base.ArrangeOverride(finalSize);
@@ -229,6 +231,43 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             return new DragResizeRotateManipulator(obj as FrameworkElement);
         }
-    }
 
+        public List<UIElement> MoveHelper(double delta_x, double delta_y)
+        {
+            if (SelectedObject != null)
+            {
+                double x = Canvas.GetLeft((SelectedObject as FrameworkElement));
+                double y = Canvas.GetTop((SelectedObject as FrameworkElement));
+                Canvas.SetLeft((SelectedObject as FrameworkElement), x + delta_x);
+                Canvas.SetTop((SelectedObject as FrameworkElement), y + delta_y);
+                // Update PropertyView
+                RaiseObjectSelected(SelectedObject);
+                List<UIElement> lst = new List<UIElement>(1);
+                lst.Add(SelectedObject);
+                return lst;
+            }
+            else if (selectedElements.Count > 0)
+            {
+                foreach (UIElement se in selectedElements)
+                {
+                    double x = Canvas.GetLeft((se as FrameworkElement));
+                    double y = Canvas.GetTop((se as FrameworkElement));
+                    Canvas.SetLeft((se as FrameworkElement), x + delta_x);
+                    Canvas.SetTop((se as FrameworkElement), y + delta_y);
+                }
+                /*DrawingContext drawingContext = selectionRectangle.RenderOpen();
+                // Create a rectangle and draw it in the DrawingContext.
+                startPos.Offset(delta_x, delta_y);
+                Rect rect = new Rect(startPos, finalSize);
+
+                drawingContext.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 0.2), rect);
+                drawingContext.Close();*/
+                selectionRectangle.RenderOpen().Close();
+                AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+                return selectedElements;
+            }
+            return null;
+        }
+
+    }
 }
