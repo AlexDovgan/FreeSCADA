@@ -83,7 +83,6 @@ namespace FreeSCADA.Designer.SchemaEditor
                     a[0] = frameworkElement;
                     return (CommonShortProp)System.Activator.CreateInstance(desctiptor.ObjectShortPropType, a);
                 }
-                
             }
             return null;
         }
