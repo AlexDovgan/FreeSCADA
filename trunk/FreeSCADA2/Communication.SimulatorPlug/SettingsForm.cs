@@ -20,9 +20,12 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			this.plugin = plugin;
 
 			variableTypeNames[typeof(CurrentTimeChannel).FullName]		= "Current time";
-			variableTypeNames[typeof(RandomIntegerChannel).FullName]	= "Random integer";
-			variableTypeNames[typeof(GenericChannel<int>).FullName]		= "Simple integer";
-			variableTypeNames[typeof(GenericChannel<string>).FullName]	= "Simple string";
+            variableTypeNames[typeof(RandomIntegerChannel).FullName] = "Random integer";
+            variableTypeNames[typeof(SawIntegerChannel).FullName] = "Saw (integer -100 .. 100)";
+            variableTypeNames[typeof(RampIntegerChannel).FullName] = "Ramp (integer 0 .. 100)";
+            variableTypeNames[typeof(SinusDoubleChannel).FullName] = "Sinus (double -1 .. 1)";
+            variableTypeNames[typeof(GenericChannel<int>).FullName] = "Simple integer";
+            variableTypeNames[typeof(GenericChannel<string>).FullName] = "Simple string";
 			variableTypeNames[typeof(GenericChannel<float>).FullName]	= "Simple float";
 			foreach (KeyValuePair<string, string> pair in variableTypeNames)
 				channelNames.Add(pair.Value);

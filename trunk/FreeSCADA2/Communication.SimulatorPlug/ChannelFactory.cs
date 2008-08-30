@@ -23,7 +23,11 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			IChannel channel = null;
 			Type channel_type = Type.GetType(type);
 
-			if (channel_type == typeof(CurrentTimeChannel) || channel_type == typeof(RandomIntegerChannel))
+            if (channel_type == typeof(CurrentTimeChannel) ||
+                channel_type == typeof(RandomIntegerChannel) ||
+                channel_type == typeof(SawIntegerChannel) ||
+                channel_type == typeof(RampIntegerChannel) ||
+                channel_type == typeof(SinusDoubleChannel))
 			{
 				object[] args = { name, plugin };
 				channel = (IChannel)Activator.CreateInstance(channel_type, args);
