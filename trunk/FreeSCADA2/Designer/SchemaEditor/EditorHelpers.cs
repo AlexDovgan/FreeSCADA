@@ -231,7 +231,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             {
                 try
                 {
-                    if (property.ReadOnly != true)
+                    if (property.ReadOnly != true && property.Name != "Style")
                         destination.SetValue(property, source.ReadLocalValue(property));
                 }
                 catch (Exception)

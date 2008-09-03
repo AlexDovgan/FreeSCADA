@@ -195,30 +195,21 @@ namespace FreeSCADA.Designer.Views
             }
             else if (activeTool is SelectionTool)
             {
-                List<System.Windows.UIElement> lst;
                 if (e.Key == System.Windows.Input.Key.Left)
                 {
-                    lst = (activeTool as SelectionTool).MoveHelper(-1, 0);
-                    foreach (System.Windows.UIElement el in lst)
-                        undoBuff.AddCommand(new ModifyGraphicsObject(el));
+                    (activeTool as SelectionTool).MoveHelper(-1, 0);
                 }
                 if (e.Key == System.Windows.Input.Key.Right)
                 {
-                    lst = (activeTool as SelectionTool).MoveHelper(1, 0);
-                    foreach (System.Windows.UIElement el in lst)
-                        undoBuff.AddCommand(new ModifyGraphicsObject(el));
+                    (activeTool as SelectionTool).MoveHelper(1, 0);
                 }
                 if (e.Key == System.Windows.Input.Key.Up)
                 {
-                    lst = (activeTool as SelectionTool).MoveHelper(0, -1);
-                    foreach (System.Windows.UIElement el in lst)
-                        undoBuff.AddCommand(new ModifyGraphicsObject(el));
+                    (activeTool as SelectionTool).MoveHelper(0, -1);
                 }
                 if (e.Key == System.Windows.Input.Key.Down)
                 {
-                    lst = (activeTool as SelectionTool).MoveHelper(0, 1);
-                    foreach (System.Windows.UIElement el in lst)
-                        undoBuff.AddCommand(new ModifyGraphicsObject(el));
+                    (activeTool as SelectionTool).MoveHelper(0, 1);
                 }
             }
 
@@ -278,6 +269,8 @@ namespace FreeSCADA.Designer.Views
         void OnSchemaIsModifiedChanged(object sender, EventArgs e)
         {
             IsModified = ((SchemaDocument)sender).IsModified;
+            Schema.MainCanvas.UpdateLayout();
+            activeTool.Update();
         }
 
         public override bool SaveDocument()

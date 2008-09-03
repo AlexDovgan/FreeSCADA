@@ -27,8 +27,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     class SelectionTool : BaseTool, ITool
     {
         Point startPos;
-        //Vector finalSize;
+        Point movePos;
+        bool moveUndoInfo = false;
+        Vector finalSize;
         bool isDragged = false;
+        bool isSelectionMoved = false;
         public List<UIElement> selectedElements = new List<UIElement>();
         Rectangle boundceRect = new Rectangle();
         DrawingVisual selectionRectangle = new DrawingVisual();
@@ -86,7 +89,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 DrawingContext drawingContext = selectionRectangle.RenderOpen();
 
                 // Create a rectangle and draw it in the DrawingContext.
-                Vector finalSize;
                 finalSize = e.GetPosition(this) - startPos;
                 Rect rect = new Rect(startPos, finalSize);
 
@@ -98,6 +100,25 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             e.Handled = false;
             // Update PropertyView
             RaiseObjectSelected(SelectedObject);
+            if (isSelectionMoved)
+            {
+                Vector newPosDelta;
+                newPosDelta = e.GetPosition(this) - movePos;
+                movePos = e.GetPosition(this);
+                foreach (UIElement se in selectedElements)
+                {
+                    double x = Canvas.GetLeft((se as FrameworkElement));
+                    double y = Canvas.GetTop((se as FrameworkElement));
+                    Canvas.SetLeft((se as FrameworkElement), x + newPosDelta.X);
+                    Canvas.SetTop((se as FrameworkElement), y + newPosDelta.Y);
+                    if (moveUndoInfo)
+                        this.OnObjectChanged(se);
+                }
+                moveUndoInfo = false;
+                //selectionRectangle.RenderOpen().Close();
+                AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+                System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.SizeAll;
+            }
         }
 
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
@@ -106,6 +127,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             if (isDragged)
                 SelectedObject = null;
             isDragged = false;
+            isSelectionMoved = false;
             ReleaseMouseCapture();
             e.Handled = false;
             Rect b = VisualTreeHelper.GetContentBounds(selectionRectangle);
@@ -125,7 +147,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             selectionRectangle.RenderOpen().Close();
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
             (menu.groupMenuItem.Command as GroupCommand).RaiseCanExecuteChanged();
-            
         }
 
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -165,9 +186,34 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(AdornedElement, documentHit);
                 if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.None)
                 {
-                    
-                    //ToolManipulator = new DragResizeRotateManipulator(el);
-                    SelectedObject = el;
+                    if (selectedElements.Count > 0)
+                    {
+                        bool found = false;
+                        for (int i = 0; i < selectedElements.Count; i++)
+                        {
+                            Rect r = new Rect(Canvas.GetLeft(selectedElements[i]), Canvas.GetTop(selectedElements[i]), selectedElements[i].RenderSize.Width, selectedElements[i].RenderSize.Height);
+                            if (r.Contains(pt))
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (found)
+                        {
+                            isSelectionMoved = true;
+                            movePos = e.GetPosition(this);
+                            System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.SizeAll;
+                            moveUndoInfo = true;
+                        }
+                        else
+                        {
+                            SelectedObject = el;
+                        }
+                    }
+                    else
+                    {
+                        SelectedObject = el;
+                    }
 
                 }
                 else
@@ -236,6 +282,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             if (SelectedObject != null)
             {
+                // undo
+                this.OnObjectChanged(SelectedObject);
                 double x = Canvas.GetLeft((SelectedObject as FrameworkElement));
                 double y = Canvas.GetTop((SelectedObject as FrameworkElement));
                 Canvas.SetLeft((SelectedObject as FrameworkElement), x + delta_x);
@@ -250,18 +298,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             {
                 foreach (UIElement se in selectedElements)
                 {
+                    // undo
+                    this.OnObjectChanged(se);
                     double x = Canvas.GetLeft((se as FrameworkElement));
                     double y = Canvas.GetTop((se as FrameworkElement));
                     Canvas.SetLeft((se as FrameworkElement), x + delta_x);
                     Canvas.SetTop((se as FrameworkElement), y + delta_y);
                 }
-                /*DrawingContext drawingContext = selectionRectangle.RenderOpen();
-                // Create a rectangle and draw it in the DrawingContext.
-                startPos.Offset(delta_x, delta_y);
-                Rect rect = new Rect(startPos, finalSize);
-
-                drawingContext.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 0.2), rect);
-                drawingContext.Close();*/
                 selectionRectangle.RenderOpen().Close();
                 AdornerLayer.GetAdornerLayer(AdornedElement).Update();
                 return selectedElements;
