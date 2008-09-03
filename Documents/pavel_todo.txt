@@ -1,0 +1,67 @@
+Freescada - small improvements
+==============================
+- moving multiple selection with mouse in SchemaView
+- dynamically showed and hidden buttons in main menu and tool strip for each type of DocumentView
+- grid in Schema, on/off command for grid, grid points distance definition, grid snap distance definition
+- alignment buttons for SchemaView
+- arrange buttons for SchemaView
+- application settings (Canvas default size etc)
+- canvas properties (W/H, Fill) via short properties
+- bitmap import and saving in project file
+- bitmap (image) object using saved bitmaps
+- Tag Name selection dialog for PropertyView
+- renaming items in project panel (F2 button)
+- directory structure definition in project zip file and project panel
+- context menu for project structure handling
+- inplace online ("connected") modus for SchemaView (no need to run Runtime when testing a picture)
+
+Freescada - Bigger works
+========================
+- Refactoring of dynamization using Data Binding and symbol libraries
+- Library window for drag and drop of symbols into schema (Visio-alike)
+- Triggers (user actions):
+	- setpoint value setting
+	- command initiation
+- Charts - two possibilities
+	- inplace Schema Object (I prefer this solution)
+	- or another (its own) Document type
+	- data source for charts will be Archiver cache as I mean
+- Event subsystem (including alarms)
+	- two event sources:
+		- external (OPC A&E or OPC UA server via Event Notification objects)
+		- internal event generator object for values received via OPC DA or MODBUS etc. - events defined via OPC alike EventConditions and sent to list and archiver via Event Notification objects
+	- Parameterization:
+		- creating general EventCondition and SubCondition objects
+		- Allocation of EventCondition objects to values
+	- Event notifications are sent to Archiver, Archiver then updates event list
+	- Event lists are connected to Archivers in order to have a possibility to show a history of events
+- Archiver subsystem
+	- In my opinion should be a normal part of Runtime exe and not a standalone service. This arrangement has sense if we have a full client/server architecture only.
+	- Cache object (receives value change events from plugins, creates some short history)
+	- Archiver working thread (sends values to SQL and a refresh event to charts(trends) and event lists)
+	- SQL DB: MS SQL server Express or Firebird Embedded? I would prefer embedded Firebird (no installation of MS SQL necessary) ...
+	- Parameterization: for each value: none, cycle or change driven archivation, time for cycle, archive art (current value, average value, maximal value etc.), trend buffer yes/no, trend buffer length
+- Report subsystem
+	- no idea yet, some cyclic csv file output is often good enough
+
+Possible future extension
+=========================
+- scripting plugin: arbitrary computations above tag values, cyclic or event-driven
+
+Very complex, but very valuable
+===============================
+- softPLC programmed via Functional Block Diagramm (CAD - like language):
+using the norm IEC61131-3 FBD:
+	- Graphic Editor - FBD language
+	- Variable editor (variable declaration) - data types Integer, Boolean, Float (no Structures and Arrays at the beginning)
+	- Library - Function Blocks of IEC (and, or etc, RS, JK etc, ramps, regulators, time blocks, edge blocks etc)
+	- Analyser of Graphical code (coverts blocks into function calls, lines into variables)
+	- Code generation to ANSI C-code, due to the possibility of porting softPLC "target" to other OSes
+	- Code compilation (gcc (mingw) configured with a generated makefile) into dll
+	- dll has inside: PLC code exported via a function, input data table and output data table
+	- SoftPLC frame exe (windows "target" - works in cyclic manner, imports dynamically the dll with PLC code compiled from graphic via gcc
+	- SoftPLC frame exe - can reload programm (via a command) using dynamic import of dll after reload
+	- Modbus/tcp interface for frame exe (modbus/tcp server) using data from dll input/output tables
+	- Modbus/tcp interface for freescada softPLC interface (modbus/tcp client)
+	- Ability to make "online test" - show the program execution in softPLC via CAD screen updates
+	- Examples of this functionality in commercial products: ISaGraf, Logicad32
