@@ -340,7 +340,7 @@ namespace FreeSCADA.Designer
 				currentDocument.OnDeactivated();
 				toolBoxView.ToolActivated -= currentDocument.OnToolActivated;
                 currentDocument.ObjectSelected -= propertyBrowserView.ShowProperties;
-			}
+            }
 		}
 
         public void SetCurrentDocumentFocus()

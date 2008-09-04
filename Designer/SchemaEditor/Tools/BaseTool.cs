@@ -36,6 +36,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 		public event EventHandler ToolStarted;
 		public event EventHandler ToolWorking;
         public event EventHandler ObjectCreated;
+        public event EventHandler ObjectDeleted;
         public event EventHandler ObjectChanged;
         public delegate void ObjectSeletedDelegate(Object obj);
         public event ObjectSeletedDelegate ObjectSelected;
@@ -213,8 +214,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         }
         public void NotifyObjectCreated(UIElement obj)
         {
-            if(ObjectCreated!=null)
-                ObjectCreated(obj,new EventArgs());
+            if (ObjectCreated != null)
+                ObjectCreated(obj, new EventArgs());
+
+        }
+        public void NotifyObjectDeleted(UIElement obj)
+        {
+            if (ObjectDeleted != null)
+                ObjectDeleted(obj, new EventArgs());
 
         }
         public void OnObjectChanged(UIElement obj)

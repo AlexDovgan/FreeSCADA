@@ -1,12 +1,14 @@
 Freescada - small improvements
 ==============================
-- moving multiple selection with mouse in SchemaView
+- moving multiple selection with mouse in SchemaView   .... OK
+- Copy, paste with Ctrl-C, V, X   .... OK
+- better handling of multiple selection in SelectionTool (perhaps temporary group???), current solution (selectedElements) does not like me
 - dynamically showed and hidden buttons in main menu and tool strip for each type of DocumentView
 - grid in Schema, on/off command for grid, grid points distance definition, grid snap distance definition
 - alignment buttons for SchemaView
 - arrange buttons for SchemaView
 - application settings (Canvas default size etc)
-- canvas properties (W/H, Fill) via short properties
+- canvas properties (W/H, Fill) via short properties  .... OK
 - bitmap import and saving in project file
 - bitmap (image) object using saved bitmaps
 - Tag Name selection dialog for PropertyView

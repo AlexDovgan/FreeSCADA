@@ -13,6 +13,7 @@ using FreeSCADA.Common;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using FreeSCADA.Designer.SchemaEditor.ShortProperties;
+using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -114,7 +115,8 @@ namespace FreeSCADA.Designer.Views
                     activeTool.Activate();
                     activeTool.ObjectSelected += activeTool_ObjectSelected;
                     activeTool.ToolFinished += activeTool_ToolFinished;
-                    activeTool.ObjectCreated +=activeTool_ObjectCreated;
+                    activeTool.ObjectCreated += activeTool_ObjectCreated;
+                    activeTool.ObjectDeleted += activeTool_ObjectDeleted;
                     activeTool.ObjectChanged += OnObjectChenged;
                 }
                 return activeTool.GetType();
@@ -150,6 +152,11 @@ namespace FreeSCADA.Designer.Views
             undoBuff.AddCommand(new AddGraphicsObject(sender as System.Windows.UIElement));
         }
 
+        void activeTool_ObjectDeleted(object sender, EventArgs e)
+        {
+            undoBuff.AddCommand(new DeleteGraphicsObject(sender as System.Windows.UIElement));
+        }
+
         void activeTool_ToolFinished(object sender, EventArgs e)
         {
             NotifyToolsCollectionChanged(AvailableTools, defaultTool);
@@ -169,10 +176,35 @@ namespace FreeSCADA.Designer.Views
             {
                 undoBuff.RedoCommand();
             }
+            else if (e.Key == System.Windows.Input.Key.X &&
+                (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
+            {
+                if (activeTool is SelectionTool && activeTool.SelectedObject != null)
+                    new CutCommand().Execute(activeTool);
+            }
+            else if (e.Key == System.Windows.Input.Key.C &&
+                (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
+            {
+                if (activeTool is SelectionTool && activeTool.SelectedObject != null)
+                    new CopyCommand().Execute(activeTool);
+            }
+            else if (e.Key == System.Windows.Input.Key.V &&
+                (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
+            {
+                if (activeTool is SelectionTool)
+                    new PasteCommand().Execute(activeTool);
+            }
             else if (e.Key == System.Windows.Input.Key.Delete)
             {
-
-                undoBuff.AddCommand(new DeleteGraphicsObject(activeTool.SelectedObject));
+                if (activeTool is SelectionTool && activeTool.SelectedObject != null)
+                    undoBuff.AddCommand(new DeleteGraphicsObject(activeTool.SelectedObject));
+                else if (activeTool is SelectionTool && (activeTool as SelectionTool).selectedElements.Count > 0)
+                {
+                    foreach (System.Windows.UIElement el in (activeTool as SelectionTool).selectedElements)
+                    {
+                        undoBuff.AddCommand(new DeleteGraphicsObject(el));
+                    }
+                }
                 activeTool.SelectedObject = null;
             }
             else if (e.Key == System.Windows.Input.Key.Add)
@@ -221,10 +253,20 @@ namespace FreeSCADA.Designer.Views
         void activeTool_ObjectSelected(Object obj)
         {
             CommonShortProp csp;
+            if (obj == null)
+                obj = Schema.MainCanvas;
             if ((csp = ObjectsFactory.CreateShortProp(obj)) != null)
+            {
                 RaiseObjectSelected(csp);
+                csp.PropertiesBrowserChanged += new CommonShortProp.PropertiesBrowserChangedDelegate(OnPropertiesBrowserChanged);
+            }
             else
                 RaiseObjectSelected(obj);
+        }
+
+        void csp_PropertiesBrowserChanged(System.Windows.UIElement el)
+        {
+            throw new NotImplementedException();
         }
 
         public override void OnActivated()
@@ -425,6 +467,13 @@ namespace FreeSCADA.Designer.Views
         {
             MessageBox.Show("SchemaView: " + el.ToString());
             undoBuff.AddCommand(new ChangeGraphicsObject(old, el));
+        }
+
+        public override void OnPropertiesBrowserChanged(object el)
+        {
+            IsModified = true;
+            if (el != null)
+                undoBuff.AddCommand((new ModifyGraphicsObject((System.Windows.UIElement)el)));
         }
 
     }

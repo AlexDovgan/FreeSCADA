@@ -106,5 +106,10 @@ namespace FreeSCADA.Designer.Views
             ToolsCollectionChanged = null;
             base.OnClosed(e);
         }
+
+        public virtual void OnPropertiesBrowserChanged(object el)
+        {
+            IsModified = true;
+        }
     }
 }

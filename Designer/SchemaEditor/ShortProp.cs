@@ -22,6 +22,9 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         public delegate void PropertiesChangedDelegate();
         public event PropertiesChangedDelegate PropertiesChanged;
 
+        public delegate void PropertiesBrowserChangedDelegate(UIElement el);
+        public event PropertiesBrowserChangedDelegate PropertiesBrowserChanged;
+ 
         public CommonShortProp(object obj)
         {
             commonObject = obj;
@@ -36,6 +39,12 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(NotifyPropertyChangedAsync), this);
         }
 
+        public void RaisePropertiesBrowserChanged(UIElement el)
+        {
+            if (PropertiesBrowserChanged != null)
+                PropertiesBrowserChanged(el);
+        }
+
         protected static void NotifyPropertyChangedAsync(Object info)
         {
             CommonShortProp obj = (CommonShortProp)info;
@@ -48,7 +57,79 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
     }
 
 
+    class CanvasShortProp : CommonShortProp, IDisposable
+    {
 
+
+        DependencyPropertyDescriptor dpdW;
+        DependencyPropertyDescriptor dpdH;
+        FrameworkElement frameworkElement;
+
+        public CanvasShortProp(FrameworkElement el)
+            : base(el)
+        {
+            frameworkElement = el;
+            dpdW = DependencyPropertyDescriptor.FromProperty(FrameworkElement.WidthProperty, typeof(FrameworkElement));
+            dpdW.AddValueChanged(el, new EventHandler(propertyValueChanged));
+            dpdH = DependencyPropertyDescriptor.FromProperty(FrameworkElement.HeightProperty, typeof(FrameworkElement));
+            dpdH.AddValueChanged(el, new EventHandler(propertyValueChanged));
+        }
+
+        ~CanvasShortProp()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            dpdW.RemoveValueChanged(frameworkElement, propertyValueChanged);
+            dpdH.RemoveValueChanged(frameworkElement, propertyValueChanged);
+            GC.SuppressFinalize(this);
+        }
+
+        void propertyValueChanged(object sender, EventArgs e)
+        {
+        }
+
+        [Description("Object's Width"), Category("Layout")]
+        public double Width
+        {
+            get { return frameworkElement.Width; }
+            set 
+            {
+                RaisePropertiesBrowserChanged((UIElement)frameworkElement); 
+                frameworkElement.Width = value;
+            }
+        }
+
+        [Description("Object's Height"), Category("Layout")]
+        public double Height
+        {
+            get { return frameworkElement.Height; }
+            set 
+            {
+                RaisePropertiesBrowserChanged((UIElement)frameworkElement); 
+                frameworkElement.Height = value;
+            }
+        }
+
+        [Description("Object's Fill color"), Category("Appearence")]
+        public System.Drawing.Color FillColor
+        {
+            get
+            {
+                System.ComponentModel.TypeConverter ccv = System.ComponentModel.TypeDescriptor.GetConverter(typeof(System.Drawing.Color));
+                return (System.Drawing.Color)ccv.ConvertFromString(((frameworkElement as Canvas).Background as SolidColorBrush).Color.ToString());
+            }
+            set
+            {
+                RaisePropertiesBrowserChanged((UIElement)frameworkElement);
+                (frameworkElement as Canvas).Background = (frameworkElement as Canvas).Background.Clone();
+                ((frameworkElement as Canvas).Background as SolidColorBrush).Color = Color.FromArgb(value.A, value.R, value.G, value.B); ;
+
+            }
+        }
+    }
 
     class FrameworkElementShortProp : CommonShortProp, IDisposable
     {
@@ -59,6 +140,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         DependencyPropertyDescriptor dpdX;
         DependencyPropertyDescriptor dpdY;
         DependencyPropertyDescriptor dpdA;
+        FrameworkElement frameworkElement;
 
         public FrameworkElementShortProp(FrameworkElement el)
             : base(el)
@@ -103,6 +185,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             {
                 try
                 {
+                    //RaisePropertiesBrowserChanged((UIElement)frameworkElement); 
                     frameworkElement.RegisterName(value, frameworkElement);
                     frameworkElement.Name = value;
                 }
@@ -118,41 +201,65 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         public double PosX
         {
             get { return Canvas.GetLeft(frameworkElement); }
-            set { Canvas.SetLeft(frameworkElement, value); }
+            set 
+            {
+                RaisePropertiesBrowserChanged((UIElement)frameworkElement); 
+                Canvas.SetLeft(frameworkElement, value);
+            }
         }
         [Description("Object's Y position"), Category("Layout")]
         public double PosY
         {
             get { return Canvas.GetTop(frameworkElement); }
-            set { Canvas.SetTop(frameworkElement, value); }
+            set 
+            {
+                RaisePropertiesBrowserChanged((UIElement)frameworkElement); 
+                Canvas.SetTop(frameworkElement, value);
+            }
         }
 
         [Description("Object's Width"), Category("Layout")]
         public double Width
         {
             get { return frameworkElement.Width; }
-            set { frameworkElement.Width = value; }
+            set 
+            {
+                RaisePropertiesBrowserChanged((UIElement)frameworkElement); 
+                frameworkElement.Width = value;
+            }
 
         }
         [Description("Object's Height"), Category("Layout")]
         public double Height
         {
             get { return frameworkElement.Height; }
-            set { frameworkElement.Height = value; }
+            set 
+            {
+                RaisePropertiesBrowserChanged((UIElement)frameworkElement); 
+                frameworkElement.Height = value;
+            }
 
         }
         [Description("Object's Rotation angle"), Category("Layout")]
         public double RotateAngle
         {
             get { return ((frameworkElement.RenderTransform as TransformGroup).Children[1] as RotateTransform).Angle; }
-            set { ((frameworkElement.RenderTransform as TransformGroup).Children[1] as RotateTransform).Angle = value; }
+            set 
+            {
+                RaisePropertiesBrowserChanged((UIElement)frameworkElement); 
+                ((frameworkElement.RenderTransform as TransformGroup).Children[1] as RotateTransform).Angle = value;
+            }
 
         }
         [Description("Object's Z-Order"), Category("Layout")]
         public int ZOrder
         {
             get { return Canvas.GetZIndex(frameworkElement); }
-            set { Canvas.SetZIndex(frameworkElement, value); }
+            set 
+            {
+                RaisePropertiesBrowserChanged((UIElement)frameworkElement); 
+                Canvas.SetZIndex(frameworkElement, value);
+            }
 
         }
 
@@ -160,11 +267,15 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         public double Opacity
         {
             get { return frameworkElement.Opacity; }
-            set { frameworkElement.Opacity = value; }
+            set 
+            {
+                RaisePropertiesBrowserChanged((UIElement)frameworkElement); 
+                frameworkElement.Opacity = value;
+            }
 
         }
-        FrameworkElement frameworkElement;
     }
+
     class ShapeShortProp : FrameworkElementShortProp
     {
 
@@ -185,6 +296,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             }
             set
             {
+                RaisePropertiesBrowserChanged((UIElement)shape); 
                 shape.Fill = shape.Fill.Clone();
                 (shape.Fill as SolidColorBrush).Color = Color.FromArgb(value.A, value.R, value.G, value.B); ;
 
@@ -201,6 +313,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             }
             set
             {
+                RaisePropertiesBrowserChanged((UIElement)shape); 
                 shape.Stroke = shape.Stroke.Clone();
                 (shape.Stroke as SolidColorBrush).Color = Color.FromArgb(value.A, value.R, value.G, value.B); ;
 
@@ -217,6 +330,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             }
             set
             {
+                RaisePropertiesBrowserChanged((UIElement)shape); 
                 shape.StrokeThickness = value;
 
             }
@@ -254,7 +368,8 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             }   
             set
             {
-                Style st=(Style)XamlReader.Load(File.Open(value,FileMode.Open));
+                RaisePropertiesBrowserChanged((UIElement)control); 
+                Style st = (Style)XamlReader.Load(File.Open(value, FileMode.Open));
                 FrameworkElement c = (FrameworkElement)control.Parent;
                 if (c.Resources == null)
                     c.Resources = new ResourceDictionary();
@@ -283,6 +398,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             get { return conentc.Content as string; }
             set
             {
+                RaisePropertiesBrowserChanged((UIElement)conentc); 
                 if (!File.Exists(value))
                     conentc.Content = value;
                 else
@@ -354,13 +470,21 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         public double MinValue
         {
             get { return rangebase.Minimum; }
-            set { rangebase.Minimum = value; }
+            set 
+            {
+                RaisePropertiesBrowserChanged((UIElement)rangebase); 
+                rangebase.Minimum = value;
+            }
         }
         [Description("Maximum Scale Value"), Category("Appearence")]
         public double MaxValue
         {
             get { return rangebase.Maximum; }
-            set { rangebase.Maximum = value; }
+            set 
+            {
+                RaisePropertiesBrowserChanged((UIElement)rangebase); 
+                rangebase.Maximum = value;
+            }
         }
         public double Value
         {
