@@ -37,7 +37,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             descriptorsDictionary[typeof(Control)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator), typeof(ControlShotProp));
             descriptorsDictionary[typeof(ContentControl)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator), typeof( ContentShortProp));
             descriptorsDictionary[typeof(RangeBase)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator), typeof(RangeBaseShortProp));
-
+            descriptorsDictionary[typeof(Canvas)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator), typeof(CanvasShortProp));
         }
         private static ObjectDescriptor FindDescriptor(Type type)
         {

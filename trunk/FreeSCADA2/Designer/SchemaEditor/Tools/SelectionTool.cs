@@ -52,6 +52,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             //need in  refectoring
             menu.groupMenuItem.CommandParameter = this; 
             menu.unGroupMenuItem.CommandParameter = this;
+            menu.cutMenuItem.CommandParameter = this;
             menu.copyMenuItem.CommandParameter = this;
             menu.pasteMenuItem.CommandParameter = this;
             menu.viewXamlMenuItem.CommandParameter = this;
@@ -230,6 +231,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             }
             (menu.groupMenuItem.Command as GroupCommand).RaiseCanExecuteChanged();
             (menu.unGroupMenuItem.Command as UngroupCommand).RaiseCanExecuteChanged();
+            (menu.cutMenuItem.Command as CutCommand).RaiseCanExecuteChanged();
             (menu.copyMenuItem.Command as CopyCommand).RaiseCanExecuteChanged();
             (menu.pasteMenuItem.Command as PasteCommand).RaiseCanExecuteChanged();
             (menu.viewXamlMenuItem.Command as XamlViewCommand).RaiseCanExecuteChanged();
@@ -242,6 +244,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 (Env.Current.MainWindow as MainForm).ungroupButton.Enabled = true;
             else
                 (Env.Current.MainWindow as MainForm).ungroupButton.Enabled = false;
+            if ((menu.cutMenuItem.Command as CutCommand).CanExecute(this))
+                (Env.Current.MainWindow as MainForm).cutButton.Enabled = true;
+            else
+                (Env.Current.MainWindow as MainForm).cutButton.Enabled = false;
             if ((menu.copyMenuItem.Command as CopyCommand).CanExecute(this))
                 (Env.Current.MainWindow as MainForm).copyButton.Enabled = true;
             else

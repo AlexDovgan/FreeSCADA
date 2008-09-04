@@ -249,7 +249,8 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
             objectCopy = XamlWriter.Save(modifiedObject);
             EditorHelper.CopyObjects(restoredObject, modifiedObject);
             schemaDocument.IsModified = documentModifiedState;
-            AdornerLayer.GetAdornerLayer(modifiedObject).Update();
+            if (AdornerLayer.GetAdornerLayer(modifiedObject) != null)
+                AdornerLayer.GetAdornerLayer(modifiedObject).Update();
         }
 
     }

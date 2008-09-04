@@ -181,15 +181,17 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             if (o is SelectionTool)
                 tool = o as SelectionTool;
             else return false;
-            if (tool.ToolManipulator != null)
+            if (tool.SelectedObject != null)
                 return true;
             return false;
         }
         public event EventHandler CanExecuteChanged;
         public void Execute(object o)
         {
-
-
+            string xaml = XamlWriter.Save((o as SelectionTool).SelectedObject);
+            System.Windows.Clipboard.SetText(xaml, System.Windows.TextDataFormat.Xaml);
+            (o as SelectionTool).NotifyObjectDeleted((o as SelectionTool).SelectedObject);
+            (o as SelectionTool).SelectedObject = null;
         }
         public void RaiseCanExecuteChanged()
         {
