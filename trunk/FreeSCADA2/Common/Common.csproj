@@ -64,6 +64,7 @@
     <Compile Include="Commands.cs" />
     <Compile Include="CommunationPlugs.cs" />
     <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="ICommandData.cs" />
     <Compile Include="Env.cs" />
     <Compile Include="IChannel.cs" />
     <Compile Include="ICommands.cs" />

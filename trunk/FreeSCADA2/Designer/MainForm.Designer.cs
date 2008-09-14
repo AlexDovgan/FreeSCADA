@@ -19,6 +19,7 @@
 			}
 			base.Dispose(disposing);
 		}
+        System.Windows.Forms.ToolStrip toolStrip1;
 
 		#region Windows Form FreeSCADA.Designer generated code
 
@@ -28,7 +29,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-            System.Windows.Forms.ToolStrip toolStrip1;
             System.Windows.Forms.ToolStripButton newProjectButton;
             System.Windows.Forms.ToolStripButton openProjectButton;
             System.Windows.Forms.ToolStripButton toolStripButton3;

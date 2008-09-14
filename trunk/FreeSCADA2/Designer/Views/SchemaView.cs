@@ -92,6 +92,9 @@ namespace FreeSCADA.Designer.Views
 
             this.ResumeLayout(false);
             this.SavedScrollPosition = new System.Windows.Point(0.0, 0.0);
+
+            // Commands
+            documentCommands.Add(new XamlViewCommand());
         }
 
         public SchemaDocument Schema
@@ -118,6 +121,10 @@ namespace FreeSCADA.Designer.Views
                     activeTool.ObjectCreated += activeTool_ObjectCreated;
                     activeTool.ObjectDeleted += activeTool_ObjectDeleted;
                     activeTool.ObjectChanged += OnObjectChenged;
+                    foreach (ICommandData icd in documentCommands)
+                    {
+                        icd.CommandToolStripItem.Tag = activeTool;
+                    }
                 }
                 return activeTool.GetType();
             }
@@ -143,6 +150,10 @@ namespace FreeSCADA.Designer.Views
                     activeTool.ObjectCreated += activeTool_ObjectCreated;
                     activeTool.ObjectChanged += OnObjectChenged;
                     activeTool.Activate();
+                    foreach (ICommandData icd in documentCommands)
+                    {
+                        icd.CommandToolStripItem.Tag = activeTool;
+                    }
                 }
             }
         }

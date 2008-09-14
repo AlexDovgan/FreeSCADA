@@ -234,6 +234,26 @@ namespace FreeSCADA.Designer
         {
             windowManager.ExecuteCommand((new UndoCommand()), (sender as ToolStripItem).Tag);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cmd"></param>
+        public ToolStripItem AddDocumentCommand(ICommandData cmd)
+        {
+            ToolStripItem tsi = (ToolStripItem)Activator.CreateInstance(cmd.ToolStripItemType);
+            tsi.Name = cmd.CommandName;
+            tsi.Image = cmd.CommandIcon;
+            tsi.Tag = cmd.Tag;
+            tsi.Click += new EventHandler(cmd.EvtHandler);
+            this.toolStrip1.Items.Add(tsi);
+            return tsi;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public void RemoveDocumentCommand(ToolStripItem tsi)
+        {
+            this.toolStrip1.Items.Remove(tsi);
+        }
     }
 }

@@ -58,26 +58,6 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             Items.Add(viewXamlMenuItem);
         }
     }
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface ICommandData
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        string CommandName
-        {
-            get;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        Bitmap CommandIcon
-        {
-            get;
-        }
-    }
 
     class UngroupCommand:ICommand
     {
@@ -242,7 +222,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         }
     }
 
-    class XamlViewCommand : ICommand, ICommandData
+    class XamlViewCommand : ICommandData
     {
         SelectionTool tool;
         public XamlViewCommand()
@@ -299,8 +279,45 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public Bitmap CommandIcon
         {
             get { 
-                return global::FreeSCADA.Designer.Properties.Resources.shape_ellipse_add;
+                return global::FreeSCADA.Designer.Properties.Resources.page_white_code_red;
             }
+        }
+        System.Windows.Forms.ToolStripItem m_tsi;
+        public System.Windows.Forms.ToolStripItem CommandToolStripItem
+        {
+            get
+            {
+                return m_tsi;
+            }
+            set
+            {
+                m_tsi = value;
+            }
+        }
+        public Type ToolStripItemType
+        {
+            get
+            {
+                return typeof(System.Windows.Forms.ToolStripButton);
+            }
+        }
+        object tag;
+        public Object Tag
+        {
+            get
+            {
+                return tag;
+            }
+            set
+            {
+                tag = value;
+            }
+        }
+
+        public void EvtHandler(object sender, System.EventArgs e)
+        {
+            //MessageBox.Show("Ahoj Tady");
+            this.Execute((sender as System.Windows.Forms.ToolStripItem).Tag);
         }
     }
 
