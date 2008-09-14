@@ -28,7 +28,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     {
         Point startPos;
         Point movePos;
-        bool moveUndoInfo = false;
+        bool moveUndoInfo = false;  // first move event after start of dragging multiple objerts
         Vector finalSize;
         bool isDragged = false;
         bool isSelectionMoved = false;
@@ -219,12 +219,18 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 }
                 else
                 {
-                    if (SelectedObject != null)
+                    if (selectedElements.Contains(el))
                     {
-                        selectedElements.Add(SelectedObject);
-                        SelectedObject = null;
+                        selectedElements.Remove(el);
                     }
-                    selectedElements.Add(el);
+                    else{
+                        if (SelectedObject != null)
+                        {
+                            selectedElements.Add(SelectedObject);
+                            SelectedObject = null;
+                        }
+                        selectedElements.Add(el);
+                    }
 
                 }
 

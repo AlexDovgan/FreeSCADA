@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using WeifenLuo.WinFormsUI.Docking;
 using FreeSCADA.ShellInterfaces;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
+using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
+using FreeSCADA.Common;
 namespace FreeSCADA.Designer.Views
 {
 	abstract class DocumentView : DockContent
@@ -19,6 +21,8 @@ namespace FreeSCADA.Designer.Views
         string documentName = "";
 		bool modifiedFlag = false;
 		bool handleModifiedFlagOnClose = true;
+
+        public List<ICommandData> documentCommands = new List<ICommandData>();
 
 		public DocumentView()
 		{
@@ -57,11 +61,20 @@ namespace FreeSCADA.Designer.Views
 
 		public virtual void OnActivated()
 		{
+            foreach (ICommandData cmd in documentCommands)
+            {
+                cmd.CommandToolStripItem = (Env.Current.MainWindow as MainForm).AddDocumentCommand(cmd);
+            }
 		}
 
 		public virtual void OnDeactivated()
 		{
-		}
+            foreach (ICommandData cmd in documentCommands)
+            {
+                if (cmd.CommandToolStripItem != null)
+                    (Env.Current.MainWindow as MainForm).RemoveDocumentCommand(cmd.CommandToolStripItem);
+            }
+        }
 
 		public virtual bool SaveDocument()
 		{
