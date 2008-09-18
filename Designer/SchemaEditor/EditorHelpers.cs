@@ -134,10 +134,11 @@ namespace FreeSCADA.Designer.SchemaEditor
            
                     gc.Children.Remove(child);
                     parent.Children.Add(child);
-                
+                    //tool.NotifyObjectCreated(child);
                 
                 }
                 g.Child = null;
+                //tool.NotifyObjectDeleted(g);
                 parent.Children.Remove(g);
                 tool.SelectedObject = null;
             }
@@ -164,6 +165,7 @@ namespace FreeSCADA.Designer.SchemaEditor
 
             foreach (UIElement ch in tool.selectedElements)
             {
+                //tool.NotifyObjectDeleted(ch);
                 Vector off = VisualTreeHelper.GetOffset(ch);
                 Canvas.SetLeft(ch, Canvas.GetLeft(ch) - r.X);
                 Canvas.SetTop(ch, Canvas.GetTop(ch) - r.Y);
@@ -173,6 +175,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             Group.Child = g;
             Canvas.SetTop(g, 0); Canvas.SetLeft(g, 0);
             workCanvas.Children.Add(Group);
+            //tool.NotifyObjectCreated(Group);
             tool.selectedElements.Clear();
             tool.AdornedElement.UpdateLayout();
             tool.SelectedObject = Group;

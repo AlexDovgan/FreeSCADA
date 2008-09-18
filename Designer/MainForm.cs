@@ -15,7 +15,7 @@ namespace FreeSCADA.Designer
 	/// </summary>
 	public partial class MainForm : Form
 	{
-		WindowManager windowManager;
+        WindowManager windowManager;
 
 		/// <summary>
 		/// Constructor
@@ -104,18 +104,6 @@ namespace FreeSCADA.Designer
             windowManager.ImportSchema();
         }
 
-        private void zoomOutButton_Click(object sender, System.EventArgs e)
-        {
-            windowManager.ExecuteCommand(new ZoomOutCommand(), null);
-            windowManager.SetCurrentDocumentFocus();
-        }
-
-        private void zoomInButton_Click(object sender, System.EventArgs e)
-        {
-            windowManager.ExecuteCommand(new ZoomInCommand(), null);
-            windowManager.SetCurrentDocumentFocus();
-        }
-
         private void zoomLevelComboBox_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             int percentage;
@@ -195,45 +183,6 @@ namespace FreeSCADA.Designer
             windowManager.ChangeGraphicsObject(old, el);
         }
 
-        private void copyButton_Click(object sender, EventArgs e)
-        {
-            windowManager.ExecuteCommand((new CopyCommand()), (sender as ToolStripItem).Tag);
-        }
-
-        private void xamlViewButton_Click(object sender, EventArgs e)
-        {
-            windowManager.ExecuteCommand((new XamlViewCommand()), (sender as ToolStripItem).Tag);
-        }
-
-        private void cutButton_Click(object sender, EventArgs e)
-        {
-            windowManager.ExecuteCommand((new CutCommand()), (sender as ToolStripItem).Tag);
-        }
-
-        private void pasteButton_Click(object sender, EventArgs e)
-        {
-            windowManager.ExecuteCommand((new PasteCommand()), (sender as ToolStripItem).Tag);
-        }
-
-        private void groupButton_Click(object sender, EventArgs e)
-        {
-            windowManager.ExecuteCommand((new GroupCommand()), (sender as ToolStripItem).Tag);
-        }
-
-        private void ungroupButton_Click(object sender, EventArgs e)
-        {
-            windowManager.ExecuteCommand((new UngroupCommand()), (sender as ToolStripItem).Tag);
-        }
-
-        private void redoButton_Click(object sender, EventArgs e)
-        {
-            windowManager.ExecuteCommand((new RedoCommand()), (sender as ToolStripItem).Tag);
-        }
-
-        private void undoButton_Click(object sender, EventArgs e)
-        {
-            windowManager.ExecuteCommand((new UndoCommand()), (sender as ToolStripItem).Tag);
-        }
         /// <summary>
         /// 
         /// </summary>
@@ -245,7 +194,10 @@ namespace FreeSCADA.Designer
             tsi.Image = cmd.CommandIcon;
             tsi.Tag = cmd.Tag;
             tsi.Click += new EventHandler(cmd.EvtHandler);
-            this.toolStrip1.Items.Add(tsi);
+            tsi.Enabled = cmd.CanExecute(null);
+            cmd.CommandToolStripItem = tsi;
+            Control[] ts = this.Controls.Find("toolStrip1", true);
+            if (ts[0] != null) (ts[0] as ToolStrip).Items.Add(tsi);
             return tsi;
         }
         /// <summary>
@@ -253,7 +205,8 @@ namespace FreeSCADA.Designer
         /// </summary>
         public void RemoveDocumentCommand(ToolStripItem tsi)
         {
-            this.toolStrip1.Items.Remove(tsi);
+            Control[] ts = this.Controls.Find("toolStrip1", true);
+            if (ts[0] != null) (ts[0] as ToolStrip).Items.Remove(tsi);
         }
     }
 }
