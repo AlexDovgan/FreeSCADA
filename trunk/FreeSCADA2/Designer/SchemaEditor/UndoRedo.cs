@@ -72,6 +72,12 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
     class BasicUndoBuffer
     {
         SchemaDocument schemaDocument;
+        public event EventHandler CanExecuteChanged;
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, new EventArgs());
+        }
         
 
         public BasicUndoBuffer(SchemaDocument doc)
@@ -83,8 +89,9 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
              redoStack.Clear();
              command.Do(schemaDocument);
              undoStack.Push(command);
-            (Env.Current.MainWindow as MainForm).undoButton.Enabled = true;
-            (Env.Current.MainWindow as MainForm).redoButton.Enabled = false;
+            //(Env.Current.MainWindow as MainForm).undoButton.Enabled = true;
+            //(Env.Current.MainWindow as MainForm).redoButton.Enabled = false;
+             RaiseCanExecuteChanged();
         }
         public void UndoCommand()
         {
@@ -95,12 +102,13 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
             try
             {
                 cmd.Undo();
-                if (!CanUndo()) (Env.Current.MainWindow as MainForm).undoButton.Enabled = false;
+                //if (!CanUndo()) (Env.Current.MainWindow as MainForm).undoButton.Enabled = false;
             }
             finally
             {
                 redoStack.Push(cmd);
-                (Env.Current.MainWindow as MainForm).redoButton.Enabled = true;
+                RaiseCanExecuteChanged();
+                //(Env.Current.MainWindow as MainForm).redoButton.Enabled = true;
             }
         }
 
@@ -113,12 +121,13 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
             try
             {
                 cmd.Redo();
-                if (!CanRedo()) (Env.Current.MainWindow as MainForm).redoButton.Enabled = false;
+                //if (!CanRedo()) (Env.Current.MainWindow as MainForm).redoButton.Enabled = false;
             }
             finally
             {
                 undoStack.Push(cmd);
-                (Env.Current.MainWindow as MainForm).undoButton.Enabled = true;
+                RaiseCanExecuteChanged();
+                //(Env.Current.MainWindow as MainForm).undoButton.Enabled = true;
             }
         }
 

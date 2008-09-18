@@ -43,6 +43,11 @@ namespace FreeSCADA.Common
             get;
             set;
         }
+        bool Enabled
+        {
+            get;
+            set;
+        }
         void EvtHandler(object sender, System.EventArgs e);
     }
 }

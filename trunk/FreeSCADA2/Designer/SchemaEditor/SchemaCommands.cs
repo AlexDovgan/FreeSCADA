@@ -58,144 +58,323 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             Items.Add(viewXamlMenuItem);
         }
     }
+    ///////////
+    abstract class BaseCommand : ICommandData
+    {
+        public BaseCommand()
+        {
+        }
+        #region ICommand Members
+        public event EventHandler CanExecuteChanged;
+        public virtual bool CanExecute(object o) { return false;}
+        public virtual void Execute(object o) { }
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, new EventArgs());
+        }
+        #endregion ICommand Members
+        #region ICommandData Members
 
-    class UngroupCommand:ICommand
+        public virtual string CommandName { get { return null; } }
+        public virtual Bitmap CommandIcon { get { return null; } }
+        System.Windows.Forms.ToolStripItem m_tsi;
+        public System.Windows.Forms.ToolStripItem CommandToolStripItem
+        {
+            get
+            {
+                return m_tsi;
+            }
+            set
+            {
+                m_tsi = value;
+            }
+        }
+        public virtual Type ToolStripItemType { get { return null; } }
+        object tag;
+        public Object Tag
+        {
+            get
+            {
+                return tag;
+            }
+            set
+            {
+                tag = value;
+            }
+        }
+
+        public bool Enabled
+        {
+            get
+            {
+                if (m_tsi != null)
+                    return m_tsi.Enabled;
+                else
+                    return false;
+            }
+            set
+            {
+                if (m_tsi != null)
+                    m_tsi.Enabled = value;
+            }
+        }
+
+        public void EvtHandler(object sender, System.EventArgs e)
+        {
+            this.Execute((sender as System.Windows.Forms.ToolStripItem).Tag);
+        }
+        #endregion ICommandData Members
+    }
+
+    class UngroupCommand : BaseCommand
     {
         SelectionTool tool;
         public UngroupCommand()
         {
         }
-        public bool CanExecute(object o)
+        #region ICommand Members
+        public override bool CanExecute(object o)
         {
-            
+
             if (o is SelectionTool)
                 tool = o as SelectionTool;
-            else return false;
-            if((tool.ToolManipulator!=null )&& (tool.ToolManipulator.AdornedElement is Viewbox))
+            else
+            {
+                Enabled = false;
+                return false;
+            }
+            if ((tool.ToolManipulator != null) && (tool.ToolManipulator.AdornedElement is Viewbox))
+            {
+                Enabled = true;
                 return true;
+            }
+            Enabled = false;
             return false;
         }
-		public event EventHandler CanExecuteChanged;
-        public void Execute(object o)
+        public override void Execute(object o)
         {
             EditorHelper.BreakGroup(o as SelectionTool);
         }
-        public void RaiseCanExecuteChanged()
+        #endregion ICommand Members
+        #region ICommandData Members
+
+        public override string CommandName
         {
-            if (CanExecuteChanged!=null)
-                CanExecuteChanged(this,new EventArgs());
+            get { return "UnGroup"; }
         }
 
+        public override Bitmap CommandIcon
+        {
+            get
+            {
+                return global::FreeSCADA.Designer.Properties.Resources.shape_ungroup;
+            }
+        }
+        public override Type ToolStripItemType
+        {
+            get
+            {
+                return typeof(System.Windows.Forms.ToolStripButton);
+            }
+        }
+        #endregion ICommandData Members
     }
 
-    class GroupCommand : ICommand
+    class GroupCommand : BaseCommand
     {
         SelectionTool tool;
         public GroupCommand()
         {
         }
-        public bool CanExecute(object o)
+        #region ICommand Members
+        public override bool CanExecute(object o)
         {
-            
+
             if (o is SelectionTool)
                 tool = o as SelectionTool;
-            else return false;
-            if (tool.selectedElements.Count > 0) return true;
+            else
+            {
+                Enabled = false;
+                return false;
+            }
+            if (tool.selectedElements.Count > 0)
+            {
+                Enabled = true;
+                return true;
+            }
+            Enabled = false;
             return false;
         }
-        public event EventHandler CanExecuteChanged;
-        public void Execute(object o)
+        public override void Execute(object o)
         {
 
             EditorHelper.CreateGroup(o as SelectionTool);
-
+            
         }
-        public void RaiseCanExecuteChanged()
+        #endregion ICommand Members
+        #region ICommandData Members
+
+        public override string CommandName
         {
-            if (CanExecuteChanged!=null)
-                CanExecuteChanged(this, new EventArgs());
+            get { return "Group";}
         }
 
+        public override Bitmap CommandIcon
+        {
+            get {
+                return global::FreeSCADA.Designer.Properties.Resources.shape_group;
+            }
+        }
 
+        public override Type ToolStripItemType
+        {
+            get
+            {
+                return typeof(System.Windows.Forms.ToolStripButton);
+            }
+        }
+        #endregion ICommandData Members
     }
     
-    class CopyCommand : ICommand
+    class CopyCommand : BaseCommand
     {
         SelectionTool tool;
         public CopyCommand()
         {
         }
-        public bool CanExecute(object o)
+       #region ICommand Members
+       public override bool CanExecute(object o)
         {
 
             if (o is SelectionTool)
                 tool = o as SelectionTool;
-            else return false;
+            else
+            {
+                Enabled = false;
+                return false;
+            }
             if (tool.SelectedObject != null)
+            {
+                Enabled = true;
                 return true;
+            }
+            Enabled = false;
             return false;
             
         }
-        public event EventHandler CanExecuteChanged;
-        public void Execute(object o)
+        public override void Execute(object o)
         {
 
             string xaml = XamlWriter.Save((o as SelectionTool).SelectedObject );
             System.Windows.Clipboard.SetText(xaml, System.Windows.TextDataFormat.Xaml);
   
         }
-        public void RaiseCanExecuteChanged()
+        #endregion ICommand Members
+        #region ICommandData Members
+
+        public override string CommandName
         {
-            if (CanExecuteChanged!=null)
-                CanExecuteChanged(this, new EventArgs());
+            get { return "Copy";}
         }
+
+        public override Bitmap CommandIcon
+        {
+            get {
+                return global::FreeSCADA.Designer.Properties.Resources.page_copy;
+            }
+        }
+
+        public override Type ToolStripItemType
+        {
+            get
+            {
+                return typeof(System.Windows.Forms.ToolStripButton);
+            }
+        }
+        #endregion ICommandData Members
     }
-    class CutCommand : ICommand
+
+    class CutCommand : BaseCommand
     {
         SelectionTool tool;
         public CutCommand()
         {
         }
-        public bool CanExecute(object o)
+        #region ICommand Members
+        public override bool CanExecute(object o)
         {
             if (o is SelectionTool)
                 tool = o as SelectionTool;
-            else return false;
+            else
+            {
+                Enabled = false;
+                return false;
+            }
             if (tool.SelectedObject != null)
+            {
+                Enabled = true;
                 return true;
+            }
+            Enabled = false;
             return false;
         }
-        public event EventHandler CanExecuteChanged;
-        public void Execute(object o)
+        public override void Execute(object o)
         {
             string xaml = XamlWriter.Save((o as SelectionTool).SelectedObject);
             System.Windows.Clipboard.SetText(xaml, System.Windows.TextDataFormat.Xaml);
             (o as SelectionTool).NotifyObjectDeleted((o as SelectionTool).SelectedObject);
             (o as SelectionTool).SelectedObject = null;
         }
-        public void RaiseCanExecuteChanged()
+        #endregion ICommand Members
+        #region ICommandData Members
+
+        public override string CommandName
         {
-            if (CanExecuteChanged != null)
-                CanExecuteChanged(this, new EventArgs());
+            get { return "Cut";}
         }
+
+        public override Bitmap CommandIcon
+        {
+            get {
+                return global::FreeSCADA.Designer.Properties.Resources.cut;
+            }
+        }
+
+        public override Type ToolStripItemType
+        {
+            get
+            {
+                return typeof(System.Windows.Forms.ToolStripButton);
+            }
+        }
+        #endregion ICommandData Members
     }
-    class PasteCommand : ICommand
+    class PasteCommand : BaseCommand
     {
         SelectionTool tool;
         public PasteCommand()
         {
         }
-        public bool CanExecute(object o)
+        #region ICommand Members
+        public override bool CanExecute(object o)
         {
             if (o is SelectionTool)
                 tool = o as SelectionTool;
-            else return false;
+            else
+            {
+                Enabled = false;
+                return false;
+            }
             if (System.Windows.Clipboard.ContainsText(System.Windows.TextDataFormat.Xaml))
+            {
+                Enabled = true;
                 return true;
+            }
+            Enabled = false;
             return false;
         }
-        public event EventHandler CanExecuteChanged;
-        public void Execute(object o)
+        public override void Execute(object o)
         {
             string xaml = System.Windows.Clipboard.GetText(System.Windows.TextDataFormat.Xaml);
             if (xaml != null)
@@ -215,33 +394,59 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
                 }
             }
         }
-        public void RaiseCanExecuteChanged()
+        #endregion ICommand Members
+        #region ICommandData Members
+
+        public override string CommandName
         {
-            if (CanExecuteChanged != null)
-                CanExecuteChanged(this, new EventArgs());
+            get { return "Paste";}
         }
+
+        public override Bitmap CommandIcon
+        {
+            get {
+                return global::FreeSCADA.Designer.Properties.Resources.paste_plain;
+            }
+        }
+
+        public override Type ToolStripItemType
+        {
+            get
+            {
+                return typeof(System.Windows.Forms.ToolStripButton);
+            }
+        }
+        #endregion ICommandData Members
     }
 
-    class XamlViewCommand : ICommandData
+    class XamlViewCommand : BaseCommand
     {
         SelectionTool tool;
         public XamlViewCommand()
         {
         }
-        public bool CanExecute(object o)
+        #region ICommand Members
+        public override bool CanExecute(object o)
         {
             if (o is SchemaView)
                 o = ((SchemaView)o).SchemaViewSelectionTool;
             if (o is SelectionTool)
                 tool = o as SelectionTool;
-            else return false;
+            else
+            {
+                Enabled = false;
+                return false;
+            }
             if (tool.SelectedObject != null)
+            {
+                Enabled = true;
                 return true;
+            }
+            Enabled = false;
             return false;
             
         }
-        public event EventHandler CanExecuteChanged;
-        public void Execute(object o)
+        public override void Execute(object o)
         {
             try
             {
@@ -266,59 +471,28 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             catch { }
         }
 
-        public void RaiseCanExecuteChanged()
-        {
-            if (CanExecuteChanged!=null)
-                CanExecuteChanged(this, new EventArgs());
-        }
-        public string CommandName
+        #endregion ICommand Members
+        #region ICommandData Members
+
+        public override string CommandName
         {
             get { return "XAML representation";}
         }
 
-        public Bitmap CommandIcon
+        public override Bitmap CommandIcon
         {
             get { 
                 return global::FreeSCADA.Designer.Properties.Resources.page_white_code_red;
             }
         }
-        System.Windows.Forms.ToolStripItem m_tsi;
-        public System.Windows.Forms.ToolStripItem CommandToolStripItem
-        {
-            get
-            {
-                return m_tsi;
-            }
-            set
-            {
-                m_tsi = value;
-            }
-        }
-        public Type ToolStripItemType
+        public override Type ToolStripItemType
         {
             get
             {
                 return typeof(System.Windows.Forms.ToolStripButton);
             }
         }
-        object tag;
-        public Object Tag
-        {
-            get
-            {
-                return tag;
-            }
-            set
-            {
-                tag = value;
-            }
-        }
-
-        public void EvtHandler(object sender, System.EventArgs e)
-        {
-            //MessageBox.Show("Ahoj Tady");
-            this.Execute((sender as System.Windows.Forms.ToolStripItem).Tag);
-        }
+        #endregion ICommandData Members
     }
 
     class ZoomLevelCommand : ICommand
@@ -346,99 +520,223 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         }
     }
 
-    class ZoomInCommand : ICommand
+    class ZoomInCommand : BaseCommand
     {
         public ZoomInCommand()
         {
+            Enabled = true;
         }
-        public bool CanExecute(object o)
+        #region ICommand Members
+        public override bool CanExecute(object o)
         {
-            if (o is SchemaView) return true;
-            return false;
+            return true;
         }
-        public event EventHandler CanExecuteChanged;
-        public void Execute(object o)
+        public override void Execute(object o)
         {
             if (o is SchemaView) ((SchemaView)o).ZoomIn();
         }
+        #endregion ICommand Members
+        #region ICommandData Members
 
-        public void RaiseCanExecuteChanged()
+        public override string CommandName
         {
-            if (CanExecuteChanged != null)
-                CanExecuteChanged(this, new EventArgs());
+            get { return "ZoomIn";}
         }
-    }
 
-    class ZoomOutCommand : ICommand
+        public override Bitmap CommandIcon
+        {
+            get { 
+                return global::FreeSCADA.Designer.Properties.Resources.zoom_in;
+            }
+        }
+        public override Type ToolStripItemType
+        {
+            get
+            {
+                return typeof(System.Windows.Forms.ToolStripButton);
+            }
+        }
+        #endregion ICommandData Members
+   }
+
+    class ZoomOutCommand : BaseCommand
     {
         public ZoomOutCommand()
         {
+            Enabled = true;
         }
-        public bool CanExecute(object o)
+        #region ICommand Members
+        public override bool CanExecute(object o)
         {
-            if (o is SchemaView) return true;
-            return false;
+            return true;
         }
-        public event EventHandler CanExecuteChanged;
-        public void Execute(object o)
+        public override void Execute(object o)
         {
             if (o is SchemaView) ((SchemaView)o).ZoomOut();
         }
+        #endregion ICommand Members
+        #region ICommandData Members
 
-        public void RaiseCanExecuteChanged()
+        public override string CommandName
         {
-            if (CanExecuteChanged != null)
-                CanExecuteChanged(this, new EventArgs());
+            get { return "ZoomOut"; }
         }
+
+        public override Bitmap CommandIcon
+        {
+            get
+            {
+                return global::FreeSCADA.Designer.Properties.Resources.zoom_out;
+            }
+        }
+        public override Type ToolStripItemType
+        {
+            get
+            {
+                return typeof(System.Windows.Forms.ToolStripButton);
+            }
+        }
+        #endregion ICommandData Members
     }
 
-    class UndoCommand : ICommand
+    class UndoCommand : BaseCommand
     {
         public UndoCommand()
         {
         }
-        public bool CanExecute(object o)
+        #region ICommand Members
+        public override bool CanExecute(object o)
         {
             if (o is DocumentView)
                 if ((o as DocumentView).undoBuff.CanUndo())
+                {
+                    Enabled = true;
                     return true;
-            return false;
+                }
+                else
+                {
+                    Enabled = false;
+                    return false;
+                }
+            return Enabled;
         }
-        public event EventHandler CanExecuteChanged;
-        public void Execute(object o)
+        public override void Execute(object o)
         {
             if (o is DocumentView) ((DocumentView)o).undoBuff.UndoCommand();
         }
+        #endregion ICommand Members
+        #region ICommandData Members
 
-        public void RaiseCanExecuteChanged()
+        public override string CommandName
         {
-            if (CanExecuteChanged != null)
-                CanExecuteChanged(this, new EventArgs());
+            get { return "Undo"; }
         }
+
+        public override Bitmap CommandIcon
+        {
+            get
+            {
+                return global::FreeSCADA.Designer.Properties.Resources.arrow_undo;
+            }
+        }
+        public override Type ToolStripItemType
+        {
+            get
+            {
+                return typeof(System.Windows.Forms.ToolStripButton);
+            }
+        }
+        #endregion ICommandData Members
     }
 
-    class RedoCommand : ICommand
+    class RedoCommand : BaseCommand
     {
         public RedoCommand()
         {
         }
-        public bool CanExecute(object o)
+        #region ICommand Members
+       public override bool CanExecute(object o)
         {
             if (o is DocumentView)
                 if ((o as DocumentView).undoBuff.CanRedo())
+                {
+                    Enabled = true;
                     return true;
-            return false;
+                }
+                else
+                {
+                    Enabled = false;
+                    return false;
+                }
+            return Enabled;
         }
-        public event EventHandler CanExecuteChanged;
-        public void Execute(object o)
+        public override void Execute(object o)
         {
             if (o is DocumentView) ((DocumentView)o).undoBuff.RedoCommand();
         }
+        #endregion ICommand Members
+        #region ICommandData Members
 
-        public void RaiseCanExecuteChanged()
+        public override string CommandName
         {
-            if (CanExecuteChanged != null)
-                CanExecuteChanged(this, new EventArgs());
+            get { return "Redo"; }
         }
+
+        public override Bitmap CommandIcon
+        {
+            get
+            {
+                return global::FreeSCADA.Designer.Properties.Resources.arrow_redo;
+            }
+        }
+        public override Type ToolStripItemType
+        {
+            get
+            {
+                return typeof(System.Windows.Forms.ToolStripButton);
+            }
+        }
+        #endregion ICommandData Members
     }
+
+    class NullCommand : BaseCommand
+    {
+        public NullCommand()
+        {
+        }
+        #region ICommand Members
+        public override bool CanExecute(object o)
+        {
+            Enabled = true;
+            return true;
+        }
+        public override void Execute(object o)
+        {
+        }
+        #endregion ICommand Members
+        #region ICommandData Members
+
+        public override string CommandName
+        {
+            get { return "Null"; }
+        }
+
+        public override Bitmap CommandIcon
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        public override Type ToolStripItemType
+        {
+            get
+            {
+                return typeof(System.Windows.Forms.ToolStripSeparator);
+            }
+        }
+        #endregion ICommandData Members
+    }
+
 }

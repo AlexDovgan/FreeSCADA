@@ -57,12 +57,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             menu.pasteMenuItem.CommandParameter = this;
             menu.viewXamlMenuItem.CommandParameter = this;
             //need in refectoring 
-            (Env.Current.MainWindow as MainForm).xamlViewButton.Tag = this;
-            (Env.Current.MainWindow as MainForm).cutButton.Tag = this;
-            (Env.Current.MainWindow as MainForm).copyButton.Tag = this;
-            (Env.Current.MainWindow as MainForm).pasteButton.Tag = this;
-            (Env.Current.MainWindow as MainForm).groupButton.Tag = this;
-            (Env.Current.MainWindow as MainForm).ungroupButton.Tag = this;
         }
         #region ITool implementation
         public String ToolName
@@ -148,6 +142,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             selectionRectangle.RenderOpen().Close();
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
             (menu.groupMenuItem.Command as GroupCommand).RaiseCanExecuteChanged();
+            RaiseObjectSelected(SelectedObject);
         }
 
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -242,32 +237,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             (menu.pasteMenuItem.Command as PasteCommand).RaiseCanExecuteChanged();
             (menu.viewXamlMenuItem.Command as XamlViewCommand).RaiseCanExecuteChanged();
 
-            if ((menu.groupMenuItem.Command as GroupCommand).CanExecute(this))
-                (Env.Current.MainWindow as MainForm).groupButton.Enabled = true;
-            else
-                (Env.Current.MainWindow as MainForm).groupButton.Enabled = false;
-            if ((menu.unGroupMenuItem.Command as UngroupCommand).CanExecute(this))
-                (Env.Current.MainWindow as MainForm).ungroupButton.Enabled = true;
-            else
-                (Env.Current.MainWindow as MainForm).ungroupButton.Enabled = false;
-            if ((menu.cutMenuItem.Command as CutCommand).CanExecute(this))
-                (Env.Current.MainWindow as MainForm).cutButton.Enabled = true;
-            else
-                (Env.Current.MainWindow as MainForm).cutButton.Enabled = false;
-            if ((menu.copyMenuItem.Command as CopyCommand).CanExecute(this))
-                (Env.Current.MainWindow as MainForm).copyButton.Enabled = true;
-            else
-                (Env.Current.MainWindow as MainForm).copyButton.Enabled = false;
-            if ((menu.pasteMenuItem.Command as PasteCommand).CanExecute(this))
-                (Env.Current.MainWindow as MainForm).pasteButton.Enabled = true;
-            else
-                (Env.Current.MainWindow as MainForm).pasteButton.Enabled = false;
-            if ((menu.viewXamlMenuItem.Command as XamlViewCommand).CanExecute(this))
-                (Env.Current.MainWindow as MainForm).xamlViewButton.Enabled = true;
-            else
-                (Env.Current.MainWindow as MainForm).xamlViewButton.Enabled = false;
-
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+            RaiseObjectSelected(SelectedObject);
             e.Handled = false;
         }
 

@@ -114,8 +114,8 @@ namespace FreeSCADA.Designer
             //doc.ToolsCollectionChanged -= toolBoxView.OnToolsCollectionChanged;
             doc.FormClosing -= new FormClosingEventHandler(OnDocumentWindowClosing);
 			documentViews.Remove(doc);
-           
-		}
+            propertyBrowserView.ShowProperties(new Object());
+        }
 
 		public void OnOpenProjectEntity(string name)
 		{
@@ -327,8 +327,8 @@ namespace FreeSCADA.Designer
                 currentDocument.OnActivated();
 				toolBoxView.ToolActivated += currentDocument.OnToolActivated;
     			currentDocument.ObjectSelected += propertyBrowserView.ShowProperties;
-                (Env.Current.MainWindow as MainForm).undoButton.Tag = currentDocument;
-                (Env.Current.MainWindow as MainForm).redoButton.Tag = currentDocument;
+                //(Env.Current.MainWindow as MainForm).undoButton.Tag = currentDocument;
+                //(Env.Current.MainWindow as MainForm).redoButton.Tag = currentDocument;
             }
 		}
 
@@ -341,7 +341,8 @@ namespace FreeSCADA.Designer
 				toolBoxView.ToolActivated -= currentDocument.OnToolActivated;
                 currentDocument.ObjectSelected -= propertyBrowserView.ShowProperties;
             }
-		}
+            propertyBrowserView.ShowProperties(new Object());
+        }
 
         public void SetCurrentDocumentFocus()
         {

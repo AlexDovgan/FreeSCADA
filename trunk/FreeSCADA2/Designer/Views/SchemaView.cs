@@ -27,6 +27,7 @@ namespace FreeSCADA.Designer.Views
         private SelectionTool selectionTool;
         private WindowManager windowManager;
         List<ITool> toolsList;
+        ICommandData undoCommand, redoCommand;
 
         public SelectionTool SchemaViewSelectionTool {
             get { 
@@ -93,8 +94,29 @@ namespace FreeSCADA.Designer.Views
             this.ResumeLayout(false);
             this.SavedScrollPosition = new System.Windows.Point(0.0, 0.0);
 
-            // Commands
+            // Commands to ToolStrip
+            ICommandData cmd;
+            documentCommands.Add(new NullCommand());    // Separator
+            documentCommands.Add(undoCommand = new UndoCommand());
+            documentCommands.Add(redoCommand = new RedoCommand());
+            documentCommands.Add(new NullCommand());    // Separator
+            documentCommands.Add(new CutCommand());
+            documentCommands.Add(new CopyCommand());
+            documentCommands.Add(new PasteCommand());
+            documentCommands.Add(new NullCommand());    // Separator
             documentCommands.Add(new XamlViewCommand());
+            documentCommands.Add(new GroupCommand());
+            documentCommands.Add(new UngroupCommand());
+            documentCommands.Add(new NullCommand());    // Separator
+            documentCommands.Add(new ZoomOutCommand());
+            documentCommands.Add(new ZoomInCommand());
+            documentCommands.Add(new NullCommand());    // Separator
+        }
+
+        void undoBuff_CanExecuteChanged(object sender, EventArgs e)
+        {
+            undoCommand.CanExecute(this);
+            redoCommand.CanExecute(this);
         }
 
         public SchemaDocument Schema
@@ -105,6 +127,7 @@ namespace FreeSCADA.Designer.Views
                 DocumentName = value.Name;
                 wpfSchemaContainer.Document = value;
                 undoBuff = UndoRedoManager.GetUndoBuffer(Schema);
+                undoBuff.CanExecuteChanged += new EventHandler(undoBuff_CanExecuteChanged);
             }
         }
 
@@ -123,7 +146,10 @@ namespace FreeSCADA.Designer.Views
                     activeTool.ObjectChanged += OnObjectChenged;
                     foreach (ICommandData icd in documentCommands)
                     {
-                        icd.CommandToolStripItem.Tag = activeTool;
+                        if (icd is ZoomInCommand || icd is ZoomOutCommand || icd is UndoCommand || icd is RedoCommand)
+                            icd.CommandToolStripItem.Tag = this;
+                        else
+                            icd.CommandToolStripItem.Tag = activeTool;
                     }
                 }
                 return activeTool.GetType();
@@ -152,7 +178,10 @@ namespace FreeSCADA.Designer.Views
                     activeTool.Activate();
                     foreach (ICommandData icd in documentCommands)
                     {
-                        icd.CommandToolStripItem.Tag = activeTool;
+                        if (icd is ZoomInCommand || icd is ZoomOutCommand || icd is UndoCommand || icd is RedoCommand)
+                            icd.CommandToolStripItem.Tag = this;
+                        else
+                            icd.CommandToolStripItem.Tag = activeTool;
                     }
                 }
             }
@@ -273,11 +302,11 @@ namespace FreeSCADA.Designer.Views
             }
             else
                 RaiseObjectSelected(obj);
-        }
-
-        void csp_PropertiesBrowserChanged(System.Windows.UIElement el)
-        {
-            throw new NotImplementedException();
+            // Menu items
+            foreach (ICommandData icd in documentCommands)
+            {
+                icd.CanExecute(activeTool);
+            }
         }
 
         public override void OnActivated()
