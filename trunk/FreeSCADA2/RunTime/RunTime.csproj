@@ -52,7 +52,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ZoomViewer.cs" />
     <Compile Include="DialogMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -115,7 +114,6 @@
       <DependentUpon>StringResources.resx</DependentUpon>
     </Compile>
     <Compile Include="WindowManager.cs" />
-    <Compile Include="WPFShemaContainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\open_file.png" />

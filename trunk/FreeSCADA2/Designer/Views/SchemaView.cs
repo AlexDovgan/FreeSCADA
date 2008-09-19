@@ -63,6 +63,19 @@ namespace FreeSCADA.Designer.Views
                 return toolsList;
             }
         }
+        public double ZoomLevel
+        {
+            get
+            {
+                return SchemaScale.ScaleX;
+            }
+            set
+            {
+                SchemaScale.ScaleX = value;
+                SchemaScale.ScaleY = value;
+                Schema.MainCanvas.LayoutTransform = SchemaScale;
+            }
+        }
 
         public SchemaView(WindowManager wm)
         {
@@ -73,7 +86,7 @@ namespace FreeSCADA.Designer.Views
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            this.wpfSchemaContainer = new WPFShemaContainer(this);
+            this.wpfSchemaContainer = new WPFShemaContainer();
             // 
             // wpfContainerHost
             // 
@@ -84,6 +97,8 @@ namespace FreeSCADA.Designer.Views
             this.wpfSchemaContainer.TabIndex = 0;
             this.wpfSchemaContainer.Text = "WPFSchemaContainer";
             this.wpfSchemaContainer.Child.KeyDown += new System.Windows.Input.KeyEventHandler(WpfKeyDown);
+            this.wpfSchemaContainer.ZoomInEvent+=new WPFShemaContainer.ZoomDelegate(ZoomIn);
+            this.wpfSchemaContainer.ZoomOutEvent+=new WPFShemaContainer.ZoomDelegate(ZoomOut);
             // 
             // SchemaView
             // 
@@ -95,7 +110,6 @@ namespace FreeSCADA.Designer.Views
             this.SavedScrollPosition = new System.Windows.Point(0.0, 0.0);
 
             // Commands to ToolStrip
-            ICommandData cmd;
             documentCommands.Add(new NullCommand());    // Separator
             documentCommands.Add(undoCommand = new UndoCommand());
             documentCommands.Add(redoCommand = new RedoCommand());
@@ -247,12 +261,12 @@ namespace FreeSCADA.Designer.Views
                 }
                 activeTool.SelectedObject = null;
             }
-            else if (e.Key == System.Windows.Input.Key.Add)
+            else if (e.Key == System.Windows.Input.Key.Add && (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
             {
                 ZoomIn();
 
             }
-            else if (e.Key == System.Windows.Input.Key.Subtract)
+            else if (e.Key == System.Windows.Input.Key.Subtract && (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
             {
                 ZoomOut();
             }
@@ -316,7 +330,7 @@ namespace FreeSCADA.Designer.Views
             //Notify connected windows about new tool collection
             NotifyToolsCollectionChanged(AvailableTools, CurrentTool);
             // Scroll to saved position
-            ZoomViewer msv = (ZoomViewer)wpfSchemaContainer.Child;
+            System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
             msv.ScrollToVerticalOffset(SavedScrollPosition.Y);
             msv.ScrollToHorizontalOffset(SavedScrollPosition.X);
         }
@@ -328,7 +342,7 @@ namespace FreeSCADA.Designer.Views
             // Save scroll position
             if (wpfSchemaContainer != null)
             {
-                ZoomViewer msv = (ZoomViewer)wpfSchemaContainer.Child;
+                System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
                 if (msv != null)
                 {
                     SavedScrollPosition.Y = msv.VerticalOffset;
@@ -460,49 +474,38 @@ namespace FreeSCADA.Designer.Views
 
         public void ZoomIn()
         {
-            ZoomIn(0.0, 0.0);
+            ZoomIn(new System.Windows.Point(0.0, 0.0));
         }
 
-        public void ZoomIn(double CenterX, double CenterY)
+        public void ZoomIn(System.Windows.Point center)
         {
-            ZoomViewer msv = (ZoomViewer)wpfSchemaContainer.Child;
+            System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
             SchemaScale.ScaleX *= 1.05;
             SchemaScale.ScaleY *= 1.05;
             Schema.MainCanvas.LayoutTransform = SchemaScale;
-            msv.ScrollToVerticalOffset(msv.VerticalOffset * 1.05 + CenterY * 0.05);
-            msv.ScrollToHorizontalOffset(msv.HorizontalOffset * 1.05 + CenterX * 0.05);
+            msv.ScrollToVerticalOffset(msv.VerticalOffset * 1.05 + center.Y* 0.05);
+            msv.ScrollToHorizontalOffset(msv.HorizontalOffset * 1.05 + center.X * 0.05);
+            //this is must be an event 
             (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
         }
 
         public void ZoomOut()
         {
-            ZoomOut(0.0, 0.0);
+            ZoomOut(new System.Windows.Point(0.0, 0.0));
         }
 
-        public void ZoomOut(double CenterX, double CenterY)
+        public void ZoomOut(System.Windows.Point center)
         {
-            ZoomViewer msv = (ZoomViewer)wpfSchemaContainer.Child;
+            System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
             SchemaScale.ScaleX /= 1.05;
             SchemaScale.ScaleY /= 1.05;
             Schema.MainCanvas.LayoutTransform = SchemaScale;
-            msv.ScrollToVerticalOffset(msv.VerticalOffset / 1.05 - CenterY * 0.05);
-            msv.ScrollToHorizontalOffset(msv.HorizontalOffset / 1.05 - CenterX * 0.05);
+            msv.ScrollToVerticalOffset(msv.VerticalOffset / 1.05 - center.Y * 0.05);
+            msv.ScrollToHorizontalOffset(msv.HorizontalOffset / 1.05 - center.X * 0.05);
             (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
         }
 
-        public double ZoomLevel
-        {
-            get {
-                return SchemaScale.ScaleX;
-            }
-            set
-            {
-                SchemaScale.ScaleX = value;
-                SchemaScale.ScaleY = value;
-                Schema.MainCanvas.LayoutTransform = SchemaScale;
-            }
-        }
-
+      
         public void ChangeGraphicsObject(System.Windows.UIElement old, System.Windows.UIElement el)
         {
             MessageBox.Show("SchemaView: " + el.ToString());
@@ -515,6 +518,7 @@ namespace FreeSCADA.Designer.Views
             if (el != null)
                 undoBuff.AddCommand((new ModifyGraphicsObject((System.Windows.UIElement)el)));
         }
+       
 
     }
 }
