@@ -60,7 +60,8 @@ namespace FreeSCADA.Designer.Views
         }
 
 		public virtual void OnActivated()
-		{
+		{//in future at this place need to use WindowManager
+            //our paradigm mean that  Views does not know about MainForm
             foreach (ICommandData cmd in documentCommands)
             {
                 cmd.CommandToolStripItem = (Env.Current.MainWindow as MainForm).AddDocumentCommand(cmd);
@@ -69,6 +70,8 @@ namespace FreeSCADA.Designer.Views
 
 		public virtual void OnDeactivated()
 		{
+            //in future at this place need to use WindowManager
+            //our paradigm mean that  Views does not know about MainForm
             foreach (ICommandData cmd in documentCommands)
             {
                 if (cmd.CommandToolStripItem != null)

@@ -77,7 +77,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DialogMessages.resx</DependentUpon>
     </Compile>
-    <Compile Include="SchemaEditor\ZoomViewer.cs" />
     <Compile Include="SchemaEditor\EditorHelpers.cs" />
     <Compile Include="SchemaEditor\Manipulators\ActionsEditManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\BaseManipulator.cs" />
@@ -102,7 +101,6 @@
     <Compile Include="SchemaEditor\Tools\SelectionTool.cs" />
     <Compile Include="SchemaEditor\Tools\TextBoxTool.cs" />
     <Compile Include="SchemaEditor\UndoRedo.cs" />
-    <Compile Include="SchemaEditor\WPFShemaContainer.cs" />
     <Compile Include="StringResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -217,6 +215,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Resources\cut.png" />
     <None Include="Resources\disk.png" />
     <None Include="Resources\arrow_undo.png" />

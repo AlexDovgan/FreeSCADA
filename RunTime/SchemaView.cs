@@ -20,7 +20,7 @@ namespace FreeSCADA.RunTime
 		private void InitializeComponent()
 		{
 			this.SuspendLayout();
-			this.wpfSchemaContainer = new WPFShemaContainer(this);
+			this.wpfSchemaContainer = new WPFShemaContainer();
 			// 
 			// wpfContainerHost
 			// 
@@ -30,6 +30,8 @@ namespace FreeSCADA.RunTime
 			this.wpfSchemaContainer.Size = new System.Drawing.Size(292, 273);
 			this.wpfSchemaContainer.TabIndex = 0;
 			this.wpfSchemaContainer.Text = "WPFSchemaContainer";
+            this.wpfSchemaContainer.ZoomInEvent += new WPFShemaContainer.ZoomDelegate(ZoomIn);
+            this.wpfSchemaContainer.ZoomOutEvent += new WPFShemaContainer.ZoomDelegate(ZoomOut);
 			// 
 			// SchemaView
 			// 
@@ -65,7 +67,7 @@ namespace FreeSCADA.RunTime
         public void OnActivated()
         {
             // Scroll to saved position
-            myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
+            System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
             msv.ScrollToVerticalOffset(SavedScrollPosition.Y);
             msv.ScrollToHorizontalOffset(SavedScrollPosition.X);
         }
@@ -75,7 +77,7 @@ namespace FreeSCADA.RunTime
             // Save scroll position
             if (wpfSchemaContainer != null)
             {
-                myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
+                System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
                 if (msv != null)
                 {
                     SavedScrollPosition.Y = msv.VerticalOffset;
@@ -94,33 +96,33 @@ namespace FreeSCADA.RunTime
 
         public void ZoomIn()
         {
-            ZoomIn(0.0, 0.0);
+            ZoomIn(new System.Windows.Point (0,0));
         }
 
-        public void ZoomIn(double CenterX, double CenterY)
+        public void ZoomIn(System.Windows.Point center)
         {
-            myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
+            System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
             SchemaScale.ScaleX *= 1.05;
             SchemaScale.ScaleY *= 1.05;
             Schema.MainCanvas.LayoutTransform = SchemaScale;
-            msv.ScrollToVerticalOffset(msv.VerticalOffset * 1.05 + CenterY * 0.05);
-            msv.ScrollToHorizontalOffset(msv.HorizontalOffset * 1.05 + CenterX * 0.05);
+            msv.ScrollToVerticalOffset(msv.VerticalOffset * 1.05 + center.Y* 0.05);
+            msv.ScrollToHorizontalOffset(msv.HorizontalOffset * 1.05 + center.X * 0.05);
             (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
         }
 
         public void ZoomOut()
         {
-            ZoomOut(0.0, 0.0);
+            ZoomOut(new System.Windows.Point(0, 0));
         }
 
-        public void ZoomOut(double CenterX, double CenterY)
+        public void ZoomOut(System.Windows.Point center)
         {
-            myScrollViewer msv = (myScrollViewer)wpfSchemaContainer.Child;
+            System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
             SchemaScale.ScaleX /= 1.05;
             SchemaScale.ScaleY /= 1.05;
             Schema.MainCanvas.LayoutTransform = SchemaScale;
-            msv.ScrollToVerticalOffset(msv.VerticalOffset / 1.05 - CenterY * 0.05);
-            msv.ScrollToHorizontalOffset(msv.HorizontalOffset / 1.05 - CenterX * 0.05);
+            msv.ScrollToVerticalOffset(msv.VerticalOffset / 1.05 - center.Y * 0.05);
+            msv.ScrollToHorizontalOffset(msv.HorizontalOffset / 1.05 - center.X* 0.05);
             (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
         }
 
