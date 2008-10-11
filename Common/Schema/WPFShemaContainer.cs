@@ -5,10 +5,31 @@ using System.Windows;
 
 namespace FreeSCADA.Common.Schema
 {
-	public class WPFShemaContainer : System.Windows.Forms.Integration.ElementHost
+    public class myHelpScrollViewer : ScrollViewer
+    {
+        // The only solution I know for enablig the positioning of elements with arrows in Canvas inside ScrollViewer
+        // ScrollViewer normally consumes Arrow keys for scrolling
+        // So I need to derive own class and override OnKeyDown
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if ((e.Key == System.Windows.Input.Key.Left || e.Key == System.Windows.Input.Key.Right || e.Key == System.Windows.Input.Key.Up || e.Key == System.Windows.Input.Key.Down) &&
+                (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) == System.Windows.Input.ModifierKeys.None)
+            {
+                // the Keydown event for Arrows is not catched by the ScrollViewer, but is used to position the selected element inside Canvas
+                // Arrows = positioning
+                e.Handled = false;
+            }
+            else
+                // Ctrl/Arrows = scrolling
+                // And all other keys
+                base.OnKeyDown(e);  // normal behavior
+        }
+    }
+
+    public class WPFShemaContainer : System.Windows.Forms.Integration.ElementHost
 	{
 		SchemaDocument document;
-        ScrollViewer scroll;
+        myHelpScrollViewer scroll;
         System.Windows.Point origPanPoint;
         public delegate void ZoomDelegate(Point pt);
         public event ZoomDelegate ZoomInEvent;
@@ -40,14 +61,11 @@ namespace FreeSCADA.Common.Schema
        
         private void Initialize()
         {
-            //Child =scroll= new ZoomViewer(this);
-            Child = scroll = new ScrollViewer();
-			//Child.Focusable = false;
+            Child = scroll = new myHelpScrollViewer();
 			
 			Child.SnapsToDevicePixels = true;
             scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
             Child.PreviewMouseWheel += new MouseWheelEventHandler(Child_MouseWheel);
-            Child.PreviewKeyDown += new KeyEventHandler(Child_KeyDown);
             Child.PreviewMouseDown += new System.Windows.Input.MouseButtonEventHandler(Child_MouseDown);
             Child.PreviewMouseUp += new System.Windows.Input.MouseButtonEventHandler(Child_MouseUp);
             Child.PreviewMouseMove += new System.Windows.Input.MouseEventHandler(Child_MouseMove);
@@ -109,16 +127,6 @@ namespace FreeSCADA.Common.Schema
             {
                 e.Handled = false;
             }
-        }
-
-        void Child_KeyDown(object sender,KeyEventArgs e)
-        {
-            if ((e.Key == System.Windows.Input.Key.Left || e.Key == System.Windows.Input.Key.Right || e.Key == System.Windows.Input.Key.Up || e.Key == System.Windows.Input.Key.Down) &&
-                (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) == System.Windows.Input.ModifierKeys.None)
-            {
-                e.Handled = false;
-            }
-           
         }
 
         protected void NotifyZoomInEvent(Point pt)
