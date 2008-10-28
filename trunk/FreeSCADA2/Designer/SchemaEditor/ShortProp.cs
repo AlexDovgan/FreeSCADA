@@ -129,6 +129,50 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
 
             }
         }
+
+        [Description("Grid active"), Category("Appearence")]
+        public bool GridOn
+        {
+            get
+            {
+                if (!frameworkElement.Resources.Contains("DesignerSettings_GridOn"))
+                {
+                    frameworkElement.Resources.Add("DesignerSettings_GridOn", true);
+                }
+                return (bool)frameworkElement.FindResource("DesignerSettings_GridOn");
+            }
+            set
+            {
+                RaisePropertiesBrowserChanged((UIElement)frameworkElement);
+                if (frameworkElement.Resources.Contains("DesignerSettings_GridOn"))
+                {
+                    frameworkElement.Resources.Remove("DesignerSettings_GridOn");
+                }
+                frameworkElement.Resources.Add("DesignerSettings_GridOn", value);
+            }
+        }
+
+        [Description("Grid delta"), Category("Appearence")]
+        public double GridDelta
+        {
+            get
+            {
+                if (!frameworkElement.Resources.Contains("DesignerSettings_GridDelta"))
+                {
+                    frameworkElement.Resources.Add("DesignerSettings_GridDelta", 10.0);
+                }
+                return (double)frameworkElement.FindResource("DesignerSettings_GridDelta");
+            }
+            set
+            {
+                RaisePropertiesBrowserChanged((UIElement)frameworkElement);
+                if (frameworkElement.Resources.Contains("DesignerSettings_GridDelta"))
+                {
+                    frameworkElement.Resources.Remove("DesignerSettings_GridDelta");
+                }
+                frameworkElement.Resources.Add("DesignerSettings_GridDelta", value);
+            }
+        }
     }
 
     class FrameworkElementShortProp : CommonShortProp, IDisposable
