@@ -22,6 +22,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
         void DragThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
             FrameworkElement item = this.DataContext as FrameworkElement;
+            double gridDelta = (double)item.FindResource("DesignerSettings_GridDelta");
+            bool gridOn = (bool)item.FindResource("DesignerSettings_GridOn");
 
             if (item != null)
             {
@@ -35,8 +37,15 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
                 left = double.IsNaN(left) ? 0 : left;
                 top = double.IsNaN(top) ? 0 : top;
 
-                Canvas.SetLeft(item, left + dragDelta.X);
-                Canvas.SetTop(item, top + dragDelta.Y);
+                double x = left + dragDelta.X;
+                double y = top + dragDelta.Y;
+                if (gridOn)
+                {
+                    x -= x % gridDelta;
+                    y -= y % gridDelta;
+                }
+                Canvas.SetLeft(item, x);
+                Canvas.SetTop(item, y);
                 
             }
             e.Handled = false;

@@ -45,8 +45,12 @@ namespace FreeSCADA.Common.Schema
 				document.MainCanvas.Focusable = false;
                 if (!(document.MainCanvas.RenderTransform is System.Windows.Media.ScaleTransform))
                     document.MainCanvas.RenderTransform = new System.Windows.Media.ScaleTransform();
-                    
-                
+
+                if (!document.MainCanvas.Resources.Contains("DesignerSettings_GridOn"))
+                {
+                    document.MainCanvas.Resources.Add("DesignerSettings_GridOn", true);
+                    document.MainCanvas.Resources.Add("DesignerSettings_GridDelta", 10.0);
+                }
 				//document.MainCanvas.Background = resources["GridBackgroundBrush"] as DrawingBrush;
 
 			}
