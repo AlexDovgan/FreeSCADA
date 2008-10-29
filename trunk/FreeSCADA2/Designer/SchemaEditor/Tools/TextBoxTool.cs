@@ -12,7 +12,7 @@ using FreeSCADA.ShellInterfaces;
 using System.Windows.Documents;
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
-    class TextBoxTool:BaseTool,ITool
+    class TextBoxTool:BaseTool
     {
         Point startPos;
         bool isDragged;
@@ -26,25 +26,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             visualChildren.Add(objectPrview);
             
         }
-        #region ITool implementation
-        public String ToolName
-        {
-            get { return "TextBox Tool"; }
-        }
-
-        public String ToolGroup
-        {
-            get { return "Graphics Tools"; }
-        }
-        public System.Drawing.Bitmap ToolIcon
-        {
-            get
-            {
-
-                return global::FreeSCADA.Designer.Properties.Resources.textfield_add;
-            }
-        }
-        #endregion
 
       
         protected override void OnPreviewMouseMove(MouseEventArgs e)

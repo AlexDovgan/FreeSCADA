@@ -12,29 +12,9 @@ using FreeSCADA.Designer.SchemaEditor.Manipulators;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
-    class ActionEditTool:BaseTool,ITool
+    class ActionEditTool:BaseTool
     {
         
-
-        #region ITool Implementation
-        public String ToolName
-        {
-            get { return "ActionEdit Tool"; }
-        }
-
-        public String ToolGroup
-        {
-            get { return "Editor Tools"; }
-        }
-        public System.Drawing.Bitmap ToolIcon
-        {
-            get
-            {
-                return global::FreeSCADA.Designer.Properties.Resources.cog_edit;
-            }
-        }
-        #endregion
-
         public ActionEditTool(UIElement elemnet)
             : base(elemnet)
         {

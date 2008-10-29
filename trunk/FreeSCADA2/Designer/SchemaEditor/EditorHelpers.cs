@@ -228,6 +228,39 @@ namespace FreeSCADA.Designer.SchemaEditor
         }
         public static void CopyObjects(DependencyObject source, DependencyObject destination)
         {
+            if (source is IAddChild)
+            {
+                ContentPropertyAttribute srcCntAttr,destCntattr;
+                if ((TypeDescriptor.GetAttributes(source)[typeof(ContentPropertyAttribute)] is ContentPropertyAttribute))
+                {
+                    srcCntAttr = TypeDescriptor.GetAttributes(source)[typeof(ContentPropertyAttribute)] as ContentPropertyAttribute;
+                    if (destination.GetType().GetProperty(srcCntAttr.Name) != null)
+                    {
+
+                        System.Reflection.PropertyInfo pi = source.GetType().GetProperty(srcCntAttr.Name);
+                        object srcChild = pi.GetValue(source, null);
+                        object destChild = pi.GetValue(destination, null);
+                        if (srcChild is UIElementCollection && destChild is UIElementCollection)
+                        {
+                            UIElementCollection srcColl = srcChild as UIElementCollection;
+                            UIElementCollection destColl = destChild as UIElementCollection;
+                            destColl.Clear();
+                            while (srcColl.Count>0)
+                            {
+                                UIElement el = srcColl[0];
+                                srcColl.Remove(el);
+                                destColl.Add(el);
+                            }
+                        
+                        }
+                        else if(srcChild is DependencyObject && destChild is DependencyObject)
+                        {
+                            CopyObjects(srcChild as DependencyObject, destChild as DependencyObject);
+                        }
+                   
+                    }
+                }
+            }
             IList<DependencyProperty> spl = GetSetedProperties(source);
             IList<DependencyProperty> dpl = GetSetedProperties(destination);
             foreach (DependencyProperty property in dpl)
@@ -258,6 +291,7 @@ namespace FreeSCADA.Designer.SchemaEditor
                 return adorners[0] as BaseTool;
             else return null;
         }
+
     }
 
 }

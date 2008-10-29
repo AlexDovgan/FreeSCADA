@@ -11,7 +11,7 @@ namespace FreeSCADA.RunTime
 		private WPFShemaContainer wpfSchemaContainer;
         private ScaleTransform SchemaScale = new ScaleTransform();
         private System.Windows.Point SavedScrollPosition;
-
+        private SchemaDocument document;
 		public SchemaView()
 		{
 			InitializeComponent();
@@ -44,13 +44,14 @@ namespace FreeSCADA.RunTime
             this.SavedScrollPosition = new System.Windows.Point(0.0, 0.0);
         }
 
+
 		public SchemaDocument Schema
 		{
-			get { return wpfSchemaContainer.Document; }
+            get { return document; }
 			set
 			{
 				TabText = value.Name;
-				wpfSchemaContainer.Document = value;
+                document = value;
 			}
 		}
 

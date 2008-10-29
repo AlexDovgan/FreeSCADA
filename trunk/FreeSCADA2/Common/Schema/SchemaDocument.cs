@@ -26,9 +26,21 @@ namespace FreeSCADA.Common.Schema
             }
         }
 
-        public String Name;
-        public Canvas MainCanvas = new Canvas();
-
+        public String Name
+        {
+            get;
+            set;
+        }
+        public Canvas MainCanvas 
+        {
+            get;
+            set;
+        }
+         
+        public SchemaDocument()
+        {
+               MainCanvas = new Canvas();
+        }
         public static SchemaDocument LoadSchema(string schemaName)
         {
             try

@@ -6,137 +6,106 @@ using Silver.UI;
 
 namespace FreeSCADA.Designer.Views
 {
-	/// <summary>
-	/// Represents available tools and manipulators for active document window. Basically used for Schema editing.
-	/// </summary>
-	class ToolBoxView : ToolWindow
-	{
-		/// <summary>
-		/// Notify that current tool has changed
-		/// </summary>
-		/// <param name="sender">Sender of the event. Typically it is ToolBoxView object instance.</param>
-		/// <param name="tool">Instance of activated tool</param>
-		public delegate void ToolActivatedHandler(Object sender, Type tool);
-		/// <summary>Occurs when user selects a tool from the list</summary>
-		public event ToolActivatedHandler ToolActivated;
+    /// <summary>
+    /// Represents available tools and manipulators for active document window. Basically used for Schema editing.
+    /// </summary>
+    class ToolBoxView : ToolWindow
+    {
+        /// <summary>
+        /// Notify that current tool has changed
+        /// </summary>
+        /// <param name="sender">Sender of the event. Typically it is ToolBoxView object instance.</param>
+        /// <param name="tool">Instance of activated tool</param>
+        public delegate void ToolActivatedHandler(Object sender, Type tool);
+        /// <summary>Occurs when user selects a tool from the list</summary>
+        public event ToolActivatedHandler ToolActivated;
 
-		List<ITool> toolsList;
+
         ToolBox toolBox;
-		public ToolBoxView()
-		{
-			TabText = "ToolBox";
-			AutoHidePortion = 0.15;
-            AddToolBox();
-            
-		}
-
-        public void SetCurrentTool(List<ITool> tools, Type toolToSet)
+        public ToolBoxView()
         {
-            if (tools != null)
-            {
-                foreach (ITool tool in tools)
-                {
-                    if (tool.GetType() == toolToSet) {
-                        ToolBoxTab tbt;
-                        ToolBoxItem tbi;
-                        tbt = toolBox[tool.ToolGroup];
-                        tbt.Selected = true;
-                        tbi = tbt[tool.ToolName];
-                        tbi.Selected = true;
-                        tbt.SelectedItem = tbi;
-                        //NotifyToolActivated(toolToSet);
-                        ToolChanged(tbi, null);
-                    }
-                }
-            }
+            TabText = "ToolBox";
+            AutoHidePortion = 0.15;
+            AddToolBox();
+
+        }
+
+        public void SetCurrentTool(ToolDescriptor toolToSet)
+        {
+            ToolBoxTab tbt;
+            ToolBoxItem tbi;
+            tbt = toolBox[toolToSet.ToolGroup];
+            tbt.Selected = true;
+            tbi = tbt[toolToSet.ToolName];
+            tbi.Selected = true;
+            tbt.SelectedItem = tbi;
+            //NotifyToolActivated(toolToSet);
+            ToolChanged(tbi, null);
             //OnToolsCollectionChanged(tools, toolToSet);
         }
 
-		public void OnToolsCollectionChanged(List<ITool> tools, Type currentTool)
-		{
+        public void OnToolsCollectionChanged(List<ToolDescriptor> tools, Type currentTool)
+        {
 
             ToolBoxTab tbtoselect = null;
             ToolBoxItem tbitoselect = null;
 
-			if (toolsList != tools)
-			{
-				toolsList = tools;
-				
-				SuspendLayout();
 
-                toolBox.DeleteAllTabs(true);
-                toolBox.SmallImageList = new ImageList();
-                
-    			if (tools != null)
-				{
-                    int imgnum = 0;
-					foreach (ITool tool in tools)
-					{
-                        ToolBoxTab tbt;
-                        ToolBoxItem tbi;
-						if((tbt=toolBox[tool.ToolGroup])==null)
-                        {
-                            tbt = new ToolBoxTab(tool.ToolGroup, -1);
-                            toolBox.AddTab(tbt);
-                        }
-                        tbi=new ToolBoxItem(tool.ToolName,imgnum++);
-                        toolBox.SmallImageList.Images.Add(tool.ToolIcon);
-                        tbt.AddItem(tbi);
+            SuspendLayout();
 
-                        tbi.Selected = false;
-						if (tool.GetType() == currentTool)
-						{
-                            tbi.Selected = true;
-                            tbtoselect = tbt;
-                            tbitoselect = tbi;
-                            tbi.Object = currentTool;
-							NotifyToolActivated((Type)tbi.Object);
-						}
-						else
-                           
-                            tbi.Object= tool.GetType();
-						
-						
-					}
-				}
-				ResumeLayout(false);
-                if (tbtoselect != null)
+            toolBox.DeleteAllTabs(true);
+            toolBox.SmallImageList = new ImageList();
+
+            if (tools != null)
+            {
+                int imgnum = 0;
+                foreach (ToolDescriptor tool in tools)
                 {
-                    tbtoselect.Selected = true;
-                    if (tbitoselect != null)
+                    ToolBoxTab tbt;
+                    ToolBoxItem tbi;
+                    if ((tbt = toolBox[tool.ToolGroup]) == null)
                     {
-                        tbitoselect.Selected = true;
-                        tbtoselect.SelectedItem = tbitoselect;
+                        tbt = new ToolBoxTab(tool.ToolGroup, -1);
+                        toolBox.AddTab(tbt);
                     }
+                    tbi = new ToolBoxItem(tool.ToolName, imgnum++);
+                    toolBox.SmallImageList.Images.Add(tool.ToolIcon);
+                    tbt.AddItem(tbi);
+
+                    tbi.Selected = false;
+                    if (tool.ToolType == currentTool)
+                    {
+                        tbi.Selected = true;
+                        tbtoselect = tbt;
+                        tbitoselect = tbi;
+                        tbi.Object = currentTool;
+                        NotifyToolActivated((Type)tbi.Object);
+                    }
+                    else
+
+                        tbi.Object = tool.ToolType;
                 }
             }
-			else
-			{
-			/*	foreach (Control control in Controls)
-				{
-					SuspendLayout();
-					if (control is RadioButton && (Type)control.Tag == currentTool)
-					{
-						RadioButton rb = (RadioButton)control;
-						rb.Checked = true;
-						rb.Focus();
-						rb.Tag = currentTool;
-						NotifyToolActivated((Type)rb.Tag);
-					}
-					ResumeLayout(false);
-				}
-             */
-			}
-            
-		}
+            ResumeLayout(false);
+            if (tbtoselect != null)
+            {
+                tbtoselect.Selected = true;
+                if (tbitoselect != null)
+                {
+                    tbitoselect.Selected = true;
+                    tbtoselect.SelectedItem = tbitoselect;
+                }
+            }
+            //SetCurrentTool( currentTool);
+        }
 
-		void ToolChanged(object sender, EventArgs e)
-		{
+        void ToolChanged(object sender, EventArgs e)
+        {
             if (sender is ToolBoxTab)
             {
                 ToolBoxTab tbt = (ToolBoxTab)sender;
                 if (tbt.SelectedItem != null)
-                   NotifyToolActivated((Type)tbt.SelectedItem.Object);
+                    NotifyToolActivated((Type)tbt.SelectedItem.Object);
                 //tbt.SelectedItem = null;
             }
             else
@@ -148,22 +117,22 @@ namespace FreeSCADA.Designer.Views
                 }
                 //MessageBox.Show(sender.ToString());
             }
-		}
+        }
 
-		private void NotifyToolActivated(Type tool)
-		{
-			if (ToolActivated != null)
-				ToolActivated(this, tool);
-		}
+        private void NotifyToolActivated(Type tool)
+        {
+            if (ToolActivated != null)
+                ToolActivated(this, tool);
+        }
 
-		public void Clean()
-		{
+        public void Clean()
+        {
             toolBox.DeleteAllTabs(true);
-		}
+        }
 
         void AddToolBox()
         {
-            toolBox= new ToolBox();
+            toolBox = new ToolBox();
 
             toolBox.BackColor = System.Drawing.SystemColors.Control;
             toolBox.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -180,5 +149,5 @@ namespace FreeSCADA.Designer.Views
             toolBox.TabSelectionChanged += new TabSelectionChangedHandler(ToolChanged);
             Controls.Add(toolBox);
         }
-	}
+    }
 }

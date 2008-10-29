@@ -10,7 +10,7 @@ using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
-    class ControlCreateTool<T>:BaseTool,ITool
+    class ControlCreateTool<T>:BaseTool
     {
         Point startPos;
 		bool isDragging;
@@ -24,27 +24,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 throw new Exception();
             visualChildren.Add(boundce);
 		}
-
-		#region ITool implementation
-		public String ToolName
-		{
-			get { return typeof(T).Name+" Tool"; }
-		}
-
-		public String ToolGroup
-		{
-			get { return StringResources.ToolControlsGroupName; }
-		}
-		public System.Drawing.Bitmap ToolIcon
-		{
-			get
-			{
-				return new System.Drawing.Bitmap(10, 10);
-			}
-		}
-		#endregion
-
-
 		protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
 		{
 			base.OnPreviewMouseLeftButtonDown(e);

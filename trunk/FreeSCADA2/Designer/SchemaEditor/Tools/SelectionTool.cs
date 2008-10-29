@@ -24,7 +24,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     /// multiselection implemented throw left button down and drag
     /// and throw clicks with shift down
     /// </summary>
-    class SelectionTool : BaseTool, ITool
+    class SelectionTool : BaseTool
     {
         Point startPos;
         Point movePos;
@@ -48,35 +48,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             selectionRectangle.Opacity = 0.5;
             visualChildren.Add(selectionRectangle);
 
-            ContextMenu = menu = new ToolContextMenu();
-            //need in  refectoring
-            menu.groupMenuItem.CommandParameter = this; 
-            menu.unGroupMenuItem.CommandParameter = this;
-            menu.cutMenuItem.CommandParameter = this;
-            menu.copyMenuItem.CommandParameter = this;
-            menu.pasteMenuItem.CommandParameter = this;
-            menu.viewXamlMenuItem.CommandParameter = this;
+           
             //need in refectoring 
         }
-        #region ITool implementation
-        public String ToolName
-        {
-            get { return "Selection Tool"; }
-        }
-
-        public String ToolGroup
-        {
-            get { return "Editor Tools"; }
-        }
-        public System.Drawing.Bitmap ToolIcon
-        {
-            get
-            {
-                return global::FreeSCADA.Designer.Properties.Resources.cursor;
-            }
-        }
-        #endregion
-
+  
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
             if (isDragged)
@@ -141,7 +116,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             }
             selectionRectangle.RenderOpen().Close();
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
-            (menu.groupMenuItem.Command as GroupCommand).RaiseCanExecuteChanged();
             RaiseObjectSelected(SelectedObject);
         }
 
@@ -230,13 +204,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 }
 
             }
-            (menu.groupMenuItem.Command as GroupCommand).RaiseCanExecuteChanged();
-            (menu.unGroupMenuItem.Command as UngroupCommand).RaiseCanExecuteChanged();
-            (menu.cutMenuItem.Command as CutCommand).RaiseCanExecuteChanged();
-            (menu.copyMenuItem.Command as CopyCommand).RaiseCanExecuteChanged();
-            (menu.pasteMenuItem.Command as PasteCommand).RaiseCanExecuteChanged();
-            (menu.viewXamlMenuItem.Command as XamlViewCommand).RaiseCanExecuteChanged();
-
+           
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
             RaiseObjectSelected(SelectedObject);
             e.Handled = false;
