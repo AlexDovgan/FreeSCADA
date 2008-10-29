@@ -18,7 +18,7 @@ using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
-    class PolylineTool:BaseTool,ITool
+    class PolylineTool:BaseTool
     {
         DrawingVisual objectPrview = new DrawingVisual();
         PointCollection pointsCollection = new PointCollection();
@@ -29,25 +29,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             visualChildren.Add(objectPrview);
         }
-
-        #region ITool Implementation
-        public String ToolName
-        {
-            get { return "Polyline Tool"; }
-        }
-
-        public String ToolGroup
-        {
-            get { return "Graphics Tools"; }
-        }
-        public System.Drawing.Bitmap ToolIcon
-        {
-            get
-            {
-                return global::FreeSCADA.Designer.Properties.Resources.shape_line_add;
-            }
-        }
-        #endregion
 
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {

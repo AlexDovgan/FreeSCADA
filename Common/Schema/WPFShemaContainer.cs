@@ -28,28 +28,29 @@ namespace FreeSCADA.Common.Schema
 
     public class WPFShemaContainer : System.Windows.Forms.Integration.ElementHost
 	{
-		SchemaDocument document;
+		//SchemaDocument document;
+        FrameworkElement view;
         myHelpScrollViewer scroll;
         System.Windows.Point origPanPoint;
         public delegate void ZoomDelegate(Point pt);
         public event ZoomDelegate ZoomInEvent;
         public event ZoomDelegate ZoomOutEvent;
 
-        public SchemaDocument Document
+        public FrameworkElement View
 		{
-			get { return document; }
+			get { return (Child as ScrollViewer).Content as FrameworkElement ; }
 			set
 			{
-				document = value;
-				(Child as ScrollViewer).Content = document.MainCanvas;
-				document.MainCanvas.Focusable = false;
-                if (!(document.MainCanvas.RenderTransform is System.Windows.Media.ScaleTransform))
-                    document.MainCanvas.RenderTransform = new System.Windows.Media.ScaleTransform();
+				
+				(Child as ScrollViewer).Content =view= value;
+				view.Focusable= false;
+                if (!(view.RenderTransform is System.Windows.Media.ScaleTransform))
+                    view.RenderTransform = new System.Windows.Media.ScaleTransform();
 
-                if (!document.MainCanvas.Resources.Contains("DesignerSettings_GridOn"))
+                if (!view.Resources.Contains("DesignerSettings_GridOn"))
                 {
-                    document.MainCanvas.Resources.Add("DesignerSettings_GridOn", true);
-                    document.MainCanvas.Resources.Add("DesignerSettings_GridDelta", 10.0);
+                    view.Resources.Add("DesignerSettings_GridOn", true);
+                    view.Resources.Add("DesignerSettings_GridDelta", 10.0);
                 }
 				//document.MainCanvas.Background = resources["GridBackgroundBrush"] as DrawingBrush;
 

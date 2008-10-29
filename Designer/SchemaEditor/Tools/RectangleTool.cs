@@ -20,7 +20,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     /// <summary>
     /// tool for rectangle creation
     /// </summary>
-    class RectangleTool : BaseTool, ITool
+    class RectangleTool : BaseTool
     {
 
         Point startPos;
@@ -38,25 +38,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             visualChildren.Add(objectPrview);
 
         }
-        #region ITool implementation
-        public String ToolName
-        {
-            get { return "Rectangle Tool"; }
-        }
-
-        public String ToolGroup
-        {
-            get { return "Graphics Tools"; }
-        }
-        public System.Drawing.Bitmap ToolIcon
-        {
-            get
-            {
-                return global::FreeSCADA.Designer.Properties.Resources.shape_square_add;
-            }
-        }
-        #endregion
-
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
 

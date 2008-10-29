@@ -118,7 +118,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             drawingContext.Close();
             drawingVisual.Opacity = 0;
             visualChildren.Add(drawingVisual);
-            
+           
         }
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
@@ -195,7 +195,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         public virtual void Deactivate()
         {
             SelectedObject=null;
-            AdornerLayer.GetAdornerLayer(AdornedElement).Remove(this);
+            if(AdornerLayer.GetAdornerLayer(AdornedElement)!=null)
+                AdornerLayer.GetAdornerLayer(AdornedElement).Remove(this);
         }
         protected  void NotifyToolFinished()
         {

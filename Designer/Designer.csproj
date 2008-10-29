@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{93466C99-5637-4243-A01A-7AF12F706889}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -90,6 +90,7 @@
     <Compile Include="SchemaEditor\Manipulators\GeometryHilightManipulator.cs" />
     <Compile Include="SchemaEditor\ObjectsFactory.cs" />
     <Compile Include="SchemaEditor\SchemaCommands.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="SchemaEditor\ShortProp.cs" />
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
@@ -150,10 +151,6 @@
       <DependentUpon>ProjectContentView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\XamlInPlaceWiew.resx">
-      <DependentUpon>XamlInPlaceWiew.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -183,6 +180,7 @@
     <Compile Include="Views\ToolBoxView.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Views\ToolDescriptor.cs" />
     <Compile Include="Views\ToolWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -191,12 +189,6 @@
     </Compile>
     <Compile Include="Dialogs\VariablesDialog.Designer.cs">
       <DependentUpon>VariablesDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\XamlInPlaceWiew.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\XamlInPlaceWiew.Designer.cs">
-      <DependentUpon>XamlInPlaceWiew.cs</DependentUpon>
     </Compile>
     <Compile Include="WindowManager.cs" />
   </ItemGroup>
@@ -215,7 +207,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
     <None Include="Resources\cut.png" />
     <None Include="Resources\disk.png" />
     <None Include="Resources\arrow_undo.png" />

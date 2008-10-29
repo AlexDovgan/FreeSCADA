@@ -2,12 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Markup;
 using System.Xml;
-using System.Windows.Controls;
-using System.Windows.Media;
+using System.Windows.Forms;
 using System.Windows;
-using System.Windows.Shapes;
+using System.Windows.Markup;
+using System.Windows.Controls;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
 using FreeSCADA.Common;
 using FreeSCADA.Designer.SchemaEditor.Tools;
@@ -17,10 +16,10 @@ using System.Drawing;
 
 namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 {
-  
-    class ToolContextMenu: ContextMenu
+
+    class ToolContextMenu : System.Windows.Forms.ContextMenu
     {
-        public MenuItem unGroupMenuItem = new MenuItem();
+      /*  public MenuItem unGroupMenuItem = new MenuItem();
         public MenuItem groupMenuItem = new MenuItem();
         public MenuItem copyMenuItem = new MenuItem();
         public MenuItem cutMenuItem = new MenuItem();
@@ -33,7 +32,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
             unGroupMenuItem.Header = "Ungroup";
             unGroupMenuItem.Command = new UngroupCommand();
-            Items.Add(unGroupMenuItem);
+            MenuItems.Add(unGroupMenuItem);
 
 
             groupMenuItem.Header = "Group";
@@ -56,7 +55,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             viewXamlMenuItem.Header = ((ICommandData)viewXamlMenuItem.Command).CommandName;
             //viewXamlMenuItem.Image = ((ICommandData)viewXamlMenuItem.Tag).CommandIcon;
             Items.Add(viewXamlMenuItem);
-        }
+        }*/
     }
     ///////////
     abstract class BaseCommand : ICommandData
@@ -421,52 +420,36 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
     class XamlViewCommand : BaseCommand
     {
-        SelectionTool tool;
-        public XamlViewCommand()
+
+        SchemaView _view;
+        public XamlViewCommand(SchemaView view)
         {
+            _view = view;
         }
         #region ICommand Members
         public override bool CanExecute(object o)
         {
-            if (o is SchemaView)
-                o = ((SchemaView)o).SchemaViewSelectionTool;
-            if (o is SelectionTool)
-                tool = o as SelectionTool;
-            else
-            {
-                Enabled = false;
-                return false;
-            }
-            if (tool.SelectedObject != null)
-            {
-                Enabled = true;
+            
                 return true;
-            }
-            Enabled = false;
-            return false;
+     
+    
             
         }
         public override void Execute(object o)
         {
+            
             try
             {
-                if (o is SchemaView)
-                    o = ((SchemaView)o).SchemaViewSelectionTool;
-                //object o = (((MainForm)Env.Current.MainWindow).windowManager.currentDocument as SchemaView).SchemaViewSelectionTool;
-                System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                XmlWriterSettings settings = new XmlWriterSettings();
-                settings.Indent = true;
-                settings.OmitXmlDeclaration = true;
-                XamlDesignerSerializationManager dsm = new XamlDesignerSerializationManager(XmlWriter.Create(sb, settings));
-                dsm.XamlWriterMode = XamlWriterMode.Expression;
-                XamlWriter.Save((o as SelectionTool).SelectedObject, dsm);
-                //string xaml = XamlWriter.Save((o as SelectionTool).selectedElements);
-                Views.XamlInPlaceWiew xw = new Views.XamlInPlaceWiew();
-                xw.XAMLtextBox.Text = sb.ToString();
-                xw.Owner = (System.Windows.Forms.Form)Env.Current.MainWindow;
-                object[] transferdata = { o, (o as SelectionTool).SelectedObject };
-                xw.Tag = transferdata;
-                xw.Show();
+                if (!_view.XamlView.Visible)
+                {
+                    _view.XamlView.Show();
+                    _view.UpdateXamlView();
+                }
+                else
+                {
+                    _view.XamlView.Hide();
+                }
+              
             }
             catch { }
         }

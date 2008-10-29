@@ -175,13 +175,7 @@ namespace FreeSCADA.Designer
             }
         }
 
-        /// <summary>
-        /// Change graphics object
-        /// </summary>
-        public void ChangeGraphicsObject(System.Windows.UIElement old, System.Windows.UIElement el)
-        {
-            windowManager.ChangeGraphicsObject(old, el);
-        }
+      
 
         /// <summary>
         /// 

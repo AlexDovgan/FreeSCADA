@@ -30,7 +30,7 @@ namespace FreeSCADA.Common
 				environmentInstance.communicationPlugins.Load();
 			}
 		}
-
+        
 		public static void Deinitialize()
 		{
 			environmentInstance = null;

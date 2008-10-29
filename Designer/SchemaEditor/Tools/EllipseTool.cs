@@ -21,7 +21,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     /// Ellipse object creation tool
     /// </summary>
     /// 
-    class EllipseTool : BaseTool, ITool
+    class EllipseTool : BaseTool
     {
 
         Point startPos;
@@ -33,25 +33,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             objectPrview.Opacity = 0.5;
             visualChildren.Add(objectPrview);
         }
-        #region ITool Implementation
-        public String ToolName
-        {
-            get { return "Ellipse Tool"; }
-        }
-
-        public String ToolGroup
-        {
-            get { return "Graphics Tools"; }
-        }
-        public System.Drawing.Bitmap ToolIcon
-        {
-            get
-            {
-                return global::FreeSCADA.Designer.Properties.Resources.shape_ellipse_add;
-            }
-        }
-        #endregion
-
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
             if (isDragged)

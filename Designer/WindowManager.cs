@@ -58,7 +58,7 @@ namespace FreeSCADA.Designer
 
 		public void CreateNewSchema()
 		{
-			SchemaView view = new SchemaView(this);
+			SchemaView view = new SchemaView();
 			if(view.CreateNewDocument() == false)
 			{
 				System.Windows.MessageBox.Show( DialogMessages.CannotCreateSchema,
@@ -120,7 +120,7 @@ namespace FreeSCADA.Designer
 		public void OnOpenProjectEntity(string name)
 		{
 			// Open your schema and other document types here by entity name
-            SchemaView view = new SchemaView(this);
+            SchemaView view = new SchemaView();
 			if (view.LoadDocument(name) == false)
 			{
 				System.Windows.MessageBox.Show(DialogMessages.CannotLoadSchema,
@@ -349,10 +349,7 @@ namespace FreeSCADA.Designer
             if (currentDocument != null) currentDocument.Focus();
         }
 
-        public void ChangeGraphicsObject(System.Windows.UIElement old, System.Windows.UIElement el)
-        {
-            if (currentDocument != null) ((SchemaView)currentDocument).ChangeGraphicsObject(old, el);
-        }
+      
 
         public void ExecuteCommand(ICommand Command, Object param)
         {
@@ -366,10 +363,6 @@ namespace FreeSCADA.Designer
                 Command.Execute(param);
             }
         }
-        
-        public void SetCurrentTool(List<ITool> tools, Type toolToSet)
-        {
-            toolBoxView.SetCurrentTool(tools, toolToSet);        
-        }
+  
     }
 }

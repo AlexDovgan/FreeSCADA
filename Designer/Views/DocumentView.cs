@@ -15,17 +15,22 @@ namespace FreeSCADA.Designer.Views
         public delegate void ObjectSelectedDelegate(object sender);
         public event ObjectSelectedDelegate ObjectSelected;
 
-        public delegate void ToolsCollectionChangedHandler(List<ITool> tools, Type defaultTool);
+        public delegate void ToolsCollectionChangedHandler(List<ToolDescriptor> tools, Type defaultTool);
         public event ToolsCollectionChangedHandler ToolsCollectionChanged;
 
         string documentName = "";
 		bool modifiedFlag = false;
 		bool handleModifiedFlagOnClose = true;
 
-        public List<ICommandData> documentCommands = new List<ICommandData>();
+        public List<ICommandData> DocumentCommands
+        {
+            get;
+            protected set;
+        }
 
 		public DocumentView()
 		{
+            DocumentCommands = new List<ICommandData>();
 			DockAreas = DockAreas.Float | DockAreas.Document;
 			documentName = "Document";
 			UpdateCaption();
@@ -62,7 +67,7 @@ namespace FreeSCADA.Designer.Views
 		public virtual void OnActivated()
 		{//in future at this place need to use WindowManager
             //our paradigm mean that  Views does not know about MainForm
-            foreach (ICommandData cmd in documentCommands)
+            foreach (ICommandData cmd in DocumentCommands)
             {
                 cmd.CommandToolStripItem = (Env.Current.MainWindow as MainForm).AddDocumentCommand(cmd);
             }
@@ -72,7 +77,7 @@ namespace FreeSCADA.Designer.Views
 		{
             //in future at this place need to use WindowManager
             //our paradigm mean that  Views does not know about MainForm
-            foreach (ICommandData cmd in documentCommands)
+            foreach (ICommandData cmd in DocumentCommands)
             {
                 if (cmd.CommandToolStripItem != null)
                     (Env.Current.MainWindow as MainForm).RemoveDocumentCommand(cmd.CommandToolStripItem);
@@ -107,7 +112,7 @@ namespace FreeSCADA.Designer.Views
 				TabText += " *";
 		}
 
-        protected void NotifyToolsCollectionChanged(List<ITool> tools,Type  currentTool)
+        protected void NotifyToolsCollectionChanged(List<ToolDescriptor> tools,Type  currentTool)
         {
             if (ToolsCollectionChanged != null)
                 ToolsCollectionChanged(tools,currentTool);
