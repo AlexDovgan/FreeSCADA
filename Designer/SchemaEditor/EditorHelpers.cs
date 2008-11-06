@@ -16,6 +16,7 @@ using FreeSCADA.Designer.SchemaEditor.Manipulators;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using System.ComponentModel;
 using System.Windows.Data;
+
 namespace FreeSCADA.Designer.SchemaEditor
 {
     

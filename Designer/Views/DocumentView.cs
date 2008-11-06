@@ -17,6 +17,8 @@ namespace FreeSCADA.Designer.Views
 
         public delegate void ToolsCollectionChangedHandler(List<ToolDescriptor> tools, Type defaultTool);
         public event ToolsCollectionChangedHandler ToolsCollectionChanged;
+        public delegate void SetCurrentToolHandler(ToolDescriptor defaultTool);
+        public event SetCurrentToolHandler SetCurrentTool;
 
         string documentName = "";
 		bool modifiedFlag = false;
@@ -116,6 +118,12 @@ namespace FreeSCADA.Designer.Views
         {
             if (ToolsCollectionChanged != null)
                 ToolsCollectionChanged(tools,currentTool);
+        }
+
+        protected void NotifySetCurrentTool(ToolDescriptor currentTool)
+        {
+            if (SetCurrentTool != null)
+                SetCurrentTool(currentTool);
         }
 
         protected override void OnClosed(EventArgs e)

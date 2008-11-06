@@ -83,6 +83,7 @@ namespace FreeSCADA.Common.Schema
 
         public void SaveSchema()
         {
+            WPFShemaContainer.ViewGrid(MainCanvas as Canvas, false);    // delete grid before save
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
             settings.OmitXmlDeclaration = true;
@@ -94,6 +95,10 @@ namespace FreeSCADA.Common.Schema
                 Env.Current.Project.SetData("Schemas/" + Name + "/xaml", ms);
             }
             IsModified = false;
+            if ((bool)MainCanvas.FindResource("DesignerSettings_GridOn") == true && Env.Current.Mode == FreeSCADA.ShellInterfaces.EnvironmentMode.Designer)
+            {
+                WPFShemaContainer.ViewGrid(MainCanvas as Canvas, true); // grid back if necessary
+            }
         }
         public void LinkActions()
         {

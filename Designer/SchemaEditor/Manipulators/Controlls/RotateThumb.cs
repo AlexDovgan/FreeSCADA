@@ -11,7 +11,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
     /// <summary>
     /// Rotating controll for DragResizeRotateManipulator
     /// </summary>
-    class RotateThumb : Thumb
+    public class RotateThumb : Thumb
     {
         double initialAngle;
         private Vector startVector;

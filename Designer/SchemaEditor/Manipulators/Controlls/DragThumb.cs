@@ -22,11 +22,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
         void DragThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
             FrameworkElement item = this.DataContext as FrameworkElement;
-            double gridDelta = (double)item.FindResource("DesignerSettings_GridDelta");
-            bool gridOn = (bool)item.FindResource("DesignerSettings_GridOn");
 
             if (item != null)
             {
+                double gridDelta = (double)item.FindResource("DesignerSettings_GridDelta");
+                bool gridOn = (bool)item.FindResource("DesignerSettings_GridOn");
                 Point dragDelta = new Point(e.HorizontalChange, e.VerticalChange);
 
                 dragDelta = RenderTransform.Transform(dragDelta);

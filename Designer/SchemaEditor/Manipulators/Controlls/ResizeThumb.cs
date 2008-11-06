@@ -56,6 +56,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
             if (ParentItem != null)
             {
                 double deltaVertical=0, deltaHorizontal=0;
+                double gridDelta = (double)ParentItem.FindResource("DesignerSettings_GridDelta");
+                bool gridOn = (bool)ParentItem.FindResource("DesignerSettings_GridOn");
                 
            
                 Point dragDelta= ParentItem.RenderTransform.Inverse.Transform(new Point(e.HorizontalChange, e.VerticalChange ));
@@ -99,8 +101,15 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
                 Point sizeDeltaTrans = ParentItem.RenderTransform.Transform(sizeDelta);
                 Vector v=sizeDelta-sizeDeltaTrans;
 
-                Canvas.SetTop(ParentItem, Canvas.GetTop(ParentItem) + v.Y * parentItem.RenderTransformOrigin.Y);
-                Canvas.SetLeft(ParentItem, Canvas.GetLeft(ParentItem) + v.X * parentItem.RenderTransformOrigin.X);
+                double x = Canvas.GetTop(ParentItem) + v.Y * parentItem.RenderTransformOrigin.Y;
+                double y = Canvas.GetLeft(ParentItem) + v.X * parentItem.RenderTransformOrigin.X;
+                /*if (gridOn)
+                {
+                    x -= x % gridDelta;
+                    y -= y % gridDelta;
+                }*/
+                Canvas.SetTop(ParentItem, x);
+                Canvas.SetLeft(ParentItem, y);
             }
             //e.Handled = true;
         }

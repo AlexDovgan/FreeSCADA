@@ -14,7 +14,8 @@ namespace FreeSCADA.Common.Schema
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if ((e.Key == System.Windows.Input.Key.Left || e.Key == System.Windows.Input.Key.Right || e.Key == System.Windows.Input.Key.Up || e.Key == System.Windows.Input.Key.Down) &&
-                (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) == System.Windows.Input.ModifierKeys.None)
+                ((System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) == System.Windows.Input.ModifierKeys.None) &&
+                Env.Current.Mode == FreeSCADA.ShellInterfaces.EnvironmentMode.Designer)
             {
                 // the Keydown event for Arrows is not catched by the ScrollViewer, but is used to position the selected element inside Canvas
                 // Arrows = positioning
@@ -53,8 +54,14 @@ namespace FreeSCADA.Common.Schema
                     view.Resources.Add("DesignerSettings_GridOn", true);
                     view.Resources.Add("DesignerSettings_GridDelta", 10.0);
                 }
-               
-               
+				//document.MainCanvas.Background = resources["GridBackgroundBrush"] as DrawingBrush;
+
+                if ((bool)view.FindResource("DesignerSettings_GridOn") == true && Env.Current.Mode == FreeSCADA.ShellInterfaces.EnvironmentMode.Designer)
+                {
+                    ViewGrid(view as Canvas, true);
+                }
+
+				//document.MainCanvas.Background = resources["GridBackgroundBrush"] as DrawingBrush;
 
 			}
 
@@ -147,5 +154,61 @@ namespace FreeSCADA.Common.Schema
                 ZoomOutEvent(pt);
         }
         
+
+
+        public static void ViewGrid(Canvas view, bool activate)
+        {
+            if (activate)
+            {
+                double grid = (double)view.FindResource("DesignerSettings_GridDelta");
+                Color c = ((view as Canvas).Background as SolidColorBrush).Color;
+                c.R = (byte)(255 - c.R);
+                c.G = (byte)(255 - c.G);
+                c.B = (byte)(255 - c.B);
+
+                GeometryDrawing aDrawing = new GeometryDrawing();
+
+                // Use geometries to describe two overlapping ellipses.
+                //EllipseGeometry ellipse1 = new EllipseGeometry();
+                //ellipse1.RadiusX = 1;
+                //ellipse1.RadiusY = 1;
+                //ellipse1.Center = new Point(0, 0);
+
+                Rect r = new Rect(0, 0, grid, grid);
+                RectangleGeometry rect1 = new RectangleGeometry(r);
+                //GeometryGroup ellipses = new GeometryGroup();
+                //ellipses.Children.Add(ellipse1);
+                //ellipses.Children.Add(rect1);
+
+                // Add the geometry to the drawing.
+                aDrawing.Geometry = rect1;
+
+                // Specify the drawing's fill.
+
+                aDrawing.Brush = ((view as Canvas).Background as SolidColorBrush);
+
+                // Specify the drawing's stroke.
+                Pen stroke = new Pen();
+                stroke.Thickness = 0.5;
+                stroke.Brush = new SolidColorBrush(c);
+                aDrawing.Pen = stroke;
+
+                // Create a DrawingBrush
+                DrawingBrush myDrawingBrush = new DrawingBrush();
+                myDrawingBrush.Drawing = aDrawing;
+                myDrawingBrush.Stretch = Stretch.None;
+                myDrawingBrush.TileMode = TileMode.Tile;
+                myDrawingBrush.Viewport = new Rect(0, 0, grid, grid);
+                myDrawingBrush.ViewportUnits = BrushMappingMode.Absolute;
+                view.Background = myDrawingBrush;
+            }
+            else
+            {
+                if (view.Background is DrawingBrush)
+                {
+                    view.Background = ((view.Background as DrawingBrush).Drawing as GeometryDrawing).Brush;
+                }
+            }
+        }
     }
 }
