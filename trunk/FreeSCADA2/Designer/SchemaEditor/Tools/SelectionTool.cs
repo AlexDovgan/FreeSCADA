@@ -115,7 +115,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             }
             selectionRectangle.RenderOpen().Close();
-            AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+            //AdornerLayer.GetAdornerLayer(AdornedElement).Update();
             RaiseObjectSelected(SelectedObject);
         }
 
