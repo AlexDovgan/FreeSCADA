@@ -35,6 +35,7 @@ namespace FreeSCADA.Designer.SchemaEditor
                 BindingExpression bindingExpression = value as BindingExpression;
                 if (bindingExpression == null)
                     throw new Exception();
+           
                 return  bindingExpression.ParentBinding;
             }
             
@@ -57,6 +58,7 @@ namespace FreeSCADA.Designer.SchemaEditor
         {
           //  TemplateResources.InitializeComponent();
             Register<BindingExpression,BindingConvertor>();
+            Register<BindingExpression, BindingConvertor>();
         }
             
         public static UIElement FindTopParentUnder(DependencyObject c, DependencyObject el)

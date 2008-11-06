@@ -82,7 +82,7 @@
     <Compile Include="Schema\Actions\ValueAction.cs" />
     <Compile Include="Schema\Actions\RotateAction.cs" />
     <Compile Include="Schema\Actions\ShowAction.cs" />
-    <Compile Include="Schema\ChannelsDataSource.cs" />
+    <Compile Include="Schema\ChannelDataSource.cs" />
     <Compile Include="Schema\SchemaDocument.cs" />
     <Compile Include="Schema\WPFShemaContainer.cs" />
   </ItemGroup>

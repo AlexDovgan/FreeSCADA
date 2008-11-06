@@ -3,6 +3,7 @@ using System.Windows.Media;
 using System.Windows.Input;
 using System.Windows;
 
+
 namespace FreeSCADA.Common.Schema
 {
     public class myHelpScrollViewer : ScrollViewer
@@ -52,7 +53,8 @@ namespace FreeSCADA.Common.Schema
                     view.Resources.Add("DesignerSettings_GridOn", true);
                     view.Resources.Add("DesignerSettings_GridDelta", 10.0);
                 }
-				//document.MainCanvas.Background = resources["GridBackgroundBrush"] as DrawingBrush;
+               
+               
 
 			}
 
