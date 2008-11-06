@@ -81,11 +81,17 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         void pointDragDelta(object sender, DragDeltaEventArgs e)
         {
             Polyline poly = AdornedElement as Polyline;
+            double gridDelta = (double)poly.FindResource("DesignerSettings_GridDelta");
+            bool gridOn = (bool)poly.FindResource("DesignerSettings_GridOn");
             
             Point p=poly.Points[visualChildren.IndexOf(sender as PointDragThumb)];
             p.X+=e.HorizontalChange;
             p.Y+= e.VerticalChange;
-
+            if (gridOn)
+            {
+                p.X -= p.X % gridDelta;
+                p.X -= p.X % gridDelta;
+            }
             poly.Points[visualChildren.IndexOf(sender as PointDragThumb)] = p;
             
             InvalidateArrange();
@@ -102,8 +108,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            Polyline poly = AdornedElement as Polyline;
-            
+            Polyline poly = AdornedElement as Polyline;            
 
             foreach (PointDragThumb pdt in visualChildren)
             {

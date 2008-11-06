@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Windows.Media.Imaging;
 using System.Windows.Documents;
 using System.Windows.Markup;
+using FreeSCADA.Common.Schema;
 
 
 
@@ -119,14 +120,24 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             get
             {
                 System.ComponentModel.TypeConverter ccv = System.ComponentModel.TypeDescriptor.GetConverter(typeof(System.Drawing.Color));
-                return (System.Drawing.Color)ccv.ConvertFromString(((frameworkElement as Canvas).Background as SolidColorBrush).Color.ToString());
+                if ((frameworkElement as Canvas).Background is SolidColorBrush)
+                    return (System.Drawing.Color)ccv.ConvertFromString(((frameworkElement as Canvas).Background as SolidColorBrush).Color.ToString());
+                else
+                    return (System.Drawing.Color)ccv.ConvertFromString(((((frameworkElement as Canvas).Background as DrawingBrush).Drawing as GeometryDrawing).Brush as SolidColorBrush).Color.ToString());
             }
             set
             {
                 RaisePropertiesBrowserChanged((UIElement)frameworkElement);
-                (frameworkElement as Canvas).Background = (frameworkElement as Canvas).Background.Clone();
-                ((frameworkElement as Canvas).Background as SolidColorBrush).Color = Color.FromArgb(value.A, value.R, value.G, value.B); ;
-
+                if ((frameworkElement as Canvas).Background is SolidColorBrush)
+                {
+                    (frameworkElement as Canvas).Background = (frameworkElement as Canvas).Background.Clone();
+                    ((frameworkElement as Canvas).Background as SolidColorBrush).Color = Color.FromArgb(value.A, value.R, value.G, value.B); ;
+                }
+                else
+                {
+                    (((frameworkElement as Canvas).Background as DrawingBrush).Drawing as GeometryDrawing).Brush.Clone();
+                    ((((frameworkElement as Canvas).Background as DrawingBrush).Drawing as GeometryDrawing).Brush as SolidColorBrush).Color = Color.FromArgb(value.A, value.R, value.G, value.B); ;
+                }
             }
         }
 
@@ -149,6 +160,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
                     frameworkElement.Resources.Remove("DesignerSettings_GridOn");
                 }
                 frameworkElement.Resources.Add("DesignerSettings_GridOn", value);
+                WPFShemaContainer.ViewGrid(frameworkElement as Canvas, value);
             }
         }
 
@@ -171,6 +183,11 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
                     frameworkElement.Resources.Remove("DesignerSettings_GridDelta");
                 }
                 frameworkElement.Resources.Add("DesignerSettings_GridDelta", value);
+                WPFShemaContainer.ViewGrid(frameworkElement as Canvas, false);
+                if ((bool)(frameworkElement as Canvas).FindResource("DesignerSettings_GridOn") == true)
+                {
+                    WPFShemaContainer.ViewGrid(frameworkElement as Canvas, true);
+                }
             }
         }
     }

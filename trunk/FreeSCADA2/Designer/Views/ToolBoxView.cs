@@ -30,7 +30,7 @@ namespace FreeSCADA.Designer.Views
 
         }
 
-        public void SetCurrentTool(ToolDescriptor toolToSet)
+        public void OnSetCurrentTool(ToolDescriptor toolToSet)
         {
             ToolBoxTab tbt;
             ToolBoxItem tbi;

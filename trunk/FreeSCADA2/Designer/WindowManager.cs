@@ -89,7 +89,8 @@ namespace FreeSCADA.Designer
 			}
             
 			view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
-			view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
+            view.SetCurrentTool += toolBoxView.OnSetCurrentTool;
+            view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
 			documentViews.Add(view);
 			view.Show(dockPanel, DockState.Document);
 		}
@@ -130,6 +131,7 @@ namespace FreeSCADA.Designer
 				return;
 			}
             view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
+            view.SetCurrentTool += toolBoxView.OnSetCurrentTool;
             documentViews.Add(view);
             view.Show(dockPanel, DockState.Document);
 		}

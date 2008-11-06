@@ -336,10 +336,10 @@ namespace FreeSCADA.Designer.Views
 
             else if (e.Key == System.Windows.Input.Key.Escape)
             {
-                CurrentTool = null;
-                CurrentTool = defaultTool;
-                
-                NotifyToolsCollectionChanged(AvailableTools, activeTool.GetType());
+                //CurrentTool = null;
+                //CurrentTool = defaultTool;
+                NotifySetCurrentTool(toolsList[0]);
+                //NotifyToolsCollectionChanged(AvailableTools, activeTool.GetType());
                 //windowManager.SetCurrentTool(AvailableTools, defaultTool);
             }
             else if (e.Key == System.Windows.Input.Key.F5)

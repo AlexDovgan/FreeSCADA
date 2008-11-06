@@ -36,7 +36,7 @@
         <Setter Property="Control.Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type s:ResizeThumb}">
-                    <Rectangle Stroke="Black" StrokeThickness="1"  Fill="White"/>
+                    <Rectangle Stroke="Black" StrokeThickness="1"  Fill="White" Opacity="0.5"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
