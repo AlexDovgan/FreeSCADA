@@ -25,6 +25,7 @@ namespace FreeSCADA.Designer
 			InitializeComponent();
 			Env.Initialize(this, mainMenu, FreeSCADA.ShellInterfaces.EnvironmentMode.Designer);
 			windowManager = new WindowManager(dockPanel);
+			CommandManager.Initialize(toolStrip1);
 			UpdateCaption();
 		}
 
@@ -173,34 +174,6 @@ namespace FreeSCADA.Designer
                 windowManager.SaveProject();
                 UpdateCaption();
             }
-        }
-
-      
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cmd"></param>
-        public ToolStripItem AddDocumentCommand(ICommandData cmd)
-        {
-            ToolStripItem tsi = (ToolStripItem)Activator.CreateInstance(cmd.ToolStripItemType);
-            tsi.Name = cmd.CommandName;
-            tsi.Image = cmd.CommandIcon;
-            tsi.Tag = cmd.Tag;
-            tsi.Click += new EventHandler(cmd.EvtHandler);
-            tsi.Enabled = cmd.CanExecute(null);
-            cmd.CommandToolStripItem = tsi;
-            Control[] ts = this.Controls.Find("toolStrip1", true);
-            if (ts[0] != null) (ts[0] as ToolStrip).Items.Add(tsi);
-            return tsi;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        public void RemoveDocumentCommand(ToolStripItem tsi)
-        {
-            Control[] ts = this.Controls.Find("toolStrip1", true);
-            if (ts[0] != null) (ts[0] as ToolStrip).Items.Remove(tsi);
         }
     }
 }

@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Windows.Input;
 using FreeSCADA.Common;
 using FreeSCADA.Designer.Dialogs;
 using FreeSCADA.Designer.Views;
 using WeifenLuo.WinFormsUI.Docking;
-using System.Windows.Input;
-using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Designer
 {
-    class WindowManager
+	class WindowManager 
     {
 		WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel;
 
@@ -54,6 +53,8 @@ namespace FreeSCADA.Designer
 			projectContentView.Close();
 			toolBoxView.Close();
 			propertyBrowserView.Close();
+
+			dockPanel.ActiveDocumentChanged -= new EventHandler(OnActiveDocumentChanged);
 		}
 
 		public void CreateNewSchema()

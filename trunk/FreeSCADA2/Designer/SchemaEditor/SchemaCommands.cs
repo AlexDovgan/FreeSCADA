@@ -76,6 +76,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         #region ICommandData Members
 
         public virtual string CommandName { get { return null; } }
+		public virtual string CommandDescription { get { return null; }	}
         public virtual Bitmap CommandIcon { get { return null; } }
         System.Windows.Forms.ToolStripItem m_tsi;
         public System.Windows.Forms.ToolStripItem CommandToolStripItem
@@ -160,8 +161,13 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         public override string CommandName
         {
-            get { return "UnGroup"; }
+            get { return StringResources.CommandUngroupName; }
         }
+
+		public override string CommandDescription 
+		{ 
+			get { return StringResources.CommandUngroupDescription; } 
+		}
 
         public override Bitmap CommandIcon
         {
@@ -216,8 +222,13 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         public override string CommandName
         {
-            get { return "Group";}
+			get { return StringResources.CommandGroupName; }
         }
+
+		public override string CommandDescription
+		{
+			get { return StringResources.CommandGroupDescription; }
+		}
 
         public override Bitmap CommandIcon
         {
@@ -274,8 +285,13 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         public override string CommandName
         {
-            get { return "Copy";}
+            get { return StringResources.CommandCopyName;}
         }
+
+		public override string CommandDescription
+		{
+			get { return StringResources.CommandCopyDescription; }
+		}
 
         public override Bitmap CommandIcon
         {
@@ -330,8 +346,13 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         public override string CommandName
         {
-            get { return "Cut";}
+            get { return StringResources.CommandCutName;}
         }
+
+		public override string CommandDescription
+		{
+			get { return StringResources.CommandCutDescription; }
+		}
 
         public override Bitmap CommandIcon
         {
@@ -396,10 +417,15 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         #endregion ICommand Members
         #region ICommandData Members
 
-        public override string CommandName
-        {
-            get { return "Paste";}
-        }
+		public override string CommandName
+		{
+			get { return StringResources.CommandPasteName; }
+		}
+
+		public override string CommandDescription
+		{
+			get { return StringResources.CommandPasteDescription; }
+		}
 
         public override Bitmap CommandIcon
         {
@@ -457,10 +483,15 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         #endregion ICommand Members
         #region ICommandData Members
 
-        public override string CommandName
-        {
-            get { return "XAML representation";}
-        }
+		public override string CommandName
+		{
+			get { return StringResources.CommandXamlViewName; }
+		}
+
+		public override string CommandDescription
+		{
+			get { return StringResources.CommandXamlViewDescription; }
+		}
 
         public override Bitmap CommandIcon
         {
@@ -521,10 +552,15 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         #endregion ICommand Members
         #region ICommandData Members
 
-        public override string CommandName
-        {
-            get { return "ZoomIn";}
-        }
+		public override string CommandName
+		{
+			get { return StringResources.CommandZoomInName; }
+		}
+
+		public override string CommandDescription
+		{
+			get { return StringResources.CommandZoomInDescription; }
+		}
 
         public override Bitmap CommandIcon
         {
@@ -560,10 +596,15 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         #endregion ICommand Members
         #region ICommandData Members
 
-        public override string CommandName
-        {
-            get { return "ZoomOut"; }
-        }
+		public override string CommandName
+		{
+			get { return StringResources.CommandZoomOutName; }
+		}
+
+		public override string CommandDescription
+		{
+			get { return StringResources.CommandZoomOutDescription; }
+		}
 
         public override Bitmap CommandIcon
         {
@@ -610,10 +651,15 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         #endregion ICommand Members
         #region ICommandData Members
 
-        public override string CommandName
-        {
-            get { return "Undo"; }
-        }
+		public override string CommandName
+		{
+			get { return StringResources.CommandUndoName; }
+		}
+
+		public override string CommandDescription
+		{
+			get { return StringResources.CommandUndoDescription; }
+		}
 
         public override Bitmap CommandIcon
         {
@@ -660,10 +706,15 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         #endregion ICommand Members
         #region ICommandData Members
 
-        public override string CommandName
-        {
-            get { return "Redo"; }
-        }
+		public override string CommandName
+		{
+			get { return StringResources.CommandRedoName; }
+		}
+
+		public override string CommandDescription
+		{
+			get { return StringResources.CommandRedoDescription; }
+		}
 
         public override Bitmap CommandIcon
         {
@@ -703,6 +754,11 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             get { return "Null"; }
         }
+
+		public override string CommandDescription
+		{
+			get { return ""; }
+		}
 
         public override Bitmap CommandIcon
         {

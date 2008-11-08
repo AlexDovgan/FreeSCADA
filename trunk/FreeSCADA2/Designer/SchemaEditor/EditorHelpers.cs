@@ -233,7 +233,7 @@ namespace FreeSCADA.Designer.SchemaEditor
         {
             if (source is IAddChild)
             {
-                ContentPropertyAttribute srcCntAttr,destCntattr;
+                ContentPropertyAttribute srcCntAttr;
                 if ((TypeDescriptor.GetAttributes(source)[typeof(ContentPropertyAttribute)] is ContentPropertyAttribute))
                 {
                     srcCntAttr = TypeDescriptor.GetAttributes(source)[typeof(ContentPropertyAttribute)] as ContentPropertyAttribute;

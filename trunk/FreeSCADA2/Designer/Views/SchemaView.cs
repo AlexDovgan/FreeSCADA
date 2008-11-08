@@ -1,19 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Xml;
-using System.Xml.Xsl;
+using System.Windows.Forms;
 using System.Windows.Markup;
 using System.Windows.Media;
-using System.Windows.Forms;
-using System.Collections.Generic;
-using FreeSCADA.ShellInterfaces;
-using FreeSCADA.Designer.SchemaEditor;
-using FreeSCADA.Common.Schema;
+using System.Xml;
+using System.Xml.Xsl;
 using FreeSCADA.Common;
+using FreeSCADA.Common.Schema;
+using FreeSCADA.Designer.SchemaEditor;
+using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
+using FreeSCADA.Designer.SchemaEditor.ShortProperties;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
-using FreeSCADA.Designer.SchemaEditor.ShortProperties;
-using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -200,54 +199,51 @@ namespace FreeSCADA.Designer.Views
         private void CreateToolList()
         {
             System.Drawing.Bitmap blankBitmap = new System.Drawing.Bitmap(10, 10);
-            toolsList.Add(new  ToolDescriptor("Selection Tool",
-                "Editor Tools",
+			toolsList.Add(new ToolDescriptor(StringResources.ToolSelection,
+				StringResources.ToolGrphicsGroupName,
                 global::FreeSCADA.Designer.Properties.Resources.cursor,
                 typeof(SelectionTool)));
-            toolsList.Add(new ToolDescriptor("Rectangle Tool",
-                "Graphics Tools",
+            toolsList.Add(new ToolDescriptor(StringResources.ToolRectangle,
+				StringResources.ToolGrphicsGroupName,
                 global::FreeSCADA.Designer.Properties.Resources.shape_square_add,
                 typeof(RectangleTool)));
-            toolsList.Add(new ToolDescriptor("Ellipse Tool",
-                "Graphics Tools",
+            toolsList.Add(new ToolDescriptor(StringResources.ToolEllipse,
+				StringResources.ToolGrphicsGroupName,
                 global::FreeSCADA.Designer.Properties.Resources.shape_ellipse_add,
                 typeof(EllipseTool)));
-            toolsList.Add(new ToolDescriptor("TextBox Tool",
-                "Graphics Tools",
+            toolsList.Add(new ToolDescriptor(StringResources.ToolTextbox,
+				StringResources.ToolGrphicsGroupName,
                 global::FreeSCADA.Designer.Properties.Resources.textfield_add,
                 typeof(TextBoxTool)));
-            toolsList.Add(new ToolDescriptor("Polyline Tool",
-                "Graphics Tools",
+            toolsList.Add(new ToolDescriptor(StringResources.ToolPolyline,
+                StringResources.ToolGrphicsGroupName,
                 global::FreeSCADA.Designer.Properties.Resources.shape_line_add,
                 typeof(PolylineTool)));
-            toolsList.Add(new ToolDescriptor("Action Edit Tool",
-                "Editor Tools",
+            toolsList.Add(new ToolDescriptor(StringResources.ToolActionEdit,
+                StringResources.ToolEditorGroupName,
                 global::FreeSCADA.Designer.Properties.Resources.cog_edit,
                 typeof(ActionEditTool)));
-            toolsList.Add(new ToolDescriptor("Button Tool",
-                "Controll Tools",
+            toolsList.Add(new ToolDescriptor(StringResources.ToolButton,
+                StringResources.ToolControlsGroupName,
                 blankBitmap ,
                  typeof(ControlCreateTool<System.Windows.Controls.Button>)));
-            toolsList.Add(new ToolDescriptor("ProgressBar Tool",
-                "Controll Tools",
+            toolsList.Add(new ToolDescriptor(StringResources.ToolProgressbar,
+				StringResources.ToolControlsGroupName,
                 blankBitmap,
                 typeof(ControlCreateTool<System.Windows.Controls.ProgressBar>)));
-            toolsList.Add(new ToolDescriptor("ScrollBar Tool",
-                "Controll Tools",
+            toolsList.Add(new ToolDescriptor(StringResources.ToolProgressbar,
+				StringResources.ToolControlsGroupName,
                 blankBitmap,
                 typeof(ControlCreateTool<System.Windows.Controls.Primitives.ScrollBar>)));
-            toolsList.Add(new ToolDescriptor("ContentControl Tool",
-                "Controll Tools",
+            toolsList.Add(new ToolDescriptor(StringResources.ToolContentControl,
+				StringResources.ToolControlsGroupName,
                 blankBitmap,
                 typeof(ControlCreateTool<System.Windows.Controls.ContentControl>)));
-            toolsList.Add(new ToolDescriptor("ContentControl Tool",
-                "Controll Tools",
+            toolsList.Add(new ToolDescriptor(StringResources.ToolSlider,
+				StringResources.ToolControlsGroupName,
                 blankBitmap,
                 typeof(ControlCreateTool<System.Windows.Controls.Slider>)));
-        
         }
-            
-        
 
         void undoBuff_CanExecuteChanged(object sender, EventArgs e)
         {

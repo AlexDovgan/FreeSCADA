@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using WeifenLuo.WinFormsUI.Docking;
-using FreeSCADA.ShellInterfaces;
-using FreeSCADA.Designer.SchemaEditor.UndoRedo;
-using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
 using FreeSCADA.Common;
+using FreeSCADA.Designer.SchemaEditor.UndoRedo;
+using WeifenLuo.WinFormsUI.Docking;
+
 namespace FreeSCADA.Designer.Views
 {
 	abstract class DocumentView : DockContent
@@ -24,7 +23,7 @@ namespace FreeSCADA.Designer.Views
 		bool modifiedFlag = false;
 		bool handleModifiedFlagOnClose = true;
 
-        public List<ICommandData> DocumentCommands
+        public virtual List<ICommandData> DocumentCommands
         {
             get;
             protected set;
@@ -37,9 +36,6 @@ namespace FreeSCADA.Designer.Views
 			documentName = "Document";
 			UpdateCaption();
 		}
-
-        
-
 
 		public string DocumentName
 		{
@@ -67,23 +63,21 @@ namespace FreeSCADA.Designer.Views
         }
 
 		public virtual void OnActivated()
-		{//in future at this place need to use WindowManager
-            //our paradigm mean that  Views does not know about MainForm
-            foreach (ICommandData cmd in DocumentCommands)
-            {
-                cmd.CommandToolStripItem = (Env.Current.MainWindow as MainForm).AddDocumentCommand(cmd);
-            }
+		{
+			foreach (ICommandData cmd in DocumentCommands)
+				cmd.CommandToolStripItem = CommandManager.Current.AddDocumentCommand(cmd);
 		}
 
 		public virtual void OnDeactivated()
 		{
-            //in future at this place need to use WindowManager
-            //our paradigm mean that  Views does not know about MainForm
-            foreach (ICommandData cmd in DocumentCommands)
-            {
-                if (cmd.CommandToolStripItem != null)
-                    (Env.Current.MainWindow as MainForm).RemoveDocumentCommand(cmd.CommandToolStripItem);
-            }
+			foreach (ICommandData cmd in DocumentCommands)
+			{
+				if (cmd.CommandToolStripItem != null)
+				{
+					CommandManager.Current.RemoveDocumentCommand(cmd.CommandToolStripItem);
+					cmd.CommandToolStripItem = null;
+				}
+			}
         }
 
 		public virtual bool SaveDocument()
