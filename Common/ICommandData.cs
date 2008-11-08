@@ -16,6 +16,13 @@ namespace FreeSCADA.Common
         {
             get;
         }
+		/// <summary>
+		/// 
+		/// </summary>
+		string CommandDescription
+		{
+			get;
+		}
         /// <summary>
         /// 
         /// </summary>

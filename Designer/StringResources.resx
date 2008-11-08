@@ -117,6 +117,66 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CommandCopyDescription" xml:space="preserve">
+    <value>Copy to clipboard</value>
+  </data>
+  <data name="CommandCopyName" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="CommandCutDescription" xml:space="preserve">
+    <value>Move to clipboard</value>
+  </data>
+  <data name="CommandCutName" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="CommandGroupDescription" xml:space="preserve">
+    <value>Group selected items</value>
+  </data>
+  <data name="CommandGroupName" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="CommandPasteDescription" xml:space="preserve">
+    <value>Paste from clipboard</value>
+  </data>
+  <data name="CommandPasteName" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="CommandRedoDescription" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="CommandRedoName" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="CommandUndoDescription" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="CommandUndoName" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="CommandUngroupDescription" xml:space="preserve">
+    <value>Remove grouping from curently selected item</value>
+  </data>
+  <data name="CommandUngroupName" xml:space="preserve">
+    <value>UnGroup</value>
+  </data>
+  <data name="CommandXamlViewDescription" xml:space="preserve">
+    <value>Show XAML code of current document</value>
+  </data>
+  <data name="CommandXamlViewName" xml:space="preserve">
+    <value>XAML representation</value>
+  </data>
+  <data name="CommandZoomInDescription" xml:space="preserve">
+    <value>Zoom in</value>
+  </data>
+  <data name="CommandZoomInName" xml:space="preserve">
+    <value>Zoom in</value>
+  </data>
+  <data name="CommandZoomOutDescription" xml:space="preserve">
+    <value>Zoom out</value>
+  </data>
+  <data name="CommandZoomOutName" xml:space="preserve">
+    <value>Zoom out</value>
+  </data>
   <data name="FileDialogFilter" xml:space="preserve">
     <value>FreeSCADA 2 files (*.fs2)|*.fs2|All files (*.*)|*.*</value>
   </data>
@@ -132,11 +192,47 @@
   <data name="SchemasItemName" xml:space="preserve">
     <value>Schemas</value>
   </data>
-  <data name="ToolButtonName" xml:space="preserve">
+  <data name="ToolActionEdit" xml:space="preserve">
+    <value>Action Edit Tool</value>
+  </data>
+  <data name="ToolButton" xml:space="preserve">
     <value>Button Tool</value>
+  </data>
+  <data name="ToolContentControl" xml:space="preserve">
+    <value>ContentControl Tool</value>
   </data>
   <data name="ToolControlsGroupName" xml:space="preserve">
     <value>Controls Tools</value>
+  </data>
+  <data name="ToolEditorGroupName" xml:space="preserve">
+    <value>Editor Tools</value>
+  </data>
+  <data name="ToolEllipse" xml:space="preserve">
+    <value>Ellipse Tool</value>
+  </data>
+  <data name="ToolGrphicsGroupName" xml:space="preserve">
+    <value>Graphics Tools</value>
+  </data>
+  <data name="ToolPolyline" xml:space="preserve">
+    <value>Polyline Tool</value>
+  </data>
+  <data name="ToolProgressbar" xml:space="preserve">
+    <value>ProgressBar Tool</value>
+  </data>
+  <data name="ToolRectangle" xml:space="preserve">
+    <value>Rectangle Tool</value>
+  </data>
+  <data name="ToolScrollbar" xml:space="preserve">
+    <value>ScrollBar Tool</value>
+  </data>
+  <data name="ToolSelection" xml:space="preserve">
+    <value>Selection Tool</value>
+  </data>
+  <data name="ToolSlider" xml:space="preserve">
+    <value>Slider Tool</value>
+  </data>
+  <data name="ToolTextbox" xml:space="preserve">
+    <value>TextBox Tool</value>
   </data>
   <data name="UnsavedProjectName" xml:space="preserve">
     <value>{unsaved project file}</value>
