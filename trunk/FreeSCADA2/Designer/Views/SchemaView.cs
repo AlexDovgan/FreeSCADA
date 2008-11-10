@@ -200,7 +200,7 @@ namespace FreeSCADA.Designer.Views
         {
             System.Drawing.Bitmap blankBitmap = new System.Drawing.Bitmap(10, 10);
 			toolsList.Add(new ToolDescriptor(StringResources.ToolSelection,
-				StringResources.ToolGrphicsGroupName,
+				StringResources.ToolEditorGroupName,
                 global::FreeSCADA.Designer.Properties.Resources.cursor,
                 typeof(SelectionTool)));
             toolsList.Add(new ToolDescriptor(StringResources.ToolRectangle,
