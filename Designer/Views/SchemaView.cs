@@ -453,32 +453,32 @@ namespace FreeSCADA.Designer.Views
 
             if ((schema = SchemaDocument.CreateNewSchema()) == null)
                 return false;
-
+            
             Schema = schema;
             Schema.IsModifiedChanged += new EventHandler(OnSchemaIsModifiedChanged);
             IsModified = true;
-           /* System.Windows.Controls.ProgressBar pb = new System.Windows.Controls.ProgressBar();
+            System.Windows.Controls.ProgressBar pb = new System.Windows.Controls.ProgressBar();
             Schema.MainCanvas.Children.Add(pb);
             System.Windows.Data.Binding bind=new System.Windows.Data.Binding("Value");
             System.Windows.Data.ObjectDataProvider dp;
-            Schema.MainCanvas.Resources["test2"] =dp = new System.Windows.Data.ObjectDataProvider();
+            dp = new System.Windows.Data.ObjectDataProvider();
             ChannelDataSource chs=new ChannelDataSource();
             chs.ChannelName="data_simulator_plug.sin";
-            Schema.MainCanvas.Resources["test1"] = chs;
             dp.ObjectInstance = chs;
             dp.MethodName = "GetChannel";
-            bind.Source = dp;
+            bind.Source = dp; 
             pb.SetBinding(System.Windows.Controls.ProgressBar.ValueProperty, bind);
             
-            
+
+            /*
             ChannelDataSource chs=new ChannelDataSource();
             chs.ChannelName="data_simulator_plug.sin";
             Schema.MainCanvas.Resources["test1"] = chs;
             System.Windows.Data.ObjectDataProvider dp;
             Schema.MainCanvas.Resources["test2"] = dp = new System.Windows.Data.ObjectDataProvider();
             dp.ObjectInstance = new System.Windows.StaticResourceExtension("test1");
-            dp.MethodName = "GetChannel";*/
-
+            dp.MethodName = "GetChannel";
+            */
 /*            <ProgressBar.Value>
 <Binding Path="Value">
 <Binding.Source>

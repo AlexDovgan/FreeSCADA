@@ -1,8 +1,13 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace FreeSCADA.Communication.OPCPlug
 {
-	class Channel:ShellInterfaces.IChannel
+    /// <summary>
+    /// TODO:  may be need to implement one abstract base class for implementation base functionality with 
+    /// events
+    /// </summary>
+    class Channel:ShellInterfaces.IChannel
 	{
 		string name;
 		string opcChannel;
@@ -13,6 +18,7 @@ namespace FreeSCADA.Communication.OPCPlug
 		object tag;
 		object value = new object();
 		object valueLock = new object();
+        public event PropertyChangedEventHandler PropertyChanged;
 
 		public Channel(string name, Plugin plugin, string opcChannel, string opcServer, string opcHost)
 		{
@@ -72,6 +78,9 @@ namespace FreeSCADA.Communication.OPCPlug
 
 		protected void FireValueChanged()
 		{
+            if (PropertyChanged != null)
+                OnPropertyChanged("Value");
+
 			if (ValueChanged != null)
 				ValueChanged(this, new EventArgs());
 		}
@@ -108,5 +117,15 @@ namespace FreeSCADA.Communication.OPCPlug
 		{
 			get { return opcHost; }
 		}
+        // Create the OnPropertyChanged method to raise the event
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
 	}
 }

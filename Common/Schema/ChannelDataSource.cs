@@ -4,6 +4,7 @@ using FreeSCADA.ShellInterfaces;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Data;
+using System.Windows.Markup;
 
 namespace FreeSCADA.Common.Schema
 {
@@ -27,4 +28,5 @@ namespace FreeSCADA.Common.Schema
         }
 
     }
+   
 }

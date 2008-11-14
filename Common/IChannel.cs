@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.ComponentModel;
 namespace FreeSCADA.ShellInterfaces
 {
-	public interface IChannel
+	public interface IChannel:INotifyPropertyChanged
 	{
 		event EventHandler ValueChanged;
 	

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace FreeSCADA.Communication.SimulatorPlug
 {
@@ -12,6 +13,9 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		private object value = new object();
 		private object valueLock = new object();
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler ValueChanged;
+
 		public ChannelBase(string name, bool readOnly, Plugin plugin, Type type)
 		{
 			this.name = name;
@@ -22,7 +26,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 
 		#region IChannel Members
 
-		public event EventHandler ValueChanged;
+		
 
 		public string Name
 		{
@@ -68,8 +72,12 @@ namespace FreeSCADA.Communication.SimulatorPlug
 
 		protected void FireValueChanged()
 		{
-			if (ValueChanged != null)
-				ValueChanged(this, new EventArgs());
+            if (PropertyChanged != null)
+                   OnPropertyChanged("Value");
+            if (ValueChanged!= null)
+                ValueChanged(this, new EventArgs());
+            
+				
 		}
 
 		protected void InternalSetValue(object value)
@@ -91,5 +99,15 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		public virtual void DoUpdate()
 		{
 		}
+        // Create the OnPropertyChanged method to raise the event
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
+ 
 	}
 }

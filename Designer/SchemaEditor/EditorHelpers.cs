@@ -1,65 +1,45 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Windows.Markup;
 using System.Xml;
-using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows;
-using System.Windows.Controls.Primitives;
-using System.Windows.Shapes;
-using System.Windows.Documents;
-using System.Windows.Input;
-using FreeSCADA.Common.Schema;
-using FreeSCADA.Designer.SchemaEditor.Manipulators;
-using FreeSCADA.Designer.SchemaEditor.Tools;
-using System.ComponentModel;
+using System.Collections;
 using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Markup;
+using System.Windows.Shapes;
+using System.ComponentModel;
+using FreeSCADA.Common.Schema;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Collections.Generic;
+using System.Windows.Controls.Primitives;
+using FreeSCADA.Designer.SchemaEditor.Tools;
+using FreeSCADA.Designer.SchemaEditor.Manipulators;
 
 namespace FreeSCADA.Designer.SchemaEditor
 {
     
-    class BindingConvertor : ExpressionConverter
-    {
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            //return base.CanConvertTo(context, destinationType);
-            if(destinationType==typeof(MarkupExtension))
-                return true;
-            else return false;
-        }
-        public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(MarkupExtension))
-            {
-                BindingExpression bindingExpression = value as BindingExpression;
-                if (bindingExpression == null)
-                    throw new Exception();
-           
-                return  bindingExpression.ParentBinding;
-            }
-            
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-    }
     
     static class EditorHelper
     {
-        public static void Register<T, TC>()
+        public static void RegisterAttribute<T>(Object instance)
         {
+            if (!(instance is Attribute))
+                throw new Exception("this is not attribute");
             Attribute[] attr = new Attribute[1];
-            TypeConverterAttribute vConv = new TypeConverterAttribute(typeof(TC));
-            attr[0] = vConv;
-            TypeDescriptor.AddAttributes(typeof(T), attr);
+            attr[0] = (Attribute)instance;
+            TypeDescriptor.AddAttributes(typeof(T), attr);  
         }
+       
 
         //public static FreeSCADA.Common.Schema.CustomElements.ElementsTemplates TemplateResources = new FreeSCADA.Common.Schema.CustomElements.ElementsTemplates();
         static  EditorHelper()
         {
-          //  TemplateResources.InitializeComponent();
-            Register<BindingExpression,BindingConvertor>();
-            Register<BindingExpression, BindingConvertor>();
+            Object inst = new TypeConverterAttribute(typeof(BindingConvertor));
+            RegisterAttribute<BindingExpression>(inst);
+            TypeDescriptor.AddProvider(new BindingTypeDescriptionProvider(),typeof(System.Windows.Data.Binding));
+            
         }
             
         public static UIElement FindTopParentUnder(DependencyObject c, DependencyObject el)
