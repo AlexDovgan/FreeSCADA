@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="SaveLoadFunctionalityTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="Designer.Tests.cd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Designer\Designer.csproj">

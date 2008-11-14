@@ -53,7 +53,7 @@ namespace FreeSCADA.RunTime
 				TabText = value.Name;
                 document = value;
                 wpfSchemaContainer.View = document.MainCanvas;
-			}
+      		}
 		}
 
 		public bool LoadDocument(string name)

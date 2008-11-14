@@ -457,7 +457,9 @@ namespace FreeSCADA.Designer.Views
             Schema = schema;
             Schema.IsModifiedChanged += new EventHandler(OnSchemaIsModifiedChanged);
             IsModified = true;
+            //creating dynamic object with binding
             System.Windows.Controls.ProgressBar pb = new System.Windows.Controls.ProgressBar();
+            pb.Width = 100; pb.Height = 100;
             Schema.MainCanvas.Children.Add(pb);
             System.Windows.Data.Binding bind=new System.Windows.Data.Binding("Value");
             System.Windows.Data.ObjectDataProvider dp;
@@ -469,30 +471,7 @@ namespace FreeSCADA.Designer.Views
             bind.Source = dp; 
             pb.SetBinding(System.Windows.Controls.ProgressBar.ValueProperty, bind);
             
-
-            /*
-            ChannelDataSource chs=new ChannelDataSource();
-            chs.ChannelName="data_simulator_plug.sin";
-            Schema.MainCanvas.Resources["test1"] = chs;
-            System.Windows.Data.ObjectDataProvider dp;
-            Schema.MainCanvas.Resources["test2"] = dp = new System.Windows.Data.ObjectDataProvider();
-            dp.ObjectInstance = new System.Windows.StaticResourceExtension("test1");
-            dp.MethodName = "GetChannel";
-            */
-/*            <ProgressBar.Value>
-<Binding Path="Value">
-<Binding.Source>
-<ObjectDataProvider MethodName="GetChannel">
-      <ObjectDataProvider.ObjectInstance>
-        <fscadacs:ChannelDataSource ChannelName="data_simulator_plug.sin" />
-      </ObjectDataProvider.ObjectInstance>
-    </ObjectDataProvider>
-</Binding.Source>
-</Binding>*/
-
-             
-
-               
+              
             
             return true;
         }
