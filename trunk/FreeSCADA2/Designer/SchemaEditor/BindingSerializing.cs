@@ -69,7 +69,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             if ((pd = pdc.Find("Source", false)) != null)
                {
 
-                   pdc.Add(TypeDescriptor.CreateProperty(typeof(System.Windows.Data.Binding), pd, new Attribute[] { new System.ComponentModel.DefaultValueAttribute("null") }));
+                   pdc.Add(TypeDescriptor.CreateProperty(typeof(System.Windows.Data.Binding), pd, new Attribute[] { new System.ComponentModel.DefaultValueAttribute(null) }));
                    pdc.Remove(pd);
                }
      
@@ -83,7 +83,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             if ((pd = pdc.Find("Source", false)) != null)
             {
 
-                pdc.Add(TypeDescriptor.CreateProperty(typeof(System.Windows.Data.Binding), pd, new Attribute[] { new System.ComponentModel.DefaultValueAttribute("null") }));
+                pdc.Add(TypeDescriptor.CreateProperty(typeof(System.Windows.Data.Binding), pd, new Attribute[] { new System.ComponentModel.DefaultValueAttribute(null) }));
                 pdc.Remove(pd);
             }
             return pdc;
