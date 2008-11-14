@@ -48,7 +48,7 @@ namespace FreeSCADA.Common.Schema.Actions
                 actionedObject = obj;
                 isLinked = true;
                 PrepareExecute();
-                actionChannel.ValueChanged += Execute;
+                actionChannel.PropertyChanged += Execute;
                 
                 return true;
             }
@@ -56,7 +56,7 @@ namespace FreeSCADA.Common.Schema.Actions
         }
         public void DeactivateAction()
         {
-            actionChannel.ValueChanged -= Execute;
+            actionChannel.PropertyChanged -= Execute;
         }
         
         protected virtual void PrepareExecute()

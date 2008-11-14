@@ -158,6 +158,7 @@ namespace FreeSCADA.Common.Schema
 
         public static void ViewGrid(Canvas view, bool activate)
         {
+            return;
             if (activate)
             {
                 double grid = (double)view.FindResource("DesignerSettings_GridDelta");
