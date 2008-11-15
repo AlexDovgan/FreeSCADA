@@ -12,7 +12,7 @@ namespace FreeSCADA.Communication.OPCPlug
 		int callbackCookie;
 		IOPCServer server;
 
-		public ConnectionGroup(string opcServer, string opcHost, List<Channel> channels)
+		public ConnectionGroup(string opcServer, string opcHost, List<OpcChannelImp> channels)
 		{
 			Type t = Type.GetTypeFromProgID(opcServer, opcHost);
 			server = (IOPCServer)Activator.CreateInstance(t);

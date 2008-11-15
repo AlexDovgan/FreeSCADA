@@ -6,9 +6,9 @@ namespace FreeSCADA.Communication.OPCPlug
 {
 	class OPCDataCallback : IOPCDataCallback
 	{
-		List<Channel> channels;
+		List<OpcChannelImp> channels;
 
-		public OPCDataCallback(List<Channel> channels)
+		public OPCDataCallback(List<OpcChannelImp> channels)
 		{
 			this.channels = channels;
 		}
@@ -28,7 +28,7 @@ namespace FreeSCADA.Communication.OPCPlug
 				if ((pwQualities[i] & Q_GOOD) != Q_GOOD)
 					continue;
 
-				foreach (Channel ch in channels)
+				foreach (OpcChannelImp ch in channels)
 				{
 					if (ch.GetHashCode() == phClientItems[i])
 						ch.DoUpdate(pvValues[i]);

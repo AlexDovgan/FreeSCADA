@@ -50,7 +50,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChannelBase.cs" />
     <Compile Include="ChannelFactory.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="SinusDoubleChannel.cs" />

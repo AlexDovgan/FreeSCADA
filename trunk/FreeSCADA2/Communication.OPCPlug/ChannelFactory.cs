@@ -20,12 +20,12 @@ namespace FreeSCADA.Communication.OPCPlug
 
 		public static IChannel CreateChannel(string name, Plugin plugin, string opcChannel, string opcServer, string opcHost)
 		{
-			return new Channel(name, plugin, opcChannel, opcServer, opcHost);
+			return new OpcChannelImp(name, plugin, opcChannel, opcServer, opcHost);
 		}
 
 		public static void SaveChannel(XmlElement node, IChannel channel)
 		{
-			Channel channelBase = (Channel)channel;
+			OpcChannelImp channelBase = (OpcChannelImp)channel;
 			node.SetAttribute("name", channelBase.Name);
 			node.SetAttribute("opcChannel", channelBase.OpcChannel);
 			node.SetAttribute("opcServer", channelBase.OpcServer);

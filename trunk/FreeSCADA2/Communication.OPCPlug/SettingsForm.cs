@@ -104,7 +104,7 @@ namespace FreeSCADA.Communication.OPCPlug
 
 		private void LoadChannels()
 		{
-			foreach (Channel channel in plugin.Channels)
+			foreach (OpcChannelImp channel in plugin.Channels)
 				AddVariable(channel.Name, channel.OpcChannel, channel.OpcServer, channel.OpcHost);
 		}
 

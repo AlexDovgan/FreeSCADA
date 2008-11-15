@@ -1,8 +1,8 @@
 ﻿using System;
-
+using FreeSCADA.Common;
 namespace FreeSCADA.Communication.SimulatorPlug
 {
-	class RampIntegerChannel : ChannelBase
+	class RampIntegerChannel : BaseChannel
 	{
 		static int val = 0;
 
@@ -11,12 +11,12 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		{
 		}
 
-		public override void DoUpdate()
+        public override  void DoUpdate()
 		{
             val++;
             if (val == 101)
                 val = 0;
-            InternalSetValue(val);
+            DoUpdate(val);
 		}
 	}
 }

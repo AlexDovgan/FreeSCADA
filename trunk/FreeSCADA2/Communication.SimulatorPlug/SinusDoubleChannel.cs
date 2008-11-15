@@ -1,8 +1,8 @@
 ﻿using System;
-
+using FreeSCADA.Common;
 namespace FreeSCADA.Communication.SimulatorPlug
 {
-    class SinusDoubleChannel : ChannelBase
+    class SinusDoubleChannel : BaseChannel
 	{
         static double angle = 0;
         static double delta = 2*Math.PI/360.0;
@@ -15,7 +15,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		public override void DoUpdate()
 		{
             angle += delta;
-            InternalSetValue(Math.Sin(angle));
+            DoUpdate(Math.Sin(angle));
 		}
 	}
 }
