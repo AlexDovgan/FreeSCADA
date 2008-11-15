@@ -157,6 +157,7 @@ namespace FreeSCADA.Designer.Views
             this.XamlView.ScrollBars = ScrollBars.Both;
             this.XamlView.Size = new System.Drawing.Size(200, 200);
             this.XamlView.Hide();
+            XamlView.MaxLength = int.MaxValue;
             // 
             // SchemaView
             // 
