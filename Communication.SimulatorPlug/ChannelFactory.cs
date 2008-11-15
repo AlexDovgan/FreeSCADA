@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml;
 using FreeSCADA.ShellInterfaces;
-
+using FreeSCADA.Common;
 namespace FreeSCADA.Communication.SimulatorPlug
 {
 	sealed class ChannelFactory
@@ -43,7 +43,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 
 		public static void SaveChannel(XmlElement node, IChannel channel)
 		{
-			ChannelBase channelBase = (ChannelBase)channel;
+			BaseChannel channelBase = (BaseChannel)channel;
 			node.SetAttribute("type", channelBase.GetType().FullName);
 			node.SetAttribute("name", channelBase.Name);
 			node.SetAttribute("readOnly", channelBase.IsReadOnly.ToString());

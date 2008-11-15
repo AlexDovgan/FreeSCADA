@@ -1,8 +1,8 @@
 ﻿using System;
-
+using FreeSCADA.Common;
 namespace FreeSCADA.Communication.SimulatorPlug
 {
-	class SawIntegerChannel : ChannelBase
+	class SawIntegerChannel : BaseChannel
 	{
 		static int val = 0;
         static bool up = true;
@@ -12,7 +12,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		{
 		}
 
-		public override void DoUpdate()
+        public override void DoUpdate()
 		{
             if (up)
                 val++;
@@ -22,7 +22,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
                 up = false;
             if (val == -100)
                 up = true;
-            InternalSetValue(val);
+            DoUpdate(val);
 		}
 	}
 }

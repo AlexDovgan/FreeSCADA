@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace FreeSCADA.Communication.SimulatorPlug
 {
-	abstract class ChannelBase:ShellInterfaces.IChannel
+	abstract class BaseChannel:ShellInterfaces.IChannel
 	{
 		protected string name;
 		protected Type type;
@@ -16,7 +16,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler ValueChanged;
 
-		public ChannelBase(string name, bool readOnly, Plugin plugin, Type type)
+		public BaseChannel(string name, bool readOnly, Plugin plugin, Type type)
 		{
 			this.name = name;
 			this.readOnly = readOnly;

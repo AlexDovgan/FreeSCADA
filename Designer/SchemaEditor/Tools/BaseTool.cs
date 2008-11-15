@@ -30,7 +30,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         BaseManipulator toolManipulator;
         protected VisualCollection visualChildren;
         protected UIElement workedLayer;
-        protected ToolContextMenu menu;
+  
         
         public event EventHandler ToolFinished;
 		public event EventHandler ToolStarted;

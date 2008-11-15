@@ -1,8 +1,8 @@
 ﻿using System;
-
+using FreeSCADA.Common;
 namespace FreeSCADA.Communication.SimulatorPlug
 {
-	class RandomIntegerChannel : ChannelBase
+	class RandomIntegerChannel : BaseChannel
 	{
 		static Random rnd = new Random();
 
@@ -11,9 +11,9 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		{
 		}
 
-		public override void DoUpdate()
+        public override void DoUpdate()
 		{
-			InternalSetValue(rnd.Next());
+			DoUpdate(rnd.Next());
 		}
 	}
 }

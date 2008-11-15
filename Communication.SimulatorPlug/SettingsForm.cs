@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using System.Collections.Generic;
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Communication.SimulatorPlug
 {
@@ -115,7 +116,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 
 		private void LoadChannels()
 		{
-			foreach (ChannelBase channel in plugin.Channels)
+			foreach (BaseChannel channel in plugin.Channels)
 				AddVariable(channel.Name, channel.GetType().FullName, channel.IsReadOnly);
 		}
 

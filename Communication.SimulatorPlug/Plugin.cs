@@ -3,6 +3,7 @@ using FreeSCADA.ShellInterfaces;
 using FreeSCADA.ShellInterfaces.Plugins;
 using System.Threading;
 using System.Xml;
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Communication.SimulatorPlug
 {
@@ -94,7 +95,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 				for (; ; )
 				{
 					//System.Console.WriteLine("{0} ChannelUpdaterThreadProc: Start loop", System.DateTime.Now);
-					foreach (ChannelBase ch in self.channels)
+					foreach (BaseChannel ch in self.channels)
 						ch.DoUpdate();
 					Thread.Sleep(100);
 				}
