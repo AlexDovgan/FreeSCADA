@@ -12,6 +12,8 @@ namespace FreeSCADA.Common
         protected string name;
         protected Type type;
         protected bool readOnly;
+        protected DateTime modifyTime;
+        protected string status;
         protected ICommunicationPlug plugin;
         private object tag;
         private object value = new object();
@@ -25,6 +27,8 @@ namespace FreeSCADA.Common
             this.readOnly = readOnly;
             this.plugin = plugin;
             this.type = type;
+            modifyTime = DateTime.MinValue;
+            status = "NotSet";
         }
 
         #region IChannel Members
@@ -65,6 +69,25 @@ namespace FreeSCADA.Common
                     InternalSetValue(value);
             }
         }
+        public DateTime ModifyTime
+        {
+            get
+            {
+                return modifyTime;
+            }
+        }
+
+        public string Status
+        {
+            get
+            {
+                return status;
+            }
+            set
+            {
+                status=value;
+            }
+        }
 
         public object Tag
         {
@@ -77,7 +100,11 @@ namespace FreeSCADA.Common
         protected void FireValueChanged()
         {
             if (PropertyChanged != null)
+            {
                 OnPropertyChanged("Value");
+                OnPropertyChanged("ModifyTime");
+                OnPropertyChanged("Status");
+            }
             if (ValueChanged != null)
                 ValueChanged(this, new EventArgs());
 
@@ -93,6 +120,8 @@ namespace FreeSCADA.Common
                 {
                     object old = this.value;
                     this.value = value;
+                    modifyTime = DateTime.Now;
+                    status = "Good";
                     fire = !old.Equals(this.value);
                 }
                 if (fire)
