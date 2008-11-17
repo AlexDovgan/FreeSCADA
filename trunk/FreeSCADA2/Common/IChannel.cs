@@ -6,8 +6,7 @@ namespace FreeSCADA.ShellInterfaces
 {
 	public interface IChannel:INotifyPropertyChanged
 	{
-		event EventHandler ValueChanged;
-	
+        event EventHandler ValueChanged;
 		string Name
 		{
 			get;
@@ -28,7 +27,15 @@ namespace FreeSCADA.ShellInterfaces
 			get;
 			set;
 		}
-
+        DateTime ModifyTime
+        {
+            get;
+        }
+        string  Status
+        {
+            get;
+            set;
+        }
 		//client's tmp_buff
 		object Tag
 		{
