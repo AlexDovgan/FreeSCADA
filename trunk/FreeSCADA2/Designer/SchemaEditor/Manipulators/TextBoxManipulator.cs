@@ -43,7 +43,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             }
             textEditor.Document = new FlowDocument(pargraph);
             textEditor.RenderTransform = AdornedElement.RenderTransform;
-
+            //textEditor.Focus();
             visualChildren.Add(textEditor);
             base.Activate();
         }
