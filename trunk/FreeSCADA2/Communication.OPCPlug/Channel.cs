@@ -39,6 +39,9 @@ namespace FreeSCADA.Communication.OPCPlug
         public override void DoUpdate()
         {
         }
+        public override void ExternalSetValue(object value)
+        {
 
+        }
 	}
 }
