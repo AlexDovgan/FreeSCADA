@@ -30,7 +30,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             return base.ConvertTo(context, culture, value, destinationType);
         }
     }
-    
+
     class BindingTypeDescriptionProvider : TypeDescriptionProvider
     {
         private static TypeDescriptionProvider defaultTypeProvider =
@@ -45,7 +45,7 @@ namespace FreeSCADA.Designer.SchemaEditor
                                                                 object instance)
         {
             ICustomTypeDescriptor defaultDescriptor =
-                                  base.GetTypeDescriptor(objectType,instance);
+                                  base.GetTypeDescriptor(objectType, instance);
 
             return instance == null ? defaultDescriptor :
                 new BindingCustomTypeDescriptor(defaultDescriptor);
@@ -67,18 +67,18 @@ namespace FreeSCADA.Designer.SchemaEditor
             PropertyDescriptorCollection pdc = new PropertyDescriptorCollection(base.GetProperties().Cast<PropertyDescriptor>().ToArray());
             PropertyDescriptor pd;
             if ((pd = pdc.Find("Source", false)) != null)
-               {
+            {
 
-                   pdc.Add(TypeDescriptor.CreateProperty(typeof(System.Windows.Data.Binding), pd, new Attribute[] { new System.ComponentModel.DefaultValueAttribute(null) }));
-                   pdc.Remove(pd);
-               }
-     
+                pdc.Add(TypeDescriptor.CreateProperty(typeof(System.Windows.Data.Binding), pd, new Attribute[] { new System.ComponentModel.DefaultValueAttribute(null) }));
+                pdc.Remove(pd);
+            }
+
             return pdc;
         }
 
         public override PropertyDescriptorCollection GetProperties(Attribute[] attributes)
         {
-            PropertyDescriptorCollection pdc =new PropertyDescriptorCollection( base.GetProperties(attributes).Cast<PropertyDescriptor>().ToArray());
+            PropertyDescriptorCollection pdc = new PropertyDescriptorCollection(base.GetProperties(attributes).Cast<PropertyDescriptor>().ToArray());
             PropertyDescriptor pd;
             if ((pd = pdc.Find("Source", false)) != null)
             {

@@ -14,7 +14,7 @@ namespace FreeSCADA.Communication.OPCPlug
 		string opcServer;
 		string opcHost;
 		public OpcChannelImp(string name, Plugin plugin, string opcChannel, string opcServer, string opcHost)
-            :base(name,false,plugin,typeof(Double))
+            :base(name,false,plugin,typeof(object))
 		{
 			
 			this.opcChannel = opcChannel;

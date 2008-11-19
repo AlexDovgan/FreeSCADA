@@ -364,7 +364,7 @@ namespace FreeSCADA.Designer.Views
                 }
             }
 
-            e.Handled = true;
+            //e.Handled = true;
             Schema.MainCanvas.UpdateLayout();
             activeTool.Update();
         }

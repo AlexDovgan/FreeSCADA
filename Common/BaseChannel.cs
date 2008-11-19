@@ -16,7 +16,7 @@ namespace FreeSCADA.Common
         protected string status;
         protected ICommunicationPlug plugin;
         private object tag;
-        private object value = new object();
+        private object value = null;
         private object valueLock = new object();
 
         
@@ -29,6 +29,8 @@ namespace FreeSCADA.Common
             this.type = type;
             modifyTime = DateTime.MinValue;
             status = "NotSet";
+            if(value==null)
+                value=System.Activator.CreateInstance(type);
         }
 
         #region IChannel Members
@@ -50,18 +52,14 @@ namespace FreeSCADA.Common
         {
             get { return readOnly; }
         }
-
+        
         public virtual object Value
         {
             get
             {
-                if (plugin.IsConnected)
-                {
-                    lock (valueLock)
-                        return value;
-                }
-                else
-                    return null;
+                lock (valueLock)
+                    return value;
+
             }
             set
             {
