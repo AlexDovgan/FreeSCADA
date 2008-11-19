@@ -19,7 +19,7 @@ namespace FreeSCADA.Common
         private object value = null;
         private object valueLock = new object();
 
-        
+
 
         public BaseChannel(string name, bool readOnly, ICommunicationPlug plugin, Type type)
         {
@@ -29,8 +29,8 @@ namespace FreeSCADA.Common
             this.type = type;
             modifyTime = DateTime.MinValue;
             status = "NotSet";
-            if(value==null)
-                value=System.Activator.CreateInstance(type);
+            if (value == null)
+                value = System.Activator.CreateInstance(type);
         }
 
         #region IChannel Members
@@ -52,7 +52,7 @@ namespace FreeSCADA.Common
         {
             get { return readOnly; }
         }
-        
+
         public virtual object Value
         {
             get
@@ -64,7 +64,7 @@ namespace FreeSCADA.Common
             set
             {
                 if (!readOnly && plugin.IsConnected)
-                    InternalSetValue(value);
+                    ExternalSetValue(value);
             }
         }
         public DateTime ModifyTime
@@ -83,7 +83,7 @@ namespace FreeSCADA.Common
             }
             set
             {
-                status=value;
+                status = value;
             }
         }
 
@@ -111,25 +111,19 @@ namespace FreeSCADA.Common
 
         protected void InternalSetValue(object value)
         {
-            if (value.GetType() == type)
+            type = value.GetType();
+            bool fire = false;
+            lock (valueLock)
             {
-                bool fire = false;
-                lock (valueLock)
-                {
-                    object old = this.value;
-                    this.value = value;
-                    modifyTime = DateTime.Now;
-                    status = "Good";
-                    fire = !old.Equals(this.value);
-                }
-                if (fire)
-                    FireValueChanged();
+                object old = this.value;
+                this.value = value;
+                modifyTime = DateTime.Now;
+                status = "Good";
+                fire = !old.Equals(this.value);
             }
-        }
-        public abstract void DoUpdate();
-        public virtual void DoUpdate(object value)
-        {
-            InternalSetValue(value);
+            if (fire)
+                FireValueChanged();
+
         }
         // Create the OnPropertyChanged method to raise the event
         protected void OnPropertyChanged(string name)
@@ -140,5 +134,17 @@ namespace FreeSCADA.Common
                 handler(this, new PropertyChangedEventArgs(name));
             }
         }
+        public abstract void DoUpdate();
+        public virtual void DoUpdate(object value)
+        {
+            InternalSetValue(value);
+        }
+        public virtual void ExternalSetValue(object value)
+        {
+            DoUpdate(value);
+        }
+
+        
+       
     }
 }
