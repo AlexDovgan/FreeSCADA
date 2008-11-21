@@ -377,12 +377,12 @@ namespace FreeSCADA.Designer.Views
             CommonShortProp csp;
             if (obj == null)
                 obj = Schema.MainCanvas;
-         /*   if ((csp = ObjectsFactory.CreateShortProp(obj)) != null)
+            if ((csp = ObjectsFactory.CreateShortProp(obj)) != null)
             {
                 RaiseObjectSelected(csp);
                 csp.PropertiesBrowserChanged += new CommonShortProp.PropertiesBrowserChangedDelegate(OnPropertiesBrowserChanged);
             }
-            else*/
+            else
                 RaiseObjectSelected(obj);
             // Menu items
             foreach (ICommandData icd in DocumentCommands)
@@ -600,9 +600,6 @@ namespace FreeSCADA.Designer.Views
                         wpfSchemaContainer.Child.UpdateLayout();
                         NotifyToolsCollectionChanged(AvailableTools, defaultTool);
                         CurrentTool = defaultTool;
-
-                        //EditorHelper.CopyObjects(canvas, Schema.MainCanvas);
-
                     }
                 }
             }
@@ -619,14 +616,8 @@ namespace FreeSCADA.Designer.Views
         {
             if (XamlView.Visible)
             {
-                System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                XmlWriterSettings settings = new XmlWriterSettings();
-                settings.Indent = true;
-                settings.OmitXmlDeclaration = true;
-                XamlDesignerSerializationManager dsm = new XamlDesignerSerializationManager(XmlWriter.Create(sb, settings));
-                dsm.XamlWriterMode = XamlWriterMode.Expression;
-                XamlWriter.Save(Schema.MainCanvas, dsm);
-                XamlView.Text = sb.ToString();
+               
+                XamlView.Text = EditorHelper.SerializeObject(Schema.MainCanvas);
             }
         }
 

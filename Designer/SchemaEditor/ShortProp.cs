@@ -574,7 +574,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
                                   base.GetExtendedTypeDescriptor(instance);
 
             return instance == null ? defaultDescriptor :
-                new UIElementCustomTypeDescriptor(defaultDescriptor,true);
+                new UIElementCustomTypeDescriptor(defaultDescriptor);
            
         }
         public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType,
@@ -584,7 +584,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
                                   base.GetTypeDescriptor(objectType, instance);
 
             return instance == null ? defaultDescriptor :
-                new UIElementCustomTypeDescriptor (defaultDescriptor,false);
+                new UIElementCustomTypeDescriptor (defaultDescriptor);
         }
     }
 
@@ -592,11 +592,11 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
     {
         ICustomTypeDescriptor defaultTypeDescriptor;
         bool isExtended;
-        public UIElementCustomTypeDescriptor(ICustomTypeDescriptor parent,bool isextended)
+        public UIElementCustomTypeDescriptor(ICustomTypeDescriptor parent)
             : base(parent)
         {
             defaultTypeDescriptor = parent;
-            isExtended = isextended;
+           
         }
         
         public override PropertyDescriptorCollection GetProperties()
@@ -610,15 +610,37 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         public override PropertyDescriptorCollection GetProperties(Attribute[] attributes)
         {
             
-            List<string> props=new List<string>(new string[]{"Width","Height"});
+            List<string> props=new List<string>(
+                new string[]{
+                    "Width",
+                    "Height",
+                    "Background",
+                    "Opacity",
+                    "Canvas.Top",
+                    "Canvas.Left",
+                    "Canvas.ZIndex",
+                    "Value",
+                    "Maximum",
+                    "Mimimum",
+                    "Content",
+                    "Style",
+                    "StrokeThickness",
+                    "Stroke",
+                    "Fill",
+                    "RenderTransform",
+                    "RenderTransformOrigin",
+                    "Name",
+                    "ContentTemplate",
+                    "Orientation"
+
+                    }
+                    );
             IEnumerable<PropertyDescriptor> ie ;
-            if (!isExtended)
+           // if (!isExtended)
                 ie = base.GetProperties(attributes).Cast<PropertyDescriptor>()
-                    .Where(x => x => DependencyPropertyDescriptor.FromProperty(x)==true
-                        &&DependencyPropertyDescriptor.FromProperty(x).IsReadOnly
-                        &&!x.IsReadOnly 
-                        &&x.SerializationVisibility == DesignerSerializationVisibility.Visible);//.Where(x => props.Contains(x.Name) == true);
-            else ie = new List<PropertyDescriptor>();
+                    .Where(x => DependencyPropertyDescriptor.FromProperty(x)!=null
+                        &&props.Contains(x.Name) == true);
+            //else ie = new List<PropertyDescriptor>();
             return new PropertyDescriptorCollection(ie.ToArray());
             
             //props.Exists(y => y == x.Name)
