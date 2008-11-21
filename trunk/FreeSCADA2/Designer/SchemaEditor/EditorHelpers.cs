@@ -39,7 +39,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             Object inst = new TypeConverterAttribute(typeof(BindingConvertor));
             RegisterAttribute<BindingExpression>(inst);
             TypeDescriptor.AddProvider(new BindingTypeDescriptionProvider(),typeof(System.Windows.Data.Binding));
-            
+            TypeDescriptor.AddProvider(new ShortProperties.UIElementTypeDescriptionProvider(), typeof(System.Windows.UIElement));
         }
             
         public static UIElement FindTopParentUnder(DependencyObject c, DependencyObject el)

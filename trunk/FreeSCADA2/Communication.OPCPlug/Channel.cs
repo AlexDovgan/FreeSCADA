@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using FreeSCADA.Common;
+using OpcRcw.Da;
 namespace FreeSCADA.Communication.OPCPlug
 {
     /// <summary>
@@ -13,6 +14,7 @@ namespace FreeSCADA.Communication.OPCPlug
 		string opcChannel;
 		string opcServer;
 		string opcHost;
+        
 		public OpcChannelImp(string name, Plugin plugin, string opcChannel, string opcServer, string opcHost)
             :base(name,false,plugin,typeof(object))
 		{
@@ -22,7 +24,7 @@ namespace FreeSCADA.Communication.OPCPlug
 			this.opcServer = opcServer;
 		}
 
-
+        
 		public string OpcChannel
 		{
 			get { return opcChannel; }
@@ -41,7 +43,8 @@ namespace FreeSCADA.Communication.OPCPlug
         }
         public override void ExternalSetValue(object value)
         {
-
+            IntPtr addErrors;
+            //opcItem.WriteVQT(1, new string[] { opcChannel }, new OPCITEMVQT[] { value }, out addErrors);
         }
 	}
 }

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -238,7 +239,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
 
         }
 
-
+        
         public string Name
         {
             get { return frameworkElement.Name; }
@@ -258,6 +259,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
                 }
             }
         }
+        [ReadOnly(true)]
         [Description("Object's X position"), Category("Layout")]
         public double PosX
         {
@@ -554,5 +556,58 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         }
         RangeBase rangebase;
 
+    }
+
+    class UIElementTypeDescriptionProvider : TypeDescriptionProvider
+    {
+        private static TypeDescriptionProvider defaultTypeProvider =
+                       TypeDescriptor.GetProvider(typeof(System.Windows.UIElement));
+
+        public UIElementTypeDescriptionProvider()
+            : base(defaultTypeProvider)
+        {
+        }
+
+        public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType,
+                                                                object instance)
+        {
+            ICustomTypeDescriptor defaultDescriptor =
+                                  base.GetTypeDescriptor(objectType, instance);
+
+            return instance == null ? defaultDescriptor :
+                new UIElementCustomTypeDescriptor (defaultDescriptor);
+        }
+    }
+
+    class UIElementCustomTypeDescriptor : CustomTypeDescriptor
+    {
+        public UIElementCustomTypeDescriptor(ICustomTypeDescriptor parent)
+            : base(parent)
+        {
+
+
+        }
+        
+        public override PropertyDescriptorCollection GetProperties()
+        {
+            return GetProperties(
+                new Attribute[] { new PropertyFilterAttribute(PropertyFilterOptions.All) });
+            //return new PropertyDescriptorCollection(base.GetProperties().OfType<PropertyDescriptor>().ToArray());
+            //.Where(x => x.IsReadOnly == false)
+            
+        }
+
+        public override PropertyDescriptorCollection GetProperties(Attribute[] attributes)
+        {
+            List<string> props=new List<string>(new string[]{"Width","Height"});
+            IEnumerable<PropertyDescriptor> ie = base.GetProperties(attributes).Cast<PropertyDescriptor>().Where(x => props.Contains(x.Name) == true);
+
+            return new PropertyDescriptorCollection(ie.ToArray());
+            
+            //props.Exists(y => y == x.Name)
+            //return new PropertyDescriptorCollection(base.GetProperties(attributes).Cast<PropertyDescriptor>().Where(x => DependencyPropertyDescriptor.FromProperty(x) != null&&x.IsBrowsable==true).ToArray());
+            
+        }
+        
     }
 }
