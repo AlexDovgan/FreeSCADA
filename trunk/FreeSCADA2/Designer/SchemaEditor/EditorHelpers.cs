@@ -23,6 +23,7 @@ namespace FreeSCADA.Designer.SchemaEditor
     
     static class EditorHelper
     {
+        static TypeDescriptionProvider uiElementProvider=null;
         public static void RegisterAttribute<T>(Object instance)
         {
             if (!(instance is Attribute))
@@ -39,7 +40,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             Object inst = new TypeConverterAttribute(typeof(BindingConvertor));
             RegisterAttribute<BindingExpression>(inst);
             TypeDescriptor.AddProvider(new BindingTypeDescriptionProvider(),typeof(System.Windows.Data.Binding));
-            TypeDescriptor.AddProvider(new ShortProperties.UIElementTypeDescriptionProvider(), typeof(System.Windows.UIElement));
+            //TypeDescriptor.AddProvider(uiElementProvider=new ShortProperties.UIElementTypeDescriptionProvider(), typeof(System.Windows.UIElement));
         }
             
         public static UIElement FindTopParentUnder(DependencyObject c, DependencyObject el)
@@ -273,6 +274,21 @@ namespace FreeSCADA.Designer.SchemaEditor
             if (adorners.Length> 0 && adorners[0] is BaseTool)
                 return adorners[0] as BaseTool;
             else return null;
+        }
+        public static string SerializeObject(object instance)
+        {
+            if(uiElementProvider!=null)
+                TypeDescriptor.RemoveProvider(uiElementProvider, typeof(System.Windows.UIElement));
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+            settings.OmitXmlDeclaration = true;
+            XamlDesignerSerializationManager dsm = new XamlDesignerSerializationManager(XmlWriter.Create(sb, settings));
+            dsm.XamlWriterMode = XamlWriterMode.Expression;
+            XamlWriter.Save(instance, dsm);
+            if(uiElementProvider!=null)
+                TypeDescriptor.AddProvider(uiElementProvider, typeof(System.Windows.UIElement));
+            return sb.ToString();
         }
 
     }
