@@ -18,6 +18,9 @@ namespace FreeSCADA.Designer.Views
 {
     class SchemaView : DocumentView
     {
+        
+        // TODO: make all actions by Commands, make command execution by pattern Vistor - one 
+     
         private WPFShemaContainer wpfSchemaContainer;
         
         private BaseTool activeTool;

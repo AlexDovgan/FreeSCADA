@@ -13,10 +13,11 @@ using FreeSCADA.Designer.SchemaEditor.Tools;
 using System.Windows.Input;
 using FreeSCADA.Designer.Views;
 using System.Drawing;
+// TODO: all commands mast receive DocumentView class for operate with him
 
 namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 {
-
+    
     class ToolContextMenu : System.Windows.Forms.ContextMenu
     {
       /*  public MenuItem unGroupMenuItem = new MenuItem();

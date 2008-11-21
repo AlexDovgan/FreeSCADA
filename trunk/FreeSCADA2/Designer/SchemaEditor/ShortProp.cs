@@ -568,6 +568,15 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         {
         }
 
+        public override ICustomTypeDescriptor GetExtendedTypeDescriptor(object instance)
+        {
+            ICustomTypeDescriptor defaultDescriptor =
+                                  base.GetExtendedTypeDescriptor(instance);
+
+            return instance == null ? defaultDescriptor :
+                new UIElementCustomTypeDescriptor(defaultDescriptor,true);
+           
+        }
         public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType,
                                                                 object instance)
         {
@@ -575,33 +584,41 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
                                   base.GetTypeDescriptor(objectType, instance);
 
             return instance == null ? defaultDescriptor :
-                new UIElementCustomTypeDescriptor (defaultDescriptor);
+                new UIElementCustomTypeDescriptor (defaultDescriptor,false);
         }
     }
 
     class UIElementCustomTypeDescriptor : CustomTypeDescriptor
     {
-        public UIElementCustomTypeDescriptor(ICustomTypeDescriptor parent)
+        ICustomTypeDescriptor defaultTypeDescriptor;
+        bool isExtended;
+        public UIElementCustomTypeDescriptor(ICustomTypeDescriptor parent,bool isextended)
             : base(parent)
         {
-
-
+            defaultTypeDescriptor = parent;
+            isExtended = isextended;
         }
         
         public override PropertyDescriptorCollection GetProperties()
         {
             return GetProperties(
                 new Attribute[] { new PropertyFilterAttribute(PropertyFilterOptions.All) });
-            //return new PropertyDescriptorCollection(base.GetProperties().OfType<PropertyDescriptor>().ToArray());
-            //.Where(x => x.IsReadOnly == false)
+            
             
         }
 
         public override PropertyDescriptorCollection GetProperties(Attribute[] attributes)
         {
+            
             List<string> props=new List<string>(new string[]{"Width","Height"});
-            IEnumerable<PropertyDescriptor> ie = base.GetProperties(attributes).Cast<PropertyDescriptor>().Where(x => props.Contains(x.Name) == true);
-
+            IEnumerable<PropertyDescriptor> ie ;
+            if (!isExtended)
+                ie = base.GetProperties(attributes).Cast<PropertyDescriptor>()
+                    .Where(x => x => DependencyPropertyDescriptor.FromProperty(x)==true
+                        &&DependencyPropertyDescriptor.FromProperty(x).IsReadOnly
+                        &&!x.IsReadOnly 
+                        &&x.SerializationVisibility == DesignerSerializationVisibility.Visible);//.Where(x => props.Contains(x.Name) == true);
+            else ie = new List<PropertyDescriptor>();
             return new PropertyDescriptorCollection(ie.ToArray());
             
             //props.Exists(y => y == x.Name)
