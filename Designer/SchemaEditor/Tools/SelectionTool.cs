@@ -69,7 +69,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             }
             e.Handled = false;
             // Update PropertyView
-            RaiseObjectSelected(SelectedObject);
+            //RaiseObjectSelected(SelectedObject);
             if (isSelectionMoved)
             {
                 Vector newPosDelta;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using OpcRcw.Da;
 
@@ -22,18 +23,23 @@ namespace FreeSCADA.Communication.OPCPlug
 			object group_obj;
 			Guid tmp_guid = typeof(IOPCItemMgt).GUID;
 			server.AddGroup("", 1, updateRate, groupClientId, new IntPtr(), new IntPtr(), 0, out groupId, out updateRate, ref tmp_guid, out group_obj);
+    		group = (IOPCItemMgt)group_obj;
+            
 
-			group = (IOPCItemMgt)group_obj;
 			OPCITEMDEF[] items = new OPCITEMDEF[channels.Count];
 			for (int i = 0; i < channels.Count; i++)
 			{
 				items[i].bActive = 1;
 				items[i].szItemID = channels[i].OpcChannel;
 				items[i].hClient = channels[i].GetHashCode();
+            
 			}
 			IntPtr addResult;
 			IntPtr addErrors;
 			group.AddItems(items.Length, items, out addResult, out addErrors);
+            //object pir=Marshal.PtrToStructure(addResult,typeof(OPCITEMRESULT));
+
+            
 			addResult = IntPtr.Zero;
 			addErrors = IntPtr.Zero;
 

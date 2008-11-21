@@ -374,12 +374,12 @@ namespace FreeSCADA.Designer.Views
             CommonShortProp csp;
             if (obj == null)
                 obj = Schema.MainCanvas;
-            if ((csp = ObjectsFactory.CreateShortProp(obj)) != null)
+         /*   if ((csp = ObjectsFactory.CreateShortProp(obj)) != null)
             {
                 RaiseObjectSelected(csp);
                 csp.PropertiesBrowserChanged += new CommonShortProp.PropertiesBrowserChangedDelegate(OnPropertiesBrowserChanged);
             }
-            else
+            else*/
                 RaiseObjectSelected(obj);
             // Menu items
             foreach (ICommandData icd in DocumentCommands)
@@ -471,9 +471,6 @@ namespace FreeSCADA.Designer.Views
             dp.MethodName = "GetChannel";
             bind.Source = dp; 
             pb.SetBinding(System.Windows.Controls.ProgressBar.ValueProperty, bind);
-            
-              
-            
             return true;
         }
 
