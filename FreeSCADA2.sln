@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+# Visual C# Express 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Designer", "Designer\Designer.csproj", "{93466C99-5637-4243-A01A-7AF12F706889}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communication.SimulatorPlug", "Communication.SimulatorPlug\Communication.SimulatorPlug.csproj", "{58770328-000A-41C0-85E7-58286173C25B}"
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Designer.Tests", "Designer.Tests\Designer.Tests.csproj", "{E98B42BA-D617-44BD-A55D-18EE931D4AC8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RunTime", "RunTime\RunTime.csproj", "{047EED80-A3C6-4A7F-BB4C-E4A64F96B210}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communication.MODBUSPlug", "Communication.MODBUSPlug\Communication.MODBUSPlug.csproj", "{BA67D037-F40A-49CE-97B3-91DDE4A44062}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{047EED80-A3C6-4A7F-BB4C-E4A64F96B210}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{047EED80-A3C6-4A7F-BB4C-E4A64F96B210}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{047EED80-A3C6-4A7F-BB4C-E4A64F96B210}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA67D037-F40A-49CE-97B3-91DDE4A44062}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA67D037-F40A-49CE-97B3-91DDE4A44062}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA67D037-F40A-49CE-97B3-91DDE4A44062}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA67D037-F40A-49CE-97B3-91DDE4A44062}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,28 +9,36 @@ namespace FreeSCADA.Common
 {
     public abstract class BaseChannel : IChannel
     {
-        protected string name;
-        protected Type type;
-        protected bool readOnly;
-        protected DateTime modifyTime;
-        protected string status;
+        protected string bname;
+        protected Type btype;
+        protected bool breadOnly;
+        protected DateTime bmodifyTime;
+        protected string bstatus;
+        //protected short quality;   // TODO - quality property
         protected ICommunicationPlug plugin;
         private object tag;
         private object value = null;
         private object valueLock = new object();
 
+        public const short Q_GOOD = 0x03 << 6;
+        
 
 
         public BaseChannel(string name, bool readOnly, ICommunicationPlug plugin, Type type)
         {
-            this.name = name;
-            this.readOnly = readOnly;
+            this.bname = name;
+            this.breadOnly = readOnly;
             this.plugin = plugin;
-            this.type = type;
-            modifyTime = DateTime.MinValue;
-            status = "NotSet";
+            this.btype = type;
+            bmodifyTime = DateTime.MinValue;
+            bstatus = "NotSet";
             if (value == null)
-                value = System.Activator.CreateInstance(type);
+                if (type == typeof(string))
+                {
+                    value = new String(new char[0]);
+                }
+                else
+                    value = System.Activator.CreateInstance(type);
         }
 
         #region IChannel Members
@@ -40,17 +48,17 @@ namespace FreeSCADA.Common
 
         public string Name
         {
-            get { return name; }
+            get { return bname; }
         }
 
         public string Type
         {
-            get { return type.Name; }
+            get { return btype.Name; }
         }
 
         public bool IsReadOnly
         {
-            get { return readOnly; }
+            get { return breadOnly; }
         }
 
         public virtual object Value
@@ -63,7 +71,7 @@ namespace FreeSCADA.Common
             }
             set
             {
-                if (!readOnly && plugin.IsConnected)
+                if (!breadOnly && plugin.IsConnected)
                     ExternalSetValue(value);
             }
         }
@@ -71,7 +79,7 @@ namespace FreeSCADA.Common
         {
             get
             {
-                return modifyTime;
+                return bmodifyTime;
             }
         }
 
@@ -79,11 +87,11 @@ namespace FreeSCADA.Common
         {
             get
             {
-                return status;
+                return bstatus;
             }
             set
             {
-                status = value;
+                bstatus = value;
             }
         }
 
@@ -111,19 +119,47 @@ namespace FreeSCADA.Common
 
         protected void InternalSetValue(object value)
         {
-            type = value.GetType();
+            btype = value.GetType();
             bool fire = false;
             lock (valueLock)
             {
                 object old = this.value;
                 this.value = value;
-                modifyTime = DateTime.Now;
-                status = "Good";
+                bmodifyTime = DateTime.Now;
+                bstatus = "Good";
                 fire = !old.Equals(this.value);
             }
             if (fire)
                 FireValueChanged();
 
+        }
+
+        protected void InternalSetValue(object value, DateTime externalTime, short externalQuality)
+        {
+            btype = value.GetType();
+            bool fire = false;
+            lock (valueLock)
+            {
+                object old = this.value;
+                this.value = value;
+                bmodifyTime = externalTime;
+                if (externalQuality == Q_GOOD)
+                {
+                    bstatus = "Good";
+                }
+                else
+                {
+                    bstatus = "Bad";
+                }
+                fire = !old.Equals(this.value);
+            }
+            if (fire)
+                FireValueChanged();
+        }
+
+        public virtual void DoUpdate(object value, DateTime externalTime, short externalQuality)
+        {
+            InternalSetValue(value, externalTime, externalQuality);
         }
         // Create the OnPropertyChanged method to raise the event
         protected void OnPropertyChanged(string name)
