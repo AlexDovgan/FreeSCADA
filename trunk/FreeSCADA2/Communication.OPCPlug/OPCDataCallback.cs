@@ -31,8 +31,16 @@ namespace FreeSCADA.Communication.OPCPlug
 				foreach (OpcChannelImp ch in channels)
 				{
 					if (ch.GetHashCode() == phClientItems[i])
-						ch.DoUpdate(pvValues[i]);
-				}
+                    {
+                        long ticks;
+                        byte[] bticks = new byte[8];
+                        BitConverter.GetBytes(pftTimeStamps[i].dwLowDateTime).CopyTo(bticks, 0);
+                        BitConverter.GetBytes(pftTimeStamps[i].dwHighDateTime).CopyTo(bticks, 4);
+                        ticks = BitConverter.ToInt64(bticks, 0);
+                        DateTime dt = DateTime.FromFileTime(ticks);
+                        ch.DoUpdate(pvValues[i], dt, pwQualities[i]);
+                    }
+                }
 			}
 		}
 
