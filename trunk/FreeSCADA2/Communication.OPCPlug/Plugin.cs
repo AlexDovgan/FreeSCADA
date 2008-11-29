@@ -81,13 +81,13 @@ namespace FreeSCADA.Communication.OPCPlug
 				originalChannels.AddRange(channels);
 				do
 				{
-					List<OpcChannelImp> groupChannels = new List<OpcChannelImp>();
-					OpcChannelImp lhc = (OpcChannelImp)originalChannels[0];
+					List<OPCBaseChannel> groupChannels = new List<OPCBaseChannel>();
+					OPCBaseChannel lhc = (OPCBaseChannel)originalChannels[0];
 					groupChannels.Add(lhc);
 					originalChannels.RemoveAt(0);
 					for (int i = originalChannels.Count - 1; i >= 0; i--)
 					{
-						OpcChannelImp rhc = (OpcChannelImp)originalChannels[i];
+						OPCBaseChannel rhc = (OPCBaseChannel)originalChannels[i];
 						if (lhc.OpcServer == rhc.OpcServer && lhc.OpcHost == rhc.OpcHost)
 						{
 							groupChannels.Add(rhc);

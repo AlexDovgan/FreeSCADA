@@ -1,5 +1,4 @@
-﻿using FreeSCADA.ShellInterfaces;
-
+﻿
 namespace FreeSCADA.Communication.SimulatorPlug
 {
 	abstract class Command

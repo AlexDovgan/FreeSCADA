@@ -1,6 +1,6 @@
 ﻿using FreeSCADA.Communication.SimulatorPlug;
-using NUnit.Framework;
 using NUnit.Extensions.Forms;
+using NUnit.Framework;
 
 namespace Communication.SimulatorPlug.Tests
 {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Windows;
-using FreeSCADA.ShellInterfaces;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Data;
-using System.Windows.Markup;
+﻿using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Common.Schema
 {

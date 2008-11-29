@@ -1,8 +1,5 @@
 ﻿using System;
-using System.IO;
 using System.Windows.Forms;
-using System.Xml;
-using System.Collections.Generic;
 
 namespace FreeSCADA.Communication.OPCPlug
 {
@@ -104,7 +101,7 @@ namespace FreeSCADA.Communication.OPCPlug
 
 		private void LoadChannels()
 		{
-			foreach (OpcChannelImp channel in plugin.Channels)
+			foreach (OPCBaseChannel channel in plugin.Channels)
 				AddVariable(channel.Name, channel.OpcChannel, channel.OpcServer, channel.OpcHost);
 		}
 

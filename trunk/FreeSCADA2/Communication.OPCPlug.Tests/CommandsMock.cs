@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using FreeSCADA.ShellInterfaces;
 
-namespace Communication.SimulatorPlug.Tests
+namespace Communication.OPCPlug.Tests
 {
 	class CommandsMock:ICommands
 	{

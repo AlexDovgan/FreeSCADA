@@ -1,9 +1,7 @@
-﻿using System.Windows.Forms;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using WeifenLuo.WinFormsUI.Docking;
-using FreeSCADA;
+using System.Windows.Forms;
 using FreeSCADA.Common;
 using FreeSCADA.Designer.Dialogs;
 using FreeSCADA.Designer.SchemaEditor.SchemaCommands;

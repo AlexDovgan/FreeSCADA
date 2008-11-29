@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Windows;
 using System.IO;
-using System.Xml;
-using System.Windows.Markup;
 using System.Windows.Controls;
-using System.Windows.Media;
-using FreeSCADA.Common.Schema.Actions;
+using System.Windows.Markup;
+using System.Xml;
 
 namespace FreeSCADA.Common.Schema
 {

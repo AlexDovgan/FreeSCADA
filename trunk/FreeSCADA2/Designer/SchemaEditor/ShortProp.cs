@@ -1,18 +1,16 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Data;
-using System.ComponentModel;
-using System.Windows.Media.Imaging;
 using System.Windows.Documents;
 using System.Windows.Markup;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using FreeSCADA.Common.Schema;
 
 
@@ -591,7 +589,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
     class UIElementCustomTypeDescriptor : CustomTypeDescriptor
     {
         ICustomTypeDescriptor defaultTypeDescriptor;
-        bool isExtended;
+		//bool isExtended;
         public UIElementCustomTypeDescriptor(ICustomTypeDescriptor parent)
             : base(parent)
         {

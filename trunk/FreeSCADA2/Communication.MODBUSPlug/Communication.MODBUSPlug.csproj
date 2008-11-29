@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BA67D037-F40A-49CE-97B3-91DDE4A44062}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -41,7 +41,7 @@
     </Reference>
     <Reference Include="Modbus, Version=1.8.0.0, Culture=neutral, PublicKeyToken=b5aba55fcbc8d946, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\bin\Release\Modbus.dll</HintPath>
+      <HintPath>..\3rdParty\NModbus\Modbus.dll</HintPath>
     </Reference>
     <Reference Include="OpcRcw.Comn, Version=1.10.1.20, Culture=neutral, PublicKeyToken=9a40e993cbface53">
       <SpecificVersion>False</SpecificVersion>

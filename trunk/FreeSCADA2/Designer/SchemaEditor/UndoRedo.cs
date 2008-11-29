@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Markup;
 using System.Xml;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows;
-using System.Windows.Shapes;
-using System.Windows.Input;
-using System.Windows.Documents;
-using System.ComponentModel;
 using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.SchemaEditor.Tools;
-using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
 {

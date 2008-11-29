@@ -1,5 +1,4 @@
 ﻿using System.Xml;
-using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Communication.MODBUSPlug
 {

@@ -1,5 +1,5 @@
-﻿using System.Windows.Forms;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace FreeSCADA.Designer.Dialogs
 {

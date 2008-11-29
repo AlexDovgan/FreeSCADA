@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using FreeSCADA.ShellInterfaces;
 using FreeSCADA.Common;
+using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Designer.Dialogs
 {

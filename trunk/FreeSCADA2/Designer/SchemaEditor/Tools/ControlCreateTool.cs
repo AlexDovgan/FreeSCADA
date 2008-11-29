@@ -3,10 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
-using FreeSCADA.Designer.SchemaEditor.UndoRedo;
-using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {

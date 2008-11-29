@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-using FreeSCADA.ShellInterfaces;
-
+﻿
 namespace FreeSCADA.Communication.SimulatorPlug
 {
 	class PropertyCommand: Command

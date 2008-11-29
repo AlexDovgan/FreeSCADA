@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using NUnit.Framework;
 
 namespace FreeSCADA.Common.Tests
 {

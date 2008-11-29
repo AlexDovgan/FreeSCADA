@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Input;
-using FreeSCADA.Common.Schema;
+﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
-using FreeSCADA.Designer.SchemaEditor.UndoRedo;
-using FreeSCADA.ShellInterfaces;
-using System.Windows.Documents;
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
     class TextBoxTool:BaseTool

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Markup;
 using System.ComponentModel;
+using System.Windows;
+using System.Windows.Markup;
 
 namespace FreeSCADA.Common.Schema.Actions
 {

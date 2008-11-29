@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using FreeSCADA.Common;
 using WeifenLuo.WinFormsUI.Docking;
-using System;
 
 namespace FreeSCADA.RunTime
 {

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Shapes;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {

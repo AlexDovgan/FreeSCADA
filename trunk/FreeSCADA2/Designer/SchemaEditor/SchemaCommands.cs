@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Xml;
-using System.Windows.Forms;
-using System.Windows;
-using System.Windows.Markup;
-using System.Windows.Controls;
-using FreeSCADA.Designer.SchemaEditor.Manipulators;
-using FreeSCADA.Common;
-using FreeSCADA.Designer.SchemaEditor.Tools;
-using System.Windows.Input;
-using FreeSCADA.Designer.Views;
 using System.Drawing;
+using System.IO;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Markup;
+using FreeSCADA.Designer.SchemaEditor.Tools;
+using FreeSCADA.Designer.Views;
+using FreeSCADA.ShellInterfaces;
+
 // TODO: all commands mast receive DocumentView class for operate with him
 
 namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
