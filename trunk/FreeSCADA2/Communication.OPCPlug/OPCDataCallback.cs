@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FreeSCADA.ShellInterfaces;
 using OpcRcw.Da;
 
 namespace FreeSCADA.Communication.OPCPlug
@@ -38,7 +39,14 @@ namespace FreeSCADA.Communication.OPCPlug
                         BitConverter.GetBytes(pftTimeStamps[i].dwHighDateTime).CopyTo(bticks, 4);
                         ticks = BitConverter.ToInt64(bticks, 0);
                         DateTime dt = DateTime.FromFileTime(ticks);
-                        ch.DoUpdate(pvValues[i], dt, pwQualities[i]);
+
+						ChannelStatusFlags status;
+						if ((pwQualities[i] & Q_GOOD) == Q_GOOD)
+							status = ChannelStatusFlags.Good;
+						else
+							status = ChannelStatusFlags.Bad;
+
+                        ch.DoUpdate(pvValues[i], dt, status);
                     }
                 }
 			}

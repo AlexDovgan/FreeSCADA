@@ -7,36 +7,24 @@ namespace FreeSCADA.Common
 {
     public abstract class BaseChannel : IChannel
     {
-        protected string bname;
-        protected Type btype;
-        protected bool breadOnly;
-        protected DateTime bmodifyTime;
-        protected string bstatus;
-        //protected short quality;   // TODO - quality property
+		private ChannelStatusFlags status = ChannelStatusFlags.Unknown;
+		private string name;
+		private Type type;
+		protected bool readOnly;
+		private DateTime modifyTime;
+
         protected ICommunicationPlug plugin;
         private object tag;
         private object value = null;
-        private object valueLock = new object();
-
-        public const short Q_GOOD = 0x03 << 6;
-        
-
 
         public BaseChannel(string name, bool readOnly, ICommunicationPlug plugin, Type type)
         {
-            this.bname = name;
-            this.breadOnly = readOnly;
+            this.name = name;
+            this.readOnly = readOnly;
             this.plugin = plugin;
-            this.btype = type;
-            bmodifyTime = DateTime.MinValue;
-            bstatus = "NotSet";
-            if (value == null)
-                if (type == typeof(string))
-                {
-                    value = new String(new char[0]);
-                }
-                else
-                    value = System.Activator.CreateInstance(type);
+            this.type = type;
+            modifyTime = DateTime.MinValue;
+            status = ChannelStatusFlags.Unknown;
         }
 
         #region IChannel Members
@@ -46,38 +34,52 @@ namespace FreeSCADA.Common
 
         public string Name
         {
-            get { return bname; }
+            get 
+			{ 
+				lock(this)
+					return name; 
+			}
         }
 
         public string Type
         {
-            get { return btype.Name; }
+            get 
+			{
+				lock (this) 
+					return type.Name;
+			}
         }
 
         public bool IsReadOnly
         {
-            get { return breadOnly; }
+            get 
+			{
+				lock (this)
+					return readOnly; 
+			}
         }
 
         public virtual object Value
         {
             get
             {
-                lock (valueLock)
+                lock (this)
                     return value;
 
             }
             set
             {
-                if (!breadOnly && plugin.IsConnected)
-                    ExternalSetValue(value);
+				if (!IsReadOnly && plugin.IsConnected)
+                    DoUpdate(value);
             }
         }
+
         public DateTime ModifyTime
         {
             get
             {
-                return bmodifyTime;
+				lock(this)
+					return modifyTime;
             }
         }
 
@@ -85,13 +87,31 @@ namespace FreeSCADA.Common
         {
             get
             {
-                return bstatus;
-            }
-            set
-            {
-                bstatus = value;
+				switch (StatusFlags)
+				{
+					case ChannelStatusFlags.Good:
+						return "Good";
+					case ChannelStatusFlags.Bad:
+						return "Bad";
+					default:
+						return "Unknown";
+				}
             }
         }
+
+		public ChannelStatusFlags StatusFlags
+		{
+			get
+			{
+				lock (this)
+					return status;
+			}
+			set
+			{
+				lock (this)
+					status = value;
+			}
+		}
 
         public object Tag
         {
@@ -108,58 +128,30 @@ namespace FreeSCADA.Common
                 OnPropertyChanged("Value");
                 OnPropertyChanged("ModifyTime");
                 OnPropertyChanged("Status");
+				OnPropertyChanged("StatusFlags");
             }
             if (ValueChanged != null)
                 ValueChanged(this, new EventArgs());
-
-
         }
 
-        protected void InternalSetValue(object value)
+        protected void InternalSetValue(object value, DateTime externalTime, ChannelStatusFlags status)
         {
-            btype = value.GetType();
+            type = value.GetType();
             bool fire = false;
-            lock (valueLock)
+            lock (this)
             {
                 object old = this.value;
                 this.value = value;
-                bmodifyTime = DateTime.Now;
-                bstatus = "Good";
-                fire = !old.Equals(this.value);
-            }
-            if (fire)
-                FireValueChanged();
 
-        }
+                modifyTime = externalTime;
+				this.status = status;
 
-        protected void InternalSetValue(object value, DateTime externalTime, short externalQuality)
-        {
-            btype = value.GetType();
-            bool fire = false;
-            lock (valueLock)
-            {
-                object old = this.value;
-                this.value = value;
-                bmodifyTime = externalTime;
-                if (externalQuality == Q_GOOD)
-                {
-                    bstatus = "Good";
-                }
-                else
-                {
-                    bstatus = "Bad";
-                }
                 fire = !old.Equals(this.value);
             }
             if (fire)
                 FireValueChanged();
         }
 
-        public virtual void DoUpdate(object value, DateTime externalTime, short externalQuality)
-        {
-            InternalSetValue(value, externalTime, externalQuality);
-        }
-        // Create the OnPropertyChanged method to raise the event
         protected void OnPropertyChanged(string name)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
@@ -168,17 +160,15 @@ namespace FreeSCADA.Common
                 handler(this, new PropertyChangedEventArgs(name));
             }
         }
-        public abstract void DoUpdate();
+
+		public abstract void DoUpdate();
         public virtual void DoUpdate(object value)
         {
-            InternalSetValue(value);
+			InternalSetValue(value, DateTime.Now, ChannelStatusFlags.Good);
         }
-        public virtual void ExternalSetValue(object value)
-        {
-            DoUpdate(value);
-        }
-
-        
-       
+		public virtual void DoUpdate(object value, DateTime externalTime, ChannelStatusFlags status)
+		{
+			InternalSetValue(value, externalTime, status);
+		}
     }
 }

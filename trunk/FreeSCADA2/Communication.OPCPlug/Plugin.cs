@@ -106,7 +106,12 @@ namespace FreeSCADA.Communication.OPCPlug
 		public void Disconnect()
 		{
 			connectedFlag = false;
+
+			foreach (OPCBaseChannel ch in channels)
+				ch.Disconnect();
+			
 			connectionGroups.Clear();
+
 			System.GC.Collect();
 		}
 

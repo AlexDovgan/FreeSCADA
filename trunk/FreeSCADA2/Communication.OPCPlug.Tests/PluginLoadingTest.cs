@@ -1,6 +1,5 @@
-﻿using System;
+﻿using FreeSCADA.Communication.OPCPlug;
 using NUnit.Framework;
-using FreeSCADA.Communication.OPCPlug;
 
 namespace Communication.OPCPlug.Tests
 {
