@@ -2,6 +2,13 @@
 using System.ComponentModel;
 namespace FreeSCADA.ShellInterfaces
 {
+	public enum ChannelStatusFlags
+	{
+		Unknown = 0,
+		Good	= 1,
+		Bad		= 2
+	}
+
 	public interface IChannel:INotifyPropertyChanged
 	{
         event EventHandler ValueChanged;
@@ -25,15 +32,23 @@ namespace FreeSCADA.ShellInterfaces
 			get;
 			set;
 		}
+
         DateTime ModifyTime
         {
             get;
         }
+
         string  Status
         {
             get;
-            set;
         }
+
+		ChannelStatusFlags StatusFlags
+		{
+			get;
+			set;
+		}
+
 		//client's tmp_buff
 		object Tag
 		{

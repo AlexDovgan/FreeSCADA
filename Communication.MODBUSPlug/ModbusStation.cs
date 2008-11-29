@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading;
+using FreeSCADA.ShellInterfaces;
 using Modbus.Data;
 using Modbus.Device;
 
@@ -158,15 +159,15 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                             {
                                                 if (ch.Value.GetType() == typeof(int))
                                                 {
-                                                    ch.DoUpdate((int)registers[ch.ModbusDataAddress - buf.startAddress], dt, 192);
+                                                    ch.DoUpdate((int)registers[ch.ModbusDataAddress - buf.startAddress], dt, ChannelStatusFlags.Good);
                                                 }
                                                 if (ch.Value.GetType() == typeof(uint))
                                                 {
-                                                    ch.DoUpdate((uint)registers[ch.ModbusDataAddress - buf.startAddress], dt, 192);
+													ch.DoUpdate((uint)registers[ch.ModbusDataAddress - buf.startAddress], dt, ChannelStatusFlags.Good);
                                                 }
                                                 if (ch.Value.GetType() == typeof(float))
                                                 {
-                                                    ch.DoUpdate((float)registers[ch.ModbusDataAddress - buf.startAddress], dt, 192);
+													ch.DoUpdate((float)registers[ch.ModbusDataAddress - buf.startAddress], dt, ChannelStatusFlags.Good);
                                                 }
                                             }
                                             break;
@@ -178,17 +179,17 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                                 if (ch.Value.GetType() == typeof(int))
                                                 {
                                                     int val = inputs[ch.ModbusDataAddress - buf.startAddress] ? 1 : 0;
-                                                    ch.DoUpdate(val, dt, 192);
+													ch.DoUpdate(val, dt, ChannelStatusFlags.Good);
                                                 }
                                                 if (ch.Value.GetType() == typeof(uint))
                                                 {
                                                     uint val = (uint)(inputs[ch.ModbusDataAddress - buf.startAddress] ? 1 : 0);
-                                                    ch.DoUpdate(val, dt, 192);
+													ch.DoUpdate(val, dt, ChannelStatusFlags.Good);
                                                 }
                                                 if (ch.Value.GetType() == typeof(float))
                                                 {
                                                     float val = inputs[ch.ModbusDataAddress - buf.startAddress] ? 1 : 0;
-                                                    ch.DoUpdate(val, dt, 192);
+													ch.DoUpdate(val, dt, ChannelStatusFlags.Good);
                                                 }
                                             }
                                             break;
@@ -200,17 +201,17 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                                 if (ch.Value.GetType() == typeof(int))
                                                 {
                                                     int val = inputs[ch.ModbusDataAddress - buf.startAddress] ? 1 : 0;
-                                                    ch.DoUpdate(val, dt, 192);
+													ch.DoUpdate(val, dt, ChannelStatusFlags.Good);
                                                 }
                                                 if (ch.Value.GetType() == typeof(uint))
                                                 {
                                                     uint val = (uint)(inputs[ch.ModbusDataAddress - buf.startAddress] ? 1 : 0);
-                                                    ch.DoUpdate(val, dt, 192);
+													ch.DoUpdate(val, dt, ChannelStatusFlags.Good);
                                                 }
                                                 if (ch.Value.GetType() == typeof(float))
                                                 {
                                                     float val = inputs[ch.ModbusDataAddress - buf.startAddress] ? 1 : 0;
-                                                    ch.DoUpdate(val, dt, 192);
+													ch.DoUpdate(val, dt, ChannelStatusFlags.Good);
                                                 }
                                             }
                                             break;
@@ -221,15 +222,15 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                             {
                                                 if (ch.Value.GetType() == typeof(int))
                                                 {
-                                                    ch.DoUpdate((int)registers[ch.ModbusDataAddress - buf.startAddress], dt, 192);
+													ch.DoUpdate((int)registers[ch.ModbusDataAddress - buf.startAddress], dt, ChannelStatusFlags.Good);
                                                 }
                                                 if (ch.Value.GetType() == typeof(uint))
                                                 {
-                                                    ch.DoUpdate((uint)registers[ch.ModbusDataAddress - buf.startAddress], dt, 192);
+													ch.DoUpdate((uint)registers[ch.ModbusDataAddress - buf.startAddress], dt, ChannelStatusFlags.Good);
                                                 }
                                                 if (ch.Value.GetType() == typeof(float))
                                                 {
-                                                    ch.DoUpdate((float)registers[ch.ModbusDataAddress - buf.startAddress], dt, 192);
+													ch.DoUpdate((float)registers[ch.ModbusDataAddress - buf.startAddress], dt, ChannelStatusFlags.Good);
                                                 }
                                             }
                                             break;

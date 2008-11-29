@@ -1,8 +1,8 @@
-﻿using FreeSCADA.Communication.OPCPlug;
+﻿using System.Windows.Forms;
+using FreeSCADA.Communication.OPCPlug;
 using FreeSCADA.ShellInterfaces;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
-using System.Windows.Forms;
 
 namespace Communication.OPCPlug.Tests
 {
@@ -121,13 +121,13 @@ namespace Communication.OPCPlug.Tests
 			{
 				for(int j=0;j<plugin.Channels.Length;j++)
 				{
-					IChannel ch = plugin.Channels[i];
+					IChannel ch = plugin.Channels[j];
 					System.Console.WriteLine("Channel value: {0}", ch.Value);
 
 					if(ch.Value != null && ch.Value.ToString() != "")
-						channelStates[i] = true;
+						channelStates[j] = true;
 					else
-						channelStates[i] = false;
+						channelStates[j] = false;
 				}
 
 				bool stop=true;
@@ -147,6 +147,28 @@ namespace Communication.OPCPlug.Tests
 
 			foreach (bool val in channelStates)
 				Assert.IsTrue(val);
+
+			plugin.Disconnect();
+		}
+
+		[Test]
+		public void WriteToAllChannels()
+		{
+			ExpectModal("SettingsForm", "ImportAllChannelsSettingsFormHandler");
+			plugin.ProcessCommand(0);
+
+
+			Assert.AreEqual(true, plugin.Connect());
+
+			//Wait for some time until all channels get filled by OPC
+			System.Threading.Thread.Sleep(1000);
+			
+			//TODO: How to check that the value is set on OPC server side?
+			foreach (IChannel ch in plugin.Channels)
+			{
+				object val = ch.Value;
+				ch.Value = val;
+			}
 
 			plugin.Disconnect();
 		}
