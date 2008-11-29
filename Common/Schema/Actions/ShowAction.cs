@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Threading;
 
 namespace FreeSCADA.Common.Schema.Actions

@@ -1,14 +1,15 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Communication.SimulatorPlug.Tests")]
+[assembly: AssemblyTitle("Communication.OPCPlug.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Communication.SimulatorPlug.Tests")]
+[assembly: AssemblyProduct("Communication.OPCPlug.Tests")]
 [assembly: AssemblyCopyright("Copyright ©  2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("71b45fb2-03ba-4fb6-ba0e-c3647f246d6b")]
+[assembly: Guid("f00873f2-fc81-4f08-a352-16083afbed41")]
 
 // Version information for an assembly consists of the following four values:
 //

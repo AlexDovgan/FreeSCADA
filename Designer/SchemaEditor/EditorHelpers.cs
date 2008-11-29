@@ -1,21 +1,17 @@
 ﻿using System;
-using System.IO;
-using System.Xml;
-using System.Windows;
 using System.Collections;
-using System.Windows.Data;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Markup;
-using System.Windows.Shapes;
-using System.ComponentModel;
-using FreeSCADA.Common.Schema;
-using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Collections.Generic;
-using System.Windows.Controls.Primitives;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Markup;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using System.Xml;
+using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.SchemaEditor.Tools;
-using FreeSCADA.Designer.SchemaEditor.Manipulators;
 
 namespace FreeSCADA.Designer.SchemaEditor
 {

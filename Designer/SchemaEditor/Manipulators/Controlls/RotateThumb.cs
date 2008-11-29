@@ -1,9 +1,9 @@
-﻿using System.Windows.Controls.Primitives;
-using System.Windows.Controls;
+﻿using System;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using System;
 
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
@@ -47,6 +47,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
             }
         }
 
+		/// <summary>
+		/// Constructor
+		/// </summary>
         public RotateThumb()
         {
             base.DragDelta += new DragDeltaEventHandler(RotateThumb_DragDelta);

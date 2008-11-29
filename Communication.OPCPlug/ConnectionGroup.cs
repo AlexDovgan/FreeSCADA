@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using OpcRcw.Da;
 
@@ -13,7 +12,7 @@ namespace FreeSCADA.Communication.OPCPlug
 		int callbackCookie;
 		IOPCServer server;
 
-		public ConnectionGroup(string opcServer, string opcHost, List<OpcChannelImp> channels)
+		public ConnectionGroup(string opcServer, string opcHost, List<OPCBaseChannel> channels)
 		{
 			Type t = Type.GetTypeFromProgID(opcServer, opcHost);
 			server = (IOPCServer)Activator.CreateInstance(t);

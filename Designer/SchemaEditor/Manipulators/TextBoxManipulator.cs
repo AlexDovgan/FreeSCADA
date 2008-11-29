@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Media;
-using System.Windows;
-using System.Windows.Input;
-using FreeSCADA.Common.Schema;
-using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
-using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using System.Windows.Documents;
-using FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls;
+using System.Windows.Media;
 
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators

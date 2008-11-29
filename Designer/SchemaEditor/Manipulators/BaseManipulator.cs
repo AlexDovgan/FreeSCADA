@@ -1,8 +1,5 @@
-using System;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Documents;
-using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators

@@ -1,6 +1,6 @@
 ﻿using System;
-using FreeSCADA.Common;
 using System.Windows.Forms;
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer.Views
 {

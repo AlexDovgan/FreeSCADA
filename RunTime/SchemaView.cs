@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Windows.Media;
 using FreeSCADA.Common;
 using FreeSCADA.Common.Schema;
 using WeifenLuo.WinFormsUI.Docking;
-using System.Windows.Media;
 
 namespace FreeSCADA.RunTime
 {

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FreeSCADA.ShellInterfaces;
 using System.ComponentModel;
+using FreeSCADA.ShellInterfaces;
 using FreeSCADA.ShellInterfaces.Plugins;
 
 namespace FreeSCADA.Common

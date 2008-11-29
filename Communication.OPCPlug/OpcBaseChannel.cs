@@ -1,21 +1,18 @@
 ﻿using System;
-using System.ComponentModel;
 using FreeSCADA.Common;
-using OpcRcw.Da;
 namespace FreeSCADA.Communication.OPCPlug
 {
     /// <summary>
     /// TODO:  may be need to implement one abstract base class for implementation base functionality with 
     /// events
     /// </summary>
-    class OpcChannelImp:BaseChannel
+    class OPCBaseChannel:BaseChannel
 	{
-
 		string opcChannel;
 		string opcServer;
 		string opcHost;
         
-		public OpcChannelImp(string name, Plugin plugin, string opcChannel, string opcServer, string opcHost)
+		public OPCBaseChannel(string name, Plugin plugin, string opcChannel, string opcServer, string opcHost)
             :base(name,false,plugin,typeof(object))
 		{
 			

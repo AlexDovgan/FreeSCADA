@@ -1,6 +1,6 @@
 ﻿using FreeSCADA.ShellInterfaces;
 
-namespace Communication.SimulatorPlug.Tests
+namespace Communication.OPCPlug.Tests
 {
 	class EnvironmentMock:IEnvironment
 	{

@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Text;
 using NUnit.Framework;
 
 namespace FreeSCADA.Common.Tests

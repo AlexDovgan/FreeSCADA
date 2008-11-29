@@ -1,5 +1,4 @@
-﻿using System;
-using FreeSCADA.Common;
+﻿using FreeSCADA.Common;
 namespace FreeSCADA.Communication.SimulatorPlug
 {
 	class SawIntegerChannel : BaseChannel

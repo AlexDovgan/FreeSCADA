@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 using FreeSCADA.Designer.SchemaEditor.ShortProperties;
 
 namespace FreeSCADA.Designer.Views

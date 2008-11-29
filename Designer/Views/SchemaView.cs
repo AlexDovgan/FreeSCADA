@@ -13,6 +13,7 @@ using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
 using FreeSCADA.Designer.SchemaEditor.ShortProperties;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
+using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Designer.Views
 {

@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace FreeSCADA.Communication.MODBUSPlug
 {
     enum ModbusStationType

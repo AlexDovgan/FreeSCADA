@@ -1,7 +1,6 @@
-﻿using System;
-using NUnit.Framework;
+﻿using FreeSCADA.Designer;
 using NUnit.Extensions.Forms;
-using FreeSCADA.Designer;
+using NUnit.Framework;
 
 namespace Designer.Tests
 {

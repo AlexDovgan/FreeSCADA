@@ -1,8 +1,5 @@
 ﻿using System;
-using System.IO;
 using System.Windows.Forms;
-using System.Xml;
-using System.Collections.Generic;
 
 namespace FreeSCADA.Communication.MODBUSPlug
 {

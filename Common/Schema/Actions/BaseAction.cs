@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.ComponentModel;
 using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Common.Schema.Actions
@@ -12,7 +9,7 @@ namespace FreeSCADA.Common.Schema.Actions
     /// </summary>
     abstract public class BaseAction
     {
-        protected string actionChannelName;
+        protected string channelName;
         protected FrameworkElement actionedObject;
         protected string objectName;
         protected IChannel actionChannel;
@@ -28,8 +25,8 @@ namespace FreeSCADA.Common.Schema.Actions
 
         public string ActionChannelName
         {
-            get{  return actionChannelName; }
-            set{  actionChannelName = value; }
+            get{  return channelName; }
+            set{  channelName = value; }
         }
 
         /*public string ActionedObjectName

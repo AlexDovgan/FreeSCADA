@@ -1,8 +1,6 @@
 ﻿using System;
-using System.IO;
-using System.Windows.Forms;
-using System.Xml;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using FreeSCADA.Common;
 
 namespace FreeSCADA.Communication.SimulatorPlug

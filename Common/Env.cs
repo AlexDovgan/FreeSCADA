@@ -1,5 +1,5 @@
-﻿using FreeSCADA.ShellInterfaces;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using FreeSCADA.ShellInterfaces;
 
 namespace FreeSCADA.Common
 {

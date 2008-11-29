@@ -1,5 +1,4 @@
 ﻿using System;
-using FreeSCADA.Common;
 
 namespace FreeSCADA.Communication.SimulatorPlug
 {

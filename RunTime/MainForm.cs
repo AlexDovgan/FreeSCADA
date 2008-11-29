@@ -1,6 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using FreeSCADA.Common;
-using System.Text.RegularExpressions;
 
 
 namespace FreeSCADA.RunTime

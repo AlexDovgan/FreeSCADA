@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using FreeSCADA.Common;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
+using FreeSCADA.ShellInterfaces;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace FreeSCADA.Designer.Views

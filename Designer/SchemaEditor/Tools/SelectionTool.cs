@@ -1,21 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using FreeSCADA.Common.Schema;
-using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
-using FreeSCADA.Designer.SchemaEditor.UndoRedo;
-using FreeSCADA.ShellInterfaces;
-using FreeSCADA.Common;
-using FreeSCADA.Designer.SchemaEditor.ShortProperties;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {

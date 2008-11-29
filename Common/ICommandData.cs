@@ -1,8 +1,8 @@
-﻿
-using System.Windows.Input;
+﻿using System;
 using System.Drawing;
-using System;
-namespace FreeSCADA.Common
+using System.Windows.Input;
+
+namespace FreeSCADA.ShellInterfaces
 {
     /// <summary>
     /// 
