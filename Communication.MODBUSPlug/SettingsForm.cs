@@ -37,9 +37,9 @@ namespace FreeSCADA.Communication.MODBUSPlug
 			stationGrid.ColumnsCount = 3;
 			stationGrid.RowsCount = 1;
             stationGrid[0, 0] = new SourceGrid.Cells.ColumnHeader("Station name");
-            stationGrid[0, 1] = new SourceGrid.Cells.ColumnHeader("IP Address");
-            stationGrid[0, 2] = new SourceGrid.Cells.ColumnHeader("TCP Port");
-
+            stationGrid[0, 1] = new SourceGrid.Cells.ColumnHeader("Station Address");
+            stationGrid[0, 2] = new SourceGrid.Cells.ColumnHeader("Parameters");
+            stationGrid.MouseDoubleClick += new MouseEventHandler(stationGrid_MouseDoubleClick);
 			LoadStations();
 			LoadChannels();
 
@@ -49,29 +49,62 @@ namespace FreeSCADA.Communication.MODBUSPlug
 			grid.AutoSizeCells();
        }
 
-        private void AddStation(string name, string ipAddress, int tcpPort)
+        void stationGrid_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            SourceGrid.Grid stationGrid = (SourceGrid.Grid)sender;
+            int [] rows = stationGrid.Selection.GetSelectionRegion().GetRowsIndex();
+            IModbusStation stat = (IModbusStation)stationGrid[rows[0], 0].Tag;
+            if (stat is ModbusTCPClientStation)
+            {
+                ModifyTCPClientStationForm mtc = new ModifyTCPClientStationForm((ModbusTCPClientStation)stat);
+                if (mtc.ShowDialog() == DialogResult.OK)
+                {
+                    stationGrid[rows[0], 0].Value = (stat as ModbusTCPClientStation).Name;
+                    stationGrid[rows[0], 1].Value = (stat as ModbusTCPClientStation).IPAddress;
+                    stationGrid[rows[0], 2].Value = (stat as ModbusTCPClientStation).TCPPort;
+                }
+            }
+        }
+
+        private void AddTCPServerStation(ModbusTCPClientStation stat)
         {
             int row = stationGrid.RowsCount;
             stationGrid.RowsCount++;
-            stationGrid[row, 0] = new SourceGrid.Cells.Cell(name, typeof(string));
-            stationGrid[row, 1] = new SourceGrid.Cells.Cell(ipAddress, typeof(string));
-            stationGrid[row, 2] = new SourceGrid.Cells.Cell(tcpPort, typeof(int));
+            stationGrid[row, 0] = new SourceGrid.Cells.Cell(stat.Name);
+            stationGrid[row, 0].Tag = stat;
+            stationGrid[row, 0].Editor = null;
+            stationGrid[row, 1] = new SourceGrid.Cells.Cell(stat.IPAddress, typeof(string));
+            stationGrid[row, 2] = new SourceGrid.Cells.Cell(stat.TCPPort, typeof(int));
+            stationGrid[row, 0].Editor = null;
+            stationGrid[row, 1].Editor = null;
+            stationGrid[row, 2].Editor = null;
         }
 
 		private void OnAddStation(object sender, EventArgs e)
 		{
             string var = GetUniqueStationName();
             int row = stationGrid.RowsCount;
-            stationGrid.RowsCount++;
             string ip = "127.0.0.1";
-            string po = "502";
+            int po = 502;
 
-            stationGrid[row, 0] = new SourceGrid.Cells.Cell(var, typeof(string));
-            stationGrid[row, 1] = new SourceGrid.Cells.Cell(ip, typeof(string));
-            stationGrid[row, 2] = new SourceGrid.Cells.Cell(po, typeof(int));
-
-            stationGrid.Selection.ResetSelection(true);
-            stationGrid.Selection.SelectRow(row, true);
+            AddStationForm asf = new AddStationForm();
+            if (asf.ShowDialog() == DialogResult.OK)
+            {
+                if (asf.stationTypeComboBox.SelectedItem != null)
+                switch ((ModbusStationType)asf.stationTypeComboBox.SelectedItem)
+                {
+                    case ModbusStationType.TCPMaster:
+                        ModbusTCPClientStation stat = new ModbusTCPClientStation(var, plugin, ip, po, 100, 1000, 3);
+                        ModifyTCPClientStationForm mtc = new ModifyTCPClientStationForm(stat);
+                        if (mtc.ShowDialog() == DialogResult.OK)
+                        {
+                            AddTCPServerStation(stat);
+                            stationGrid.Selection.ResetSelection(true);
+                            stationGrid.Selection.SelectRow(row, true);
+                        }
+                        break;
+                }
+            }
         }
 
         private void OnRemoveStation(object sender, EventArgs e)
@@ -96,8 +129,14 @@ namespace FreeSCADA.Communication.MODBUSPlug
         
         private void LoadStations()
         {
-            foreach (ModbusStation stat in plugin.Stations)
-                AddStation(stat.Name, stat.IPAddress, stat.TCPPort);
+            foreach (IModbusStation stat in plugin.Stations)
+            {
+                if (stat is ModbusTCPClientStation)
+                {
+                    ModbusTCPClientStation tcpstat = (ModbusTCPClientStation)stat;
+                    AddTCPServerStation(tcpstat);
+                }
+            }
         }
 
         private void AddVariable(string name, string type, string modbusStation, string modbusType, string modbusAddress)
@@ -227,17 +266,14 @@ namespace FreeSCADA.Communication.MODBUSPlug
             }
 			plugin.Channels = channels;
 
-            ModbusStation[] stations = new ModbusStation[stationGrid.RowsCount - 1];
+            IModbusStation[] stations = new IModbusStation[stationGrid.RowsCount - 1];
             for (int i = 1; i < stationGrid.RowsCount; i++)
             {
-                stations[i - 1] = StationFactory.CreateStation(stationGrid[i, 0].DisplayText,
-                                                                plugin,
-                                                                stationGrid[i, 1].DisplayText,
-                                                                int.Parse(stationGrid[i, 2].DisplayText));
+                stations[i - 1] = (IModbusStation)stationGrid[i, 0].Tag;
             }
 			plugin.Stations = stations;
 
-            foreach (ModbusStation stat in stations)
+            foreach (IModbusStation stat in stations)
             {
                 stat.ClearChannels();
                 foreach (ModbusChannelImp chan in channels)
@@ -247,6 +283,5 @@ namespace FreeSCADA.Communication.MODBUSPlug
 
 			plugin.SaveSettings();
 		}
-
 	}
 }

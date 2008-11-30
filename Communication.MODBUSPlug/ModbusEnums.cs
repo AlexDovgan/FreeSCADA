@@ -11,13 +11,13 @@ namespace FreeSCADA.Communication.MODBUSPlug
     
     enum ModbusConversionType
     {
-        AsIs,
+        SwapNone,
         SwapBytes,
         SwapWords,
         SwapAll
     }
 
-    enum ModbusInternalType
+    public enum ModbusInternalType
     {
         Integer,
         Unsigned,

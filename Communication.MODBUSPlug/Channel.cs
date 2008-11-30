@@ -18,6 +18,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
         string modbusType;
         string modbusAddress;
         ModbusDataType modbusDataType;
+        ModbusInternalType modbusInternalType;
         ushort modbusDataAddress;
 
         public ModbusChannelImp(string name, Plugin plugin, Type type, string modbusStation, string modbusType, string modbusAddress)
@@ -42,6 +43,12 @@ namespace FreeSCADA.Communication.MODBUSPlug
                     modbusDataType = ModbusDataType.HoldingRegister;
                     break;
             }
+            if (type == typeof(int))
+                modbusInternalType = ModbusInternalType.Integer;
+            else if (type == typeof(uint))
+                modbusInternalType = ModbusInternalType.Unsigned;
+            else if (type == typeof(float))
+                modbusInternalType = ModbusInternalType.Float;
         }
 
         public string ModbusStation
@@ -63,6 +70,11 @@ namespace FreeSCADA.Communication.MODBUSPlug
 		{
             get { return modbusDataType; }
 		}
+
+        public ModbusInternalType ModbusInternalType
+        {
+            get { return modbusInternalType; }
+        }
 
         public ushort ModbusDataAddress
 		{
@@ -93,12 +105,17 @@ namespace FreeSCADA.Communication.MODBUSPlug
                 return 1;
             if (x.ModbusDataType < y.ModbusDataType)
                 return -1;
-            else if (ushort.Parse(x.ModbusAddress) > ushort.Parse(y.ModbusAddress))
+            else if (x.modbusDataAddress > y.modbusDataAddress)
                 return 1;
-            else if (ushort.Parse(x.ModbusAddress) < ushort.Parse(y.ModbusAddress))
+            else if (x.modbusDataAddress < y.modbusDataAddress)
                 return -1;
             else
                 return 0;
         }
+
+        /*public override void ExternalSetValue(object value)
+        {
+            base.ExternalSetValue(value);
+        }*/
     }
 }
