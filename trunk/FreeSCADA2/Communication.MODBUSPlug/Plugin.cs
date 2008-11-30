@@ -10,7 +10,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
 		private IEnvironment environment;
 		List<Command> commands = new List<Command>();
 		List<IChannel> channels = new List<IChannel>();
-        List<ModbusStation> stations = new List<ModbusStation>();
+        List<IModbusStation> stations = new List<IModbusStation>();
 
 		bool connectedFlag = false;
 
@@ -38,14 +38,14 @@ namespace FreeSCADA.Communication.MODBUSPlug
             }
         }
 
-        public ModbusStation[] Stations
+        public IModbusStation[] Stations
         {
             get { return stations.ToArray(); }
             set
             {
                 stations.Clear();
                 stations.AddRange(value);
-                stations.RemoveAll(delegate(ModbusStation st) { return st == null; });
+                stations.RemoveAll(delegate(IModbusStation st) { return st == null; });
             }
         }
 
@@ -88,7 +88,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
 
 			if (channels.Count > 0)
 			{
-                foreach (ModbusStation stat in stations)
+                foreach (IModbusStation stat in stations)
                     stat.Start();
             }
 
@@ -101,7 +101,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
             if (!IsConnected)
                 return;
             connectedFlag = false;
-            foreach (ModbusStation stat in stations)
+            foreach (IModbusStation stat in stations)
                 stat.Stop();
 			System.GC.Collect();
 		}
@@ -126,7 +126,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
 
 				XmlDocument doc = new System.Xml.XmlDocument();
 				XmlElement root_elem = doc.CreateElement("root");
-                foreach (ModbusStation stat in stations)
+                foreach (IModbusStation stat in stations)
                 {
 					XmlElement elem = doc.CreateElement("station");
                     StationFactory.SaveStation(elem, stat);
@@ -168,7 +168,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                 foreach (XmlElement node in nodes)
                     channels.Add(ChannelFactory.CreateChannel(node, this));
 
-                foreach (ModbusStation stat in stations)
+                foreach (IModbusStation stat in stations)
                 {
                     stat.ClearChannels();
                     foreach (ModbusChannelImp chan in channels)

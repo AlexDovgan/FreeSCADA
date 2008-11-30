@@ -145,8 +145,10 @@ namespace FreeSCADA.Common
 
                 modifyTime = externalTime;
 				this.status = status;
-
-                fire = !old.Equals(this.value);
+                if (old != null)
+                    fire = !old.Equals(this.value);
+                else
+                    fire = true;
             }
             if (fire)
                 FireValueChanged();
