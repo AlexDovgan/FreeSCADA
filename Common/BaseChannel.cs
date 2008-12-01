@@ -15,7 +15,7 @@ namespace FreeSCADA.Common
 
         protected ICommunicationPlug plugin;
         private object tag;
-        private object value = null;
+        private object value = new object();
 
         public BaseChannel(string name, bool readOnly, ICommunicationPlug plugin, Type type)
         {
@@ -23,6 +23,9 @@ namespace FreeSCADA.Common
             this.readOnly = readOnly;
             this.plugin = plugin;
             this.type = type;
+			if (type != value.GetType())
+				value = System.Activator.CreateInstance(type);
+
             modifyTime = DateTime.MinValue;
             status = ChannelStatusFlags.Unknown;
         }
@@ -136,12 +139,12 @@ namespace FreeSCADA.Common
 
         protected void InternalSetValue(object value, DateTime externalTime, ChannelStatusFlags status)
         {
-            type = value.GetType();
             bool fire = false;
             lock (this)
             {
                 object old = this.value;
                 this.value = value;
+				this.type = value.GetType();
 
                 modifyTime = externalTime;
 				this.status = status;

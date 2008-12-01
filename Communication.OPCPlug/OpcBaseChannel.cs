@@ -45,7 +45,10 @@ namespace FreeSCADA.Communication.OPCPlug
 			set
 			{
 				if (!IsReadOnly && plugin.IsConnected && opcConnection != null)
+				{
 					opcConnection.WriteChannel(opcHandle, value);
+					base.Value = value;
+				}
 			}
 		}
 
@@ -65,11 +68,5 @@ namespace FreeSCADA.Communication.OPCPlug
         public override void DoUpdate()
         {
         }
-
-		//public override void ExternalSetValue(object value)
-		//{
-		//    IntPtr addErrors;
-		//    //opcItem.WriteVQT(1, new string[] { opcChannel }, new OPCITEMVQT[] { value }, out addErrors);
-		//}
 	}
 }
