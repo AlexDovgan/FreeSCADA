@@ -24,7 +24,10 @@ namespace FreeSCADA.Common
             this.plugin = plugin;
             this.type = type;
 			if (type != value.GetType())
-				value = System.Activator.CreateInstance(type);
+                if (type != typeof(string))     // This approach does not work with STRING channels!!!!!!!!!!!
+				    value = System.Activator.CreateInstance(type);
+                else
+                    value = "";
 
             modifyTime = DateTime.MinValue;
             status = ChannelStatusFlags.Unknown;
