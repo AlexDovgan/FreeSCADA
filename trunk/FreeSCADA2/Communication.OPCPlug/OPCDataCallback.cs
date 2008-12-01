@@ -26,9 +26,6 @@ namespace FreeSCADA.Communication.OPCPlug
 		{
 			for (int i = 0; i < dwCount; i++)
 			{
-				if ((pwQualities[i] & Q_GOOD) != Q_GOOD)
-					continue;
-
 				foreach (OPCBaseChannel ch in channels)
 				{
 					if (ch.GetHashCode() == phClientItems[i])
@@ -59,7 +56,16 @@ namespace FreeSCADA.Communication.OPCPlug
 
 		public void OnWriteComplete(int dwTransid, int hGroup, int hrMastererr, int dwCount, int[] pClienthandles, int[] pErrors)
 		{
-			throw new NotImplementedException();
+			for (int i = 0; i < dwCount; i++)
+			{
+				foreach (OPCBaseChannel ch in channels)
+				{
+					if (ch.GetHashCode() == pClienthandles[i])
+					{
+						ch.StatusFlags = ChannelStatusFlags.Good;
+					}
+				}
+			}
 		}
 
 		#endregion
