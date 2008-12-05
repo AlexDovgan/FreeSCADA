@@ -98,8 +98,8 @@ namespace FreeSCADA.Common.Schema
             }*/
         }
         public void LinkActions()
-        {
-         /*   foreach (FrameworkElement el in MainCanvas.Children)
+        {/*
+            foreach (FrameworkElement el in MainCanvas.Children)
             {
                 TransformGroup tg = new TransformGroup();
                 tg.Children.Add(el.RenderTransform);
