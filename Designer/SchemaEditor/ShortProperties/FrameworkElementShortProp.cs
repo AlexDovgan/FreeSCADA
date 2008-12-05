@@ -74,20 +74,19 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
                 }
             }
         }
-        
+
         [Description("Object's X position"), Category("Layout")]
         [Editor(typeof(DoubleEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        [OriginalProperty(typeof(Canvas),"Left")]
+        [OriginalProperty(typeof(Canvas), "Left")]
         public double PosX
         {
-               get { return Canvas.GetLeft(frameworkElement); }
-               set
-               {
-                   RaisePropertiesBrowserChanged((UIElement)frameworkElement);
-                   Canvas.SetLeft(frameworkElement, value);
-               }
-            
-            
+             get { return Canvas.GetLeft(frameworkElement); }
+             set
+             {
+                 RaisePropertiesBrowserChanged((UIElement)frameworkElement);
+                 Canvas.SetLeft(frameworkElement, value);
+             }
+          
         }
         [Description("Object's Y position"), Category("Layout")]
         [Editor(typeof(DoubleEditor), typeof(System.Drawing.Design.UITypeEditor))]
@@ -103,6 +102,8 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         }
 
         [Description("Object's Width"), Category("Layout")]
+        [Editor(typeof(DoubleEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [OriginalProperty(typeof(FrameworkElement), "Width")]
         public double Width
         {
             get { return frameworkElement.Width; }
@@ -114,6 +115,8 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
 
         }
         [Description("Object's Height"), Category("Layout")]
+        [Editor(typeof(DoubleEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [OriginalProperty(typeof(FrameworkElement), "Width")]
         public double Height
         {
             get { return frameworkElement.Height; }
@@ -125,6 +128,8 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
 
         }
         [Description("Object's Rotation angle"), Category("Layout")]
+        //[Editor(typeof(DoubleEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        //[OriginalProperty(typeof(FrameworkElement), "Angle")]
         public double RotateAngle
         {
             get
@@ -140,7 +145,9 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
 
         }
         [Description("Object's Z-Order"), Category("Layout")]
-        public int ZOrder
+        [Editor(typeof(DoubleEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [OriginalProperty(typeof(FrameworkElement), "ZIndex")]
+         public int ZOrder
         {
             get { return Canvas.GetZIndex(frameworkElement); }
             set
@@ -152,6 +159,8 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         }
 
         [Description("Object's Opacity"), Category("Appearence")]
+        [Editor(typeof(DoubleEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [OriginalProperty(typeof(FrameworkElement), "Opacity")]
         public double Opacity
         {
             get { return frameworkElement.Opacity; }
