@@ -52,7 +52,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertyGridTypeEditors
                 if (edSvc != null)
                 {
                     // Display an angle selection control and retrieve the value.
-                    DoubleBindingControl control = new DoubleBindingControl();
+                    DoubleBindingControl control = new DoubleBindingControl(context);
                     edSvc.DropDownControl(control);
                     if (control.SelectedNode != null&&control.SelectedNode.Tag!=null )
                     {
@@ -66,23 +66,24 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertyGridTypeEditors
                         dp.ObjectInstance = chs;
                         dp.MethodName = "GetChannel";
                         bind.Source = dp;
-                        bind.Converter = new Kent.Boogaart.Converters.TypeConverter(Type.GetType(chs.GetChannel().Type), depProp.PropertyType);
-                        
+                        bind.Converter = new Kent.Boogaart.Converters.TypeConverter(chs.GetChannel().Value.GetType(), depProp.PropertyType);
+                        bind.Mode = BindingMode.TwoWay;
                         BindingOperations.SetBinding(depObj, depProp, bind);
+                        depObj.SetValue(depProp, value);
+                        
+                        
                         
                     }
 
 
                 }
-
-
-
             }
             return value;
         }
         
         public override void PaintValue(System.Drawing.Design.PaintValueEventArgs e)
         {
+            
             if (e.Context.Instance is ShortProperties.CommonShortProp &&
                 (e.Context.Instance as ShortProperties.CommonShortProp).WrapedObject is DependencyObject)
             {
@@ -97,28 +98,10 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertyGridTypeEditors
                 string channelName;
                 if((bind=BindingOperations.GetBinding(depObj,depProp))!=null)
                 {
-                    try
-                    {
-                        ObjectDataProvider odp = bind.Source as ObjectDataProvider;
-                        Common.Schema.ChannelDataSource chs = odp.ObjectInstance as Common.Schema.ChannelDataSource;
-                        channelName = chs.ChannelName;
-                        
-                        // Create font and brush.
-                        Font drawFont = new Font("Arial", 16);
+                      
                         SolidBrush drawBrush = new SolidBrush(Color.Black);
-
-                        // Create point for upper-left corner of drawing.
-                        PointF drawPoint = new PointF(0, 0);
-
-                        // Draw string to screen.
-                        e.Graphics.DrawString(channelName, drawFont, drawBrush, drawPoint);
-
-                    }
-                    catch(Exception ex)
-                    {
-                    }
-                    
-                    
+                        e.Graphics.FillRectangle(drawBrush, e.Bounds);
+                                        
                 }
                     
 
@@ -137,21 +120,50 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertyGridTypeEditors
     // Provides a user interface for adjusting an angle value.
     internal class DoubleBindingControl : System.Windows.Forms.TreeView
     {
-        public DoubleBindingControl()
+        public DoubleBindingControl(System.ComponentModel.ITypeDescriptorContext context)
         {
+            OriginalPropertyAttribute atr;
+            string channelName=String.Empty;
+            if ((atr = context.PropertyDescriptor.Attributes[typeof(OriginalPropertyAttribute)] as OriginalPropertyAttribute) != null)
+            {
+                DependencyObject depObj = (context.Instance as ShortProperties.CommonShortProp).WrapedObject as DependencyObject;
+                DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromName(atr.PropertyName, atr.ObjectType, depObj.GetType());
+                DependencyProperty depProp = dpd.DependencyProperty;
+             
+                System.Windows.Data.Binding bind;
+
+                if ((bind = BindingOperations.GetBinding(depObj, depProp)) != null)
+                {
+                    Common.Schema.ChannelDataSource chs = ((ObjectDataProvider)bind.Source).ObjectInstance as Common.Schema.ChannelDataSource;
+                    channelName = chs.ChannelName;
+                }
+            }
+            string[] splitStr = channelName.Split('.');
             foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
             {
                 TreeNode plugNode = this.Nodes.Add(Env.Current.CommunicationPlugins[plugId].Name);
-
+                //if (plugNode.Text == Env.Current.CommunicationPlugins[splitStr[0]].Name)
+                    
+                if(splitStr.Count(x=>x==plugNode.Text)>0)
+                    plugNode.Expand();
                 foreach (IChannel ch in Env.Current.CommunicationPlugins[plugId].Channels)
                 {
                     TreeNode chNode;
                     chNode = plugNode.Nodes.Add(ch.Name);
                     chNode.Tag = plugId;
+                    if (splitStr.Count(x => x == chNode.Text)>0)
+                    {
+ 
+                        this.SelectedNode = chNode;
+                        this.Update();
+                    }
                 }
             }
             Width = 200;
+            
+ 
         }
+      
 
     }
 

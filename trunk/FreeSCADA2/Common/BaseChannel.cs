@@ -75,7 +75,7 @@ namespace FreeSCADA.Common
             }
             set
             {
-				if (!IsReadOnly && plugin.IsConnected)
+				if (!IsReadOnly /*&& plugin.IsConnected*/)
                     DoUpdate(value);
             }
         }

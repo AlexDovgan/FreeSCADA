@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using FreeSCADA.Designer.SchemaEditor.PropertyGridTypeEditors;
 
 namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
 {
@@ -31,6 +32,8 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
                 rangebase.Maximum = value;
             }
         }
+        [Editor(typeof(DoubleEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [OriginalProperty(typeof(RangeBase), "Value")]
         public double Value
         {
             get { return rangebase.Value; }

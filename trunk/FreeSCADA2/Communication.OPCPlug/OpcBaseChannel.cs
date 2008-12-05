@@ -19,6 +19,7 @@ namespace FreeSCADA.Communication.OPCPlug
 			this.opcChannel = opcChannel;
 			this.opcHost = opcHost;
 			this.opcServer = opcServer;
+            
 		}
         
 		public string OpcChannel
