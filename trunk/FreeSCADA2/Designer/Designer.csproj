@@ -37,6 +37,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\SourceGrid4_11\DevAge.Windows.Forms.dll</HintPath>
     </Reference>
+    <Reference Include="Kent.Boogaart.Converters, Version=1.1.0.0, Culture=neutral, PublicKeyToken=cc96fa93a217f7a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\DataConverters\Kent.Boogaart.Converters.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -94,9 +98,20 @@
     <Compile Include="SchemaEditor\Manipulators\DragResizeRotateManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\GeometryHilightManipulator.cs" />
     <Compile Include="SchemaEditor\ObjectsFactory.cs" />
+    <Compile Include="SchemaEditor\PropertyGridTypeEditors\DoubleEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SchemaEditor\PropertyGridTypeEditors\OrinalPropertyAttribute.cs" />
     <Compile Include="SchemaEditor\SchemaCommands.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="SchemaEditor\ShortProperties\CanvasShortProp.cs" />
+    <Compile Include="SchemaEditor\ShortProperties\CommonShortProp.cs" />
+    <Compile Include="SchemaEditor\ShortProperties\ContentShortProp.cs" />
+    <Compile Include="SchemaEditor\ShortProperties\ControlShortProp.cs" />
+    <Compile Include="SchemaEditor\ShortProperties\FrameworkElementShortProp.cs" />
+    <Compile Include="SchemaEditor\ShortProperties\RangeBaseShortProp.cs" />
+    <Compile Include="SchemaEditor\ShortProperties\ShapeShortProp.cs" />
     <Compile Include="SchemaEditor\ShortProp.cs" />
     <Compile Include="SchemaEditor\ToolDescriptor.cs" />
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
