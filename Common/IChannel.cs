@@ -8,7 +8,7 @@ namespace FreeSCADA.ShellInterfaces
 		Good	= 1,
 		Bad		= 2
 	}
-
+        
 	public interface IChannel:INotifyPropertyChanged
 	{
         event EventHandler ValueChanged;

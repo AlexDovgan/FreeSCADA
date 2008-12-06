@@ -232,7 +232,7 @@ namespace FreeSCADA.Designer.Views
                 StringResources.ToolControlsGroupName,
                 blankBitmap ,
                  typeof(ControlCreateTool<System.Windows.Controls.Button>)));
-            toolsList.Add(new ToolDescriptor(StringResources.ToolProgressbar,
+            toolsList.Add(new ToolDescriptor(StringResources.ToolButton,
 				StringResources.ToolControlsGroupName,
                 blankBitmap,
                 typeof(ControlCreateTool<System.Windows.Controls.ProgressBar>)));

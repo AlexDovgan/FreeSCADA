@@ -116,7 +116,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         }
         [Description("Object's Height"), Category("Layout")]
         [Editor(typeof(DoubleEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        [OriginalProperty(typeof(FrameworkElement), "Width")]
+        [OriginalProperty(typeof(FrameworkElement), "Height")]
         public double Height
         {
             get { return frameworkElement.Height; }
@@ -130,17 +130,19 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         [Description("Object's Rotation angle"), Category("Layout")]
         //[Editor(typeof(DoubleEditor), typeof(System.Drawing.Design.UITypeEditor))]
         //[OriginalProperty(typeof(FrameworkElement), "Angle")]
-        public double RotateAngle
+        public TransformGroup RotateAngle
         {
             get
             {
 
-                return ((frameworkElement.RenderTransform as TransformGroup).Children[1] as RotateTransform).Angle;
+                //return ((frameworkElement.RenderTransform as TransformGroup).Children[1] as RotateTransform).Angle;
+                return frameworkElement.RenderTransform as TransformGroup;
             }
             set
             {
                 RaisePropertiesBrowserChanged((UIElement)frameworkElement);
-                ((frameworkElement.RenderTransform as TransformGroup).Children[1] as RotateTransform).Angle = value;
+                //((frameworkElement.RenderTransform as TransformGroup).Children[1] as RotateTransform).Angle = value;
+                frameworkElement.RenderTransform = value;
             }
 
         }
