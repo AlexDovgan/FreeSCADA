@@ -1,63 +1,101 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
-using FreeSCADA.ShellInterfaces;
+using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Common
 {
 	public class Commands : ICommands
 	{
-		MenuStrip mainMenu;
-		struct CmdId
+		struct CommandInfo
 		{
-			public int Id;
-			public string PluginId;
-		}
-		Dictionary<int, CmdId> items = new Dictionary<int,CmdId>();
+			public ICommandContext context;
+			public ICommand cmd;
+		};
+		List<CommandInfo> registeredCommands = new List<CommandInfo>();
+		BaseCommandContext globalContext;
+		BaseCommandContext communicationContext;
 
-		public delegate void PluginCommandHandler(Object sender, int id, string pluginId);
-		public event PluginCommandHandler PluginCommand;
+		#region ICommands implementation
 
-
-		public Commands(MenuStrip mainMenu)
+		public Commands(MenuStrip menu, ToolStrip toolbar)
 		{
-			this.mainMenu = mainMenu;
-		}
+			globalContext = new BaseCommandContext(menu, toolbar);
 
-
-		public int RegisterCommand(string pluginId, string name, string group)
-		{
-			ToolStripMenuItem group_item = OpenGroupItem(group);
-			ToolStripMenuItem new_item = new ToolStripMenuItem(name);
-			group_item.DropDown.Items.Add(new_item);
-
-			CmdId cmdId = new CmdId();
-			cmdId.Id = items.Count;
-			cmdId.PluginId = pluginId;
-			items.Add(cmdId.Id, cmdId);
-
-			new_item.Tag = cmdId.Id;
-			new_item.Click += new EventHandler(OnItemClick);
-			return cmdId.Id;
+			ToolStrip communicationMenu = GetGroupItem(menu, StringResources.CommunicationCommandGroupName);
+			communicationContext = new BaseCommandContext(communicationMenu, null);
 		}
 
-		private ToolStripMenuItem OpenGroupItem(string group)
+		public void AddCommand(ICommandContext context, ICommand cmd)
 		{
-			foreach (ToolStripItem item in mainMenu.Items)
+			CommandInfo commandInfo = new CommandInfo();
+			commandInfo.context = context;
+			commandInfo.cmd = cmd;
+			registeredCommands.Add(commandInfo);
+
+			commandInfo.context.AddCommand(commandInfo.cmd);
+		}
+
+		public void RemoveCommand(ICommand cmd)
+		{
+			List<CommandInfo> newList = new List<CommandInfo>();
+			List<CommandInfo> removalList = new List<CommandInfo>();
+			foreach (CommandInfo cmdInfo in registeredCommands)
 			{
-				if (group == item.Text && item is ToolStripMenuItem)
-					return (ToolStripMenuItem)item;
+				if (cmdInfo.cmd == cmd)
+					removalList.Add(cmdInfo);
+				else
+					newList.Add(cmdInfo);
 			}
-			ToolStripMenuItem new_item = new ToolStripMenuItem(group);
-			mainMenu.Items.Add(new_item);
-			return new_item;
+
+			registeredCommands = newList;
+
+			foreach (CommandInfo cmdInfo in removalList)
+				cmdInfo.context.RemoveCommand(cmdInfo.cmd);
 		}
 
-		void OnItemClick(object sender, EventArgs e)
+		public List<ICommand> GetCommands(ICommandContext context)
 		{
-			CmdId cmdId = items[(int)(sender as ToolStripMenuItem).Tag];
-			if(PluginCommand != null)
-				PluginCommand(this, cmdId.Id, cmdId.PluginId);
+			List<ICommand> result = new List<ICommand>();
+			foreach (CommandInfo cmdInfo in registeredCommands)
+			{
+				if (cmdInfo.context == context)
+					result.Add(cmdInfo.cmd);
+			}
+			return result;
+		}
+
+		public ICommand FindCommandByName(ICommandContext context, string name)
+		{
+			foreach (CommandInfo cmdInfo in registeredCommands)
+			{
+				if (cmdInfo.context == context && cmdInfo.cmd.Name == name)
+					return cmdInfo.cmd;
+			}
+			return null;
+		}
+
+		public ICommandContext GetPredefinedContext(PredefinedContexts type)
+		{
+			if (type == PredefinedContexts.Global)
+				return globalContext;
+			else if (type == PredefinedContexts.Communication)
+				return communicationContext;
+			else
+				return null;
+		}
+		#endregion
+
+		private ToolStrip GetGroupItem(ToolStrip root, string name)
+		{
+			foreach (ToolStripItem item in root.Items)
+			{
+				ToolStripMenuItem tmp = (ToolStripMenuItem)item;
+				if (name == item.Text && tmp != null)
+					return tmp.DropDown;
+			}
+			ToolStripMenuItem newItem = new ToolStripMenuItem(name);
+			root.Items.Add(newItem);
+			return newItem.DropDown;
 		}
 	}
 }

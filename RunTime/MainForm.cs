@@ -12,7 +12,7 @@ namespace FreeSCADA.RunTime
 		public MainForm()
 		{
 			InitializeComponent();
-			Env.Initialize(this, mainMenu, FreeSCADA.ShellInterfaces.EnvironmentMode.Runtime);
+			Env.Initialize(this, mainMenu, mainToolbar, FreeSCADA.Interfaces.EnvironmentMode.Runtime);
 			windowManager = new WindowManager(dockPanel);
 			UpdateCaption();
 		}
@@ -20,7 +20,7 @@ namespace FreeSCADA.RunTime
         public MainForm(string fileToLoad)
         {
             InitializeComponent();
-            Env.Initialize(this, mainMenu, FreeSCADA.ShellInterfaces.EnvironmentMode.Runtime);
+			Env.Initialize(this, mainMenu, mainToolbar, FreeSCADA.Interfaces.EnvironmentMode.Runtime);
             windowManager = new WindowManager(dockPanel);
             if (fileToLoad != "")
                 windowManager.LoadProject(fileToLoad);

@@ -1,4 +1,5 @@
 ﻿using System;
+using FreeSCADA.Common;
 using FreeSCADA.Communication.SimulatorPlug;
 using NUnit.Framework;
 
@@ -8,20 +9,19 @@ namespace Communication.SimulatorPlug.Tests
 	public class PluginTest
 	{
 		Plugin plugin;
-		EnvironmentMock environment;
 
 		[SetUp]
 		public void Init()
 		{
-			environment = new EnvironmentMock();
-			plugin = new Plugin();
-			plugin.Initialize(environment);
+			System.Windows.Forms.MenuStrip menu = new System.Windows.Forms.MenuStrip();
+			Env.Initialize(null, menu, null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			plugin = (Plugin)Env.Current.CommunicationPlugins["data_simulator_plug"];
 		}
 		[TearDown]
 		public void DeInit()
 		{
 			plugin = null;
-			environment = null;
+			Env.Deinitialize();
 			GC.Collect();
 		}
 
@@ -35,7 +35,7 @@ namespace Communication.SimulatorPlug.Tests
 		[Test]
 		public void Miscellaneous()
 		{
-			Assert.AreEqual(environment, plugin.Environment);
+			Assert.AreEqual(Env.Current, plugin.Environment);
 			Assert.IsNotNull(plugin.Channels);
 			Assert.IsEmpty(plugin.Channels); //Should be empty because the project object is empty
 			Assert.IsFalse(plugin.IsConnected); //Should be false initially

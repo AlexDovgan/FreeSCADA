@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Windows;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.ComponentModel;
-using System.Drawing.Design;
-using System.Windows.Forms.Design;
 using System.Drawing;
-using FreeSCADA.ShellInterfaces;
-using FreeSCADA.Common;
+using System.Drawing.Design;
+using System.Linq;
+using System.Windows;
 using System.Windows.Data;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
+using FreeSCADA.Common;
+using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertyGridTypeEditors
 {

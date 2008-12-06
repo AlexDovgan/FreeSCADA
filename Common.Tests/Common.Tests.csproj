@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandMock.cs" />
     <Compile Include="CommandsTest.cs" />
     <Compile Include="CommunationPlugsTest.cs" />
     <Compile Include="ConfigurationManagerTest.cs" />

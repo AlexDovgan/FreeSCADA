@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Xml;
 using FreeSCADA.Common;
-using FreeSCADA.ShellInterfaces;
+using FreeSCADA.Interfaces;
+
 namespace FreeSCADA.Communication.SimulatorPlug
 {
 	sealed class ChannelFactory

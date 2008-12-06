@@ -13,7 +13,7 @@ using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
 using FreeSCADA.Designer.SchemaEditor.ShortProperties;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
-using FreeSCADA.ShellInterfaces;
+using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -31,7 +31,7 @@ namespace FreeSCADA.Designer.Views
         private SchemaDocument schema;
         
         List<ToolDescriptor> toolsList=new List<ToolDescriptor>();
-        ICommandData undoCommand, redoCommand;
+		SchemaCommand undoCommand, redoCommand;
 
         public TextBox XamlView
         {
@@ -88,13 +88,7 @@ namespace FreeSCADA.Designer.Views
                     activeTool.ObjectCreated += activeTool_ObjectCreated;
                     activeTool.ObjectDeleted += activeTool_ObjectDeleted;
                     activeTool.ObjectChanged += OnObjectChenged;
-                    foreach (ICommandData icd in DocumentCommands)
-                    {
-                        if (icd is ZoomInCommand || icd is ZoomOutCommand || icd is UndoCommand || icd is RedoCommand)
-                            icd.CommandToolStripItem.Tag = this;
-                        else
-                            icd.CommandToolStripItem.Tag = activeTool;
-                    }
+					UpdateCommandState();
                 }
                 return activeTool.GetType();
             }
@@ -121,16 +115,25 @@ namespace FreeSCADA.Designer.Views
                     activeTool.ObjectCreated += activeTool_ObjectCreated;
                     activeTool.ObjectChanged += OnObjectChenged;
                     activeTool.Activate();
-                    foreach (ICommandData icd in DocumentCommands)
-                    {
-                        if (icd is ZoomInCommand || icd is ZoomOutCommand || icd is UndoCommand || icd is RedoCommand)
-                            icd.CommandToolStripItem.Tag = this;
-                        else
-                            icd.CommandToolStripItem.Tag = activeTool;
-                    }
+					UpdateCommandState();
                 }
             }
         }
+
+		private void UpdateCommandState()
+		{
+			foreach (ICommand item in DocumentCommands)
+			{
+				if (item is SchemaCommand)
+				{
+					SchemaCommand cmd = (SchemaCommand)item;
+					if (cmd is ZoomInCommand || cmd is ZoomOutCommand || cmd is UndoCommand || cmd is RedoCommand)
+						cmd.ControlledObject = this;
+					else
+						cmd.ControlledObject = activeTool;
+				}
+			}
+		}
 
 
         public SchemaView()
@@ -174,7 +177,6 @@ namespace FreeSCADA.Designer.Views
             this.SavedScrollPosition = new System.Windows.Point(0.0, 0.0);
 
             // Commands to ToolStrip
-            DocumentCommands.Add(new NullCommand());    // Separator
             DocumentCommands.Add(undoCommand = new UndoCommand());
             DocumentCommands.Add(redoCommand = new RedoCommand());
             DocumentCommands.Add(new NullCommand());    // Separator
@@ -188,18 +190,8 @@ namespace FreeSCADA.Designer.Views
             DocumentCommands.Add(new NullCommand());    // Separator
             DocumentCommands.Add(new ZoomOutCommand());
             DocumentCommands.Add(new ZoomInCommand());
-            DocumentCommands.Add(new NullCommand());    // Separator
-            this.ContextMenu = new ToolContextMenu();
 
             CreateToolList();
-            /*
-            menu.groupMenuItem.CommandParameter = this;
-            menu.unGroupMenuItem.CommandParameter = this;
-            menu.cutMenuItem.CommandParameter = this;
-            menu.copyMenuItem.CommandParameter = this;
-            menu.pasteMenuItem.CommandParameter = this;
-            menu.viewXamlMenuItem.CommandParameter = this;
-            */
         }
         private void CreateToolList()
         {
@@ -252,8 +244,8 @@ namespace FreeSCADA.Designer.Views
 
         void undoBuff_CanExecuteChanged(object sender, EventArgs e)
         {
-            undoCommand.CanExecute(this);
-            redoCommand.CanExecute(this);
+			undoCommand.ControlledObject = this;
+			redoCommand.ControlledObject = this;
         }
 
         void activeTool_ObjectCreated(object sender, EventArgs e)
@@ -297,20 +289,32 @@ namespace FreeSCADA.Designer.Views
             else if (e.Key == System.Windows.Input.Key.X &&
                 (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
             {
-                if (activeTool is SelectionTool && activeTool.SelectedObject != null)
-                    new CutCommand().Execute(activeTool);
+				if (activeTool is SelectionTool && activeTool.SelectedObject != null)
+				{
+					SchemaCommand cmd = new CutCommand();
+					cmd.ControlledObject = activeTool;
+					cmd.Execute();
+				}
             }
             else if (e.Key == System.Windows.Input.Key.C &&
                 (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
             {
                 if (activeTool is SelectionTool && activeTool.SelectedObject != null)
-                    new CopyCommand().Execute(activeTool);
+				{
+					SchemaCommand cmd = new CopyCommand();
+					cmd.ControlledObject = activeTool;
+					cmd.Execute();
+				}
             }
             else if (e.Key == System.Windows.Input.Key.V &&
                 (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
             {
                 if (activeTool is SelectionTool)
-                    new PasteCommand().Execute(activeTool);
+				{
+					SchemaCommand cmd = new PasteCommand();
+					cmd.ControlledObject = activeTool;
+					cmd.Execute();
+				}
             }
             else if (e.Key == System.Windows.Input.Key.Delete)
             {
@@ -385,11 +389,8 @@ namespace FreeSCADA.Designer.Views
             }
             else
                 RaiseObjectSelected(obj);
-            // Menu items
-            foreach (ICommandData icd in DocumentCommands)
-            {
-                icd.CanExecute(activeTool);
-            }
+
+			UpdateCommandState();
         }
 
         public override void OnActivated()

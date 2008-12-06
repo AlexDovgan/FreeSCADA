@@ -21,9 +21,12 @@ namespace FreeSCADA.Designer
 		public MainForm()
 		{
 			InitializeComponent();
-			Env.Initialize(this, mainMenu, FreeSCADA.ShellInterfaces.EnvironmentMode.Designer);
+			Env.Initialize(this, mainMenu, mainToolbar, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+
+			CommandManager.documentContext = new BaseCommandContext(editSubMenu.DropDown, documentToolbar);
+			CommandManager.viewContext = new BaseCommandContext(viewSubMenu.DropDown, mainMenu);
 			windowManager = new WindowManager(dockPanel);
-			CommandManager.Initialize(toolStrip1);
+			
 			UpdateCaption();
 		}
 

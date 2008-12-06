@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
-using FreeSCADA.ShellInterfaces;
-using FreeSCADA.ShellInterfaces.Plugins;
+using FreeSCADA.Interfaces;
+using FreeSCADA.Interfaces.Plugins;
 
 namespace FreeSCADA.Communication.MODBUSPlug
 {
 	public class Plugin: ICommunicationPlug
 	{
 		private IEnvironment environment;
-		List<Command> commands = new List<Command>();
 		List<IChannel> channels = new List<IChannel>();
         List<IModbusStation> stations = new List<IModbusStation>();
 
@@ -61,16 +60,10 @@ namespace FreeSCADA.Communication.MODBUSPlug
 
 			LoadSettings();
 
-			if(environment.Mode == EnvironmentMode.Designer)
-				commands.Add(new PropertyCommand(this));
-		}
-
-		public void ProcessCommand(int commandId)
-		{
-			foreach (Command cmd in commands)
+			if (environment.Mode == EnvironmentMode.Designer)
 			{
-				if (cmd.CommandId == commandId)
-					cmd.ProcessCommand();
+				ICommandContext context = environment.Commands.GetPredefinedContext(PredefinedContexts.Communication);
+				environment.Commands.AddCommand(context, new PropertyCommand(this));
 			}
 		}
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
-using FreeSCADA.ShellInterfaces;
-using FreeSCADA.ShellInterfaces.Plugins;
+using FreeSCADA.Interfaces;
+using FreeSCADA.Interfaces.Plugins;
 
 namespace FreeSCADA.Common
 {

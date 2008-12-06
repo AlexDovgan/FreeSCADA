@@ -107,7 +107,7 @@ namespace FreeSCADA.Communication.OPCPlug
 
 		private void SaveChannels()
 		{
-			ShellInterfaces.IChannel[] channels = new ShellInterfaces.IChannel[grid.RowsCount - 1];
+			Interfaces.IChannel[] channels = new Interfaces.IChannel[grid.RowsCount - 1];
 			for (int i = 1; i < grid.RowsCount; i++)
 			{
 				channels[i-1] = ChannelFactory.CreateChannel(	grid[i, 0].DisplayText, 

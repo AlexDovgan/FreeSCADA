@@ -51,7 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChannelFactory.cs" />
-    <Compile Include="Command.cs" />
     <Compile Include="SinusDoubleChannel.cs" />
     <Compile Include="RampIntegerChannel.cs" />
     <Compile Include="SawIntegerChannel.cs" />

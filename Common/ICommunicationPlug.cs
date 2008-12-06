@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FreeSCADA.ShellInterfaces
+namespace FreeSCADA.Interfaces
 {
 	namespace Plugins
 	{
@@ -27,8 +27,6 @@ namespace FreeSCADA.ShellInterfaces
 			}
 
 			void Initialize(IEnvironment environment);
-
-			void ProcessCommand(int commandId);
 
 			bool Connect();
 			void Disconnect();

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using System.Threading;
 using System.Net.Sockets;
-using Modbus.Device;
+using System.Threading;
+using FreeSCADA.Interfaces;
 using Modbus.Data;
-using FreeSCADA.ShellInterfaces;
+using Modbus.Device;
 
 namespace FreeSCADA.Communication.MODBUSPlug
 {

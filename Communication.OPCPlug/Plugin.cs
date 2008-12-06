@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
-using FreeSCADA.ShellInterfaces;
-using FreeSCADA.ShellInterfaces.Plugins;
+using FreeSCADA.Interfaces;
+using FreeSCADA.Interfaces.Plugins;
 
 namespace FreeSCADA.Communication.OPCPlug
 {
 	public class Plugin: ICommunicationPlug
 	{
 		private IEnvironment environment;
-		List<Command> commands = new List<Command>();
 		List<IChannel> channels = new List<IChannel>();
 		List<ConnectionGroup> connectionGroups = new List<ConnectionGroup>();
 		bool connectedFlag = false;
@@ -49,16 +48,10 @@ namespace FreeSCADA.Communication.OPCPlug
 
 			LoadSettings();
 
-			if(environment.Mode == EnvironmentMode.Designer)
-				commands.Add(new PropertyCommand(this));
-		}
-
-		public void ProcessCommand(int commandId)
-		{
-			foreach (Command cmd in commands)
+			if (environment.Mode == EnvironmentMode.Designer)
 			{
-				if (cmd.CommandId == commandId)
-					cmd.ProcessCommand();
+				ICommandContext context = environment.Commands.GetPredefinedContext(PredefinedContexts.Communication);
+				environment.Commands.AddCommand(context, new PropertyCommand(this));
 			}
 		}
 

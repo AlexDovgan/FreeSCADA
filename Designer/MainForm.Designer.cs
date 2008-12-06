@@ -33,7 +33,7 @@
 			System.Windows.Forms.ToolStripButton toolStripButton3;
 			System.Windows.Forms.ToolStripButton toolStripButtonNewSchema;
 			System.Windows.Forms.ToolStripButton toolStripButton5;
-			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+			this.mainToolbar = new System.Windows.Forms.ToolStrip();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.runButton = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -47,18 +47,25 @@
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.importSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.viewSubMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.projectContentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.projectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.variablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mainMenu = new System.Windows.Forms.MenuStrip();
+			this.editSubMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.documentToolbar = new System.Windows.Forms.ToolStrip();
+			this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
 			newProjectButton = new System.Windows.Forms.ToolStripButton();
 			openProjectButton = new System.Windows.Forms.ToolStripButton();
 			toolStripButton3 = new System.Windows.Forms.ToolStripButton();
 			toolStripButtonNewSchema = new System.Windows.Forms.ToolStripButton();
 			toolStripButton5 = new System.Windows.Forms.ToolStripButton();
-			this.toolStrip1.SuspendLayout();
+			this.mainToolbar.SuspendLayout();
 			this.mainMenu.SuspendLayout();
+			this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
+			this.toolStripContainer1.ContentPanel.SuspendLayout();
+			this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
+			this.toolStripContainer1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// newProjectButton
@@ -111,10 +118,11 @@
 			toolStripButton5.Text = "New Event List";
 			toolStripButton5.Click += new System.EventHandler(this.OnEventsItemClick);
 			// 
-			// toolStrip1
+			// mainToolbar
 			// 
-			this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.mainToolbar.Dock = System.Windows.Forms.DockStyle.None;
+			this.mainToolbar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			this.mainToolbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             newProjectButton,
             openProjectButton,
             toolStripButton3,
@@ -124,11 +132,11 @@
             this.runButton,
             this.toolStripSeparator4,
             this.zoomLevelComboBox});
-			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
-			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(599, 25);
-			this.toolStrip1.TabIndex = 3;
-			this.toolStrip1.Text = "mainToolbar";
+			this.mainToolbar.Location = new System.Drawing.Point(3, 24);
+			this.mainToolbar.Name = "mainToolbar";
+			this.mainToolbar.Size = new System.Drawing.Size(276, 25);
+			this.mainToolbar.TabIndex = 3;
+			this.mainToolbar.Text = "mainToolbar";
 			// 
 			// toolStripSeparator1
 			// 
@@ -164,9 +172,10 @@
 			// 
 			// statusStrip1
 			// 
-			this.statusStrip1.Location = new System.Drawing.Point(0, 362);
+			this.statusStrip1.Dock = System.Windows.Forms.DockStyle.None;
+			this.statusStrip1.Location = new System.Drawing.Point(0, 0);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(599, 22);
+			this.statusStrip1.Size = new System.Drawing.Size(699, 22);
 			this.statusStrip1.TabIndex = 1;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
@@ -180,9 +189,9 @@
 			this.dockPanel.DockRightPortion = 0.15;
 			this.dockPanel.DockTopPortion = 0.15;
 			this.dockPanel.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
-			this.dockPanel.Location = new System.Drawing.Point(0, 49);
+			this.dockPanel.Location = new System.Drawing.Point(0, 0);
 			this.dockPanel.Name = "dockPanel";
-			this.dockPanel.Size = new System.Drawing.Size(599, 313);
+			this.dockPanel.Size = new System.Drawing.Size(699, 337);
 			this.dockPanel.TabIndex = 4;
 			// 
 			// fileToolStripMenuItem
@@ -241,13 +250,13 @@
 			this.exitToolStripMenuItem.Text = "Exit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnMenuExitClick);
 			// 
-			// viewToolStripMenuItem
+			// viewSubMenu
 			// 
-			this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.viewSubMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.projectContentToolStripMenuItem});
-			this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-			this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-			this.viewToolStripMenuItem.Text = "View";
+			this.viewSubMenu.Name = "viewSubMenu";
+			this.viewSubMenu.Size = new System.Drawing.Size(44, 20);
+			this.viewSubMenu.Text = "View";
 			// 
 			// projectContentToolStripMenuItem
 			// 
@@ -272,37 +281,81 @@
 			// 
 			// mainMenu
 			// 
+			this.mainMenu.Dock = System.Windows.Forms.DockStyle.None;
 			this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.viewToolStripMenuItem,
+            this.editSubMenu,
+            this.viewSubMenu,
             this.projectToolStripMenuItem});
 			this.mainMenu.Location = new System.Drawing.Point(0, 0);
 			this.mainMenu.Name = "mainMenu";
-			this.mainMenu.Size = new System.Drawing.Size(599, 24);
+			this.mainMenu.Size = new System.Drawing.Size(699, 24);
 			this.mainMenu.TabIndex = 0;
 			this.mainMenu.Text = "menuStrip1";
+			// 
+			// editSubMenu
+			// 
+			this.editSubMenu.Name = "editSubMenu";
+			this.editSubMenu.Size = new System.Drawing.Size(39, 20);
+			this.editSubMenu.Text = "Edit";
+			// 
+			// documentToolbar
+			// 
+			this.documentToolbar.Dock = System.Windows.Forms.DockStyle.None;
+			this.documentToolbar.Location = new System.Drawing.Point(282, 24);
+			this.documentToolbar.Name = "documentToolbar";
+			this.documentToolbar.Size = new System.Drawing.Size(43, 25);
+			this.documentToolbar.TabIndex = 5;
+			this.documentToolbar.Text = "toolStrip1";
+			// 
+			// toolStripContainer1
+			// 
+			// 
+			// toolStripContainer1.BottomToolStripPanel
+			// 
+			this.toolStripContainer1.BottomToolStripPanel.Controls.Add(this.statusStrip1);
+			// 
+			// toolStripContainer1.ContentPanel
+			// 
+			this.toolStripContainer1.ContentPanel.Controls.Add(this.dockPanel);
+			this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(699, 337);
+			this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
+			this.toolStripContainer1.Name = "toolStripContainer1";
+			this.toolStripContainer1.Size = new System.Drawing.Size(699, 408);
+			this.toolStripContainer1.TabIndex = 6;
+			this.toolStripContainer1.Text = "toolStripContainer1";
+			// 
+			// toolStripContainer1.TopToolStripPanel
+			// 
+			this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.mainMenu);
+			this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.mainToolbar);
+			this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.documentToolbar);
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(599, 384);
-			this.Controls.Add(this.dockPanel);
-			this.Controls.Add(this.toolStrip1);
-			this.Controls.Add(this.statusStrip1);
-			this.Controls.Add(this.mainMenu);
+			this.ClientSize = new System.Drawing.Size(699, 408);
+			this.Controls.Add(this.toolStripContainer1);
 			this.MainMenuStrip = this.mainMenu;
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds;
 			this.Text = "Designer";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
-			this.toolStrip1.ResumeLayout(false);
-			this.toolStrip1.PerformLayout();
+			this.mainToolbar.ResumeLayout(false);
+			this.mainToolbar.PerformLayout();
 			this.mainMenu.ResumeLayout(false);
 			this.mainMenu.PerformLayout();
+			this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);
+			this.toolStripContainer1.BottomToolStripPanel.PerformLayout();
+			this.toolStripContainer1.ContentPanel.ResumeLayout(false);
+			this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
+			this.toolStripContainer1.TopToolStripPanel.PerformLayout();
+			this.toolStripContainer1.ResumeLayout(false);
+			this.toolStripContainer1.PerformLayout();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
@@ -316,7 +369,7 @@
 		private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem viewSubMenu;
 		private System.Windows.Forms.ToolStripMenuItem projectContentToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem projectToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem variablesToolStripMenuItem;
@@ -326,6 +379,9 @@
         private System.Windows.Forms.ToolStripButton runButton;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-		private System.Windows.Forms.ToolStrip toolStrip1;
+		private System.Windows.Forms.ToolStrip mainToolbar;
+		private System.Windows.Forms.ToolStrip documentToolbar;
+		private System.Windows.Forms.ToolStripContainer toolStripContainer1;
+		private System.Windows.Forms.ToolStripMenuItem editSubMenu;
 	}
 }

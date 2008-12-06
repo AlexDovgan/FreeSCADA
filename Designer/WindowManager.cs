@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Windows.Input;
 using FreeSCADA.Common;
 using FreeSCADA.Designer.Dialogs;
 using FreeSCADA.Designer.Views;
@@ -354,17 +353,13 @@ namespace FreeSCADA.Designer
 
       
 
-        public void ExecuteCommand(ICommand Command, Object param)
+        public void ExecuteCommand(FreeSCADA.Interfaces.ICommand command, Object param)
         {
-            if (param == null)
-            {
-                if (currentDocument != null)
-                    Command.Execute(currentDocument);
-            }
-            else
-            {
-                Command.Execute(param);
-            }
+			SchemaEditor.SchemaCommands.SchemaCommand cmd = (SchemaEditor.SchemaCommands.SchemaCommand)command;
+			if(cmd != null)
+				cmd.ControlledObject = (param == null) ? currentDocument : param;
+
+			command.Execute();
         }
   
     }

@@ -120,7 +120,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 
 		private void SaveChannels()
 		{
-			ShellInterfaces.IChannel[] channels = new ShellInterfaces.IChannel[grid.RowsCount - 1];
+			Interfaces.IChannel[] channels = new Interfaces.IChannel[grid.RowsCount - 1];
 			for (int i = 1; i < grid.RowsCount; i++)
 			{
 				string name = grid[i, 0].DisplayText;

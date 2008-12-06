@@ -1,5 +1,5 @@
 ﻿
-namespace FreeSCADA.ShellInterfaces
+namespace FreeSCADA.Interfaces
 {
 	public enum EnvironmentMode
 	{
