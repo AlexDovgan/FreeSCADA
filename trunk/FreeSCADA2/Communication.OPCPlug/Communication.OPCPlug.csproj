@@ -60,7 +60,6 @@
   <ItemGroup>
     <Compile Include="OPCBaseChannel.cs" />
     <Compile Include="ChannelFactory.cs" />
-    <Compile Include="Command.cs" />
     <Compile Include="ConnectionGroup.cs" />
     <Compile Include="ImportOPCForm.cs">
       <SubType>Form</SubType>

@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
+using FreeSCADA.Common;
 using FreeSCADA.Communication.OPCPlug;
-using FreeSCADA.ShellInterfaces;
+using FreeSCADA.Interfaces;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -10,14 +11,13 @@ namespace Communication.OPCPlug.Tests
 	public class ReadWriteChannelsTest : NUnitFormTest
 	{
 		Plugin plugin;
-		EnvironmentMock environment;
 		string projectFile;
 
 		public override void Setup()
 		{
-			environment = new EnvironmentMock();
-			plugin = new Plugin();
-			plugin.Initialize(environment);
+			System.Windows.Forms.MenuStrip menu = new System.Windows.Forms.MenuStrip();
+			Env.Initialize(null, menu, null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			plugin = (Plugin)Env.Current.CommunicationPlugins["opc_connection_plug"];
 
 			projectFile = System.IO.Path.GetTempFileName();
 
@@ -28,7 +28,7 @@ namespace Communication.OPCPlug.Tests
 		public override void TearDown()
 		{
 			plugin = null;
-			environment = null;
+			Env.Deinitialize();
 			System.IO.File.Delete(projectFile);
 
 			System.GC.Collect();
@@ -102,7 +102,10 @@ namespace Communication.OPCPlug.Tests
 		public void ImportAllChannels()
 		{
 			ExpectModal("SettingsForm", "ImportAllChannelsSettingsFormHandler");
-			plugin.ProcessCommand(0);
+
+			ICommandContext context = Env.Current.Commands.GetPredefinedContext(PredefinedContexts.Communication);
+			Env.Current.Commands.FindCommandByName(context, StringConstants.PropertyCommandName).Execute();
+
 			Assert.Greater(plugin.Channels.Length, 0);
 		}
 
@@ -110,7 +113,8 @@ namespace Communication.OPCPlug.Tests
 		public void ReadAllChannels()
 		{
 			ExpectModal("SettingsForm", "ImportAllChannelsSettingsFormHandler");
-			plugin.ProcessCommand(0);
+			ICommandContext context = Env.Current.Commands.GetPredefinedContext(PredefinedContexts.Communication);
+			Env.Current.Commands.FindCommandByName(context, StringConstants.PropertyCommandName).Execute();
 
 
 			Assert.AreEqual(true, plugin.Connect());
@@ -155,7 +159,8 @@ namespace Communication.OPCPlug.Tests
 		public void WriteToAllChannels()
 		{
 			ExpectModal("SettingsForm", "ImportAllChannelsSettingsFormHandler");
-			plugin.ProcessCommand(0);
+			ICommandContext context = Env.Current.Commands.GetPredefinedContext(PredefinedContexts.Communication);
+			Env.Current.Commands.FindCommandByName(context, StringConstants.PropertyCommandName).Execute();
 
 
 			Assert.AreEqual(true, plugin.Connect());

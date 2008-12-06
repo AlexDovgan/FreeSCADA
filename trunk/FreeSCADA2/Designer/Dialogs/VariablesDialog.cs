@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using FreeSCADA.Common;
-using FreeSCADA.ShellInterfaces;
+using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.Dialogs
 {

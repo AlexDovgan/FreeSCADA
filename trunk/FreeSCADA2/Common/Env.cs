@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-using FreeSCADA.ShellInterfaces;
+using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Common
 {
@@ -15,7 +15,7 @@ namespace FreeSCADA.Common
 
 		#region Initialization and singleton implementation
 
-		public static void Initialize(Control mainWindow, MenuStrip mainMenu, EnvironmentMode mode)
+		public static void Initialize(Control mainWindow, MenuStrip mainMenu, ToolStrip mainToolbar,  EnvironmentMode mode)
 		{
 			if (environmentInstance == null)
 			{
@@ -23,7 +23,7 @@ namespace FreeSCADA.Common
 
 				environmentInstance.mode = mode;
 				environmentInstance.CreateNewProject();
-				environmentInstance.commands = new Commands(mainMenu);
+				environmentInstance.commands = new Commands(mainMenu, mainToolbar);
 				environmentInstance.mainWindow = mainWindow;
 				environmentInstance.communicationPlugins = new CommunationPlugs();
 

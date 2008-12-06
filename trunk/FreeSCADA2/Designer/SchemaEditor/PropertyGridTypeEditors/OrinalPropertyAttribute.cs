@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Windows;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
 namespace FreeSCADA.Designer.SchemaEditor.PropertyGridTypeEditors
 {
     public class OriginalPropertyAttribute:Attribute

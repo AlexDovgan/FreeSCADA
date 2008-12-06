@@ -2,15 +2,14 @@
 using System.Threading;
 using System.Xml;
 using FreeSCADA.Common;
-using FreeSCADA.ShellInterfaces;
-using FreeSCADA.ShellInterfaces.Plugins;
+using FreeSCADA.Interfaces;
+using FreeSCADA.Interfaces.Plugins;
 
 namespace FreeSCADA.Communication.SimulatorPlug
 {
 	public class Plugin: ICommunicationPlug
 	{
 		private IEnvironment environment;
-		List<Command> commands = new List<Command>();
 		List<IChannel> channels = new List<IChannel>();
 		Thread channelUpdaterThread;
 
@@ -51,15 +50,9 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			LoadSettings();
 
 			if (environment.Mode == EnvironmentMode.Designer)
-				commands.Add(new PropertyCommand(this));
-		}
-
-		public void ProcessCommand(int commandId)
-		{
-			foreach (Command cmd in commands)
 			{
-				if (cmd.CommandId == commandId)
-					cmd.ProcessCommand();
+				ICommandContext context = environment.Commands.GetPredefinedContext(PredefinedContexts.Communication);
+				environment.Commands.AddCommand(context, new PropertyCommand(this));
 			}
 		}
 

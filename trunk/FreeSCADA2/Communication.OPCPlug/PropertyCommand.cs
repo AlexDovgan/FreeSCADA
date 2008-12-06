@@ -1,17 +1,25 @@
-﻿
+﻿using FreeSCADA.Common;
+
 namespace FreeSCADA.Communication.OPCPlug
 {
-	class PropertyCommand: Command
+	class PropertyCommand: BaseCommand
 	{
+		Plugin plugin;
+
 		public PropertyCommand(Plugin plugin)
-			: base(plugin, StringConstants.PropertyCommandName, StringConstants.CommunicationGroupName)
 		{
+			this.plugin = plugin;
+			CanExecute = true;
 		}
 
-		public override void ProcessCommand()
+		public override string Name { get { return StringConstants.PropertyCommandName; } }
+		public override string Description { get { return StringConstants.PropertyCommandName; } }
+		public override System.Drawing.Bitmap Icon { get { return null; } }
+
+		public override void Execute()
 		{
 			SettingsForm frm = new SettingsForm(plugin);
-			frm.ShowDialog(base.plugin.Environment.MainWindow);
+			frm.ShowDialog(plugin.Environment.MainWindow);
 		}
 	}
 }

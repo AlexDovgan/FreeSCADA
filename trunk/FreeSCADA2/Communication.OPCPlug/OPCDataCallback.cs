@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using FreeSCADA.ShellInterfaces;
+using FreeSCADA.Interfaces;
 using OpcRcw.Da;
 
 namespace FreeSCADA.Communication.OPCPlug

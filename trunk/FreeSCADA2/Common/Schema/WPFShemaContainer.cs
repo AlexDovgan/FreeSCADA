@@ -15,7 +15,7 @@ namespace FreeSCADA.Common.Schema
         {
             if ((e.Key == System.Windows.Input.Key.Left || e.Key == System.Windows.Input.Key.Right || e.Key == System.Windows.Input.Key.Up || e.Key == System.Windows.Input.Key.Down) &&
                 ((System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) == System.Windows.Input.ModifierKeys.None) &&
-                Env.Current.Mode == FreeSCADA.ShellInterfaces.EnvironmentMode.Designer)
+                Env.Current.Mode == FreeSCADA.Interfaces.EnvironmentMode.Designer)
             {
                 // the Keydown event for Arrows is not catched by the ScrollViewer, but is used to position the selected element inside Canvas
                 // Arrows = positioning
@@ -56,7 +56,7 @@ namespace FreeSCADA.Common.Schema
                 }
 				//document.MainCanvas.Background = resources["GridBackgroundBrush"] as DrawingBrush;
 
-                if ((bool)view.FindResource("DesignerSettings_GridOn") == true && Env.Current.Mode == FreeSCADA.ShellInterfaces.EnvironmentMode.Designer)
+                if ((bool)view.FindResource("DesignerSettings_GridOn") == true && Env.Current.Mode == FreeSCADA.Interfaces.EnvironmentMode.Designer)
                 {
                     ViewGrid(view as Canvas, true);
                 }

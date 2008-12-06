@@ -1,4 +1,6 @@
-﻿using FreeSCADA.Communication.OPCPlug;
+﻿using FreeSCADA.Common;
+using FreeSCADA.Communication.OPCPlug;
+using FreeSCADA.Interfaces;
 using NUnit.Framework;
 
 namespace Communication.OPCPlug.Tests
@@ -9,26 +11,15 @@ namespace Communication.OPCPlug.Tests
 		[Test]
 		public void Initialization()
 		{
-			EnvironmentMock environment = new EnvironmentMock();
-			Plugin plugin = new Plugin();
-			plugin.Initialize(environment);
+			System.Windows.Forms.MenuStrip menu = new System.Windows.Forms.MenuStrip();
+			Env.Initialize(null, menu, null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
 
-			CommandsMock.CommandInfo cmd1 = new CommandsMock.CommandInfo("opc_connection_plug", "OPC properties...", "Communication");
-			Assert.Contains(cmd1, environment.commands.registeredCommands);
-		}
+			Plugin plugin = (Plugin)Env.Current.CommunicationPlugins["opc_connection_plug"];
 
-		[Test]
-		public void Initialization2()
-		{
-			EnvironmentMock environment = new EnvironmentMock();
-			Plugin plugin = new Plugin();
-			plugin.Initialize(environment);
+			ICommandContext context = Env.Current.Commands.GetPredefinedContext(PredefinedContexts.Communication);
+			Assert.IsNotEmpty(Env.Current.Commands.GetCommands(context));
 
-			CommandsMock.CommandInfo cmd1 = new CommandsMock.CommandInfo("opc_connection_plug", "OPC properties...", "Communication");
-
-			EnvironmentMock environment2 = new EnvironmentMock();
-			plugin.Environment = environment2;
-			Assert.Contains(cmd1, environment2.commands.registeredCommands);
+			Env.Deinitialize();
 		}
 	}
 }

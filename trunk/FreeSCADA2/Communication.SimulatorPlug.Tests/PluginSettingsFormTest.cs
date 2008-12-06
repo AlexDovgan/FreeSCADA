@@ -1,4 +1,6 @@
-﻿using FreeSCADA.Communication.SimulatorPlug;
+﻿using FreeSCADA.Common;
+using FreeSCADA.Communication.SimulatorPlug;
+using FreeSCADA.Interfaces;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -8,16 +10,15 @@ namespace Communication.SimulatorPlug.Tests
 	public class PluginSettingsFormTest : NUnitFormTest
 	{
 		Plugin plugin;
-		EnvironmentMock environment;
 		int[] channelchangedNotification;
 		string[] ChannelTypes = { "Current time", "Random integer", "Simple integer", "Simple string", "Simple float" };
 		string projectFile;
 
 		public override void Setup()
 		{
-			environment = new EnvironmentMock();
-			plugin = new Plugin();
-			plugin.Initialize(environment);
+			System.Windows.Forms.MenuStrip menu = new System.Windows.Forms.MenuStrip();
+			Env.Initialize(null, menu, null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			plugin = (Plugin)Env.Current.CommunicationPlugins["data_simulator_plug"];
 
 			projectFile = System.IO.Path.GetTempFileName();
 
@@ -28,7 +29,8 @@ namespace Communication.SimulatorPlug.Tests
 		public override void TearDown()
 		{
 			plugin = null;
-			environment = null;
+			Env.Deinitialize();
+
 			System.IO.File.Delete(projectFile);
 
 			System.GC.Collect();
@@ -38,7 +40,10 @@ namespace Communication.SimulatorPlug.Tests
 		public void AddingNewChannels()
 		{
 			ExpectModal("SettingsForm", "AddingNewChannelsHandler");
-			plugin.ProcessCommand(0);
+			
+			ICommandContext context = Env.Current.Commands.GetPredefinedContext(PredefinedContexts.Communication);
+			Env.Current.Commands.FindCommandByName(context, StringConstants.PropertyCommandName).Execute();
+
 			Assert.AreEqual(3, plugin.Channels.Length);
 		}
 
@@ -69,7 +74,10 @@ namespace Communication.SimulatorPlug.Tests
 		public void ReceiveData()
 		{
 			ExpectModal("SettingsForm", "CreateRandomChannels");
-			plugin.ProcessCommand(0);
+
+			ICommandContext context = Env.Current.Commands.GetPredefinedContext(PredefinedContexts.Communication);
+			Env.Current.Commands.FindCommandByName(context, StringConstants.PropertyCommandName).Execute();
+
 			Assert.AreEqual(3, plugin.Channels.Length);
 			Assert.IsFalse(plugin.IsConnected);
 			channelchangedNotification = new int[3];
@@ -77,23 +85,21 @@ namespace Communication.SimulatorPlug.Tests
 				channelchangedNotification[i] = 0;
 
 			int channelNo = 0;
-			foreach (FreeSCADA.ShellInterfaces.IChannel ch in plugin.Channels)
+			foreach (FreeSCADA.Interfaces.IChannel ch in plugin.Channels)
 			{
-				Assert.IsNull(ch.Value);
 				ch.Tag = channelNo;
 				Assert.AreEqual(channelNo, ch.Tag);
 				channelNo++;
 			}
 
-			foreach (FreeSCADA.ShellInterfaces.IChannel ch in plugin.Channels)
+			foreach (FreeSCADA.Interfaces.IChannel ch in plugin.Channels)
 			{
-				Assert.IsNull(ch.Value);
 				ch.ValueChanged += new System.EventHandler(OnChannelValueChanged);
 			}
 
 			plugin.Connect();
 			System.Threading.Thread.Sleep(500);
-			foreach (FreeSCADA.ShellInterfaces.IChannel ch in plugin.Channels)
+			foreach (FreeSCADA.Interfaces.IChannel ch in plugin.Channels)
 				Assert.IsNotNull(ch.Value);
 
 			for (int i = 0; i < 3; i++)
@@ -104,7 +110,7 @@ namespace Communication.SimulatorPlug.Tests
 
 		void OnChannelValueChanged(object sender, System.EventArgs e)
 		{
-			FreeSCADA.ShellInterfaces.IChannel ch = (FreeSCADA.ShellInterfaces.IChannel)sender;
+			FreeSCADA.Interfaces.IChannel ch = (FreeSCADA.Interfaces.IChannel)sender;
 			channelchangedNotification[(int)ch.Tag]++;
 		}
 
@@ -129,15 +135,21 @@ namespace Communication.SimulatorPlug.Tests
 		public void LoadSaveChannels()
 		{
 			ExpectModal("SettingsForm", "CreateTestChannels");
-			plugin.ProcessCommand(0); //Plugin should save its channels in the project
+
+			//Plugin should save its channels in the project
+			ICommandContext context = Env.Current.Commands.GetPredefinedContext(PredefinedContexts.Communication);
+			Env.Current.Commands.FindCommandByName(context, StringConstants.PropertyCommandName).Execute();
+
 			Assert.AreEqual(ChannelTypes.Length, plugin.Channels.Length);
 
+			//Plugin should load its channels from the project
 			plugin = new Plugin();
-			plugin.Initialize(environment); //Plugin should load its channels from the project
+			plugin.Initialize(Env.Current);
+
 			Assert.AreEqual(ChannelTypes.Length, plugin.Channels.Length);
 			for(int i=0;i<plugin.Channels.Length;i++)
 			{
-				FreeSCADA.ShellInterfaces.IChannel ch = plugin.Channels[i];
+				FreeSCADA.Interfaces.IChannel ch = plugin.Channels[i];
 				Assert.IsNotNull(ch);
 				Assert.AreEqual(string.Format("variable_{0}", i + 1), ch.Name);
 			}
@@ -163,18 +175,25 @@ namespace Communication.SimulatorPlug.Tests
 		public void LoadSaveFileChannels()
 		{
 			ExpectModal("SettingsForm", "CreateTestChannels");
-			plugin.ProcessCommand(0); //Plugin should save its channels in the project
-			Assert.AreEqual(ChannelTypes.Length, plugin.Channels.Length);
-			environment.Project.Save(projectFile);
 
-			plugin = new Plugin();
-			environment = new EnvironmentMock();
-			plugin.Initialize(environment);
-			environment.Project.Load(projectFile); //Plugin should load its channels from the project on its loading
+			//Plugin should save its channels in the project
+			ICommandContext context = Env.Current.Commands.GetPredefinedContext(PredefinedContexts.Communication);
+			Env.Current.Commands.FindCommandByName(context, StringConstants.PropertyCommandName).Execute();
+
+			Assert.AreEqual(ChannelTypes.Length, plugin.Channels.Length);
+			Env.Current.Project.Save(projectFile);
+
+			//Plugin should load its channels from the project on its loading
+			Env.Deinitialize();
+			System.Windows.Forms.MenuStrip menu = new System.Windows.Forms.MenuStrip();
+			Env.Initialize(null, menu, null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			plugin = (Plugin)Env.Current.CommunicationPlugins["data_simulator_plug"];
+			Env.Current.Project.Load(projectFile); 
+
 			Assert.AreEqual(ChannelTypes.Length, plugin.Channels.Length);
 			for (int i = 0; i < plugin.Channels.Length; i++)
 			{
-				FreeSCADA.ShellInterfaces.IChannel ch = plugin.Channels[i];
+				FreeSCADA.Interfaces.IChannel ch = plugin.Channels[i];
 				Assert.IsNotNull(ch);
 				Assert.AreEqual(string.Format("variable_{0}", i + 1), ch.Name);
 			}

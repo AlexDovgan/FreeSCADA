@@ -49,8 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandsMock.cs" />
-    <Compile Include="EnvironmentMock.cs" />
     <Compile Include="PluginLoadingTest.cs" />
     <Compile Include="PluginSettingsFormTest.cs" />
     <Compile Include="PluginTest.cs" />

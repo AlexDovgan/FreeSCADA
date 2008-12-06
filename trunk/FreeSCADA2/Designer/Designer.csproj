@@ -103,7 +103,6 @@
     </Compile>
     <Compile Include="SchemaEditor\PropertyGridTypeEditors\OrinalPropertyAttribute.cs" />
     <Compile Include="SchemaEditor\SchemaCommands.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="SchemaEditor\ShortProperties\CanvasShortProp.cs" />
     <Compile Include="SchemaEditor\ShortProperties\CommonShortProp.cs" />

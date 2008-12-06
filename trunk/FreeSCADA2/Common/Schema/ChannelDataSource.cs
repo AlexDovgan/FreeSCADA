@@ -1,4 +1,4 @@
-﻿using FreeSCADA.ShellInterfaces;
+﻿using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Common.Schema
 {

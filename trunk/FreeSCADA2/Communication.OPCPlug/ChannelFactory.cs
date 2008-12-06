@@ -1,5 +1,5 @@
 ﻿using System.Xml;
-using FreeSCADA.ShellInterfaces;
+using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Communication.OPCPlug
 {

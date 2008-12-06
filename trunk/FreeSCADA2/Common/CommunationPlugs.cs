@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using FreeSCADA.ShellInterfaces;
-using FreeSCADA.ShellInterfaces.Plugins;
+using FreeSCADA.Interfaces;
+using FreeSCADA.Interfaces.Plugins;
 
 namespace FreeSCADA.Common
 {
@@ -26,14 +26,6 @@ namespace FreeSCADA.Common
 					}
 				}
 			}
-			(Env.Current.Commands as Commands).PluginCommand += new Commands.PluginCommandHandler(OnCommand);
-		}
-
-		void OnCommand(object sender, int id, string pluginId)
-		{
-			foreach(ICommunicationPlug plug in commPlugs)
-				if(plug.PluginId == pluginId)
-					plug.ProcessCommand(id);
 		}
 
 		private void InitializePlugin(IEnvironment env, ICommunicationPlug plug)

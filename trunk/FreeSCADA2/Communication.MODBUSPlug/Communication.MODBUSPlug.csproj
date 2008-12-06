@@ -82,7 +82,6 @@
     </Compile>
     <Compile Include="StationFactory.cs" />
     <Compile Include="ModbusEnums.cs" />
-    <Compile Include="Command.cs" />
     <Compile Include="ModbusTCPClientStation.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

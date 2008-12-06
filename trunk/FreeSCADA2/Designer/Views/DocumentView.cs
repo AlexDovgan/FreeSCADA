@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using FreeSCADA.Common;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
-using FreeSCADA.ShellInterfaces;
+using FreeSCADA.Interfaces;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace FreeSCADA.Designer.Views
@@ -23,7 +24,7 @@ namespace FreeSCADA.Designer.Views
 		bool modifiedFlag = false;
 		bool handleModifiedFlagOnClose = true;
 
-        public virtual List<ICommandData> DocumentCommands
+        public virtual List<ICommand> DocumentCommands
         {
             get;
             protected set;
@@ -31,7 +32,7 @@ namespace FreeSCADA.Designer.Views
 
 		public DocumentView()
 		{
-            DocumentCommands = new List<ICommandData>();
+			DocumentCommands = new List<ICommand>();
 			DockAreas = DockAreas.Float | DockAreas.Document;
 			documentName = "Document";
 			UpdateCaption();
@@ -64,20 +65,14 @@ namespace FreeSCADA.Designer.Views
 
 		public virtual void OnActivated()
 		{
-			foreach (ICommandData cmd in DocumentCommands)
-				cmd.CommandToolStripItem = CommandManager.Current.AddDocumentCommand(cmd);
+			foreach (ICommand cmd in DocumentCommands)
+				Env.Current.Commands.AddCommand(CommandManager.documentContext, cmd);
 		}
 
 		public virtual void OnDeactivated()
 		{
-			foreach (ICommandData cmd in DocumentCommands)
-			{
-				if (cmd.CommandToolStripItem != null)
-				{
-					CommandManager.Current.RemoveDocumentCommand(cmd.CommandToolStripItem);
-					cmd.CommandToolStripItem = null;
-				}
-			}
+			foreach (ICommand cmd in DocumentCommands)
+				Env.Current.Commands.RemoveCommand(cmd);
         }
 
 		public virtual bool SaveDocument()

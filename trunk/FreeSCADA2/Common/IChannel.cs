@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
-namespace FreeSCADA.ShellInterfaces
+
+namespace FreeSCADA.Interfaces
 {
 	public enum ChannelStatusFlags
 	{

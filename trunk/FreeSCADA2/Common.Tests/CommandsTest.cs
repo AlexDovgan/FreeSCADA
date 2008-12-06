@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using FreeSCADA.Interfaces;
 using NUnit.Framework;
 
 namespace FreeSCADA.Common.Tests
@@ -10,55 +11,49 @@ namespace FreeSCADA.Common.Tests
 		public void RegisterCommand()
 		{
 			MenuStrip menu = new MenuStrip();
-			Commands commands = new Commands(menu);
+			ToolStrip toolbar = new ToolStrip();
+			Commands commands = new Commands(menu, toolbar);
 
-			//There is only one command. RegisterCommand should return "0" then "1"
-			Assert.AreEqual(0, commands.RegisterCommand("test_id", "Test command 1", "Test group"));
-			Assert.AreEqual(1, commands.RegisterCommand("test_id", "Test command 2", "Test group"));
+			CommandMock testCommand1 = new CommandMock("Test command 1");
+			CommandMock testCommand2 = new CommandMock("Test command 2");
 
-			Assert.AreEqual("Test group", menu.Items[0].Text);
-			Assert.IsTrue(menu.Items[0] is ToolStripMenuItem);
+			ICommandContext context = commands.GetPredefinedContext(FreeSCADA.Interfaces.PredefinedContexts.Communication);
+			Assert.IsNotNull(context);
+
+			commands.AddCommand(context, testCommand1);
+			commands.AddCommand(context, testCommand2);
+
+			Assert.AreEqual(2, commands.GetCommands(context).Count);
 
 			ToolStripMenuItem group = (ToolStripMenuItem)menu.Items[0];
 			Assert.AreEqual("Test command 1", group.DropDown.Items[0].Text);
 			Assert.AreEqual("Test command 2", group.DropDown.Items[1].Text);
 		}
 
-		class PluginEventReceiver
-		{
-			public object sender = null;
-			public int id = -1;
-			public string pluginId = null;
-			public bool gotEvent = false;
-
-			public void Handler(object sender, int id, string pluginId)
-			{
-				gotEvent = true;
-				this.sender = sender;
-				this.id = id;
-				this.pluginId = pluginId;
-			}
-		}
-
 		[Test]
-		public void PluginCommandEvent()
+		public void HandlingEvents()
 		{
 			MenuStrip menu = new MenuStrip();
-			Commands commands = new Commands(menu);
+			ToolStrip toolbar = new ToolStrip();
+			Commands commands = new Commands(menu, toolbar);
 
-			int cmdId = commands.RegisterCommand("test_id", "Test command 1", "Test group");
+			CommandMock testCommand = new CommandMock("Test command 1");
 
-			PluginEventReceiver receiver = new PluginEventReceiver();
-			commands.PluginCommand += new Commands.PluginCommandHandler(receiver.Handler);
-			
-			Assert.IsFalse(receiver.gotEvent);
-			ToolStripMenuItem group = (ToolStripMenuItem)menu.Items[0];
-			group.DropDown.Items[0].PerformClick();
+			ICommandContext context = commands.GetPredefinedContext(FreeSCADA.Interfaces.PredefinedContexts.Global);
+			commands.AddCommand(context, testCommand);
 
-			Assert.IsTrue(receiver.gotEvent);
-			Assert.AreEqual(commands, receiver.sender);
-			Assert.AreEqual(cmdId, receiver.id);
-			Assert.AreEqual("test_id",receiver.pluginId);			
+			foreach (ICommand cmd in commands.GetCommands(context))
+				cmd.Execute();
+
+			Assert.IsTrue(testCommand.isExecuted);
+
+			testCommand.isExecuted = false;
+			menu.Items[1].PerformClick();
+			Assert.IsTrue(testCommand.isExecuted);
+
+			testCommand.isExecuted = false;
+			toolbar.Items[0].PerformClick();
+			Assert.IsTrue(testCommand.isExecuted);
 		}
 	}
 }

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
-using System.Xml;
 using System.Windows.Media;
-using System.Windows;
+using System.Xml;
 using FreeSCADA.Common.Schema.Actions;
 namespace FreeSCADA.Common.Schema
 {
@@ -94,7 +94,7 @@ namespace FreeSCADA.Common.Schema
                 Env.Current.Project.SetData("Schemas/" + Name + "/xaml", ms);
             }
             IsModified = false;
-        /*    if ((bool)MainCanvas.FindResource("DesignerSettings_GridOn") == true && Env.Current.Mode == FreeSCADA.ShellInterfaces.EnvironmentMode.Designer)
+        /*    if ((bool)MainCanvas.FindResource("DesignerSettings_GridOn") == true && Env.Current.Mode == FreeSCADA.Interfaces.EnvironmentMode.Designer)
             {
                 WPFShemaContainer.ViewGrid(MainCanvas as Canvas, true); // grid back if necessary
             }*/

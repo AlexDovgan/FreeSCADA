@@ -47,9 +47,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnvironmentMock.cs" />
     <Compile Include="PluginLoadingTest.cs" />
-    <Compile Include="CommandsMock.cs" />
     <Compile Include="ReadWriteChannelsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
