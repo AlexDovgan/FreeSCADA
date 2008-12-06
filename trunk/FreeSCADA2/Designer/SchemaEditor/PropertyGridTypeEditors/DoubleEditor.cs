@@ -70,9 +70,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertyGridTypeEditors
                         bind.Mode = BindingMode.TwoWay;
                         BindingOperations.SetBinding(depObj, depProp, bind);
                         depObj.SetValue(depProp, value);
-                        
-                        
-                        
+                               
                     }
 
 
@@ -93,6 +91,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertyGridTypeEditors
                 if ((atr = e.Context.PropertyDescriptor.Attributes[typeof(OriginalPropertyAttribute)] as OriginalPropertyAttribute) == null)
                     return;
                 DependencyPropertyDescriptor dpd= DependencyPropertyDescriptor.FromName(atr.PropertyName, atr.ObjectType, depObj.GetType());
+                if (dpd == null)
+                    return;
                 DependencyProperty depProp = dpd.DependencyProperty;
                 System.Windows.Data.Binding bind;
                 string channelName;

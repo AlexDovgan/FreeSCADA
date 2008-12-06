@@ -3,7 +3,9 @@ using System.IO;
 using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Xml;
-
+using System.Windows.Media;
+using System.Windows;
+using FreeSCADA.Common.Schema.Actions;
 namespace FreeSCADA.Common.Schema
 {
     public class SchemaDocument
@@ -98,7 +100,7 @@ namespace FreeSCADA.Common.Schema
             }*/
         }
         public void LinkActions()
-        {/*
+        {
             foreach (FrameworkElement el in MainCanvas.Children)
             {
                 TransformGroup tg = new TransformGroup();
@@ -115,7 +117,7 @@ namespace FreeSCADA.Common.Schema
                 {
                     a.ActivateActionFor(el);
                 }
-            }*/
+            }
         }
     }
 
