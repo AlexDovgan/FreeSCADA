@@ -192,7 +192,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
         private void LoadChannels()
         {
             foreach (ModbusChannelImp channel in plugin.Channels)
-                AddVariable(channel.Name, channel.Type, channel.ModbusStation, channel.ModbusType, channel.ModbusAddress);
+                AddVariable(channel.Name, channel.Type.ToString(), channel.ModbusStation, channel.ModbusType, channel.ModbusAddress);
         }
 
         private string GetUniqueVariableName()

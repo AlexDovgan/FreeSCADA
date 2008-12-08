@@ -36,10 +36,15 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 poly.Points[i] = p;
             }
             poly.Stretch = Stretch.None;
-            poly.SetValue(Canvas.LeftProperty, DependencyProperty.UnsetValue);
-            poly.SetValue(Canvas.TopProperty, DependencyProperty.UnsetValue);
-            poly.SetValue(FrameworkElement.WidthProperty, DependencyProperty.UnsetValue);
-            poly.SetValue(FrameworkElement.HeightProperty, DependencyProperty.UnsetValue);
+            //poly.SetValue(Canvas.LeftProperty, DependencyProperty.UnsetValue);
+            //poly.SetValue(Canvas.TopProperty, DependencyProperty.UnsetValue);
+            //poly.SetValue(FrameworkElement.WidthProperty, DependencyProperty.UnsetValue);
+            //poly.SetValue(FrameworkElement.HeightProperty, DependencyProperty.UnsetValue);
+            EditorHelper.SetDependencyProperty(poly, Canvas.LeftProperty, DependencyProperty.UnsetValue);
+            EditorHelper.SetDependencyProperty(poly, Canvas.TopProperty, DependencyProperty.UnsetValue);
+            EditorHelper.SetDependencyProperty(poly, FrameworkElement.WidthProperty, DependencyProperty.UnsetValue);
+            EditorHelper.SetDependencyProperty(poly, FrameworkElement.HeightProperty, DependencyProperty.UnsetValue);
+
 
             //poly.SetValue(UIElement.RenderTransformProperty, DependencyProperty.UnsetValue);
             TransformGroup t = new TransformGroup();
@@ -55,10 +60,15 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             Polyline poly = AdornedElement as Polyline;
             Rect b = VisualTreeHelper.GetContentBounds(poly);
             poly.Stretch = Stretch.Fill;
-            poly.SetValue(Canvas.LeftProperty, b.X);
-            poly.SetValue(Canvas.TopProperty, b.Y);
-            poly.SetValue(FrameworkElement.WidthProperty, b.Width);
-            poly.SetValue(FrameworkElement.HeightProperty, b.Height);
+            //poly.SetValue(Canvas.LeftProperty, b.X);
+            //poly.SetValue(Canvas.TopProperty, b.Y);
+            //poly.SetValue(FrameworkElement.WidthProperty, b.Width);
+            //poly.SetValue(FrameworkElement.HeightProperty, b.Height);
+            EditorHelper.SetDependencyProperty(poly, Canvas.LeftProperty, b.X);
+            EditorHelper.SetDependencyProperty(poly, Canvas.TopProperty, b.Y);
+            EditorHelper.SetDependencyProperty(poly, FrameworkElement.WidthProperty, b.Width);
+            EditorHelper.SetDependencyProperty(poly, FrameworkElement.HeightProperty, b.Height);
+
             for (int i = 0; i < poly.Points.Count; i++)
             {
                 Point p = poly.Points[i];

@@ -2,7 +2,9 @@
 
 namespace FreeSCADA.Common.Schema
 {
-    //TDOD: substitute this solution on custom dtata provider 
+    ///TDOD: substitute this solution on custom dtata provider 
+    ///
+
     public class ChannelDataSource
     {
         

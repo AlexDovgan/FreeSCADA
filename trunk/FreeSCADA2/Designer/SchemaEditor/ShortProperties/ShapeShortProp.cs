@@ -62,7 +62,8 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             set
             {
                 RaisePropertiesBrowserChanged((UIElement)shape);
-                shape.StrokeThickness = value;
+                //shape.StrokeThickness = value;
+                EditorHelper.SetDependencyProperty(shape, Shape.StrokeThicknessProperty, value);
 
             }
         }

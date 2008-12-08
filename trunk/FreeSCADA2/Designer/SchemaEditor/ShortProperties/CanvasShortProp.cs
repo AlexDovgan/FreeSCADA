@@ -46,7 +46,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             set
             {
                 RaisePropertiesBrowserChanged((UIElement)frameworkElement);
-                frameworkElement.Width = value;
+                EditorHelper.SetDependencyProperty(frameworkElement, FrameworkElement.WidthProperty, value);
             }
         }
 
@@ -57,7 +57,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             set
             {
                 RaisePropertiesBrowserChanged((UIElement)frameworkElement);
-                frameworkElement.Height = value;
+                EditorHelper.SetDependencyProperty(frameworkElement, FrameworkElement.HeightProperty, value);
             }
         }
 

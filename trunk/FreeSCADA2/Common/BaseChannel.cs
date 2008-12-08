@@ -15,7 +15,7 @@ namespace FreeSCADA.Common
 
         protected ICommunicationPlug plugin;
         private object tag;
-        private object value = new object();
+        private object value=null;//= new object();
 
         public BaseChannel(string name, bool readOnly, ICommunicationPlug plugin, Type type)
         {
@@ -23,12 +23,12 @@ namespace FreeSCADA.Common
             this.readOnly = readOnly;
             this.plugin = plugin;
             this.type = type;
-			if (type != value.GetType())
+			/*if (type != value.GetType())
                 if (type != typeof(string))     // This approach does not work with STRING channels!!!!!!!!!!!
 				    value = System.Activator.CreateInstance(type);
                 else
                     value = "";
-
+            */
             modifyTime = DateTime.MinValue;
             status = ChannelStatusFlags.Unknown;
         }
@@ -47,12 +47,12 @@ namespace FreeSCADA.Common
 			}
         }
 
-        public string Type
+        public Type Type
         {
             get 
 			{
 				lock (this) 
-					return type.Name;
+					return type;
 			}
         }
 
@@ -69,9 +69,10 @@ namespace FreeSCADA.Common
         {
             get
             {
+                
                 lock (this)
                     return value;
-
+                
             }
             set
             {
