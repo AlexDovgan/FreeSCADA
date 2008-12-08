@@ -287,6 +287,34 @@ namespace FreeSCADA.Designer.SchemaEditor
             return sb.ToString();
         }
 
+        public static void SetDependencyProperty(DependencyObject dobj,DependencyProperty dp, object value)
+        {
+            Binding bind;
+            if ((bind = BindingOperations.GetBinding(dobj, dp)) != null)
+            {
+                System.Reflection.FieldInfo isSealedFieldInfo;
+                isSealedFieldInfo =
+                    typeof(BindingBase).GetField("_isSealed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+                if (isSealedFieldInfo == null)
+                    throw new InvalidOperationException("Oops, we have a problem, it seems like the WPF team decided to change the name of the _isSealed field of the BindingBase class.");
+
+
+
+                bool isSealed = (bool)isSealedFieldInfo.GetValue(bind);
+
+                if (isSealed)//change the is sealed value
+                    isSealedFieldInfo.SetValue(bind, false);
+                                
+                bind.FallbackValue = value;
+
+                if (isSealed)//put the is sealed value back as it was...
+                    isSealedFieldInfo.SetValue(bind, true);
+                BindingOperations.GetBindingExpression(dobj, dp).UpdateTarget();
+            }
+            else
+                dobj.SetValue(dp, value);
+        }
     }
 
 }

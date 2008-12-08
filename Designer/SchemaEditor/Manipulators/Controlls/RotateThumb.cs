@@ -103,7 +103,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
                 double angle = Vector.AngleBetween(startVector, deltaVector);
 
                 // and update the transformation
-                ItemRotateTransform.Angle = initialAngle + Math.Round(angle, 0);
+                EditorHelper.SetDependencyProperty(ItemRotateTransform, RotateTransform.AngleProperty, initialAngle + Math.Round(angle, 0));
+
+                //ItemRotateTransform.Angle = initialAngle + Math.Round(angle, 0);
            }
         }
     }

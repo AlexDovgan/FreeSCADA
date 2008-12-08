@@ -84,7 +84,8 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
              set
              {
                  RaisePropertiesBrowserChanged((UIElement)frameworkElement);
-                 Canvas.SetLeft(frameworkElement, value);
+                 
+                 EditorHelper.SetDependencyProperty(frameworkElement, Canvas.LeftProperty, value);
              }
           
         }
@@ -97,7 +98,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             set
             {
                 RaisePropertiesBrowserChanged((UIElement)frameworkElement);
-                Canvas.SetTop(frameworkElement, value);
+                EditorHelper.SetDependencyProperty(frameworkElement, Canvas.TopProperty, value);
             }
         }
 
@@ -110,7 +111,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             set
             {
                 RaisePropertiesBrowserChanged((UIElement)frameworkElement);
-                frameworkElement.Width = value;
+                EditorHelper.SetDependencyProperty(frameworkElement, FrameworkElement.WidthProperty, value);
             }
 
         }
@@ -123,14 +124,14 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             set
             {
                 RaisePropertiesBrowserChanged((UIElement)frameworkElement);
-                frameworkElement.Height = value;
+                EditorHelper.SetDependencyProperty(frameworkElement, FrameworkElement.HeightProperty, value);
             }
 
         }
-        [Description("Object's Rotation angle"), Category("Layout")]
+        [Description("Object's Transformation"), Category("Layout")]
         //[Editor(typeof(DoubleEditor), typeof(System.Drawing.Design.UITypeEditor))]
         //[OriginalProperty(typeof(FrameworkElement), "Angle")]
-        public TransformGroup RotateAngle
+        public TransformGroup RenderTransform
         {
             get
             {
@@ -142,13 +143,14 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             {
                 RaisePropertiesBrowserChanged((UIElement)frameworkElement);
                 //((frameworkElement.RenderTransform as TransformGroup).Children[1] as RotateTransform).Angle = value;
-                frameworkElement.RenderTransform = value;
+                EditorHelper.SetDependencyProperty(frameworkElement.RenderTransform, RotateTransform.AngleProperty, value);
+                
             }
 
         }
         [Description("Object's Z-Order"), Category("Layout")]
         [Editor(typeof(DoubleEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        [OriginalProperty(typeof(FrameworkElement), "ZIndex")]
+        [OriginalProperty(typeof(Canvas), "ZIndex")]
          public int ZOrder
         {
             get { return Canvas.GetZIndex(frameworkElement); }
@@ -156,6 +158,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             {
                 RaisePropertiesBrowserChanged((UIElement)frameworkElement);
                 Canvas.SetZIndex(frameworkElement, value);
+                EditorHelper.SetDependencyProperty(frameworkElement,Canvas.ZIndexProperty, value);
             }
 
         }
@@ -169,7 +172,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             set
             {
                 RaisePropertiesBrowserChanged((UIElement)frameworkElement);
-                frameworkElement.Opacity = value;
+                EditorHelper.SetDependencyProperty(frameworkElement, FrameworkElement.OpacityProperty, value);
             }
 
         }

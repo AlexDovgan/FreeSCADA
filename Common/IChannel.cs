@@ -18,7 +18,7 @@ namespace FreeSCADA.Interfaces
 			get;
 		}
 
-		string Type
+		Type Type
 		{
 			get;
 		}

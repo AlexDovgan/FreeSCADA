@@ -42,9 +42,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls
                     x -= x % gridDelta;
                     y -= y % gridDelta;
                 }
-                Canvas.SetLeft(item, x);
-                Canvas.SetTop(item, y);
-                
+                //Canvas.SetLeft(item, x);
+                //Canvas.SetTop(item, y);
+                EditorHelper.SetDependencyProperty(item, Canvas.LeftProperty, x);
+                EditorHelper.SetDependencyProperty(item, Canvas.TopProperty, y);
             }
             e.Handled = false;
         }

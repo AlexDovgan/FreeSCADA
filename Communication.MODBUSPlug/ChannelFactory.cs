@@ -43,7 +43,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
 		{
 			ModbusChannelImp channelBase = (ModbusChannelImp)channel;
 			node.SetAttribute("name", channelBase.Name);
-            node.SetAttribute("type", channelBase.Type);
+            node.SetAttribute("type", channelBase.Type.ToString());
             node.SetAttribute("modbusStation", channelBase.ModbusStation);
             node.SetAttribute("modbusType", channelBase.ModbusType);
             node.SetAttribute("modbusAddress", channelBase.ModbusAddress);

@@ -19,7 +19,8 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             set
             {
                 RaisePropertiesBrowserChanged((UIElement)rangebase);
-                rangebase.Minimum = value;
+                
+                EditorHelper.SetDependencyProperty(rangebase, RangeBase.MinimumProperty, value);
             }
         }
         [Description("Maximum Scale Value"), Category("Appearence")]
@@ -29,7 +30,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
             set
             {
                 RaisePropertiesBrowserChanged((UIElement)rangebase);
-                rangebase.Maximum = value;
+                EditorHelper.SetDependencyProperty(rangebase, RangeBase.MaximumProperty, value);
             }
         }
         [Editor(typeof(DoubleEditor), typeof(System.Drawing.Design.UITypeEditor))]
@@ -37,7 +38,7 @@ namespace FreeSCADA.Designer.SchemaEditor.ShortProperties
         public double Value
         {
             get { return rangebase.Value; }
-            set { rangebase.Value = value; }
+            set { EditorHelper.SetDependencyProperty(rangebase, RangeBase.ValueProperty, value); }
         }
         RangeBase rangebase;
 

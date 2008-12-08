@@ -64,10 +64,12 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertyGridTypeEditors
                         dp.ObjectInstance = chs;
                         dp.MethodName = "GetChannel";
                         bind.Source = dp;
-                        bind.Converter = new Kent.Boogaart.Converters.TypeConverter(chs.GetChannel().Value.GetType(), depProp.PropertyType);
+                        bind.Converter = new Kent.Boogaart.Converters.TypeConverter(chs.GetChannel().Type, depProp.PropertyType);
                         bind.Mode = BindingMode.TwoWay;
+                        bind.FallbackValue = value;
                         BindingOperations.SetBinding(depObj, depProp, bind);
-                        depObj.SetValue(depProp, value);
+
+                        
                                
                     }
 
