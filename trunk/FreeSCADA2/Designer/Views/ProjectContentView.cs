@@ -47,6 +47,7 @@ namespace FreeSCADA.Designer.Views
 
 			TabText = "Project Content";
 
+			RefreshContent(Env.Current.Project);
 			Env.Current.Project.LoadEvent += new EventHandler(OnProjectLoad);
 		}
 

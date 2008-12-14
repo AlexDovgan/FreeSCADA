@@ -29,7 +29,7 @@ namespace FreeSCADA.Designer
 			
 			windowManager = new WindowManager(dockPanel);
 			
-			UpdateCaption();
+			UpdateCaptionAndCommands();
 		}
 
 		private void OnMenuVariables(object sender, System.EventArgs e)
@@ -56,20 +56,20 @@ namespace FreeSCADA.Designer
 		private void OnSaveProjectClick(object sender, System.EventArgs e)
 		{
 			windowManager.SaveProject();
-			UpdateCaption();
+			UpdateCaptionAndCommands();
 		}
 
 		private void OnLoadProjectClick(object sender, System.EventArgs e)
 		{
 			windowManager.LoadProject();
-			UpdateCaption();
+			UpdateCaptionAndCommands();
 		}
 
 		private void OnSaveFileClick(object sender, System.EventArgs e)
 		{
 			//windowManager.SaveDocument();
             windowManager.SaveProject();
-            UpdateCaption();
+            UpdateCaptionAndCommands();
         }
 
 		private void OnFormClosing(object sender, FormClosingEventArgs e)
@@ -82,12 +82,17 @@ namespace FreeSCADA.Designer
 			Env.Deinitialize();
 		}
 
-		void UpdateCaption()
+		void UpdateCaptionAndCommands()
 		{
 			if (Env.Current.Project.FileName == "")
 				Text = StringResources.MainWindowName;
 			else
 				Text = string.Format(StringResources.MainWindowNameEx, Env.Current.Project.FileName);
+
+			if (Env.Current.Project.FileName == "")
+				runButton.Enabled = false;
+			else
+				runButton.Enabled = !Env.Current.Project.IsModified;
 		}
 
 		private void OnNewProjectClick(object sender, System.EventArgs e)
@@ -98,7 +103,7 @@ namespace FreeSCADA.Designer
 				Env.Current.CreateNewProject();
 				windowManager = new WindowManager(dockPanel);
                 Env.Current.Project.LoadNew();
-                UpdateCaption();
+                UpdateCaptionAndCommands();
 				System.GC.Collect();
 			}
 		}
@@ -126,7 +131,7 @@ namespace FreeSCADA.Designer
             {
                 Env.Current.Project.SaveAsFileName = sfd.FileName;
                 windowManager.SaveProject();
-                UpdateCaption();
+                UpdateCaptionAndCommands();
             }
         }
     }
