@@ -67,6 +67,7 @@
     <Compile Include="BaseChannel.cs" />
     <Compile Include="BaseCommand.cs" />
     <Compile Include="BaseCommandContext.cs" />
+    <Compile Include="BaseDropDownCommand.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="CommunationPlugs.cs" />
     <Compile Include="ConfigurationManager.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Env.cs" />
     <Compile Include="IChannel.cs" />
     <Compile Include="ICommandContext.cs" />
+    <Compile Include="ICommandItems.cs" />
     <Compile Include="ICommands.cs" />
     <Compile Include="ICommunicationPlug.cs" />
     <Compile Include="IEnvironment.cs" />

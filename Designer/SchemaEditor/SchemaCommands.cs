@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,6 +8,10 @@ using System.Windows.Markup;
 using FreeSCADA.Common;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.Views;
+using FreeSCADA.Interfaces;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
 
 namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 {
@@ -282,13 +287,43 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         #endregion ICommand Members
     }
 
-    class ZoomLevelCommand : SchemaCommand
+	class ZoomLevelCommand : SchemaCommand, ICommandItems
     {
-        double Level;
+		double level;
+		public event EventHandler CurrentChanged;
+
         public ZoomLevelCommand(double level)
         {
-            Level = level;
+            this.level = level;
         }
+
+		public ZoomLevelCommand()
+		{
+			this.level = 1.0;
+		}
+
+		#region Informational properties
+
+		public override string Name
+		{
+			get { return StringResources.CommandZoomName; }
+		}
+
+		public override string Description
+		{
+			get { return StringResources.CommandZoomDescription; }
+		}
+
+		public override Bitmap Icon
+		{
+			get
+			{
+				return null;
+			}
+		}
+		public override CommandType Type { get { return CommandType.DropDownBox; } }
+		public override ICommandItems DropDownItems { get { return this; } }
+		#endregion
 
 		public override void CheckApplicability()
 		{
@@ -297,8 +332,54 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public override void Execute()
         {
 			SchemaView view = (SchemaView)ControlledObject;
-            view.ZoomLevel = Level;
+            view.ZoomLevel = level;
+			view.Focus();
         }
+
+		public List<object> Items
+		{
+			get
+			{
+				List<object> res = new List<object>();
+				res.Add("25%");
+				res.Add("50%");
+				res.Add("75%");
+				res.Add("100%");
+				res.Add("150%");
+				res.Add("200%");
+				return res;
+			}
+		}
+
+		public double Level
+		{
+			get { return level; }
+			set { level = value; Current = string.Format("Zoom {0}%", level * 100); }
+		}
+
+		public virtual object Current
+		{
+			get
+			{
+				return string.Format("Zoom {0}%", level * 100);
+			}
+			set
+			{
+				if (value.ToString().Length == 0)
+					level = 1.0;
+				else
+				{
+					MatchCollection matches = Regex.Matches(value.ToString(), @"\d+");
+					level = int.Parse(matches[0].Value) / 100.0;
+					if (level < 0.25)
+						level = 0.25;
+					if (level > 10)
+						level = 10;
+				}
+				if(CurrentChanged != null)
+					CurrentChanged(this, new EventArgs());
+			}
+		}
     }
 
     class ZoomInCommand : SchemaCommand

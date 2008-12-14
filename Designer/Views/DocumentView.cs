@@ -24,7 +24,25 @@ namespace FreeSCADA.Designer.Views
 		bool modifiedFlag = false;
 		bool handleModifiedFlagOnClose = true;
 
-        public virtual List<ICommand> DocumentCommands
+		public struct CommandInfo
+		{
+			public ICommand command;
+			public ICommandContext defaultContext;
+
+			public CommandInfo(ICommand command)
+			{
+				this.command = command;
+				this.defaultContext = null;
+			}
+
+			public CommandInfo(ICommand command, ICommandContext defaultContext)
+			{
+				this.command = command;
+				this.defaultContext = defaultContext;
+			}
+		}
+
+		public virtual List<CommandInfo> DocumentCommands
         {
             get;
             protected set;
@@ -32,7 +50,7 @@ namespace FreeSCADA.Designer.Views
 
 		public DocumentView()
 		{
-			DocumentCommands = new List<ICommand>();
+			DocumentCommands = new List<CommandInfo>();
 			DockAreas = DockAreas.Float | DockAreas.Document;
 			documentName = "Document";
 			UpdateCaption();
@@ -65,14 +83,19 @@ namespace FreeSCADA.Designer.Views
 
 		public virtual void OnActivated()
 		{
-			foreach (ICommand cmd in DocumentCommands)
-				Env.Current.Commands.AddCommand(CommandManager.documentContext, cmd);
+			foreach (CommandInfo cmdInfo in DocumentCommands)
+			{
+				if(cmdInfo.defaultContext != null)
+					Env.Current.Commands.AddCommand(cmdInfo.defaultContext, cmdInfo.command);
+				else
+					Env.Current.Commands.AddCommand(CommandManager.documentContext, cmdInfo.command);
+			}
 		}
 
 		public virtual void OnDeactivated()
 		{
-			foreach (ICommand cmd in DocumentCommands)
-				Env.Current.Commands.RemoveCommand(cmd);
+			foreach (CommandInfo cmdInfo in DocumentCommands)
+				Env.Current.Commands.RemoveCommand(cmdInfo.command);
         }
 
 		public virtual bool SaveDocument()

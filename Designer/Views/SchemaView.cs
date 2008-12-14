@@ -122,12 +122,12 @@ namespace FreeSCADA.Designer.Views
 
 		private void UpdateCommandState()
 		{
-			foreach (ICommand item in DocumentCommands)
+			foreach (CommandInfo cmdInfo in DocumentCommands)
 			{
-				if (item is SchemaCommand)
+				if (cmdInfo.command is SchemaCommand)
 				{
-					SchemaCommand cmd = (SchemaCommand)item;
-					if (cmd is ZoomInCommand || cmd is ZoomOutCommand || cmd is UndoCommand || cmd is RedoCommand)
+					SchemaCommand cmd = (SchemaCommand)cmdInfo.command;
+					if (cmd is ZoomInCommand || cmd is ZoomOutCommand || cmd is UndoCommand || cmd is RedoCommand || cmd is ZoomLevelCommand)
 						cmd.ControlledObject = this;
 					else
 						cmd.ControlledObject = activeTool;
@@ -177,19 +177,20 @@ namespace FreeSCADA.Designer.Views
             this.SavedScrollPosition = new System.Windows.Point(0.0, 0.0);
 
             // Commands to ToolStrip
-            DocumentCommands.Add(undoCommand = new UndoCommand());
-            DocumentCommands.Add(redoCommand = new RedoCommand());
-            DocumentCommands.Add(new NullCommand());    // Separator
-            DocumentCommands.Add(new CutCommand());
-            DocumentCommands.Add(new CopyCommand());
-            DocumentCommands.Add(new PasteCommand());
-            DocumentCommands.Add(new NullCommand());    // Separator
-            DocumentCommands.Add(new XamlViewCommand(this));
-            DocumentCommands.Add(new GroupCommand());
-            DocumentCommands.Add(new UngroupCommand());
-            DocumentCommands.Add(new NullCommand());    // Separator
-            DocumentCommands.Add(new ZoomOutCommand());
-            DocumentCommands.Add(new ZoomInCommand());
+            DocumentCommands.Add(new CommandInfo(undoCommand = new UndoCommand()));
+            DocumentCommands.Add(new CommandInfo(redoCommand = new RedoCommand()));
+            DocumentCommands.Add(new CommandInfo(new NullCommand()));    // Separator
+            DocumentCommands.Add(new CommandInfo(new CutCommand()));
+            DocumentCommands.Add(new CommandInfo(new CopyCommand()));
+            DocumentCommands.Add(new CommandInfo(new PasteCommand()));
+            DocumentCommands.Add(new CommandInfo(new NullCommand()));    // Separator
+            DocumentCommands.Add(new CommandInfo(new XamlViewCommand(this)));
+            DocumentCommands.Add(new CommandInfo(new GroupCommand()));
+            DocumentCommands.Add(new CommandInfo(new UngroupCommand()));
+            //DocumentCommands.Add(new NullCommand());    // Separator
+			DocumentCommands.Add(new CommandInfo(new ZoomLevelCommand(), CommandManager.viewContext));
+            DocumentCommands.Add(new CommandInfo(new ZoomOutCommand(), CommandManager.viewContext));
+            DocumentCommands.Add(new CommandInfo(new ZoomInCommand(), CommandManager.viewContext));
 
             CreateToolList();
         }
@@ -564,8 +565,8 @@ namespace FreeSCADA.Designer.Views
             Schema.MainCanvas.LayoutTransform = SchemaScale;
             msv.ScrollToVerticalOffset(msv.VerticalOffset * 1.05 + center.Y* 0.05);
             msv.ScrollToHorizontalOffset(msv.HorizontalOffset * 1.05 + center.X * 0.05);
-            //this is must be an event 
-            (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
+
+			UpdateZoomLevel();
         }
 
         public void ZoomOut()
@@ -581,9 +582,18 @@ namespace FreeSCADA.Designer.Views
             Schema.MainCanvas.LayoutTransform = SchemaScale;
             msv.ScrollToVerticalOffset(msv.VerticalOffset / 1.05 - center.Y * 0.05);
             msv.ScrollToHorizontalOffset(msv.HorizontalOffset / 1.05 - center.X * 0.05);
-            (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
+
+			UpdateZoomLevel();
         }
 
+		private void UpdateZoomLevel()
+		{
+			foreach (CommandInfo cmdInfo in DocumentCommands)
+			{
+				if (cmdInfo.command is ZoomLevelCommand)
+					(cmdInfo.command as ZoomLevelCommand).Level = SchemaScale.ScaleX;
+			}
+		}
       
         public void UpdateCanvasByXaml()
         {

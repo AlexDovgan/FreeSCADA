@@ -6,7 +6,8 @@ namespace FreeSCADA.Interfaces
 	public enum CommandType
 	{
 		Separator,
-		Standard
+		Standard,
+		DropDownBox
 	}
     /// <summary>
     /// 
@@ -49,6 +50,11 @@ namespace FreeSCADA.Interfaces
             get;
             set;
         }
+
+		ICommandItems DropDownItems
+		{
+			get;
+		}
 
 		void Execute();
     }

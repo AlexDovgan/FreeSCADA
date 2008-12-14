@@ -18,6 +18,7 @@ namespace FreeSCADA.Common
 		public virtual string Description { get { throw new NotImplementedException(); } }
 		public virtual Bitmap Icon { get { return null; } }
 		public virtual CommandType Type { get { return CommandType.Standard; } }
+		public virtual ICommandItems DropDownItems { get { return null; } }
 
 		public virtual bool CanExecute
 		{
@@ -36,7 +37,7 @@ namespace FreeSCADA.Common
 		{
 		}
 
-		public void FireCanExecuteChanged()
+		protected void FireCanExecuteChanged()
 		{
 			if (CanExecuteChanged != null)
 				CanExecuteChanged(this, new EventArgs());
