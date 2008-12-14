@@ -47,8 +47,15 @@ namespace FreeSCADA.Common
 						throw new NotImplementedException();
 				}
 				tsi.Tag = cmd;
-				
-				menu.Items.Add(tsi);
+
+				int pos = FindPositionToInsert(menu.Items, cmd);
+				if (pos >= 0)
+					menu.Items.Insert(pos, tsi);
+				else
+				{
+					if(!(menu.Items.Count == 0 && cmd.Type == CommandType.Separator)) //Don't add separator if there is nothing to separate
+						menu.Items.Add(tsi);
+				}
 			}
 
 			if (toolbar != null)
@@ -73,9 +80,28 @@ namespace FreeSCADA.Common
 				}
 				tsi.Tag = cmd;
 
-				toolbar.Items.Add(tsi);
+				int pos = FindPositionToInsert(toolbar.Items, cmd);
+				if (pos >= 0)
+					toolbar.Items.Insert(pos, tsi);
+				else
+					toolbar.Items.Add(tsi);
+
 				toolbar.Visible = true;
 			}
+		}
+
+		private int FindPositionToInsert(ToolStripItemCollection items, ICommand cmd)
+		{
+			for(int i=0;i<items.Count;i++)
+			{
+				if (items[i].Tag is ICommand)
+				{
+					int itemPriority = (items[i].Tag as ICommand).Priority;
+					if (itemPriority > cmd.Priority)
+						return i;
+				}
+			}
+			return -1;
 		}
 
 		private void InitializeStandardCommand(ToolStripItem tsi, ICommand cmd)

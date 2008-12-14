@@ -19,9 +19,13 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 	{
 		object controlledObject;
 
+		public SchemaCommand()
+		{
+			Priority = (int)CommandManager.Priorities.EditCommands;
+		}
 		public virtual object ControlledObject
 		{
-			get{return controlledObject;}
+			get { return controlledObject; }
 			set
 			{
 				controlledObject = value;
@@ -29,48 +33,48 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 			}
 		}
 
-		public virtual void CheckApplicability(){}
+		public virtual void CheckApplicability() { }
 	}
 
 	class UngroupCommand : SchemaCommand
-    {
+	{
 		public override void CheckApplicability()
-        {
+		{
 			SelectionTool tool = ControlledObject as SelectionTool;
-            if (tool != null && tool.ToolManipulator != null && tool.ToolManipulator.AdornedElement is Viewbox)
-                CanExecute = true;
+			if (tool != null && tool.ToolManipulator != null && tool.ToolManipulator.AdornedElement is Viewbox)
+				CanExecute = true;
 			else
 				CanExecute = false;
-        }
-
-		#region ICommand Members
-        public override void Execute()
-        {
-            EditorHelper.BreakGroup(ControlledObject as SelectionTool);
-        }
-
-        public override string Name
-        {
-            get { return StringResources.CommandUngroupName; }
-        }
-
-		public override string Description 
-		{ 
-			get { return StringResources.CommandUngroupDescription; } 
 		}
 
-        public override Bitmap Icon
-        {
-            get
-            {
-                return global::FreeSCADA.Designer.Properties.Resources.shape_ungroup;
-            }
-        }
-        #endregion ICommand Members
-    }
+		#region ICommand Members
+		public override void Execute()
+		{
+			EditorHelper.BreakGroup(ControlledObject as SelectionTool);
+		}
 
-    class GroupCommand : SchemaCommand
-    {
+		public override string Name
+		{
+			get { return StringResources.CommandUngroupName; }
+		}
+
+		public override string Description
+		{
+			get { return StringResources.CommandUngroupDescription; }
+		}
+
+		public override Bitmap Icon
+		{
+			get
+			{
+				return global::FreeSCADA.Designer.Properties.Resources.shape_ungroup;
+			}
+		}
+		#endregion ICommand Members
+	}
+
+	class GroupCommand : SchemaCommand
+	{
 		public override void CheckApplicability()
 		{
 			SelectionTool tool = ControlledObject as SelectionTool;
@@ -80,32 +84,32 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 				CanExecute = false;
 		}
 
-        #region ICommand Members
+		#region ICommand Members
 
 		public override void Execute()
-        {
-            EditorHelper.CreateGroup(ControlledObject as SelectionTool);   
-        }
+		{
+			EditorHelper.CreateGroup(ControlledObject as SelectionTool);
+		}
 
-        public override string Name
-        {
+		public override string Name
+		{
 			get { return StringResources.CommandGroupName; }
-        }
+		}
 
 		public override string Description
 		{
 			get { return StringResources.CommandGroupDescription; }
 		}
 
-        public override Bitmap Icon
-        {
-            get 
+		public override Bitmap Icon
+		{
+			get
 			{
-                return global::FreeSCADA.Designer.Properties.Resources.shape_group;
-            }
-        }
-        #endregion ICommand Members
-    }
+				return global::FreeSCADA.Designer.Properties.Resources.shape_group;
+			}
+		}
+		#endregion ICommand Members
+	}
 
 	class CopyCommand : SchemaCommand
 	{
@@ -143,10 +147,10 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 			}
 		}
 		#endregion ICommand Members
-    }
+	}
 
-    class CutCommand : SchemaCommand
-    {
+	class CutCommand : SchemaCommand
+	{
 		public override void CheckApplicability()
 		{
 			SelectionTool tool = ControlledObject as SelectionTool;
@@ -157,37 +161,37 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 		}
 
 		#region ICommand Members
-        public override void Execute()
-        {
+		public override void Execute()
+		{
 			SelectionTool tool = (SelectionTool)ControlledObject;
 
-            string xaml = XamlWriter.Save(tool.SelectedObject);
-            System.Windows.Clipboard.SetText(xaml, System.Windows.TextDataFormat.Xaml);
-            tool.NotifyObjectDeleted(tool.SelectedObject);
-            tool.SelectedObject = null;
-        }
+			string xaml = XamlWriter.Save(tool.SelectedObject);
+			System.Windows.Clipboard.SetText(xaml, System.Windows.TextDataFormat.Xaml);
+			tool.NotifyObjectDeleted(tool.SelectedObject);
+			tool.SelectedObject = null;
+		}
 
-        public override string Name
-        {
-            get { return StringResources.CommandCutName;}
-        }
+		public override string Name
+		{
+			get { return StringResources.CommandCutName; }
+		}
 
 		public override string Description
 		{
 			get { return StringResources.CommandCutDescription; }
 		}
 
-        public override Bitmap Icon
-        {
-            get 
+		public override Bitmap Icon
+		{
+			get
 			{
-                return global::FreeSCADA.Designer.Properties.Resources.cut;
-            }
-        }
-        #endregion ICommand Members
-    }
-    class PasteCommand : SchemaCommand
-    {
+				return global::FreeSCADA.Designer.Properties.Resources.cut;
+			}
+		}
+		#endregion ICommand Members
+	}
+	class PasteCommand : SchemaCommand
+	{
 		public override void CheckApplicability()
 		{
 			SelectionTool tool = ControlledObject as SelectionTool;
@@ -197,28 +201,28 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 				CanExecute = false;
 		}
 
-        #region ICommand Members
-        public override void Execute()
-        {
+		#region ICommand Members
+		public override void Execute()
+		{
 			SelectionTool tool = ControlledObject as SelectionTool;
-            string xaml = System.Windows.Clipboard.GetText(System.Windows.TextDataFormat.Xaml);
+			string xaml = System.Windows.Clipboard.GetText(System.Windows.TextDataFormat.Xaml);
 			if (tool != null && xaml != null)
-            {
-                using (MemoryStream stream = new MemoryStream(xaml.Length))
-                {
-                    using (StreamWriter sw = new StreamWriter(stream))
-                    {
-                        sw.Write(xaml);
-                        sw.Flush();
-                        stream.Seek(0, SeekOrigin.Begin);
-                        UIElement el = XamlReader.Load(stream) as UIElement;
-                        Canvas.SetLeft(el, Mouse.GetPosition(tool).X);
-                        Canvas.SetTop(el, Mouse.GetPosition(tool).Y);
-                        tool.NotifyObjectCreated(el);
-                     }
-                }
-            }
-        }
+			{
+				using (MemoryStream stream = new MemoryStream(xaml.Length))
+				{
+					using (StreamWriter sw = new StreamWriter(stream))
+					{
+						sw.Write(xaml);
+						sw.Flush();
+						stream.Seek(0, SeekOrigin.Begin);
+						UIElement el = XamlReader.Load(stream) as UIElement;
+						Canvas.SetLeft(el, Mouse.GetPosition(tool).X);
+						Canvas.SetTop(el, Mouse.GetPosition(tool).Y);
+						tool.NotifyObjectCreated(el);
+					}
+				}
+			}
+		}
 
 		public override string Name
 		{
@@ -230,42 +234,43 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 			get { return StringResources.CommandPasteDescription; }
 		}
 
-        public override Bitmap Icon
-        {
-            get 
+		public override Bitmap Icon
+		{
+			get
 			{
-                return global::FreeSCADA.Designer.Properties.Resources.paste_plain;
-            }
-        }
-        #endregion ICommand Members
-    }
+				return global::FreeSCADA.Designer.Properties.Resources.paste_plain;
+			}
+		}
+		#endregion ICommand Members
+	}
 
-    class XamlViewCommand : BaseCommand
-    {
-        SchemaView view;
-        public XamlViewCommand(SchemaView view)
-        {
-            this.view = view;
+	class XamlViewCommand : BaseCommand
+	{
+		SchemaView view;
+		public XamlViewCommand(SchemaView view)
+		{
+			this.view = view;
 			CanExecute = true;
-        }
+			Priority = (int)CommandManager.Priorities.EditCommands;
+		}
 
-        #region ICommand Members
-        public override void Execute()
-        {
-            try
-            {
+		#region ICommand Members
+		public override void Execute()
+		{
+			try
+			{
 				if (!view.XamlView.Visible)
-                {
+				{
 					view.XamlView.Show();
 					view.UpdateXamlView();
-                }
-                else
-                {
+				}
+				else
+				{
 					view.XamlView.Hide();
-                }
-            }
-            catch { }
-        }
+				}
+			}
+			catch { }
+		}
 
 		public override string Name
 		{
@@ -277,28 +282,24 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 			get { return StringResources.CommandXamlViewDescription; }
 		}
 
-        public override Bitmap Icon
-        {
-            get 
-			{ 
-                return global::FreeSCADA.Designer.Properties.Resources.page_white_code_red;
-            }
-        }
-        #endregion ICommand Members
-    }
+		public override Bitmap Icon
+		{
+			get
+			{
+				return global::FreeSCADA.Designer.Properties.Resources.page_white_code_red;
+			}
+		}
+		#endregion ICommand Members
+	}
 
 	class ZoomLevelCommand : SchemaCommand, ICommandItems
-    {
+	{
 		double level;
 		public event EventHandler CurrentChanged;
 
-        public ZoomLevelCommand(double level)
-        {
-            this.level = level;
-        }
-
 		public ZoomLevelCommand()
 		{
+			Priority = (int)CommandManager.Priorities.ViewCommands;
 			this.level = 1.0;
 		}
 
@@ -329,12 +330,12 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 		{
 			CanExecute = ControlledObject is SchemaView;
 		}
-        public override void Execute()
-        {
+		public override void Execute()
+		{
 			SchemaView view = (SchemaView)ControlledObject;
-            view.ZoomLevel = level;
+			view.ZoomLevel = level;
 			view.Focus();
-        }
+		}
 
 		public List<object> Items
 		{
@@ -376,25 +377,30 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 					if (level > 10)
 						level = 10;
 				}
-				if(CurrentChanged != null)
+				if (CurrentChanged != null)
 					CurrentChanged(this, new EventArgs());
 			}
 		}
-    }
+	}
 
-    class ZoomInCommand : SchemaCommand
-    {
+	class ZoomInCommand : SchemaCommand
+	{
+		public ZoomInCommand()
+		{
+			Priority = (int)CommandManager.Priorities.ViewCommands;
+		}
+
 		public override void CheckApplicability()
 		{
 			CanExecute = ControlledObject is SchemaView;
 		}
 
-        #region ICommand Members
-        public override void Execute()
-        {
+		#region ICommand Members
+		public override void Execute()
+		{
 			SchemaView view = (SchemaView)ControlledObject;
-            view.ZoomIn();
-        }
+			view.ZoomIn();
+		}
 
 		public override string Name
 		{
@@ -406,27 +412,32 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 			get { return StringResources.CommandZoomInDescription; }
 		}
 
-        public override Bitmap Icon
-        {
-            get 
-			{ 
-                return global::FreeSCADA.Designer.Properties.Resources.zoom_in;
-            }
-        }
-        #endregion ICommand Members
-   }
+		public override Bitmap Icon
+		{
+			get
+			{
+				return global::FreeSCADA.Designer.Properties.Resources.zoom_in;
+			}
+		}
+		#endregion ICommand Members
+	}
 
-    class ZoomOutCommand : SchemaCommand
-    {
+	class ZoomOutCommand : SchemaCommand
+	{
+		public ZoomOutCommand()
+		{
+			Priority = (int)CommandManager.Priorities.ViewCommands;
+		}
+
 		public override void CheckApplicability()
 		{
 			CanExecute = ControlledObject is SchemaView;
 		}
 
 		public override void Execute()
-        {
+		{
 			SchemaView view = (SchemaView)ControlledObject;
-            view.ZoomOut();
+			view.ZoomOut();
 		}
 
 		#region Informational properties
@@ -440,18 +451,18 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 			get { return StringResources.CommandZoomOutDescription; }
 		}
 
-        public override Bitmap Icon
-        {
-            get
-            {
-                return global::FreeSCADA.Designer.Properties.Resources.zoom_out;
-            }
-        }
-        #endregion ICommand Members
-    }
+		public override Bitmap Icon
+		{
+			get
+			{
+				return global::FreeSCADA.Designer.Properties.Resources.zoom_out;
+			}
+		}
+		#endregion ICommand Members
+	}
 
-    class UndoCommand : SchemaCommand
-    {
+	class UndoCommand : SchemaCommand
+	{
 		public override void CheckApplicability()
 		{
 			DocumentView doc = ControlledObject as DocumentView;
@@ -468,7 +479,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 			doc.undoBuff.UndoCommand();
 		}
 
-        #region Informational properties
+		#region Informational properties
 
 		public override string Name
 		{
@@ -480,18 +491,18 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 			get { return StringResources.CommandUndoDescription; }
 		}
 
-        public override Bitmap Icon
-        {
-            get
-            {
-                return global::FreeSCADA.Designer.Properties.Resources.arrow_undo;
-            }
-        }
-        #endregion
-    }
+		public override Bitmap Icon
+		{
+			get
+			{
+				return global::FreeSCADA.Designer.Properties.Resources.arrow_undo;
+			}
+		}
+		#endregion
+	}
 
 	class RedoCommand : SchemaCommand
-    {
+	{
 		public override void CheckApplicability()
 		{
 			DocumentView doc = ControlledObject as DocumentView;
@@ -520,13 +531,13 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 			get { return StringResources.CommandRedoDescription; }
 		}
 
-        public override Bitmap Icon
-        {
-            get
-            {
-                return global::FreeSCADA.Designer.Properties.Resources.arrow_redo;
-            }
-        }
+		public override Bitmap Icon
+		{
+			get
+			{
+				return global::FreeSCADA.Designer.Properties.Resources.arrow_redo;
+			}
+		}
 		#endregion Informational properties
 	}
 }
