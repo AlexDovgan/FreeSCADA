@@ -6,5 +6,6 @@ namespace FreeSCADA.Designer
 	{
 		static public ICommandContext documentContext = null;
 		static public ICommandContext viewContext = null;
+		static public ICommandContext fileContext = null;
 	}
 }

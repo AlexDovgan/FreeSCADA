@@ -22,6 +22,8 @@ namespace FreeSCADA.Common
 		public void AddCommand(ICommand cmd)
 		{
 			cmd.CanExecuteChanged += new EventHandler(OnCommandCanExecuteChanged);
+			if (cmd.DropDownItems != null)
+				cmd.DropDownItems.CurrentChanged += new EventHandler(OnDropDownCommandCurrentChanged);
 
 			//We cannot add the same item object into different holders. Therefore we create two copies
 			if (menu != null)
@@ -29,18 +31,23 @@ namespace FreeSCADA.Common
 				ToolStripItem tsi;
 				switch (cmd.Type)
 				{
-					case CommandType.Separator: tsi = new ToolStripSeparator(); break;
-					case CommandType.Standard: tsi = new ToolStripMenuItem(); break;
+					case CommandType.Separator: 
+						tsi = new ToolStripSeparator();
+						break;
+					case CommandType.Standard: 
+						tsi = new ToolStripMenuItem();
+						InitializeStandardCommand(tsi, cmd);
+						tsi.Text = cmd.Name;
+						break;
+					case CommandType.DropDownBox:
+						tsi = new ToolStripComboBox();
+						InitializeDropDownBoxCommand((ToolStripComboBox)tsi, cmd);
+						break;
 					default:
 						throw new NotImplementedException();
 				}
-				tsi.Text = cmd.Name;
-				tsi.ToolTipText = cmd.Description;
-				tsi.Image = cmd.Icon;
 				tsi.Tag = cmd;
-				tsi.Enabled = cmd.CanExecute;
-				tsi.Click += new EventHandler(OnCommandClick);
-
+				
 				menu.Items.Add(tsi);
 			}
 
@@ -49,26 +56,57 @@ namespace FreeSCADA.Common
 				ToolStripItem tsi;
 				switch (cmd.Type)
 				{
-					case CommandType.Separator: tsi = new ToolStripSeparator(); break;
-					case CommandType.Standard: tsi = new ToolStripButton(); break;
+					case CommandType.Separator: 
+						tsi = new ToolStripSeparator();
+						break;
+					case CommandType.Standard: 
+						tsi = new ToolStripButton();
+						InitializeStandardCommand(tsi, cmd);
+						tsi.Name = cmd.Name;
+						break;
+					case CommandType.DropDownBox: 
+						tsi = new ToolStripComboBox();
+						InitializeDropDownBoxCommand((ToolStripComboBox)tsi, cmd);
+						break;
 					default:
 						throw new NotImplementedException();
 				}
-				tsi.Name = cmd.Name;
-				tsi.ToolTipText = cmd.Description;
-				tsi.Image = cmd.Icon;
 				tsi.Tag = cmd;
-				tsi.Enabled = cmd.CanExecute;
-				tsi.Click += new EventHandler(OnCommandClick);
 
 				toolbar.Items.Add(tsi);
 				toolbar.Visible = true;
 			}
 		}
 
+		private void InitializeStandardCommand(ToolStripItem tsi, ICommand cmd)
+		{
+			tsi.ToolTipText = cmd.Description;
+			tsi.Image = cmd.Icon;
+			tsi.Enabled = cmd.CanExecute;
+
+			tsi.Click += new EventHandler(OnCommandClick);
+		}
+
+		private void InitializeDropDownBoxCommand(ToolStripComboBox tsi, ICommand cmd)
+		{
+			tsi.ToolTipText = cmd.Description;
+			tsi.Image = cmd.Icon;
+			tsi.Enabled = cmd.CanExecute;
+
+			foreach (object obj in cmd.DropDownItems.Items)
+				tsi.Items.Add(obj);
+			if(cmd.DropDownItems.Current != null)
+				tsi.Text = cmd.DropDownItems.Current.ToString();
+
+			tsi.KeyUp += new KeyEventHandler(OnDropDownCommandKeyUp);
+			tsi.SelectedIndexChanged += new EventHandler(OnDropDownCommandSelectedChanged);
+		}
+
 		public void RemoveCommand(ICommand cmd)
 		{
 			cmd.CanExecuteChanged -= new EventHandler(OnCommandCanExecuteChanged);
+			if(cmd.DropDownItems != null)
+				cmd.DropDownItems.CurrentChanged -= new EventHandler(OnDropDownCommandCurrentChanged);
 
 			if (menu != null)
 				RemoveToolStripItems(menu, cmd);
@@ -91,7 +129,16 @@ namespace FreeSCADA.Common
 
 			foreach (ToolStripItem item in removalList)
 			{
-				item.Click -= new EventHandler(OnCommandClick);
+				switch (cmd.Type)
+				{
+					case CommandType.Standard:
+						item.Click -= new EventHandler(OnCommandClick);
+						break;
+					case CommandType.DropDownBox:
+						(item as ToolStripComboBox).KeyUp -= new KeyEventHandler(OnDropDownCommandKeyUp);
+						break;
+				}
+
 				container.Items.Remove(item);
 			}
 		}
@@ -104,6 +151,42 @@ namespace FreeSCADA.Common
 				ICommand cmd = (ICommand)item.Tag;
 				if (cmd.CanExecute)
 					cmd.Execute();
+			}
+		}
+
+		void OnDropDownCommandKeyUp(object sender, KeyEventArgs e)
+		{
+			ToolStripComboBox item = sender as ToolStripComboBox;
+			if (item.Tag != null && e.KeyCode == Keys.Return)
+			{
+				ICommand cmd = (ICommand)item.Tag;
+				if (cmd.CanExecute)
+				{
+					if (cmd.DropDownItems != null)
+					{
+						cmd.DropDownItems.Current = item.Text;
+						cmd.Execute();
+					}
+				}
+			}
+		}
+
+		void OnDropDownCommandSelectedChanged(object sender, EventArgs e)
+		{
+			ToolStripComboBox item = sender as ToolStripComboBox;
+			if (item.Tag != null)
+			{
+				ICommand cmd = (ICommand)item.Tag;
+				if (cmd.CanExecute)
+				{
+					if (cmd.DropDownItems != null)
+					{
+						cmd.DropDownItems.Current = item.SelectedItem.ToString();
+						cmd.Execute();
+						if (cmd.DropDownItems.Current != null)
+							item.Text = cmd.DropDownItems.Current.ToString();
+					}
+				}
 			}
 		}
 
@@ -126,6 +209,29 @@ namespace FreeSCADA.Common
 				{
 					if (item.Tag == cmd)
 						item.Enabled = cmd.CanExecute;
+				}
+			}
+		}
+
+		void OnDropDownCommandCurrentChanged(object sender, EventArgs e)
+		{
+			ICommand cmd = (ICommand)sender;
+
+			if (menu != null)
+			{
+				foreach (ToolStripItem item in menu.Items)
+				{
+					if (item.Tag == cmd)
+						item.Text = cmd.DropDownItems.Current.ToString();
+				}
+			}
+
+			if (toolbar != null)
+			{
+				foreach (ToolStripItem item in toolbar.Items)
+				{
+					if (item.Tag == cmd)
+						item.Text = cmd.DropDownItems.Current.ToString();
 				}
 			}
 		}

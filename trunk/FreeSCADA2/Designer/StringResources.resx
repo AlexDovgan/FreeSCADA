@@ -165,11 +165,17 @@
   <data name="CommandXamlViewName" xml:space="preserve">
     <value>XAML representation</value>
   </data>
+  <data name="CommandZoomDescription" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
   <data name="CommandZoomInDescription" xml:space="preserve">
     <value>Zoom in</value>
   </data>
   <data name="CommandZoomInName" xml:space="preserve">
     <value>Zoom in</value>
+  </data>
+  <data name="CommandZoomName" xml:space="preserve">
+    <value>Zoom</value>
   </data>
   <data name="CommandZoomOutDescription" xml:space="preserve">
     <value>Zoom out</value>

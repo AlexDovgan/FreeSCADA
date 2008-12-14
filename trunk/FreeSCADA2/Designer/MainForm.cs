@@ -23,8 +23,10 @@ namespace FreeSCADA.Designer
 			InitializeComponent();
 			Env.Initialize(this, mainMenu, mainToolbar, FreeSCADA.Interfaces.EnvironmentMode.Designer);
 
-			CommandManager.documentContext = new BaseCommandContext(editSubMenu.DropDown, documentToolbar);
-			CommandManager.viewContext = new BaseCommandContext(viewSubMenu.DropDown, mainMenu);
+			CommandManager.fileContext = new BaseCommandContext(fileToolStripMenuItem.DropDown, mainToolbar);
+			CommandManager.viewContext = new BaseCommandContext(viewSubMenu.DropDown, mainToolbar);
+			CommandManager.documentContext = new BaseCommandContext(editSubMenu.DropDown, mainToolbar);
+			
 			windowManager = new WindowManager(dockPanel);
 			
 			UpdateCaption();
@@ -104,56 +106,6 @@ namespace FreeSCADA.Designer
         private void importSchemaToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             windowManager.ImportSchema();
-        }
-
-        private void zoomLevelComboBox_SelectedIndexChanged(object sender, System.EventArgs e)
-        {
-            int percentage;
-            string txt = ((ToolStripComboBox)sender).SelectedItem.ToString();
-            //MessageBox.Show(txt);
-
-            try
-            {
-                MatchCollection matches = Regex.Matches(txt, @"\d+");
-                percentage = int.Parse(matches[0].Value);
-                windowManager.ExecuteCommand(new ZoomLevelCommand((double)percentage / 100.0), null);
-            }
-            catch
-            {
-                // do nothing
-            }
-            windowManager.SetCurrentDocumentFocus();
-        }
-
-        private void zoomLevelComboBox_KeyUp(object sender, KeyEventArgs e)
-        {
-            int percentage;
-            string txt = ((ToolStripComboBox)sender).Text;
-            //MessageBox.Show(e.KeyCode.ToString());
-            if (e.KeyCode == Keys.Return)
-            {
-                try
-                {
-                    //MessageBox.Show(txt);
-                    MatchCollection matches = Regex.Matches(txt, @"\d+");
-                    percentage = int.Parse(matches[0].Value);
-                    windowManager.ExecuteCommand(new ZoomLevelCommand((double)percentage / 100.0), null);
-                }
-                catch
-                {
-                    // do nothing
-                }
-                windowManager.SetCurrentDocumentFocus();
-            }
-        }
-        /// <summary>
-        /// Zoom level visualuzation
-        /// </summary>
-        public void zoomLevelComboBox_SetZoomLevelTxt(double level)
-        {
-            int percentage = (int)(level * 100);
-            string txt = "Zoom " + percentage.ToString() + "%";
-            zoomLevelComboBox.Text = txt;
         }
 
         private void runButton_Click(object sender, EventArgs e)
