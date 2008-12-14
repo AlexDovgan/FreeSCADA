@@ -177,17 +177,19 @@ namespace FreeSCADA.Designer.Views
             this.SavedScrollPosition = new System.Windows.Point(0.0, 0.0);
 
             // Commands to ToolStrip
+			DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
             DocumentCommands.Add(new CommandInfo(undoCommand = new UndoCommand()));
             DocumentCommands.Add(new CommandInfo(redoCommand = new RedoCommand()));
-            DocumentCommands.Add(new CommandInfo(new NullCommand()));    // Separator
+            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
             DocumentCommands.Add(new CommandInfo(new CutCommand()));
             DocumentCommands.Add(new CommandInfo(new CopyCommand()));
             DocumentCommands.Add(new CommandInfo(new PasteCommand()));
-            DocumentCommands.Add(new CommandInfo(new NullCommand()));    // Separator
+			DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
             DocumentCommands.Add(new CommandInfo(new XamlViewCommand(this)));
             DocumentCommands.Add(new CommandInfo(new GroupCommand()));
             DocumentCommands.Add(new CommandInfo(new UngroupCommand()));
-            //DocumentCommands.Add(new NullCommand());    // Separator
+
+			DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.ViewCommands), CommandManager.viewContext));    // Separator
 			DocumentCommands.Add(new CommandInfo(new ZoomLevelCommand(), CommandManager.viewContext));
             DocumentCommands.Add(new CommandInfo(new ZoomOutCommand(), CommandManager.viewContext));
             DocumentCommands.Add(new CommandInfo(new ZoomInCommand(), CommandManager.viewContext));

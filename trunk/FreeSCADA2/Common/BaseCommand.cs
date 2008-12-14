@@ -7,6 +7,7 @@ namespace FreeSCADA.Common
 	public abstract class BaseCommand : ICommand
 	{
 		bool canExecute = false;
+		int priority = -1;
 
 		public BaseCommand()
 		{
@@ -19,7 +20,17 @@ namespace FreeSCADA.Common
 		public virtual Bitmap Icon { get { return null; } }
 		public virtual CommandType Type { get { return CommandType.Standard; } }
 		public virtual ICommandItems DropDownItems { get { return null; } }
-
+		public virtual int Priority
+		{
+			get
+			{
+				return priority;
+			}
+			set
+			{
+				priority = value;
+			}
+		}
 		public virtual bool CanExecute
 		{
 			get { return canExecute; }

@@ -52,7 +52,6 @@
 			this.mainToolbar = new System.Windows.Forms.ToolStrip();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.runButton = new System.Windows.Forms.ToolStripButton();
-			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
 			this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
 			this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
@@ -254,8 +253,7 @@
             this.toolStripSeparator1,
             toolStripButtonNewSchema,
             toolStripButton5,
-            this.runButton,
-            this.toolStripSeparator4});
+            this.runButton});
 			this.mainToolbar.Location = new System.Drawing.Point(0, 24);
 			this.mainToolbar.Name = "mainToolbar";
 			this.mainToolbar.Size = new System.Drawing.Size(699, 25);
@@ -276,11 +274,6 @@
 			this.runButton.Size = new System.Drawing.Size(23, 22);
 			this.runButton.Text = "Run Runtime";
 			this.runButton.Click += new System.EventHandler(this.runButton_Click);
-			// 
-			// toolStripSeparator4
-			// 
-			this.toolStripSeparator4.Name = "toolStripSeparator4";
-			this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
 			// 
 			// RightToolStripPanel
 			// 
@@ -360,7 +353,6 @@
 		private System.Windows.Forms.ToolStrip mainToolbar;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripButton runButton;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
 		private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel;
 		private System.Windows.Forms.ToolStripPanel BottomToolStripPanel;
 		private System.Windows.Forms.ToolStripPanel TopToolStripPanel;

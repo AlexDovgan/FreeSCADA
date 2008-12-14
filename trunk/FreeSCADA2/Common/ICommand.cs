@@ -51,6 +51,12 @@ namespace FreeSCADA.Interfaces
             set;
         }
 
+		int Priority
+		{
+			get;
+			set;
+		}
+
 		ICommandItems DropDownItems
 		{
 			get;
