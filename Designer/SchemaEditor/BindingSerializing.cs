@@ -23,8 +23,14 @@ namespace FreeSCADA.Designer.SchemaEditor
                 BindingExpression bindingExpression = value as BindingExpression;
                 if (bindingExpression == null)
                     throw new Exception();
+                else 
+                    return bindingExpression.ParentBinding;
+                MultiBindingExpression multiBindingExpression = value as MultiBindingExpression;
+                if (multiBindingExpression == null)
+                    throw new Exception();
+                else
+                    return multiBindingExpression.ParentMultiBinding;
 
-                return bindingExpression.ParentBinding;
             }
 
             return base.ConvertTo(context, culture, value, destinationType);

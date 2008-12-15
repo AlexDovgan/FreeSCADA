@@ -15,6 +15,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     /// Each tool can work with many types of manipulators but the only ONE manipulator can be active.
     /// Base class implement objects single selection by default manipulator of tool instance
     /// </summary>
+    /// 
+
     abstract class BaseTool : Adorner
     {
         BaseManipulator toolManipulator;
@@ -27,7 +29,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 		public event EventHandler ToolWorking;
         public event EventHandler ObjectCreated;
         public event EventHandler ObjectDeleted;
-        public event EventHandler ObjectChanged;
+        public event EventHandler ObjectChanged;    
         public delegate void ObjectSeletedDelegate(Object obj);
         public event ObjectSeletedDelegate ObjectSelected;
       

@@ -38,7 +38,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             dragControl.HorizontalAlignment = HorizontalAlignment.Stretch;
             dragControl.Cursor = Cursors.SizeAll;
             visualChildren.Add(dragControl);
-
+            
             
             rotateTopLeft.VerticalAlignment = VerticalAlignment.Top;
             rotateTopLeft.HorizontalAlignment = HorizontalAlignment.Left;

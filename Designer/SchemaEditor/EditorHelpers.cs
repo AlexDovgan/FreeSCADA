@@ -35,6 +35,10 @@ namespace FreeSCADA.Designer.SchemaEditor
         {
             Object inst = new TypeConverterAttribute(typeof(BindingConvertor));
             RegisterAttribute<BindingExpression>(inst);
+            inst = new TypeConverterAttribute(typeof(BindingConvertor));
+            RegisterAttribute<MultiBindingExpression>(inst);
+            RegisterAttribute<Double>(new EditorAttribute(typeof(FreeSCADA.Designer.SchemaEditor.PropertiesUtils.DoubleEditor), typeof(System.Drawing.Design.UITypeEditor)));
+            RegisterAttribute<String>(new EditorAttribute(typeof(FreeSCADA.Designer.SchemaEditor.PropertiesUtils.StringEditor), typeof(System.Drawing.Design.UITypeEditor)));
             TypeDescriptor.AddProvider(new BindingTypeDescriptionProvider(),typeof(System.Windows.Data.Binding));
             //TypeDescriptor.AddProvider(uiElementProvider=new ShortProperties.UIElementTypeDescriptionProvider(), typeof(System.Windows.UIElement));
         }
