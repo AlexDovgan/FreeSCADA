@@ -10,9 +10,9 @@ using FreeSCADA.Common;
 using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.SchemaEditor;
 using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
-using FreeSCADA.Designer.SchemaEditor.ShortProperties;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
+using FreeSCADA.Designer.SchemaEditor.PropertiesUtils;
 using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.Views
@@ -382,16 +382,10 @@ namespace FreeSCADA.Designer.Views
         
         void activeTool_ObjectSelected(Object obj)
         {
-            CommonShortProp csp;
+            
             if (obj == null)
                 obj = Schema.MainCanvas;
-            if ((csp = ObjectsFactory.CreateShortProp(obj)) != null)
-            {
-                RaiseObjectSelected(csp);
-                csp.PropertiesBrowserChanged += new CommonShortProp.PropertiesBrowserChangedDelegate(OnPropertiesBrowserChanged);
-            }
-            else
-                RaiseObjectSelected(obj);
+            RaiseObjectSelected(new PropProxy(obj));
 
 			UpdateCommandState();
         }
@@ -466,20 +460,6 @@ namespace FreeSCADA.Designer.Views
             Schema = schema;
             Schema.IsModifiedChanged += new EventHandler(OnSchemaIsModifiedChanged);
             IsModified = true;
-            //creating dynamic object with binding
-            /*System.Windows.Controls.ProgressBar pb = new System.Windows.Controls.ProgressBar();
-            pb.Width = 100; pb.Height = 100;
-            Schema.MainCanvas.Children.Add(pb);
-            System.Windows.Data.Binding bind=new System.Windows.Data.Binding("Value");
-            System.Windows.Data.ObjectDataProvider dp;
-            dp = new System.Windows.Data.ObjectDataProvider();
-            ChannelDataSource chs=new ChannelDataSource();
-            chs.ChannelName="data_simulator_plug.sin";
-            dp.ObjectInstance = chs;
-            dp.MethodName = "GetChannel";
-            bind.Source = dp; 
-            pb.SetBinding(System.Windows.Controls.ProgressBar.ValueProperty, bind);
-             */
             return true;
         }
 

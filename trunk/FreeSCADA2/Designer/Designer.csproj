@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{93466C99-5637-4243-A01A-7AF12F706889}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -97,21 +97,19 @@
     <Compile Include="SchemaEditor\Manipulators\Controlls\RotateThumb.cs" />
     <Compile Include="SchemaEditor\Manipulators\DragResizeRotateManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\GeometryHilightManipulator.cs" />
-    <Compile Include="SchemaEditor\ObjectsFactory.cs" />
-    <Compile Include="SchemaEditor\PropertyGridTypeEditors\DoubleEditor.cs">
+    <Compile Include="SchemaEditor\ObjectsFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\DoubleEditor.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SchemaEditor\PropertyGridTypeEditors\OrinalPropertyAttribute.cs" />
+    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\StringEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\PropertyWrapper.cs" />
+    <Compile Include="SchemaEditor\PropertiesUtils\PropProxy.cs" />
     <Compile Include="SchemaEditor\SchemaCommands.cs">
     </Compile>
-    <Compile Include="SchemaEditor\ShortProperties\CanvasShortProp.cs" />
-    <Compile Include="SchemaEditor\ShortProperties\CommonShortProp.cs" />
-    <Compile Include="SchemaEditor\ShortProperties\ContentShortProp.cs" />
-    <Compile Include="SchemaEditor\ShortProperties\ControlShortProp.cs" />
-    <Compile Include="SchemaEditor\ShortProperties\FrameworkElementShortProp.cs" />
-    <Compile Include="SchemaEditor\ShortProperties\RangeBaseShortProp.cs" />
-    <Compile Include="SchemaEditor\ShortProperties\ShapeShortProp.cs" />
-    <Compile Include="SchemaEditor\ShortProp.cs" />
     <Compile Include="SchemaEditor\ToolDescriptor.cs" />
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
     <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
@@ -161,6 +159,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\StringEditor.resx">
+      <DependentUpon>StringEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StringResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

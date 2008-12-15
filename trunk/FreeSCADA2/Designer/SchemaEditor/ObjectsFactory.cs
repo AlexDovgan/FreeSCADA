@@ -5,7 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Shapes;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
-using FreeSCADA.Designer.SchemaEditor.ShortProperties;
 
 namespace FreeSCADA.Designer.SchemaEditor
 {
@@ -14,13 +13,12 @@ namespace FreeSCADA.Designer.SchemaEditor
     /// </summary>
     class  ObjectDescriptor
     {
-        public ObjectDescriptor(Type manType, Type shPropType)
+        public ObjectDescriptor(Type manType)
         {
             ObjectManipulatorType = manType;
-            ObjectShortPropType = shPropType;
-        }
+         }
         public Type ObjectManipulatorType;
-        public Type ObjectShortPropType;
+        
     }
 
     static class ObjectsFactory
@@ -29,14 +27,14 @@ namespace FreeSCADA.Designer.SchemaEditor
 
         static ObjectsFactory()
         {
-            descriptorsDictionary[typeof(FrameworkElement)]=new ObjectDescriptor(typeof(DragResizeRotateManipulator), typeof(FrameworkElementShortProp));
-            descriptorsDictionary[typeof(TextBlock)] = new ObjectDescriptor(typeof(TextBoxManipulator), typeof(FrameworkElementShortProp));
-            descriptorsDictionary[typeof(Shape)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator), typeof(ShapeShortProp));
-            descriptorsDictionary[typeof(Polyline)] = new ObjectDescriptor(typeof(PolylineEditManipulantor), typeof(ShapeShortProp));
-            descriptorsDictionary[typeof(Control)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator), typeof(ControlShortProp));
-            descriptorsDictionary[typeof(ContentControl)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator), typeof( ContentShortProp));
-            descriptorsDictionary[typeof(RangeBase)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator), typeof(RangeBaseShortProp));
-            descriptorsDictionary[typeof(Canvas)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator), typeof(CanvasShortProp));
+            descriptorsDictionary[typeof(FrameworkElement)]=new ObjectDescriptor(typeof(DragResizeRotateManipulator));
+            descriptorsDictionary[typeof(TextBlock)] = new ObjectDescriptor(typeof(TextBoxManipulator));
+            descriptorsDictionary[typeof(Shape)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
+            descriptorsDictionary[typeof(Polyline)] = new ObjectDescriptor(typeof(PolylineEditManipulantor));
+            descriptorsDictionary[typeof(Control)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
+            descriptorsDictionary[typeof(ContentControl)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
+            descriptorsDictionary[typeof(RangeBase)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
+            descriptorsDictionary[typeof(Canvas)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
         }
         private static ObjectDescriptor FindDescriptor(Type type)
         {
@@ -68,7 +66,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             }
             return null;
         }
-        public static CommonShortProp CreateShortProp(Object obj)
+       /* public static CommonShortProp CreateShortProp(Object obj)
         {
             FrameworkElement frameworkElement = obj as FrameworkElement;
             ObjectDescriptor desctiptor;
@@ -84,6 +82,6 @@ namespace FreeSCADA.Designer.SchemaEditor
                 }
             }
             return null;
-        }
+        }*/
     }
 }
