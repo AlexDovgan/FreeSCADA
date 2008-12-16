@@ -69,9 +69,11 @@ namespace FreeSCADA.Common
         {
             get
             {
-                
-                lock (this)
-                    return value;
+                if (StatusFlags == ChannelStatusFlags.Good && plugin.IsConnected)
+                    lock (this)
+                        return value;
+                else
+                    return null;
                 
             }
             set

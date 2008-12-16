@@ -74,6 +74,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                     "Width",
                     "Height",
                     "Background",
+                    "Foreground",
                     "Opacity",
                     "Canvas.Top",
                     "Canvas.Left",

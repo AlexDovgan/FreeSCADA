@@ -12,7 +12,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
     
     class TextBoxManipulator : BaseManipulator
     {
-        RichTextBox textEditor = new RichTextBox();
+        TextBox textEditor = new TextBox();
         TextBlock textBlock;
         public TextBoxManipulator(UIElement el)
             : base(el)
@@ -25,16 +25,17 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
          
             
             textBlock = AdornedElement as TextBlock;
-            Paragraph pargraph = new Paragraph();
+           /* Paragraph pargraph = new Paragraph();
 
             while (textBlock.Inlines.Count > 0)
             {
 
                 pargraph.Inlines.Add(textBlock.Inlines.FirstInline);
             }
-            textEditor.Document = new FlowDocument(pargraph);
+            textEditor.Document = new FlowDocument(pargraph);*/
+            textEditor.Text = textBlock.Text;
             textEditor.RenderTransform = AdornedElement.RenderTransform;
-            //textEditor.Focus();
+            textEditor.Focus();
             visualChildren.Add(textEditor);
             base.Activate();
         }
@@ -42,13 +43,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         public override void Deactivate()
         {
             
-            textBlock.Inlines.Clear();
+            /*textBlock.Inlines.Clear();
             Paragraph paragraph = textEditor.Document.Blocks.FirstBlock as Paragraph;
             while(paragraph.Inlines.Count>0)
             {
                 textBlock.Inlines.Add(paragraph.Inlines.FirstInline);
 
-            }
+            }*/
+            textBlock.Text = textEditor.Text;
             base.Deactivate();
         }
         protected override Size ArrangeOverride(Size finalSize)
