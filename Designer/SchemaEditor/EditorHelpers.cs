@@ -19,7 +19,7 @@ namespace FreeSCADA.Designer.SchemaEditor
     
     static class EditorHelper
     {
-        static TypeDescriptionProvider uiElementProvider=null;
+        
         public static void RegisterAttribute<T>(Object instance)
         {
             if (!(instance is Attribute))
@@ -40,7 +40,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             RegisterAttribute<Double>(new EditorAttribute(typeof(FreeSCADA.Designer.SchemaEditor.PropertiesUtils.DoubleEditor), typeof(System.Drawing.Design.UITypeEditor)));
             RegisterAttribute<String>(new EditorAttribute(typeof(FreeSCADA.Designer.SchemaEditor.PropertiesUtils.StringEditor), typeof(System.Drawing.Design.UITypeEditor)));
             TypeDescriptor.AddProvider(new BindingTypeDescriptionProvider(),typeof(System.Windows.Data.Binding));
-            //TypeDescriptor.AddProvider(uiElementProvider=new ShortProperties.UIElementTypeDescriptionProvider(), typeof(System.Windows.UIElement));
+        
         }
             
         public static UIElement FindTopParentUnder(DependencyObject c, DependencyObject el)
@@ -277,8 +277,7 @@ namespace FreeSCADA.Designer.SchemaEditor
         }
         public static string SerializeObject(object instance)
         {
-            if(uiElementProvider!=null)
-                TypeDescriptor.RemoveProvider(uiElementProvider, typeof(System.Windows.UIElement));
+           
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
@@ -286,8 +285,6 @@ namespace FreeSCADA.Designer.SchemaEditor
             XamlDesignerSerializationManager dsm = new XamlDesignerSerializationManager(XmlWriter.Create(sb, settings));
             dsm.XamlWriterMode = XamlWriterMode.Expression;
             XamlWriter.Save(instance, dsm);
-            if(uiElementProvider!=null)
-                TypeDescriptor.AddProvider(uiElementProvider, typeof(System.Windows.UIElement));
             return sb.ToString();
         }
 

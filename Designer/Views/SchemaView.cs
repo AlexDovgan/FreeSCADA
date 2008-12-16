@@ -109,7 +109,6 @@ namespace FreeSCADA.Designer.Views
                 if (value != null)
                 {
                     activeTool = (BaseTool)System.Activator.CreateInstance(value, new object[] { Schema.MainCanvas });
-
                     activeTool.ObjectSelected += activeTool_ObjectSelected;
                     activeTool.ToolFinished += activeTool_ToolFinished;
                     activeTool.ObjectCreated += activeTool_ObjectCreated;
@@ -120,6 +119,7 @@ namespace FreeSCADA.Designer.Views
             }
         }
 
+        
 		private void UpdateCommandState()
 		{
 			foreach (CommandInfo cmdInfo in DocumentCommands)
@@ -193,9 +193,58 @@ namespace FreeSCADA.Designer.Views
 			DocumentCommands.Add(new CommandInfo(new ZoomLevelCommand(), CommandManager.viewContext));
             DocumentCommands.Add(new CommandInfo(new ZoomOutCommand(), CommandManager.viewContext));
             DocumentCommands.Add(new CommandInfo(new ZoomInCommand(), CommandManager.viewContext));
-
             CreateToolList();
+            this.wpfSchemaContainer.Child.AllowDrop = true;
+            this.wpfSchemaContainer.Child.DragEnter += new System.Windows.DragEventHandler(Child_DragEnter);
+            this.wpfSchemaContainer.Child.Drop += new System.Windows.DragEventHandler(Child_Drop);
         }
+
+        void Child_Drop(object sender, System.Windows.DragEventArgs e)
+        {
+            TreeNode node = (TreeNode)e.Data.GetData("System.Windows.Forms.TreeNode");
+            
+            System.Windows.Controls.ContentControl content = new System.Windows.Controls.ContentControl();
+            System.Windows.Data.Binding bind = new System.Windows.Data.Binding();
+            System.Windows.Data.ObjectDataProvider dp;
+            dp = new System.Windows.Data.ObjectDataProvider();
+            Common.Schema.ChannelDataSource chs = new Common.Schema.ChannelDataSource();
+            chs.ChannelName = node.Tag + "." + node.Text;
+            dp.ObjectInstance = chs;
+            dp.MethodName = "GetChannel";
+            bind.Source = dp;
+            
+            System.Windows.Data.BindingOperations.SetBinding(content, System.Windows.Controls.ContentControl.ContentProperty, bind);
+            //TODO:need to solve problem with drag mouse capturing
+           // System.Windows.Point p=System.Windows.Input.Mouse.GetPosition(Schema.MainCanvas); 
+            
+            System.Windows.Controls.Canvas.SetLeft(content, 0);
+            System.Windows.Controls.Canvas.SetTop(content, 0);
+            content.Width = 60; content.Height = 50;
+            if (Schema.MainCanvas.Resources[typeof(BaseChannel)] == null)
+            {
+                System.Windows.DataTemplate dt = ((System.Windows.DataTemplate)XamlReader.Load(new XmlTextReader(new StringReader(StringResources.ChannelDefaultTemplate))));
+                dt.DataType = typeof(BaseChannel);
+                System.Windows.DataTemplateKey dk = new System.Windows.DataTemplateKey(typeof(BaseChannel));
+                
+                Schema.MainCanvas.Resources[dk] = dt;
+            }
+            undoBuff.AddCommand(new AddGraphicsObject(content));
+            
+        }
+
+        void Child_DragEnter(object sender, System.Windows.DragEventArgs e)
+        {
+            TreeNode node = (TreeNode)e.Data.GetData("System.Windows.Forms.TreeNode");
+            if (node != null)
+            {
+                e.Effects = System.Windows.DragDropEffects.Copy;
+                               
+            }
+        }
+
+
+       
+
         private void CreateToolList()
         {
             System.Drawing.Bitmap blankBitmap = new System.Drawing.Bitmap(10, 10);
@@ -375,7 +424,7 @@ namespace FreeSCADA.Designer.Views
                 }
             }
 
-            //e.Handled = true;
+  
             Schema.MainCanvas.UpdateLayout();
             activeTool.Update();
         }
@@ -460,6 +509,7 @@ namespace FreeSCADA.Designer.Views
             Schema = schema;
             Schema.IsModifiedChanged += new EventHandler(OnSchemaIsModifiedChanged);
             IsModified = true;
+        
             return true;
         }
 
@@ -615,6 +665,6 @@ namespace FreeSCADA.Designer.Views
                 XamlView.Text = EditorHelper.SerializeObject(Schema.MainCanvas);
             }
         }
-
+        
     }
 }

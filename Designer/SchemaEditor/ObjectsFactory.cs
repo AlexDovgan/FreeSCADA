@@ -28,7 +28,7 @@ namespace FreeSCADA.Designer.SchemaEditor
         static ObjectsFactory()
         {
             descriptorsDictionary[typeof(FrameworkElement)]=new ObjectDescriptor(typeof(DragResizeRotateManipulator));
-            descriptorsDictionary[typeof(TextBlock)] = new ObjectDescriptor(typeof(TextBoxManipulator));
+            descriptorsDictionary[typeof(TextBlock)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
             descriptorsDictionary[typeof(Shape)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
             descriptorsDictionary[typeof(Polyline)] = new ObjectDescriptor(typeof(PolylineEditManipulantor));
             descriptorsDictionary[typeof(Control)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));

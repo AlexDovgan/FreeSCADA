@@ -76,10 +76,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             e.Handled = false;
         }
-        protected override BaseManipulator CreateToolManipulator(UIElement obj)
+        /*protected override BaseManipulator CreateToolManipulator(UIElement obj)
         {
             return new TextBoxManipulator(obj);
-        }
+        }*/
 
     }
 }

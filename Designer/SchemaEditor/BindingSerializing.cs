@@ -21,14 +21,10 @@ namespace FreeSCADA.Designer.SchemaEditor
             if (destinationType == typeof(MarkupExtension))
             {
                 BindingExpression bindingExpression = value as BindingExpression;
-                if (bindingExpression == null)
-                    throw new Exception();
-                else 
+                if (bindingExpression != null)
                     return bindingExpression.ParentBinding;
                 MultiBindingExpression multiBindingExpression = value as MultiBindingExpression;
-                if (multiBindingExpression == null)
-                    throw new Exception();
-                else
+                if (multiBindingExpression != null)
                     return multiBindingExpression.ParentMultiBinding;
 
             }
