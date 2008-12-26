@@ -66,28 +66,29 @@ namespace FreeSCADA.Designer.SchemaEditor
         public override PropertyDescriptorCollection GetProperties()
         {
 
-            PropertyDescriptorCollection pdc = new PropertyDescriptorCollection(base.GetProperties().Cast<PropertyDescriptor>().ToArray());
-            PropertyDescriptor pd;
-            if ((pd = pdc.Find("Source", false)) != null)
-            {
 
-                pdc.Add(TypeDescriptor.CreateProperty(typeof(System.Windows.Data.Binding), pd, new Attribute[] { new System.ComponentModel.DefaultValueAttribute(null) }));
-                pdc.Remove(pd);
-            }
-
-            return pdc;
+            return GetProperties(new Attribute[]{});
         }
 
         public override PropertyDescriptorCollection GetProperties(Attribute[] attributes)
         {
-            PropertyDescriptorCollection pdc = new PropertyDescriptorCollection(base.GetProperties(attributes).Cast<PropertyDescriptor>().ToArray());
-            PropertyDescriptor pd;
-            if ((pd = pdc.Find("Source", false)) != null)
-            {
+            PropertyDescriptorCollection pdc = new PropertyDescriptorCollection(base.GetProperties().Cast<PropertyDescriptor>().ToArray());
 
-                pdc.Add(TypeDescriptor.CreateProperty(typeof(System.Windows.Data.Binding), pd, new Attribute[] { new System.ComponentModel.DefaultValueAttribute(null) }));
+            string[] props = { "Source","ValidationRules"};
+
+            foreach (PropertyDescriptor pd in props.Select(x => pdc.Find(x, false)))
+            {
+                PropertyDescriptor pd2;
+                pd2 = TypeDescriptor.CreateProperty(typeof(System.Windows.Data.Binding), pd, new Attribute[] { new System.ComponentModel.DefaultValueAttribute(null),new System.ComponentModel.DesignerSerializationVisibilityAttribute(DesignerSerializationVisibility.Content) });
+                
+                //pd2.Attributes.
+                    //[typeof(ReadOnlyAttribute)] = null;
+
+                pdc.Add(pd2);
+
                 pdc.Remove(pd);
             }
+
             return pdc;
         }
 
