@@ -9,9 +9,212 @@ using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using FreeSCADA.Common;
 using FreeSCADA.Interfaces;
+using System.Collections.Generic;
+
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {
+    internal class DoubleBindingControl : System.Windows.Forms.Form
+    {
+        private TreeView channelsTree;
+        private Button button1;
+        private NumericUpDown minVal;
+        private NumericUpDown maxVal;
+        private Label label1;
+        private Label label2;
+        private Button button2;
+      
+
+        public DoubleBindingControl(System.ComponentModel.ITypeDescriptorContext context)
+        {
+            InitializeComponent();
+            string channelName = String.Empty;
+            PropertiesUtils.PropertyWrapper pw;
+
+            if ((pw = context.PropertyDescriptor as PropertiesUtils.PropertyWrapper) == null)
+                return;
+            DependencyObject depObj = pw.ControlledObject as DependencyObject;
+            DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(pw.ControlledProperty);
+            if (depObj == null || dpd == null)
+                return;
+            DependencyProperty depProp = dpd.DependencyProperty;
+           
+            System.Windows.Data.Binding bind;
+
+            if ((bind = BindingOperations.GetBinding(depObj, depProp)) != null)
+            {
+                Common.Schema.ChannelDataSource chs = ((ObjectDataProvider)bind.Source).ObjectInstance as Common.Schema.ChannelDataSource;
+                channelName = chs.ChannelName;
+                try
+                {
+                    minVal.Value = (Decimal)(bind.ValidationRules[0] as FreeSCADA.Common.Schema.ChannelValidator).Min;
+                    maxVal.Value = (Decimal)(bind.ValidationRules[0] as FreeSCADA.Common.Schema.ChannelValidator).Max;
+                }catch(Exception ex){}
+            }
+
+            string[] splitStr = channelName.Split('.');
+            foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
+            {
+                TreeNode plugNode = channelsTree.Nodes.Add(Env.Current.CommunicationPlugins[plugId].Name);
+                
+
+                if (splitStr.Count(x => x == plugNode.Text) > 0)
+                    plugNode.Expand();
+                foreach (IChannel ch in Env.Current.CommunicationPlugins[plugId].Channels)
+                {
+                    TreeNode chNode;
+                    chNode = plugNode.Nodes.Add(ch.Name);
+                    chNode.Tag = plugId;
+                    if (splitStr.Count(x => x == chNode.Text) > 0)
+                    {
+
+                        channelsTree.SelectedNode = chNode;
+                        channelsTree.Update();
+                    }
+                }
+            }
+        }
+        
+
+        public TreeNode SelectedNode
+        {
+            get { return channelsTree.SelectedNode; }
+        }
+        
+        public double Max
+        {
+            get{ return Decimal.ToDouble(maxVal.Value);}
+        }
+        public double Min
+        { 
+            get{return Decimal.ToDouble(minVal.Value);}
+        }
+
+        private void InitializeComponent()
+        {
+            this.channelsTree = new System.Windows.Forms.TreeView();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.minVal = new System.Windows.Forms.NumericUpDown();
+            this.maxVal = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.minVal)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.maxVal)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // channelsTree
+            // 
+            this.channelsTree.Location = new System.Drawing.Point(1, 2);
+            this.channelsTree.Name = "channelsTree";
+            this.channelsTree.Size = new System.Drawing.Size(203, 274);
+            this.channelsTree.TabIndex = 0;
+            this.channelsTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.channelsTree_AfterSelect);
+            // 
+            // button1
+            // 
+            this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.button1.Location = new System.Drawing.Point(259, 205);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(80, 26);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "Ok";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button2.Location = new System.Drawing.Point(259, 237);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(80, 26);
+            this.button2.TabIndex = 4;
+            this.button2.Text = "Cancel";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // minVal
+            // 
+            this.minVal.DecimalPlaces = 2;
+            this.minVal.Location = new System.Drawing.Point(209, 3);
+            this.minVal.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.minVal.Minimum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            -2147483648});
+            this.minVal.Name = "minVal";
+            this.minVal.Size = new System.Drawing.Size(67, 20);
+            this.minVal.TabIndex = 1;
+            // 
+            // maxVal
+            // 
+            this.maxVal.DecimalPlaces = 2;
+            this.maxVal.Location = new System.Drawing.Point(209, 29);
+            this.maxVal.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.maxVal.Minimum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            -2147483648});
+            this.maxVal.Name = "maxVal";
+            this.maxVal.Size = new System.Drawing.Size(67, 20);
+            this.maxVal.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(283, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(53, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Min value";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(283, 29);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(56, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Max value";
+            // 
+            // DoubleBindingControl
+            // 
+            this.AcceptButton = this.button1;
+            this.CancelButton = this.button2;
+            this.ClientSize = new System.Drawing.Size(345, 278);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.maxVal);
+            this.Controls.Add(this.minVal);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.channelsTree);
+            this.Name = "DoubleBindingControl";
+            ((System.ComponentModel.ISupportInitialize)(this.minVal)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.maxVal)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+
+
+        private void channelsTree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+        }
+
+      
+
+    }
+
     [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
     public class DoubleEditor : System.Drawing.Design.UITypeEditor
     {
@@ -23,12 +226,13 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
         // drop down dialog, or no UI outside of the properties window.
         public override System.Drawing.Design.UITypeEditorEditStyle GetEditStyle(System.ComponentModel.ITypeDescriptorContext context)
         {
-            return UITypeEditorEditStyle.DropDown;
+            return UITypeEditorEditStyle.Modal;
         }
 
         // Displays the UI for value selection.
         public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value)
         {
+
             PropertiesUtils.PropertyWrapper pw;
             if ((pw = context.PropertyDescriptor as PropertiesUtils.PropertyWrapper) == null)
                 return value;
@@ -43,11 +247,11 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
             {
                 // Display an angle selection control and retrieve the value.
                 DoubleBindingControl control = new DoubleBindingControl(context);
-                edSvc.DropDownControl(control);
-                if (control.SelectedNode != null && control.SelectedNode.Tag != null)
-                {
 
-                    //DependencyProperty depprop= context.PropertyDescriptor.Attributes[typeof(OrinalPropertyAttribute)];
+
+                if (edSvc.ShowDialog(control) == DialogResult.OK )
+                {
+             
                     System.Windows.Data.Binding bind = new System.Windows.Data.Binding("Value");
                     System.Windows.Data.ObjectDataProvider dp;
                     dp = new System.Windows.Data.ObjectDataProvider();
@@ -55,15 +259,22 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                     chs.ChannelName = control.SelectedNode.Tag + "." + control.SelectedNode.Text;
                     dp.ObjectInstance = chs;
                     dp.MethodName = "GetChannel";
+                    FreeSCADA.Common.Schema.ChannelValidator chv = new FreeSCADA.Common.Schema.ChannelValidator();
+                    chv.Min=control.Min;
+                    chv.Max=control.Max;
+                    chv.ValidatesOnTargetUpdated = true;
+                    bind.ValidationRules.Add(chv);
                     bind.Source = dp;
                     bind.Converter = new Kent.Boogaart.Converters.TypeConverter(chs.GetChannel().Type, depProp.PropertyType);
                     bind.Mode = BindingMode.TwoWay;
                     bind.FallbackValue = value;
                     BindingOperations.SetBinding(depObj, depProp, bind);
-
+                   
                 }
             }
 
+
+           
             return value;
         }
 
@@ -97,56 +308,5 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
         }
     }
 
-    // Provides a user interface for adjusting an angle value.
-    internal class DoubleBindingControl : System.Windows.Forms.TreeView
-    {
-        public DoubleBindingControl(System.ComponentModel.ITypeDescriptorContext context)
-        {
-            string channelName = String.Empty;
-            PropertiesUtils.PropertyWrapper pw;
-
-            if ((pw = context.PropertyDescriptor as PropertiesUtils.PropertyWrapper) == null)
-                return;
-            DependencyObject depObj = pw.ControlledObject as DependencyObject;
-            DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(pw.ControlledProperty);
-            if (depObj == null || dpd == null)
-                return;
-            DependencyProperty depProp = dpd.DependencyProperty;
-            System.Windows.Data.Binding bind;
-
-            if ((bind = BindingOperations.GetBinding(depObj, depProp)) != null)
-            {
-                Common.Schema.ChannelDataSource chs = ((ObjectDataProvider)bind.Source).ObjectInstance as Common.Schema.ChannelDataSource;
-                channelName = chs.ChannelName;
-            }
-
-            string[] splitStr = channelName.Split('.');
-            foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
-            {
-                TreeNode plugNode = this.Nodes.Add(Env.Current.CommunicationPlugins[plugId].Name);
-                //if (plugNode.Text == Env.Current.CommunicationPlugins[splitStr[0]].Name)
-
-                if (splitStr.Count(x => x == plugNode.Text) > 0)
-                    plugNode.Expand();
-                foreach (IChannel ch in Env.Current.CommunicationPlugins[plugId].Channels)
-                {
-                    TreeNode chNode;
-                    chNode = plugNode.Nodes.Add(ch.Name);
-                    chNode.Tag = plugId;
-                    if (splitStr.Count(x => x == chNode.Text) > 0)
-                    {
-
-                        this.SelectedNode = chNode;
-                        this.Update();
-                    }
-                }
-            }
-            Width = 200;
-
-
-        }
-
-
-    }
-
+  
 }

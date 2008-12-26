@@ -121,26 +121,28 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
             // 
             // button1
             // 
+            this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.button1.Location = new System.Drawing.Point(300, 249);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(80, 26);
             this.button1.TabIndex = 3;
             this.button1.Text = "Ok";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
+            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button2.Location = new System.Drawing.Point(398, 249);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(80, 26);
             this.button2.TabIndex = 4;
             this.button2.Text = "Cancel";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // StringBindingControl
             // 
+            this.AcceptButton = this.button1;
+            this.CancelButton = this.button2;
             this.ClientSize = new System.Drawing.Size(486, 278);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -153,15 +155,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
         }
         
-        private void button1_Click(object sender, EventArgs e)
-        {
-            this.Close();   
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        
 
         private void channelsTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
@@ -178,15 +172,19 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
         {
             ListViewItem it = ((ListView)sender).SelectedItems[0];
             string str="{" + it.Index+ "}";
-            textBox1.SelectionStart=textBox1.Text.IndexOf(str); ;
-            textBox1.SelectionLength = str.Length;
-            textBox1.SelectedText = "";
-            for (int i = it.Index+1; i < listView1.Items.Count; i++)
+            if (textBox1.Text.IndexOf(str) != -1)
             {
-                textBox1.SelectionStart = textBox1.Text.IndexOf("{" + i+ "}"); ;
+                textBox1.SelectionStart = textBox1.Text.IndexOf(str); ;
                 textBox1.SelectionLength = str.Length;
-                textBox1.SelectedText = "{" + (i-1) + "}";
-            
+                textBox1.SelectedText = "";
+                for (int i = it.Index + 1; i < listView1.Items.Count; i++)
+                {
+
+                    textBox1.SelectionStart = textBox1.Text.IndexOf("{" + i + "}");
+                    textBox1.SelectionLength = str.Length;
+                    textBox1.SelectedText = "{" + (i - 1) + "}";
+
+                }
             }
             listView1.Items.Remove(it);
         }
@@ -224,8 +222,9 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
             {
                 // Display an angle selection control and retrieve the value.
                 StringBindingControl control = new StringBindingControl(context);
-                edSvc.ShowDialog(control);
-                if (control.BindedChannels.Count>0)
+
+
+                if (edSvc.ShowDialog(control) == DialogResult.OK&&control.BindedChannels.Count > 0)
                 {
                     System.Windows.Data.MultiBinding multiBind = new MultiBinding();
                     foreach (String item in control.BindedChannels)
