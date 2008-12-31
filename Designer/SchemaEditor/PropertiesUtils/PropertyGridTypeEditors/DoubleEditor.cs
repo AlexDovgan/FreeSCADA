@@ -10,7 +10,7 @@ using System.Windows.Forms.Design;
 using FreeSCADA.Common;
 using FreeSCADA.Interfaces;
 using System.Collections.Generic;
-
+using FreeSCADA.Common.Schema;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {
@@ -22,8 +22,9 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
         private NumericUpDown maxVal;
         private Label label1;
         private Label label2;
+        private TextBox expressionTextBox;
         private Button button2;
-      
+
 
         public DoubleBindingControl(System.ComponentModel.ITypeDescriptorContext context)
         {
@@ -38,7 +39,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
             if (depObj == null || dpd == null)
                 return;
             DependencyProperty depProp = dpd.DependencyProperty;
-           
+
             System.Windows.Data.Binding bind;
 
             if ((bind = BindingOperations.GetBinding(depObj, depProp)) != null)
@@ -47,16 +48,19 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                 channelName = chs.ChannelName;
                 try
                 {
-                    minVal.Value = (Decimal)(bind.ValidationRules[0] as FreeSCADA.Common.Schema.ChannelValidator).Min;
-                    maxVal.Value = (Decimal)(bind.ValidationRules[0] as FreeSCADA.Common.Schema.ChannelValidator).Max;
-                }catch(Exception ex){}
+                    ComposingConverter conv = bind.Converter as ComposingConverter;
+                    RangeConverter rc = conv.Converters.Single(x => x is RangeConverter) as RangeConverter;
+                    minVal.Value = (Decimal)rc.Min;
+                    maxVal.Value = (Decimal)rc.Max;
+                }
+                catch (Exception ex) { }
             }
 
             string[] splitStr = channelName.Split('.');
             foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
             {
                 TreeNode plugNode = channelsTree.Nodes.Add(Env.Current.CommunicationPlugins[plugId].Name);
-                
+
 
                 if (splitStr.Count(x => x == plugNode.Text) > 0)
                     plugNode.Expand();
@@ -74,20 +78,23 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                 }
             }
         }
-        
 
+        public String Expression
+        {
+            get { return expressionTextBox.Text; }
+        }
         public TreeNode SelectedNode
         {
             get { return channelsTree.SelectedNode; }
         }
-        
+
         public double Max
         {
-            get{ return Decimal.ToDouble(maxVal.Value);}
+            get { return Decimal.ToDouble(maxVal.Value); }
         }
         public double Min
-        { 
-            get{return Decimal.ToDouble(minVal.Value);}
+        {
+            get { return Decimal.ToDouble(minVal.Value); }
         }
 
         private void InitializeComponent()
@@ -99,6 +106,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
             this.maxVal = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.expressionTextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.minVal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxVal)).BeginInit();
             this.SuspendLayout();
@@ -134,7 +142,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
             // minVal
             // 
             this.minVal.DecimalPlaces = 2;
-            this.minVal.Location = new System.Drawing.Point(209, 3);
+            this.minVal.Enabled = false;
+            this.minVal.Location = new System.Drawing.Point(212, 129);
             this.minVal.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -152,7 +161,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
             // maxVal
             // 
             this.maxVal.DecimalPlaces = 2;
-            this.maxVal.Location = new System.Drawing.Point(209, 29);
+            this.maxVal.Enabled = false;
+            this.maxVal.Location = new System.Drawing.Point(212, 155);
             this.maxVal.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -165,12 +175,12 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
             -2147483648});
             this.maxVal.Name = "maxVal";
             this.maxVal.Size = new System.Drawing.Size(67, 20);
-            this.maxVal.TabIndex = 1;
+            this.maxVal.TabIndex = 2;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(283, 3);
+            this.label1.Location = new System.Drawing.Point(286, 129);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(53, 13);
             this.label1.TabIndex = 5;
@@ -179,17 +189,26 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(283, 29);
+            this.label2.Location = new System.Drawing.Point(286, 155);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(56, 13);
             this.label2.TabIndex = 5;
             this.label2.Text = "Max value";
+            // 
+            // textBox1
+            // 
+            this.expressionTextBox.Location = new System.Drawing.Point(212, 2);
+            this.expressionTextBox.Multiline = true;
+            this.expressionTextBox.Name = "textBox1";
+            this.expressionTextBox.Size = new System.Drawing.Size(127, 121);
+            this.expressionTextBox.TabIndex = 6;
             // 
             // DoubleBindingControl
             // 
             this.AcceptButton = this.button1;
             this.CancelButton = this.button2;
             this.ClientSize = new System.Drawing.Size(345, 278);
+            this.Controls.Add(this.expressionTextBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.maxVal);
@@ -209,9 +228,20 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
         private void channelsTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            if (e.Node.Tag != null)
+            {
+                minVal.Enabled = true;
+                maxVal.Enabled = true;
+            }
+            else
+            {
+                minVal.Enabled = false;
+                maxVal.Enabled = false;
+
+            }
         }
 
-      
+
 
     }
 
@@ -249,9 +279,9 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                 DoubleBindingControl control = new DoubleBindingControl(context);
 
 
-                if (edSvc.ShowDialog(control) == DialogResult.OK )
+                if (edSvc.ShowDialog(control) == DialogResult.OK)
                 {
-             
+
                     System.Windows.Data.Binding bind = new System.Windows.Data.Binding("Value");
                     System.Windows.Data.ObjectDataProvider dp;
                     dp = new System.Windows.Data.ObjectDataProvider();
@@ -259,22 +289,35 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                     chs.ChannelName = control.SelectedNode.Tag + "." + control.SelectedNode.Text;
                     dp.ObjectInstance = chs;
                     dp.MethodName = "GetChannel";
-                    FreeSCADA.Common.Schema.ChannelValidator chv = new FreeSCADA.Common.Schema.ChannelValidator();
-                    chv.Min=control.Min;
-                    chv.Max=control.Max;
-                    chv.ValidatesOnTargetUpdated = true;
-                    bind.ValidationRules.Add(chv);
                     bind.Source = dp;
-                    bind.Converter = new Kent.Boogaart.Converters.TypeConverter(chs.GetChannel().Type, depProp.PropertyType);
+                    ComposingConverter conv = new ComposingConverter();
+
+                    RangeConverter rc = new RangeConverter();
+                    rc.Min = control.Min;
+                    rc.Max = control.Max;
+                    conv.Converters.Add(rc);
+                    try
+                    {
+                        Kent.Boogaart.Converters.ExpressionConverter ec = new Kent.Boogaart.Converters.ExpressionConverter();
+                        ec.Expression = control.Expression;
+                        conv.Converters.Add(ec);
+
+
+                    }
+                    catch (System.Exception e)
+                    {
+                        conv.Converters.Add(new Kent.Boogaart.Converters.TypeConverter(chs.GetChannel().Type, depProp.PropertyType));
+                    }
+                    bind.Converter = conv;
                     bind.Mode = BindingMode.TwoWay;
                     bind.FallbackValue = value;
                     BindingOperations.SetBinding(depObj, depProp, bind);
-                   
+
                 }
             }
 
 
-           
+
             return value;
         }
 
@@ -286,8 +329,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
 
             DependencyObject depObj = pw.ControlledObject as DependencyObject;
-            DependencyPropertyDescriptor  dpd= DependencyPropertyDescriptor.FromProperty(pw.ControlledProperty);
-            if (depObj == null || dpd== null)
+            DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(pw.ControlledProperty);
+            if (depObj == null || dpd == null)
                 return;
             DependencyProperty depProp = dpd.DependencyProperty;
             System.Windows.Data.Binding bind;
@@ -308,5 +351,5 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
         }
     }
 
-  
+
 }
