@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,8 +11,6 @@ using FreeSCADA.Common;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.Views;
 using FreeSCADA.Interfaces;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 
 namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands

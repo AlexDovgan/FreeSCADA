@@ -7,7 +7,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 {
 	sealed class ChannelFactory
 	{
-		//Prevent class reation
+		//Prevent class creation
 		private ChannelFactory() { }
 
 		public static IChannel CreateChannel(XmlElement node, Plugin plugin)

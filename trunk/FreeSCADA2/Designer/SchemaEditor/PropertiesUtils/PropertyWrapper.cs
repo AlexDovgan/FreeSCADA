@@ -1,7 +1,6 @@
-﻿using System.ComponentModel;
-using System;
+﻿using System;
+using System.ComponentModel;
 using System.Windows;
-using System.Collections.Generic;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using FreeSCADA.Archiver;
 using FreeSCADA.Common;
 using FreeSCADA.Designer.Dialogs;
-using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
 
 namespace FreeSCADA.Designer
 {
@@ -22,6 +21,7 @@ namespace FreeSCADA.Designer
 		{
 			InitializeComponent();
 			Env.Initialize(this, mainMenu, mainToolbar, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			ArchiverMain.Initialize();
 
 			CommandManager.fileContext = new BaseCommandContext(fileToolStripMenuItem.DropDown, mainToolbar);
 			CommandManager.viewContext = new BaseCommandContext(viewSubMenu.DropDown, mainToolbar);
@@ -51,6 +51,11 @@ namespace FreeSCADA.Designer
 		private void OnEventsItemClick(object sender, System.EventArgs e)
 		{
 			windowManager.ShowEvents();
+		}
+
+		private void OnArchiverSettingsClick(object sender, EventArgs e)
+		{
+			windowManager.ShowArhiverSettings();
 		}
 
 		private void OnSaveProjectClick(object sender, System.EventArgs e)
@@ -102,7 +107,7 @@ namespace FreeSCADA.Designer
 				windowManager.ForceWindowsClose();
 				Env.Current.CreateNewProject();
 				windowManager = new WindowManager(dockPanel);
-                Env.Current.Project.LoadNew();
+				Env.Current.CreateNewProject();
                 UpdateCaptionAndCommands();
 				System.GC.Collect();
 			}

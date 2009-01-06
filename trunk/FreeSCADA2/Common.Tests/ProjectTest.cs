@@ -70,7 +70,7 @@ namespace FreeSCADA.Common.Tests
 			p = new Project();
 
 			bool loadEventCalled = false;
-			p.LoadEvent += new System.EventHandler(new System.EventHandler( delegate(object obj, System.EventArgs args)
+			p.ProjectLoaded += new System.EventHandler(new System.EventHandler( delegate(object obj, System.EventArgs args)
 																					{ loadEventCalled = true; Assert.AreSame(p, obj); }));
 			p.Load(projectFile);
 			Assert.IsTrue(loadEventCalled);

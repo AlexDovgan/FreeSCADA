@@ -5,8 +5,6 @@ namespace FreeSCADA.Common
 {
 	public class Env : IEnvironment
 	{
-		static Env environmentInstance = null;
-
 		Commands commands;
 		Control mainWindow;
 		CommunationPlugs communicationPlugins;
@@ -14,7 +12,7 @@ namespace FreeSCADA.Common
 		EnvironmentMode mode;
 
 		#region Initialization and singleton implementation
-
+		static Env environmentInstance = null;
 		public static void Initialize(Control mainWindow, MenuStrip mainMenu, ToolStrip mainToolbar,  EnvironmentMode mode)
 		{
 			if (environmentInstance == null)
@@ -82,7 +80,10 @@ namespace FreeSCADA.Common
 
 		public void CreateNewProject()
 		{
-			project = new FreeSCADA.Common.Project();
+			if (project != null)
+				project.Clear();
+			else
+				project = new FreeSCADA.Common.Project();
 		}
 	}
 }

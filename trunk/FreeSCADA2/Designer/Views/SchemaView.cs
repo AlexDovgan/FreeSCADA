@@ -9,11 +9,10 @@ using System.Xml.Xsl;
 using FreeSCADA.Common;
 using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.SchemaEditor;
+using FreeSCADA.Designer.SchemaEditor.PropertiesUtils;
 using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
-using FreeSCADA.Designer.SchemaEditor.PropertiesUtils;
-using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.Views
 {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Xml;
 using FreeSCADA.Common;
@@ -20,6 +21,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		}
 
 		#region ICommunicationPlug Members
+		public event EventHandler ChannelsChanged;
 
 		public string Name
 		{
@@ -34,6 +36,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 				channels.Clear(); 
 				channels.AddRange(value);
 				channels.RemoveAll( delegate(IChannel ch) { return ch == null; } );
+				FireChannelChangedEvent();
 			}
 		}
 
@@ -45,7 +48,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		public void Initialize(IEnvironment environment)
 		{
 			this.environment = environment;
-			environment.Project.LoadEvent += new System.EventHandler(OnProjectLoad);
+			environment.Project.ProjectLoaded += new System.EventHandler(OnProjectLoad);
 
 			LoadSettings();
 
@@ -124,14 +127,14 @@ namespace FreeSCADA.Communication.SimulatorPlug
 				}
 				doc.AppendChild(root_elem);
 				doc.Save(ms);
-				environment.Project[StringConstants.PluginId + "_channels"] = ms;
+				environment.Project["settings/" + StringConstants.PluginId + "_channels"] = ms;
 			}
 		}
 
 		void LoadSettings()
 		{
 			channels.Clear();
-			using (System.IO.Stream ms = environment.Project[StringConstants.PluginId + "_channels"])
+			using (System.IO.Stream ms = environment.Project["settings/" + StringConstants.PluginId + "_channels"])
 			{
 				if (ms == null || ms.Length == 0)
 					return;
@@ -148,11 +151,18 @@ namespace FreeSCADA.Communication.SimulatorPlug
 				foreach (XmlElement node in nodes)
 					channels.Add(ChannelFactory.CreateChannel(node, this));
 			}
+			FireChannelChangedEvent();
 		}
 
 		void OnProjectLoad(object sender, System.EventArgs e)
 		{
 			LoadSettings();
+		}
+
+		void FireChannelChangedEvent()
+		{
+			if (ChannelsChanged != null)
+				ChannelsChanged(this, new EventArgs());
 		}
 	}
 }

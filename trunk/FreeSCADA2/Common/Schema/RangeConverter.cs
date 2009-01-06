@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Data;
 using System.Globalization;
+using System.Windows.Data;
 
 
 namespace FreeSCADA.Common.Schema
@@ -36,7 +34,7 @@ namespace FreeSCADA.Common.Schema
                     return _max;
                 return val;
             }
-            catch (System.Exception e)
+            catch (System.Exception)
             {
                 return o;
             }

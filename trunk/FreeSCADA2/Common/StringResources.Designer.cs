@@ -68,5 +68,14 @@ namespace FreeSCADA.Common
                 return ResourceManager.GetString("CommunicationCommandGroupName", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project.
+        /// </summary>
+        internal static string ProjectCommandGroupName {
+            get {
+                return ResourceManager.GetString("ProjectCommandGroupName", resourceCulture);
+            }
+        }
     }
 }
