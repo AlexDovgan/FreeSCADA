@@ -26,6 +26,12 @@ namespace FreeSCADA.Designer.Dialogs
 
 			SourceGrid.Cells.Views.Cell categoryView = GetCategoryCellView();
 
+			channelsGrid.RowsCount++;
+			channelsGrid[0, 0] = new SourceGrid.Cells.ColumnHeader("Channel");
+			channelsGrid[0, 1] = new SourceGrid.Cells.ColumnHeader("Value");
+			channelsGrid[0, 2] = new SourceGrid.Cells.ColumnHeader("Access");
+			channelsGrid[0, 3] = new SourceGrid.Cells.ColumnHeader("Type");
+
 			foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
 				LoadPlugin(categoryView, plugId);
 
@@ -49,19 +55,13 @@ namespace FreeSCADA.Designer.Dialogs
 		private void LoadPlugin(SourceGrid.Cells.Views.Cell categoryView, string plugId)
 		{
 			int curRow = channelsGrid.RowsCount;
-			channelsGrid.RowsCount += 2;
+			channelsGrid.RowsCount++;
 			CommunationPlugs plugs = Env.Current.CommunicationPlugins;
 
 			channelsGrid[curRow, 0] = new SourceGrid.Cells.Cell(plugs[plugId].Name);
 			channelsGrid[curRow, 0].ColumnSpan = channelsGrid.ColumnsCount;
 			channelsGrid[curRow, 0].View = categoryView;
 			channelsGrid[curRow, 0].AddController(new SourceGrid.Cells.Controllers.Unselectable());
-			curRow++;
-
-			channelsGrid[curRow, 0] = new SourceGrid.Cells.ColumnHeader("Channel");
-			channelsGrid[curRow, 1] = new SourceGrid.Cells.ColumnHeader("Value");
-			channelsGrid[curRow, 2] = new SourceGrid.Cells.ColumnHeader("Access");
-			channelsGrid[curRow, 3] = new SourceGrid.Cells.ColumnHeader("Type");
 
 			foreach(IChannel ch in plugs[plugId].Channels)
 			{

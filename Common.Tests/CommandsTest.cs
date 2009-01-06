@@ -48,7 +48,14 @@ namespace FreeSCADA.Common.Tests
 			Assert.IsTrue(testCommand.isExecuted);
 
 			testCommand.isExecuted = false;
-			menu.Items[1].PerformClick();
+			ToolStripItem menuItem = null;
+			foreach(ToolStripItem item in menu.Items)
+			{
+				if(item.Text == testCommand.Name)
+					menuItem = item;
+			}
+			Assert.IsNotNull(menuItem);
+			menuItem.PerformClick();
 			Assert.IsTrue(testCommand.isExecuted);
 
 			testCommand.isExecuted = false;
