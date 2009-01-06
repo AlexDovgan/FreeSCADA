@@ -5,7 +5,8 @@ namespace FreeSCADA.Interfaces
 	public enum PredefinedContexts
 	{
 		Global,
-		Communication
+		Communication,
+		Project
 	}
 	public interface ICommands
 	{

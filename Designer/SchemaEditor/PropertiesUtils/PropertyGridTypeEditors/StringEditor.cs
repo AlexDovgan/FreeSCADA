@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
@@ -9,7 +10,6 @@ using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using FreeSCADA.Common;
 using FreeSCADA.Interfaces;
-using System.Collections.Generic;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {

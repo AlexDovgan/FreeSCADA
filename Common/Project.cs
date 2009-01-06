@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using ICSharpCode.SharpZipLib.Checksums;
@@ -11,8 +12,14 @@ namespace FreeSCADA.Common
 		Dictionary<string, byte[]> data = new Dictionary<string, byte[]>();
 		bool modifiedFlag = false;
 
-		public event System.EventHandler LoadEvent;
+		public event EventHandler ProjectLoaded;
+		public event EventHandler ProjectClosed;
+
         string fileName = "";
+
+		internal Project()
+		{
+		}
 
 		~Project()
 		{
@@ -32,12 +39,6 @@ namespace FreeSCADA.Common
         public string SaveAsFileName
         {
             set { fileName = value; }
-        }
-
-        public void LoadNew()
-        {
-            if (LoadEvent != null)
-                LoadEvent(this, new System.EventArgs());
         }
 
    		public void Load(string fileName)
@@ -60,12 +61,14 @@ namespace FreeSCADA.Common
 				}
 			}
             this.fileName = fileName;
-			if (LoadEvent != null)
-				LoadEvent(this, new System.EventArgs());
+			FireProjectLoaded();
 		}
 
-		private void Clear()
+		internal void Clear()
 		{
+			if (ProjectClosed != null)
+				ProjectClosed(this, new EventArgs());
+
 			data.Clear();
 			System.GC.Collect();
 			modifiedFlag = false;
@@ -179,14 +182,10 @@ namespace FreeSCADA.Common
 			set { SetData(name, value); }
 		}
 
-		public void SerializeContent(string name, object obj)
+		private void FireProjectLoaded()
 		{
-			
-		}
-
-		public object DeserializeContent(string name)
-		{
-			return null;
+			if (ProjectLoaded != null)
+				ProjectLoaded(this, new System.EventArgs());
 		}
 	}
 }

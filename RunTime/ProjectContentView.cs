@@ -48,7 +48,7 @@ namespace FreeSCADA.RunTime
 
 			TabText = "Project Content";
 
-			Env.Current.Project.LoadEvent += new EventHandler(OnProjectLoad);
+			Env.Current.Project.ProjectLoaded += new EventHandler(OnProjectLoad);
 		}
 
 		public void RefreshContent(Project project)

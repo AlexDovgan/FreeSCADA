@@ -8,9 +8,8 @@ using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using FreeSCADA.Common;
-using FreeSCADA.Interfaces;
-using System.Collections.Generic;
 using FreeSCADA.Common.Schema;
+using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {

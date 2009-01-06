@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using FreeSCADA.Designer.SchemaEditor.Manipulators;
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
     class TextBoxTool:BaseTool

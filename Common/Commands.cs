@@ -14,6 +14,7 @@ namespace FreeSCADA.Common
 		List<CommandInfo> registeredCommands = new List<CommandInfo>();
 		BaseCommandContext globalContext;
 		BaseCommandContext communicationContext;
+		BaseCommandContext projectContext;
 
 		#region ICommands implementation
 
@@ -23,6 +24,9 @@ namespace FreeSCADA.Common
 
 			ToolStrip communicationMenu = GetGroupItem(menu, StringResources.CommunicationCommandGroupName);
 			communicationContext = new BaseCommandContext(communicationMenu, null);
+
+			ToolStrip projectMenu = GetGroupItem(menu, StringResources.ProjectCommandGroupName);
+			projectContext = new BaseCommandContext(projectMenu, null);
 		}
 
 		public void AddCommand(ICommandContext context, ICommand cmd)
@@ -80,6 +84,8 @@ namespace FreeSCADA.Common
 				return globalContext;
 			else if (type == PredefinedContexts.Communication)
 				return communicationContext;
+			else if (type == PredefinedContexts.Project)
+				return projectContext;
 			else
 				return null;
 		}

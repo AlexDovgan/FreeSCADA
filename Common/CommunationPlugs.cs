@@ -9,6 +9,9 @@ namespace FreeSCADA.Common
 {
 	public class CommunationPlugs
 	{
+		public delegate void ChannelsChangedHandler(ICommunicationPlug plug);
+		public event ChannelsChangedHandler ChannelsChanged;
+
 		private List<ICommunicationPlug> commPlugs = new List<ICommunicationPlug>();
 
 		public void Load()
@@ -31,7 +34,19 @@ namespace FreeSCADA.Common
 		private void InitializePlugin(IEnvironment env, ICommunicationPlug plug)
 		{
 			plug.Initialize(env);
+			plug.ChannelsChanged += new EventHandler(OnPluginChannelsChanged);
 			commPlugs.Add(plug);
+		}
+
+		void OnPluginChannelsChanged(object sender, EventArgs e)
+		{
+			if(ChannelsChanged != null)
+			{
+				if (sender is ICommunicationPlug)
+					ChannelsChanged(sender as ICommunicationPlug);
+				else
+					ChannelsChanged(null);
+			}
 		}
 
 		public List<string> PluginIds

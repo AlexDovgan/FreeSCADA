@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Xml;
 using FreeSCADA.Common;
@@ -20,6 +21,7 @@ namespace FreeSCADA.Communication.Timers
 		}
 
 		#region ICommunicationPlug Members
+		public event EventHandler ChannelsChanged;
 
 		public string Name
 		{
@@ -34,6 +36,7 @@ namespace FreeSCADA.Communication.Timers
 				channels.Clear(); 
 				channels.AddRange(value);
 				channels.RemoveAll( delegate(IChannel ch) { return ch == null; } );
+				FireChannelChangedEvent();
 			}
 		}
 
@@ -45,7 +48,7 @@ namespace FreeSCADA.Communication.Timers
 		public void Initialize(IEnvironment environment)
 		{
 			this.environment = environment;
-			environment.Project.LoadEvent += new System.EventHandler(OnProjectLoad);
+			environment.Project.ProjectLoaded += new System.EventHandler(OnProjectLoad);
 
 			LoadSettings();
 
@@ -156,11 +159,18 @@ namespace FreeSCADA.Communication.Timers
 				foreach (XmlElement node in nodes)
 					channels.Add(ChannelFactory.CreateChannel(node, this));
 			}
+			FireChannelChangedEvent();
 		}
 
 		void OnProjectLoad(object sender, System.EventArgs e)
 		{
 			LoadSettings();
+		}
+
+		void FireChannelChangedEvent()
+		{
+			if (ChannelsChanged != null)
+				ChannelsChanged(this, new EventArgs());
 		}
 	}
 }

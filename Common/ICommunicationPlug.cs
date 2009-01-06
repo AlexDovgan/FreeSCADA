@@ -6,6 +6,8 @@ namespace FreeSCADA.Interfaces
 	{
 		public interface ICommunicationPlug
 		{
+			event EventHandler ChannelsChanged;
+
 			String Name
 			{
 				get;

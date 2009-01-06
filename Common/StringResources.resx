@@ -120,4 +120,7 @@
   <data name="CommunicationCommandGroupName" xml:space="preserve">
     <value>Communication</value>
   </data>
+  <data name="ProjectCommandGroupName" xml:space="preserve">
+    <value>Project</value>
+  </data>
 </root>

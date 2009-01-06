@@ -152,6 +152,30 @@ namespace FreeSCADA.Designer
 
 			EventsView view = new EventsView();
 			view.Show(dockPanel, DockState.Document);
+
+			view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
+			documentViews.Add(view);
+		}
+
+		/// <summary>
+		/// Create or active existing "Arhiver Settings" view.
+		/// </summary>
+		public void ShowArhiverSettings()
+		{
+			foreach (DocumentView doc in documentViews)
+			{
+				if (doc is ArhiverSettingsView)
+				{
+					doc.Activate();
+					return;
+				}
+			}
+
+			ArhiverSettingsView view = new ArhiverSettingsView();
+			view.Show(dockPanel, DockState.Document);
+
+			view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
+			documentViews.Add(view);
 		}
 
 		/// <summary>

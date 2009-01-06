@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Xml;
-using FreeSCADA.Common;
 using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Communication.Timers

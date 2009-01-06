@@ -53,11 +53,20 @@ namespace FreeSCADA.Designer.Views
 			TabText = "Project Content";
 
 			RefreshContent(Env.Current.Project);
-			Env.Current.Project.LoadEvent += new EventHandler(OnProjectLoad);
             AllowDrop = true;
             this.projectTree.DragEnter += new DragEventHandler(projectTree_DragEnter);
-        
+
+			Env.Current.Project.ProjectLoaded += new EventHandler(OnProjectLoad);
+			Env.Current.CommunicationPlugins.ChannelsChanged += new CommunationPlugs.ChannelsChangedHandler(OnCommunicationPluginsChannelsChanged);
+
+			this.FormClosed += new FormClosedEventHandler(OnFormClosed);
   		}
+
+		void OnFormClosed(object sender, FormClosedEventArgs e)
+		{
+			Env.Current.Project.ProjectLoaded -= new EventHandler(OnProjectLoad);
+			Env.Current.CommunicationPlugins.ChannelsChanged -= new CommunationPlugs.ChannelsChangedHandler(OnCommunicationPluginsChannelsChanged);
+		}
 
         void projectTree_DragEnter(object sender, DragEventArgs e)
         {
@@ -108,6 +117,11 @@ namespace FreeSCADA.Designer.Views
 		void OnProjectLoad(object sender, EventArgs e)
 		{
 			 RefreshContent((Project)sender);
+		}
+
+		void OnCommunicationPluginsChannelsChanged(FreeSCADA.Interfaces.Plugins.ICommunicationPlug plug)
+		{
+			RefreshContent(Env.Current.Project);
 		}
 
 		private void OnNodeDblClick(object sender, TreeNodeMouseClickEventArgs e)
