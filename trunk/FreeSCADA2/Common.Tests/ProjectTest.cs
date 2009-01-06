@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Windows.Forms;
 using NUnit.Framework;
 
 namespace FreeSCADA.Common.Tests
@@ -11,6 +12,8 @@ namespace FreeSCADA.Common.Tests
 		[SetUp]
 		public void Init()
 		{
+			Env.Initialize(new Control(), new MenuStrip(), null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+
 			projectFile = System.IO.Path.GetTempFileName();
 
 			if (System.IO.File.Exists(projectFile))
@@ -19,13 +22,14 @@ namespace FreeSCADA.Common.Tests
 		[TearDown]
 		public void DeInit()
 		{
+			Env.Deinitialize();
 			System.IO.File.Delete(projectFile);
 		}
 
 		[Test]
 		public void StreamContent()
 		{
-			Project p = new Project();
+			Project p = Env.Current.Project;
 			Assert.IsNull(p.GetData("test1")); //There is no such entity
 
 			using (MemoryStream stream = new MemoryStream())
@@ -48,7 +52,7 @@ namespace FreeSCADA.Common.Tests
 		[Test]
 		public void SaveLoad()
 		{
-			Project p = new Project();
+			Project p = Env.Current.Project;
 			Assert.IsFalse(p.IsModified);
 
 			using (MemoryStream stream = new MemoryStream())
@@ -67,7 +71,9 @@ namespace FreeSCADA.Common.Tests
 			Assert.IsTrue(System.IO.File.Exists(projectFile));
 			Assert.IsFalse(p.IsModified);
 
-			p = new Project();
+			Env.Deinitialize();
+			Env.Initialize(new Control(), new MenuStrip(), null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			p = Env.Current.Project;
 
 			bool loadEventCalled = false;
 			p.ProjectLoaded += new System.EventHandler(new System.EventHandler( delegate(object obj, System.EventArgs args)
@@ -98,7 +104,7 @@ namespace FreeSCADA.Common.Tests
 			const int files = 10;
 			const int lines = 100000;
 
-			Project p = new Project();
+			Project p = Env.Current.Project;
 
 			for (int i = 0; i < files; i++)
 			{
@@ -113,7 +119,9 @@ namespace FreeSCADA.Common.Tests
 			}
 			p.Save(projectFile);
 
-			p = new Project();
+			Env.Deinitialize();
+			Env.Initialize(new Control(), new MenuStrip(), null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			p = Env.Current.Project;
 			p.Load(projectFile);
 			for (int i = 0; i < files; i++)
 			{
@@ -129,7 +137,7 @@ namespace FreeSCADA.Common.Tests
 		[Test]
 		public void Entries()
 		{
-			Project p = new Project();
+			Project p = Env.Current.Project;
 			string[] test_entries = {	"file 1",
 										"file 2",
 										"dir 1/file 3",
