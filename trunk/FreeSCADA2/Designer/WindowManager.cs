@@ -158,20 +158,20 @@ namespace FreeSCADA.Designer
 		}
 
 		/// <summary>
-		/// Create or active existing "Arhiver Settings" view.
+		/// Create or active existing "Archiver Settings" view.
 		/// </summary>
-		public void ShowArhiverSettings()
+		public void ShowArchiverSettings()
 		{
 			foreach (DocumentView doc in documentViews)
 			{
-				if (doc is ArhiverSettingsView)
+				if (doc is ArchiverSettingsView)
 				{
 					doc.Activate();
 					return;
 				}
 			}
 
-			ArhiverSettingsView view = new ArhiverSettingsView();
+			ArchiverSettingsView view = new ArchiverSettingsView();
 			view.Show(dockPanel, DockState.Document);
 
 			view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
