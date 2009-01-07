@@ -18,6 +18,11 @@ namespace FreeSCADA.Interfaces
 			get;
 		}
 
+		string PluginId
+		{
+			get;
+		}
+
 		Type Type
 		{
 			get;

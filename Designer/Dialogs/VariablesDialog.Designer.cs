@@ -29,9 +29,10 @@
 		private void InitializeComponent()
 		{
 			this.channelsGrid = new SourceGrid.Grid();
-			this.button1 = new System.Windows.Forms.Button();
+			this.closeButton = new System.Windows.Forms.Button();
 			this.connectCheckBox = new System.Windows.Forms.CheckBox();
 			this.connectionStatusLabel = new System.Windows.Forms.Label();
+			this.selectButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// channelsGrid
@@ -50,22 +51,22 @@
 			this.channelsGrid.TabStop = true;
 			this.channelsGrid.ToolTipText = "";
 			// 
-			// button1
+			// closeButton
 			// 
-			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.Location = new System.Drawing.Point(544, 329);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(75, 23);
-			this.button1.TabIndex = 1;
-			this.button1.Text = "Close";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.OnCloseButton);
+			this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.closeButton.Location = new System.Drawing.Point(544, 329);
+			this.closeButton.Name = "closeButton";
+			this.closeButton.Size = new System.Drawing.Size(75, 23);
+			this.closeButton.TabIndex = 1;
+			this.closeButton.Text = "Close";
+			this.closeButton.UseVisualStyleBackColor = true;
+			this.closeButton.Click += new System.EventHandler(this.OnCloseButton);
 			// 
 			// connectCheckBox
 			// 
 			this.connectCheckBox.AutoSize = true;
 			this.connectCheckBox.Location = new System.Drawing.Point(12, 306);
-			this.connectCheckBox.Name = "autorefreshCheckBox";
+			this.connectCheckBox.Name = "connectCheckBox";
 			this.connectCheckBox.Size = new System.Drawing.Size(84, 17);
 			this.connectCheckBox.TabIndex = 2;
 			this.connectCheckBox.Text = "Autorefresh";
@@ -81,17 +82,28 @@
 			this.connectionStatusLabel.TabIndex = 3;
 			this.connectionStatusLabel.Text = "Connection status";
 			// 
+			// selectButton
+			// 
+			this.selectButton.Location = new System.Drawing.Point(463, 329);
+			this.selectButton.Name = "selectButton";
+			this.selectButton.Size = new System.Drawing.Size(75, 23);
+			this.selectButton.TabIndex = 4;
+			this.selectButton.Text = "Select";
+			this.selectButton.UseVisualStyleBackColor = true;
+			this.selectButton.Click += new System.EventHandler(this.selectButton_Click);
+			// 
 			// VariablesDialog
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(631, 364);
+			this.Controls.Add(this.selectButton);
 			this.Controls.Add(this.connectionStatusLabel);
 			this.Controls.Add(this.connectCheckBox);
-			this.Controls.Add(this.button1);
+			this.Controls.Add(this.closeButton);
 			this.Controls.Add(this.channelsGrid);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-			this.Name = "VariablesForm";
+			this.Name = "VariablesDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "VariablesForm";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.VariablesForm_FormClosing);
@@ -103,9 +115,10 @@
 		#endregion
 
 		private SourceGrid.Grid channelsGrid;
-		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Button closeButton;
 		private System.Windows.Forms.CheckBox connectCheckBox;
 		private System.Windows.Forms.Label connectionStatusLabel;
+		private System.Windows.Forms.Button selectButton;
 
 	}
 }

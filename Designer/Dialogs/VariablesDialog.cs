@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using FreeSCADA.Common;
 using FreeSCADA.Interfaces;
 
@@ -11,13 +12,31 @@ namespace FreeSCADA.Designer.Dialogs
 	/// </summary>
 	public partial class VariablesDialog : Form
 	{
+		bool selectMode = false;
+		List<IChannel> selectedChannels = new List<IChannel>();
+
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		public VariablesDialog()
 		{
 			InitializeComponent();
+			Initialize();			
+		}
 
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		public VariablesDialog(bool selectMode)
+		{
+			this.selectMode = selectMode;
+
+			InitializeComponent();
+			Initialize();
+		}
+
+		void Initialize()
+		{
 			DevAge.Drawing.RectangleBorder b = channelsGrid.Selection.Border;
 			b.SetWidth(0);
 			channelsGrid.Selection.Border = b;
@@ -38,7 +57,46 @@ namespace FreeSCADA.Designer.Dialogs
 			channelsGrid.AutoStretchColumnsToFitWidth = true;
 			channelsGrid.AutoSizeCells();
 
+			channelsGrid.Selection.SelectionChanged += new SourceGrid.RangeRegionChangedEventHandler(OnSelectionChanged);
+			UpdateSelectedChannels();
+
 			Connect(connectCheckBox.Checked);
+
+			selectButton.Visible = selectMode;
+			if (selectMode == true)
+				closeButton.Text = "Cancel";
+			else
+				closeButton.Text = "Close";
+		}
+
+		/// <summary>
+		/// Returns list of selected channels. Available only if selectedMode==true was passed to the constructor.
+		/// </summary>
+		public List<IChannel> SelectedChannels
+		{
+			get { return selectedChannels; }
+			set { selectedChannels = value; }
+		}
+
+		void OnSelectionChanged(object sender, SourceGrid.RangeRegionChangedEventArgs e)
+		{
+			UpdateSelectedChannels();
+		}
+
+		private void UpdateSelectedChannels()
+		{
+			selectedChannels.Clear();
+			foreach (int row in channelsGrid.Selection.GetSelectionRegion().GetRowsIndex())
+			{
+
+				if (channelsGrid.Rows[row].Tag != null && channelsGrid.Rows[row].Tag is IChannel)
+				{
+					IChannel ch = channelsGrid.Rows[row].Tag as IChannel;
+					selectedChannels.Add(ch);
+				}
+			}
+
+			selectButton.Enabled = selectedChannels.Count > 0;
 		}
 
 		private SourceGrid.Cells.Views.Cell GetCategoryCellView()
@@ -81,11 +139,19 @@ namespace FreeSCADA.Designer.Dialogs
 		private void OnCloseButton(object sender, EventArgs e)
 		{
             CommunationPlugs plugs = Env.Current.CommunicationPlugins;
-            foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
-                foreach (IChannel ch in plugs[plugId].Channels)
-                {
-                    ch.ValueChanged -= new EventHandler(OnChannelValueChanged);
-                }
+			foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
+			{
+				foreach (IChannel ch in plugs[plugId].Channels)
+				{
+					ch.ValueChanged -= new EventHandler(OnChannelValueChanged);
+				}
+			}
+
+			if (selectMode == true)
+				DialogResult = DialogResult.Cancel;
+			else
+				DialogResult = DialogResult.OK;
+
             Close();
 		}
 
@@ -134,5 +200,12 @@ namespace FreeSCADA.Designer.Dialogs
 				}
 			}
 		}
+
+		private void selectButton_Click(object sender, EventArgs e)
+		{
+			DialogResult = DialogResult.OK;
+			Close();
+		}
+
 	}
 }

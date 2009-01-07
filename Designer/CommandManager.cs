@@ -4,9 +4,9 @@ namespace FreeSCADA.Designer
 {
 	static class CommandManager
 	{
-		static public ICommandContext documentContext = null;
-		static public ICommandContext viewContext = null;
-		static public ICommandContext fileContext = null;
+		static public ICommandContext documentContext;
+		static public ICommandContext viewContext;
+		static public ICommandContext fileContext;
 
 		public enum Priorities
 		{

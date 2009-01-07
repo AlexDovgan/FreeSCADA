@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
 using FreeSCADA.Archiver;
+using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -16,8 +17,8 @@ namespace FreeSCADA.Designer.Views
 		private Button removeRuleButton;
 		private Button newRuleButton;
 		private GroupBox groupBox3;
-		private Button button3;
-		private Button button1;
+		private Button removeChannelButton;
+		private Button addChannelButton;
 		private GroupBox groupBox1;
 		private Label label1;
 		private PropertyGrid conditionProperties;
@@ -56,8 +57,8 @@ namespace FreeSCADA.Designer.Views
 			this.newRuleButton = new System.Windows.Forms.Button();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.button3 = new System.Windows.Forms.Button();
-			this.button1 = new System.Windows.Forms.Button();
+			this.removeChannelButton = new System.Windows.Forms.Button();
+			this.addChannelButton = new System.Windows.Forms.Button();
 			this.channelsList = new System.Windows.Forms.ListBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.conditionProperties = new System.Windows.Forms.PropertyGrid();
@@ -144,7 +145,9 @@ namespace FreeSCADA.Designer.Views
 			this.rulesList.UseCompatibleStateImageBehavior = false;
 			this.rulesList.View = System.Windows.Forms.View.Details;
 			this.rulesList.Resize += new System.EventHandler(this.rulesList_Resize);
+			this.rulesList.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.rulesList_AfterLabelEdit);
 			this.rulesList.SelectedIndexChanged += new System.EventHandler(this.rulesList_SelectedIndexChanged);
+			this.rulesList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rulesList_KeyDown);
 			// 
 			// columnHeader1
 			// 
@@ -159,6 +162,7 @@ namespace FreeSCADA.Designer.Views
 			this.removeRuleButton.TabIndex = 2;
 			this.removeRuleButton.Text = "Remove rule";
 			this.removeRuleButton.UseVisualStyleBackColor = true;
+			this.removeRuleButton.Click += new System.EventHandler(this.removeRuleButton_Click);
 			// 
 			// newRuleButton
 			// 
@@ -174,8 +178,8 @@ namespace FreeSCADA.Designer.Views
 			// groupBox3
 			// 
 			this.groupBox3.Controls.Add(this.label1);
-			this.groupBox3.Controls.Add(this.button3);
-			this.groupBox3.Controls.Add(this.button1);
+			this.groupBox3.Controls.Add(this.removeChannelButton);
+			this.groupBox3.Controls.Add(this.addChannelButton);
 			this.groupBox3.Controls.Add(this.channelsList);
 			this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox3.Location = new System.Drawing.Point(0, 0);
@@ -183,7 +187,7 @@ namespace FreeSCADA.Designer.Views
 			this.groupBox3.Size = new System.Drawing.Size(418, 255);
 			this.groupBox3.TabIndex = 9;
 			this.groupBox3.TabStop = false;
-			this.groupBox3.Text = "groupBox3";
+			this.groupBox3.Text = "Channels";
 			// 
 			// label1
 			// 
@@ -196,25 +200,27 @@ namespace FreeSCADA.Designer.Views
 			this.label1.TabIndex = 2;
 			this.label1.Text = "Hint: You can drag and drop channels from Project Content view into this window";
 			// 
-			// button3
+			// removeChannelButton
 			// 
-			this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button3.Location = new System.Drawing.Point(296, 226);
-			this.button3.Name = "button3";
-			this.button3.Size = new System.Drawing.Size(110, 23);
-			this.button3.TabIndex = 1;
-			this.button3.Text = "Remove channel";
-			this.button3.UseVisualStyleBackColor = true;
+			this.removeChannelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.removeChannelButton.Location = new System.Drawing.Point(296, 226);
+			this.removeChannelButton.Name = "removeChannelButton";
+			this.removeChannelButton.Size = new System.Drawing.Size(110, 23);
+			this.removeChannelButton.TabIndex = 1;
+			this.removeChannelButton.Text = "Remove channel";
+			this.removeChannelButton.UseVisualStyleBackColor = true;
+			this.removeChannelButton.Click += new System.EventHandler(this.removeChannelButton_Click);
 			// 
-			// button1
+			// addChannelButton
 			// 
-			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button1.Location = new System.Drawing.Point(6, 226);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(110, 23);
-			this.button1.TabIndex = 1;
-			this.button1.Text = "Add channel";
-			this.button1.UseVisualStyleBackColor = true;
+			this.addChannelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.addChannelButton.Location = new System.Drawing.Point(6, 226);
+			this.addChannelButton.Name = "addChannelButton";
+			this.addChannelButton.Size = new System.Drawing.Size(110, 23);
+			this.addChannelButton.TabIndex = 1;
+			this.addChannelButton.Text = "Add channel";
+			this.addChannelButton.UseVisualStyleBackColor = true;
+			this.addChannelButton.Click += new System.EventHandler(this.addChannelButton_Click);
 			// 
 			// channelsList
 			// 
@@ -227,6 +233,7 @@ namespace FreeSCADA.Designer.Views
 			this.channelsList.Location = new System.Drawing.Point(6, 19);
 			this.channelsList.Name = "channelsList";
 			this.channelsList.Size = new System.Drawing.Size(400, 185);
+			this.channelsList.Sorted = true;
 			this.channelsList.TabIndex = 0;
 			this.channelsList.DragDrop += new System.Windows.Forms.DragEventHandler(this.listBox1_DragDrop);
 			this.channelsList.DragEnter += new System.Windows.Forms.DragEventHandler(this.listBox1_DragEnter);
@@ -326,6 +333,7 @@ namespace FreeSCADA.Designer.Views
 				item.Checked = rule.Enable;
 				item.Selected = selected.Contains(i);
 			}
+			rulesList.Sort();
 		}
 
 		private void RefreshChannelsList()
@@ -346,6 +354,9 @@ namespace FreeSCADA.Designer.Views
 					}
 				}
 			}
+
+			if (selected >= channelsList.Items.Count)
+				selected = channelsList.Items.Count - 1;
 
 			channelsList.SelectedIndex = selected;
 		}
@@ -520,6 +531,51 @@ namespace FreeSCADA.Designer.Views
 			Rule rule = rulesList.SelectedItems[0].Tag as Rule;
 			if (rule != null)
 				rule.Conditions = conditions;
+		}
+
+		private void addChannelButton_Click(object sender, EventArgs e)
+		{
+			FreeSCADA.Designer.Dialogs.VariablesDialog dlg = new FreeSCADA.Designer.Dialogs.VariablesDialog(true);
+			if (dlg.ShowDialog(this) == DialogResult.OK)
+			{
+				Rule rule = rulesList.SelectedItems[0].Tag as Rule;
+				if (rule != null)
+				{
+					foreach (IChannel ch in dlg.SelectedChannels)
+					{
+						ChannelInfo channel = new ChannelInfo();
+						channel.ChannelName = ch.Name;
+						channel.PluginId = ch.PluginId;
+
+						rule.Channels.Add(channel);
+					}
+				}
+				RefreshChannelsList();
+			}
+		}
+
+		private void removeRuleButton_Click(object sender, EventArgs e)
+		{
+			List<Rule> rulesToRemove = new List<Rule>();
+			foreach (ListViewItem item in rulesList.SelectedItems)
+				rulesToRemove.Add(item.Tag as Rule);
+
+			foreach (Rule rule in rulesToRemove)
+				ArchiverMain.Current.ChannelsSettings.Rules.Remove(rule);
+
+			RefreshRulesList();
+		}
+
+		private void removeChannelButton_Click(object sender, EventArgs e)
+		{
+			if (channelsList.SelectedIndex >= 0)
+			{
+				ChannelItem channelToRemove = (ChannelItem)channelsList.Items[channelsList.SelectedIndex];
+
+				Rule rule = rulesList.SelectedItems[0].Tag as Rule;
+				rule.Channels.Remove(channelToRemove.channel);
+				RefreshChannelsList();
+			}
 		}
 	}
 

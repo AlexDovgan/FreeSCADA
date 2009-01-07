@@ -9,7 +9,7 @@ namespace FreeSCADA.Archiver
 
 		#region Initialization and singleton implementation
 
-		static ArchiverMain instance = null;
+		static ArchiverMain instance;
 
 		public static void Initialize()
 		{

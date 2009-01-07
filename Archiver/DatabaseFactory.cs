@@ -9,7 +9,7 @@ namespace FreeSCADA.Archiver
 {
 	public static class DatabaseFactory
 	{
-		public static string SQLiteName = "System.Data.SQLite";
+		public const string SQLiteName = "System.Data.SQLite";
 
 		enum ProcessorType
 		{
@@ -73,7 +73,6 @@ namespace FreeSCADA.Archiver
 				{
 					int AddressWidth = int.Parse(processor["AddressWidth"].ToString());
 					int Architecture = int.Parse(processor["Architecture"].ToString());
-					processor.Dispose();
 
 					//See Win32_Processor Class for details
 					if (AddressWidth == 32)
