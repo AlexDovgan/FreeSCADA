@@ -6,7 +6,7 @@ using FreeSCADA.Archiver;
 
 namespace FreeSCADA.Designer.Views
 {
-	class ArhiverSettingsView:DocumentView
+	class ArchiverSettingsView:DocumentView
 	{
 		private SplitContainer splitContainer1;
 		private SplitContainer splitContainer2;
@@ -26,11 +26,11 @@ namespace FreeSCADA.Designer.Views
 		private ColumnHeader conditionDescriptionColumn;
 		private ListBox channelsList;
 	
-		public ArhiverSettingsView()
+		public ArchiverSettingsView()
 		{
 			InitializeComponent();
 
-			TabText = "Arhiver Settings";
+			TabText = "Archiver Settings";
 			UpdateControlStates();
 		}
 
@@ -286,12 +286,12 @@ namespace FreeSCADA.Designer.Views
 			this.conditionDescriptionColumn.Text = "Description";
 			this.conditionDescriptionColumn.Width = 209;
 			// 
-			// ArhiverSettingsView
+			// ArchiverSettingsView
 			// 
 			this.ClientSize = new System.Drawing.Size(799, 415);
 			this.Controls.Add(this.splitContainer1);
-			this.Name = "ArhiverSettingsView";
-			this.Load += new System.EventHandler(this.ArhiverSettingsView_Load);
+			this.Name = "ArchiverSettingsView";
+			this.Load += new System.EventHandler(this.ArchiverSettingsView_Load);
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel2.ResumeLayout(false);
 			this.splitContainer1.ResumeLayout(false);
@@ -306,7 +306,7 @@ namespace FreeSCADA.Designer.Views
 
 		}
 
-		private void ArhiverSettingsView_Load(object sender, System.EventArgs e)
+		private void ArchiverSettingsView_Load(object sender, System.EventArgs e)
 		{
 			RefreshRulesList();
 			splitContainer1.SplitterDistance = (int)(splitContainer1.Size.Height * 0.25);

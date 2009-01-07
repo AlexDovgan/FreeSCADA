@@ -55,7 +55,7 @@ namespace FreeSCADA.Designer
 
 		private void OnArchiverSettingsClick(object sender, EventArgs e)
 		{
-			windowManager.ShowArhiverSettings();
+			windowManager.ShowArchiverSettings();
 		}
 
 		private void OnSaveProjectClick(object sender, System.EventArgs e)

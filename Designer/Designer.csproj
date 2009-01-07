@@ -125,7 +125,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StringResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Views\ArhiverSettingsView.cs">
+    <Compile Include="Views\ArchiverSettingsView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\DocumentView.cs">
@@ -172,8 +172,8 @@
       <LastGenOutput>StringResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\ArhiverSettingsView.resx">
-      <DependentUpon>ArhiverSettingsView.cs</DependentUpon>
+    <EmbeddedResource Include="Views\ArchiverSettingsView.resx">
+      <DependentUpon>ArchiverSettingsView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ProjectContentView.resx">
       <DependentUpon>ProjectContentView.cs</DependentUpon>
