@@ -89,12 +89,12 @@ namespace FreeSCADA.Designer
 
 		void UpdateCaptionAndCommands()
 		{
-			if (Env.Current.Project.FileName == "")
+			if (string.IsNullOrEmpty(Env.Current.Project.FileName))
 				Text = StringResources.MainWindowName;
 			else
 				Text = string.Format(StringResources.MainWindowNameEx, Env.Current.Project.FileName);
 
-			if (Env.Current.Project.FileName == "")
+			if (string.IsNullOrEmpty(Env.Current.Project.FileName))
 				runButton.Enabled = false;
 			else
 				runButton.Enabled = !Env.Current.Project.IsModified;

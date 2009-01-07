@@ -52,7 +52,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                     minVal.Value = (Decimal)rc.Min;
                     maxVal.Value = (Decimal)rc.Max;
                 }
-                catch (Exception ex) { }
+                catch (Exception) { }
             }
 
             string[] splitStr = channelName.Split('.');

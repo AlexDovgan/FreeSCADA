@@ -20,7 +20,7 @@ namespace FreeSCADA.Common
 		public virtual Bitmap Icon { get { return null; } }
 		public virtual CommandType Type { get { return CommandType.Standard; } }
 		public virtual ICommandItems DropDownItems { get { return null; } }
-		public virtual int Priority
+		public int Priority
 		{
 			get
 			{
@@ -31,7 +31,7 @@ namespace FreeSCADA.Common
 				priority = value;
 			}
 		}
-		public virtual bool CanExecute
+		public bool CanExecute
 		{
 			get { return canExecute; }
 			set 

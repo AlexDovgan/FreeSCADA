@@ -56,6 +56,16 @@ namespace FreeSCADA.Archiver
 			set { interval = value; }
 		}
 
+		override public string Name
+		{
+			get { return StringConstants.TimeIntervalConditionName; }
+		}
+
+		override public string Description
+		{
+			get { return StringConstants.TimeIntervalConditionDescription; }
+		}
+
 		override public void Process()
 		{
 			DateTime currentTime = DateTime.Now;

@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:s="clr-namespace:FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls"
-                    x:Class="FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls.ThumbsResources">
+                    xmlns:s="clr-namespace:FreeSCADA.Designer.SchemaEditor.Manipulators.Controls"
+                    x:Class="FreeSCADA.Designer.SchemaEditor.Manipulators.Controls.ThumbsResources">
 
 
     <!-- RotateThumb Style -->

@@ -1,6 +1,6 @@
 using System.Windows;
 using System.Windows.Media;
-using FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls;
+using FreeSCADA.Designer.SchemaEditor.Manipulators.Controls;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {

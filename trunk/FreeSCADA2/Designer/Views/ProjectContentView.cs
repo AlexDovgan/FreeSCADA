@@ -76,9 +76,8 @@ namespace FreeSCADA.Designer.Views
 
         void projectTree_ItemDrag(object sender, ItemDragEventArgs e)
         {
-            DragDropEffects ef;
             if((e.Item as TreeNode).Tag!=null)
-                ef=DoDragDrop(e.Item, DragDropEffects.All);
+                DoDragDrop(e.Item, DragDropEffects.All);
         }
 
 		public void RefreshContent(Project project)
@@ -86,7 +85,7 @@ namespace FreeSCADA.Designer.Views
 			projectTree.Nodes.Clear();
 			TreeNode root;
 			
-			if(project.FileName == "")
+			if(string.IsNullOrEmpty(project.FileName))
 				root = projectTree.Nodes.Add(StringResources.UnsavedProjectName);
 			else
 				root = projectTree.Nodes.Add(project.FileName);

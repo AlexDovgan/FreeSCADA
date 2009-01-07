@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Shapes;
-using FreeSCADA.Designer.SchemaEditor.Manipulators.Controlls;
+using FreeSCADA.Designer.SchemaEditor.Manipulators.Controls;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {

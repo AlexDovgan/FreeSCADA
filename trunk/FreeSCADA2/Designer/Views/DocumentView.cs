@@ -21,7 +21,7 @@ namespace FreeSCADA.Designer.Views
         public event SetCurrentToolHandler SetCurrentTool;
 
         string documentName = "";
-		bool modifiedFlag = false;
+		bool modifiedFlag;
 		bool handleModifiedFlagOnClose = true;
 
 		public struct CommandInfo
