@@ -70,7 +70,7 @@ namespace FreeSCADA.Archiver
 		{
 			DateTime currentTime = DateTime.Now;
 			TimeSpan delta = new TimeSpan(0, 0, 0, 0, interval);
-			if (lastCheck + delta >= currentTime)
+			if (lastCheck + delta <= currentTime)
 			{
 				lastCheck = currentTime;
 				IsValid = true;

@@ -67,7 +67,13 @@ namespace FreeSCADA.Archiver
 
 		void UpdateControlsAvailability()
 		{
-			if (dbType1.Checked)
+			if (disableAchivation.Checked)
+			{
+				UpdateGroup(controlGroup1, false);
+				UpdateGroup(controlGroup2, false);
+				UpdateGroup(controlGroup3, false);
+			}
+			else if (dbType1.Checked)
 			{
 				UpdateGroup(controlGroup1, true);
 				UpdateGroup(controlGroup2, false);
@@ -102,6 +108,7 @@ namespace FreeSCADA.Archiver
 		{
 			DatabaseSettings settings = new DatabaseSettings();
 
+			settings.EnableArchiving = !disableAchivation.Checked;
 			settings.DbFile = fileNameBox.Text;
 			settings.DbSource = serverBox.Text;
 			settings.DbCatalog = dbNameBox.Text;
@@ -128,7 +135,11 @@ namespace FreeSCADA.Archiver
 			DatabaseSettings settings = new DatabaseSettings();
 			settings.Load();
 
-			if (settings.DbProvider == DatabaseFactory.SQLiteName)
+			if (settings.EnableArchiving == false)
+			{
+				disableAchivation.Checked = true;
+			}
+			else if (settings.DbProvider == DatabaseFactory.SQLiteName)
 			{
 				dbType1.Checked = true;
 				fileNameBox.Text = settings.DbFile;

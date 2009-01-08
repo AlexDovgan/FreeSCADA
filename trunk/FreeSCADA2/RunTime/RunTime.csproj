@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{047EED80-A3C6-4A7F-BB4C-E4A64F96B210}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -38,8 +38,10 @@
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
     <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.2.2864.18696, Culture=neutral, PublicKeyToken=d481317c817cec47, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\DockPanel\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
@@ -52,11 +54,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandManager.cs" />
     <Compile Include="DialogMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DialogMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="DocumentCommands.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,6 +95,9 @@
       <LastGenOutput>StringResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\ArchiverTableView.resx">
+      <DependentUpon>ArchiverTableView.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -105,13 +112,19 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="SchemaView.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="StringResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>StringResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ArchiverTableView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\DocumentView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\SchemaView.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="WindowManager.cs" />
   </ItemGroup>
@@ -119,6 +132,10 @@
     <None Include="Resources\open_file.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Archiver\Archiver.csproj">
+      <Project>{0BD3A946-E95E-46B7-A0B2-F89C2B03A5F9}</Project>
+      <Name>Archiver</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{A3D91CED-553F-4433-AD67-8706E0127D8D}</Project>
       <Name>Common</Name>
@@ -131,13 +148,16 @@
     <None Include="Resources\stop.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\db_table.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\zoom_in.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\zoom_out.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\refresh.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

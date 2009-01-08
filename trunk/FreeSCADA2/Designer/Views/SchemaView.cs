@@ -241,9 +241,6 @@ namespace FreeSCADA.Designer.Views
             }
         }
 
-
-       
-
         private void CreateToolList()
         {
             System.Drawing.Bitmap blankBitmap = new System.Drawing.Bitmap(10, 10);

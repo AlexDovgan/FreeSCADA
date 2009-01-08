@@ -3,10 +3,11 @@ using System.Windows.Media;
 using FreeSCADA.Common;
 using FreeSCADA.Common.Schema;
 using WeifenLuo.WinFormsUI.Docking;
+using FreeSCADA.RunTime.DocumentCommands;
 
-namespace FreeSCADA.RunTime
+namespace FreeSCADA.RunTime.Views
 {
-	class SchemaView : DockContent
+	class SchemaView : DocumentView
 	{
 		private WPFShemaContainer wpfSchemaContainer;
         private ScaleTransform SchemaScale = new ScaleTransform();
@@ -15,6 +16,11 @@ namespace FreeSCADA.RunTime
 		public SchemaView()
 		{
 			InitializeComponent();
+
+			DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.ViewCommands), CommandManager.viewContext));    // Separator
+			DocumentCommands.Add(new CommandInfo(new ZoomLevelCommand(), CommandManager.viewContext));
+			DocumentCommands.Add(new CommandInfo(new ZoomOutCommand(), CommandManager.viewContext));
+			DocumentCommands.Add(new CommandInfo(new ZoomInCommand(), CommandManager.viewContext));
 		}
 
 		private void InitializeComponent()
@@ -50,7 +56,7 @@ namespace FreeSCADA.RunTime
             get { return document; }
 			set
 			{
-				TabText = value.Name;
+				DocumentName = value.Name;
                 document = value;
                 wpfSchemaContainer.View = document.MainCanvas;
       		}
@@ -66,16 +72,28 @@ namespace FreeSCADA.RunTime
 			return true;
 		}
 
-        public void OnActivated()
+        public override void OnActivated()
         {
+			base.OnActivated();
+
+			foreach (CommandInfo cmdInfo in DocumentCommands)
+			{
+				if (cmdInfo.command is BaseDocumentCommand)
+				{
+					BaseDocumentCommand cmd = (BaseDocumentCommand)cmdInfo.command;
+					cmd.ControlledObject = this;
+				}
+			}
+
             // Scroll to saved position
             System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
             msv.ScrollToVerticalOffset(SavedScrollPosition.Y);
             msv.ScrollToHorizontalOffset(SavedScrollPosition.X);
         }
 
-        public void OnDeactivated()
+		public override void OnDeactivated()
         {
+			base.OnDeactivated();
             // Save scroll position
             if (wpfSchemaContainer != null)
             {
@@ -109,7 +127,8 @@ namespace FreeSCADA.RunTime
             Schema.MainCanvas.LayoutTransform = SchemaScale;
             msv.ScrollToVerticalOffset(msv.VerticalOffset * 1.05 + center.Y* 0.05);
             msv.ScrollToHorizontalOffset(msv.HorizontalOffset * 1.05 + center.X * 0.05);
-            (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
+
+			UpdateZoomLevel();
         }
 
         public void ZoomOut()
@@ -125,8 +144,18 @@ namespace FreeSCADA.RunTime
             Schema.MainCanvas.LayoutTransform = SchemaScale;
             msv.ScrollToVerticalOffset(msv.VerticalOffset / 1.05 - center.Y * 0.05);
             msv.ScrollToHorizontalOffset(msv.HorizontalOffset / 1.05 - center.X* 0.05);
-            (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt(SchemaScale.ScaleX);
+
+			UpdateZoomLevel();
         }
+
+		private void UpdateZoomLevel()
+		{
+			foreach (CommandInfo cmdInfo in DocumentCommands)
+			{
+				if (cmdInfo.command is ZoomLevelCommand)
+					(cmdInfo.command as ZoomLevelCommand).Level = SchemaScale.ScaleX;
+			}
+		}
 
         public double ZoomLevel
         {
