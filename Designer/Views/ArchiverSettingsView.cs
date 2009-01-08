@@ -145,6 +145,7 @@ namespace FreeSCADA.Designer.Views
 			this.rulesList.UseCompatibleStateImageBehavior = false;
 			this.rulesList.View = System.Windows.Forms.View.Details;
 			this.rulesList.Resize += new System.EventHandler(this.rulesList_Resize);
+			this.rulesList.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.rulesList_ItemChecked);
 			this.rulesList.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.rulesList_AfterLabelEdit);
 			this.rulesList.SelectedIndexChanged += new System.EventHandler(this.rulesList_SelectedIndexChanged);
 			this.rulesList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rulesList_KeyDown);
@@ -434,6 +435,7 @@ namespace FreeSCADA.Designer.Views
 		private void newRuleButton_Click(object sender, System.EventArgs e)
 		{
 			ArchiverMain.Current.ChannelsSettings.AddRule(new Rule());
+			ArchiverMain.Current.ChannelsSettings.Save();
 			RefreshRulesList();
 			rulesList.SelectedItems.Clear();
 			rulesList.Items[rulesList.Items.Count - 1].Selected = true;
@@ -443,7 +445,10 @@ namespace FreeSCADA.Designer.Views
 		{
 			Rule rule = e.Item.Tag as Rule;
 			if (rule != null)
+			{
 				rule.Enable = e.Item.Checked;
+				ArchiverMain.Current.ChannelsSettings.Save();
+			}
 		}
 
 		private void rulesList_AfterLabelEdit(object sender, LabelEditEventArgs e)
@@ -453,7 +458,10 @@ namespace FreeSCADA.Designer.Views
 
 			Rule rule = rulesList.Items[e.Item].Tag as Rule;
 			if (rule != null && e.Label != null)
+			{
 				rule.Name = e.Label;
+				ArchiverMain.Current.ChannelsSettings.Save();
+			}
 		}
 
 		private void rulesList_KeyDown(object sender, KeyEventArgs e)
@@ -487,6 +495,7 @@ namespace FreeSCADA.Designer.Views
 			if (rule != null)
 			{
 				rule.Channels.Add(channel);
+				ArchiverMain.Current.ChannelsSettings.Save();
 				RefreshChannelsList();
 			}
 		}
@@ -530,7 +539,10 @@ namespace FreeSCADA.Designer.Views
 
 			Rule rule = rulesList.SelectedItems[0].Tag as Rule;
 			if (rule != null)
+			{
 				rule.Conditions = conditions;
+				ArchiverMain.Current.ChannelsSettings.Save();
+			}
 		}
 
 		private void addChannelButton_Click(object sender, EventArgs e)
@@ -550,6 +562,7 @@ namespace FreeSCADA.Designer.Views
 						rule.Channels.Add(channel);
 					}
 				}
+				ArchiverMain.Current.ChannelsSettings.Save();
 				RefreshChannelsList();
 			}
 		}
@@ -563,6 +576,8 @@ namespace FreeSCADA.Designer.Views
 			foreach (Rule rule in rulesToRemove)
 				ArchiverMain.Current.ChannelsSettings.Rules.Remove(rule);
 
+			ArchiverMain.Current.ChannelsSettings.Save();
+
 			RefreshRulesList();
 		}
 
@@ -574,6 +589,7 @@ namespace FreeSCADA.Designer.Views
 
 				Rule rule = rulesList.SelectedItems[0].Tag as Rule;
 				rule.Channels.Remove(channelToRemove.channel);
+				ArchiverMain.Current.ChannelsSettings.Save();
 				RefreshChannelsList();
 			}
 		}

@@ -34,9 +34,8 @@
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.runButton = new System.Windows.Forms.ToolStripButton();
 			this.stopButton = new System.Windows.Forms.ToolStripButton();
-			this.zoomOutButton = new System.Windows.Forms.ToolStripButton();
-			this.zoomInButton = new System.Windows.Forms.ToolStripButton();
-			this.zoomLevelComboBox = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+			this.showTableButton = new System.Windows.Forms.ToolStripButton();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.mainMenu = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,28 +43,11 @@
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+			this.viewSubMenu = new System.Windows.Forms.ToolStripMenuItem();
 			toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.mainToolbar.SuspendLayout();
 			this.mainMenu.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// mainToolbar
-			// 
-			this.mainToolbar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-			this.mainToolbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            toolStripButton1,
-            this.refreshButton,
-            this.toolStripSeparator1,
-            this.runButton,
-            this.stopButton,
-            this.zoomOutButton,
-            this.zoomInButton,
-            this.zoomLevelComboBox});
-			this.mainToolbar.Location = new System.Drawing.Point(0, 24);
-			this.mainToolbar.Name = "mainToolbar";
-			this.mainToolbar.Size = new System.Drawing.Size(513, 25);
-			this.mainToolbar.TabIndex = 9;
-			this.mainToolbar.Text = "mainToolbar";
 			// 
 			// toolStripButton1
 			// 
@@ -76,6 +58,23 @@
 			toolStripButton1.Size = new System.Drawing.Size(23, 22);
 			toolStripButton1.Text = "Open Project";
 			toolStripButton1.Click += new System.EventHandler(this.OnLoadProjectClick);
+			// 
+			// mainToolbar
+			// 
+			this.mainToolbar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			this.mainToolbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            toolStripButton1,
+            this.refreshButton,
+            this.toolStripSeparator1,
+            this.runButton,
+            this.stopButton,
+            this.toolStripSeparator4,
+            this.showTableButton});
+			this.mainToolbar.Location = new System.Drawing.Point(0, 24);
+			this.mainToolbar.Name = "mainToolbar";
+			this.mainToolbar.Size = new System.Drawing.Size(513, 25);
+			this.mainToolbar.TabIndex = 9;
+			this.mainToolbar.Text = "mainToolbar";
 			// 
 			// refreshButton
 			// 
@@ -113,37 +112,20 @@
 			this.stopButton.Text = "Stop Project";
 			this.stopButton.Click += new System.EventHandler(this.OnStopClick);
 			// 
-			// zoomOutButton
+			// toolStripSeparator4
 			// 
-			this.zoomOutButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.zoomOutButton.Image = global::FreeSCADA.RunTime.Properties.Resources.zoom_out;
-			this.zoomOutButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.zoomOutButton.Name = "zoomOutButton";
-			this.zoomOutButton.Size = new System.Drawing.Size(23, 22);
-			this.zoomOutButton.Text = "Zoom Out";
-			this.zoomOutButton.Click += new System.EventHandler(this.zoomOutButton_Click);
+			this.toolStripSeparator4.Name = "toolStripSeparator4";
+			this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
 			// 
-			// zoomInButton
+			// showTableButton
 			// 
-			this.zoomInButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.zoomInButton.Image = global::FreeSCADA.RunTime.Properties.Resources.zoom_in;
-			this.zoomInButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.zoomInButton.Name = "zoomInButton";
-			this.zoomInButton.Size = new System.Drawing.Size(23, 22);
-			this.zoomInButton.Text = "Zoom In";
-			this.zoomInButton.Click += new System.EventHandler(this.zoomInButton_Click);
-			// 
-			// zoomLevelComboBox
-			// 
-			this.zoomLevelComboBox.Items.AddRange(new object[] {
-            "Home (100%)",
-            "50%",
-            "150%"});
-			this.zoomLevelComboBox.Name = "zoomLevelComboBox";
-			this.zoomLevelComboBox.Size = new System.Drawing.Size(121, 25);
-			this.zoomLevelComboBox.ToolTipText = "Zoom Level";
-			this.zoomLevelComboBox.SelectedIndexChanged += new System.EventHandler(this.zoomLevelComboBox_SelectedIndexChanged);
-			this.zoomLevelComboBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.zoomLevelComboBox_KeyUp);
+			this.showTableButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.showTableButton.Image = global::FreeSCADA.RunTime.Properties.Resources.db_table;
+			this.showTableButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.showTableButton.Name = "showTableButton";
+			this.showTableButton.Size = new System.Drawing.Size(23, 22);
+			this.showTableButton.Text = "toolStripButton2";
+			this.showTableButton.Click += new System.EventHandler(this.showTableButton_Click);
 			// 
 			// statusStrip1
 			// 
@@ -156,7 +138,8 @@
 			// mainMenu
 			// 
 			this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.viewSubMenu});
 			this.mainMenu.Location = new System.Drawing.Point(0, 0);
 			this.mainMenu.Name = "mainMenu";
 			this.mainMenu.Size = new System.Drawing.Size(513, 24);
@@ -208,6 +191,12 @@
 			this.dockPanel.Size = new System.Drawing.Size(513, 275);
 			this.dockPanel.TabIndex = 10;
 			// 
+			// viewSubMenu
+			// 
+			this.viewSubMenu.Name = "viewSubMenu";
+			this.viewSubMenu.Size = new System.Drawing.Size(44, 20);
+			this.viewSubMenu.Text = "View";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -242,11 +231,11 @@
 		private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel;
 		private System.Windows.Forms.ToolStripButton runButton;
 		private System.Windows.Forms.ToolStripButton stopButton;
-        private System.Windows.Forms.ToolStripButton zoomOutButton;
-        private System.Windows.Forms.ToolStripButton zoomInButton;
-        private System.Windows.Forms.ToolStripComboBox zoomLevelComboBox;
         private System.Windows.Forms.ToolStripButton refreshButton;
 		private System.Windows.Forms.ToolStrip mainToolbar;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+		private System.Windows.Forms.ToolStripButton showTableButton;
+		private System.Windows.Forms.ToolStripMenuItem viewSubMenu;
 	}
 }
 

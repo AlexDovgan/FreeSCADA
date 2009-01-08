@@ -50,6 +50,7 @@
 			this.connectionStringLabel = new System.Windows.Forms.Label();
 			this.connectionStringBox = new System.Windows.Forms.TextBox();
 			this.browseFileButton = new System.Windows.Forms.Button();
+			this.disableAchivation = new System.Windows.Forms.RadioButton();
 			this.SuspendLayout();
 			// 
 			// okButton
@@ -77,12 +78,10 @@
 			// dbType1
 			// 
 			this.dbType1.AutoSize = true;
-			this.dbType1.Checked = true;
-			this.dbType1.Location = new System.Drawing.Point(13, 13);
+			this.dbType1.Location = new System.Drawing.Point(12, 35);
 			this.dbType1.Name = "dbType1";
 			this.dbType1.Size = new System.Drawing.Size(165, 17);
 			this.dbType1.TabIndex = 0;
-			this.dbType1.TabStop = true;
 			this.dbType1.Text = "Embedded database (SQLite)";
 			this.dbType1.UseVisualStyleBackColor = true;
 			this.dbType1.CheckedChanged += new System.EventHandler(this.OnDbTypeUpdated);
@@ -90,7 +89,7 @@
 			// dbType2
 			// 
 			this.dbType2.AutoSize = true;
-			this.dbType2.Location = new System.Drawing.Point(13, 80);
+			this.dbType2.Location = new System.Drawing.Point(12, 102);
 			this.dbType2.Name = "dbType2";
 			this.dbType2.Size = new System.Drawing.Size(113, 17);
 			this.dbType2.TabIndex = 1;
@@ -101,7 +100,7 @@
 			// fileNameLabel
 			// 
 			this.fileNameLabel.AutoSize = true;
-			this.fileNameLabel.Location = new System.Drawing.Point(32, 37);
+			this.fileNameLabel.Location = new System.Drawing.Point(31, 59);
 			this.fileNameLabel.Name = "fileNameLabel";
 			this.fileNameLabel.Size = new System.Drawing.Size(52, 13);
 			this.fileNameLabel.TabIndex = 3;
@@ -111,7 +110,7 @@
 			// 
 			this.fileNameBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.fileNameBox.Location = new System.Drawing.Point(35, 54);
+			this.fileNameBox.Location = new System.Drawing.Point(34, 76);
 			this.fileNameBox.Name = "fileNameBox";
 			this.fileNameBox.Size = new System.Drawing.Size(604, 20);
 			this.fileNameBox.TabIndex = 4;
@@ -119,7 +118,7 @@
 			// providerLabel1
 			// 
 			this.providerLabel1.AutoSize = true;
-			this.providerLabel1.Location = new System.Drawing.Point(35, 104);
+			this.providerLabel1.Location = new System.Drawing.Point(34, 126);
 			this.providerLabel1.Name = "providerLabel1";
 			this.providerLabel1.Size = new System.Drawing.Size(47, 13);
 			this.providerLabel1.TabIndex = 6;
@@ -131,7 +130,7 @@
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.providerCombo1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.providerCombo1.FormattingEnabled = true;
-			this.providerCombo1.Location = new System.Drawing.Point(38, 121);
+			this.providerCombo1.Location = new System.Drawing.Point(37, 143);
 			this.providerCombo1.Name = "providerCombo1";
 			this.providerCombo1.Size = new System.Drawing.Size(630, 21);
 			this.providerCombo1.TabIndex = 7;
@@ -139,7 +138,7 @@
 			// serverLabel
 			// 
 			this.serverLabel.AutoSize = true;
-			this.serverLabel.Location = new System.Drawing.Point(38, 149);
+			this.serverLabel.Location = new System.Drawing.Point(37, 171);
 			this.serverLabel.Name = "serverLabel";
 			this.serverLabel.Size = new System.Drawing.Size(39, 13);
 			this.serverLabel.TabIndex = 8;
@@ -147,7 +146,7 @@
 			// 
 			// serverBox
 			// 
-			this.serverBox.Location = new System.Drawing.Point(41, 166);
+			this.serverBox.Location = new System.Drawing.Point(40, 188);
 			this.serverBox.Name = "serverBox";
 			this.serverBox.Size = new System.Drawing.Size(137, 20);
 			this.serverBox.TabIndex = 9;
@@ -155,7 +154,7 @@
 			// dbNameLabel
 			// 
 			this.dbNameLabel.AutoSize = true;
-			this.dbNameLabel.Location = new System.Drawing.Point(38, 189);
+			this.dbNameLabel.Location = new System.Drawing.Point(37, 211);
 			this.dbNameLabel.Name = "dbNameLabel";
 			this.dbNameLabel.Size = new System.Drawing.Size(82, 13);
 			this.dbNameLabel.TabIndex = 10;
@@ -163,7 +162,7 @@
 			// 
 			// dbNameBox
 			// 
-			this.dbNameBox.Location = new System.Drawing.Point(41, 205);
+			this.dbNameBox.Location = new System.Drawing.Point(40, 227);
 			this.dbNameBox.Name = "dbNameBox";
 			this.dbNameBox.Size = new System.Drawing.Size(137, 20);
 			this.dbNameBox.TabIndex = 11;
@@ -172,7 +171,7 @@
 			// 
 			this.userLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.userLabel.AutoSize = true;
-			this.userLabel.Location = new System.Drawing.Point(378, 149);
+			this.userLabel.Location = new System.Drawing.Point(377, 171);
 			this.userLabel.Name = "userLabel";
 			this.userLabel.Size = new System.Drawing.Size(29, 13);
 			this.userLabel.TabIndex = 12;
@@ -181,7 +180,7 @@
 			// userBox
 			// 
 			this.userBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.userBox.Location = new System.Drawing.Point(381, 166);
+			this.userBox.Location = new System.Drawing.Point(380, 188);
 			this.userBox.Name = "userBox";
 			this.userBox.Size = new System.Drawing.Size(100, 20);
 			this.userBox.TabIndex = 13;
@@ -190,7 +189,7 @@
 			// 
 			this.passwordLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.passwordLabel.AutoSize = true;
-			this.passwordLabel.Location = new System.Drawing.Point(378, 189);
+			this.passwordLabel.Location = new System.Drawing.Point(377, 211);
 			this.passwordLabel.Name = "passwordLabel";
 			this.passwordLabel.Size = new System.Drawing.Size(53, 13);
 			this.passwordLabel.TabIndex = 14;
@@ -199,7 +198,7 @@
 			// passwordBox
 			// 
 			this.passwordBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.passwordBox.Location = new System.Drawing.Point(381, 205);
+			this.passwordBox.Location = new System.Drawing.Point(380, 227);
 			this.passwordBox.Name = "passwordBox";
 			this.passwordBox.Size = new System.Drawing.Size(100, 20);
 			this.passwordBox.TabIndex = 15;
@@ -207,7 +206,7 @@
 			// dbType3
 			// 
 			this.dbType3.AutoSize = true;
-			this.dbType3.Location = new System.Drawing.Point(13, 231);
+			this.dbType3.Location = new System.Drawing.Point(12, 253);
 			this.dbType3.Name = "dbType3";
 			this.dbType3.Size = new System.Drawing.Size(172, 17);
 			this.dbType3.TabIndex = 2;
@@ -218,7 +217,7 @@
 			// providerLabel2
 			// 
 			this.providerLabel2.AutoSize = true;
-			this.providerLabel2.Location = new System.Drawing.Point(35, 255);
+			this.providerLabel2.Location = new System.Drawing.Point(34, 277);
 			this.providerLabel2.Name = "providerLabel2";
 			this.providerLabel2.Size = new System.Drawing.Size(47, 13);
 			this.providerLabel2.TabIndex = 16;
@@ -230,7 +229,7 @@
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.providerCombo2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.providerCombo2.FormattingEnabled = true;
-			this.providerCombo2.Location = new System.Drawing.Point(38, 272);
+			this.providerCombo2.Location = new System.Drawing.Point(37, 294);
 			this.providerCombo2.Name = "providerCombo2";
 			this.providerCombo2.Size = new System.Drawing.Size(630, 21);
 			this.providerCombo2.TabIndex = 17;
@@ -238,7 +237,7 @@
 			// connectionStringLabel
 			// 
 			this.connectionStringLabel.AutoSize = true;
-			this.connectionStringLabel.Location = new System.Drawing.Point(38, 300);
+			this.connectionStringLabel.Location = new System.Drawing.Point(37, 322);
 			this.connectionStringLabel.Name = "connectionStringLabel";
 			this.connectionStringLabel.Size = new System.Drawing.Size(91, 13);
 			this.connectionStringLabel.TabIndex = 18;
@@ -249,21 +248,33 @@
 			this.connectionStringBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.connectionStringBox.Location = new System.Drawing.Point(38, 317);
+			this.connectionStringBox.Location = new System.Drawing.Point(37, 339);
 			this.connectionStringBox.Multiline = true;
 			this.connectionStringBox.Name = "connectionStringBox";
-			this.connectionStringBox.Size = new System.Drawing.Size(630, 74);
+			this.connectionStringBox.Size = new System.Drawing.Size(630, 54);
 			this.connectionStringBox.TabIndex = 19;
 			// 
 			// browseFileButton
 			// 
 			this.browseFileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.browseFileButton.Location = new System.Drawing.Point(641, 54);
+			this.browseFileButton.Location = new System.Drawing.Point(640, 76);
 			this.browseFileButton.Name = "browseFileButton";
 			this.browseFileButton.Size = new System.Drawing.Size(27, 20);
 			this.browseFileButton.TabIndex = 5;
 			this.browseFileButton.Text = "...";
 			this.browseFileButton.UseVisualStyleBackColor = true;
+			// 
+			// disableAchivation
+			// 
+			this.disableAchivation.AutoSize = true;
+			this.disableAchivation.Checked = true;
+			this.disableAchivation.Location = new System.Drawing.Point(12, 12);
+			this.disableAchivation.Name = "disableAchivation";
+			this.disableAchivation.Size = new System.Drawing.Size(126, 17);
+			this.disableAchivation.TabIndex = 0;
+			this.disableAchivation.Text = "Don\'t use archivation";
+			this.disableAchivation.UseVisualStyleBackColor = true;
+			this.disableAchivation.CheckedChanged += new System.EventHandler(this.OnDbTypeUpdated);
 			// 
 			// DatabaseSettingsForm
 			// 
@@ -289,6 +300,7 @@
 			this.Controls.Add(this.fileNameLabel);
 			this.Controls.Add(this.dbType3);
 			this.Controls.Add(this.dbType2);
+			this.Controls.Add(this.disableAchivation);
 			this.Controls.Add(this.dbType1);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.okButton);
@@ -327,5 +339,6 @@
 		private System.Windows.Forms.Label connectionStringLabel;
 		private System.Windows.Forms.TextBox connectionStringBox;
 		private System.Windows.Forms.Button browseFileButton;
+		private System.Windows.Forms.RadioButton disableAchivation;
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using FreeSCADA.Common;
+using FreeSCADA.RunTime.Views;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace FreeSCADA.RunTime
@@ -10,10 +11,10 @@ namespace FreeSCADA.RunTime
     {
 		WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel;
 
-		List<DockContent> documentViews = new List<DockContent>();
+		List<DocumentView> documentViews = new List<DocumentView>();
 		ProjectContentView projectContentView;
 
-        DockContent currentDocument;
+		DocumentView currentDocument;
 
 		public WindowManager(DockPanel dockPanel)
 		{
@@ -31,7 +32,7 @@ namespace FreeSCADA.RunTime
 		{
             while (documentViews.Count > 0)
             {
-                DockContent doc = documentViews[0];
+				DocumentView doc = documentViews[0];
                 doc.Close();
                 documentViews.Remove(doc);
             }
@@ -42,7 +43,7 @@ namespace FreeSCADA.RunTime
 
 		void OnDocumentWindowClosing(object sender, FormClosingEventArgs e)
 		{
-			DockContent doc = (DockContent)sender;
+			DocumentView doc = (DocumentView)sender;
 
             doc.FormClosing -= new FormClosingEventHandler(OnDocumentWindowClosing);
 			documentViews.Remove(doc);           
@@ -63,21 +64,18 @@ namespace FreeSCADA.RunTime
 
 			documentViews.Add(view);
 			view.Show(dockPanel, DockState.Document);
-            currentDocument = (DockContent)dockPanel.ActiveDocument;
+			currentDocument = (DocumentView)dockPanel.ActiveDocument;
         }
 
         void OnActiveDocumentChanged(object sender, EventArgs e)
         {
-            if (currentDocument != null)
-                (currentDocument as SchemaView).OnDeactivated();
-            currentDocument = (DockContent)dockPanel.ActiveDocument;
-            if (currentDocument == null)
-                (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt(1.0);
-            else
-            {
-                (Env.Current.MainWindow as MainForm).zoomLevelComboBox_SetZoomLevelTxt((currentDocument as SchemaView).ZoomLevel);
-                (currentDocument as SchemaView).OnActivated();
-            }
+			if (currentDocument != null)
+				currentDocument.OnDeactivated();
+
+			currentDocument = (DocumentView)dockPanel.ActiveDocument;
+
+			if (currentDocument != null)
+				currentDocument.OnActivated();
         }
 
         /// <summary>
@@ -110,24 +108,22 @@ namespace FreeSCADA.RunTime
             return true;
         }
 
-        public void zoom_in()
-        {
-            if (currentDocument != null) ((SchemaView)currentDocument).ZoomIn();
-        }
+		public void ShowArchiverTable()
+		{
+			foreach (DockContent doc in documentViews)
+			{
+				if (doc is ArchiverTableView)
+				{
+					doc.Activate();
+					return;
+				}
+			}
 
-        public void zoom_out()
-        {
-            if (currentDocument != null) ((SchemaView)currentDocument).ZoomOut();
-        }
+			ArchiverTableView view = new ArchiverTableView();
+			view.Show(dockPanel, DockState.Document);
 
-        public void zoom_level(double level)
-        {
-            if (currentDocument != null) ((SchemaView)currentDocument).ZoomLevel = level;
-        }
-
-        public void SetCurrentDocumentFocus()
-        {
-            if (currentDocument != null) currentDocument.Focus();
-        }
+			view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
+			documentViews.Add(view);
+		}
     }
 }
