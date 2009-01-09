@@ -96,7 +96,7 @@ namespace FreeSCADA.Archiver
 			{
 				for (; ; )
 				{
-					System.Console.WriteLine("{0} ChannelUpdaterThreadProc: Start loop", System.DateTime.Now);
+					//System.Console.WriteLine("{0} ChannelUpdaterThreadProc: Start loop", System.DateTime.Now);
 					foreach (Rule rule in self.channelSettings.Rules)
 					{
 						if (rule.Enable)

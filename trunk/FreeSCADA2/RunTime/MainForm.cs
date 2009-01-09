@@ -27,6 +27,9 @@ namespace FreeSCADA.RunTime
             InitializeComponent();
 			Env.Initialize(this, mainMenu, mainToolbar, FreeSCADA.Interfaces.EnvironmentMode.Runtime);
 			ArchiverMain.Initialize();
+
+			CommandManager.viewContext = new BaseCommandContext(viewSubMenu.DropDown, mainToolbar);
+
             windowManager = new WindowManager(dockPanel);
             if (fileToLoad != "")
                 windowManager.LoadProject(fileToLoad);
