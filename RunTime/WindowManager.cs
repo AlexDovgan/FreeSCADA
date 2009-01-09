@@ -24,6 +24,7 @@ namespace FreeSCADA.RunTime
 			projectContentView = new ProjectContentView();
 			projectContentView.Show(dockPanel, DockState.DockLeft);
 			projectContentView.OpenEntity += new ProjectContentView.OpenEntityHandler(OnOpenProjectEntity);
+
             //Connect Windows Manager to heleper events
             dockPanel.ActiveDocumentChanged += new EventHandler(OnActiveDocumentChanged);
         }
@@ -108,22 +109,47 @@ namespace FreeSCADA.RunTime
             return true;
         }
 
-		public void ShowArchiverTable()
+		public void ShowQueryView()
 		{
-			foreach (DockContent doc in documentViews)
+			foreach (DockContent view in dockPanel.Contents)
 			{
-				if (doc is ArchiverTableView)
+				if (view is QueryView)
 				{
-					doc.Activate();
+					view.Activate();
 					return;
 				}
 			}
 
-			ArchiverTableView view = new ArchiverTableView();
-			view.Show(dockPanel, DockState.Document);
+			QueryView queryView = new QueryView();
+			queryView.Show(dockPanel, DockState.DockRight);
+			dockPanel.DockRightPortion = (double)(queryView.MinimumSize.Width + 4) / dockPanel.Size.Width;
 
-			view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
-			documentViews.Add(view);
+			queryView.FormClosed += new FormClosedEventHandler(OnQueryViewClosed);
+			queryView.OpenTableView += new QueryView.OpenTableViewHandler(OnOpenTableView);
+		}
+
+		void OnOpenTableView(QueryInfo query)
+		{
+			Application.UseWaitCursor = true;
+			Application.DoEvents();
+
+			ArchiverTableView view = new ArchiverTableView();
+			if (view.Open(query) == true)
+			{
+				view.Show(dockPanel, DockState.Document);
+				view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
+				documentViews.Add(view);
+			}
+
+			Application.UseWaitCursor = false;
+		}
+
+		void OnQueryViewClosed(object sender, FormClosedEventArgs e)
+		{
+			QueryView queryView = sender as QueryView;
+
+			queryView.FormClosed -= new FormClosedEventHandler(OnQueryViewClosed);
+			queryView.OpenTableView -= new QueryView.OpenTableViewHandler(OnOpenTableView);
 		}
     }
 }

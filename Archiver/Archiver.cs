@@ -1,6 +1,8 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Threading;
 using FreeSCADA.Common;
 using FreeSCADA.Interfaces;
 
@@ -174,5 +176,24 @@ namespace FreeSCADA.Archiver
 			return data;
 		}
 
+		public DataTable GetChannelData(DateTime from, DateTime to, List<ChannelInfo> channels)
+		{
+			string datePattern = "yyyy-MM-dd HH:mm:ss";
+			string query = "SELECT ChannelName, Time, Value FROM Channels WHERE ";
+			query += string.Format("Time >= '{0}' AND Time <= '{1}' ", from.ToString(datePattern), to.ToString(datePattern));
+			query += "AND (";
+			for(int i=0;i<channels.Count;i++)
+			{
+				ChannelInfo ch = channels[i];
+				query += string.Format("(PluginId='{0}' AND ChannelName='{1}')", ch.PluginId, ch.ChannelName);
+				if (i != channels.Count - 1)
+				{
+					query += " OR ";
+				}
+			}
+			query += ") ORDER BY Time;";
+
+			return GetDataTable(query);
+		}
 	}
 }

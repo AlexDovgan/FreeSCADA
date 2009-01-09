@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using FreeSCADA.Common;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace FreeSCADA.RunTime
+namespace FreeSCADA.RunTime.Views
 {
 	class ProjectContentView:DockContent
     {

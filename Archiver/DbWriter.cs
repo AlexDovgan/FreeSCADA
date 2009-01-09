@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Text;
-using FreeSCADA.Interfaces;
 using FreeSCADA.Common;
+using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Archiver
 {

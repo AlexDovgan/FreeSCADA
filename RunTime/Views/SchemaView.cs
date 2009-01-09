@@ -2,7 +2,6 @@
 using System.Windows.Media;
 using FreeSCADA.Common;
 using FreeSCADA.Common.Schema;
-using WeifenLuo.WinFormsUI.Docking;
 using FreeSCADA.RunTime.DocumentCommands;
 
 namespace FreeSCADA.RunTime.Views

@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using FreeSCADA.Archiver;
 using FreeSCADA.Common;
 
@@ -42,6 +41,8 @@ namespace FreeSCADA.RunTime
 				Text = StringResources.MainWindowName;
 			else
 				Text = string.Format(StringResources.MainWindowNameEx, Env.Current.Project.FileName);
+
+			showTableButton.Enabled = ArchiverMain.Current.DatabaseSettings.EnableArchiving;
 		}
 
 		private void OnLoadProjectClick(object sender, System.EventArgs e)
@@ -98,7 +99,7 @@ namespace FreeSCADA.RunTime
 
 		private void showTableButton_Click(object sender, System.EventArgs e)
 		{
-			windowManager.ShowArchiverTable();
+			windowManager.ShowQueryView();
 		}
     }
 }

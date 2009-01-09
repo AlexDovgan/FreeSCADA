@@ -68,7 +68,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="ProjectContentView.cs">
+    <Compile Include="Views\ProjectContentView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,7 +81,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProjectContentView.resx">
+    <EmbeddedResource Include="Views\ProjectContentView.resx">
       <DependentUpon>ProjectContentView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -97,6 +97,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ArchiverTableView.resx">
       <DependentUpon>ArchiverTableView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\QueryView.resx">
+      <DependentUpon>QueryView.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -121,6 +124,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\DocumentView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\QueryView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\SchemaView.cs">
