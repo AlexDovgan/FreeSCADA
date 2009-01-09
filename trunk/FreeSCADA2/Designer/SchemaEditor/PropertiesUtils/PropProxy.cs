@@ -92,14 +92,25 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                     "Name",
                     "ContentTemplate",
                     "Orientation",
-                    "Text"
+                    "Text",
+                    "ActionChannelName",
+                    "HelperObject",
+                    "MinChannelValue",
+                    "MaxChannelValue",
+                    "MinAngle",
+                    "MaxAngle"
+    
 
                     }
                         );
             IEnumerable<PropertyWrapper> ie;
-            ie = TypeDescriptor.GetProperties(controlledObject, attributes).Cast<PropertyDescriptor>()
+            if(controlledObject is System.Windows.DependencyObject)
+                ie = TypeDescriptor.GetProperties(controlledObject, attributes).Cast<PropertyDescriptor>()
                      .Where(x => DependencyPropertyDescriptor.FromProperty(x) != null
                          && props.Contains(x.Name) == true).Select<PropertyDescriptor,PropertyWrapper>(x=>new PropertyWrapper(controlledObject,x));
+            else
+                ie = TypeDescriptor.GetProperties(controlledObject, attributes).Cast<PropertyDescriptor>()
+                    .Select<PropertyDescriptor, PropertyWrapper>(x => new PropertyWrapper(controlledObject, x));
 
             return new PropertyDescriptorCollection(ie.ToArray());
         }

@@ -255,7 +255,16 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
         // drop down dialog, or no UI outside of the properties window.
         public override System.Drawing.Design.UITypeEditorEditStyle GetEditStyle(System.ComponentModel.ITypeDescriptorContext context)
         {
-            return UITypeEditorEditStyle.Modal;
+
+            PropertiesUtils.PropertyWrapper pw;
+            if ((pw = context.PropertyDescriptor as PropertiesUtils.PropertyWrapper) == null)
+                return UITypeEditorEditStyle.None;
+
+
+            if (pw.ControlledObject is DependencyObject)
+                return UITypeEditorEditStyle.Modal;
+            else
+                return UITypeEditorEditStyle.None;
         }
 
         // Displays the UI for value selection.
@@ -319,7 +328,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
             return value;
         }
-
+        
         public override void PaintValue(System.Drawing.Design.PaintValueEventArgs e)
         {
             PropertiesUtils.PropertyWrapper pw;
@@ -346,7 +355,15 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
         // representation of a property's value.
         public override bool GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context)
         {
-            return true;
+            PropertiesUtils.PropertyWrapper pw;
+            if ((pw = context.PropertyDescriptor as PropertiesUtils.PropertyWrapper) == null)
+                return false;
+
+
+            if (pw.ControlledObject is DependencyObject)
+                return true;
+            else
+                return false;
         }
     }
 

@@ -87,7 +87,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>mkdir  $(TargetDir)\SQLite
-xcopy $(SolutionDir)\3rdParty\SQLite $(TargetDir)\SQLite /S /R /Y</PostBuildEvent>
+    <PostBuildEvent>mkdir  "$(TargetDir)SQLite"
+xcopy "$(SolutionDir)3rdParty\SQLite" "$(TargetDir)SQLite" /S /R /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
