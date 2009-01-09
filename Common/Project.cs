@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 using ICSharpCode.SharpZipLib.Checksums;
 using ICSharpCode.SharpZipLib.Zip;
 
@@ -9,6 +10,8 @@ namespace FreeSCADA.Common
 {
 	public class Project
 	{
+		public const int CurrentVersion = 200;
+
 		Dictionary<string, byte[]> data = new Dictionary<string, byte[]>();
 		bool modifiedFlag = false;
 
@@ -40,6 +43,31 @@ namespace FreeSCADA.Common
         {
             set { fileName = value; }
         }
+
+		public int Version
+		{
+			get
+			{
+				using (System.IO.Stream ms = Env.Current.Project["version.info"])
+				{
+					if (ms == null || ms.Length == 0)
+						return CurrentVersion;
+
+					XmlSerializer serializer = new XmlSerializer(typeof(int));
+					return (int)serializer.Deserialize(ms);
+				}
+			}
+			internal set
+			{
+				using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
+				{
+					XmlSerializer serializer = new XmlSerializer(typeof(int));
+					serializer.Serialize(ms, CurrentVersion);
+
+					Env.Current.Project.SetData("version.info", ms);
+				}
+			}
+		}
 
    		public void Load(string fileName)
         {
@@ -79,6 +107,8 @@ namespace FreeSCADA.Common
 		{
 			if (System.IO.File.Exists(fileName))
 				System.IO.File.Delete(fileName);
+
+			Version = CurrentVersion; //Save version info
 
 			using (FileStream zipFileStream = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
 			using (ZipOutputStream zipOutput = new ZipOutputStream(zipFileStream))

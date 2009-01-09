@@ -263,6 +263,7 @@
 			this.browseFileButton.TabIndex = 5;
 			this.browseFileButton.Text = "...";
 			this.browseFileButton.UseVisualStyleBackColor = true;
+			this.browseFileButton.Click += new System.EventHandler(this.browseFileButton_Click);
 			// 
 			// disableAchivation
 			// 
@@ -272,6 +273,7 @@
 			this.disableAchivation.Name = "disableAchivation";
 			this.disableAchivation.Size = new System.Drawing.Size(126, 17);
 			this.disableAchivation.TabIndex = 0;
+			this.disableAchivation.TabStop = true;
 			this.disableAchivation.Text = "Don\'t use archivation";
 			this.disableAchivation.UseVisualStyleBackColor = true;
 			this.disableAchivation.CheckedChanged += new System.EventHandler(this.OnDbTypeUpdated);

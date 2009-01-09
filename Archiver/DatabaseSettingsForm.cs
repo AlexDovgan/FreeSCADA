@@ -165,5 +165,18 @@ namespace FreeSCADA.Archiver
 				providerCombo2.SelectedIndex = provider;
 			}
 		}
+
+		private void browseFileButton_Click(object sender, EventArgs e)
+		{
+			SaveFileDialog fd = new SaveFileDialog();
+
+			fd.Filter = "Database files (*.db)|*.db|All files (*.*)|*.*";
+			fd.FilterIndex = 1;
+			fd.RestoreDirectory = true;
+			fd.OverwritePrompt = false;
+
+			if (fd.ShowDialog() == DialogResult.OK)
+				fileNameBox.Text = fd.FileName;
+		}
 	}
 }

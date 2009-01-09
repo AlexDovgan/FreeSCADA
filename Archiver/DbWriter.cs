@@ -73,7 +73,7 @@ namespace FreeSCADA.Archiver
 			}
 		}
 
-		public void WriteChannels(List<ChannelInfo> channels)
+		public bool WriteChannels(List<ChannelInfo> channels)
 		{
 			DbTransaction transaction = dbConnection.BeginTransaction();
 			DbCommand cmd = dbConnection.CreateCommand();
@@ -104,7 +104,15 @@ namespace FreeSCADA.Archiver
 				}
 			}
 
-			transaction.Commit();
+			try
+			{
+				transaction.Commit();
+			}
+			catch (System.Exception)
+			{
+				return false;
+			}
+			return true;
 		}
 	}
 }
