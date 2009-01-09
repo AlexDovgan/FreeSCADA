@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Data.Common;
 using System.Xml.Serialization;
 using FreeSCADA.Common;
-using System.Data.Common;
 
 namespace FreeSCADA.Archiver
 {

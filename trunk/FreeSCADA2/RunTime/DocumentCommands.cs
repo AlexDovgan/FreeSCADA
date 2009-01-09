@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Markup;
 using FreeSCADA.Common;
-using FreeSCADA.RunTime.Views;
 using FreeSCADA.Interfaces;
+using FreeSCADA.RunTime.Views;
 
 
 namespace FreeSCADA.RunTime.DocumentCommands
