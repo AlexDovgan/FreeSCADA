@@ -19,5 +19,10 @@ namespace FreeSCADA.Communication.MODBUSPlug
         {
 
         }
+
+        private void OKButton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

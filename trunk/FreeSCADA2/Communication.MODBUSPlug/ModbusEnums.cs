@@ -1,15 +1,15 @@
 ﻿
 namespace FreeSCADA.Communication.MODBUSPlug
 {
-    enum ModbusStationType
+    public enum ModbusStationType
     {
         TCPMaster,
         TCPSlave,
         SerialMaster,
         SerialSlave
     }
-    
-    enum ModbusConversionType
+
+    public enum ModbusConversionType
     {
         SwapNone,
         SwapBytes,
@@ -22,5 +22,11 @@ namespace FreeSCADA.Communication.MODBUSPlug
         Integer,
         Unsigned,
         Float
+    }
+
+    public enum ModbusSerialType
+    {
+        RTU,
+        ASCII
     }
 }

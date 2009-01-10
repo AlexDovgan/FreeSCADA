@@ -23,20 +23,23 @@ namespace FreeSCADA.Communication.MODBUSPlug
             int retryCount = 3;
             try { retryCount = int.Parse(node.Attributes["retryCount"].Value); }
             catch { };
+            int failedCount = 20;
+            try { retryCount = int.Parse(node.Attributes["failedCount"].Value); }
+            catch { };
             switch (type)
             {
                 case "ModbusTCPClientStation":
                     string ipAddress = node.Attributes["ipAddress"].Value;
                     int tcpPort = int.Parse(node.Attributes["tcpPort"].Value);
-                    ist = CreateTCPClientStation(name, plugin, ipAddress, tcpPort, cycleTimeout, retryTimeout, retryCount);
+                    ist = CreateTCPClientStation(name, plugin, ipAddress, tcpPort, cycleTimeout, retryTimeout, retryCount, failedCount);
                     break;
             }
             return ist;
         }
 
-        public static IModbusStation CreateTCPClientStation(string name, Plugin plugin, string ipAddress, int tcpPort, int cycleTimeout, int retryTimeout, int retryCount)
+        public static IModbusStation CreateTCPClientStation(string name, Plugin plugin, string ipAddress, int tcpPort, int cycleTimeout, int retryTimeout, int retryCount, int failedCount)
 		{
-            return new ModbusTCPClientStation(name, plugin, ipAddress, tcpPort, cycleTimeout, retryTimeout, retryCount);
+            return new ModbusTCPClientStation(name, plugin, ipAddress, tcpPort, cycleTimeout, retryTimeout, retryCount, failedCount);
 		}
 
         public static void SaveStation(XmlElement node, IModbusStation stat)

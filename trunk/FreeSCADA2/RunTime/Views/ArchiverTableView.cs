@@ -81,6 +81,7 @@ namespace FreeSCADA.RunTime.Views
 			ThreadData data = (ThreadData)threadArgs;
 
 			DataTable dt = ArchiverMain.Current.GetChannelData(data.query.From, data.query.To, data.query.Channels);
+            if (dt == null) return;
 
 			object[] args = new object[1];
 			args[0] = dt;

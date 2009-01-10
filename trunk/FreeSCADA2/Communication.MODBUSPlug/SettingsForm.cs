@@ -64,6 +64,16 @@ namespace FreeSCADA.Communication.MODBUSPlug
                     stationGrid[rows[0], 2].Value = (stat as ModbusTCPClientStation).TCPPort;
                 }
             }
+            if (stat is ModbusSerialClientStation)
+            {
+                ModifySerialClientStationForm mtc = new ModifySerialClientStationForm((ModbusSerialClientStation)stat);
+                if (mtc.ShowDialog() == DialogResult.OK)
+                {
+                    stationGrid[rows[0], 0].Value = (stat as ModbusSerialClientStation).Name;
+                    stationGrid[rows[0], 1].Value = (stat as ModbusSerialClientStation).IPAddress;
+                    //stationGrid[rows[0], 2].Value = (stat as ModbusSerialClientStation).SerialPort;
+                }
+            }
         }
 
         private void AddTCPServerStation(ModbusTCPClientStation stat)
@@ -80,7 +90,21 @@ namespace FreeSCADA.Communication.MODBUSPlug
             stationGrid[row, 2].Editor = null;
         }
 
-		private void OnAddStation(object sender, EventArgs e)
+        private void AddSerialServerStation(ModbusSerialClientStation stat)
+        {
+            int row = stationGrid.RowsCount;
+            stationGrid.RowsCount++;
+            stationGrid[row, 0] = new SourceGrid.Cells.Cell(stat.Name);
+            stationGrid[row, 0].Tag = stat;
+            stationGrid[row, 0].Editor = null;
+            stationGrid[row, 1] = new SourceGrid.Cells.Cell(stat.IPAddress, typeof(string));
+            stationGrid[row, 2] = new SourceGrid.Cells.Cell(stat.SerialPort, typeof(int));
+            stationGrid[row, 0].Editor = null;
+            stationGrid[row, 1].Editor = null;
+            stationGrid[row, 2].Editor = null;
+        }
+
+        private void OnAddStation(object sender, EventArgs e)
 		{
             string var = GetUniqueStationName();
             int row = stationGrid.RowsCount;
@@ -94,13 +118,20 @@ namespace FreeSCADA.Communication.MODBUSPlug
                 switch ((ModbusStationType)asf.stationTypeComboBox.SelectedItem)
                 {
                     case ModbusStationType.TCPMaster:
-                        ModbusTCPClientStation stat = new ModbusTCPClientStation(var, plugin, ip, po, 100, 1000, 3);
+                        ModbusTCPClientStation stat = new ModbusTCPClientStation(var, plugin, ip, po, 100, 1000, 3, 20);
                         ModifyTCPClientStationForm mtc = new ModifyTCPClientStationForm(stat);
                         if (mtc.ShowDialog() == DialogResult.OK)
                         {
                             AddTCPServerStation(stat);
                             stationGrid.Selection.ResetSelection(true);
                             stationGrid.Selection.SelectRow(row, true);
+                        }
+                        break;
+                    case ModbusStationType.SerialMaster:
+                        ModbusSerialClientStation stat2 = new ModbusSerialClientStation(var, plugin, ip, po, 100, 1000, 3, 20);
+                        ModifySerialClientStationForm msc = new ModifySerialClientStationForm(stat2);
+                        if (msc.ShowDialog() == DialogResult.OK)
+                        {
                         }
                         break;
                 }
