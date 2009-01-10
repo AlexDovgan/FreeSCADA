@@ -125,14 +125,12 @@ namespace FreeSCADA.RunTime
 			dockPanel.DockRightPortion = (double)(queryView.MinimumSize.Width + 4) / dockPanel.Size.Width;
 
 			queryView.FormClosed += new FormClosedEventHandler(OnQueryViewClosed);
-			queryView.OpenTableView += new QueryView.OpenTableViewHandler(OnOpenTableView);
+			queryView.OpenTableView += new QueryView.ExecuteQueryHandler(OnOpenTableView);
+			queryView.OpenGraphView += new QueryView.ExecuteQueryHandler(OnOpenGraphView);
 		}
 
 		void OnOpenTableView(QueryInfo query)
 		{
-			Application.UseWaitCursor = true;
-			Application.DoEvents();
-
 			ArchiverTableView view = new ArchiverTableView();
 			if (view.Open(query) == true)
 			{
@@ -140,8 +138,17 @@ namespace FreeSCADA.RunTime
 				view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
 				documentViews.Add(view);
 			}
+		}
 
-			Application.UseWaitCursor = false;
+		void OnOpenGraphView(QueryInfo query)
+		{
+			ArchiverGraphView view = new ArchiverGraphView();
+			if (view.Open(query) == true)
+			{
+				view.Show(dockPanel, DockState.Document);
+				view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
+				documentViews.Add(view);
+			}
 		}
 
 		void OnQueryViewClosed(object sender, FormClosedEventArgs e)
@@ -149,7 +156,7 @@ namespace FreeSCADA.RunTime
 			QueryView queryView = sender as QueryView;
 
 			queryView.FormClosed -= new FormClosedEventHandler(OnQueryViewClosed);
-			queryView.OpenTableView -= new QueryView.OpenTableViewHandler(OnOpenTableView);
+			queryView.OpenTableView -= new QueryView.ExecuteQueryHandler(OnOpenTableView);
 		}
     }
 }

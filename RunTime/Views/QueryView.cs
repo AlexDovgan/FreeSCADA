@@ -34,8 +34,9 @@ namespace FreeSCADA.RunTime.Views
 		private Button showTrendsButton;
 		private TreeView channelTree;
 
-		public delegate void OpenTableViewHandler(QueryInfo query);
-		public event OpenTableViewHandler OpenTableView;
+		public delegate void ExecuteQueryHandler(QueryInfo query);
+		public event ExecuteQueryHandler OpenTableView;
+		public event ExecuteQueryHandler OpenGraphView;
 
 		public QueryView()
 		{
@@ -167,13 +168,13 @@ namespace FreeSCADA.RunTime.Views
 			// showTrendsButton
 			// 
 			this.showTrendsButton.Dock = System.Windows.Forms.DockStyle.Top;
-			this.showTrendsButton.Enabled = false;
 			this.showTrendsButton.Location = new System.Drawing.Point(0, 265);
 			this.showTrendsButton.Name = "showTrendsButton";
 			this.showTrendsButton.Size = new System.Drawing.Size(284, 23);
 			this.showTrendsButton.TabIndex = 4;
 			this.showTrendsButton.Text = "Show trends";
 			this.showTrendsButton.UseVisualStyleBackColor = true;
+			this.showTrendsButton.Click += new System.EventHandler(this.showTrendsButton_Click);
 			// 
 			// QueryView
 			// 
@@ -253,23 +254,40 @@ namespace FreeSCADA.RunTime.Views
 			}
 		}
 
+		private void showTrendsButton_Click(object sender, EventArgs e)
+		{
+			if (OpenGraphView != null)
+			{
+				QueryInfo queryInfo = new QueryInfo();
+
+				queryInfo.Channels = GetCheckedChannels();
+				queryInfo.From = dateTimePicker1.Value;
+				queryInfo.To = dateTimePicker2.Value;
+
+				if (queryInfo.Channels.Count > 0)
+					OpenGraphView(queryInfo);
+			}
+		}
+
 		private List<ChannelInfo> GetCheckedChannels()
 		{
 			List<ChannelInfo> channels = new List<ChannelInfo>();
 
 			foreach (TreeNode topNode in channelTree.Nodes)
 			{
-                if (topNode.Checked == true)
-                    foreach (TreeNode node in topNode.Nodes)
-                    {
-                        channels.Add(node.Tag as ChannelInfo);
-                    }
-                else
-                    foreach (TreeNode node in topNode.Nodes)
-				    {
-					    if (node.Checked == true)
-						    channels.Add(node.Tag as ChannelInfo);
-				    }
+				if (topNode.Checked == true)
+				{
+					foreach (TreeNode node in topNode.Nodes)
+						channels.Add(node.Tag as ChannelInfo);
+				}
+				else
+				{
+					foreach (TreeNode node in topNode.Nodes)
+					{
+						if (node.Checked == true)
+							channels.Add(node.Tag as ChannelInfo);
+					}
+				}
 			}
 			return channels;
 		}
