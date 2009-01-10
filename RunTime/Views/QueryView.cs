@@ -248,8 +248,8 @@ namespace FreeSCADA.RunTime.Views
 				queryInfo.Channels = GetCheckedChannels();
 				queryInfo.From = dateTimePicker1.Value;
 				queryInfo.To = dateTimePicker2.Value;
-
-				OpenTableView(queryInfo);
+                if (queryInfo.Channels.Count > 0)
+				    OpenTableView(queryInfo);
 			}
 		}
 
@@ -259,14 +259,20 @@ namespace FreeSCADA.RunTime.Views
 
 			foreach (TreeNode topNode in channelTree.Nodes)
 			{
-				foreach (TreeNode node in topNode.Nodes)
-				{
-					if (node.Checked == true)
-						channels.Add(node.Tag as ChannelInfo);
-				}
+                if (topNode.Checked == true)
+                    foreach (TreeNode node in topNode.Nodes)
+                    {
+                        channels.Add(node.Tag as ChannelInfo);
+                    }
+                else
+                    foreach (TreeNode node in topNode.Nodes)
+				    {
+					    if (node.Checked == true)
+						    channels.Add(node.Tag as ChannelInfo);
+				    }
 			}
 			return channels;
 		}
 	}
-  
+
 }

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BA67D037-F40A-49CE-97B3-91DDE4A44062}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -67,11 +67,12 @@
   <ItemGroup>
     <Compile Include="Channel.cs" />
     <Compile Include="ChannelFactory.cs" />
-    <Compile Include="ModifyTCPClientStationForm.cs">
+    <Compile Include="ModbusSerialClientStation.cs" />
+    <Compile Include="ModifySerialClientStationForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ModifyTCPClientStationForm.Designer.cs">
-      <DependentUpon>ModifyTCPClientStationForm.cs</DependentUpon>
+    <Compile Include="ModifySerialClientStationForm.Designer.cs">
+      <DependentUpon>ModifySerialClientStationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IModbusStation.cs" />
     <Compile Include="AddStationForm.cs">
@@ -79,6 +80,12 @@
     </Compile>
     <Compile Include="AddStationForm.Designer.cs">
       <DependentUpon>AddStationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ModifyTCPClientStationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ModifyTCPClientStationForm.Designer.cs">
+      <DependentUpon>ModifyTCPClientStationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="StationFactory.cs" />
     <Compile Include="ModbusEnums.cs" />
@@ -102,6 +109,10 @@
   <ItemGroup>
     <EmbeddedResource Include="AddStationForm.resx">
       <DependentUpon>AddStationForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModifySerialClientStationForm.resx">
+      <DependentUpon>ModifySerialClientStationForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ModifyTCPClientStationForm.resx">

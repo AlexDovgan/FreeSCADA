@@ -43,6 +43,7 @@
             this.OKButton.TabIndex = 0;
             this.OKButton.Text = "OK";
             this.OKButton.UseVisualStyleBackColor = true;
+            this.OKButton.Click += new System.EventHandler(this.OKButton_Click);
             // 
             // cancelButton
             // 
@@ -69,15 +70,16 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(81, 21);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(123, 13);
+            this.label1.Size = new System.Drawing.Size(200, 13);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Choose new station type";
+            this.label1.Text = "Choose Free SCADA communication role";
             // 
             // AddStationForm
             // 
             this.AcceptButton = this.OKButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(359, 125);
             this.ControlBox = false;
             this.Controls.Add(this.label1);
@@ -90,7 +92,8 @@
             this.Name = "AddStationForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "AddStationForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Add Communication Station";
             this.ResumeLayout(false);
             this.PerformLayout();
 

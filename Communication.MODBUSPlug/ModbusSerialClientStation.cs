@@ -8,7 +8,7 @@ using Modbus.Device;
 
 namespace FreeSCADA.Communication.MODBUSPlug
 {
-    public class ModbusTCPClientStation : IModbusStation
+    public class ModbusSerialClientStation : IModbusStation
     {
         private string name;
         private string ipAddress;
@@ -22,7 +22,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
         private List<ModbusBuffer> buffers = new List<ModbusBuffer>();
         Thread channelUpdaterThread;
 
-        public ModbusTCPClientStation(string name, Plugin plugin, string ipAddress, int tcpPort, int cycleTimeout, int retryTimeout, int retryCount, int failedCount)
+        public ModbusSerialClientStation(string name, Plugin plugin, string ipAddress, int tcpPort, int cycleTimeout, int retryTimeout, int retryCount, int failedCount)
         {
             this.name = name;
             this.plugin = plugin;
@@ -44,7 +44,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
             get { return ipAddress; }
             set { ipAddress = value; }
         }
-        public int TCPPort
+        public int SerialPort
         {
             get { return tcpPort; }
             set { tcpPort = value; }
@@ -147,7 +147,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
         {
             try
             {
-                ModbusTCPClientStation self = (ModbusTCPClientStation)obj;
+                ModbusSerialClientStation self = (ModbusSerialClientStation)obj;
                 for (; ; )
                 {
                     try
