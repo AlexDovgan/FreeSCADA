@@ -8,6 +8,19 @@ using ICSharpCode.SharpZipLib.Zip;
 
 namespace FreeSCADA.Common
 {
+    public enum ProjectEntityType
+    {
+        Schema,
+        Channel,
+        Bitmap,
+        Script,
+        Trend,
+        Report,
+        EventList,
+        AlarmList,
+        Archiver
+    }
+
 	public class Project
 	{
 		public const int CurrentVersion = 200;

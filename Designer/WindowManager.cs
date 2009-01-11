@@ -118,22 +118,47 @@ namespace FreeSCADA.Designer
             propertyBrowserView.ShowProperties(new Object());
         }
 
-		public void OnOpenProjectEntity(string name)
+        public void OnOpenProjectEntity(ProjectEntityType type, string name)
 		{
 			// Open your schema and other document types here by entity name
-            SchemaView view = new SchemaView();
-			if (view.LoadDocument(name) == false)
-			{
-				System.Windows.MessageBox.Show(DialogMessages.CannotLoadSchema,
-												DialogMessages.ErrorCaption,
-												System.Windows.MessageBoxButton.OK,
-												System.Windows.MessageBoxImage.Error);
-				return;
-			}
-            view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
-            view.SetCurrentTool += toolBoxView.OnSetCurrentTool;
-            documentViews.Add(view);
-            view.Show(dockPanel, DockState.Document);
+            DocumentView view = null;
+            switch (type)
+            {
+                case ProjectEntityType.Schema:
+                    foreach (DocumentView doc in documentViews)
+                    {
+                        if (doc is SchemaView)
+                        {
+                            if (doc.DocumentName == name)
+                            {
+                                doc.Activate();
+                                return;
+                            }
+                        }
+                    }
+                    view = new SchemaView();
+                    if (view == null || view.LoadDocument(name) == false)
+                    {
+                        System.Windows.MessageBox.Show(DialogMessages.CannotLoadSchema,
+                                                        DialogMessages.ErrorCaption,
+                                                        System.Windows.MessageBoxButton.OK,
+                                                        System.Windows.MessageBoxImage.Error);
+                        return;
+                    }
+                    view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
+                    view.SetCurrentTool += toolBoxView.OnSetCurrentTool;
+                    documentViews.Add(view);
+                    view.Show(dockPanel, DockState.Document);
+                    break;
+                case ProjectEntityType.Archiver:
+                    ShowArchiverSettings();
+                    break;
+                case ProjectEntityType.Script:
+                    break;
+                // etc....
+                default:
+                    break;
+            }
 		}
 
 		/// <summary>
