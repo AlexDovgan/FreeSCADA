@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using FreeSCADA.Common;
+using FreeSCADA.Archiver;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -12,7 +13,7 @@ namespace FreeSCADA.Designer.Views
 		/// Notify that user double clicked on some node
 		/// </summary>
 		/// <param name="entity_name">Full name of the node how it is in the project</param>
-		public delegate void OpenEntityHandler(string entity_name);
+        public delegate void OpenEntityHandler(ProjectEntityType entity_type, string entity_name);
 		/// <summary>Occurs when user double clicks a node from the list</summary>
 		public event OpenEntityHandler OpenEntity;
 
@@ -110,8 +111,15 @@ namespace FreeSCADA.Designer.Views
               
                 }
             }
+            TreeNode archivers = root.Nodes.Add(StringResources.ArchiverItemName);
+            foreach (Rule rule in ArchiverMain.Current.ChannelsSettings.Rules)
+            {
+                TreeNode chNode;
+                chNode = archivers.Nodes.Add(rule.Name);
+                //chNode.Tag = plugId;
 
-		}
+            }
+        }
 
 		void OnProjectLoad(object sender, EventArgs e)
 		{
@@ -125,9 +133,11 @@ namespace FreeSCADA.Designer.Views
 
 		private void OnNodeDblClick(object sender, TreeNodeMouseClickEventArgs e)
 		{
-            if (OpenEntity != null && e.Node.Tag!=null&& e.Node.Parent.Text=="Schemas")
-				OpenEntity((string)e.Node.Tag);
-		}
+            if (OpenEntity != null && e.Node.Tag != null && e.Node.Parent.Text == StringResources.SchemasItemName)
+                OpenEntity(ProjectEntityType.Schema, (string)e.Node.Tag);
+            else if (OpenEntity != null && (e.Node.Text == StringResources.ArchiverItemName || e.Node.Parent.Text == StringResources.ArchiverItemName))
+                OpenEntity(ProjectEntityType.Archiver, (string)e.Node.Text);
+        }
        
 	}
   
