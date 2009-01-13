@@ -203,7 +203,16 @@ namespace FreeSCADA.Designer.Dialogs
 
 		private void selectButton_Click(object sender, EventArgs e)
 		{
-			DialogResult = DialogResult.OK;
+            CommunationPlugs plugs = Env.Current.CommunicationPlugins;
+            foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
+            {
+                foreach (IChannel ch in plugs[plugId].Channels)
+                {
+                    ch.ValueChanged -= new EventHandler(OnChannelValueChanged);
+                }
+            }
+
+            DialogResult = DialogResult.OK;
 			Close();
 		}
 
