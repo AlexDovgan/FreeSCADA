@@ -50,10 +50,18 @@
     <Compile Include="FreeSCADA2.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Archiver\Archiver.csproj">
+      <Project>{0BD3A946-E95E-46B7-A0B2-F89C2B03A5F9}</Project>
+      <Name>Archiver</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Name>Common</Name>
       <Project>{a3d91ced-553f-4433-ad67-8706e0127d8d}</Project>
       <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Communication.MODBUSPlug\Communication.MODBUSPlug.csproj">
+      <Project>{BA67D037-F40A-49CE-97B3-91DDE4A44062}</Project>
+      <Name>Communication.MODBUSPlug</Name>
     </ProjectReference>
     <ProjectReference Include="..\Communication.OPCPlug\Communication.OPCPlug.csproj">
       <Name>Communication.OPCPlug</Name>
@@ -64,6 +72,10 @@
       <Name>Communication.SimulatorPlug</Name>
       <Project>{58770328-000a-41c0-85e7-58286173c25b}</Project>
       <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Communication.Timers\Communication.Timers.csproj">
+      <Project>{9EABAB10-2305-4DFF-8600-1456C0CD4729}</Project>
+      <Name>Communication.Timers</Name>
     </ProjectReference>
     <ProjectReference Include="..\Designer\Designer.csproj">
       <Name>Designer</Name>
@@ -77,8 +89,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <WixExtension Include="C:\Program Files\Windows Installer XML v3\bin\WixNetFxExtension.dll" />
-    <WixExtension Include="C:\Program Files\Windows Installer XML v3\bin\WixUIExtension.dll" />
+    <WixExtension Include="WixNetFxExtension">
+      <HintPath>C:\Program Files\Windows Installer XML v3\bin\WixNetFxExtension.dll</HintPath>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>C:\Program Files\Windows Installer XML v3\bin\WixUIExtension.dll</HintPath>
+    </WixExtension>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

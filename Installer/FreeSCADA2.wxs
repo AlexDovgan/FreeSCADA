@@ -1,118 +1,179 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="{A0692C53-185D-4d97-BF57-6F6AD70D96F1}"
-           Name="FreeSCADA 2"
-           Language="1033"
-           Version="2.0.0.4"
-           Manufacturer="FreeSCADA Project [http://free-scada.sourceforge.net]"
-           UpgradeCode="{3E3F16AD-E81B-482a-968A-77EAD18BFB8E}">
-
-    <Package InstallerVersion="200" Compressed="yes" />
-
-    <PropertyRef Id="NETFRAMEWORK30"/>
-    <Condition Message="The .NET Framework 3.0 must be installed">NETFRAMEWORK30</Condition>
-
-    <Media Id="1" Cabinet="FreeSCADA2.cab" EmbedCab="yes" />
-
-    <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFilesFolder">
-        <Directory Id="ProgramMenuFolder">
-          <Directory Id="ShortcutFolder" Name="FreeSCADA 2"/>
-        </Directory>
-
-        <Directory Id="INSTALLLOCATION" Name="FreeSCADA 2">
-
-          <Component Id="Common" Guid="{C5ED9FC1-84B6-462b-AF09-11C6D9D82B5D}">
-            <File Name="$(var.Common.TargetFileName)" Source="$(var.Common.TargetPath)" Vital="yes"/>
-            <File Name="weifenluo.winformsui.docking.dll" Source="..\3rdParty\DockPanel\weifenluo.winformsui.docking.dll" Vital="yes"/>
-            <File Name="icsharpcode.sharpziplib.dll" Source="..\3rdParty\SharpZipLib\icsharpcode.sharpziplib.dll" Vital="yes"/>
-            <File Name="devage.core.dll" Source="..\3rdParty\SourceGrid4_11\devage.core.dll" Vital="yes"/>
-            <File Name="devage.windows.forms.dll" Source="..\3rdParty\SourceGrid4_11\devage.windows.forms.dll" Vital="yes"/>
-            <File Name="sourcegrid.dll" Source="..\3rdParty\SourceGrid4_11\sourcegrid.dll" Vital="yes"/>
-          	<File Name="kent.boogaart.converters.dll" Source="..\3rdParty\DataConverters\kent.boogaart.converters.dll" Vital="yes"/>
-          	<File Name="kent.boogaart.helpertrinity.dll" Source="..\3rdParty\DataConverters\kent.boogaart.helpertrinity.dll" Vital="yes"/>
-          	<File Name="toolbox.dll" Source="..\3rdParty\toolbox\toolbox.dll" Vital="yes"/>
-          	
-            <File Name="license.txt" Source="..\license.txt" Vital="yes"/>
-            <!-- 3rd party licenses:
-            <File Name="sharpziplib_license.rtf" Source="..\3rdParty\SharpZipLib\readme.rtf"/>
-            <File Name="weifenluo_license.txt" Source="..\3rdParty\DockPanel\license.txt"/>
-            <File Name="sourcegrid.license.txt" Source="..\3rdParty\SourceGrid4_11\sourcegrid.license.txt"/>-->
-
-            <RemoveFolder Id="RemoveShortcutFolder" Directory="ShortcutFolder" On="uninstall"/>
-          </Component>
-
-          <Component Id="Designer" Guid="{F1FDBE57-86BD-4506-9EDB-D829B8A9B072}">
-            <File Name="$(var.Designer.TargetFileName)" Source="$(var.Designer.TargetPath)">
-              <Shortcut Id="DesignerShortcut" Directory="ShortcutFolder" Name="Designer" Advertise="yes"/>
-            </File>
-          </Component>
-
-          <Component Id="Runtime" Guid="{80622C67-50FA-4595-8E59-7BD47601E9E8}">
-            <File Name="$(var.RunTime.TargetFileName)" Source="$(var.RunTime.TargetPath)">
-              <Shortcut Id="RuntimeShortcut" Directory="ShortcutFolder" Name="Runtime" Advertise="yes"/>
-            </File>
-          </Component>
-
-          <Component Id="CommOPCPlugin" Guid="{4B44C968-ACBB-4c7d-B203-A63B32B960CD}">
-            <File Name="$(var.Communication.OPCPlug.TargetFileName)" Source="$(var.Communication.OPCPlug.TargetPath)"/>
-            <File Name="opcrcw.comn.dll" Source="..\3rdParty\OPC\opcrcw.comn.dll"/>
-            <File Name="opcrcw.da.dll" Source="..\3rdParty\OPC\opcrcw.da.dll"/>
-          </Component>
-
-          <Component Id="CommSimulatorPlugin" Guid="{69CED1CE-5A01-4006-AA65-45F316A05563}">
-            <File Name="$(var.Communication.SimulatorPlug.TargetFileName)" Source="$(var.Communication.SimulatorPlug.TargetPath)"/>
-          </Component>
-
-          <Directory Id="SamplesDir" Name="Samples">
-            <Component Id="Samples" Guid="{7F40F8DD-969A-453e-BB60-33CB249A6050}">
-              <File Name="Chart.xaml" Source="..\Samples\Chart.xaml"/>
-              <File Name="clinton.svg" Source="..\Samples\clinton.svg"/>
-              <File Name="lion.svg" Source="..\Samples\lion.svg"/>
-              <File Name="picasso.svg" Source="..\Samples\picasso.svg"/>
-              <File Name="tiger.svg" Source="..\Samples\tiger.svg"/>
-              <File Name="water.svg" Source="..\Samples\water.svg"/>
-            </Component>
-          </Directory>
-          <Directory Id="ResourceDir" Name="Resources">
-            <Component Id="DesignerResources" Guid="{27EDA75F-AD2A-4f9a-ADF9-AAEC94DA50AC}">
-              <File Name="colors.xml" Source="..\Designer\Resources\colors.xml"/>
-              <File Name="svg2xaml.xsl" Source="..\Designer\Resources\svg2xaml.xsl"/>
-            </Component>
-          </Directory>
-        </Directory>
-      </Directory>
-    </Directory>
-
-    <Feature Id="ProductFeature" Title="FreeSCADA" Level="1" AllowAdvertise="no" InstallDefault="local" Description="Install the whole product.">
-      <ComponentRef Id="Common" />
-
-      <Feature Id="DesignerFeature" Title="Designer" Level="1" AllowAdvertise="no" Description="Install component which allows you to create HMI schemas, data connections, events and etc.">
-        <ComponentRef Id="Designer" />
-        <ComponentRef Id="DesignerResources" />
-      </Feature>
-
-      <Feature Id="RuntimeFeature" Title="Runtime" Level="1" AllowAdvertise="no" Description="Install component which allows you to view and execute HMI schemas created by Designer.">
-        <ComponentRef Id="Runtime" />
-      </Feature>
-
-      <Feature Id="SamplesFeature" Title="Samples" Level="1" AllowAdvertise="no" Description="Install few samples to start with.">
-        <ComponentRef Id="Samples" />
-      </Feature>
-
-      <Feature Id="CommPluginsFeature" Title="Communication plugins" Level="1" AllowAdvertise="no" Description="Cummunication plugins are used for connection with outer world.">
-        <Feature Id="CommOPCPluginFeature" Title="OPC" Level="1" AllowAdvertise="no" Description="OPC connections support">
-          <ComponentRef Id="CommOPCPlugin" />
-        </Feature>
-        <Feature Id="CommSimulatorPluginFeature" Title="Simulator" Level="1" AllowAdvertise="no" Description="Simulator for real data connections. Useful for studyings.">
-          <ComponentRef Id="CommSimulatorPlugin" />
-        </Feature>
-      </Feature>
-    </Feature>
-
-    <UIRef Id="WixUI_FeatureTree" />
-    <UIRef Id="WixUI_ErrorProgressText" />
-
-    <WixVariable Id="WixUILicenseRtf" Value="../license.rtf" />
-  </Product>
+	<Product Id="{A0692C53-185D-4d97-BF57-6F6AD70D96F1}"
+	         Name="FreeSCADA 2"
+	         Language="1033"
+	         Version="2.0.0.5"
+	         Manufacturer="FreeSCADA Project [http://free-scada.sourceforge.net]"
+	         UpgradeCode="{3E3F16AD-E81B-482a-968A-77EAD18BFB8E}">
+		
+		<Package InstallerVersion="200" Compressed="yes" />
+		
+		<PropertyRef Id="NETFRAMEWORK30"/>
+		<Condition Message="The .NET Framework 3.0 must be installed">NETFRAMEWORK30</Condition>
+		
+		<Media Id="1" Cabinet="FreeSCADA2.cab" EmbedCab="yes" />
+		
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="ProgramMenuFolder">
+					<Directory Id="ShortcutFolder" Name="FreeSCADA 2"/>
+				</Directory>
+				
+				<Directory Id="INSTALLLOCATION" Name="FreeSCADA 2">
+					
+					<Component Id="Common" Guid="{C5ED9FC1-84B6-462b-AF09-11C6D9D82B5D}">
+						<File Name="$(var.Common.TargetFileName)" Source="$(var.Common.TargetPath)" Vital="yes"/>
+						<File Name="$(var.Archiver.TargetFileName)" Source="$(var.Archiver.TargetPath)" Vital="yes"/>
+						<File Name="license.txt" Source="..\license.txt" Vital="yes"/>
+						
+						<RemoveFolder Id="RemoveShortcutFolder" Directory="ShortcutFolder" On="uninstall"/>
+					</Component>
+					
+					<Component Id="Comp_3rdPartyLibraries" Guid="{EFC25A67-CF0B-4bab-B1E4-F9C12C807B66}">
+						<File Name="weifenluo.winformsui.docking.dll" Source="..\3rdParty\DockPanel\weifenluo.winformsui.docking.dll" Vital="yes"/>
+						
+						<File Name="icsharpcode.sharpziplib.dll" Source="..\3rdParty\SharpZipLib\icsharpcode.sharpziplib.dll" Vital="yes"/>
+						
+						<File Name="devage.core.dll" Source="..\3rdParty\SourceGrid4_11\devage.core.dll" Vital="yes"/>
+						<File Name="devage.windows.forms.dll" Source="..\3rdParty\SourceGrid4_11\devage.windows.forms.dll" Vital="yes"/>
+						<File Name="sourcegrid.dll" Source="..\3rdParty\SourceGrid4_11\sourcegrid.dll" Vital="yes"/>
+						
+						<File Name="kent.boogaart.converters.dll" Source="..\3rdParty\DataConverters\kent.boogaart.converters.dll" Vital="yes"/>
+						<File Name="kent.boogaart.helpertrinity.dll" Source="..\3rdParty\DataConverters\kent.boogaart.helpertrinity.dll" Vital="yes"/>
+						
+						<File Name="toolbox.dll" Source="..\3rdParty\toolbox\toolbox.dll" Vital="yes"/>
+						
+						<File Name="modbus.dll" Source="..\3rdParty\NModbus\modbus.dll" Vital="yes"/>
+						<File Name="unme.common.dll" Source="..\3rdParty\NModbus\unme.common.dll" Vital="yes"/>
+						<File Name="log4net.dll" Source="..\3rdParty\NModbus\log4net.dll" Vital="yes"/>
+						
+						<File Name="nplot.dll" Source="..\3rdParty\NPlot\nplot.dll" Vital="yes"/>
+					</Component>
+					
+					<Directory Id="SQLite_root" Name="SQLite">
+						<Directory Id="SQLite_itanium" Name="Itanium">
+							<Component Id="Comp_3rdPartyLibraries_sqlite_itanium" Guid="{13F18069-BACC-4c38-B7D3-80EB741B19B0}">
+								<File Id="SQLite_assambly_Itanium" Name="system.data.sqlite.dll" Source="..\3rdParty\SQLite\Itanium\system.data.sqlite.dll" Vital="yes"/>
+							</Component>
+						</Directory>
+						<Directory Id="SQLite_x32" Name="x32">
+							<Component Id="Comp_3rdPartyLibraries_sqlite_x32" Guid="{5CAC83D2-4E83-4650-B142-002AC332128B}">
+								<File Id="SQLite_assambly_x32" Name="system.data.sqlite.dll" Source="..\3rdParty\SQLite\x32\system.data.sqlite.dll" Vital="yes"/>
+							</Component>
+						</Directory>
+						<Directory Id="SQLite_x64" Name="x64">
+							<Component Id="Comp_3rdPartyLibraries_sqlite_x64" Guid="{F24EE092-167D-47ae-A044-83AD26B8703A}">
+								<File Id="SQLite_assambly_x64" Name="system.data.sqlite.dll" Source="..\3rdParty\SQLite\x64\system.data.sqlite.dll" Vital="yes"/>
+							</Component>
+						</Directory>
+					</Directory>
+					
+					<Directory Id="Dir_3rdPartyLicenses" Name="3rd party licenses">
+						<Component Id="Comp_3rdPartyLicenses" Guid="{2AA574C5-473F-4bb2-9075-7BA7D7A9B369}">
+							<File Name="kent.boogaart.converters.txt" Source="..\3rdParty\DataConverters\license.txt"/>
+							<File Name="NModbus.txt" Source="..\3rdParty\NModbus\readme.txt"/>
+							<File Name="NPlot.txt" Source="..\3rdParty\NPlot\license.txt"/>
+							<File Name="System.Data.SQLite.txt" Source="..\3rdParty\SQLite\license.txt"/>
+							<File Name="toolbox.txt" Source="..\3rdParty\toolbox\readme.txt"/>
+							<File Name="sharpziplib.rtf" Source="..\3rdParty\SharpZipLib\readme.rtf"/>
+							<File Name="weifenluo.dockpanel.txt" Source="..\3rdParty\DockPanel\license.txt"/>
+							<File Name="sourcegrid.txt" Source="..\3rdParty\SourceGrid4_11\sourcegrid.license.txt"/>
+						</Component>
+					</Directory>
+					
+					<Component Id="Designer" Guid="{F1FDBE57-86BD-4506-9EDB-D829B8A9B072}">
+						<File Name="$(var.Designer.TargetFileName)" Source="$(var.Designer.TargetPath)" KeyPath="yes">
+							<Shortcut Id="DesignerShortcut" Directory="ShortcutFolder" Name="Designer" Advertise="yes"/>
+						</File>
+					</Component>
+					
+					<Component Id="Runtime" Guid="{80622C67-50FA-4595-8E59-7BD47601E9E8}">
+						<File Name="$(var.RunTime.TargetFileName)" Source="$(var.RunTime.TargetPath)" KeyPath="yes">
+							<Shortcut Id="RuntimeShortcut" Directory="ShortcutFolder" Name="Runtime" Advertise="yes"/>
+						</File>
+					</Component>
+					
+					<Component Id="CommOPCPlugin" Guid="{4B44C968-ACBB-4c7d-B203-A63B32B960CD}">
+						<File Name="$(var.Communication.OPCPlug.TargetFileName)" Source="$(var.Communication.OPCPlug.TargetPath)"/>
+						<File Name="opcrcw.comn.dll" Source="..\3rdParty\OPC\opcrcw.comn.dll"/>
+						<File Name="opcrcw.da.dll" Source="..\3rdParty\OPC\opcrcw.da.dll"/>
+					</Component>
+					
+					<Component Id="CommSimulatorPlugin" Guid="{69CED1CE-5A01-4006-AA65-45F316A05563}">
+						<File Name="$(var.Communication.SimulatorPlug.TargetFileName)" Source="$(var.Communication.SimulatorPlug.TargetPath)"/>
+					</Component>
+					
+					<Component Id="CommModbusPlugin" Guid="{663B483A-91D1-4da4-8CEF-09D85ACF97C1}">
+						<File Name="$(var.Communication.MODBUSPlug.TargetFileName)" Source="$(var.Communication.MODBUSPlug.TargetPath)"/>
+					</Component>
+					
+					<Component Id="CommTimersPlugin" Guid="{90E9C329-2012-48d0-AB48-1F7FBFFA694C}">
+						<File Name="$(var.Communication.Timers.TargetFileName)" Source="$(var.Communication.Timers.TargetPath)"/>
+					</Component>
+					
+					<Directory Id="SamplesDir" Name="Samples">
+						<Component Id="Samples" Guid="{7F40F8DD-969A-453e-BB60-33CB249A6050}">
+							<File Name="Chart.xaml" Source="..\Samples\Chart.xaml"/>
+							<File Name="clinton.svg" Source="..\Samples\clinton.svg"/>
+							<File Name="lion.svg" Source="..\Samples\lion.svg"/>
+							<File Name="picasso.svg" Source="..\Samples\picasso.svg"/>
+							<File Name="tiger.svg" Source="..\Samples\tiger.svg"/>
+							<File Name="water.svg" Source="..\Samples\water.svg"/>
+						</Component>
+					</Directory>
+					
+					<Directory Id="ResourceDir" Name="Resources">
+						<Component Id="DesignerResources" Guid="{27EDA75F-AD2A-4f9a-ADF9-AAEC94DA50AC}">
+							<File Name="colors.xml" Source="..\Designer\Resources\colors.xml"/>
+							<File Name="svg2xaml.xsl" Source="..\Designer\Resources\svg2xaml.xsl"/>
+						</Component>
+					</Directory>
+				
+				</Directory>
+			</Directory>
+		</Directory>
+		
+		<Feature Id="ProductFeature" Title="FreeSCADA" Level="1" AllowAdvertise="no" InstallDefault="local" Description="Install the whole product.">
+			<ComponentRef Id="Common" />
+			<ComponentRef Id="Comp_3rdPartyLibraries" />
+			<ComponentRef Id="Comp_3rdPartyLicenses" />
+			<ComponentRef Id="Comp_3rdPartyLibraries_sqlite_itanium" />
+			<ComponentRef Id="Comp_3rdPartyLibraries_sqlite_x32" />
+			<ComponentRef Id="Comp_3rdPartyLibraries_sqlite_x64" />
+			
+			<Feature Id="DesignerFeature" Title="Designer" Level="1" AllowAdvertise="no" Description="Install component which allows you to create HMI schemas, data connections, events and etc.">
+				<ComponentRef Id="Designer" />
+				<ComponentRef Id="DesignerResources" />
+			</Feature>
+			
+			<Feature Id="RuntimeFeature" Title="Runtime" Level="1" AllowAdvertise="no" Description="Install component which allows you to view and execute HMI schemas created by Designer.">
+				<ComponentRef Id="Runtime" />
+			</Feature>
+			
+			<Feature Id="SamplesFeature" Title="Samples" Level="1" AllowAdvertise="no" Description="Install few samples to start with.">
+				<ComponentRef Id="Samples" />
+			</Feature>
+			
+			<Feature Id="CommPluginsFeature" Title="Communication plugins" Level="1" AllowAdvertise="no" Description="Cummunication plugins are used for connection with outer world.">
+				<Feature Id="CommOPCPluginFeature" Title="OPC" Level="1" AllowAdvertise="no" Description="OPC connections support">
+					<ComponentRef Id="CommOPCPlugin" />
+				</Feature>
+				<Feature Id="CommSimulatorPluginFeature" Title="Simulator" Level="1" AllowAdvertise="no" Description="Simulator for real data connections. Useful for studyings.">
+					<ComponentRef Id="CommSimulatorPlugin" />
+				</Feature>
+				<Feature Id="CommModbusPluginFeature" Title="MODBUS" Level="1" AllowAdvertise="no" Description="MODBUS connections support.">
+					<ComponentRef Id="CommModbusPlugin" />
+				</Feature>
+				<Feature Id="CommTimersPluginFeature" Title="Timers" Level="1" AllowAdvertise="no" Description="Configurable timers which can be used as normal variables.">
+					<ComponentRef Id="CommTimersPlugin" />
+				</Feature>
+			</Feature>
+		</Feature>
+		
+		<UIRef Id="WixUI_FeatureTree" />
+		<UIRef Id="WixUI_ErrorProgressText" />
+		
+		<WixVariable Id="WixUILicenseRtf" Value="../license.rtf" />
+	</Product>
 </Wix>
