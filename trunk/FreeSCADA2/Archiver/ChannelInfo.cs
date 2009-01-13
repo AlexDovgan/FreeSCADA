@@ -17,5 +17,16 @@ namespace FreeSCADA.Archiver
 			get { return channelName; }
 			set { channelName = value; }
 		}
+
+		public override bool Equals(object obj)
+		{
+			if (obj is ChannelInfo)
+			{
+				ChannelInfo ci = obj as ChannelInfo;
+				return ci.ChannelName == ChannelName && ci.PluginId == PluginId;
+			}
+			else
+				return base.Equals(obj);
+		}
 	}
 }

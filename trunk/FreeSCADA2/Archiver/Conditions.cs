@@ -11,6 +11,7 @@ namespace FreeSCADA.Archiver
 		bool isValid = false;
 
 		[Browsable(false)]
+		[XmlIgnore]
 		virtual public bool IsValid
 		{
 			get { return isValid; }
