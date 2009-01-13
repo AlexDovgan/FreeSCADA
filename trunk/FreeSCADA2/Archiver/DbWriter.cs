@@ -90,7 +90,7 @@ namespace FreeSCADA.Archiver
 					}
 				}
 
-				if (channel != null)
+				if (channel != null && channel.Value != null)
 				{
 					cmd.CommandText = "INSERT INTO Channels VALUES (";
 					cmd.CommandText += "'" + channel.PluginId + "', ";
