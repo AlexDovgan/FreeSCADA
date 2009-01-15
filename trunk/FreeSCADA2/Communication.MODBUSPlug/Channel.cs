@@ -12,74 +12,56 @@ namespace FreeSCADA.Communication.MODBUSPlug
     /// </summary>
     public class ModbusChannelImp:BaseChannel, IComparer<ModbusChannelImp>
 	{
-        //ModbusDataType modType;
-
         string modbusStation;
-        string modbusType;
-        string modbusAddress;
-        ModbusDataType modbusDataType;
-        ModbusInternalType modbusInternalType;
+        ModbusDataTypeEx modbusDataType;
+        ModbusFs2InternalType modbusInternalType;
         ushort modbusDataAddress;
+        byte slaveId;
 
-        public ModbusChannelImp(string name, Plugin plugin, Type type, string modbusStation, string modbusType, string modbusAddress)
+        public ModbusChannelImp(string name, Plugin plugin, Type type, string modbusStation, ModbusDataTypeEx modbusType, ushort modbusAddress, byte slaveId)
             : base(name, false, plugin, type)
 		{
             this.modbusStation = modbusStation;
-            this.modbusType = modbusType;
-            this.modbusAddress = modbusAddress;
-            this.modbusDataAddress = ushort.Parse(modbusAddress);
-            switch (modbusType)
-            {
-                case "InputRegister":
-                    modbusDataType = ModbusDataType.InputRegister;
-                    break;
-                case "Coil":
-                    modbusDataType = ModbusDataType.Coil;
-                    break;
-                case "Input":
-                    modbusDataType = ModbusDataType.Input;
-                    break;
-                case "HoldingRegister":
-                    modbusDataType = ModbusDataType.HoldingRegister;
-                    break;
-            }
+            this.modbusDataAddress = modbusAddress;
+            this.modbusDataType = modbusType;
             if (type == typeof(int))
-                modbusInternalType = ModbusInternalType.Integer;
+                modbusInternalType = ModbusFs2InternalType.Int32;
             else if (type == typeof(uint))
-                modbusInternalType = ModbusInternalType.Unsigned;
+                modbusInternalType = ModbusFs2InternalType.UInt32;
             else if (type == typeof(float))
-                modbusInternalType = ModbusInternalType.Float;
+                modbusInternalType = ModbusFs2InternalType.Float;
+            this.slaveId = slaveId;
         }
 
         public string ModbusStation
 		{
             get { return modbusStation; }
-		}
-
-        public string ModbusType
-        {
-            get { return modbusType; }
+            set { modbusStation = value; }
         }
 
-        public string ModbusAddress
-		{
-            get { return modbusAddress; }
-		}
-
-        public ModbusDataType ModbusDataType
+        public ModbusDataTypeEx ModbusDataType
 		{
             get { return modbusDataType; }
-		}
+            set { modbusDataType =value; }
+        }
 
-        public ModbusInternalType ModbusInternalType
+        public ModbusFs2InternalType ModbusInternalType
         {
             get { return modbusInternalType; }
+            set { modbusInternalType = value; }
         }
 
         public ushort ModbusDataAddress
 		{
             get { return modbusDataAddress; }
-		}
+            set { modbusDataAddress = value; }
+        }
+
+        public byte SlaveId
+		{
+            get { return slaveId; }
+            set { slaveId = value; }
+        }
 
         public override void DoUpdate()
         {
@@ -101,6 +83,10 @@ namespace FreeSCADA.Communication.MODBUSPlug
         //     than zero x is greater than y.
         public int Compare(ModbusChannelImp x, ModbusChannelImp y)
         {
+            if (x.SlaveId > y.SlaveId)
+                return 1;
+            if (x.SlaveId < y.SlaveId)
+                return -1;
             if (x.ModbusDataType > y.ModbusDataType)
                 return 1;
             if (x.ModbusDataType < y.ModbusDataType)
@@ -112,10 +98,6 @@ namespace FreeSCADA.Communication.MODBUSPlug
             else
                 return 0;
         }
-
-        /*public override void ExternalSetValue(object value)
-        {
-            base.ExternalSetValue(value);
-        }*/
     }
+
 }

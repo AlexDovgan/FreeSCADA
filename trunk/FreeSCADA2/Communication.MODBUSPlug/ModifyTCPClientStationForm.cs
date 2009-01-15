@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace FreeSCADA.Communication.MODBUSPlug
 {
     public partial class ModifyTCPClientStationForm : Form
     {
         bool test = false;
+        List<string> forbiddenNames;
 
         public ModifyTCPClientStationForm()
         {
             InitializeComponent();
         }
 
-        public ModifyTCPClientStationForm(ModbusTCPClientStation tcs)
+        public ModifyTCPClientStationForm(ModbusTCPClientStation tcs, List<string> forbiddenNames)
         {
             InitializeComponent();
             this.Tag = tcs;
@@ -24,15 +26,19 @@ namespace FreeSCADA.Communication.MODBUSPlug
             this.NuberNumericUpDown.Value = tcs.RetryCount;
             this.failedNumericUpDown.Value = tcs.FailedCount;
             this.FormClosing += new FormClosingEventHandler(ModifyTCPClientStationForm_FormClosing);
+            this.forbiddenNames = forbiddenNames;
         }
 
         void ModifyTCPClientStationForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if ((sender as ModifyTCPClientStationForm).test)
             {
-                if (/* Some validation is */ false)
+                ModbusTCPClientStation tcs = (ModbusTCPClientStation)this.Tag;
+
+                if (forbiddenNames != null && forbiddenNames.Contains(tcs.Name))
                 {
                     e.Cancel = true;
+                    MessageBox.Show("Name already assigned to another Station!");
                 }
                 (sender as ModifyTCPClientStationForm).test = false;
             }
