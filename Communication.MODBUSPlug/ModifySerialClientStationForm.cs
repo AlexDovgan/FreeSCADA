@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace FreeSCADA.Communication.MODBUSPlug
 {
     public partial class ModifySerialClientStationForm : Form
     {
         bool test = false;
+        List<string> forbiddenNames;
 
         public ModifySerialClientStationForm()
         {
             InitializeComponent();
         }
 
-        public ModifySerialClientStationForm(ModbusSerialClientStation tcs)
+        public ModifySerialClientStationForm(ModbusSerialClientStation tcs, List<string> forbiddenNames)
         {
             InitializeComponent();
             this.Tag = tcs;
@@ -27,9 +29,12 @@ namespace FreeSCADA.Communication.MODBUSPlug
         {
             if ((sender as ModifySerialClientStationForm).test)
             {
-                if (/* Some validation is */ false)
+                ModbusTCPClientStation tcs = (ModbusTCPClientStation)this.Tag;
+
+                if (forbiddenNames != null && forbiddenNames.Contains(tcs.Name))
                 {
                     e.Cancel = true;
+                    MessageBox.Show("Name already assigned to another Station!");
                 }
                 (sender as ModifySerialClientStationForm).test = false;
             }

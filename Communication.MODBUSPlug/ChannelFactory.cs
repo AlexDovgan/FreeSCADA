@@ -4,49 +4,58 @@ using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Communication.MODBUSPlug
 {
-	sealed class ChannelFactory
-	{
-		//Prevent class reation
-		private ChannelFactory() { }
+    sealed class ChannelFactory
+    {
+        //Prevent class reation
+        private ChannelFactory() { }
 
-		public static IChannel CreateChannel(XmlElement node, Plugin plugin)
-		{
+        public static IChannel CreateChannel(XmlElement node, Plugin plugin)
+        {
             string name = node.Attributes["name"].Value;
             string type = node.Attributes["type"].Value;
             string modbusStation = node.Attributes["modbusStation"].Value;
             string modbusType = node.Attributes["modbusType"].Value;
-            string modbusAddress = node.Attributes["modbusAddress"].Value;
-            //Type t = Type.GetType(type);
-
-            return CreateChannel(name, plugin, type, modbusStation, modbusType, modbusAddress);
-		}
-
-        public static IChannel CreateChannel(string name, Plugin plugin, string type, string modbusStation, string modbusType, string modbusAddress)
-		{
-            Type t;
-            switch (type)
+            ModbusDataTypeEx modbusDataType;
+            switch (modbusType)
             {
-                case "Unsigned":
-                    t = typeof(uint);
+                case "InputRegister":
+                    modbusDataType = ModbusDataTypeEx.InputRegister;
                     break;
-                case "Float":
-                    t = typeof(float);
+                case "Coil":
+                    modbusDataType = ModbusDataTypeEx.Coil;
+                    break;
+                case "Input":
+                    modbusDataType = ModbusDataTypeEx.Input;
+                    break;
+                case "HoldingRegister":
+                    modbusDataType = ModbusDataTypeEx.HoldingRegister;
                     break;
                 default:
-                    t = typeof(int);
+                    modbusDataType = ModbusDataTypeEx.DeviceFailureInfo;
                     break;
             }
-            return new ModbusChannelImp(name, plugin, t, modbusStation, modbusType, modbusAddress);
-		}
+            string modbusAddress = node.Attributes["modbusAddress"].Value;
+            string slaveId = node.Attributes["slaveId"].Value;
 
-		public static void SaveChannel(XmlElement node, IChannel channel)
-		{
-			ModbusChannelImp channelBase = (ModbusChannelImp)channel;
-			node.SetAttribute("name", channelBase.Name);
-            node.SetAttribute("type", channelBase.Type.ToString());
+            Type t = Type.GetType("System." + type);
+
+            return CreateChannel(name, plugin, t, modbusStation, modbusDataType, ushort.Parse(modbusAddress), byte.Parse(slaveId));
+        }
+
+        public static IChannel CreateChannel(string name, Plugin plugin, Type type, string modbusStation, ModbusDataTypeEx modbusType, ushort modbusAddress, byte slaveId)
+        {
+            return new ModbusChannelImp(name, plugin, type, modbusStation, modbusType, modbusAddress, slaveId);
+        }
+
+        public static void SaveChannel(XmlElement node, IChannel channel)
+        {
+            ModbusChannelImp channelBase = (ModbusChannelImp)channel;
+            node.SetAttribute("name", channelBase.Name);
+            node.SetAttribute("type", channelBase.ModbusInternalType.ToString());
             node.SetAttribute("modbusStation", channelBase.ModbusStation);
-            node.SetAttribute("modbusType", channelBase.ModbusType);
-            node.SetAttribute("modbusAddress", channelBase.ModbusAddress);
-		}
-	}
+            node.SetAttribute("modbusType", channelBase.ModbusDataType.ToString());
+            node.SetAttribute("modbusAddress", channelBase.ModbusDataAddress.ToString());
+            node.SetAttribute("slaveId", channelBase.SlaveId.ToString());
+        }
+    }
 }

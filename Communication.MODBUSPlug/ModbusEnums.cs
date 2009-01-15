@@ -17,10 +17,10 @@ namespace FreeSCADA.Communication.MODBUSPlug
         SwapAll
     }
 
-    public enum ModbusInternalType
+    public enum ModbusFs2InternalType
     {
-        Integer,
-        Unsigned,
+        Int32,
+        UInt32,
         Float
     }
 
@@ -29,4 +29,14 @@ namespace FreeSCADA.Communication.MODBUSPlug
         RTU,
         ASCII
     }
+
+    public enum ModbusDataTypeEx
+    {
+        HoldingRegister = 0,
+        InputRegister = 1,
+        Coil = 2,
+        Input = 3,
+        DeviceFailureInfo = 4
+    }
+
 }

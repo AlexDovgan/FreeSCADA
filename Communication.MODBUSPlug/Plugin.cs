@@ -143,8 +143,9 @@ namespace FreeSCADA.Communication.MODBUSPlug
 
 		void LoadSettings()
 		{
-			channels.Clear();
-			using (System.IO.Stream ms = environment.Project["settings/" + StringConstants.PluginId + "_channels"])
+            channels.Clear();
+            stations.Clear();
+            using (System.IO.Stream ms = environment.Project["settings/" + StringConstants.PluginId + "_channels"])
 			{
 				if (ms == null || ms.Length == 0)
 					return;

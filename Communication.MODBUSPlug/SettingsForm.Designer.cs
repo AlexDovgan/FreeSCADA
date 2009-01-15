@@ -55,7 +55,7 @@
             this.grid.OptimizeMode = SourceGrid.CellOptimizeMode.ForRows;
             this.grid.RowsCount = 1;
             this.grid.SelectionMode = SourceGrid.GridSelectionMode.Cell;
-            this.grid.Size = new System.Drawing.Size(530, 189);
+            this.grid.Size = new System.Drawing.Size(684, 189);
             this.grid.TabIndex = 0;
             this.grid.TabStop = true;
             this.grid.ToolTipText = "";
@@ -85,7 +85,7 @@
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.Location = new System.Drawing.Point(379, 341);
+            this.okButton.Location = new System.Drawing.Point(533, 341);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(80, 23);
             this.okButton.TabIndex = 2;
@@ -96,7 +96,7 @@
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.Location = new System.Drawing.Point(465, 341);
+            this.cancelButton.Location = new System.Drawing.Point(619, 341);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(80, 23);
             this.cancelButton.TabIndex = 3;
@@ -128,7 +128,7 @@
             this.stationGrid.OptimizeMode = SourceGrid.CellOptimizeMode.ForRows;
             this.stationGrid.RowsCount = 1;
             this.stationGrid.SelectionMode = SourceGrid.GridSelectionMode.Cell;
-            this.stationGrid.Size = new System.Drawing.Size(530, 107);
+            this.stationGrid.Size = new System.Drawing.Size(684, 107);
             this.stationGrid.TabIndex = 5;
             this.stationGrid.TabStop = true;
             this.stationGrid.ToolTipText = "";
@@ -149,7 +149,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.grid);
-            this.splitContainer1.Size = new System.Drawing.Size(536, 312);
+            this.splitContainer1.Size = new System.Drawing.Size(690, 312);
             this.splitContainer1.SplitterDistance = 113;
             this.splitContainer1.TabIndex = 6;
             // 
@@ -168,7 +168,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(560, 385);
+            this.ClientSize = new System.Drawing.Size(714, 385);
             this.Controls.Add(this.removeStatButton);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.AddVarButton);
