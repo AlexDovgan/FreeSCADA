@@ -35,7 +35,12 @@ namespace FreeSCADA.Communication.MODBUSPlug
                     break;
             }
             string modbusAddress = node.Attributes["modbusAddress"].Value;
-            string slaveId = node.Attributes["slaveId"].Value;
+            string slaveId;
+            try
+            {
+                slaveId = node.Attributes["slaveId"].Value;
+            }
+            catch { slaveId = "0"; };
 
             Type t = Type.GetType("System." + type);
 
