@@ -29,14 +29,7 @@ namespace FreeSCADA.Common.Schema.Actions
             set{  channelName = value; }
         }
 
-        /*public string ActionedObjectName
-        {
-            get { return objectName; }
-            set {objectName=value;}
-        }
-        */
-
-         
+        
         public bool ActivateActionFor(FrameworkElement obj)
         {
             if ((actionChannel = Env.Current.CommunicationPlugins.GetChannel(ActionChannelName)) != null &&
@@ -70,6 +63,10 @@ namespace FreeSCADA.Common.Schema.Actions
             if (obj is FrameworkElement)
                 return true;
             
+            return false;
+        }
+        public virtual bool IsHelperObjectNeded()
+        {
             return false;
         }
         
