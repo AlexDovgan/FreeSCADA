@@ -23,16 +23,21 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         {
 
             AddActionPanel.Orientation = Orientation.Vertical;
+            Button b ;
             foreach (Type actionType in ActionsCollection.ActionsTypes)
             {
 
-                Button b = new Button();
+                b= new Button();
                 b.Content = "Add" + actionType.Name;
                 AddActionPanel.Children.Add(b);
                 b.Tag = actionType;
                 b.Click += new RoutedEventHandler(AddEventClick);
 
             }
+            b = new Button();
+            b.Content = "Delete Action";
+            AddActionPanel.Children.Add(b);
+            b.Click += new RoutedEventHandler(DeleteActionClicked);
             AddActionPanel.HorizontalAlignment = HorizontalAlignment.Left;
             AddActionPanel.VerticalAlignment = VerticalAlignment.Top;
             ActionsPanel.HorizontalAlignment = HorizontalAlignment.Right;
@@ -44,15 +49,31 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 
         }
 
+        void DeleteActionClicked(object sender, RoutedEventArgs e)
+        {
+            foreach (RadioButton butt in ActionsPanel.Children)
+            {
+                if (butt.IsChecked.Value)
+                {
+                    ActionsCollection.GetActions(AdornedElement as FrameworkElement).ActionsList.Remove((BaseAction)butt.Tag);
+                    break;
+                }
+
+            }
+            FillActions();
+        }
+
         public override void Activate()
         {
             foreach (Button b in AddActionPanel.Children)
             {
-
-                BaseAction a = (BaseAction)System.Activator.CreateInstance(b.Tag as Type);
-                if (a != null && !a.CheckActionFor(AdornedElement))
-                    b.IsEnabled = false;
-                else b.IsEnabled = true;
+                if (b.Tag != null)
+                {
+                    BaseAction a = (BaseAction)System.Activator.CreateInstance(b.Tag as Type);
+                    if (a != null && !a.CheckActionFor(AdornedElement))
+                        b.IsEnabled = false;
+                    else b.IsEnabled = true;
+                }
 
             }
             FillActions();
@@ -67,7 +88,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 helperTool.Deactivate();
                 helperTool = null;
             }
-
+            helperObject.RenderOpen().Close();
             base.Deactivate();
         }
 
@@ -75,7 +96,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         {
 
             BaseAction a = (BaseAction)System.Activator.CreateInstance((Type)((Button)sender).Tag);
-
             ActionsCollection.GetActions(AdornedElement as FrameworkElement).ActionsList.Add(a);
             FillActions();
             UpdateLayout();
@@ -83,7 +103,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         void FillActions()
         {
             ActionsPanel.Children.Clear();
-
+            helperObject.RenderOpen().Close();
             foreach (BaseAction action in ActionsCollection.GetActions(AdornedElement as FrameworkElement).ActionsList)
             {
                 RadioButton b = new RadioButton();
@@ -109,7 +129,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 
                 foreach (RadioButton b in ActionsPanel.Children)
                 {
-                    if (b.IsChecked.Value /*&& (b.Tag is MoveAction)*/)
+                    if (b.IsChecked.Value)
                     {
 
                         (b.Tag as BaseAction).HelperObject = shape.RenderedGeometry; ;
@@ -136,6 +156,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         {
             if (ActionSelected != null)
                 ActionSelected(((RadioButton)sender).Tag as BaseAction);
+            helperObject.RenderOpen().Close();
+            if (!(((RadioButton)sender).Tag as BaseAction).IsHelperObjectNeded())
+                return;
 
             if (helperTool != null)
             {
@@ -143,10 +166,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 helperTool.ObjectSelected -= helperSelected;
                 helperTool = null;
             }
-
+ 
+           
+            
             if ((((RadioButton)sender).Tag as BaseAction).HelperObject == null)
             {
-                helperTool = new Tools.SelectionTool((UIElement)VisualTreeHelper.GetParent(AdornedElement));
+                helperTool = new Tools.HelperSelectorTool((UIElement)VisualTreeHelper.GetParent(AdornedElement), AdornedElement);
                 helperTool.Activate();
                 helperTool.ObjectSelected += helperSelected;
             }

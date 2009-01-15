@@ -84,13 +84,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     if (ToolManipulator == null || ToolManipulator.AdornedElement != value)
                     {
                         ToolManipulator = CreateToolManipulator(value);
-                        ToolManipulator.InvalidateArrange();
+                        if(ToolManipulator!=null)
+                            ToolManipulator.InvalidateArrange();
                     }
                          
                 }   
                 else
                     ToolManipulator = null;
-                RaiseObjectSelected(SelectedObject);
+                RaiseObjectSelected(value);
             }
 
         }

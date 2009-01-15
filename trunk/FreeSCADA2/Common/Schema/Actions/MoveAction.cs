@@ -62,5 +62,9 @@ namespace FreeSCADA.Common.Schema.Actions
                 actionedObject.Dispatcher.Invoke(DispatcherPriority.Normal, new MoveDelegate(Move));
             }
         }
+        public override bool IsHelperObjectNeded()
+        {
+            return true;
+        }
     }
 }

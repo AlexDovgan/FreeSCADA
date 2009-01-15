@@ -119,6 +119,7 @@
     <Compile Include="SchemaEditor\Tools\RectangleTool.cs" />
     <Compile Include="SchemaEditor\Tools\SelectionTool.cs" />
     <Compile Include="SchemaEditor\Tools\TextBoxTool.cs" />
+    <Compile Include="SchemaEditor\Tools\HelperSelectorTool.cs" />
     <Compile Include="SchemaEditor\UndoRedo.cs" />
     <Compile Include="StringResources.Designer.cs">
       <AutoGen>True</AutoGen>

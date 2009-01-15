@@ -366,7 +366,7 @@ namespace FreeSCADA.Designer.Views
             }
             else if (e.Key == System.Windows.Input.Key.Delete)
             {
-                if (activeTool is SelectionTool && activeTool.SelectedObject != null)
+                if (activeTool.SelectedObject != null)
                     undoBuff.AddCommand(new DeleteGraphicsObject(activeTool.SelectedObject));
                 else if (activeTool is SelectionTool && (activeTool as SelectionTool).selectedElements.Count > 0)
                 {
