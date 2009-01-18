@@ -110,6 +110,7 @@
     <Compile Include="SchemaEditor\PropertiesUtils\PropProxy.cs" />
     <Compile Include="SchemaEditor\SchemaCommands.cs">
     </Compile>
+    <Compile Include="SchemaEditor\SelectionHelper.cs" />
     <Compile Include="SchemaEditor\ToolDescriptor.cs" />
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
     <Compile Include="SchemaEditor\Tools\BaseTool.cs" />

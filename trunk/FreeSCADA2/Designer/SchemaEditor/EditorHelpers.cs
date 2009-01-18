@@ -138,16 +138,16 @@ namespace FreeSCADA.Designer.SchemaEditor
             Group.SetValue(Viewbox.StretchProperty, Stretch.Fill);
             Canvas workCanvas = (Canvas)tool.AdornedElement;
             Canvas g = new Canvas();
-            Rect r = EditorHelper.CalculateBoundce(tool.selectedElements, workCanvas);
+            Rect r = EditorHelper.CalculateBoundce(tool.SelectedObjects, workCanvas);
             Canvas.SetLeft(Group, r.X);
             Canvas.SetTop(Group, r.Y);
             Group.Width = g.Width = r.Width;
             Group.Height = g.Height = r.Height;
 
 
-            
 
-            foreach (UIElement ch in tool.selectedElements)
+
+            foreach (UIElement ch in tool.SelectedObjects)
             {
                 //tool.NotifyObjectDeleted(ch);
                 Vector off = VisualTreeHelper.GetOffset(ch);
@@ -160,7 +160,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             Canvas.SetTop(g, 0); Canvas.SetLeft(g, 0);
             workCanvas.Children.Add(Group);
             //tool.NotifyObjectCreated(Group);
-            tool.selectedElements.Clear();
+            tool.SelectedObjects.Clear();
             tool.AdornedElement.UpdateLayout();
             tool.SelectedObject = Group;
             

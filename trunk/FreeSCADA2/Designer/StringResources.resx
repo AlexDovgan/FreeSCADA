@@ -241,6 +241,11 @@
   <data name="FileImportDialogFilter" xml:space="preserve">
     <value>XAML  files (*.xaml)|*.xaml|svg files (*.svg)|*.svg|All files (*.*)|*.*</value>
   </data>
+  <data name="HelperSelectingToolTooltip" xml:space="preserve">
+    <value>Please select trajectory object 
+    (line,rectangle,ellipse)</value>
+  </data>
+  
   <data name="MainWindowName" xml:space="preserve">
     <value>Designer</value>
   </data>
