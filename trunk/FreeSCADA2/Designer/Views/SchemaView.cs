@@ -101,6 +101,7 @@ namespace FreeSCADA.Designer.Views
                     activeTool.ToolFinished -= activeTool_ToolFinished;
                     activeTool.ObjectCreated -= activeTool_ObjectCreated;
                     activeTool.ObjectChanged -= OnObjectChenged;
+                    activeTool.ObjectDeleted -= activeTool_ObjectDeleted;
                     activeTool.Deactivate();
                     activeTool = null;
                 }
@@ -112,6 +113,7 @@ namespace FreeSCADA.Designer.Views
                     activeTool.ToolFinished += activeTool_ToolFinished;
                     activeTool.ObjectCreated += activeTool_ObjectCreated;
                     activeTool.ObjectChanged += OnObjectChenged;
+                    activeTool.ObjectDeleted += activeTool_ObjectDeleted;
                     activeTool.Activate();
 					UpdateCommandState();
                 }
@@ -126,6 +128,7 @@ namespace FreeSCADA.Designer.Views
 				if (cmdInfo.command is SchemaCommand)
 				{
 					SchemaCommand cmd = (SchemaCommand)cmdInfo.command;
+                    //TDODO: Need in refactoring, make using commands in common way
 					if (cmd is ZoomInCommand || cmd is ZoomOutCommand || cmd is UndoCommand || cmd is RedoCommand || cmd is ZoomLevelCommand)
 						cmd.ControlledObject = this;
 					else

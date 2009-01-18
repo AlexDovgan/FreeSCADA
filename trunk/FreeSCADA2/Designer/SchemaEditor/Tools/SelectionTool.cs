@@ -24,6 +24,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         bool isSelectionMoved = false;
         Rectangle boundceRect = new Rectangle();
         DrawingVisual selectionRectangle = new DrawingVisual();
+        public Point LastClickedPoint
+        {
+            get;
+            set;
+        }
 
         public SelectionTool(UIElement element)
             : base(element)
@@ -95,6 +100,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             selectionRectangle.RenderOpen().Close();
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
             RaiseObjectSelected(SelectedObject);
+            LastClickedPoint = e.GetPosition(this);
         }
 
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -125,7 +131,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 CaptureMouse();
                 startPos = e.GetPosition(this);
                 isDragged = true;
-                selectedElements.Clear();
                 SelectedObject = null;
 
             }
