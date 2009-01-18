@@ -4,6 +4,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
+using System.Collections.Generic;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
@@ -32,7 +33,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         public event EventHandler ObjectChanged;    
         public delegate void ObjectSeletedDelegate(Object obj);
         public event ObjectSeletedDelegate ObjectSelected;
-      
+
+        protected List<UIElement> selectedElements = new List<UIElement>();
+        public List<UIElement> SelectedObjects
+        {
+            get { return selectedElements; }
+        }
+
         /// <summary>
         /// active manipulator upon  selected object created by tool
         /// may be as default manipulator so as an another manipulator that can be created by tool instance
@@ -73,24 +80,26 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             get
             {
-                if (ToolManipulator != null)
-                    return ToolManipulator.AdornedElement;
+                if (selectedElements.Count>0)
+                    return selectedElements[selectedElements.Count-1];
                 else return null;
             }
             set
             {
+                selectedElements.Clear();
                 if (value != null)
                 {
                     if (ToolManipulator == null || ToolManipulator.AdornedElement != value)
                     {
                         ToolManipulator = CreateToolManipulator(value);
-                        if(ToolManipulator!=null)
+                        if (ToolManipulator != null)
                             ToolManipulator.InvalidateArrange();
                     }
-                         
-                }   
+                    selectedElements.Add(value);
+                }
                 else
                     ToolManipulator = null;
+                AdornerLayer.GetAdornerLayer(AdornedElement).Update();
                 RaiseObjectSelected(value);
             }
 

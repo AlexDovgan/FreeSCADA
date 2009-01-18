@@ -78,7 +78,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 		public override void CheckApplicability()
 		{
 			SelectionTool tool = ControlledObject as SelectionTool;
-			if (tool != null && tool.selectedElements.Count > 0)
+			if (tool != null && tool.SelectedObjects.Count > 0)
 				CanExecute = true;
 			else
 				CanExecute = false;
@@ -116,7 +116,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 		public override void CheckApplicability()
 		{
 			SelectionTool tool = ControlledObject as SelectionTool;
-			if (tool != null && tool.SelectedObject != null)
+            if (tool != null && tool.SelectedObjects.Count>0)
 				CanExecute = true;
 			else
 				CanExecute = false;
@@ -125,7 +125,22 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 		#region ICommand Members
 		public override void Execute()
 		{
-			string xaml = XamlWriter.Save((ControlledObject as SelectionTool).SelectedObject);
+            SelectionTool tool = ControlledObject as SelectionTool;
+                            
+            
+            Rect b = EditorHelper.CalculateBoundce(tool.SelectedObjects, tool.AdornedElement);
+            string xaml = string.Format(
+                "<Canvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Left=\"{0}\" Top=\"{1}\">"
+                ,b.X
+                ,b.Y);
+
+            foreach (UIElement el in tool.SelectedObjects)
+            {
+                
+                xaml+=XamlWriter.Save(el);
+            }
+            xaml += "</Canvas>";
+            
 			System.Windows.Clipboard.SetText(xaml, System.Windows.TextDataFormat.Xaml);
 		}
 
@@ -151,23 +166,24 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
 	class CutCommand : SchemaCommand
 	{
+        CopyCommand copyCommand= new CopyCommand();
 		public override void CheckApplicability()
 		{
-			SelectionTool tool = ControlledObject as SelectionTool;
-			if (tool != null && tool.SelectedObject != null)
-				CanExecute = true;
-			else
-				CanExecute = false;
+            copyCommand.ControlledObject = ControlledObject;
+            copyCommand.CheckApplicability();
+            CanExecute = copyCommand.CanExecute;
 		}
 
 		#region ICommand Members
 		public override void Execute()
 		{
 			SelectionTool tool = (SelectionTool)ControlledObject;
-
-			string xaml = XamlWriter.Save(tool.SelectedObject);
-			System.Windows.Clipboard.SetText(xaml, System.Windows.TextDataFormat.Xaml);
-			tool.NotifyObjectDeleted(tool.SelectedObject);
+            copyCommand.Execute();
+            foreach(UIElement el in tool.SelectedObjects)
+            {
+                tool.NotifyObjectDeleted(el);
+            }
+   
 			tool.SelectedObject = null;
 		}
 
@@ -215,10 +231,16 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 						sw.Write(xaml);
 						sw.Flush();
 						stream.Seek(0, SeekOrigin.Begin);
-						UIElement el = XamlReader.Load(stream) as UIElement;
-						Canvas.SetLeft(el, Mouse.GetPosition(tool).X);
-						Canvas.SetTop(el, Mouse.GetPosition(tool).Y);
-						tool.NotifyObjectCreated(el);
+                        Canvas uielements  = XamlReader.Load(stream) as Canvas;
+                        while (uielements.Children.Count != 0)
+                        {
+                            UIElement el = uielements.Children[0];
+                            uielements.Children.Remove(el);
+                            Canvas.SetLeft(el,Canvas.GetLeft(el) - Canvas.GetLeft(uielements)+Mouse.GetPosition(tool).X);
+                            Canvas.SetTop(el, Canvas.GetTop(el) - Canvas.GetTop(uielements)+Mouse.GetPosition(tool).Y);
+                            tool.NotifyObjectCreated(el);
+                        }
+						
 					}
 				}
 			}

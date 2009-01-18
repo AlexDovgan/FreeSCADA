@@ -22,7 +22,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         Vector finalSize;
         bool isDragged = false;
         bool isSelectionMoved = false;
-        public List<UIElement> selectedElements = new List<UIElement>();
         Rectangle boundceRect = new Rectangle();
         DrawingVisual selectionRectangle = new DrawingVisual();
 
@@ -38,10 +37,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             selectionRectangle.Opacity = 0.5;
             visualChildren.Add(selectionRectangle);
 
-           
+
             //need in refectoring 
         }
-  
+
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
             if (isDragged)
@@ -65,25 +64,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 Vector newPosDelta;
                 newPosDelta = e.GetPosition(this) - movePos;
                 movePos = e.GetPosition(this);
-                foreach (UIElement se in selectedElements)
-                {
-                    double x = Canvas.GetLeft((se as FrameworkElement));
-                    double y = Canvas.GetTop((se as FrameworkElement));
-                    Canvas.SetLeft((se as FrameworkElement), x + newPosDelta.X);
-                    Canvas.SetTop((se as FrameworkElement), y + newPosDelta.Y);
-                    if (moveUndoInfo)
-                        this.OnObjectChanged(se);
-                }
-                moveUndoInfo = false;
-                //selectionRectangle.RenderOpen().Close();
-                AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+                MoveHelper(newPosDelta.X, newPosDelta.Y);
                 System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.SizeAll;
             }
         }
 
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
-            
+
             if (isDragged)
                 SelectedObject = null;
             isDragged = false;
@@ -99,13 +87,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
                 if (b.Contains(itemBounds))
                 {
-                    
+
                     selectedElements.Add(el);
                 }
 
             }
             selectionRectangle.RenderOpen().Close();
-            //AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+            AdornerLayer.GetAdornerLayer(AdornedElement).Update();
             RaiseObjectSelected(SelectedObject);
         }
 
@@ -113,13 +101,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             //base.OnPreviewMouseLeftButtonDown(e);
             Point pt = e.GetPosition(this);
-            
+
             IInputElement manipulatorHit = null;
             if (ToolManipulator != null)
                 manipulatorHit = ToolManipulator.InputHitTest(e.GetPosition(ToolManipulator));
 
-            DependencyObject documentHit=null;
-            if(VisualTreeHelper.HitTest(AdornedElement, pt)!=null)
+            DependencyObject documentHit = null;
+            if (VisualTreeHelper.HitTest(AdornedElement, pt) != null)
                 documentHit = VisualTreeHelper.HitTest(AdornedElement, pt).VisualHit;
             if (manipulatorHit != null)
             {
@@ -146,35 +134,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(AdornedElement, documentHit);
                 if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.None)
                 {
-                    if (selectedElements.Count > 0)
-                    {
-                        bool found = false;
-                        for (int i = 0; i < selectedElements.Count; i++)
-                        {
-                            Rect r = new Rect(Canvas.GetLeft(selectedElements[i]), Canvas.GetTop(selectedElements[i]), selectedElements[i].RenderSize.Width, selectedElements[i].RenderSize.Height);
-                            if (r.Contains(pt))
-                            {
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (found)
-                        {
-                            isSelectionMoved = true;
-                            movePos = e.GetPosition(this);
-                            System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.SizeAll;
-                            moveUndoInfo = true;
-                        }
-                        else
-                        {
-                            SelectedObject = el;
-                        }
-                    }
-                    else
-                    {
+           
+                    isSelectionMoved = true;
+                    movePos = e.GetPosition(this);
+                    System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.SizeAll;
+                    moveUndoInfo = true;
+                    if(!selectedElements.Contains(el))
                         SelectedObject = el;
-                    }
-
                 }
                 else
                 {
@@ -182,19 +148,17 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     {
                         selectedElements.Remove(el);
                     }
-                    else{
+                    else
+                    {
                         if (SelectedObject != null)
-                        {
-                            selectedElements.Add(SelectedObject);
-                            SelectedObject = null;
-                        }
+                            ToolManipulator = null;
                         selectedElements.Add(el);
                     }
 
                 }
 
             }
-           
+
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
             RaiseObjectSelected(SelectedObject);
             e.Handled = false;
@@ -219,38 +183,23 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             return new DragResizeRotateManipulator(obj as FrameworkElement);
         }
 
-        public List<UIElement> MoveHelper(double delta_x, double delta_y)
+        public void MoveHelper(double delta_x, double delta_y)
         {
-            if (SelectedObject != null)
+            foreach (UIElement se in selectedElements)
             {
                 // undo
-                this.OnObjectChanged(SelectedObject);
-                double x = Canvas.GetLeft((SelectedObject as FrameworkElement));
-                double y = Canvas.GetTop((SelectedObject as FrameworkElement));
-                Canvas.SetLeft((SelectedObject as FrameworkElement), x + delta_x);
-                Canvas.SetTop((SelectedObject as FrameworkElement), y + delta_y);
-                // Update PropertyView
-                RaiseObjectSelected(SelectedObject);
-                List<UIElement> lst = new List<UIElement>(1);
-                lst.Add(SelectedObject);
-                return lst;
+                this.OnObjectChanged(se);
+                double x = Canvas.GetLeft((se as FrameworkElement));
+                double y = Canvas.GetTop((se as FrameworkElement));
+                Canvas.SetLeft((se as FrameworkElement), x + delta_x);
+                Canvas.SetTop((se as FrameworkElement), y + delta_y);
+                if (moveUndoInfo)
+                        this.OnObjectChanged(se);
             }
-            else if (selectedElements.Count > 0)
-            {
-                foreach (UIElement se in selectedElements)
-                {
-                    // undo
-                    this.OnObjectChanged(se);
-                    double x = Canvas.GetLeft((se as FrameworkElement));
-                    double y = Canvas.GetTop((se as FrameworkElement));
-                    Canvas.SetLeft((se as FrameworkElement), x + delta_x);
-                    Canvas.SetTop((se as FrameworkElement), y + delta_y);
-                }
-                selectionRectangle.RenderOpen().Close();
-                AdornerLayer.GetAdornerLayer(AdornedElement).Update();
-                return selectedElements;
-            }
-            return null;
+            moveUndoInfo = false;
+       
+            selectionRectangle.RenderOpen().Close();
+            AdornerLayer.GetAdornerLayer(AdornedElement).Update();
         }
 
     }

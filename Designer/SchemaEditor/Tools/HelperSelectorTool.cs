@@ -28,15 +28,17 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             Brush b =  Brushes.Black.Clone();
             b.Opacity = 0.3;
             FormattedText formattedText = new FormattedText(
-                "Please select trajectory object",
+                StringResources.HelperSelectingToolTooltip,
                 CultureInfo.GetCultureInfo("en-us"),
                 FlowDirection.LeftToRight,
                 new Typeface("Verdana"),
                 14,
                 b);
             Rect bounds=VisualTreeHelper.GetContentBounds(helperFor);
-            drawingContext.DrawText(formattedText, new Point(Canvas.GetLeft(helperFor), Canvas.GetTop(helperFor) - 20));
-            drawingContext.DrawLine(new Pen(b, 1), new Point(Canvas.GetLeft(helperFor) + bounds.Width / 2, Canvas.GetTop(helperFor) + bounds.Height / 2), e.GetPosition(AdornedElement));
+            drawingContext.DrawText(formattedText, new Point(Canvas.GetLeft(helperFor), Canvas.GetTop(helperFor) - 40));
+            Pen p=new Pen(b, 1);
+            p.DashStyle=DashStyles.DashDot;
+            drawingContext.DrawLine(p, new Point(Canvas.GetLeft(helperFor) + bounds.Width / 2, Canvas.GetTop(helperFor) + bounds.Height / 2), e.GetPosition(AdornedElement));
             Shape sh;
             if ((sh=ValidateMousePos(e.GetPosition(AdornedElement)))!=null)//TODO: candidate to refectoring, ned take type of object from caller
             {
@@ -44,7 +46,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 Geometry g;
                 g= sh.RenderedGeometry; ;
                 g.Transform = (Transform)sh.TransformToVisual(AdornedElement);
-                Brush hb=Brushes.Yellow.Clone();
+                SolidColorBrush hb=new SolidColorBrush();//=Brushes.Yellow.Clone();
+                System.Drawing.Color value = System.Drawing.SystemColors.Highlight;
+                hb.Color = Color.FromArgb(value.A, value.R, value.G, value.B); 
                 hb.Opacity=0.2;
                 drawingContext.DrawGeometry(null,new Pen(hb,5),g);
                         
@@ -68,34 +72,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
          }
         protected override void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
         {
-        //    ReleaseMouseCapture();
-        //    if (pointsCollection.Count == 0)
-        //        NotifyToolFinished();
-        //    if (pointsCollection.Count > 1)
-        //    {
-        //        Rect b = VisualTreeHelper.GetContentBounds(objectPrview);
-        //        Polyline poly = new Polyline();
-        //        for (int i = 0; i < pointsCollection.Count; i++)
-        //        {
-        //            Point p=pointsCollection[i];
-        //            p.X -= b.X;
-        //            p.Y -= b.Y;
-        //            pointsCollection[i] = p;
-        //        }
-        //        poly.Points = pointsCollection.Clone();
-        //        pointsCollection.Clear();
-        //        Canvas.SetLeft(poly, b.X);
-        //        Canvas.SetTop(poly, b.Y);
-        //        poly.Width = b.Width;
-        //        poly.Height = b.Height;
-        //        poly.Stroke = Brushes.Black;
-        //        poly.Fill = Brushes.Transparent;
-        //        poly.Stretch = Stretch.Fill;
-        //        NotifyObjectCreated(poly);
-        //        SelectedObject = poly;
-        //    }
-        //    pointsCollection.Clear();
-        //    objectPrview.RenderOpen().Close();
+     
         }
         protected override BaseManipulator CreateToolManipulator(UIElement obj)
         {

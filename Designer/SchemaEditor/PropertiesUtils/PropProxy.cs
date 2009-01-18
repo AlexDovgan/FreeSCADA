@@ -94,7 +94,6 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                     "Orientation",
                     "Text",
                     "ActionChannelName",
-                    "HelperObject",
                     "MinChannelValue",
                     "MaxChannelValue",
                     "MinAngle",

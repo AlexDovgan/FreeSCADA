@@ -309,6 +309,16 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select trajectory object 
+        ///    (line,rectangle,ellipse).
+        /// </summary>
+        internal static string HelperSelectingToolTooltip {
+            get {
+                return ResourceManager.GetString("HelperSelectingToolTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Designer.
         /// </summary>
         internal static string MainWindowName {
