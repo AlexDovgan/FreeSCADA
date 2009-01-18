@@ -126,13 +126,12 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 		public override void Execute()
 		{
             SelectionTool tool = ControlledObject as SelectionTool;
-                            
-            
+
+			System.Globalization.CultureInfo ci = System.Globalization.CultureInfo.CreateSpecificCulture("");
             Rect b = EditorHelper.CalculateBoundce(tool.SelectedObjects, tool.AdornedElement);
-            string xaml = string.Format(
+            string xaml = string.Format(ci.NumberFormat,
                 "<Canvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Left=\"{0}\" Top=\"{1}\">"
-                ,b.X
-                ,b.Y);
+                ,b.X, b.Y);
 
             foreach (UIElement el in tool.SelectedObjects)
             {
