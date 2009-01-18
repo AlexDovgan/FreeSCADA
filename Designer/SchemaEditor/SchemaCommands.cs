@@ -236,8 +236,8 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
                         {
                             UIElement el = uielements.Children[0];
                             uielements.Children.Remove(el);
-                            Canvas.SetLeft(el,Canvas.GetLeft(el) - Canvas.GetLeft(uielements)+Mouse.GetPosition(tool).X);
-                            Canvas.SetTop(el, Canvas.GetTop(el) - Canvas.GetTop(uielements)+Mouse.GetPosition(tool).Y);
+                            Canvas.SetLeft(el,Canvas.GetLeft(el) - Canvas.GetLeft(uielements)+tool.LastClickedPoint.X);
+                            Canvas.SetTop(el, Canvas.GetTop(el) - Canvas.GetTop(uielements)+tool.LastClickedPoint.Y);
                             tool.NotifyObjectCreated(el);
                         }
 						
