@@ -107,7 +107,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                     bool found = false;
                     foreach (ModbusBuffer buf in buffers)
                     {
-                        if (ch.ModbusDataType == buf.ModbusDataType)
+                        if (ch.SlaveId == buf.slaveId && ch.ModbusDataType == buf.ModbusDataType)
                         {
                             int mult;
                             if (ch.ModbusDataType == ModbusDataTypeEx.Input || ch.ModbusDataType == ModbusDataTypeEx.Coil)
@@ -128,6 +128,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                     {
                         // Set up a new buffer
                         ModbusBuffer buf = new ModbusBuffer();
+                        buf.slaveId = ch.SlaveId;
                         buf.numInputs = 1;
                         buf.startAddress = buf.lastAddress = ch.ModbusDataAddress;
                         buf.ModbusDataType = ch.ModbusDataType;
@@ -167,7 +168,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                     switch (buf.ModbusDataType)
                                     {
                                         case ModbusDataTypeEx.InputRegister:
-                                            ushort[] registers = master.ReadInputRegisters(startAddress, numInputs);
+                                            ushort[] registers = master.ReadInputRegisters(buf.slaveId, startAddress, numInputs);
                                             DateTime dt = DateTime.Now;
                                             foreach (ModbusChannelImp ch in buf.channels)
                                             {
@@ -186,7 +187,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                             }
                                             break;
                                         case ModbusDataTypeEx.Coil:
-                                            bool[] inputs = master.ReadCoils(startAddress, numInputs);
+                                            bool[] inputs = master.ReadCoils(buf.slaveId, startAddress, numInputs);
                                             dt = DateTime.Now;
                                             foreach (ModbusChannelImp ch in buf.channels)
                                             {
@@ -208,7 +209,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                             }
                                             break;
                                         case ModbusDataTypeEx.Input:
-                                            inputs = master.ReadInputs(startAddress, numInputs);
+                                            inputs = master.ReadInputs(buf.slaveId, startAddress, numInputs);
                                             dt = DateTime.Now;
                                             foreach (ModbusChannelImp ch in buf.channels)
                                             {
@@ -230,7 +231,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                             }
                                             break;
                                         case ModbusDataTypeEx.HoldingRegister:
-                                            registers = master.ReadHoldingRegisters(startAddress, numInputs);
+                                            registers = master.ReadHoldingRegisters(buf.slaveId, startAddress, numInputs);
                                             dt = DateTime.Now;
                                             foreach (ModbusChannelImp ch in buf.channels)
                                             {
@@ -275,6 +276,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
             public ushort lastAddress;
             public ushort numInputs;
             public List<ModbusChannelImp> channels = new List<ModbusChannelImp>();
+            public byte slaveId;
         }
     }
 }

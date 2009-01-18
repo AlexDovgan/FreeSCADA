@@ -7,6 +7,19 @@ namespace FreeSCADA.Communication.MODBUSPlug
 	public partial class SettingsForm : Form
 	{
 		Plugin plugin;
+        const int gridColName = 0;
+        const int gridColFSType = 1;
+        const int gridColStation = 2;
+        const int gridColMODType = 3;
+        const int gridColAddress = 4;
+        const int gridColDevice = 5;
+        const int gridColDevDataType = 6;
+        const int gridColDevDataLen = 7;
+        const int gridColConversion = 8;
+
+        const int stationGridColName = 0;
+        const int stationGridColAddr = 1;
+        const int stationGridColPara = 2;
 
 		public SettingsForm(Plugin plugin)
 		{
@@ -21,14 +34,17 @@ namespace FreeSCADA.Communication.MODBUSPlug
             grid.Selection.Border = b;
             grid.Selection.FocusBackColor = grid.Selection.BackColor;
 
-			grid.ColumnsCount = 6;
+			grid.ColumnsCount = 9;
 			grid.RowsCount = 1;
-            grid[0, 0] = new SourceGrid.Cells.ColumnHeader("Channel name");
-            grid[0, 1] = new SourceGrid.Cells.ColumnHeader("Channel Type");
-            grid[0, 2] = new SourceGrid.Cells.ColumnHeader("MODBUS Station");
-            grid[0, 3] = new SourceGrid.Cells.ColumnHeader("MODBUS Type");
-            grid[0, 4] = new SourceGrid.Cells.ColumnHeader("MODBUS Address");
-            grid[0, 5] = new SourceGrid.Cells.ColumnHeader("MODBUS Device");
+            grid[0, gridColName] = new SourceGrid.Cells.ColumnHeader("Channel name");
+            grid[0, gridColFSType] = new SourceGrid.Cells.ColumnHeader("FS2 Channel Type");
+            grid[0, gridColStation] = new SourceGrid.Cells.ColumnHeader("Station Name");
+            grid[0, gridColMODType] = new SourceGrid.Cells.ColumnHeader("MOD Register Type");
+            grid[0, gridColAddress] = new SourceGrid.Cells.ColumnHeader("MOD Address");
+            grid[0, gridColDevice] = new SourceGrid.Cells.ColumnHeader("MOD Device Index");
+            grid[0, gridColDevDataType] = new SourceGrid.Cells.ColumnHeader("MOD Data Type");
+            grid[0, gridColDevDataLen] = new SourceGrid.Cells.ColumnHeader("MOD Data Length");
+            grid[0, gridColConversion] = new SourceGrid.Cells.ColumnHeader("MOD Byte Swap");
 
             stationGrid.SelectionMode = SourceGrid.GridSelectionMode.Row;
 			stationGrid.Selection.EnableMultiSelection = false;
@@ -38,9 +54,9 @@ namespace FreeSCADA.Communication.MODBUSPlug
 
 			stationGrid.ColumnsCount = 3;
 			stationGrid.RowsCount = 1;
-            stationGrid[0, 0] = new SourceGrid.Cells.ColumnHeader("Station name");
-            stationGrid[0, 1] = new SourceGrid.Cells.ColumnHeader("Station Address");
-            stationGrid[0, 2] = new SourceGrid.Cells.ColumnHeader("Parameters");
+            stationGrid[0, stationGridColName] = new SourceGrid.Cells.ColumnHeader("Station name");
+            stationGrid[0, stationGridColAddr] = new SourceGrid.Cells.ColumnHeader("Station Address");
+            stationGrid[0, stationGridColPara] = new SourceGrid.Cells.ColumnHeader("Parameters");
             stationGrid.MouseDoubleClick += new MouseEventHandler(stationGrid_MouseDoubleClick);
 			LoadStations();
 			LoadChannels();
@@ -55,31 +71,31 @@ namespace FreeSCADA.Communication.MODBUSPlug
         {
             SourceGrid.Grid stationGrid = (SourceGrid.Grid)sender;
             int [] rows = stationGrid.Selection.GetSelectionRegion().GetRowsIndex();
-            IModbusStation stat = (IModbusStation)stationGrid[rows[0], 0].Tag;
+            IModbusStation stat = (IModbusStation)stationGrid[rows[0], stationGridColName].Tag;
             string oldname = stat.Name;
             List<string> forbiddenNames = new List<string>();
             for (int i = 1; i < stationGrid.RowsCount; i++)
             {
                 if (i != rows[0])
-                    forbiddenNames.Add(stationGrid[i, 0].DisplayText);
+                    forbiddenNames.Add(stationGrid[i, stationGridColName].DisplayText);
             }
             if (stat is ModbusTCPClientStation)
             {
                 ModifyTCPClientStationForm mtc = new ModifyTCPClientStationForm((ModbusTCPClientStation)stat, forbiddenNames);
                 if (mtc.ShowDialog() == DialogResult.OK)
                 {
-                    stationGrid[rows[0], 0].Value = (stat as ModbusTCPClientStation).Name;
-                    stationGrid[rows[0], 1].Value = (stat as ModbusTCPClientStation).IPAddress;
-                    stationGrid[rows[0], 2].Value = (stat as ModbusTCPClientStation).TCPPort;
+                    stationGrid[rows[0], stationGridColName].Value = (stat as ModbusTCPClientStation).Name;
+                    stationGrid[rows[0], stationGridColAddr].Value = (stat as ModbusTCPClientStation).IPAddress;
+                    stationGrid[rows[0], stationGridColPara].Value = (stat as ModbusTCPClientStation).TCPPort;
                     if (oldname != stat.Name)
                     {
                         //MessageBox.Show("renaming");
                         for (int i = 1; i < grid.RowsCount; i++)
                         {
-                            if (grid[i, 2].DisplayText == oldname)
+                            if (grid[i, gridColStation].DisplayText == oldname)
                             {
-                                (grid[i, 0].Tag as ModbusChannelImp).ModbusStation = stat.Name;
-                                grid[i, 2].Value = stat.Name;
+                                (grid[i, gridColName].Tag as ModbusChannelImp).ModbusStation = stat.Name;
+                                grid[i, gridColStation].Value = stat.Name;
                             }
                         }
                     }
@@ -90,9 +106,9 @@ namespace FreeSCADA.Communication.MODBUSPlug
                 ModifySerialClientStationForm mtc = new ModifySerialClientStationForm((ModbusSerialClientStation)stat, forbiddenNames);
                 if (mtc.ShowDialog() == DialogResult.OK)
                 {
-                    stationGrid[rows[0], 0].Value = (stat as ModbusSerialClientStation).Name;
-                    stationGrid[rows[0], 1].Value = (stat as ModbusSerialClientStation).IPAddress;
-                    //stationGrid[rows[0], 2].Value = (stat as ModbusSerialClientStation).SerialPort;
+                    stationGrid[rows[0], stationGridColName].Value = (stat as ModbusSerialClientStation).Name;
+                    stationGrid[rows[0], stationGridColAddr].Value = (stat as ModbusSerialClientStation).IPAddress;
+                    //stationGrid[rows[0], stationGridColPara].Value = (stat as ModbusSerialClientStation).SerialPort;
                 }
             }
             updateStationsInVariables();
@@ -102,28 +118,28 @@ namespace FreeSCADA.Communication.MODBUSPlug
         {
             int row = stationGrid.RowsCount;
             stationGrid.RowsCount++;
-            stationGrid[row, 0] = new SourceGrid.Cells.Cell(stat.Name);
-            stationGrid[row, 0].Tag = stat;
-            stationGrid[row, 0].Editor = null;
-            stationGrid[row, 1] = new SourceGrid.Cells.Cell(stat.IPAddress, typeof(string));
-            stationGrid[row, 2] = new SourceGrid.Cells.Cell(stat.TCPPort, typeof(int));
-            stationGrid[row, 0].Editor = null;
-            stationGrid[row, 1].Editor = null;
-            stationGrid[row, 2].Editor = null;
+            stationGrid[row, stationGridColName] = new SourceGrid.Cells.Cell(stat.Name);
+            stationGrid[row, stationGridColName].Tag = stat;
+            stationGrid[row, stationGridColName].Editor = null;
+            stationGrid[row, stationGridColAddr] = new SourceGrid.Cells.Cell(stat.IPAddress, typeof(string));
+            stationGrid[row, stationGridColPara] = new SourceGrid.Cells.Cell(stat.TCPPort, typeof(int));
+            stationGrid[row, stationGridColName].Editor = null;
+            stationGrid[row, stationGridColAddr].Editor = null;
+            stationGrid[row, stationGridColPara].Editor = null;
         }
 
         private void AddSerialServerStation(ModbusSerialClientStation stat)
         {
             int row = stationGrid.RowsCount;
             stationGrid.RowsCount++;
-            stationGrid[row, 0] = new SourceGrid.Cells.Cell(stat.Name);
-            stationGrid[row, 0].Tag = stat;
-            stationGrid[row, 0].Editor = null;
-            stationGrid[row, 1] = new SourceGrid.Cells.Cell(stat.IPAddress, typeof(string));
-            stationGrid[row, 2] = new SourceGrid.Cells.Cell(stat.SerialPort, typeof(int));
-            stationGrid[row, 0].Editor = null;
-            stationGrid[row, 1].Editor = null;
-            stationGrid[row, 2].Editor = null;
+            stationGrid[row, stationGridColName] = new SourceGrid.Cells.Cell(stat.Name);
+            stationGrid[row, stationGridColName].Tag = stat;
+            stationGrid[row, stationGridColName].Editor = null;
+            stationGrid[row, stationGridColAddr] = new SourceGrid.Cells.Cell(stat.IPAddress, typeof(string));
+            stationGrid[row, stationGridColPara] = new SourceGrid.Cells.Cell(stat.SerialPort, typeof(int));
+            stationGrid[row, stationGridColName].Editor = null;
+            stationGrid[row, stationGridColAddr].Editor = null;
+            stationGrid[row, stationGridColPara].Editor = null;
         }
 
         private void OnAddStation(object sender, EventArgs e)
@@ -168,7 +184,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                 bool exist = false;
                 for (int i = 1; i < grid.RowsCount; i++)
                 {
-                    if (grid[i, 2].DisplayText == stationGrid[row, 0].DisplayText)
+                    if (grid[i, gridColStation].DisplayText == stationGrid[row, stationGridColName].DisplayText)
                     {
                         exist = true;
                         break;
@@ -198,17 +214,20 @@ namespace FreeSCADA.Communication.MODBUSPlug
         {
             int row = grid.RowsCount;
             grid.RowsCount++;
-            grid[row, 0] = new SourceGrid.Cells.Cell(channel.Name, typeof(string));
-            grid[row, 0].Tag = channel;
+            grid[row, gridColName] = new SourceGrid.Cells.Cell(channel.Name, typeof(string));
+            grid[row, gridColName].Tag = channel;
 
-            grid[row, 1] = new SourceGrid.Cells.Cell(channel.ModbusInternalType, typeof(ModbusFs2InternalType));
+            grid[row, gridColFSType] = new SourceGrid.Cells.Cell(channel.ModbusInternalType, typeof(ModbusFs2InternalType));
 
-            grid[row, 2] = new SourceGrid.Cells.Cell(channel.ModbusStation);
+            grid[row, gridColStation] = new SourceGrid.Cells.Cell(channel.ModbusStation);
             updateStationsInVariables();
 
-            grid[row, 3] = new SourceGrid.Cells.Cell(channel.ModbusDataType, typeof(ModbusDataTypeEx));
-            grid[row, 4] = new SourceGrid.Cells.Cell(channel.ModbusDataAddress, typeof(ushort));
-            grid[row, 5] = new SourceGrid.Cells.Cell(channel.SlaveId, typeof(byte));
+            grid[row, gridColMODType] = new SourceGrid.Cells.Cell(channel.ModbusDataType, typeof(ModbusDataTypeEx));
+            grid[row, gridColAddress] = new SourceGrid.Cells.Cell(channel.ModbusDataAddress, typeof(ushort));
+            grid[row, gridColDevice] = new SourceGrid.Cells.Cell(channel.SlaveId, typeof(byte));
+            grid[row, gridColDevDataType] = new SourceGrid.Cells.Cell(channel.DeviceDataType, typeof(ModbusDeviceDataType));
+            grid[row, gridColDevDataLen] = new SourceGrid.Cells.Cell(channel.DeviceDataLen, typeof(int));
+            grid[row, gridColConversion] = new SourceGrid.Cells.Cell(channel.ConversionType, typeof(ModbusConversionType));
 
             grid.Selection.ResetSelection(true);
             grid.Selection.SelectRow(row, true);
@@ -228,13 +247,14 @@ namespace FreeSCADA.Communication.MODBUSPlug
                 int [] sel = stationGrid.Selection.GetSelectionRegion().GetRowsIndex();
                 if (sel.GetLength(0) > 0)
                     if (sel[0] > 1)
-                        statname = stationGrid[sel[0], 0].DisplayText;
+                        statname = stationGrid[sel[0], stationGridColName].DisplayText;
                     else
-                        statname = stationGrid[1, 0].DisplayText;
+                        statname = stationGrid[1, stationGridColName].DisplayText;
                 else
-                    statname = stationGrid[1, 0].DisplayText;
+                    statname = stationGrid[1, stationGridColName].DisplayText;
 
-                ModbusChannelImp ch = (ModbusChannelImp)ChannelFactory.CreateChannel(var, plugin, typeof(int), statname, ModbusDataTypeEx.HoldingRegister, 1, 0);
+                ModbusChannelImp ch = (ModbusChannelImp)ChannelFactory.CreateChannel(var, plugin, typeof(int), statname, ModbusDataTypeEx.HoldingRegister, 1, 0,
+                                                                                     ModbusDeviceDataType.Int, 1, ModbusConversionType.SwapNone);
                 AddVariable(ch);
             }
             else
@@ -246,13 +266,13 @@ namespace FreeSCADA.Communication.MODBUSPlug
             string[] stations = new string[stationGrid.RowsCount - 1];
             for (int i = 1; i < stationGrid.RowsCount; i++)
             {
-                stations[i - 1] = ((IModbusStation)stationGrid[i, 0].Tag).Name;
+                stations[i - 1] = ((IModbusStation)stationGrid[i, stationGridColName].Tag).Name;
             }
             SourceGrid.Cells.Editors.ComboBox editorCB = new SourceGrid.Cells.Editors.ComboBox(typeof(string), stations, true);
 
             for (int row = 1; row < grid.RowsCount; row++)
             {
-                grid[row, 2].Editor = editorCB;
+                grid[row, gridColStation].Editor = editorCB;
             }
         }
 
@@ -278,7 +298,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                 bool exists = false;
                 for (int i = 1; i < grid.RowsCount; i++)
                 {
-                    if (grid[i, 0].DisplayText == newName)
+                    if (grid[i, gridColName].DisplayText == newName)
                     {
                         exists = true;
                         break;
@@ -301,7 +321,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                 bool exists = false;
                 for (int i = 1; i < stationGrid.RowsCount; i++)
                 {
-                    if (stationGrid[i, 0].DisplayText == newName)
+                    if (stationGrid[i, stationGridColName].DisplayText == newName)
                     {
                         exists = true;
                         break;
@@ -330,21 +350,23 @@ namespace FreeSCADA.Communication.MODBUSPlug
 			Interfaces.IChannel[] channels = new Interfaces.IChannel[grid.RowsCount - 1];
 			for (int i = 1; i < grid.RowsCount; i++)
 			{
-                //channels[i - 1] = (Interfaces.IChannel)grid[i, 0].Tag;
-                channels[i - 1] = ChannelFactory.CreateChannel((string)grid[i, 0].Value,
+                channels[i - 1] = ChannelFactory.CreateChannel((string)grid[i, gridColName].Value,
                                                                 plugin,
-                                                                Type.GetType("System." + grid[i, 1].DisplayText),
-                                                                (string)grid[i, 2].Value,
-                                                                (ModbusDataTypeEx)grid[i, 3].Value,
-                                                                (ushort)grid[i, 4].Value,
-                                                                (byte)grid[i, 5].Value);
+                                                                Type.GetType("System." + grid[i, gridColFSType].DisplayText),
+                                                                (string)grid[i, gridColStation].Value,
+                                                                (ModbusDataTypeEx)grid[i, gridColMODType].Value,
+                                                                (ushort)grid[i, gridColAddress].Value,
+                                                                (byte)grid[i, gridColDevice].Value,
+                                                                (ModbusDeviceDataType)grid[i, gridColDevDataType].Value,                   // TODO
+                                                                (int)grid[i, gridColDevDataLen].Value,
+                                                                (ModbusConversionType)grid[i, gridColConversion].Value);
             }
-			plugin.Channels = channels;
+            plugin.Channels = channels;
 
             IModbusStation[] stations = new IModbusStation[stationGrid.RowsCount - 1];
             for (int i = 1; i < stationGrid.RowsCount; i++)
             {
-                stations[i - 1] = (IModbusStation)stationGrid[i, 0].Tag;
+                stations[i - 1] = (IModbusStation)stationGrid[i, stationGridColName].Tag;
             }
 			plugin.Stations = stations;
 

@@ -16,12 +16,14 @@ namespace FreeSCADA.Communication.MODBUSPlug
         SwapWords,
         SwapAll
     }
-
+    
     public enum ModbusFs2InternalType
     {
+        Boolean,
         Int32,
         UInt32,
-        Float
+        Float,
+        String
     }
 
     public enum ModbusSerialType
@@ -37,6 +39,17 @@ namespace FreeSCADA.Communication.MODBUSPlug
         Coil = 2,
         Input = 3,
         DeviceFailureInfo = 4
+    }
+
+    public enum ModbusDeviceDataType
+    {
+        Bool,
+        Int,
+        UInt,
+        DInt,
+        DUInt,
+        Float,
+        String
     }
 
 }

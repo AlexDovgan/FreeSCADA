@@ -17,8 +17,12 @@ namespace FreeSCADA.Communication.MODBUSPlug
         ModbusFs2InternalType modbusInternalType;
         ushort modbusDataAddress;
         byte slaveId;
+        ModbusDeviceDataType deviceDataType;
+        int deviceDataLen;
+        ModbusConversionType conversionType;
 
-        public ModbusChannelImp(string name, Plugin plugin, Type type, string modbusStation, ModbusDataTypeEx modbusType, ushort modbusAddress, byte slaveId)
+        public ModbusChannelImp(string name, Plugin plugin, Type type, string modbusStation, ModbusDataTypeEx modbusType, ushort modbusAddress,
+                                byte slaveId, ModbusDeviceDataType deviceDataType, int deviceDataLen, ModbusConversionType conversionType)
             : base(name, false, plugin, type)
 		{
             this.modbusStation = modbusStation;
@@ -31,6 +35,9 @@ namespace FreeSCADA.Communication.MODBUSPlug
             else if (type == typeof(float))
                 modbusInternalType = ModbusFs2InternalType.Float;
             this.slaveId = slaveId;
+            this.deviceDataType = deviceDataType;
+            this.deviceDataLen = deviceDataLen;
+            this.conversionType = conversionType;
         }
 
         public string ModbusStation
@@ -61,6 +68,24 @@ namespace FreeSCADA.Communication.MODBUSPlug
 		{
             get { return slaveId; }
             set { slaveId = value; }
+        }
+
+        public ModbusDeviceDataType DeviceDataType
+		{
+            get { return deviceDataType; }
+            set { deviceDataType = value; }
+        }
+
+        public int DeviceDataLen
+		{
+            get { return deviceDataLen; }
+            set { deviceDataLen = value; }
+        }
+
+        public ModbusConversionType ConversionType
+		{
+            get { return conversionType; }
+            set { conversionType = value; }
         }
 
         public override void DoUpdate()
