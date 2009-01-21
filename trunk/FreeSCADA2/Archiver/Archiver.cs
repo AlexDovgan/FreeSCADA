@@ -168,10 +168,18 @@ namespace FreeSCADA.Archiver
 			DbCommand command = dbConnection.CreateCommand();
 			command.CommandText = selectCommand;
 
-			dataAdapter.MissingMappingAction = MissingMappingAction.Passthrough;
-			dataAdapter.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-			dataAdapter.SelectCommand = command;
-			dataAdapter.Fill(data);
+			try
+			{
+				dataAdapter.MissingMappingAction = MissingMappingAction.Passthrough;
+				dataAdapter.MissingSchemaAction = MissingSchemaAction.AddWithKey;
+				dataAdapter.SelectCommand = command;
+				dataAdapter.Fill(data);
+			}
+			catch(Exception e)
+			{
+				Console.WriteLine(e.Message);
+				return data;
+			}
 		
 			return data;
 		}
