@@ -5,13 +5,34 @@ using OpcRcw.Da;
 
 namespace FreeSCADA.Communication.OPCPlug
 {
+	//class Statistic
+	//{
+	//    public static int ChannelsCount = 0;
+
+	//    static DateTime lastCheck = DateTime.Now;
+
+	//    public static void DoAnalysis()
+	//    {
+	//        TimeSpan diff = DateTime.Now - lastCheck;
+	//        if (diff.TotalMilliseconds > 1000)
+	//        {
+	//            Console.WriteLine("Statistic: channels per second = {0}", ChannelsCount);
+	//            lastCheck = DateTime.Now;
+	//            ChannelsCount = 0;
+	//        }
+	//    }
+	//}
+
 	class OPCDataCallback : IOPCDataCallback
 	{
-		List<OPCBaseChannel> channels;
+		Dictionary<int,OPCBaseChannel> channels = new Dictionary<int,OPCBaseChannel>();
 
 		public OPCDataCallback(List<OPCBaseChannel> channels)
 		{
-			this.channels = channels;
+			foreach (OPCBaseChannel ch in channels)
+			{
+				this.channels[ch.GetHashCode()] = ch;
+			}
 		}
 
 		#region IOPCDataCallback Members
@@ -26,26 +47,27 @@ namespace FreeSCADA.Communication.OPCPlug
 		{
 			for (int i = 0; i < dwCount; i++)
 			{
-				foreach (OPCBaseChannel ch in channels)
+				OPCBaseChannel ch;
+				if (channels.TryGetValue(phClientItems[i], out ch))
 				{
-					if (ch.GetHashCode() == phClientItems[i])
-                    {
-                        long ticks;
-                        byte[] bticks = new byte[8];
-                        BitConverter.GetBytes(pftTimeStamps[i].dwLowDateTime).CopyTo(bticks, 0);
-                        BitConverter.GetBytes(pftTimeStamps[i].dwHighDateTime).CopyTo(bticks, 4);
-                        ticks = BitConverter.ToInt64(bticks, 0);
-                        DateTime dt = DateTime.FromFileTime(ticks);
+					long ticks;
+					byte[] bticks = new byte[8];
+					BitConverter.GetBytes(pftTimeStamps[i].dwLowDateTime).CopyTo(bticks, 0);
+					BitConverter.GetBytes(pftTimeStamps[i].dwHighDateTime).CopyTo(bticks, 4);
+					ticks = BitConverter.ToInt64(bticks, 0);
+					DateTime dt = DateTime.FromFileTime(ticks);
 
-						ChannelStatusFlags status;
-						if ((pwQualities[i] & Q_GOOD) == Q_GOOD)
-							status = ChannelStatusFlags.Good;
-						else
-							status = ChannelStatusFlags.Bad;
+					ChannelStatusFlags status;
+					if ((pwQualities[i] & Q_GOOD) == Q_GOOD)
+						status = ChannelStatusFlags.Good;
+					else
+						status = ChannelStatusFlags.Bad;
 
-                        ch.DoUpdate(pvValues[i], dt, status);
-                    }
-                }
+					ch.DoUpdate(pvValues[i], dt, status);
+
+					//Statistic.ChannelsCount++;
+					//Statistic.DoAnalysis();
+				}
 			}
 		}
 
@@ -58,13 +80,9 @@ namespace FreeSCADA.Communication.OPCPlug
 		{
 			for (int i = 0; i < dwCount; i++)
 			{
-				foreach (OPCBaseChannel ch in channels)
-				{
-					if (ch.GetHashCode() == pClienthandles[i])
-					{
+				OPCBaseChannel ch;
+				if (channels.TryGetValue(pClienthandles[i], out ch))
 						ch.StatusFlags = ChannelStatusFlags.Good;
-					}
-				}
 			}
 		}
 
