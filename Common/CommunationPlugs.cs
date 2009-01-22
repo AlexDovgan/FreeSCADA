@@ -77,6 +77,7 @@ namespace FreeSCADA.Common
 			{
 				if (plug.Connect() == false)
 				{
+					Env.Current.Logger.LogError(StringResources.msgFailedToConnectPlugins);
 					Disconnect();
 					return false;
 				}

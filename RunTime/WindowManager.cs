@@ -13,6 +13,7 @@ namespace FreeSCADA.RunTime
 
 		List<DocumentView> documentViews = new List<DocumentView>();
 		ProjectContentView projectContentView;
+		LogConsoleView logConsoleView;
 
 		DocumentView currentDocument;
 
@@ -21,9 +22,17 @@ namespace FreeSCADA.RunTime
 			this.dockPanel = dockPanel;
 
 			//Create toolwindows
+			dockPanel.SuspendLayout();
 			projectContentView = new ProjectContentView();
 			projectContentView.Show(dockPanel, DockState.DockLeft);
 			projectContentView.OpenEntity += new ProjectContentView.OpenEntityHandler(OnOpenProjectEntity);
+
+			logConsoleView = new LogConsoleView();
+			logConsoleView.Show(dockPanel, DockState.DockBottomAutoHide);
+			dockPanel.ActiveAutoHideContent = null;
+
+			projectContentView.Activate();
+			dockPanel.ResumeLayout(true);
 
             //Connect Windows Manager to heleper events
             dockPanel.ActiveDocumentChanged += new EventHandler(OnActiveDocumentChanged);
