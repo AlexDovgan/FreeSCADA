@@ -75,6 +75,9 @@
     <Compile Include="Views\ArchiverGraphView.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Views\LogConsoleView.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Views\ProjectContentView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +93,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ArchiverGraphView.resx">
       <DependentUpon>ArchiverGraphView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\LogConsoleView.resx">
+      <DependentUpon>LogConsoleView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ProjectContentView.resx">
       <DependentUpon>ProjectContentView.cs</DependentUpon>
@@ -174,6 +180,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\zoom_out.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\log_error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\log_info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\log_warning.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

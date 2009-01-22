@@ -10,6 +10,7 @@ namespace FreeSCADA.Common
 		CommunationPlugs communicationPlugins;
 		FreeSCADA.Common.Project project;
 		EnvironmentMode mode;
+		Logger logger;
 
 		#region Initialization and singleton implementation
 		static Env environmentInstance = null;
@@ -84,6 +85,12 @@ namespace FreeSCADA.Common
 				project.Clear();
 			else
 				project = new FreeSCADA.Common.Project();
+		}
+
+		public Logger Logger
+		{
+			get { return logger; }
+			set { logger = value; }
 		}
 	}
 }
