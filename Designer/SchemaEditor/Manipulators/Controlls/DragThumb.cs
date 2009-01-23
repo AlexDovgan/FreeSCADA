@@ -12,10 +12,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 
         public DragThumb()
         {
-            base.DragDelta += new DragDeltaEventHandler(DragThumb_DragDelta);
-            
+
+               
+            //base.DragDelta += new DragDeltaEventHandler(DragThumb_DragDelta);
+           
         }
-     
+        
 
         void DragThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
@@ -37,11 +39,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 
                 double x = left + dragDelta.X;
                 double y = top + dragDelta.Y;
-                if (gridOn)
-                {
-                    x -= x % gridDelta;
-                    y -= y % gridDelta;
-                }
+                //if (gridOn)
+                //{
+                //    x -= x % gridDelta;
+                //    y -= y % gridDelta;
+                //}
                 //Canvas.SetLeft(item, x);
                 //Canvas.SetTop(item, y);
                 EditorHelper.SetDependencyProperty(item, Canvas.LeftProperty, x);

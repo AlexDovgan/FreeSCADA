@@ -38,6 +38,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             inst = new TypeConverterAttribute(typeof(BindingConvertor));
             RegisterAttribute<MultiBindingExpression>(inst);
             RegisterAttribute<Double>(new EditorAttribute(typeof(FreeSCADA.Designer.SchemaEditor.PropertiesUtils.DoubleEditor), typeof(System.Drawing.Design.UITypeEditor)));
+            RegisterAttribute<Nullable<bool>>(new EditorAttribute(typeof(FreeSCADA.Designer.SchemaEditor.PropertiesUtils.NullableBoolEditor), typeof(System.Drawing.Design.UITypeEditor)));
             RegisterAttribute<String>(new EditorAttribute(typeof(FreeSCADA.Designer.SchemaEditor.PropertiesUtils.StringEditor), typeof(System.Drawing.Design.UITypeEditor)));
             TypeDescriptor.AddProvider(new BindingTypeDescriptionProvider(),typeof(System.Windows.Data.Binding));
         
@@ -138,7 +139,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             Group.SetValue(Viewbox.StretchProperty, Stretch.Fill);
             Canvas workCanvas = (Canvas)tool.AdornedElement;
             Canvas g = new Canvas();
-            Rect r = EditorHelper.CalculateBoundce(tool.SelectedObjects, workCanvas);
+            Rect r = EditorHelper.CalculateBounds(tool.SelectedObjects, workCanvas);
             Canvas.SetLeft(Group, r.X);
             Canvas.SetTop(Group, r.Y);
             Group.Width = g.Width = r.Width;
@@ -167,7 +168,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             
         }
 
-        public static Rect CalculateBoundce(List<UIElement> elList, UIElement parent)
+        public static Rect CalculateBounds(List<UIElement> elList, UIElement parent)
         {
             Rect boundce = Rect.Empty;
             foreach (UIElement el in elList)

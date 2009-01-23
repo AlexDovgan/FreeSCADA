@@ -111,11 +111,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             IInputElement manipulatorHit = null;
             if (ToolManipulator != null)
                 manipulatorHit = ToolManipulator.InputHitTest(e.GetPosition(ToolManipulator));
-
+            if (manipulatorHit != null)
+                return;
             DependencyObject documentHit = null;
             if (VisualTreeHelper.HitTest(AdornedElement, pt) != null)
                 documentHit = VisualTreeHelper.HitTest(AdornedElement, pt).VisualHit;
-            if (manipulatorHit != null)
+            if (documentHit == SelectedObject)
             {
                 if (e.ClickCount > 1)
                 {
@@ -123,9 +124,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     SelectedObject = null;
                     ToolManipulator = ObjectsFactory.CreateDefaultManipulator(so);
                     SelectedObject = so;
+                    return;
                 }
             }
-            else if (documentHit == AdornedElement)
+            if (documentHit == AdornedElement)
             {
 
                 CaptureMouse();
@@ -134,17 +136,17 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 SelectedObject = null;
 
             }
-            else if (documentHit != AdornedElement)
+            else if (documentHit != AdornedElement )
             {
                 FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(AdornedElement, documentHit);
                 if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.None)
                 {
-           
+
                     isSelectionMoved = true;
                     movePos = e.GetPosition(this);
                     System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.SizeAll;
                     moveUndoInfo = true;
-                    if(!selectedElements.Contains(el))
+                    if (!selectedElements.Contains(el))
                         SelectedObject = el;
                 }
                 else
@@ -172,8 +174,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         protected override Size ArrangeOverride(Size finalSize)
         {
             base.ArrangeOverride(finalSize);
-            Rect r = EditorHelper.CalculateBoundce(selectedElements, AdornedElement);
-            if (!r.IsEmpty)
+            Rect r = EditorHelper.CalculateBounds(selectedElements, AdornedElement);
+            if (SelectedObjects.Count>1&&!r.IsEmpty)
             {
                 boundceRect.Visibility = Visibility.Visible;
                 boundceRect.Arrange(r);
@@ -199,10 +201,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 Canvas.SetLeft((se as FrameworkElement), x + delta_x);
                 Canvas.SetTop((se as FrameworkElement), y + delta_y);
                 if (moveUndoInfo)
-                        this.OnObjectChanged(se);
+                    this.OnObjectChanged(se);
             }
             moveUndoInfo = false;
-       
+
             selectionRectangle.RenderOpen().Close();
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
         }

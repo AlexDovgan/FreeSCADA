@@ -93,6 +93,15 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CheckBox Tool.
+        /// </summary>
+        internal static string CheckBox {
+            get {
+                return ResourceManager.GetString("CheckBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy to clipboard.
         /// </summary>
         internal static string CommandCopyDescription {

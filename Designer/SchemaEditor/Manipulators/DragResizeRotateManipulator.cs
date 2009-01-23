@@ -12,7 +12,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
     class DragResizeRotateManipulator : BaseManipulator
     {
         
-        public DragThumb dragControl = new DragThumb();
+        //public DragThumb dragControl = new DragThumb();
+        Rectangle dragControl = new Rectangle();
         RotateThumb rotateTopLeft = new RotateThumb();
         RotateThumb rotateBottomLeft = new RotateThumb();
         RotateThumb rotateTopRight = new RotateThumb();
@@ -21,7 +22,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         ResizeThumb resizeBottomLeft = new ResizeThumb();
         ResizeThumb resizeTopRight = new ResizeThumb();
         ResizeThumb resizeBottomRight = new ResizeThumb();
-        ResizeThumb resizeLeft = new ResizeThumb();
+        ResizeThumb resizeLeft = new ResizeThumb();   
         ResizeThumb resizeRight = new ResizeThumb();
         ResizeThumb resizeTop = new ResizeThumb();
         ResizeThumb resizeBottom = new ResizeThumb();
@@ -33,11 +34,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         {
             
 
-            
-            //dragControl.VerticalAlignment = VerticalAlignment.Stretch;
-            //dragControl.HorizontalAlignment = HorizontalAlignment.Stretch;
-            //dragControl.Cursor = Cursors.SizeAll;
-            //visualChildren.Add(dragControl);
+            dragControl.VerticalAlignment = VerticalAlignment.Stretch;
+            dragControl.HorizontalAlignment = HorizontalAlignment.Stretch;
+            dragControl.StrokeThickness = 1;
+            dragControl.Stroke = System.Windows.Media.Brushes.Black;
+            dragControl.Cursor = Cursors.SizeAll;
+            visualChildren.Add(dragControl);
             
             
             rotateTopLeft.VerticalAlignment = VerticalAlignment.Top;
@@ -106,14 +108,19 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             if (!(AdornedElement is FrameworkElement))
                 throw new Exception("This is not FrameworkElement");
 
-            foreach (Thumb control in visualChildren)
+            foreach (FrameworkElement control in visualChildren)
             {
-
-                control.DataContext = AdornedElement;
-                control.DragStarted += new DragStartedEventHandler(control_DragStarted);
-                control.DragCompleted += new DragCompletedEventHandler(control_DragCompleted);
-                control.DragDelta += new DragDeltaEventHandler(control_DragDelta);
-                if (control.Cursor == Cursors.SizeAll) control.RenderTransform = AdornedElement.RenderTransform;
+                if(control is Thumb)
+                {
+                    Thumb t = control as Thumb;
+                    t.DataContext = AdornedElement;
+                    t.DragStarted += new DragStartedEventHandler(control_DragStarted);
+                    t.DragCompleted += new DragCompletedEventHandler(control_DragCompleted);
+                    t.DragDelta += new DragDeltaEventHandler(control_DragDelta);
+                    
+                }
+                if (control.Cursor == Cursors.SizeAll) 
+                    control.RenderTransform = AdornedElement.RenderTransform;
 
             }
             base.Activate();
@@ -146,7 +153,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             //if (Visibility == Visibility.Hidden) return finalSize;
             Rect ro = new Rect(0, 0, AdornedElement.DesiredSize.Width, AdornedElement.DesiredSize.Height);
             //Rect ro = LayoutInformation.GetLayoutSlot(AdornedElement as FrameworkElement);
-            foreach (Thumb control in visualChildren)
+            foreach (FrameworkElement control in visualChildren)
             {
                 Rect aligmentRect = new Rect();
                 aligmentRect.Width = control.Width;
