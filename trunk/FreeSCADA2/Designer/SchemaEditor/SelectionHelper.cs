@@ -9,11 +9,11 @@ namespace FreeSCADA.Designer.SchemaEditor
 {
     class SelectionManager
     {
-        Canvas mainCanvas;
+        Tools.BaseTool _tool;
         protected List<UIElement> _selected=new List<UIElement>();
-        SelectionManager(Canvas canvas)
+        SelectionManager(Tools.BaseTool tool)
         {
-            mainCanvas = canvas;
+            _tool = tool;
             
         }
         public List<UIElement>  Selected
@@ -22,7 +22,7 @@ namespace FreeSCADA.Designer.SchemaEditor
         }
         public Rect GetSelectedBounds()
         {
-            EditorHelper.CalculateBoundce(Selected, mainCanvas);
+            EditorHelper.CalculateBounds(Selected, _tool.AdornedElement);
 
             return new Rect();
         }

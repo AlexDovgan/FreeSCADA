@@ -101,13 +101,17 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\DoubleEditor.cs">
-      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\NullableBoolEditor.cs">
     </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\StringEditor.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyWrapper.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\PropProxy.cs" />
+    <Compile Include="SchemaEditor\PropertiesUtils\ValueBindingDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SchemaEditor\SchemaCommands.cs">
     </Compile>
     <Compile Include="SchemaEditor\SelectionHelper.cs" />

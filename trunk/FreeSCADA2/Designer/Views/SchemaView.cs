@@ -291,6 +291,10 @@ namespace FreeSCADA.Designer.Views
 				StringResources.ToolControlsGroupName,
                 blankBitmap,
                 typeof(ControlCreateTool<System.Windows.Controls.Slider>)));
+            toolsList.Add(new ToolDescriptor(StringResources.CheckBox,
+                StringResources.ToolControlsGroupName,
+                blankBitmap,
+                typeof(ControlCreateTool<System.Windows.Controls.CheckBox>)));
         }
 
         void undoBuff_CanExecuteChanged(object sender, EventArgs e)

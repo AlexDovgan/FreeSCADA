@@ -39,11 +39,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 
                 double x = left + dragDelta.X;
                 double y = top + dragDelta.Y;
-                if (gridOn)
-                {
-                    x -= x % gridDelta;
-                    y -= y % gridDelta;
-                }
+                //if (gridOn)
+                //{
+                //    x -= x % gridDelta;
+                //    y -= y % gridDelta;
+                //}
                 EditorHelper.SetDependencyProperty(item, Canvas.LeftProperty, x);
                 EditorHelper.SetDependencyProperty(item, Canvas.TopProperty, y);
             }

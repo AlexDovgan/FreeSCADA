@@ -97,14 +97,15 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                     "MinChannelValue",
                     "MaxChannelValue",
                     "MinAngle",
-                    "MaxAngle"
+                    "MaxAngle",
+                    "IsChecked"
     
 
                     }
                         );
             IEnumerable<PropertyWrapper> ie;
             if(controlledObject is System.Windows.DependencyObject)
-                ie = TypeDescriptor.GetProperties(controlledObject, attributes).Cast<PropertyDescriptor>()
+                ie = TypeDescriptor.GetProperties(controlledObject, null).Cast<PropertyDescriptor>()
                      .Where(x => DependencyPropertyDescriptor.FromProperty(x) != null
                          && props.Contains(x.Name) == true).Select<PropertyDescriptor,PropertyWrapper>(x=>new PropertyWrapper(controlledObject,x));
             else

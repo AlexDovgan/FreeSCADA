@@ -169,6 +169,9 @@
   <data name="ChannelsItemName" xml:space="preserve">
     <value>Channels Tree</value>
   </data>
+  <data name="CheckBox" xml:space="preserve">
+    <value>CheckBox Tool</value>
+  </data>
   <data name="CommandCopyDescription" xml:space="preserve">
     <value>Copy to clipboard</value>
   </data>
@@ -245,7 +248,6 @@
     <value>Please select trajectory object 
     (line,rectangle,ellipse)</value>
   </data>
-  
   <data name="MainWindowName" xml:space="preserve">
     <value>Designer</value>
   </data>
