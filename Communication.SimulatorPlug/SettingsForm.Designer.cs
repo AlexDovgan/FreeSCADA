@@ -28,13 +28,19 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.grid = new SourceGrid.Grid();
 			this.addButton = new System.Windows.Forms.Button();
 			this.removeButton = new System.Windows.Forms.Button();
 			this.okButton = new System.Windows.Forms.Button();
 			this.cancelButton = new System.Windows.Forms.Button();
-			this.label1 = new System.Windows.Forms.Label();
 			this.expressionEditBox = new System.Windows.Forms.TextBox();
+			this.expressionContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.codeTemplateButton = new System.Windows.Forms.Button();
+			this.label1 = new System.Windows.Forms.Label();
+			this.triggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.counterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.expressionContextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// grid
@@ -50,7 +56,7 @@
 			this.grid.OptimizeMode = SourceGrid.CellOptimizeMode.ForRows;
 			this.grid.RowsCount = 1;
 			this.grid.SelectionMode = SourceGrid.GridSelectionMode.Row;
-			this.grid.Size = new System.Drawing.Size(528, 231);
+			this.grid.Size = new System.Drawing.Size(528, 187);
 			this.grid.TabIndex = 0;
 			this.grid.TabStop = true;
 			this.grid.ToolTipText = "";
@@ -99,28 +105,65 @@
 			this.cancelButton.UseVisualStyleBackColor = true;
 			this.cancelButton.Click += new System.EventHandler(this.OnCancelClick);
 			// 
+			// expressionEditBox
+			// 
+			this.expressionEditBox.AcceptsReturn = true;
+			this.expressionEditBox.AcceptsTab = true;
+			this.expressionEditBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.expressionEditBox.Enabled = false;
+			this.expressionEditBox.Location = new System.Drawing.Point(12, 234);
+			this.expressionEditBox.Multiline = true;
+			this.expressionEditBox.Name = "expressionEditBox";
+			this.expressionEditBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.expressionEditBox.Size = new System.Drawing.Size(528, 101);
+			this.expressionEditBox.TabIndex = 5;
+			this.expressionEditBox.WordWrap = false;
+			this.expressionEditBox.TextChanged += new System.EventHandler(this.expressionEditBox_TextChanged);
+			// 
+			// expressionContextMenu
+			// 
+			this.expressionContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.triggerToolStripMenuItem,
+            this.counterToolStripMenuItem});
+			this.expressionContextMenu.Name = "expressionContextMenu";
+			this.expressionContextMenu.Size = new System.Drawing.Size(118, 48);
+			// 
+			// codeTemplateButton
+			// 
+			this.codeTemplateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.codeTemplateButton.Enabled = false;
+			this.codeTemplateButton.Location = new System.Drawing.Point(384, 205);
+			this.codeTemplateButton.Name = "codeTemplateButton";
+			this.codeTemplateButton.Size = new System.Drawing.Size(156, 23);
+			this.codeTemplateButton.TabIndex = 7;
+			this.codeTemplateButton.Text = "Insert code template";
+			this.codeTemplateButton.UseVisualStyleBackColor = true;
+			this.codeTemplateButton.Click += new System.EventHandler(this.codeTemplateButton_Click);
+			// 
 			// label1
 			// 
+			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(12, 250);
+			this.label1.Location = new System.Drawing.Point(12, 215);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(63, 13);
 			this.label1.TabIndex = 4;
 			this.label1.Text = "Expression:";
 			// 
-			// expressionEditBox
+			// triggerToolStripMenuItem
 			// 
-			this.expressionEditBox.AcceptsReturn = true;
-			this.expressionEditBox.AcceptsTab = true;
-			this.expressionEditBox.Enabled = false;
-			this.expressionEditBox.Location = new System.Drawing.Point(12, 267);
-			this.expressionEditBox.Multiline = true;
-			this.expressionEditBox.Name = "expressionEditBox";
-			this.expressionEditBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.expressionEditBox.Size = new System.Drawing.Size(528, 68);
-			this.expressionEditBox.TabIndex = 5;
-			this.expressionEditBox.WordWrap = false;
-			this.expressionEditBox.TextChanged += new System.EventHandler(this.expressionEditBox_TextChanged);
+			this.triggerToolStripMenuItem.Name = "triggerToolStripMenuItem";
+			this.triggerToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+			this.triggerToolStripMenuItem.Text = "Trigger";
+			this.triggerToolStripMenuItem.Click += new System.EventHandler(this.triggerToolStripMenuItem_Click);
+			// 
+			// counterToolStripMenuItem
+			// 
+			this.counterToolStripMenuItem.Name = "counterToolStripMenuItem";
+			this.counterToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+			this.counterToolStripMenuItem.Text = "Counter";
+			this.counterToolStripMenuItem.Click += new System.EventHandler(this.counterToolStripMenuItem_Click);
 			// 
 			// SettingsForm
 			// 
@@ -128,9 +171,10 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(552, 376);
 			this.Controls.Add(this.expressionEditBox);
-			this.Controls.Add(this.label1);
 			this.Controls.Add(this.cancelButton);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.removeButton);
+			this.Controls.Add(this.codeTemplateButton);
 			this.Controls.Add(this.okButton);
 			this.Controls.Add(this.addButton);
 			this.Controls.Add(this.grid);
@@ -140,6 +184,7 @@
 			this.Name = "SettingsForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Simulator settings";
+			this.expressionContextMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -152,7 +197,11 @@
 		private System.Windows.Forms.Button removeButton;
 		private System.Windows.Forms.Button okButton;
 		private System.Windows.Forms.Button cancelButton;
-		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox expressionEditBox;
+		private System.Windows.Forms.ContextMenuStrip expressionContextMenu;
+		private System.Windows.Forms.Button codeTemplateButton;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.ToolStripMenuItem triggerToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem counterToolStripMenuItem;
 	}
 }

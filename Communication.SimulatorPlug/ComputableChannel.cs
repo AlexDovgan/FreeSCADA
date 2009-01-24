@@ -11,6 +11,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		string expression;
 		static ScriptEngine python = InitializePython();
 		ScriptSource source;
+		ScriptScope scope;
 
 		public ComputableChannel(string name, Plugin plugin, string expression)
 			: base(name, true, plugin, typeof(int))
@@ -27,9 +28,8 @@ namespace FreeSCADA.Communication.SimulatorPlug
 
         public override  void DoUpdate()
 		{
-			ScriptScope scope = python.CreateScope();
 			foreach (IChannel ch in plugin.Channels)
-					scope.SetVariable(ch.Name, ch.Value);
+				scope.SetVariable(ch.Name, ch.Value);
 
 			if (source != null)
 			{
@@ -58,6 +58,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 				{
 					string pyExpr = "from math import *\n" + expression;
 					source = python.CreateScriptSourceFromString(pyExpr, Microsoft.Scripting.SourceCodeKind.Statements);
+					scope = python.CreateScope();
 				}
 			}
 		}
