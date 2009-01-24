@@ -309,7 +309,7 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XAML  files (*.xaml)|*.xaml|svg files (*.svg)|*.svg|All files (*.*)|*.*.
+        ///   Looks up a localized string similar to All vector graphics (*.xaml;*.svg)|*.xaml;*.svg|XAML  files (*.xaml)|*.xaml|svg files (*.svg)|*.svg|All files (*.*)|*.*.
         /// </summary>
         internal static string FileImportDialogFilter {
             get {

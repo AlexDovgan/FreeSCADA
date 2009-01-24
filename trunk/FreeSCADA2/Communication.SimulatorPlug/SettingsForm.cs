@@ -63,7 +63,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 						"The script is Python based (please refer to Python documentation for the syntax).\n"+
 						"At the end of your script, you must assing some value to 'result' variable. This is\n"+
 						"internal value used by FreeSCADA. You could also refer to other variables withing Simulator\n"+
-						"plugin just by typing it names like a variable.\n\nExample:\n"+
+						"plugin just by typing their names like a variable.\n\nExample:\n"+
 						"   if variable_1 > 5:\n"+
 						"      result = 1\n"+
 						"   else:\n"+
@@ -79,7 +79,10 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		private void UpdateExpressionField()
 		{
 			if (grid.Selection.GetSelectionRegion().Count == 0)
+			{
 				expressionEditBox.Enabled = false;
+				codeTemplateButton.Enabled = false;
+			}
 
 			foreach (int row in grid.Selection.GetSelectionRegion().GetRowsIndex())
 			{
@@ -102,6 +105,8 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			if (type == typeof(ComputableChannel).FullName)
 			{
 				expressionEditBox.Enabled = true;
+				codeTemplateButton.Enabled = true;
+
 				if (grid.Rows[row].Tag != null)
 					expressionEditBox.Text = (string)grid.Rows[row].Tag;
 				else
@@ -110,6 +115,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			else
 			{
 				expressionEditBox.Enabled = false;
+				codeTemplateButton.Enabled = false;
 				expressionEditBox.Text = "";
 			}
 		}
@@ -128,6 +134,8 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			grid[row, 0] = new SourceGrid.Cells.Cell(variableName, typeof(string));
 			
 			SourceGrid.Cells.Editors.ComboBox combo = new SourceGrid.Cells.Editors.ComboBox(typeof(string), channelNames, true);
+			combo.Control.Sorted = true;
+			combo.Control.DropDownStyle = ComboBoxStyle.DropDownList;
 			combo.Control.SelectionChangeCommitted += new EventHandler(OnChannelTypeChanged);
 			grid[row, 1] = new SourceGrid.Cells.Cell(variableTypeNames[type], combo);
 			SourceGrid.Cells.CheckBox check = new SourceGrid.Cells.CheckBox();
@@ -244,6 +252,38 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			{
 				grid.Rows[row].Tag = expressionEditBox.Text;
 			}
+		}
+
+		private void triggerToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			string channelName = "";
+			foreach (int row in grid.Selection.GetSelectionRegion().GetRowsIndex())
+				channelName = grid[row, 0].DisplayText;
+
+			if (string.IsNullOrEmpty(channelName))
+				return;
+
+			string template = "#Condition to trigger: 'counter_variable == 0'\r\n"+
+				"if counter_variable == 0:\r\n" +
+				"    if "+channelName+" == 1: result = 0\r\n"+
+				"    else: result = 1\r\n"+
+				"else: result = "+channelName+"\r\n";
+
+			expressionEditBox.Text += template;
+		}
+
+		private void counterToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			string template = "if not vars().has_key('counter_var'): counter_var = 0\r\n" +
+				"counter_var = counter_var + 1\r\n" +
+				"result = counter_var\r\n";
+
+			expressionEditBox.Text += template;
+		}
+
+		private void codeTemplateButton_Click(object sender, EventArgs e)
+		{
+			expressionContextMenu.Show(codeTemplateButton, 0, codeTemplateButton.Height);
 		}
 	}
 }

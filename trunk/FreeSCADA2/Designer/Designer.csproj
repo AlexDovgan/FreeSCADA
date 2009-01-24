@@ -12,6 +12,7 @@
     <AssemblyName>Designer</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -286,4 +287,9 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>mkdir  "$(TargetDir)Resources"
+xcopy "$(SolutionDir)Designer\Resources\svg2xaml.xsl" "$(TargetDir)Resources" /S /R /Y
+xcopy "$(SolutionDir)Designer\Resources\colors.xml" "$(TargetDir)Resources" /S /R /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>
