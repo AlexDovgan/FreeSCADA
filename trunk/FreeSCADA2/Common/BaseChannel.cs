@@ -15,7 +15,8 @@ namespace FreeSCADA.Common
 
         protected ICommunicationPlug plugin;
         private object tag;
-        private object value=null;//= new object();
+        private object value = null;
+		object defaultValue = null;
 
         public BaseChannel(string name, bool readOnly, ICommunicationPlug plugin, Type type)
         {
@@ -23,12 +24,12 @@ namespace FreeSCADA.Common
             this.readOnly = readOnly;
             this.plugin = plugin;
             this.type = type;
-			/*if (type != value.GetType())
-                if (type != typeof(string))     // This approach does not work with STRING channels!!!!!!!!!!!
-				    value = System.Activator.CreateInstance(type);
-                else
-                    value = "";
-            */
+
+			defaultValue = type.IsValueType ? Activator.CreateInstance(type) : null;
+			if (type == typeof(string))
+				defaultValue = "";
+			value = defaultValue;
+            
             modifyTime = DateTime.MinValue;
             status = ChannelStatusFlags.Unknown;
         }
@@ -78,11 +79,16 @@ namespace FreeSCADA.Common
         {
             get
             {
-                if (StatusFlags == ChannelStatusFlags.Good && plugin.IsConnected)
-                    lock (this)
-                        return value;
-                else
-                    return null;
+				if (plugin.IsConnected)
+				{
+					lock (this)
+						return value;
+				}
+				else
+				{
+					lock (this)
+						return defaultValue;
+				}
                 
             }
             set
@@ -139,6 +145,15 @@ namespace FreeSCADA.Common
 
         #endregion
 
+		public virtual void Reset()
+		{
+			object defVal;
+			lock (this)
+				defVal = defaultValue;
+
+			InternalSetValue(defVal, DateTime.Now, ChannelStatusFlags.Unknown);
+		}
+
         protected void FireValueChanged()
         {
             if (PropertyChanged != null)
@@ -158,11 +173,21 @@ namespace FreeSCADA.Common
             lock (this)
             {
                 object old = this.value;
-                this.value = value;
-				this.type = value.GetType();
+
+				if (value != null)
+				{
+					this.value = value;
+					this.type = value.GetType();
+					this.status = status;
+				}
+				else
+				{
+					this.value = defaultValue;
+					this.type = defaultValue.GetType();
+					this.status = ChannelStatusFlags.Unknown;
+				}
 
                 modifyTime = externalTime;
-				this.status = status;
                 if (old != null)
                     fire = !old.Equals(this.value);
                 else

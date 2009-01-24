@@ -33,6 +33,8 @@
 			this.removeButton = new System.Windows.Forms.Button();
 			this.okButton = new System.Windows.Forms.Button();
 			this.cancelButton = new System.Windows.Forms.Button();
+			this.label1 = new System.Windows.Forms.Label();
+			this.expressionEditBox = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// grid
@@ -47,8 +49,8 @@
 			this.grid.Name = "grid";
 			this.grid.OptimizeMode = SourceGrid.CellOptimizeMode.ForRows;
 			this.grid.RowsCount = 1;
-			this.grid.SelectionMode = SourceGrid.GridSelectionMode.Cell;
-			this.grid.Size = new System.Drawing.Size(528, 323);
+			this.grid.SelectionMode = SourceGrid.GridSelectionMode.Row;
+			this.grid.Size = new System.Drawing.Size(528, 231);
 			this.grid.TabIndex = 0;
 			this.grid.TabStop = true;
 			this.grid.ToolTipText = "";
@@ -97,11 +99,36 @@
 			this.cancelButton.UseVisualStyleBackColor = true;
 			this.cancelButton.Click += new System.EventHandler(this.OnCancelClick);
 			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(12, 250);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(63, 13);
+			this.label1.TabIndex = 4;
+			this.label1.Text = "Expression:";
+			// 
+			// expressionEditBox
+			// 
+			this.expressionEditBox.AcceptsReturn = true;
+			this.expressionEditBox.AcceptsTab = true;
+			this.expressionEditBox.Enabled = false;
+			this.expressionEditBox.Location = new System.Drawing.Point(12, 267);
+			this.expressionEditBox.Multiline = true;
+			this.expressionEditBox.Name = "expressionEditBox";
+			this.expressionEditBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.expressionEditBox.Size = new System.Drawing.Size(528, 68);
+			this.expressionEditBox.TabIndex = 5;
+			this.expressionEditBox.WordWrap = false;
+			this.expressionEditBox.TextChanged += new System.EventHandler(this.expressionEditBox_TextChanged);
+			// 
 			// SettingsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(552, 376);
+			this.Controls.Add(this.expressionEditBox);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.removeButton);
 			this.Controls.Add(this.okButton);
@@ -114,6 +141,7 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Simulator settings";
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -124,5 +152,7 @@
 		private System.Windows.Forms.Button removeButton;
 		private System.Windows.Forms.Button okButton;
 		private System.Windows.Forms.Button cancelButton;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.TextBox expressionEditBox;
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using FreeSCADA.Common;
+
 namespace FreeSCADA.Communication.SimulatorPlug
 {
 	class GenericChannel<T> :BaseChannel

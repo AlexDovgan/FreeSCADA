@@ -66,6 +66,11 @@ namespace FreeSCADA.Communication.SimulatorPlug
 
 		public bool Connect()
 		{
+			foreach (IChannel channel in channels)
+			{
+				if (channel is BaseChannel)
+					(channel as BaseChannel).Reset();
+			}
 			channelUpdaterThread = new Thread(new ParameterizedThreadStart(ChannelUpdaterThreadProc));
 			channelUpdaterThread.Start(this);
 			return IsConnected;

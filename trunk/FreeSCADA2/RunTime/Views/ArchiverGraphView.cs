@@ -18,7 +18,6 @@ namespace FreeSCADA.RunTime.Views
 		}
 		private NPlot.Windows.PlotSurface2D graph;
 		private Label label1;
-		private System.ComponentModel.IContainer components;
 
 		public ArchiverGraphView()
 		{

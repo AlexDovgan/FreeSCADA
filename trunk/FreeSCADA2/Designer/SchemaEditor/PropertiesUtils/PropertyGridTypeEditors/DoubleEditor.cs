@@ -82,7 +82,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
 
                     }
-                    catch (System.Exception e)
+                    catch (System.Exception)
                     {
                         conv.Converters.Add(new Kent.Boogaart.Converters.TypeConverter(chs.GetChannel().Type, depProp.PropertyType));
                     }

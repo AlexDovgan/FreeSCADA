@@ -16,6 +16,18 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			string name = node.Attributes["name"].Value;
 			bool readOnly = node.HasAttribute("readOnly")?bool.Parse(node.Attributes["readOnly"].Value):true;
 
+			if (Type.GetType(type) == typeof(ComputableChannel))
+			{
+				string expression = "";
+				foreach (XmlElement expNode in node.GetElementsByTagName("expression"))
+					expression = expNode.InnerText;
+
+				if (string.IsNullOrEmpty(expression) == false)
+					return new ComputableChannel(name, plugin, expression);
+				else
+					return null;
+			}
+
 			return CreateChannel(type, name, readOnly, plugin);
 		}
 
@@ -48,6 +60,14 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			node.SetAttribute("type", channelBase.GetType().FullName);
 			node.SetAttribute("name", channelBase.Name);
 			node.SetAttribute("readOnly", channelBase.IsReadOnly.ToString());
+
+			if (channel is ComputableChannel)
+			{
+				ComputableChannel ch = channel as ComputableChannel;
+				XmlElement expNode = node.OwnerDocument.CreateElement("expression");
+				expNode.InnerText = ch.Expression;
+				node.AppendChild(expNode);
+			}
 		}
 	}
 }

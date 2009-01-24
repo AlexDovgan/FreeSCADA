@@ -9,8 +9,6 @@ namespace FreeSCADA.Communication.SimulatorPlug
 	{
 		Dictionary<string, string> variableTypeNames = new Dictionary<string,string>();
 		List<string> channelNames = new List<string>();
-		//string[] variableTypeNames = { "Current time", "Random integer", "Simple integer", "Simple string", "Simple float"};
-		//enum VariableTypes { CurrentTime, RandomInteger, SimpleInteger, SimpleString, SimpleFloat};
 		Plugin plugin;
 
 		public SettingsForm(Plugin plugin)
@@ -26,6 +24,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
             variableTypeNames[typeof(GenericChannel<int>).FullName] = "Simple integer";
             variableTypeNames[typeof(GenericChannel<string>).FullName] = "Simple string";
 			variableTypeNames[typeof(GenericChannel<float>).FullName]	= "Simple float";
+			variableTypeNames[typeof(ComputableChannel).FullName] = "Computable";
 			foreach (KeyValuePair<string, string> pair in variableTypeNames)
 				channelNames.Add(pair.Value);
 
@@ -43,10 +42,76 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			grid[0, 1] = new SourceGrid.Cells.ColumnHeader("Type");
 			grid[0, 2] = new SourceGrid.Cells.ColumnHeader("Read only");
 
+			grid.Selection.SelectionChanged += new SourceGrid.RangeRegionChangedEventHandler(OnSelectionChanged);
+
 			LoadChannels();
 
 			grid.AutoStretchColumnsToFitWidth = true;
 			grid.AutoSizeCells();
+
+			InitializeTooltips();
+		}
+
+		void InitializeTooltips()
+		{
+			ToolTip expressionTooltip = new ToolTip();
+			expressionTooltip.AutomaticDelay = 180000;
+			expressionTooltip.InitialDelay = 100;
+			expressionTooltip.ShowAlways = true;
+
+			string tip = "Channel processing script.\n\n" +
+						"The script is Python based (please refer to Python documentation for the syntax).\n"+
+						"At the end of your script, you must assing some value to 'result' variable. This is\n"+
+						"internal value used by FreeSCADA. You could also refer to other variables withing Simulator\n"+
+						"plugin just by typing it names like a variable.\n\nExample:\n"+
+						"   if variable_1 > 5:\n"+
+						"      result = 1\n"+
+						"   else:\n"+
+						"      result = 0";
+			expressionTooltip.SetToolTip(expressionEditBox, tip);
+		}
+
+		void OnSelectionChanged(object sender, SourceGrid.RangeRegionChangedEventArgs e)
+		{
+			UpdateExpressionField();
+		}
+
+		private void UpdateExpressionField()
+		{
+			if (grid.Selection.GetSelectionRegion().Count == 0)
+				expressionEditBox.Enabled = false;
+
+			foreach (int row in grid.Selection.GetSelectionRegion().GetRowsIndex())
+			{
+				UpdateExpressionFieldForRow(row, grid[row, 1].DisplayText);
+			}
+		}
+
+		private void UpdateExpressionFieldForRow(int row, string typeDisplayName)
+		{
+			string type = null;
+			foreach (KeyValuePair<string, string> pair in variableTypeNames)
+			{
+				if (typeDisplayName == pair.Value)
+				{
+					type = pair.Key;
+					break;
+				}
+			}
+
+			if (type == typeof(ComputableChannel).FullName)
+			{
+				expressionEditBox.Enabled = true;
+				if (grid.Rows[row].Tag != null)
+					expressionEditBox.Text = (string)grid.Rows[row].Tag;
+				else
+					expressionEditBox.Text = "";
+			}
+			else
+			{
+				expressionEditBox.Enabled = false;
+				expressionEditBox.Text = "";
+			}
 		}
 
 		private void OnAddRow(object sender, EventArgs e)
@@ -63,6 +128,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			grid[row, 0] = new SourceGrid.Cells.Cell(variableName, typeof(string));
 			
 			SourceGrid.Cells.Editors.ComboBox combo = new SourceGrid.Cells.Editors.ComboBox(typeof(string), channelNames, true);
+			combo.Control.SelectionChangeCommitted += new EventHandler(OnChannelTypeChanged);
 			grid[row, 1] = new SourceGrid.Cells.Cell(variableTypeNames[type], combo);
 			SourceGrid.Cells.CheckBox check = new SourceGrid.Cells.CheckBox();
 			check.Checked = readOnly;
@@ -72,10 +138,26 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			grid.Selection.SelectRow(row, true);
 		}
 
+		void OnChannelTypeChanged(object sender, EventArgs e)
+		{
+			DevAge.Windows.Forms.DevAgeComboBox combo = (DevAge.Windows.Forms.DevAgeComboBox)sender;
+			foreach (int row in grid.Selection.GetSelectionRegion().GetRowsIndex())
+			{
+				UpdateExpressionFieldForRow(row, (string)combo.Value);
+			}
+		}
+
 		private void OnRemoveRow(object sender, EventArgs e)
 		{
-			foreach(int row in grid.Selection.GetSelectionRegion().GetRowsIndex())
+			foreach (int row in grid.Selection.GetSelectionRegion().GetRowsIndex())
+			{
+				if(grid[row, 1].Editor is SourceGrid.Cells.Editors.ComboBox)
+				{
+					SourceGrid.Cells.Editors.ComboBox combo = grid[row, 1].Editor as SourceGrid.Cells.Editors.ComboBox;
+					combo.Control.SelectionChangeCommitted -= new EventHandler(OnChannelTypeChanged);
+				}
 				grid.Rows.Remove(row);
+			}
 		}
 
 		private string GetUniqueVariableName()
@@ -115,7 +197,11 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		private void LoadChannels()
 		{
 			foreach (BaseChannel channel in plugin.Channels)
+			{
 				AddVariable(channel.Name, channel.GetType().FullName, channel.IsReadOnly);
+				if (channel is ComputableChannel)
+					grid.Rows[grid.RowsCount - 1].Tag = (channel as ComputableChannel).Expression;
+			}
 		}
 
 		private void SaveChannels()
@@ -138,10 +224,26 @@ namespace FreeSCADA.Communication.SimulatorPlug
 				if (type == null)
 					continue;
 
-				channels[i - 1] = ChannelFactory.CreateChannel(type, name, readOnly, plugin);
+				if (type == typeof(ComputableChannel).FullName)
+				{
+					string expression = "";
+					if(grid.Rows[i].Tag != null)
+						expression = (string)grid.Rows[i].Tag;
+					channels[i - 1] = new ComputableChannel(name, plugin, expression);
+				}
+				else
+					channels[i - 1] = ChannelFactory.CreateChannel(type, name, readOnly, plugin);
 			}
 			plugin.Channels = channels;
 			plugin.SaveSettings();
+		}
+
+		private void expressionEditBox_TextChanged(object sender, EventArgs e)
+		{
+			foreach (int row in grid.Selection.GetSelectionRegion().GetRowsIndex())
+			{
+				grid.Rows[row].Tag = expressionEditBox.Text;
+			}
 		}
 	}
 }
