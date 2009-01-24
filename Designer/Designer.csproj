@@ -160,6 +160,9 @@
       <LastGenOutput>DialogMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\VariablesDialog.resx">
+      <DependentUpon>VariablesDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -172,6 +175,9 @@
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\StringEditor.resx">
       <DependentUpon>StringEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SchemaEditor\PropertiesUtils\ValueBindingDialog.resx">
+      <DependentUpon>ValueBindingDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StringResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

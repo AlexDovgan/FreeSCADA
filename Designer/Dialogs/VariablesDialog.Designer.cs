@@ -64,6 +64,7 @@
 			// 
 			// connectCheckBox
 			// 
+			this.connectCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.connectCheckBox.AutoSize = true;
 			this.connectCheckBox.Location = new System.Drawing.Point(12, 306);
 			this.connectCheckBox.Name = "connectCheckBox";
@@ -75,6 +76,7 @@
 			// 
 			// connectionStatusLabel
 			// 
+			this.connectionStatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.connectionStatusLabel.AutoSize = true;
 			this.connectionStatusLabel.Location = new System.Drawing.Point(12, 334);
 			this.connectionStatusLabel.Name = "connectionStatusLabel";
@@ -84,6 +86,7 @@
 			// 
 			// selectButton
 			// 
+			this.selectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.selectButton.Location = new System.Drawing.Point(463, 329);
 			this.selectButton.Name = "selectButton";
 			this.selectButton.Size = new System.Drawing.Size(75, 23);
@@ -105,7 +108,7 @@
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
 			this.Name = "VariablesDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "VariablesForm";
+			this.Text = "Project variables";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.VariablesForm_FormClosing);
 			this.ResumeLayout(false);
 			this.PerformLayout();

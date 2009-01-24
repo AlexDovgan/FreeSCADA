@@ -21,6 +21,7 @@ namespace FreeSCADA.Common
 				environmentInstance = new Env();
 
 				environmentInstance.mode = mode;
+				environmentInstance.logger = new Logger();
 				environmentInstance.CreateNewProject();
 				environmentInstance.commands = new Commands(mainMenu, mainToolbar);
 				environmentInstance.mainWindow = mainWindow;

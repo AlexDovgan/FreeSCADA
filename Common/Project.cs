@@ -37,11 +37,6 @@ namespace FreeSCADA.Common
 		{
 		}
 
-		~Project()
-		{
-			Clear();
-		}
-
 		public bool IsModified
 		{
 			get { return modifiedFlag; }
@@ -114,6 +109,8 @@ namespace FreeSCADA.Common
 			System.GC.Collect();
 			modifiedFlag = false;
 			fileName = "";
+
+			FireProjectLoaded();
 		}
 
 		public void Save(string fileName)

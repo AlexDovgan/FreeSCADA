@@ -3,8 +3,8 @@ namespace FreeSCADA.Communication.SimulatorPlug
 {
 	class SawIntegerChannel : BaseChannel
 	{
-		static int val = 0;
-        static bool up = true;
+		int val = 0;
+        bool up = true;
 
 		public SawIntegerChannel(string name, Plugin plugin)
 			: base(name, true, plugin, typeof(int))

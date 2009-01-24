@@ -28,5 +28,10 @@ namespace FreeSCADA.Archiver
 			else
 				return base.Equals(obj);
 		}
+
+		public override int GetHashCode()
+		{
+			return base.GetHashCode();
+		}
 	}
 }

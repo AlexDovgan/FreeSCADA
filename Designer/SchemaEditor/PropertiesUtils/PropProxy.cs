@@ -98,10 +98,14 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                     "MaxChannelValue",
                     "MinAngle",
                     "MaxAngle",
-                    "IsChecked"
-    
-
-                    }
+                    "IsChecked",
+					"FontFamily",
+					"FontSize",
+					"FontStretch",
+					"FontStyle",
+					"FontWeight",
+					"TextAlignment"
+					}
                         );
             IEnumerable<PropertyWrapper> ie;
             if(controlledObject is System.Windows.DependencyObject)
