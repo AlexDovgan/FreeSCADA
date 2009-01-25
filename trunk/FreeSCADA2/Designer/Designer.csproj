@@ -189,8 +189,7 @@
       <DependentUpon>StringEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SchemaEditor\PropertiesUtils\ValueBindingDialog.resx">
-      <DependentUpon>ValueBindingDialog.cs</DependentUpon>
+    <EmbeddedResource Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ValueBindingDialog.resx">
     </EmbeddedResource>
     <EmbeddedResource Include="StringResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
