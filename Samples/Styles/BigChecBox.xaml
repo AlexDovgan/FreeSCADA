@@ -5,8 +5,7 @@
 
     <Setter Property="Control.Template">
         <Setter.Value>
-        <ControlTemplate x:Key="templateBigCheck" 
-                         TargetType="{x:Type CheckBox}">
+        <ControlTemplate TargetType="{x:Type CheckBox}">
 
             <Border BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
