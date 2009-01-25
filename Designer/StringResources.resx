@@ -238,11 +238,11 @@
   <data name="CommandZoomOutName" xml:space="preserve">
     <value>Zoom out</value>
   </data>
-  <data name="FileDialogFilter" xml:space="preserve">
-    <value>FreeSCADA 2 files (*.fs2)|*.fs2|All files (*.*)|*.*</value>
-  </data>
   <data name="FileImportDialogFilter" xml:space="preserve">
     <value>All vector graphics (*.xaml;*.svg)|*.xaml;*.svg|XAML  files (*.xaml)|*.xaml|svg files (*.svg)|*.svg|All files (*.*)|*.*</value>
+  </data>
+  <data name="FileOpenDialogFilter" xml:space="preserve">
+    <value>FreeSCADA 2 files (*.fs2)|*.fs2|All files (*.*)|*.*</value>
   </data>
   <data name="HelperSelectingToolTooltip" xml:space="preserve">
     <value>Please select trajectory object 
@@ -253,6 +253,9 @@
   </data>
   <data name="MainWindowNameEx" xml:space="preserve">
     <value>[{0}] - Designer</value>
+  </data>
+  <data name="OpenMediaDialogFilter" xml:space="preserve">
+    <value>Media files|*.gif;*.BMP;*.PNG;*.JPEG;*.JPG;*.TIFF|All files (*.*)|*.*</value>
   </data>
   <data name="SchemasItemName" xml:space="preserve">
     <value>Schemas</value>

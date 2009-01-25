@@ -57,6 +57,7 @@
 			this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
 			this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
 			this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+			this.mediaContentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			newProjectButton = new System.Windows.Forms.ToolStripButton();
 			openProjectButton = new System.Windows.Forms.ToolStripButton();
 			toolStripButton3 = new System.Windows.Forms.ToolStripButton();
@@ -197,7 +198,8 @@
 			// projectToolStripMenuItem
 			// 
 			this.projectToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.variablesToolStripMenuItem});
+            this.variablesToolStripMenuItem,
+            this.mediaContentToolStripMenuItem});
 			this.projectToolStripMenuItem.Name = "projectToolStripMenuItem";
 			this.projectToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
 			this.projectToolStripMenuItem.Text = "Project";
@@ -205,7 +207,7 @@
 			// variablesToolStripMenuItem
 			// 
 			this.variablesToolStripMenuItem.Name = "variablesToolStripMenuItem";
-			this.variablesToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+			this.variablesToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
 			this.variablesToolStripMenuItem.Text = "Variables...";
 			this.variablesToolStripMenuItem.Click += new System.EventHandler(this.OnMenuVariables);
 			// 
@@ -323,6 +325,13 @@
 			this.dockPanel.Size = new System.Drawing.Size(699, 337);
 			this.dockPanel.TabIndex = 4;
 			// 
+			// mediaContentToolStripMenuItem
+			// 
+			this.mediaContentToolStripMenuItem.Name = "mediaContentToolStripMenuItem";
+			this.mediaContentToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+			this.mediaContentToolStripMenuItem.Text = "Media content...";
+			this.mediaContentToolStripMenuItem.Click += new System.EventHandler(this.OnMenuMediaContent);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -373,5 +382,6 @@
 		private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
 		private System.Windows.Forms.ToolStripContentPanel ContentPanel;
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
+		private System.Windows.Forms.ToolStripMenuItem mediaContentToolStripMenuItem;
 	}
 }

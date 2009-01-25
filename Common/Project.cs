@@ -12,7 +12,7 @@ namespace FreeSCADA.Common
     {
         Schema,
         Channel,
-        Bitmap,
+        Image,
         Script,
         Trend,
         Report,
@@ -147,6 +147,19 @@ namespace FreeSCADA.Common
 		}
 
 		/// <summary>
+		/// Return given entity from the project
+		/// </summary>
+		/// <param name="type">Entity type</param>
+		/// <param name="name">Entity name</param>
+		public void RemoveEntity(ProjectEntityType type, string name)
+		{
+			if(data.ContainsKey(GetFullEntityName(type,name)))
+			{
+				data.Remove(GetFullEntityName(type,name));
+				modifiedFlag = true;
+			}
+		}
+		/// <summary>
 		/// Return read only stream for specified entity
 		/// </summary>
 		/// <param name="name">Entity name</param>
@@ -157,6 +170,17 @@ namespace FreeSCADA.Common
 				return null;
 
 			return new MemoryStream(data[name], false);
+		}
+
+		/// <summary>
+		/// Return read only stream for specified entity
+		/// </summary>
+		/// <param name="type">Entity type</param>
+		/// <param name="name">Entity name</param>
+		/// <returns>Return Stream instance or null if there is no entity</returns>
+		public Stream GetData(ProjectEntityType type, string name)
+		{
+			return GetData(GetFullEntityName(type, name));
 		}
 
 		/// <summary>
@@ -176,6 +200,38 @@ namespace FreeSCADA.Common
 		}
 
 		/// <summary>
+		/// Writes a tmp_buff into the project. Automatically sets IsModified property.
+		/// </summary>
+		/// <param name="type">Entity type</param>
+		/// <param name="name">Entity name</param>
+		/// <param name="data_block">Data block for saving</param>
+		public void SetData(ProjectEntityType type, string name, Stream data_block)
+		{
+			SetData(GetFullEntityName(type,name), data_block);
+		}
+
+		/// <summary>
+		/// Returns full internal name of given entity
+		/// </summary>
+		public string GetFullEntityName(ProjectEntityType type, string name)
+		{
+			return Path.Combine(GetEntityTypeInternalName(type), name);
+		}
+
+		/// <summary>
+		/// Returns internal name of given entity type
+		/// </summary>
+		public string GetEntityTypeInternalName(ProjectEntityType type)
+		{
+			switch (type)
+			{
+				case ProjectEntityType.Image: return "images";
+				default:
+					throw new NotImplementedException();
+			}
+		}
+
+		/// <summary>
 		/// Return all available entities
 		/// </summary>
 		/// <returns>return array of entities</returns>
@@ -187,9 +243,40 @@ namespace FreeSCADA.Common
 		}
 
 		/// <summary>
+		/// Return all entities of given type
+		/// </summary>
+		/// <param name="type">Entity type</param>
+		/// <returns>return array of entities</returns>
+		public string[] GetEntities(ProjectEntityType type)
+		{
+			List<string> entities = new List<string>();
+			foreach (string key in data.Keys)
+			{
+				if (key.StartsWith(GetEntityTypeInternalName(type)))
+				{
+					string tmp = key.Remove(0, GetEntityTypeInternalName(type).Length + 1);
+					entities.Add(tmp);
+				}
+			}
+			return entities.ToArray();
+		}
+
+		/// <summary>
+		/// Checks if the project contains given entity
+		/// </summary>
+		/// <param name="type">Entity type</param>
+		/// <param name="name">Entity name</param>
+		/// <returns>return array of entities</returns>
+		public bool ContainsEntity(ProjectEntityType type, string name)
+		{
+			return data.ContainsKey(GetFullEntityName(type, name));
+		}
+
+		/// <summary>
 		/// Return all available entities
 		/// </summary>
 		/// <returns>return array of entities</returns>
+		[Obsolete("Should use GetEntities() method with entity type")]
 		public string[] GetSchemas()
 		{
 			List<string> schemas = new List<string>();
@@ -211,6 +298,7 @@ namespace FreeSCADA.Common
 		/// </summary>
 		/// <param name="name">Schema name for testing</param>
 		/// <returns>Return true if the name is unique</returns>
+		[Obsolete("Should use ContainsEntity() method with entity type")]
 		public bool IsSchemaNameUnique(string name)
 		{
 			return System.Array.IndexOf(GetSchemas(), name) < 0;
