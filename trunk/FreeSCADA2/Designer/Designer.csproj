@@ -114,14 +114,17 @@
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\StringEditor.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\StyleEditor.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyWrapper.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\PropProxy.cs" />
-    <Compile Include="SchemaEditor\PropertiesUtils\ValueBindingDialog.cs">
+    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ValueBindingDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SchemaEditor\SchemaCommands.cs">
     </Compile>
     <Compile Include="SchemaEditor\SelectionHelper.cs" />
+    <Compile Include="SchemaEditor\StylesLibrary\StylesLibrary.cs" />
+    <Compile Include="SchemaEditor\StylesLibrary\StyleConvertor.cs" />
     <Compile Include="SchemaEditor\ToolDescriptor.cs" />
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
     <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
@@ -299,6 +302,8 @@
   <PropertyGroup>
     <PostBuildEvent>mkdir  "$(TargetDir)Resources"
 xcopy "$(SolutionDir)Designer\Resources\svg2xaml.xsl" "$(TargetDir)Resources" /S /R /Y
-xcopy "$(SolutionDir)Designer\Resources\colors.xml" "$(TargetDir)Resources" /S /R /Y</PostBuildEvent>
+xcopy "$(SolutionDir)Designer\Resources\colors.xml" "$(TargetDir)Resources" /S /R /Y
+mkdir  "$(TargetDir)Styles"
+xcopy  "$(SolutionDir)Samples\Styles" "$(TargetDir)Styles" /S /R /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

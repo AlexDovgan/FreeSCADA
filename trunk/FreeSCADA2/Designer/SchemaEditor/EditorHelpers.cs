@@ -33,17 +33,24 @@ namespace FreeSCADA.Designer.SchemaEditor
         //public static FreeSCADA.Common.Schema.CustomElements.ElementsTemplates TemplateResources = new FreeSCADA.Common.Schema.CustomElements.ElementsTemplates();
         static  EditorHelper()
         {
+
+            RegisterHelperTypes();
+        }
+
+        static void RegisterHelperTypes()
+        {
             Object inst = new TypeConverterAttribute(typeof(BindingConvertor));
             RegisterAttribute<BindingExpression>(inst);
             inst = new TypeConverterAttribute(typeof(BindingConvertor));
             RegisterAttribute<MultiBindingExpression>(inst);
             RegisterAttribute<Double>(new EditorAttribute(typeof(FreeSCADA.Designer.SchemaEditor.PropertiesUtils.DoubleEditor), typeof(System.Drawing.Design.UITypeEditor)));
             RegisterAttribute<Nullable<bool>>(new EditorAttribute(typeof(FreeSCADA.Designer.SchemaEditor.PropertiesUtils.NullableBoolEditor), typeof(System.Drawing.Design.UITypeEditor)));
+            RegisterAttribute<Style>(new EditorAttribute(typeof(FreeSCADA.Designer.SchemaEditor.PropertiesUtils.StyleEditor), typeof(System.Drawing.Design.UITypeEditor)));
             RegisterAttribute<String>(new EditorAttribute(typeof(FreeSCADA.Designer.SchemaEditor.PropertiesUtils.StringEditor), typeof(System.Drawing.Design.UITypeEditor)));
-            TypeDescriptor.AddProvider(new BindingTypeDescriptionProvider(),typeof(System.Windows.Data.Binding));
-        
+            TypeDescriptor.AddProvider(new BindingTypeDescriptionProvider(), typeof(System.Windows.Data.Binding));
+            inst = new TypeConverterAttribute(typeof(StylesLibrary.StyleConverter));
+            RegisterAttribute<Style>(inst);
         }
-            
         public static UIElement FindTopParentUnder(DependencyObject c, DependencyObject el)
 
         {
