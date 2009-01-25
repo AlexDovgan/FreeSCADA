@@ -300,20 +300,20 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to FreeSCADA 2 files (*.fs2)|*.fs2|All files (*.*)|*.*.
-        /// </summary>
-        internal static string FileDialogFilter {
-            get {
-                return ResourceManager.GetString("FileDialogFilter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to All vector graphics (*.xaml;*.svg)|*.xaml;*.svg|XAML  files (*.xaml)|*.xaml|svg files (*.svg)|*.svg|All files (*.*)|*.*.
         /// </summary>
         internal static string FileImportDialogFilter {
             get {
                 return ResourceManager.GetString("FileImportDialogFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FreeSCADA 2 files (*.fs2)|*.fs2|All files (*.*)|*.*.
+        /// </summary>
+        internal static string FileOpenDialogFilter {
+            get {
+                return ResourceManager.GetString("FileOpenDialogFilter", resourceCulture);
             }
         }
         
@@ -342,6 +342,15 @@ namespace FreeSCADA.Designer {
         internal static string MainWindowNameEx {
             get {
                 return ResourceManager.GetString("MainWindowNameEx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Media files|*.gif;*.BMP;*.PNG;*.JPEG;*.JPG;*.TIFF|All files (*.*)|*.*.
+        /// </summary>
+        internal static string OpenMediaDialogFilter {
+            get {
+                return ResourceManager.GetString("OpenMediaDialogFilter", resourceCulture);
             }
         }
         

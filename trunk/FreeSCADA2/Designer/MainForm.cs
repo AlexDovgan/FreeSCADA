@@ -38,6 +38,12 @@ namespace FreeSCADA.Designer
 			frm.ShowDialog(this);
 		}
 
+		private void OnMenuMediaContent(object sender, EventArgs e)
+		{
+			ProjectMediaDialog frm = new ProjectMediaDialog();
+			frm.ShowDialog(this);
+		}
+
 		private void OnMenuExitClick(object sender, System.EventArgs e)
 		{
 			Close();

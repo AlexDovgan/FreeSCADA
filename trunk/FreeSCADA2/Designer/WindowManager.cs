@@ -235,7 +235,7 @@ namespace FreeSCADA.Designer
 			{
 				SaveFileDialog fd = new SaveFileDialog();
 
-				fd.Filter = StringResources.FileDialogFilter;
+				fd.Filter = StringResources.FileOpenDialogFilter;
 				fd.FilterIndex = 0;
 				fd.RestoreDirectory = true;
 
@@ -259,7 +259,7 @@ namespace FreeSCADA.Designer
 		{
 			OpenFileDialog fd = new OpenFileDialog();
 
-			fd.Filter = StringResources.FileDialogFilter;
+			fd.Filter = StringResources.FileOpenDialogFilter;
 			fd.FilterIndex = 0;
 			fd.RestoreDirectory = true;
 
