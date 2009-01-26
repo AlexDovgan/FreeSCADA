@@ -34,11 +34,18 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		{
 			get
 			{
-				//List<Attribute> attrs= new List<Attribute>();
-                //attrs.Add(new EditorAttribute(typeof(FreeSCADA.Designer.SchemaEditor.PropertyGridTypeEditors.DoubleEditor), typeof(System.Drawing.Design.UITypeEditor)));
-              //  AttributeCollection at = new AttributeCollection(attrs.ToArray());
-               // return at;
-                return new AttributeCollection();
+                Attribute[] attrs=null;
+                Type editorType = null;
+                if ((editorType =PropertiesMap.GetEditor(controlledObject.GetType(), controlledProperty.Name)) != null)
+                {
+                    if(editorType.IsSubclassOf(typeof(System.Drawing.Design.UITypeEditor)))
+                        attrs=new Attribute[]{
+                            new  EditorAttribute(
+                                editorType
+                                , typeof(System.Drawing.Design.UITypeEditor))};
+                }
+
+                return new AttributeCollection(attrs);
 			}
 		}
 

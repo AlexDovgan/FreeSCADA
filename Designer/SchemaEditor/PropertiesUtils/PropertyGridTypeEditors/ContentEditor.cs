@@ -11,13 +11,12 @@ using FreeSCADA.Common;
 using FreeSCADA.Common.Schema;
 using FreeSCADA.Interfaces;
 
+
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditors
 {
-
-    [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-    class StyleEditor : System.Drawing.Design.UITypeEditor
+    class ContentEditor:System.Drawing.Design.UITypeEditor
     {
-        public StyleEditor()
+        public ContentEditor()
         {
         }
 
@@ -25,7 +24,10 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
         // drop down dialog, or no UI outside of the properties window.
         public override System.Drawing.Design.UITypeEditorEditStyle GetEditStyle(System.ComponentModel.ITypeDescriptorContext context)
         {
-             return UITypeEditorEditStyle.DropDown;
+           // if(context.Instance is System.Windows.Controls.ContentControl)
+                return UITypeEditorEditStyle.Modal;
+           // else
+           //     return UITypeEditorEditStyle.None;
         }
 
         // Displays the UI for value selection.
@@ -37,6 +39,9 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
                 return value;
              
             DependencyObject depObj = pw.ControlledObject as DependencyObject;
+            if(!(depObj is System.Windows.Controls.ContentControl))
+                return value;
+
             DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(pw.ControlledProperty);
             if (depObj == null || dpd == null)
                 return value;
@@ -44,22 +49,20 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
             IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
             if (edSvc != null)
             {
-                using (ListBox lb = new ListBox())
-                {
-                    StylesLibrary.StylesLibrary  sl=StylesLibrary.StylesLibrary.Instance;
-                    if (sl[depObj.GetType()] != null)
-                    {
-                        foreach (String name in sl[depObj.GetType()].Keys)
-                            lb.Items.Add(name);
-                       
-                        lb.SelectedIndexChanged += new EventHandler((x, y) => { edSvc.CloseDropDown(); });
-                        edSvc.DropDownControl(lb);
-                        if(lb.SelectedItem!=null)
-                            depObj.SetValue(depProp, sl[depObj.GetType()][lb.SelectedItem.ToString()]);
-                        
-
-                    }
-                }
+                
+                ContentEditorDialog ced = new ContentEditorDialog();
+                edSvc.ShowDialog(ced);
+                FreeSCADA.Common.Schema.MediaProvider mp = new MediaProvider();
+                mp.MediaFileName = ced.ImagesList.SelectedItems[0].Text;
+                
+                System.Windows.Data.Binding b = new System.Windows.Data.Binding();
+                b.Mode = BindingMode.OneTime;
+                
+                b.Source=mp;
+                mp.Refresh();
+                depObj.SetValue(System.Windows.Controls.ContentControl.ContentProperty, b);
+                (depObj as System.Windows.Controls.ContentControl).InvalidateProperty(System.Windows.Controls.ContentControl.ContentProperty);
+     
             }
 
             return value;
@@ -80,7 +83,6 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
                 return false;
         }
     }
-
 
 
 }

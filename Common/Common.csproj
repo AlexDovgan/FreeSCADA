@@ -91,6 +91,7 @@
     <Compile Include="Schema\Actions\ShowAction.cs" />
     <Compile Include="Schema\ChannelDataSource.cs" />
     <Compile Include="Schema\ComposingConverter.cs" />
+    <Compile Include="Schema\MediaProvider.cs" />
     <Compile Include="Schema\RangeConverter.cs" />
     <Compile Include="Schema\SchemaDocument.cs" />
     <Compile Include="Schema\WPFShemaContainer.cs" />

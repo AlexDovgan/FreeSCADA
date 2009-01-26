@@ -107,9 +107,18 @@
     <Compile Include="SchemaEditor\ObjectsFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ChannelSelectEditor.cs" />
+    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ColorEditor.cs" />
+    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ContentEditor.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\DoubleEditor.cs">
     </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\NullableBoolEditor.cs">
+    </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ContentEditorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ContentEditorDialog.Designer.cs">
+      <DependentUpon>ContentEditorDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\StringEditor.cs">
       <SubType>Form</SubType>
@@ -120,11 +129,12 @@
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ValueBindingDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\PropertiesMap.cs" />
     <Compile Include="SchemaEditor\SchemaCommands.cs">
     </Compile>
     <Compile Include="SchemaEditor\SelectionHelper.cs" />
     <Compile Include="SchemaEditor\StylesLibrary\StylesLibrary.cs" />
-    <Compile Include="SchemaEditor\StylesLibrary\StyleConvertor.cs" />
+    <Compile Include="SchemaEditor\PropertiesUtils\TypeConverters\DependencyObjectConverter.cs" />
     <Compile Include="SchemaEditor\ToolDescriptor.cs" />
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
     <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
@@ -185,11 +195,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ContentEditorDialog.resx">
+      <DependentUpon>ContentEditorDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\StringEditor.resx">
       <DependentUpon>StringEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ValueBindingDialog.resx">
     </EmbeddedResource>
     <EmbeddedResource Include="StringResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

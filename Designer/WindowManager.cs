@@ -147,6 +147,7 @@ namespace FreeSCADA.Designer
                     }
                     view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
                     view.SetCurrentTool += toolBoxView.OnSetCurrentTool;
+                    view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
                     documentViews.Add(view);
                     view.Show(dockPanel, DockState.Document);
                     break;

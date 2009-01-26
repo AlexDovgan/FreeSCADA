@@ -12,7 +12,7 @@ using FreeSCADA.Common.Schema;
 using FreeSCADA.Interfaces;
 
 
-namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
+namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditors
 {
     internal class ValueBindingDialog : System.Windows.Forms.Form
     {

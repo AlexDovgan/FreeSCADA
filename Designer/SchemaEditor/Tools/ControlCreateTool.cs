@@ -34,7 +34,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 				Canvas.SetTop(createdObject, startPos.Y);
 				createdObject.Width = 0;
 				createdObject.Height = 0;
-				//buttonObject.Content = "Button";
+                if(typeof(T)==typeof(ContentControl)||typeof(T).IsSubclassOf(typeof(ContentControl)))
+                    (createdObject as ContentControl).Content = "Content";
 
 				visualChildren.Add(createdObject);
 
