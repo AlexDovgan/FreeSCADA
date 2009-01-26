@@ -12,7 +12,7 @@ namespace FreeSCADA.Designer.Views
 		/// <summary>
 		/// Notify that user double clicked on some node
 		/// </summary>
-		/// <param name="entity_name">Full name of the node how it is in the project</param>
+		
         public delegate void OpenEntityHandler(ProjectEntityType entity_type, string entity_name);
 		/// <summary>Occurs when user double clicks a node from the list</summary>
 		public event OpenEntityHandler OpenEntity;

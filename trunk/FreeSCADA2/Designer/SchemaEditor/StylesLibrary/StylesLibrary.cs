@@ -41,7 +41,7 @@ namespace FreeSCADA.Designer.SchemaEditor.StylesLibrary
                             
                         }
                     }
-                    catch(Exception ex)
+                    catch(Exception)
                     { 
 
                     }

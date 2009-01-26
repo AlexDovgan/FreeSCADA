@@ -11,10 +11,10 @@ using FreeSCADA.Common;
 using FreeSCADA.Common.Schema;
 using FreeSCADA.Interfaces;
 
-namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
+namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditors
 {
     [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-    public class DoubleEditor : System.Drawing.Design.UITypeEditor
+    class DoubleEditor : System.Drawing.Design.UITypeEditor
     {
         public DoubleEditor()
         {

@@ -15,7 +15,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {
     
     [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-    public class NullableBoolEditor : System.Drawing.Design.UITypeEditor
+    class NullableBoolEditor : System.Drawing.Design.UITypeEditor
     {
         public NullableBoolEditor()
         {
@@ -73,7 +73,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                     if (lb.SelectedIndex == 3)
                     {
                         // Display an angle selection control and retrieve the value.
-                        using (ValueBindingDialog control = new ValueBindingDialog(context))
+                        using (PropertyGridTypeEditors.ValueBindingDialog control = new PropertyGridTypeEditors.ValueBindingDialog(context))
                         {
                             if (edSvc.ShowDialog(control) == DialogResult.OK)
                             {
@@ -100,7 +100,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
 
                                 }
-                                catch (System.Exception e)
+                                catch (System.Exception)
                                 {
                                     conv.Converters.Add(new Kent.Boogaart.Converters.TypeConverter(chs.GetChannel().Type, depProp.PropertyType));
                                 }

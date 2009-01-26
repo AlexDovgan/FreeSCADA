@@ -11,7 +11,7 @@ using System.Windows.Forms.Design;
 using FreeSCADA.Common;
 using FreeSCADA.Interfaces;
 
-namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
+namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditors
 {
     internal class StringBindingControl : System.Windows.Forms.Form
     {
@@ -192,7 +192,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
     }
 
     [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-    public class StringEditor : System.Drawing.Design.UITypeEditor
+     class StringEditor : System.Drawing.Design.UITypeEditor
     {
         public StringEditor()
         {

@@ -67,55 +67,63 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
             return this;
         }
 
+        //public PropertyDescriptorCollection GetProperties(Attribute[] attributes)
+        //{
+        //    List<string> props = new List<string>(
+        //            new string[]{
+        //            "Width",
+        //            "Height",
+        //            "Background",
+        //            "Foreground",
+        //            "Opacity",
+        //            "Canvas.Top",
+        //            "Canvas.Left",
+        //            "Canvas.ZIndex",
+        //            "Value",
+        //            "Maximum",
+        //            "Mimimum",
+        //            "Content",
+        //            "Style",
+        //            "StrokeThickness",
+        //            "Stroke",
+        //            "Fill",
+        //            "RenderTransform",
+        //            "RenderTransformOrigin",
+        //            "Name",
+        //            "ContentTemplate",
+        //            "Orientation",
+        //            "Text",
+        //            "ActionChannelName",
+        //            "MinChannelValue",
+        //            "MaxChannelValue",
+        //            "MinAngle",
+        //            "MaxAngle",
+        //            "IsChecked",
+        //            "FontFamily",
+        //            "FontSize",
+        //            "FontStretch",
+        //            "FontStyle",
+        //            "FontWeight",
+        //            "TextAlignment"
+        //            }
+        //                );
+        //    IEnumerable<PropertyWrapper> ie;
+        //    if(controlledObject is System.Windows.DependencyObject)
+        //        ie = TypeDescriptor.GetProperties(controlledObject, null).Cast<PropertyDescriptor>()
+        //             .Where(x => DependencyPropertyDescriptor.FromProperty(x) != null
+        //                 && props.Contains(x.Name) == true).Select<PropertyDescriptor,PropertyWrapper>(x=>new PropertyWrapper(controlledObject,x));
+        //    else
+        //        ie = TypeDescriptor.GetProperties(controlledObject, attributes).Cast<PropertyDescriptor>()
+        //            .Select<PropertyDescriptor, PropertyWrapper>(x => new PropertyWrapper(controlledObject, x));
+
+        //    return new PropertyDescriptorCollection(ie.ToArray());
+        //}
         public PropertyDescriptorCollection GetProperties(Attribute[] attributes)
         {
-            List<string> props = new List<string>(
-                    new string[]{
-                    "Width",
-                    "Height",
-                    "Background",
-                    "Foreground",
-                    "Opacity",
-                    "Canvas.Top",
-                    "Canvas.Left",
-                    "Canvas.ZIndex",
-                    "Value",
-                    "Maximum",
-                    "Mimimum",
-                    "Content",
-                    "Style",
-                    "StrokeThickness",
-                    "Stroke",
-                    "Fill",
-                    "RenderTransform",
-                    "RenderTransformOrigin",
-                    "Name",
-                    "ContentTemplate",
-                    "Orientation",
-                    "Text",
-                    "ActionChannelName",
-                    "MinChannelValue",
-                    "MaxChannelValue",
-                    "MinAngle",
-                    "MaxAngle",
-                    "IsChecked",
-					"FontFamily",
-					"FontSize",
-					"FontStretch",
-					"FontStyle",
-					"FontWeight",
-					"TextAlignment"
-					}
-                        );
             IEnumerable<PropertyWrapper> ie;
-            if(controlledObject is System.Windows.DependencyObject)
-                ie = TypeDescriptor.GetProperties(controlledObject, null).Cast<PropertyDescriptor>()
-                     .Where(x => DependencyPropertyDescriptor.FromProperty(x) != null
-                         && props.Contains(x.Name) == true).Select<PropertyDescriptor,PropertyWrapper>(x=>new PropertyWrapper(controlledObject,x));
-            else
-                ie = TypeDescriptor.GetProperties(controlledObject, attributes).Cast<PropertyDescriptor>()
-                    .Select<PropertyDescriptor, PropertyWrapper>(x => new PropertyWrapper(controlledObject, x));
-
+            List<string > props=PropertiesMap.GetProperties(controlledObject.GetType());
+            ie = TypeDescriptor.GetProperties(controlledObject, null).Cast<PropertyDescriptor>()
+                     .Where(x => props.Contains(x.Name) == true).Select<PropertyDescriptor, PropertyWrapper>(x => new PropertyWrapper(controlledObject, x));
             return new PropertyDescriptorCollection(ie.ToArray());
         }
 
