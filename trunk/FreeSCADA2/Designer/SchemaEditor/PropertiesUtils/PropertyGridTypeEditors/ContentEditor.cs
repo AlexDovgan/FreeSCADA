@@ -53,16 +53,18 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
                 ContentEditorDialog ced = new ContentEditorDialog();
                 edSvc.ShowDialog(ced);
                 FreeSCADA.Common.Schema.MediaProvider mp = new MediaProvider();
-                mp.MediaFileName = ced.ImagesList.SelectedItems[0].Text;
-                
-                System.Windows.Data.Binding b = new System.Windows.Data.Binding();
-                b.Mode = BindingMode.OneTime;
-                
-                b.Source=mp;
-                mp.Refresh();
-                depObj.SetValue(System.Windows.Controls.ContentControl.ContentProperty, b);
-                (depObj as System.Windows.Controls.ContentControl).InvalidateProperty(System.Windows.Controls.ContentControl.ContentProperty);
-     
+                if (ced.ImagesList.SelectedItems.Count > 0)
+                {
+                    mp.MediaFileName = ced.ImagesList.SelectedItems[0].Text;
+
+                    System.Windows.Data.Binding b = new System.Windows.Data.Binding();
+                    b.Mode = BindingMode.OneTime;
+
+                    b.Source = mp;
+                    mp.Refresh();
+                    depObj.SetValue(System.Windows.Controls.ContentControl.ContentProperty, b);
+                    (depObj as System.Windows.Controls.ContentControl).InvalidateProperty(System.Windows.Controls.ContentControl.ContentProperty);
+                }
             }
 
             return value;
