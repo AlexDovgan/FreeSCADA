@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
+using System.Collections.Generic;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {
@@ -12,12 +13,35 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 	{
 		object controlledObject;
 		PropertyDescriptor controlledProperty;
+		PropertyInfo propertyInfo;
 
-		public PropertyWrapper(object controlledObject, PropertyDescriptor controlledProperty)
-			: base(controlledProperty.Name, null)
+		public PropertyWrapper(object controlledObject, PropertyInfo propertyInfo)
+			: base(propertyInfo.GetTargetPropertyName(), null)
 		{
 			this.controlledObject = controlledObject;
-			this.controlledProperty = controlledProperty;
+			this.propertyInfo = propertyInfo;
+
+			foreach(PropertyDescriptor pd in TypeDescriptor.GetProperties(controlledObject))
+			{
+				if(pd.Name == propertyInfo.SourceProperty)
+				{
+					this.controlledProperty = pd;
+					break;
+				}
+			}
+			if (this.controlledProperty == null)
+				throw new System.InvalidOperationException("sourceProperty is not found in controlled object");
+		}
+
+		public static bool CheckIfApplicable(object controlledObject, PropertyInfo propertyInfo)
+		{
+			foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(controlledObject))
+			{
+				if (pd.Name == propertyInfo.SourceProperty)
+					return true;
+			}
+
+			return false;
 		}
 
         public object ControlledObject
@@ -34,18 +58,13 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		{
 			get
 			{
-                Attribute[] attrs=null;
-                Type editorType = null;
-                if ((editorType =PropertiesMap.GetEditor(controlledObject.GetType(), controlledProperty.Name)) != null)
-                {
-                    if(editorType.IsSubclassOf(typeof(System.Drawing.Design.UITypeEditor)))
-                        attrs=new Attribute[]{
-                            new  EditorAttribute(
-                                editorType
-                                , typeof(System.Drawing.Design.UITypeEditor))};
-                }
+				List<Attribute> attrs = new List<Attribute>();
+                if (propertyInfo.Editor != null && propertyInfo.Editor.IsSubclassOf(typeof(System.Drawing.Design.UITypeEditor)))
+					attrs.Add(new EditorAttribute(propertyInfo.Editor, typeof(System.Drawing.Design.UITypeEditor)));
+				if (string.IsNullOrEmpty(propertyInfo.Group) == false)
+					attrs.Add(new CategoryAttribute(propertyInfo.Group));
 
-                return new AttributeCollection(attrs);
+                return new AttributeCollection(attrs.ToArray());
 			}
 		}
 
@@ -67,7 +86,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		{
 			get
 			{
-                return controlledProperty.DisplayName;
+				return propertyInfo.GetTargetPropertyDisplayName();
 			}
 		}
 
@@ -75,18 +94,22 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		{
 			get
 			{
-                return controlledProperty.Description;
+				if (string.IsNullOrEmpty(propertyInfo.Description))
+					return controlledProperty.Description;
+				else
+					return propertyInfo.Description;
 			}
 		}
 
 		public override object GetValue(object component)
 		{
+			//TODO: probably we need some type convertor here for "compound" properties
 			return controlledProperty.GetValue(controlledObject);
-			//return "value";
 		}
 
 		public override void SetValue(object component, object value)
 		{
+			//TODO: probably we need some type convertor here for "compound" properties
             if(controlledObject is DependencyObject && DependencyPropertyDescriptor.FromProperty(controlledProperty)!=null)
                 EditorHelper.SetDependencyProperty(controlledObject as DependencyObject, DependencyPropertyDescriptor.FromProperty(controlledProperty).DependencyProperty, value);
             else		
@@ -101,7 +124,10 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
 		public override string Name
 		{
-            get { return controlledProperty.Name; }
+            get 
+			{
+				return propertyInfo.GetTargetPropertyName();
+			}
 		}
 
 		public override Type PropertyType
