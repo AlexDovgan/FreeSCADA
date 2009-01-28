@@ -56,7 +56,7 @@ namespace FreeSCADA.RunTime.Views
 			projectTree.Nodes.Clear();
 			TreeNode root = projectTree.Nodes.Add(project.FileName);
 			TreeNode schemas = root.Nodes.Add(StringResources.SchemasItemName);
-			foreach (string entity in Env.Current.Project.GetEntities(ProjectEntityType.Schema))
+			foreach (string entity in Env.Current.Project.GetSchemas()/*GetEntities(ProjectEntityType.Schema)*/)
 			{
 				TreeNode node = schemas.Nodes.Add(entity);
 				node.Tag = entity;
