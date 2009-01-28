@@ -19,6 +19,8 @@ namespace FreeSCADA.RunTime.Views
 
 			public override void Log(Severity severity, string message)
 			{
+				base.Log(severity, message);
+
 				if (OnMessage != null)
 					OnMessage(severity, message);
 			}
