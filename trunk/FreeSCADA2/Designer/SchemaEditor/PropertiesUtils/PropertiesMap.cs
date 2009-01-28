@@ -12,100 +12,143 @@ using FreeSCADA.Common.Schema.Actions;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {
-    static class PropertiesMap
-    {
-        static Dictionary<Type, Dictionary<string, Type>> propertiesMap = new Dictionary<Type, Dictionary<string, Type>>();
+	class PropertyInfo
+	{
+		public string SourceProperty;
+		public string TargetProperty;
+		public string DisplayName;
+		public string Description;
+		public string Group;
+		public Type Editor;
 
-        static PropertiesMap()
-        {
-            propertiesMap.Add(typeof(Object), new Dictionary<string, Type>());
-            RegisterPrperties();
-        }
+		public string GetTargetPropertyName()
+		{
+			if (string.IsNullOrEmpty(TargetProperty))
+				return SourceProperty;
+			else
+				return TargetProperty;
+		}
 
-        static public void RegisterProperty(Type type, string propName, Type editor)
-        {
-            if (!propertiesMap.ContainsKey(type))
-                propertiesMap.Add(type, new Dictionary<string, Type>());
-            propertiesMap[type].Add(propName, editor);
-        }
-        static public List<string> GetProperties(Type type)
-        {
-            List<String> l = new List<string>();
-            Type bt = SearchClosestType(type);
-            if (bt == typeof(Object))
-                return l;
-            l.AddRange(propertiesMap[bt].Keys);    
-            bt = bt.BaseType;
-            l.AddRange(GetProperties(bt));
-            
-       
-            return l;
-        }
+		public string GetTargetPropertyDisplayName()
+		{
+			if (string.IsNullOrEmpty(DisplayName))
+			{
+				if (string.IsNullOrEmpty(TargetProperty))
+					return SourceProperty;
+				else
+					return TargetProperty;
+			}
+			else
+				return DisplayName;
+		}
+	}
 
-        static public Type GetEditor(Type type, string propName)
-        {
-            do
-            {
-                type = SearchClosestType(type);
-                if (propertiesMap[type].ContainsKey(propName))
-                    return propertiesMap[type][propName];
-                else
-                    type = type.BaseType;
-                
+	static class PropertiesMap
+	{
+		static Dictionary<Type, List<PropertyInfo>> propertiesMap = new Dictionary<Type, List<PropertyInfo>>();
 
-            } while (type != typeof(Object));
-            return null;
-        }
-        static public Type SearchClosestType(Type type)
-        {
-            do
-            {
-                if (!propertiesMap.ContainsKey(type))
-                    type = type.BaseType;
-                else
-                    return type;
-            } while (type != typeof(FrameworkElement));
-            return type;
-        }
-        static public void RegisterPrperties()
-        {
-            RegisterProperty(typeof(FrameworkElement),"Width", typeof(DoubleEditor));
-            RegisterProperty(typeof(FrameworkElement),"Height", typeof(DoubleEditor));
-            RegisterProperty(typeof(FrameworkElement), "Background", typeof(DoubleEditor));
-            RegisterProperty(typeof(FrameworkElement), "Foreground", typeof(DoubleEditor));
-            RegisterProperty(typeof(FrameworkElement), "Opacity", typeof(DoubleEditor));
-            RegisterProperty(typeof(FrameworkElement), "Canvas.Top", typeof(DoubleEditor));                            
-            RegisterProperty(typeof(FrameworkElement), "Canvas.Left", typeof(DoubleEditor));
-            RegisterProperty(typeof(FrameworkElement), "Canvas.ZIndex", null);
-            RegisterProperty(typeof(FrameworkElement), "RenderTransform", null);
-            RegisterProperty(typeof(FrameworkElement), "RenderTransformOrigin", null);
-            RegisterProperty(typeof(FrameworkElement), "Name", null);
-            RegisterProperty(typeof(RangeBase), "Value", typeof(DoubleEditor));                            
-            RegisterProperty(typeof(RangeBase), "Maximum", typeof(DoubleEditor));                                                            
-            RegisterProperty(typeof(RangeBase), "Mimimum", typeof(DoubleEditor));
-            RegisterProperty(typeof(RangeBase), "Orientation", null);
-            RegisterProperty(typeof(ContentControl), "Content", typeof(ContentEditor));
-            RegisterProperty(typeof(ContentControl), "ContentTemplate", null);
-            RegisterProperty(typeof(Control), "Style", typeof(StyleEditor));                    
-            RegisterProperty(typeof(Shape), "StrokeThickness", null);                    
-            RegisterProperty(typeof(Shape), "Stroke", typeof(ColorEditor));                    
-            RegisterProperty(typeof(Shape), "Fill", typeof(ColorEditor));
-            RegisterProperty(typeof(BaseAction), "ActionChannelName", typeof(ChannelSelectEditor));
-            RegisterProperty(typeof(BaseAction), "MinChannelValue", null);
-            RegisterProperty(typeof(BaseAction), "MaxChannelValue", null);
-            RegisterProperty(typeof(RotateAction), "MinAngle", null);
-            RegisterProperty(typeof(RotateAction), "MaxAngle", null);
-            RegisterProperty(typeof(TextBlock), "Text", typeof(StringEditor));
-            RegisterProperty(typeof(TextBlock), "FontFamily", null);
-            RegisterProperty(typeof(TextBlock), "FontSize", null);
-            RegisterProperty(typeof(TextBlock), "FontStretch", null);
-            RegisterProperty(typeof(TextBlock), "FontStyle", null);
-            RegisterProperty(typeof(TextBlock), "FontWeight", null);
-            RegisterProperty(typeof(TextBlock), "TextAlignment", null);
-            RegisterProperty(typeof(CheckBox), "IsChecked", typeof(NullableBoolEditor));                                         
+		static PropertiesMap()
+		{
+			RegisterPrperties();
+		}
 
-			
-        }
-        
-    }
+		static public void RegisterProperty(Type objectType, string sourceProperty, string targetProperty, Type editor, string description, string group)
+		{
+			PropertyInfo info = new PropertyInfo();
+			info.SourceProperty = sourceProperty;
+			info.TargetProperty = targetProperty;
+			info.Editor = editor;
+			info.Description = description;
+			info.Group = group;
+			RegisterProperty(objectType, info);
+		}
+
+		static public void RegisterProperty(Type objectType, string sourceProperty, Type editor)
+		{
+			PropertyInfo info = new PropertyInfo();
+			info.SourceProperty = sourceProperty;
+			info.Editor = editor;
+			RegisterProperty(objectType, info);
+		}
+
+		static public void RegisterProperty(Type objectType, string sourceProperty, string targetProperty, Type editor, string description)
+		{
+			PropertyInfo info = new PropertyInfo();
+			info.SourceProperty = sourceProperty;
+			info.TargetProperty = targetProperty;
+			info.Editor = editor;
+			info.Description = description;
+			RegisterProperty(objectType, info);
+		}
+
+		static public void RegisterProperty(Type objectType, string sourceProperty)
+		{
+			PropertyInfo info = new PropertyInfo();
+			info.SourceProperty = sourceProperty;
+			RegisterProperty(objectType, info);
+		}
+
+		static public void RegisterProperty(Type objectType, PropertyInfo propertyInfo)
+		{
+			if (propertiesMap.ContainsKey(objectType) == false)
+				propertiesMap.Add(objectType, new List<PropertyInfo>());
+			propertiesMap[objectType].Add(propertyInfo);
+		}
+
+		static public List<PropertyInfo> GetProperties(Type type)
+		{
+			List<PropertyInfo> result = new List<PropertyInfo>();
+			do
+			{
+				if (propertiesMap.ContainsKey(type))
+					result.AddRange(propertiesMap[type]);
+				type = type.BaseType;
+			} while (type != null);
+
+			return result;
+		}
+
+		static public void RegisterPrperties()
+		{
+			//Check duplicating properties
+			//RegisterProperty(typeof(FrameworkElement), "Width", "Width1", typeof(DoubleEditor), "Description for width1 property");
+			//RegisterProperty(typeof(FrameworkElement), "Width", "Width2", typeof(DoubleEditor), "Description for width2 property");
+
+			RegisterProperty(typeof(FrameworkElement), "Width", typeof(DoubleEditor));
+			RegisterProperty(typeof(FrameworkElement), "Height", typeof(DoubleEditor));
+			RegisterProperty(typeof(FrameworkElement), "Background", typeof(DoubleEditor));
+			RegisterProperty(typeof(FrameworkElement), "Foreground", typeof(DoubleEditor));
+			RegisterProperty(typeof(FrameworkElement), "Opacity", typeof(DoubleEditor));
+			RegisterProperty(typeof(FrameworkElement), "Canvas.Top", typeof(DoubleEditor));
+			RegisterProperty(typeof(FrameworkElement), "Canvas.Left", typeof(DoubleEditor));
+			RegisterProperty(typeof(FrameworkElement), "Canvas.ZIndex", null);
+			RegisterProperty(typeof(FrameworkElement), "RenderTransform", null);
+			RegisterProperty(typeof(FrameworkElement), "RenderTransformOrigin", null);
+			RegisterProperty(typeof(FrameworkElement), "Name", null);
+			RegisterProperty(typeof(RangeBase), "Value", typeof(DoubleEditor));
+			RegisterProperty(typeof(RangeBase), "Maximum", typeof(DoubleEditor));
+			RegisterProperty(typeof(RangeBase), "Mimimum", typeof(DoubleEditor));
+			RegisterProperty(typeof(RangeBase), "Orientation", null);
+			RegisterProperty(typeof(ContentControl), "Content", typeof(ContentEditor));
+			RegisterProperty(typeof(ContentControl), "ContentTemplate", null);
+			RegisterProperty(typeof(Control), "Style", typeof(StyleEditor));
+			RegisterProperty(typeof(Shape), "StrokeThickness", null);
+			RegisterProperty(typeof(Shape), "Stroke", typeof(ColorEditor));
+			RegisterProperty(typeof(Shape), "Fill", typeof(ColorEditor));
+			RegisterProperty(typeof(BaseAction), "ActionChannelName", typeof(ChannelSelectEditor));
+			RegisterProperty(typeof(BaseAction), "MinChannelValue", null);
+			RegisterProperty(typeof(BaseAction), "MaxChannelValue", null);
+			RegisterProperty(typeof(RotateAction), "MinAngle", null);
+			RegisterProperty(typeof(RotateAction), "MaxAngle", null);
+			RegisterProperty(typeof(TextBlock), "Text", typeof(StringEditor));
+			RegisterProperty(typeof(TextBlock), "FontFamily", null);
+			RegisterProperty(typeof(TextBlock), "FontSize", null);
+			RegisterProperty(typeof(TextBlock), "FontStretch", null);
+			RegisterProperty(typeof(TextBlock), "FontStyle", null);
+			RegisterProperty(typeof(TextBlock), "FontWeight", null);
+			RegisterProperty(typeof(TextBlock), "TextAlignment", null);
+			RegisterProperty(typeof(CheckBox), "IsChecked", typeof(NullableBoolEditor));
+		}
+
+	}
 }
