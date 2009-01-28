@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using OpcRcw.Comn;
 using OpcRcw.Da;
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Communication.OPCPlug
 {
@@ -76,10 +77,19 @@ namespace FreeSCADA.Communication.OPCPlug
 					for (int i = 0; i < fetched; i++)
 					{
 						try{srv.ChangeBrowsePosition(OPCBROWSEDIRECTION.OPC_BROWSE_DOWN, tmp[i]);}
-						catch (COMException) { return; };
+						catch (Exception e) 
+						{
+							Env.Current.Logger.LogWarning(string.Format("OPC server failed to handle OPC_BROWSE_DOWN request for item '{0}' ({1})", tmp[i], e.Message));
+							continue; 
+						};
 						TreeNode node = root.Add(tmp[i]);
 						ImportOPCChannels(srv, node.Nodes);
-						srv.ChangeBrowsePosition(OPCBROWSEDIRECTION.OPC_BROWSE_UP, tmp[i]);
+						try { srv.ChangeBrowsePosition(OPCBROWSEDIRECTION.OPC_BROWSE_UP, ""); }
+						catch (Exception e) 
+						{
+							Env.Current.Logger.LogWarning(string.Format("OPC server failed to handle OPC_BROWSE_UP request for item '{0}' ({1})", tmp[i], e.Message));
+							continue; 
+						};
 					}
 				} while(fetched>0);
 

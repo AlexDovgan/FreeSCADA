@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
 
 namespace FreeSCADA.Common
 {
@@ -16,6 +15,18 @@ namespace FreeSCADA.Common
 		public virtual void Log(Severity severity, string message)
 		{
 			Console.WriteLine(string.Format("{0}: {1}", severity.ToString(), message));
+
+			try
+			{
+				string tmpFile = Path.Combine(Path.GetTempPath(), "FreeSCADA2_log_file.txt");
+				using (Stream stream = new FileStream(tmpFile, FileMode.Append, FileAccess.Write, FileShare.Read))
+				using (TextWriter writer = new StreamWriter(stream))
+				{
+					writer.WriteLine(string.Format("[{0}] {1}: {2}", DateTime.Now, severity.ToString(), message));
+					writer.Flush();
+				}
+			}
+			catch { }
 		}
 
 		public void LogInfo(string message)
