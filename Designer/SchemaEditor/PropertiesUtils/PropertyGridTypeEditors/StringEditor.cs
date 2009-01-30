@@ -50,8 +50,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
             if (depObj == null || dpd == null)
                 return;
             DependencyProperty depProp = dpd.DependencyProperty;
-
-            BindString = (String)depObj.GetValue(depProp);
+            if (depObj.GetValue(depProp) is String)
+                BindString = (String)depObj.GetValue(depProp);
             foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
             {
                 TreeNode plugNode = channelsTree.Nodes.Add(Env.Current.CommunicationPlugins[plugId].Name);
@@ -75,7 +75,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
                                   select (((ObjectDataProvider)(((System.Windows.Data.Binding)b).Source)).ObjectInstance as Common.Schema.ChannelDataSource).ChannelName).ToList();
                 return;
             }
-            textBox1.Text = (String)depObj.GetValue(depProp);
+            textBox1.Text = BindString;
             
         }
         public TreeNode SelectedNode

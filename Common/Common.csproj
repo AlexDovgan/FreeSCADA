@@ -89,6 +89,7 @@
     <Compile Include="Schema\Actions\ValueAction.cs" />
     <Compile Include="Schema\Actions\RotateAction.cs" />
     <Compile Include="Schema\Actions\ShowAction.cs" />
+    <Compile Include="Schema\AnimatedImage.cs" />
     <Compile Include="Schema\ChannelDataSource.cs" />
     <Compile Include="Schema\ComposingConverter.cs" />
     <Compile Include="Schema\MediaProvider.cs" />

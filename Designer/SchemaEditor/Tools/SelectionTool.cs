@@ -70,6 +70,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 newPosDelta = e.GetPosition(this) - movePos;
                 movePos = e.GetPosition(this);
                 MoveHelper(newPosDelta.X, newPosDelta.Y);
+                
                 System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.SizeAll;
             }
         }
@@ -206,7 +207,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             moveUndoInfo = false;
 
             selectionRectangle.RenderOpen().Close();
-            AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+            //AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+
         }
 
     }

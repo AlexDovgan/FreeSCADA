@@ -46,6 +46,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             TypeDescriptor.AddProvider(new BindingTypeDescriptionProvider(), typeof(System.Windows.Data.Binding));
             inst = new TypeConverterAttribute(typeof(PropertiesUtils.TypeConverters.DependencyObjectConverter));
             RegisterAttribute<Style>(inst);
+         //   RegisterAttribute<AnimatedImage>(inst);
         }
         public static UIElement FindTopParentUnder(DependencyObject c, DependencyObject el)
         {

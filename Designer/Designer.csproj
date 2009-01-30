@@ -109,7 +109,7 @@
     </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ChannelSelectEditor.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ColorEditor.cs" />
-    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ContentEditor.cs" />
+    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ImageEditor.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\DoubleEditor.cs">
     </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\NullableBoolEditor.cs">
