@@ -49,9 +49,18 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
                 try
                 {
                     ComposingConverter conv = bind.Converter as ComposingConverter;
-                    RangeConverter rc = conv.Converters.Single(x => x is RangeConverter) as RangeConverter;
-                    minVal.Value = (Decimal)rc.Min;
-                    maxVal.Value = (Decimal)rc.Max;
+                    RangeConverter rc;
+                    if((rc= conv.Converters[0] as RangeConverter)!=null)
+                    {
+                        minVal.Value = (Decimal)rc.Min;
+                        maxVal.Value = (Decimal)rc.Max;
+                    }
+                    Kent.Boogaart.Converters.ExpressionConverter ec;
+                    if ((ec = conv.Converters[1] as Kent.Boogaart.Converters.ExpressionConverter) != null)
+                    {
+                        expressionTextBox.Text = ec.Expression;
+                    }
+
                 }
                 catch (Exception) { }
             }
