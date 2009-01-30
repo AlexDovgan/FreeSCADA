@@ -328,6 +328,15 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Image.
+        /// </summary>
+        internal static string ToolImageControl {
+            get {
+                return ResourceManager.GetString("ImageControl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Designer.
         /// </summary>
         internal static string MainWindowName {

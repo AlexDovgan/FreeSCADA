@@ -110,9 +110,9 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		public override void SetValue(object component, object value)
 		{
 			//TODO: probably we need some type convertor here for "compound" properties
-            if(controlledObject is DependencyObject && DependencyPropertyDescriptor.FromProperty(controlledProperty)!=null)
-                EditorHelper.SetDependencyProperty(controlledObject as DependencyObject, DependencyPropertyDescriptor.FromProperty(controlledProperty).DependencyProperty, value);
-            else		
+           // if(controlledObject is DependencyObject && DependencyPropertyDescriptor.FromProperty(controlledProperty)!=null)
+             //   EditorHelper.SetDependencyProperty(controlledObject as DependencyObject, DependencyPropertyDescriptor.FromProperty(controlledProperty).DependencyProperty, value);
+            //else		
                 controlledProperty.SetValue(controlledObject, value);
             
 		}

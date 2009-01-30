@@ -127,10 +127,13 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			RegisterProperty(typeof(FrameworkElement), "Name", null);
 			RegisterProperty(typeof(RangeBase), "Value", typeof(DoubleEditor));
 			RegisterProperty(typeof(RangeBase), "Maximum", typeof(DoubleEditor));
-			RegisterProperty(typeof(RangeBase), "Mimimum", typeof(DoubleEditor));
+			RegisterProperty(typeof(RangeBase), "Minimum", typeof(DoubleEditor));
 			RegisterProperty(typeof(RangeBase), "Orientation", null);
-			RegisterProperty(typeof(ContentControl), "Content", typeof(ContentEditor));
-			RegisterProperty(typeof(ContentControl), "ContentTemplate", null);
+			RegisterProperty(typeof(Button), "Content","Image",  typeof(ImageEditor),"Image" );
+            RegisterProperty(typeof(Button), "Content", "Text", typeof(StringEditor), "Text");
+            RegisterProperty(typeof(FreeSCADA.Common.Schema.AnimatedImage), "ImageName", "Image", typeof(ImageEditor), "Image");
+            RegisterProperty(typeof(FreeSCADA.Common.Schema.AnimatedImage), "AnimatedControl", "AnimatedControl", typeof(NullableBoolEditor), "Animation controling");
+			//RegisterProperty(typeof(ContentControl), "ContentTemplate", null);
 			RegisterProperty(typeof(Control), "Style", typeof(StyleEditor));
 			RegisterProperty(typeof(Shape), "StrokeThickness", null);
 			RegisterProperty(typeof(Shape), "Stroke", typeof(ColorEditor));

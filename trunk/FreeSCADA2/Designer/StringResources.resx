@@ -248,6 +248,9 @@
     <value>Please select trajectory object 
     (line,rectangle,ellipse)</value>
   </data>
+  <data name="ImageControl" xml:space="preserve">
+    <value>Image</value>
+  </data>
   <data name="MainWindowName" xml:space="preserve">
     <value>Designer</value>
   </data>

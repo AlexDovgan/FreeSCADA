@@ -283,10 +283,10 @@ namespace FreeSCADA.Designer.Views
 				StringResources.ToolControlsGroupName,
                 blankBitmap,
                 typeof(ControlCreateTool<System.Windows.Controls.Primitives.ScrollBar>)));
-            toolsList.Add(new ToolDescriptor(StringResources.ToolContentControl,
+            toolsList.Add(new ToolDescriptor(StringResources.ToolImageControl,
 				StringResources.ToolControlsGroupName,
                 blankBitmap,
-                typeof(ControlCreateTool<System.Windows.Controls.ContentControl>)));
+                typeof(ControlCreateTool<FreeSCADA.Common.Schema.AnimatedImage>)));
             toolsList.Add(new ToolDescriptor(StringResources.ToolSlider,
 				StringResources.ToolControlsGroupName,
                 blankBitmap,

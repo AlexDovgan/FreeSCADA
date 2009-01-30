@@ -11,13 +11,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     {
         Point startPos;
 		bool isDragging;
-		Control createdObject;
+		FrameworkElement createdObject;
         DrawingVisual boundce = new DrawingVisual();
 
         public ControlCreateTool(UIElement element)
             : base(element)
 		{
-            if(!typeof(T).IsSubclassOf(typeof(Control)))
+            if(!typeof(T).IsSubclassOf(typeof(FrameworkElement)))
                 throw new Exception();
             visualChildren.Add(boundce);
 		}
@@ -28,7 +28,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 			{
 				startPos = e.GetPosition(this);
 
-				createdObject = (Control)System.Activator.CreateInstance(typeof(T));
+				createdObject = (FrameworkElement)System.Activator.CreateInstance(typeof(T));
     			createdObject.Opacity = 0.75;
 				Canvas.SetLeft(createdObject, startPos.X);
 				Canvas.SetTop(createdObject, startPos.Y);

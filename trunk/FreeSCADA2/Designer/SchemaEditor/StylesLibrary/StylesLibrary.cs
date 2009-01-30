@@ -9,6 +9,7 @@ using System.Windows.Markup;
 using System.ComponentModel;
 namespace FreeSCADA.Designer.SchemaEditor.StylesLibrary
 {
+    //TODO:reimplement as DataSourceProvider
     class StylesLibrary:IDisposable
     {
         static StylesLibrary instance=null;
