@@ -5,14 +5,14 @@ using System.Threading;
 using FreeSCADA.Interfaces;
 using Modbus.Data;
 using Modbus.Device;
+using System.IO.Ports;
 
 namespace FreeSCADA.Communication.MODBUSPlug
 {
     public class ModbusSerialClientStation : IModbusStation
     {
         private string name;
-        private string ipAddress;
-        private int tcpPort;
+        private SerialPort serport;
         private Plugin plugin;
         private int cycleTimeout;
         private int retryTimeout;
@@ -21,13 +21,19 @@ namespace FreeSCADA.Communication.MODBUSPlug
         private List<ModbusChannelImp> channels = new List<ModbusChannelImp>();
         private List<ModbusBuffer> buffers = new List<ModbusBuffer>();
         Thread channelUpdaterThread;
+        ModbusSerialType serialType = ModbusSerialType.RTU;
+        private string comPort;
+        private int baudRate = 9600;
+        private int dataBits = 8;
+        private StopBits stopBits = StopBits.One;
+        private Parity parity = Parity.None;
+        private Handshake handshake = Handshake.None;
 
-        public ModbusSerialClientStation(string name, Plugin plugin, string ipAddress, int tcpPort, int cycleTimeout, int retryTimeout, int retryCount, int failedCount)
+        public ModbusSerialClientStation(string name, Plugin plugin, string comPort, int cycleTimeout, int retryTimeout, int retryCount, int failedCount)
         {
             this.name = name;
             this.plugin = plugin;
-            this.ipAddress = ipAddress;
-            this.tcpPort = tcpPort;
+            this.comPort = comPort;
             this.cycleTimeout = Math.Max(cycleTimeout, 10);
             this.retryTimeout = Math.Max(retryTimeout, 100);
             this.retryCount = Math.Max(retryCount, 1);
@@ -39,15 +45,10 @@ namespace FreeSCADA.Communication.MODBUSPlug
             get { return name; }
             set { name = value; }
         }
-        public string IPAddress
+        public string ComPort
         {
-            get { return ipAddress; }
-            set { ipAddress = value; }
-        }
-        public int SerialPort
-        {
-            get { return tcpPort; }
-            set { tcpPort = value; }
+            get { return comPort; }
+            set { comPort = value; }
         }
         public int CycleTimeout
         {
@@ -69,6 +70,34 @@ namespace FreeSCADA.Communication.MODBUSPlug
         {
             get { return failedCount; }
             set { failedCount = value; }
+        }
+
+        public ModbusSerialType SerialType
+        {
+            get { return serialType; }
+            set { serialType = value; }
+        }
+
+        public int BaudRate {
+            get { return baudRate; }
+            set { baudRate = value; }
+        }
+        public int DataBits {
+            get { return dataBits; }
+            set { dataBits = value; }
+        }
+        public StopBits StopBits {
+            get { return stopBits; }
+            set { stopBits = value; }
+        }
+        public Parity Parity {
+            get { return parity; }
+            set { parity = value; }
+        }
+        public Handshake Handshake
+        {
+            get { return handshake; }
+            set { handshake = value; }
         }
 
         public void AddChannel(ModbusChannelImp channel)
@@ -152,7 +181,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                 {
                     try
                     {
-                        using (TcpClient client = new TcpClient(self.ipAddress, self.tcpPort))
+                        /*using (TcpClient client = new TcpClient(self.comPort, self.tcpPort))
                         {
                             ModbusIpMaster master = ModbusIpMaster.CreateIp(client);
                             master.Transport.Retries = self.retryCount;
@@ -252,7 +281,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                 }
                                 Thread.Sleep(self.cycleTimeout);
                             }
-                        }
+                        }*/
                     }
                     catch (Exception e)
                     {

@@ -8,10 +8,11 @@ namespace FreeSCADA.Communication.MODBUSPlug
         public AddStationForm()
         {
             InitializeComponent();
-            stationTypeComboBox.Items.Add(ModbusStationType.TCPMaster);
-            stationTypeComboBox.Items.Add(ModbusStationType.TCPSlave);
-            stationTypeComboBox.Items.Add(ModbusStationType.SerialMaster);
-            stationTypeComboBox.Items.Add(ModbusStationType.SerialSlave);
+            foreach (object o in Enum.GetValues(typeof(ModbusStationType)))
+            {
+                int i = this.stationTypeComboBox.Items.Add(o);
+            }
+
             stationTypeComboBox.SelectedItem = ModbusStationType.TCPMaster;
         }
 

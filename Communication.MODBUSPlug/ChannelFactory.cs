@@ -15,104 +15,52 @@ namespace FreeSCADA.Communication.MODBUSPlug
             string type = node.Attributes["type"].Value;
             string modbusStation = node.Attributes["modbusStation"].Value;
             string modbusType = node.Attributes["modbusType"].Value;
-            string slaveId;
+            byte slaveId = 0;
             string sdeviceDataType;
-            string deviceDataLen;
+            ushort deviceDataLen = 1;
             string sconversionType;
 
             ModbusDataTypeEx modbusDataType;
             ModbusDeviceDataType deviceDataType;
             ModbusConversionType conversionType;
 
-            switch (modbusType)
-            {
-                case "InputRegister":
-                    modbusDataType = ModbusDataTypeEx.InputRegister;
-                    break;
-                case "Coil":
-                    modbusDataType = ModbusDataTypeEx.Coil;
-                    break;
-                case "Input":
-                    modbusDataType = ModbusDataTypeEx.Input;
-                    break;
-                case "HoldingRegister":
-                    modbusDataType = ModbusDataTypeEx.HoldingRegister;
-                    break;
-                default:
-                    modbusDataType = ModbusDataTypeEx.DeviceFailureInfo;
-                    break;
-            }
+            modbusDataType = (ModbusDataTypeEx)Enum.Parse(typeof(ModbusDataTypeEx), modbusType);
 
             string modbusAddress = node.Attributes["modbusAddress"].Value;
             try
             {
-                slaveId = node.Attributes["slaveId"].Value;
+                slaveId = byte.Parse(node.Attributes["slaveId"].Value);
             }
-            catch { slaveId = "0"; };
+            catch { };
 
             try
             {
                 sdeviceDataType = node.Attributes["deviceDataType"].Value;
             }
             catch { sdeviceDataType = "UInt"; };
-            switch (sdeviceDataType)
-            {
-                case "Bool":
-                    deviceDataType = ModbusDeviceDataType.Bool;
-                    break;
-                case "UInt":
-                    deviceDataType = ModbusDeviceDataType.UInt;
-                    break;
-                case "DInt":
-                    deviceDataType = ModbusDeviceDataType.DInt;
-                    break;
-                case "DUInt":
-                    deviceDataType = ModbusDeviceDataType.DUInt;
-                    break;
-                case "Float":
-                    deviceDataType = ModbusDeviceDataType.Float;
-                    break;
-                case "String":
-                    deviceDataType = ModbusDeviceDataType.String;
-                    break;
-                default:    //Int
-                    deviceDataType = ModbusDeviceDataType.Int;
-                    break;
-            }
+            deviceDataType = (ModbusDeviceDataType)Enum.Parse(typeof(ModbusDeviceDataType), sdeviceDataType);
+            
             try
             {
-                deviceDataLen = node.Attributes["deviceDataLen"].Value;
+                deviceDataLen = ushort.Parse(node.Attributes["deviceDataLen"].Value);
             }
-            catch { deviceDataLen = "1"; };
+            catch { };
+            
             try
             {
                 sconversionType = node.Attributes["conversionType"].Value;
             }
             catch { sconversionType = "SwapNone"; };
-            switch (sconversionType)
-            {
-                case "SwapAll":
-                    conversionType = ModbusConversionType.SwapAll;
-                    break;
-                case "SwapBytes":
-                    conversionType = ModbusConversionType.SwapBytes;
-                    break;
-                case "SwapWords":
-                    conversionType = ModbusConversionType.SwapWords;
-                    break;
-                default:
-                    conversionType = ModbusConversionType.SwapNone;
-                    break;
-            }
+            conversionType = (ModbusConversionType)Enum.Parse(typeof(ModbusConversionType), sconversionType);
 
             Type t = Type.GetType("System." + type);
 
-            return CreateChannel(name, plugin, t, modbusStation, modbusDataType, ushort.Parse(modbusAddress), byte.Parse(slaveId),
-                                 deviceDataType, int.Parse(deviceDataLen), conversionType);
+            return CreateChannel(name, plugin, t, modbusStation, modbusDataType, ushort.Parse(modbusAddress), slaveId,
+                                 deviceDataType, deviceDataLen, conversionType);
         }
 
         public static IChannel CreateChannel(string name, Plugin plugin, Type type, string modbusStation, ModbusDataTypeEx modbusType, ushort modbusAddress,
-                                            byte slaveId, ModbusDeviceDataType deviceDataType, int deviceDataLen, ModbusConversionType conversionType)
+                                            byte slaveId, ModbusDeviceDataType deviceDataType, ushort deviceDataLen, ModbusConversionType conversionType)
         {
             return new ModbusChannelImp(name, plugin, type, modbusStation, modbusType, modbusAddress, slaveId, deviceDataType, deviceDataLen, conversionType);
         }

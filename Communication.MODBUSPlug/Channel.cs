@@ -18,11 +18,11 @@ namespace FreeSCADA.Communication.MODBUSPlug
         ushort modbusDataAddress;
         byte slaveId;
         ModbusDeviceDataType deviceDataType;
-        int deviceDataLen;
+        ushort deviceDataLen;
         ModbusConversionType conversionType;
 
         public ModbusChannelImp(string name, Plugin plugin, Type type, string modbusStation, ModbusDataTypeEx modbusType, ushort modbusAddress,
-                                byte slaveId, ModbusDeviceDataType deviceDataType, int deviceDataLen, ModbusConversionType conversionType)
+                                byte slaveId, ModbusDeviceDataType deviceDataType, ushort deviceDataLen, ModbusConversionType conversionType)
             : base(name, false, plugin, type)
 		{
             this.modbusStation = modbusStation;
@@ -76,7 +76,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
             set { deviceDataType = value; }
         }
 
-        public int DeviceDataLen
+        public ushort DeviceDataLen
 		{
             get { return deviceDataLen; }
             set { deviceDataLen = value; }

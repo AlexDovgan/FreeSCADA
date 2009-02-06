@@ -82,8 +82,8 @@
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(359, 125);
             this.ControlBox = false;
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.stationTypeComboBox);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.OKButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;

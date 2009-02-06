@@ -4,9 +4,9 @@ namespace FreeSCADA.Communication.MODBUSPlug
     public enum ModbusStationType
     {
         TCPMaster,
-        TCPSlave,
+        //TCPSlave,
         SerialMaster,
-        SerialSlave
+        //SerialSlave
     }
 
     public enum ModbusConversionType
