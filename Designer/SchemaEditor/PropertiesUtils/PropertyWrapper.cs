@@ -1,7 +1,6 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Windows;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {
@@ -99,6 +98,11 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				else
 					return propertyInfo.Description;
 			}
+		}
+
+		internal PropertyInfo PropertyInfo
+		{
+			get { return propertyInfo; }
 		}
 
 		public override object GetValue(object component)

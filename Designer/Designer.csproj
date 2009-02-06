@@ -107,6 +107,12 @@
     <Compile Include="SchemaEditor\ObjectsFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\CommonBindingDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\CommonBindingDialog.Designer.cs">
+      <DependentUpon>CommonBindingDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ChannelSelectEditor.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ColorEditor.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ImageEditor.cs" />
@@ -132,6 +138,7 @@
     <Compile Include="SchemaEditor\PropertiesUtils\PropertiesMap.cs" />
     <Compile Include="SchemaEditor\SchemaCommands.cs">
     </Compile>
+    <Compile Include="SchemaEditor\SchemaMenuContext.cs" />
     <Compile Include="SchemaEditor\SelectionHelper.cs" />
     <Compile Include="SchemaEditor\StylesLibrary\StylesLibrary.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\TypeConverters\DependencyObjectConverter.cs" />
@@ -194,6 +201,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SchemaEditor\PropertiesUtils\CommonBindingDialog.resx">
+      <DependentUpon>CommonBindingDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ContentEditorDialog.resx">
       <DependentUpon>ContentEditorDialog.cs</DependentUpon>

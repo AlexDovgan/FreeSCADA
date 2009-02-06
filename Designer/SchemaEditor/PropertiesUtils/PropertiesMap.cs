@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing.Design;
 using System.Windows;
-using System.Windows.Shapes;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditors;
+using System.Windows.Shapes;
 using FreeSCADA.Common.Schema.Actions;
+using FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditors;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {
 	class PropertyInfo
 	{
-		public string SourceProperty;
-		public string TargetProperty;
-		public string DisplayName;
-		public string Description;
-		public string Group;
+		public string SourceProperty = "";
+		public string TargetProperty = "";
+		public string DisplayName = "";
+		public string Description = "";
+		public string Group = "";
 		public Type Editor;
 
 		public string GetTargetPropertyName()
@@ -40,6 +37,11 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			}
 			else
 				return DisplayName;
+		}
+
+		public override string ToString()
+		{
+			return GetTargetPropertyDisplayName();
 		}
 	}
 

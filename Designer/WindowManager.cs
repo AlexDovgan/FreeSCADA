@@ -81,7 +81,7 @@ namespace FreeSCADA.Designer
 						break;
 					}
 				}
-				if (hasTheSameDocument == false && Env.Current.Project.IsSchemaNameUnique(newName))
+				if (hasTheSameDocument == false && !Env.Current.Project.ContainsEntity(ProjectEntityType.Schema,newName))
 				{
 					view.DocumentName = newName;
 					break;

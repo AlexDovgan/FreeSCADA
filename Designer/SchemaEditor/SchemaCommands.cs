@@ -5,9 +5,9 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Markup;
 using FreeSCADA.Common;
+using FreeSCADA.Designer.SchemaEditor.PropertiesUtils;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.Views;
 using FreeSCADA.Interfaces;
@@ -558,6 +558,39 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 			{
 				return global::FreeSCADA.Designer.Properties.Resources.arrow_redo;
 			}
+		}
+		#endregion Informational properties
+	}
+
+	class CommonBindingCommand : SchemaCommand
+	{
+		public override void CheckApplicability()
+		{
+			SelectionTool tool = ControlledObject as SelectionTool;
+			if (tool != null && tool.SelectedObjects.Count == 1)
+				CanExecute = true;
+			else
+				CanExecute = false;
+		}
+
+		public override void Execute()
+		{
+			SelectionTool tool = ControlledObject as SelectionTool;
+
+			CommonBindingDialog dlg = new CommonBindingDialog(new PropProxy(tool.SelectedObjects[0]));
+			dlg.ShowDialog(Env.Current.MainWindow);
+		}
+
+		#region Informational properties
+
+		public override string Name
+		{
+			get { return StringResources.CommandCommonBindingName; }
+		}
+
+		public override string Description
+		{
+			get { return StringResources.CommandCommonBindingName; }
 		}
 		#endregion Informational properties
 	}

@@ -249,16 +249,21 @@ namespace FreeSCADA.Common
 		/// <returns>return array of entities</returns>
 		public string[] GetEntities(ProjectEntityType type)
 		{
-			List<string> entities = new List<string>();
-			foreach (string key in data.Keys)
+			if (type == ProjectEntityType.Schema)
+				return GetSchemas();
+			else
 			{
-				if (key.StartsWith(GetEntityTypeInternalName(type)))
+				List<string> entities = new List<string>();
+				foreach (string key in data.Keys)
 				{
-					string tmp = key.Remove(0, GetEntityTypeInternalName(type).Length + 1);
-					entities.Add(tmp);
+					if (key.StartsWith(GetEntityTypeInternalName(type)))
+					{
+						string tmp = key.Remove(0, GetEntityTypeInternalName(type).Length + 1);
+						entities.Add(tmp);
+					}
 				}
+				return entities.ToArray();
 			}
-			return entities.ToArray();
 		}
 
 		/// <summary>
@@ -269,15 +274,13 @@ namespace FreeSCADA.Common
 		/// <returns>return array of entities</returns>
 		public bool ContainsEntity(ProjectEntityType type, string name)
 		{
-			return data.ContainsKey(GetFullEntityName(type, name));
+			if(type == ProjectEntityType.Schema)
+				return System.Array.IndexOf(GetEntities(type), name) >= 0;
+			else
+				return data.ContainsKey(GetFullEntityName(type, name));
 		}
 
-		/// <summary>
-		/// Return all available entities
-		/// </summary>
-		/// <returns>return array of entities</returns>
-		[Obsolete("Should use GetEntities() method with entity type")]
-		public string[] GetSchemas()
+		string[] GetSchemas()
 		{
 			List<string> schemas = new List<string>();
 			foreach (string entity in data.Keys)
@@ -291,17 +294,6 @@ namespace FreeSCADA.Common
 				}
 			}
 			return schemas.ToArray();
-		}
-
-		/// <summary>
-		/// Test if provide name is unique schema name
-		/// </summary>
-		/// <param name="name">Schema name for testing</param>
-		/// <returns>Return true if the name is unique</returns>
-		[Obsolete("Should use ContainsEntity() method with entity type")]
-		public bool IsSchemaNameUnique(string name)
-		{
-			return System.Array.IndexOf(GetSchemas(), name) < 0;
 		}
 
 		public Stream this[string name]

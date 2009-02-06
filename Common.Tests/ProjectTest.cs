@@ -161,12 +161,12 @@ namespace FreeSCADA.Common.Tests
 			for (int i = 0; i < test_entries.Length; i++)
 				Assert.Contains(test_entries[i], p.GetEntities());
 
-			Assert.AreEqual(2, p.GetSchemas().Length);
-			Assert.Contains("Schema 1", p.GetSchemas());
-			Assert.Contains("Schema 2", p.GetSchemas());
+			Assert.AreEqual(2, p.GetEntities(ProjectEntityType.Schema).Length);
+			Assert.Contains("Schema 1", p.GetEntities(ProjectEntityType.Schema));
+			Assert.Contains("Schema 2", p.GetEntities(ProjectEntityType.Schema));
 
-			Assert.IsFalse(p.IsSchemaNameUnique("Schema 2"));
-			Assert.IsTrue(p.IsSchemaNameUnique("Schema 3"));
+			Assert.IsTrue(p.ContainsEntity(ProjectEntityType.Schema, "Schema 2"));
+			Assert.IsFalse(p.ContainsEntity(ProjectEntityType.Schema, "Schema 3"));
 		}
 	}
 }

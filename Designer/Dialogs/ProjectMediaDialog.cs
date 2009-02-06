@@ -1,11 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using FreeSCADA.Common;
@@ -58,7 +52,7 @@ namespace FreeSCADA.Designer.Dialogs
 			{
 				//Check that we don't have duplicates
 				string entryName = Path.GetFileName(fileName);
-				if (Env.Current.Project.ContainsEntity(ProjectEntityType.Image, entryName) == true)
+				if (Env.Current.Project.ContainsEntity(ProjectEntityType.Image, entryName) == false)
 				{
 					MessageBox.Show(string.Format(DialogMessages.DuplicateImageFound, entryName),
 						DialogMessages.ErrorCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);

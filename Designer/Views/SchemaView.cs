@@ -13,6 +13,7 @@ using FreeSCADA.Designer.SchemaEditor.PropertiesUtils;
 using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
+using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -28,6 +29,8 @@ namespace FreeSCADA.Designer.Views
         private ScaleTransform SchemaScale = new ScaleTransform();
         private System.Windows.Point SavedScrollPosition;
         private SchemaDocument schema;
+		System.Windows.Forms.ContextMenu contextMenu = new System.Windows.Forms.ContextMenu();
+		ICommandContext documentMenuContext;
         
         List<ToolDescriptor> toolsList=new List<ToolDescriptor>();
 		SchemaCommand undoCommand, redoCommand;
@@ -95,8 +98,6 @@ namespace FreeSCADA.Designer.Views
             {
                 if (activeTool != null)
                 {
-
-
                     activeTool.ObjectSelected -= activeTool_ObjectSelected;
                     activeTool.ToolFinished -= activeTool_ToolFinished;
                     activeTool.ObjectCreated -= activeTool_ObjectCreated;
@@ -140,7 +141,6 @@ namespace FreeSCADA.Designer.Views
 
         public SchemaView()
         {
-            
             InitializeComponent();
         }
 
@@ -178,27 +178,47 @@ namespace FreeSCADA.Designer.Views
             this.ResumeLayout(false);
             this.SavedScrollPosition = new System.Windows.Point(0.0, 0.0);
 
+			documentMenuContext = new SchemaMenuContext(contextMenu);
+			CommandManager.documentMenuContext = documentMenuContext;
+			this.ContextMenu = contextMenu;
+
+			// Commands
+			ICommand copyCommand = new CopyCommand();
+			ICommand pasteCommand = new PasteCommand();
+			ICommand cutCommand = new CutCommand();
+			ICommand bindingCommand = new CommonBindingCommand();
+
+
             // Commands to ToolStrip
 			DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
             DocumentCommands.Add(new CommandInfo(undoCommand = new UndoCommand()));
             DocumentCommands.Add(new CommandInfo(redoCommand = new RedoCommand()));
             DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
-            DocumentCommands.Add(new CommandInfo(new CutCommand()));
-            DocumentCommands.Add(new CommandInfo(new CopyCommand()));
-            DocumentCommands.Add(new CommandInfo(new PasteCommand()));
+			DocumentCommands.Add(new CommandInfo(cutCommand));
+			DocumentCommands.Add(new CommandInfo(copyCommand));
+			DocumentCommands.Add(new CommandInfo(pasteCommand));
 			DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
             DocumentCommands.Add(new CommandInfo(new XamlViewCommand(this)));
             DocumentCommands.Add(new CommandInfo(new GroupCommand()));
             DocumentCommands.Add(new CommandInfo(new UngroupCommand()));
+			DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
+			DocumentCommands.Add(new CommandInfo(bindingCommand));
 
 			DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.ViewCommands), CommandManager.viewContext));    // Separator
 			DocumentCommands.Add(new CommandInfo(new ZoomLevelCommand(), CommandManager.viewContext));
             DocumentCommands.Add(new CommandInfo(new ZoomOutCommand(), CommandManager.viewContext));
             DocumentCommands.Add(new CommandInfo(new ZoomInCommand(), CommandManager.viewContext));
+
+			DocumentCommands.Add(new CommandInfo(cutCommand, CommandManager.documentMenuContext));
+			DocumentCommands.Add(new CommandInfo(copyCommand, CommandManager.documentMenuContext));
+			DocumentCommands.Add(new CommandInfo(pasteCommand, CommandManager.documentMenuContext));
+			DocumentCommands.Add(new CommandInfo(bindingCommand, CommandManager.documentMenuContext));
+
             CreateToolList();
             this.wpfSchemaContainer.Child.AllowDrop = true;
             this.wpfSchemaContainer.Child.DragEnter += new System.Windows.DragEventHandler(Child_DragEnter);
             this.wpfSchemaContainer.Child.Drop += new System.Windows.DragEventHandler(Child_Drop);
+			//this.wpfSchemaContainer.View.ContextMenu = contextMenu;
         }
 
         void Child_Drop(object sender, System.Windows.DragEventArgs e)
@@ -445,6 +465,8 @@ namespace FreeSCADA.Designer.Views
         public override void OnActivated()
         {
             base.OnActivated();
+
+			CommandManager.documentMenuContext = documentMenuContext;
 
             //Notify connected windows about new tool collection
             NotifyToolsCollectionChanged(AvailableTools, CurrentTool);
