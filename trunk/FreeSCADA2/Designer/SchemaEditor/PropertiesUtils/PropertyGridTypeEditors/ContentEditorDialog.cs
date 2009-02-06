@@ -1,11 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using FreeSCADA.Common;
@@ -18,14 +13,41 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
 	public partial class ContentEditorDialog : Form
 	{
 		System.Windows.Controls.Image m_image_preview;
-        public System.Windows.Forms.ListView ImagesList
+		bool selectMode = false;
+
+		/// <summary>
+		/// Returns selected images
+		/// </summary>
+        public List<string> ImagesList
         {
-            get { return imageList; }
+            get 
+			{
+				List<string> result = new List<string>();
+				foreach (ListViewItem item in imageList.SelectedItems)
+					result.Add(item.Text);
+
+				return result;
+			}
         }
+
 		/// <summary>
 		/// Constructor
 		/// </summary>
-        public ContentEditorDialog()
+		public ContentEditorDialog()
+		{
+			Init();
+		}
+
+		/// <summary>
+		/// Constructor
+		/// </summary>
+        public ContentEditorDialog(bool selectMode)
+		{
+			this.selectMode = selectMode;
+			Init();
+		}
+
+		private void Init()
 		{
 			InitializeComponent();
 
@@ -43,9 +65,25 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
 			if (imageList.SelectedIndices.Count == 0 && imageList.Items.Count > 0)
 				imageList.Items[0].Selected = true;
 
-		}
+			if (selectMode)
+			{
+				button3.DialogResult = DialogResult.Cancel;
+				button3.Text = "Cancel";
+				button3.Visible = true;
 
-		
+				button1.DialogResult = DialogResult.OK;
+				button1.Text = "Ok";
+				button1.Visible = true;
+			}
+			else
+			{
+				button3.DialogResult = DialogResult.OK;
+				button3.Text = "Ok";
+				button3.Visible = true;
+
+				button1.Visible = false;
+			}
+		}
 
 		void UpdateImageList()
 		{

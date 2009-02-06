@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-using FreeSCADA.Common;
 using FreeSCADA.Archiver;
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -92,7 +92,7 @@ namespace FreeSCADA.Designer.Views
 				root = projectTree.Nodes.Add(project.FileName);
 
 			TreeNode schemas = root.Nodes.Add(StringResources.SchemasItemName);
-			foreach (string entity in Env.Current.Project.GetSchemas())
+			foreach (string entity in Env.Current.Project.GetEntities(ProjectEntityType.Schema))
 			{
 				TreeNode node = schemas.Nodes.Add(entity);
 				node.Tag = entity;

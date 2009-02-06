@@ -172,6 +172,9 @@
   <data name="CheckBox" xml:space="preserve">
     <value>CheckBox Tool</value>
   </data>
+  <data name="CommandCommonBindingName" xml:space="preserve">
+    <value>Associate with data...</value>
+  </data>
   <data name="CommandCopyDescription" xml:space="preserve">
     <value>Copy to clipboard</value>
   </data>
@@ -248,9 +251,6 @@
     <value>Please select trajectory object 
     (line,rectangle,ellipse)</value>
   </data>
-  <data name="ImageControl" xml:space="preserve">
-    <value>Image</value>
-  </data>
   <data name="MainWindowName" xml:space="preserve">
     <value>Designer</value>
   </data>
@@ -283,6 +283,9 @@
   </data>
   <data name="ToolGrphicsGroupName" xml:space="preserve">
     <value>Graphics Tools</value>
+  </data>
+  <data name="ToolImageControl" xml:space="preserve">
+    <value>Image</value>
   </data>
   <data name="ToolPolyline" xml:space="preserve">
     <value>Polyline Tool</value>

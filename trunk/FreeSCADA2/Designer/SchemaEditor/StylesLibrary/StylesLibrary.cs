@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.IO;
-using System.Xml;
-using System.Windows.Markup;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Windows;
+using System.Windows.Markup;
+using System.Xml;
 namespace FreeSCADA.Designer.SchemaEditor.StylesLibrary
 {
     //TODO:reimplement as DataSourceProvider
