@@ -11,5 +11,6 @@ namespace FreeSCADA.Communication.MODBUSPlug
         int CycleTimeout { get; set; }
         int RetryTimeout { get; set; }
         int RetryCount { get; set; }
-   }
+        int FailedCount { get; set; }
+    }
 }

@@ -114,11 +114,12 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                 mult = 16;
                             else
                                 mult = 1;
-                            if (((ch.ModbusDataAddress - buf.lastAddress) < 4 * mult) && (buf.numInputs < 110 * mult))   // Optimization - "holes" in address space less than 4 words
-                            // will be included in one read until max frame 2*110+8 bytes is reached
+                            if (((ch.ModbusDataAddress - buf.lastAddress) < 4 * mult) && ((buf.lastAddress - buf.startAddress + ch.DeviceDataLen) < 120 * mult))
+                            // Optimization - "holes" in address space less than 4 words
+                            // will be included in one read until max frame 2*120 bytes is reached
                             {
-                                buf.lastAddress = ch.ModbusDataAddress;
-                                buf.numInputs = (ushort)(buf.lastAddress - buf.startAddress + 1);
+                                buf.lastAddress = (ushort)(ch.ModbusDataAddress + ch.DeviceDataLen - 1);
+                                buf.numInputs = (ushort)(buf.lastAddress - buf.startAddress + ch.DeviceDataLen);
                                 buf.channels.Add(ch);
                                 found = true;
                             }
@@ -186,6 +187,25 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                                 }
                                             }
                                             break;
+                                        case ModbusDataTypeEx.HoldingRegister:
+                                            registers = master.ReadHoldingRegisters(buf.slaveId, startAddress, numInputs);
+                                            dt = DateTime.Now;
+                                            foreach (ModbusChannelImp ch in buf.channels)
+                                            {
+                                                if (ch.ModbusInternalType == ModbusFs2InternalType.Int32)
+                                                {
+                                                    ch.DoUpdate((int)registers[ch.ModbusDataAddress - buf.startAddress], dt, ChannelStatusFlags.Good);
+                                                }
+                                                if (ch.ModbusInternalType == ModbusFs2InternalType.UInt32)
+                                                {
+                                                    ch.DoUpdate((uint)registers[ch.ModbusDataAddress - buf.startAddress], dt, ChannelStatusFlags.Good);
+                                                }
+                                                if (ch.ModbusInternalType == ModbusFs2InternalType.Float)
+                                                {
+                                                    ch.DoUpdate((float)registers[ch.ModbusDataAddress - buf.startAddress], dt, ChannelStatusFlags.Good);
+                                                }
+                                            }
+                                            break;
                                         case ModbusDataTypeEx.Coil:
                                             bool[] inputs = master.ReadCoils(buf.slaveId, startAddress, numInputs);
                                             dt = DateTime.Now;
@@ -227,25 +247,6 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                                 {
                                                     float val = inputs[ch.ModbusDataAddress - buf.startAddress] ? 1 : 0;
                                                     ch.DoUpdate(val, dt, ChannelStatusFlags.Good);
-                                                }
-                                            }
-                                            break;
-                                        case ModbusDataTypeEx.HoldingRegister:
-                                            registers = master.ReadHoldingRegisters(buf.slaveId, startAddress, numInputs);
-                                            dt = DateTime.Now;
-                                            foreach (ModbusChannelImp ch in buf.channels)
-                                            {
-                                                if (ch.ModbusInternalType == ModbusFs2InternalType.Int32)
-                                                {
-                                                    ch.DoUpdate((int)registers[ch.ModbusDataAddress - buf.startAddress], dt, ChannelStatusFlags.Good);
-                                                }
-                                                if (ch.ModbusInternalType == ModbusFs2InternalType.UInt32)
-                                                {
-                                                    ch.DoUpdate((uint)registers[ch.ModbusDataAddress - buf.startAddress], dt, ChannelStatusFlags.Good);
-                                                }
-                                                if (ch.ModbusInternalType == ModbusFs2InternalType.Float)
-                                                {
-                                                    ch.DoUpdate((float)registers[ch.ModbusDataAddress - buf.startAddress], dt, ChannelStatusFlags.Good);
                                                 }
                                             }
                                             break;

@@ -38,7 +38,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                 if (forbiddenNames != null && forbiddenNames.Contains(tcs.Name))
                 {
                     e.Cancel = true;
-                    MessageBox.Show("Name already assigned to another Station!");
+                    MessageBox.Show(StringConstants.NameAssigned);
                 }
                 (sender as ModifyTCPClientStationForm).test = false;
             }

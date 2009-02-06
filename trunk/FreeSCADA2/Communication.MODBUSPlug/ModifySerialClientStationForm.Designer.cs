@@ -266,7 +266,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(32, 181);
+            this.label9.Location = new System.Drawing.Point(33, 208);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(49, 13);
             this.label9.TabIndex = 15;
@@ -275,7 +275,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(32, 208);
+            this.label11.Location = new System.Drawing.Point(33, 181);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(33, 13);
             this.label11.TabIndex = 16;
@@ -331,7 +331,7 @@
             // stopBitsComboBox
             // 
             this.stopBitsComboBox.FormattingEnabled = true;
-            this.stopBitsComboBox.Location = new System.Drawing.Point(206, 178);
+            this.stopBitsComboBox.Location = new System.Drawing.Point(206, 205);
             this.stopBitsComboBox.Name = "stopBitsComboBox";
             this.stopBitsComboBox.Size = new System.Drawing.Size(106, 21);
             this.stopBitsComboBox.TabIndex = 21;
@@ -339,7 +339,7 @@
             // parityComboBox
             // 
             this.parityComboBox.FormattingEnabled = true;
-            this.parityComboBox.Location = new System.Drawing.Point(206, 205);
+            this.parityComboBox.Location = new System.Drawing.Point(207, 178);
             this.parityComboBox.Name = "parityComboBox";
             this.parityComboBox.Size = new System.Drawing.Size(106, 21);
             this.parityComboBox.TabIndex = 22;
