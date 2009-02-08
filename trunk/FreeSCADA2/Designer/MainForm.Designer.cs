@@ -45,6 +45,7 @@
 			this.projectContentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.projectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.variablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mediaContentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mainMenu = new System.Windows.Forms.MenuStrip();
 			this.editSubMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
@@ -57,7 +58,8 @@
 			this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
 			this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
 			this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-			this.mediaContentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mRU1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			newProjectButton = new System.Windows.Forms.ToolStripButton();
 			openProjectButton = new System.Windows.Forms.ToolStripButton();
 			toolStripButton3 = new System.Windows.Forms.ToolStripButton();
@@ -131,6 +133,8 @@
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
             this.loadToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.mRU1ToolStripMenuItem,
             this.toolStripSeparator2,
             this.importSchemaToolStripMenuItem,
             this.exitToolStripMenuItem});
@@ -210,6 +214,13 @@
 			this.variablesToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
 			this.variablesToolStripMenuItem.Text = "Variables...";
 			this.variablesToolStripMenuItem.Click += new System.EventHandler(this.OnMenuVariables);
+			// 
+			// mediaContentToolStripMenuItem
+			// 
+			this.mediaContentToolStripMenuItem.Name = "mediaContentToolStripMenuItem";
+			this.mediaContentToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+			this.mediaContentToolStripMenuItem.Text = "Media content...";
+			this.mediaContentToolStripMenuItem.Click += new System.EventHandler(this.OnMenuMediaContent);
 			// 
 			// mainMenu
 			// 
@@ -325,12 +336,17 @@
 			this.dockPanel.Size = new System.Drawing.Size(699, 337);
 			this.dockPanel.TabIndex = 4;
 			// 
-			// mediaContentToolStripMenuItem
+			// toolStripMenuItem1
 			// 
-			this.mediaContentToolStripMenuItem.Name = "mediaContentToolStripMenuItem";
-			this.mediaContentToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-			this.mediaContentToolStripMenuItem.Text = "Media content...";
-			this.mediaContentToolStripMenuItem.Click += new System.EventHandler(this.OnMenuMediaContent);
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(156, 6);
+			// 
+			// mRU1ToolStripMenuItem
+			// 
+			this.mRU1ToolStripMenuItem.Name = "mRU1ToolStripMenuItem";
+			this.mRU1ToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+			this.mRU1ToolStripMenuItem.Text = "MRU_start";
+			this.mRU1ToolStripMenuItem.Visible = false;
 			// 
 			// MainForm
 			// 
@@ -383,5 +399,7 @@
 		private System.Windows.Forms.ToolStripContentPanel ContentPanel;
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
 		private System.Windows.Forms.ToolStripMenuItem mediaContentToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem mRU1ToolStripMenuItem;
 	}
 }

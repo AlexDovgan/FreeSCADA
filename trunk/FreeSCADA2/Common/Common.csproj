@@ -80,6 +80,7 @@
     <Compile Include="ICommunicationPlug.cs" />
     <Compile Include="IEnvironment.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="MRUManager.cs" />
     <Compile Include="NullCommand.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -46,7 +46,7 @@ namespace FreeSCADA.Common.Schema
                 }
                 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 base.OnQueryFinished(mediaFileName);
             }

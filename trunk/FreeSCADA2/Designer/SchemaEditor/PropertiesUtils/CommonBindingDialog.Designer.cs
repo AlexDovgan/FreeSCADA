@@ -31,7 +31,9 @@
 			this.propertyList = new System.Windows.Forms.ListBox();
 			this.button1 = new System.Windows.Forms.Button();
 			this.channelsTree = new System.Windows.Forms.TreeView();
-			this.checkBox1 = new System.Windows.Forms.CheckBox();
+			this.enableInDesignerCheckbox = new System.Windows.Forms.CheckBox();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.CreateAssociationButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// propertyList
@@ -43,6 +45,7 @@
 			this.propertyList.Name = "propertyList";
 			this.propertyList.Size = new System.Drawing.Size(120, 420);
 			this.propertyList.TabIndex = 0;
+			this.propertyList.SelectedIndexChanged += new System.EventHandler(this.propertyList_SelectedIndexChanged);
 			// 
 			// button1
 			// 
@@ -59,34 +62,61 @@
 			// 
 			this.channelsTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Right)));
+			this.channelsTree.FullRowSelect = true;
+			this.channelsTree.HideSelection = false;
 			this.channelsTree.Location = new System.Drawing.Point(597, 13);
 			this.channelsTree.Name = "channelsTree";
 			this.channelsTree.Size = new System.Drawing.Size(204, 419);
 			this.channelsTree.TabIndex = 2;
+			this.channelsTree.DoubleClick += new System.EventHandler(this.channelsTree_DoubleClick);
 			// 
-			// checkBox1
+			// enableInDesignerCheckbox
 			// 
-			this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.checkBox1.AutoSize = true;
-			this.checkBox1.Location = new System.Drawing.Point(12, 444);
-			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(188, 17);
-			this.checkBox1.TabIndex = 3;
-			this.checkBox1.Text = "Enable property in Designer mode";
-			this.checkBox1.UseVisualStyleBackColor = true;
+			this.enableInDesignerCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.enableInDesignerCheckbox.AutoSize = true;
+			this.enableInDesignerCheckbox.Location = new System.Drawing.Point(12, 444);
+			this.enableInDesignerCheckbox.Name = "enableInDesignerCheckbox";
+			this.enableInDesignerCheckbox.Size = new System.Drawing.Size(188, 17);
+			this.enableInDesignerCheckbox.TabIndex = 3;
+			this.enableInDesignerCheckbox.Text = "Enable property in Designer mode";
+			this.enableInDesignerCheckbox.UseVisualStyleBackColor = true;
+			this.enableInDesignerCheckbox.CheckedChanged += new System.EventHandler(this.enableInDesignerCheckbox_CheckedChanged);
+			// 
+			// panel1
+			// 
+			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.panel1.Location = new System.Drawing.Point(138, 41);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(453, 391);
+			this.panel1.TabIndex = 6;
+			// 
+			// CreateAssociationButton
+			// 
+			this.CreateAssociationButton.Location = new System.Drawing.Point(139, 13);
+			this.CreateAssociationButton.Name = "CreateAssociationButton";
+			this.CreateAssociationButton.Size = new System.Drawing.Size(452, 23);
+			this.CreateAssociationButton.TabIndex = 7;
+			this.CreateAssociationButton.Text = "Create association";
+			this.CreateAssociationButton.UseVisualStyleBackColor = true;
+			this.CreateAssociationButton.Click += new System.EventHandler(this.CreateAssociationButton_Click);
 			// 
 			// CommonBindingDialog
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(813, 475);
-			this.Controls.Add(this.checkBox1);
+			this.Controls.Add(this.CreateAssociationButton);
+			this.Controls.Add(this.panel1);
+			this.Controls.Add(this.enableInDesignerCheckbox);
 			this.Controls.Add(this.channelsTree);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.propertyList);
 			this.Name = "CommonBindingDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Associate element with data";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CommonBindingDialog_FormClosing);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -97,6 +127,8 @@
 		private System.Windows.Forms.ListBox propertyList;
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.TreeView channelsTree;
-		private System.Windows.Forms.CheckBox checkBox1;
+		private System.Windows.Forms.CheckBox enableInDesignerCheckbox;
+		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.Button CreateAssociationButton;
 	}
 }

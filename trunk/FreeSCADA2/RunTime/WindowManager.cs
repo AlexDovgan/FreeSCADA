@@ -7,9 +7,10 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace FreeSCADA.RunTime
 {
-    class WindowManager
+    class WindowManager:IDisposable
     {
 		WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel;
+		MRUManager mruManager;
 
 		List<DocumentView> documentViews = new List<DocumentView>();
 		ProjectContentView projectContentView;
@@ -17,9 +18,11 @@ namespace FreeSCADA.RunTime
 
 		DocumentView currentDocument;
 
-		public WindowManager(DockPanel dockPanel)
+		public WindowManager(DockPanel dockPanel, MRUManager mruManager)
 		{
 			this.dockPanel = dockPanel;
+			this.mruManager = mruManager;
+			mruManager.ItemClicked += new MRUManager.ItemClickedDelegate(OnMRUItemClicked);
 
 			//Create toolwindows
 			dockPanel.SuspendLayout();
@@ -104,6 +107,7 @@ namespace FreeSCADA.RunTime
                 return false;
             Close();
             Env.Current.Project.Load(fd.FileName);
+			mruManager.Add(fd.FileName);
             return true;
         }
 
@@ -115,6 +119,7 @@ namespace FreeSCADA.RunTime
         {
             Close();
             Env.Current.Project.Load(fileToLoad);
+			mruManager.Add(fileToLoad);
             return true;
         }
 
@@ -167,5 +172,28 @@ namespace FreeSCADA.RunTime
 			queryView.FormClosed -= new FormClosedEventHandler(OnQueryViewClosed);
 			queryView.OpenTableView -= new QueryView.ExecuteQueryHandler(OnOpenTableView);
 		}
+
+		void OnMRUItemClicked(object sender, string file)
+		{
+			LoadProject(file);
+		}
+
+		#region IDisposable Members
+
+		public void Dispose()
+		{
+			Close();
+
+			mruManager.ItemClicked -= new MRUManager.ItemClickedDelegate(OnMRUItemClicked);
+			projectContentView.OpenEntity -= new ProjectContentView.OpenEntityHandler(OnOpenProjectEntity);
+			dockPanel.ActiveDocumentChanged -= new EventHandler(OnActiveDocumentChanged);
+
+			projectContentView.Dispose();
+			logConsoleView.Dispose();
+			dockPanel.Dispose();
+			mruManager.Dispose();
+		}
+
+		#endregion
     }
 }

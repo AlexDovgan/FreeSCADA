@@ -17,7 +17,8 @@ namespace FreeSCADA.RunTime
 
 			CommandManager.viewContext = new BaseCommandContext(viewSubMenu.DropDown, mainToolbar);
 
-			windowManager = new WindowManager(dockPanel);
+			MRUManager mruManager = new MRUManager(mRUstartToolStripMenuItem, toolStripSeparator3);
+			windowManager = new WindowManager(dockPanel, mruManager);
 			UpdateCaption();
 		}
 
@@ -29,7 +30,8 @@ namespace FreeSCADA.RunTime
 
 			CommandManager.viewContext = new BaseCommandContext(viewSubMenu.DropDown, mainToolbar);
 
-            windowManager = new WindowManager(dockPanel);
+			MRUManager mruManager = new MRUManager(mRUstartToolStripMenuItem, toolStripSeparator3);
+			windowManager = new WindowManager(dockPanel, mruManager);
             if (fileToLoad != "")
                 windowManager.LoadProject(fileToLoad);
             UpdateCaption();
