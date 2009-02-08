@@ -42,8 +42,10 @@
 			this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
 			this.viewSubMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+			this.mRUstartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.mainToolbar.SuspendLayout();
 			this.mainMenu.SuspendLayout();
@@ -151,6 +153,8 @@
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadToolStripMenuItem,
             this.toolStripSeparator2,
+            this.mRUstartToolStripMenuItem,
+            this.toolStripSeparator3,
             this.exitToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -160,21 +164,27 @@
 			// 
 			this.loadToolStripMenuItem.Image = global::FreeSCADA.RunTime.Properties.Resources.open_file;
 			this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-			this.loadToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+			this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.loadToolStripMenuItem.Text = "Load project...";
 			this.loadToolStripMenuItem.Click += new System.EventHandler(this.OnLoadProjectClick);
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(146, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-			this.exitToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+			this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.exitToolStripMenuItem.Text = "Exit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnMenuExitClick);
+			// 
+			// viewSubMenu
+			// 
+			this.viewSubMenu.Name = "viewSubMenu";
+			this.viewSubMenu.Size = new System.Drawing.Size(44, 20);
+			this.viewSubMenu.Text = "View";
 			// 
 			// dockPanel
 			// 
@@ -191,11 +201,16 @@
 			this.dockPanel.Size = new System.Drawing.Size(513, 275);
 			this.dockPanel.TabIndex = 10;
 			// 
-			// viewSubMenu
+			// mRUstartToolStripMenuItem
 			// 
-			this.viewSubMenu.Name = "viewSubMenu";
-			this.viewSubMenu.Size = new System.Drawing.Size(44, 20);
-			this.viewSubMenu.Text = "View";
+			this.mRUstartToolStripMenuItem.Name = "mRUstartToolStripMenuItem";
+			this.mRUstartToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.mRUstartToolStripMenuItem.Text = "MRU_start";
+			// 
+			// toolStripSeparator3
+			// 
+			this.toolStripSeparator3.Name = "toolStripSeparator3";
+			this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
 			// 
 			// MainForm
 			// 
@@ -236,6 +251,8 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
 		private System.Windows.Forms.ToolStripButton showTableButton;
 		private System.Windows.Forms.ToolStripMenuItem viewSubMenu;
+		private System.Windows.Forms.ToolStripMenuItem mRUstartToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 	}
 }
 

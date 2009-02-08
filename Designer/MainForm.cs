@@ -26,8 +26,9 @@ namespace FreeSCADA.Designer
 			CommandManager.fileContext = new BaseCommandContext(fileToolStripMenuItem.DropDown, mainToolbar);
 			CommandManager.viewContext = new BaseCommandContext(viewSubMenu.DropDown, mainToolbar);
 			CommandManager.documentContext = new BaseCommandContext(editSubMenu.DropDown, mainToolbar);
-			
-			windowManager = new WindowManager(dockPanel);
+
+			MRUManager mruManager = new MRUManager(mRU1ToolStripMenuItem, toolStripSeparator2);
+			windowManager = new WindowManager(dockPanel, mruManager);
 			
 			UpdateCaptionAndCommands();
 		}
@@ -111,8 +112,12 @@ namespace FreeSCADA.Designer
 			if (windowManager.Close())
 			{
 				windowManager.ForceWindowsClose();
+				windowManager.Dispose();
 				Env.Current.CreateNewProject();
-				windowManager = new WindowManager(dockPanel);
+				
+				MRUManager mruManager = new MRUManager(mRU1ToolStripMenuItem, toolStripSeparator2);
+				windowManager = new WindowManager(dockPanel, mruManager);
+
 				Env.Current.CreateNewProject();
                 UpdateCaptionAndCommands();
 				System.GC.Collect();

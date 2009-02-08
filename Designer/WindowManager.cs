@@ -8,9 +8,10 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace FreeSCADA.Designer
 {
-	class WindowManager 
+	class WindowManager: IDisposable
     {
 		WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel;
+		MRUManager mruManager;
 
         List<DocumentView> documentViews = new List<DocumentView>();
         DocumentView currentDocument;
@@ -19,9 +20,12 @@ namespace FreeSCADA.Designer
         PropertyBrowserView propertyBrowserView;
 		ToolBoxView toolBoxView;
 
-		public WindowManager(DockPanel dockPanel)
+		public WindowManager(DockPanel dockPanel, MRUManager mruManager)
 		{
 			this.dockPanel = dockPanel;
+			this.mruManager = mruManager;
+
+			mruManager.ItemClicked += new MRUManager.ItemClickedDelegate(OnMRUItemClicked);
 
 			//Create toolwindows
 			projectContentView = new ProjectContentView();
@@ -249,6 +253,7 @@ namespace FreeSCADA.Designer
 			SaveAllDocuments();
 			Env.Current.Project.Save(projectFileName);
 			projectContentView.RefreshContent(Env.Current.Project);
+			mruManager.Add(projectFileName);
 			return true;
 		}
 
@@ -269,8 +274,10 @@ namespace FreeSCADA.Designer
 
             Close();
 			Env.Current.Project.Load(fd.FileName);
+			mruManager.Add(fd.FileName);
 			return true;
 		}
+
         public bool ImportSchema()
         {
             if(!(currentDocument is SchemaView)) 
@@ -286,6 +293,13 @@ namespace FreeSCADA.Designer
             return  (currentDocument as SchemaView).ImportFile(fd.FileName);
             
         }
+
+		void OnMRUItemClicked(object sender, string file)
+		{
+			Close();
+			Env.Current.Project.Load(file);
+			mruManager.Add(file);
+		}
 
 		/// <summary>
 		/// Close project. If there are unsaved open documents, an appropriate dialog will be show. User will be able 
@@ -403,6 +417,27 @@ namespace FreeSCADA.Designer
 
 			command.Execute();
         }
-  
-    }
+
+
+		#region IDisposable Members
+
+		public void Dispose()
+		{
+			ForceWindowsClose();
+
+			mruManager.ItemClicked -= new MRUManager.ItemClickedDelegate(OnMRUItemClicked);
+			projectContentView.OpenEntity -= new ProjectContentView.OpenEntityHandler(OnOpenProjectEntity);
+			dockPanel.ActiveDocumentChanged -= new EventHandler(OnActiveDocumentChanged);
+
+			//Create toolwindows
+			projectContentView.Dispose();
+			toolBoxView.Dispose();
+			propertyBrowserView.Dispose();
+
+			dockPanel.Dispose();
+			mruManager.Dispose();
+		}
+
+		#endregion
+	}
 }

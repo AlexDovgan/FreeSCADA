@@ -107,11 +107,23 @@
     <Compile Include="SchemaEditor\ObjectsFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\BaseBindingPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\BaseBindingPanel.Designer.cs">
+      <DependentUpon>BaseBindingPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\CommonBindingDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\CommonBindingDialog.Designer.cs">
       <DependentUpon>CommonBindingDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\NumericBindingPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\NumericBindingPanel.Designer.cs">
+      <DependentUpon>NumericBindingPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ChannelSelectEditor.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ColorEditor.cs" />
@@ -205,6 +217,9 @@
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\CommonBindingDialog.resx">
       <DependentUpon>CommonBindingDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SchemaEditor\PropertiesUtils\NumericBindingPanel.resx">
+      <DependentUpon>NumericBindingPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ContentEditorDialog.resx">
       <DependentUpon>ContentEditorDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -290,6 +305,8 @@
     <Content Include="Resources\cog_edit.png" />
     <Content Include="Resources\cursor.png" />
     <None Include="Resources\db_settings.png" />
+    <None Include="Resources\mark_bad.png" />
+    <None Include="Resources\mark_ok.png" />
     <Content Include="Resources\new_file.png" />
     <Content Include="Resources\open_events.png" />
     <Content Include="Resources\open_file.png" />
