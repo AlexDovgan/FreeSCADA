@@ -19,15 +19,6 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			label4.Text = "";
 		}
 
-		public override bool CheckApplicability(object element, PropertyInfo property)
-		{
-			Type type = GetPropertyType(element, property);
-			if (type.Equals(typeof(Double)))
-				return true;
-
-			return base.CheckApplicability(element, property);
-		}
-
 		public override void AddChannel(IChannel channel)
 		{
 			if (channel != null)
@@ -39,21 +30,11 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			}
 		}
 
-		public override void Initialize(object element, PropertyInfo property)
+		public override void Initialize(object element, PropertyInfo property, System.Windows.Data.BindingBase binding)
 		{
-			base.Initialize(element, property);
+			base.Initialize(element, property, binding);
 
-			PropertyDescriptor pd = TypeDescriptor.GetProperties(element).Find(property.SourceProperty, true);
-			if (pd == null || !(pd is PropertiesUtils.PropertyWrapper))
-				return;
-
-			DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty((pd as PropertiesUtils.PropertyWrapper).ControlledProperty);
-			if (dpd == null)
-				return;
-			DependencyObject depObj = (pd as PropertiesUtils.PropertyWrapper).ControlledObject as DependencyObject;
-			DependencyProperty depProp = dpd.DependencyProperty;
-
-			System.Windows.Data.Binding bind = BindingOperations.GetBinding(depObj, depProp);
+			System.Windows.Data.Binding bind = binding as System.Windows.Data.Binding;
 			if (bind != null)
 			{
 				Common.Schema.ChannelDataSource chs = ((ObjectDataProvider)bind.Source).ObjectInstance as Common.Schema.ChannelDataSource;
@@ -107,16 +88,57 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty((pd as PropertiesUtils.PropertyWrapper).ControlledProperty);
 				if (dpd == null)
 					return;
-				DependencyObject depObj = (pd as PropertiesUtils.PropertyWrapper).ControlledObject as DependencyObject;
-				DependencyProperty depProp = dpd.DependencyProperty;
 
-				BindingOperations.SetBinding(depObj, depProp, bind);
+				DependencyObject depObj;
+				DependencyProperty depProp;
+				GetPropertyObjects(element, property, out depObj, out depProp);
+				if(depObj != null && depProp != null)
+					BindingOperations.SetBinding(depObj, depProp, bind);
 			}
 		}
 
 		private void checkBox1_CheckedChanged(object sender, EventArgs e)
 		{
 			groupBox1.Enabled = checkBox1.Checked;
+		}
+	}
+
+	internal class NumericBindingPanelFactory : BaseBindingPanelFactory
+	{
+		override public bool CheckApplicability(object element, PropertyInfo property)
+		{
+			Type type = BaseBindingPanel.GetPropertyType(element, property);
+			if (type.Equals(typeof(Double)))
+				return true;
+
+			return false;
+		}
+
+		override public bool CanWorkWithBinding(System.Windows.Data.BindingBase binding)
+		{
+			if (binding != null && binding is System.Windows.Data.Binding)
+			{
+				System.Windows.Data.Binding bind = binding as System.Windows.Data.Binding;
+				if (((ObjectDataProvider)bind.Source).ObjectInstance is Common.Schema.ChannelDataSource == false)
+					return false;
+
+				if (bind.Converter is ComposingConverter == false)
+					return false;
+
+				return true;
+			}
+
+			return true;
+		}
+
+		override public BaseBindingPanel CreateInstance()
+		{
+			return new NumericBindingPanel();
+		}
+
+		override public string Name
+		{
+			get { return StringResources.NumericBindingPanelName; }
 		}
 	}
 }
