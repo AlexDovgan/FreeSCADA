@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Reflection;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Forms;
@@ -61,6 +62,15 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			}
 		}
 
+		void FillBindingTypes()
+		{
+			bindingTypes.Items.Clear();
+			bindingTypes.Items.AddRange(GetAvailableBindingPanels().ToArray());
+
+			if (bindingTypes.Items.Count > 0)
+				bindingTypes.SelectedIndex = 0;
+		}
+
 		private void CreateAssociationButton_Click(object sender, EventArgs e)
 		{
 			if (bindingPanel != null)
@@ -69,15 +79,15 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				bindingPanel = null;
 			}
 
-			if (propertyList.SelectedIndex >= 0)
+			if (propertyList.SelectedIndex >= 0 && bindingTypes.SelectedIndex >= 0)
 			{
-				bindingPanel = GetBindingPanel();
-				if (bindingPanel != null)
-				{
-					bindingPanel.Parent = panel1;
-					bindingPanel.Dock = DockStyle.Fill;
-				}
+				BaseBindingPanelFactory factory = (BaseBindingPanelFactory)bindingTypes.SelectedItem;
+				bindingPanel = factory.CreateInstance();
+				bindingPanel.Initialize(element, propertyList.SelectedItem as PropertyInfo, null);
+				bindingPanel.Parent = panel1;
+				bindingPanel.Dock = DockStyle.Fill;
 				CreateAssociationButton.Enabled = false;
+				bindingTypes.Enabled = false;
 			}
 		}
 
@@ -89,83 +99,92 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				bindingPanel = null;
 			}
 
-			if (propertyList.SelectedIndex >= 0 && IsBindingExist(propertyList.SelectedItem as PropertyInfo))
+			if (propertyList.SelectedIndex >= 0)
 			{
-				bindingPanel = GetBindingPanel();
-				if (bindingPanel != null)
+				System.Windows.Data.BindingBase binding = GetExistingBinding(propertyList.SelectedItem as PropertyInfo);
+				if (binding != null)
 				{
-					bindingPanel.Parent = panel1;
-					bindingPanel.Dock = DockStyle.Fill;
-					enableInDesignerCheckbox.Checked = bindingPanel.EnableInDesigner;
+					PropertyInfo propInfo = propertyList.Items[propertyList.SelectedIndex] as PropertyInfo;
+					List<BaseBindingPanelFactory> panels = GetAvailableBindingPanels();
+					foreach (BaseBindingPanelFactory panel in panels)
+					{
+						if (panel.CanWorkWithBinding(binding))
+						{
+							bindingPanel = panel.CreateInstance();
+							break;
+						}
+					}
+
+					if (bindingPanel != null)
+					{
+						bindingPanel.Initialize(element, propertyList.SelectedItem as PropertyInfo, binding);
+						bindingPanel.Parent = panel1;
+						bindingPanel.Dock = DockStyle.Fill;
+						enableInDesignerCheckbox.Checked = bindingPanel.EnableInDesigner;
+					}
+					CreateAssociationButton.Enabled = false;
 				}
-				CreateAssociationButton.Enabled = false;
 			}
 		}
 
-		bool IsBindingExist(PropertyInfo property)
+		System.Windows.Data.BindingBase GetExistingBinding(PropertyInfo property)
 		{
 			PropertyDescriptor pd = TypeDescriptor.GetProperties(element).Find(property.SourceProperty, true);
 			if(pd == null || !(pd is PropertiesUtils.PropertyWrapper))
-				return false;
+				return null;
 
 			DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty((pd as PropertiesUtils.PropertyWrapper).ControlledProperty);
             if (dpd == null)
-                return false;
+                return null;
 
 			DependencyObject depObj = (pd as PropertiesUtils.PropertyWrapper).ControlledObject as DependencyObject;
-			System.Windows.Data.Binding binding = BindingOperations.GetBinding(depObj, dpd.DependencyProperty);
-
-			return binding != null;
+			return BindingOperations.GetBindingBase(depObj, dpd.DependencyProperty);
 		}
 
-		BaseBindingPanel GetBindingPanel()
+		List<BaseBindingPanelFactory> GetAvailableBindingPanels()
 		{
 			PropertyInfo propInfo = null;
+			List<BaseBindingPanelFactory> result = new List<BaseBindingPanelFactory>();
 
 			if (propertyList.SelectedIndex >= 0)
 				propInfo = propertyList.Items[propertyList.SelectedIndex] as PropertyInfo;
 
 			if (propInfo == null)
-				return null;
+				return result;
 
 			Assembly archiverAssembly = this.GetType().Assembly;
 			foreach (Type type in archiverAssembly.GetTypes())
 			{
-				if (type.IsSubclassOf(typeof(BaseBindingPanel)))
+				if (type.IsSubclassOf(typeof(BaseBindingPanelFactory)))
 				{
-					BaseBindingPanel obj = (BaseBindingPanel)Activator.CreateInstance(type);
-
-					if (obj.CheckApplicability(element, propInfo))
-					{
-						obj.Initialize(element, propInfo);
-						return obj;
-					}
-					else
-						obj.Dispose();
+					BaseBindingPanelFactory factory = (BaseBindingPanelFactory)Activator.CreateInstance(type);
+					if (factory != null && factory.CheckApplicability(element, propInfo))
+						result.Add(factory);
 				}
 			}
 
-			return null;
+			return result;
 		}
 
 		void UpdateControlsState()
 		{
-			BaseBindingPanel panel = GetBindingPanel();
-			if (panel != null)
+			if (GetAvailableBindingPanels().Count > 0)
 			{
-				panel.Dispose();
 				CreateAssociationButton.Enabled = true;
 				enableInDesignerCheckbox.Enabled = true;
+				bindingTypes.Enabled = true;
 			}
 			else
 			{
 				CreateAssociationButton.Enabled = false;
 				enableInDesignerCheckbox.Enabled = false;
+				bindingTypes.Enabled = false;
 			}
 		}
 
 		private void propertyList_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			FillBindingTypes();
 			UpdateControlsState();
 			ShowBindingPanel();
 		}

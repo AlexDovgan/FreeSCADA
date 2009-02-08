@@ -257,11 +257,17 @@
   <data name="MainWindowNameEx" xml:space="preserve">
     <value>[{0}] - Designer</value>
   </data>
+  <data name="NumericBindingPanelName" xml:space="preserve">
+    <value>Bind to numeric value</value>
+  </data>
   <data name="OpenMediaDialogFilter" xml:space="preserve">
     <value>Media files|*.gif;*.BMP;*.PNG;*.JPEG;*.JPG;*.TIFF|All files (*.*)|*.*</value>
   </data>
   <data name="SchemasItemName" xml:space="preserve">
     <value>Schemas</value>
+  </data>
+  <data name="StringBindingPanelName" xml:space="preserve">
+    <value>Bind to string value</value>
   </data>
   <data name="ToolActionEdit" xml:space="preserve">
     <value>Action Edit Tool</value>
