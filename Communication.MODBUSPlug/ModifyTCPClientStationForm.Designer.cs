@@ -49,6 +49,8 @@
             this.failedNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.loggingComboBox = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.TcpPortNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PauseNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TimeoutNumericUpDown)).BeginInit();
@@ -59,7 +61,7 @@
             // OKButton
             // 
             this.OKButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.OKButton.Location = new System.Drawing.Point(55, 248);
+            this.OKButton.Location = new System.Drawing.Point(55, 285);
             this.OKButton.Name = "OKButton";
             this.OKButton.Size = new System.Drawing.Size(87, 34);
             this.OKButton.TabIndex = 0;
@@ -70,7 +72,7 @@
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(208, 248);
+            this.cancelButton.Location = new System.Drawing.Point(208, 285);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(87, 34);
             this.cancelButton.TabIndex = 1;
@@ -294,13 +296,31 @@
             this.label10.TabIndex = 6;
             this.label10.Text = "communication to a failed device";
             // 
+            // loggingComboBox
+            // 
+            this.loggingComboBox.FormattingEnabled = true;
+            this.loggingComboBox.Location = new System.Drawing.Point(207, 245);
+            this.loggingComboBox.Name = "loggingComboBox";
+            this.loggingComboBox.Size = new System.Drawing.Size(104, 21);
+            this.loggingComboBox.TabIndex = 12;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(36, 248);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(174, 13);
+            this.label11.TabIndex = 6;
+            this.label11.Text = "Logging Level (0=no,  3=all, 4=deb)";
+            // 
             // ModifyTCPClientStationForm
             // 
             this.AcceptButton = this.OKButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(359, 300);
+            this.ClientSize = new System.Drawing.Size(359, 338);
             this.ControlBox = false;
+            this.Controls.Add(this.loggingComboBox);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.nameTextBox);
@@ -310,6 +330,7 @@
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.TimeoutNumericUpDown);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.PauseNumericUpDown);
             this.Controls.Add(this.label4);
@@ -360,5 +381,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown failedNumericUpDown;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ComboBox loggingComboBox;
+        private System.Windows.Forms.Label label11;
     }
 }

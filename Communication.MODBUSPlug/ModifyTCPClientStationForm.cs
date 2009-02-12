@@ -7,6 +7,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
     public partial class ModifyTCPClientStationForm : Form
     {
         bool test = false;
+        bool cancel = false;
         List<string> forbiddenNames;
 
         public ModifyTCPClientStationForm()
@@ -27,10 +28,21 @@ namespace FreeSCADA.Communication.MODBUSPlug
             this.failedNumericUpDown.Value = tcs.FailedCount;
             this.FormClosing += new FormClosingEventHandler(ModifyTCPClientStationForm_FormClosing);
             this.forbiddenNames = forbiddenNames;
+            this.loggingComboBox.Items.Add(0);
+            this.loggingComboBox.Items.Add(1);
+            this.loggingComboBox.Items.Add(2);
+            this.loggingComboBox.Items.Add(3);
+            this.loggingComboBox.Items.Add(4);
+            this.loggingComboBox.SelectedItem = tcs.LoggingLevel;
         }
 
         void ModifyTCPClientStationForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if ((sender as ModifyTCPClientStationForm).cancel)
+            {
+                e.Cancel = true;
+                cancel = false;
+            }
             if ((sender as ModifyTCPClientStationForm).test)
             {
                 ModbusTCPClientStation tcs = (ModbusTCPClientStation)this.Tag;
@@ -46,15 +58,24 @@ namespace FreeSCADA.Communication.MODBUSPlug
 
         private void OKButton_Click(object sender, EventArgs e)
         {
-            ModbusTCPClientStation tcs = (ModbusTCPClientStation)this.Tag;
-            tcs.Name = this.nameTextBox.Text;
-            tcs.IPAddress = this.IpMaskedTextBox.Text;
-            tcs.TCPPort = (int)this.TcpPortNumericUpDown.Value;
-            tcs.CycleTimeout = (int)this.PauseNumericUpDown.Value;
-            tcs.RetryTimeout = (int)this.TimeoutNumericUpDown.Value;
-            tcs.RetryCount = (int)this.NuberNumericUpDown.Value;
-            tcs.FailedCount = (int)this.failedNumericUpDown.Value;
-            test = true;
+            try
+            {
+                ModbusTCPClientStation tcs = (ModbusTCPClientStation)this.Tag;
+                tcs.Name = this.nameTextBox.Text;
+                tcs.IPAddress = this.IpMaskedTextBox.Text;
+                tcs.TCPPort = (int)this.TcpPortNumericUpDown.Value;
+                tcs.CycleTimeout = (int)this.PauseNumericUpDown.Value;
+                tcs.RetryTimeout = (int)this.TimeoutNumericUpDown.Value;
+                tcs.RetryCount = (int)this.NuberNumericUpDown.Value;
+                tcs.FailedCount = (int)this.failedNumericUpDown.Value;
+                tcs.LoggingLevel = (int)this.loggingComboBox.SelectedItem;
+                test = true;
+            }
+            catch
+            {
+                MessageBox.Show(StringConstants.ReadingValues);
+                cancel = true;
+            }
         }
     }
 }

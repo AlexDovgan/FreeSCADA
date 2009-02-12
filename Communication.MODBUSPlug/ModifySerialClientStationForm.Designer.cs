@@ -50,7 +50,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.COMtextBox = new System.Windows.Forms.TextBox();
-            this.baudRatenumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.dataBitsComboBox = new System.Windows.Forms.ComboBox();
             this.stopBitsComboBox = new System.Windows.Forms.ComboBox();
             this.parityComboBox = new System.Windows.Forms.ComboBox();
@@ -59,17 +58,19 @@
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.serialTypeComboBox = new System.Windows.Forms.ComboBox();
+            this.loggingComboBox = new System.Windows.Forms.ComboBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.baudRateComboBox = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.PauseNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TimeoutNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NuberNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.failedNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.baudRatenumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // OKButton
             // 
             this.OKButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.OKButton.Location = new System.Drawing.Point(53, 381);
+            this.OKButton.Location = new System.Drawing.Point(53, 417);
             this.OKButton.Name = "OKButton";
             this.OKButton.Size = new System.Drawing.Size(87, 34);
             this.OKButton.TabIndex = 0;
@@ -80,7 +81,7 @@
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(206, 381);
+            this.cancelButton.Location = new System.Drawing.Point(206, 417);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(87, 34);
             this.cancelButton.TabIndex = 1;
@@ -209,9 +210,9 @@
             // 
             // nameTextBox
             // 
-            this.nameTextBox.Location = new System.Drawing.Point(208, 47);
+            this.nameTextBox.Location = new System.Drawing.Point(206, 47);
             this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(104, 20);
+            this.nameTextBox.Size = new System.Drawing.Size(106, 20);
             this.nameTextBox.TabIndex = 10;
             // 
             // failedNumericUpDown
@@ -292,33 +293,11 @@
             // 
             // COMtextBox
             // 
-            this.COMtextBox.Location = new System.Drawing.Point(208, 98);
+            this.COMtextBox.Location = new System.Drawing.Point(206, 98);
             this.COMtextBox.Name = "COMtextBox";
-            this.COMtextBox.Size = new System.Drawing.Size(104, 20);
+            this.COMtextBox.Size = new System.Drawing.Size(106, 20);
             this.COMtextBox.TabIndex = 18;
             this.COMtextBox.Text = "COM1";
-            // 
-            // baudRatenumericUpDown
-            // 
-            this.baudRatenumericUpDown.Location = new System.Drawing.Point(207, 125);
-            this.baudRatenumericUpDown.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.baudRatenumericUpDown.Minimum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.baudRatenumericUpDown.Name = "baudRatenumericUpDown";
-            this.baudRatenumericUpDown.Size = new System.Drawing.Size(105, 20);
-            this.baudRatenumericUpDown.TabIndex = 19;
-            this.baudRatenumericUpDown.Value = new decimal(new int[] {
-            9600,
-            0,
-            0,
-            0});
             // 
             // dataBitsComboBox
             // 
@@ -339,7 +318,7 @@
             // parityComboBox
             // 
             this.parityComboBox.FormattingEnabled = true;
-            this.parityComboBox.Location = new System.Drawing.Point(207, 178);
+            this.parityComboBox.Location = new System.Drawing.Point(206, 178);
             this.parityComboBox.Name = "parityComboBox";
             this.parityComboBox.Size = new System.Drawing.Size(106, 21);
             this.parityComboBox.TabIndex = 22;
@@ -382,18 +361,46 @@
             // serialTypeComboBox
             // 
             this.serialTypeComboBox.FormattingEnabled = true;
-            this.serialTypeComboBox.Location = new System.Drawing.Point(207, 72);
+            this.serialTypeComboBox.Location = new System.Drawing.Point(206, 72);
             this.serialTypeComboBox.Name = "serialTypeComboBox";
             this.serialTypeComboBox.Size = new System.Drawing.Size(106, 21);
             this.serialTypeComboBox.TabIndex = 27;
+            // 
+            // loggingComboBox
+            // 
+            this.loggingComboBox.FormattingEnabled = true;
+            this.loggingComboBox.Location = new System.Drawing.Point(206, 376);
+            this.loggingComboBox.Name = "loggingComboBox";
+            this.loggingComboBox.Size = new System.Drawing.Size(104, 21);
+            this.loggingComboBox.TabIndex = 29;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(35, 379);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(174, 13);
+            this.label16.TabIndex = 28;
+            this.label16.Text = "Logging Level (0=no,  3=all, 4=deb)";
+            // 
+            // baudRateComboBox
+            // 
+            this.baudRateComboBox.FormattingEnabled = true;
+            this.baudRateComboBox.Location = new System.Drawing.Point(206, 124);
+            this.baudRateComboBox.Name = "baudRateComboBox";
+            this.baudRateComboBox.Size = new System.Drawing.Size(106, 21);
+            this.baudRateComboBox.TabIndex = 30;
             // 
             // ModifySerialClientStationForm
             // 
             this.AcceptButton = this.OKButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(359, 436);
+            this.ClientSize = new System.Drawing.Size(359, 473);
             this.ControlBox = false;
+            this.Controls.Add(this.baudRateComboBox);
+            this.Controls.Add(this.loggingComboBox);
+            this.Controls.Add(this.label16);
             this.Controls.Add(this.serialTypeComboBox);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.label13);
@@ -402,7 +409,6 @@
             this.Controls.Add(this.parityComboBox);
             this.Controls.Add(this.stopBitsComboBox);
             this.Controls.Add(this.dataBitsComboBox);
-            this.Controls.Add(this.baudRatenumericUpDown);
             this.Controls.Add(this.COMtextBox);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label11);
@@ -435,7 +441,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.TimeoutNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NuberNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.failedNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.baudRatenumericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -464,7 +469,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox COMtextBox;
-        private System.Windows.Forms.NumericUpDown baudRatenumericUpDown;
         private System.Windows.Forms.ComboBox dataBitsComboBox;
         private System.Windows.Forms.ComboBox stopBitsComboBox;
         private System.Windows.Forms.ComboBox parityComboBox;
@@ -473,5 +477,8 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.ComboBox serialTypeComboBox;
+        private System.Windows.Forms.ComboBox loggingComboBox;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.ComboBox baudRateComboBox;
     }
 }
