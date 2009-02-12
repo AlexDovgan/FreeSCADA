@@ -26,10 +26,20 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             if (isDragged)
             {
                 Vector v = e.GetPosition(this) - startPos;
+                Point rectStart;
                 DrawingContext drawingContext = objectPrview.RenderOpen();
-                Rect rect = new Rect(startPos, v);
-                drawingContext.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 0.2), rect);
+                if ((System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Control) != 0)
+                    v = new Vector(System.Math.Max(v.X, v.Y), System.Math.Max(v.X, v.Y));
 
+                if ((System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Shift) != 0)
+                {
+                    rectStart = new Point(startPos.X - v.X / 2, startPos.Y - v.Y / 2);
+                }
+                else
+                    rectStart = startPos;
+
+                Rect rect = new Rect(rectStart, v);
+                drawingContext.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 1), rect);
                 drawingContext.Close();
             }
             base.OnPreviewMouseMove(e);

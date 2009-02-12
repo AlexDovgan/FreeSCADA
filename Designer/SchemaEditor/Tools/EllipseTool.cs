@@ -28,7 +28,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             {
                 Vector v = e.GetPosition(this) - startPos;
                 DrawingContext drawingContext = objectPrview.RenderOpen();
-                Rect rect = new Rect(startPos, v);
+                if ((System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Control) != 0)
+                    v = new Vector(System.Math.Max(v.X, v.Y), System.Math.Max(v.X, v.Y));
                 drawingContext.DrawEllipse(Brushes.Gray, new Pen(Brushes.Black, 1), startPos, v.X, v.Y);
                 drawingContext.Close();
            }
