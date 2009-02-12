@@ -68,6 +68,12 @@
     <Compile Include="Channel.cs" />
     <Compile Include="ChannelFactory.cs" />
     <Compile Include="ModbusSerialClientStation.cs" />
+    <Compile Include="ModifyChannelForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ModifyChannelForm.Designer.cs">
+      <DependentUpon>ModifyChannelForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ModifySerialClientStationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +116,9 @@
     <EmbeddedResource Include="AddStationForm.resx">
       <DependentUpon>AddStationForm.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModifyChannelForm.resx">
+      <DependentUpon>ModifyChannelForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ModifySerialClientStationForm.resx">
       <DependentUpon>ModifySerialClientStationForm.cs</DependentUpon>

@@ -38,6 +38,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
             this.retryTimeout = Math.Max(retryTimeout, 100);
             this.retryCount = Math.Max(retryCount, 1);
             this.failedCount = Math.Max(failedCount, 1);
+            this.LoggingLevel = 0;
         }
 
         public string Name
@@ -98,6 +99,12 @@ namespace FreeSCADA.Communication.MODBUSPlug
         {
             get { return handshake; }
             set { handshake = value; }
+        }
+
+        public int LoggingLevel
+        {
+            get;
+            set;
         }
 
         public void AddChannel(ModbusChannelImp channel)

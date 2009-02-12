@@ -20,9 +20,10 @@ namespace FreeSCADA.Communication.MODBUSPlug
         ModbusDeviceDataType deviceDataType;
         ushort deviceDataLen;
         ModbusConversionType conversionType;
+        ModbusReadWrite modbusReadWrite;
 
         public ModbusChannelImp(string name, Plugin plugin, Type type, string modbusStation, ModbusDataTypeEx modbusType, ushort modbusAddress,
-                                byte slaveId, ModbusDeviceDataType deviceDataType, ushort deviceDataLen, ModbusConversionType conversionType)
+                                byte slaveId, ModbusDeviceDataType deviceDataType, ushort deviceDataLen, ModbusConversionType conversionType, ModbusReadWrite modbusReadWrite)
             : base(name, false, plugin, type)
 		{
             this.modbusStation = modbusStation;
@@ -32,13 +33,42 @@ namespace FreeSCADA.Communication.MODBUSPlug
                 modbusInternalType = ModbusFs2InternalType.Int32;
             else if (type == typeof(uint))
                 modbusInternalType = ModbusFs2InternalType.UInt32;
-            else if (type == typeof(float))
-                modbusInternalType = ModbusFs2InternalType.Float;
+            else if (type == typeof(double))
+                modbusInternalType = ModbusFs2InternalType.Double;
+            else if (type == typeof(bool))
+                modbusInternalType = ModbusFs2InternalType.Boolean;
+            else if (type == typeof(string))
+                modbusInternalType = ModbusFs2InternalType.String;
             this.slaveId = slaveId;
             this.deviceDataType = deviceDataType;
             this.deviceDataLen = deviceDataLen;
             this.conversionType = conversionType;
+            this.modbusReadWrite = modbusReadWrite;
+            if (modbusReadWrite == ModbusReadWrite.ReadOnly)
+                this.readOnly = true;
+            this.BitIndex = 0;
+            this.K = 1.0;
+            this.D = 0.0;
         }
+
+        public ModbusChannelImp(string name, ModbusChannelImp ch)
+            : base(name, false, ch.plugin, ch.Type)
+        {
+            this.modbusStation = ch.modbusStation;
+            this.modbusDataAddress = ch.modbusDataAddress;
+            this.modbusDataType = ch.modbusDataType;
+            this.modbusInternalType = ch.modbusInternalType;
+            this.slaveId = ch.slaveId;
+            this.deviceDataType = ch.deviceDataType;
+            this.deviceDataLen = ch.deviceDataLen;
+            this.conversionType = ch.conversionType;
+            this.modbusReadWrite = ch.modbusReadWrite;
+            if (modbusReadWrite == ModbusReadWrite.ReadOnly)
+                this.readOnly = true;
+            this.BitIndex = ch.BitIndex;
+            this.K = ch.K;
+            this.D = ch.D;
+       }
 
         public string ModbusStation
 		{
@@ -52,7 +82,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
             set { modbusDataType =value; }
         }
 
-        public ModbusFs2InternalType ModbusInternalType
+        public ModbusFs2InternalType ModbusFs2InternalType
         {
             get { return modbusInternalType; }
             set { modbusInternalType = value; }
@@ -87,6 +117,23 @@ namespace FreeSCADA.Communication.MODBUSPlug
             get { return conversionType; }
             set { conversionType = value; }
         }
+
+        public ModbusReadWrite ModbusReadWrite
+		{
+            get { return modbusReadWrite; }
+            set {
+                modbusReadWrite = value;
+                if (modbusReadWrite == ModbusReadWrite.ReadOnly)
+                    this.readOnly = true;
+                else
+                    this.readOnly = false;
+            }
+        }
+
+        public int BitIndex { get; set; }
+
+        public double K { get; set; }
+        public double D { get; set; }
 
         public override void DoUpdate()
         {

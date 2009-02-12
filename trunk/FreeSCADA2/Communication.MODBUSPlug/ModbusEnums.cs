@@ -4,8 +4,8 @@ namespace FreeSCADA.Communication.MODBUSPlug
     public enum ModbusStationType
     {
         TCPMaster,
-        //TCPSlave,
         SerialMaster,
+        //TCPSlave,
         //SerialSlave
     }
 
@@ -22,7 +22,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
         Boolean,
         Int32,
         UInt32,
-        Float,
+        Double,
         String
     }
 
@@ -52,4 +52,19 @@ namespace FreeSCADA.Communication.MODBUSPlug
         String
     }
 
+    public enum ModbusReadWrite
+    {
+        ReadOnly,
+        WriteOnly,
+        ReadAndWrite
+    }
+
+    public struct ModbusLog
+    {
+        public const int logNone = 0;
+        public const int logErrors = 1;
+        public const int logWarnings = 2;
+        public const int logInfos = 3;
+        public const int logDebug = 4;
+    }
 }

@@ -12,5 +12,6 @@ namespace FreeSCADA.Communication.MODBUSPlug
         int RetryTimeout { get; set; }
         int RetryCount { get; set; }
         int FailedCount { get; set; }
+        int LoggingLevel { get; set; }
     }
 }
