@@ -257,11 +257,14 @@ namespace FreeSCADA.Communication.MODBUSPlug
                         case ModbusDeviceDataType.String:
                             deviceDataLenNumericUpDown.Enabled = true;
                             //---
-                            ch.ConversionType = ModbusConversionType.SwapNone;
                             conversionTypeComboBox.Items.Clear();
+                            if (ch.ConversionType != ModbusConversionType.SwapNone &&
+                                ch.ConversionType != ModbusConversionType.SwapBytes)
+                                ch.ConversionType = ModbusConversionType.SwapNone;
                             conversionTypeComboBox.Items.Add(ModbusConversionType.SwapNone);
-                            conversionTypeComboBox.SelectedItem = ModbusConversionType.SwapNone;
-                            conversionTypeComboBox.Enabled = false;
+                            conversionTypeComboBox.Items.Add(ModbusConversionType.SwapBytes);
+                            conversionTypeComboBox.SelectedItem = ch.ConversionType;
+                            conversionTypeComboBox.Enabled = true;
                             //---
                             ch.ModbusFs2InternalType = ModbusFs2InternalType.String;
                             modbusFs2InternalTypeComboBox.Items.Clear();

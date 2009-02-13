@@ -436,7 +436,10 @@ namespace FreeSCADA.Communication.MODBUSPlug
                 stat.ClearChannels();
                 foreach (ModbusChannelImp chan in channels)
                     if (chan.ModbusStation == stat.Name)
+                    {
                         stat.AddChannel(chan);
+                        chan.MyStation = (ModbusBaseClientStation)stat;
+                    }
             }
 
 			plugin.SaveSettings();

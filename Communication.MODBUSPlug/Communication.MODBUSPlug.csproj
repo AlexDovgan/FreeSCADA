@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="Channel.cs" />
     <Compile Include="ChannelFactory.cs" />
+    <Compile Include="ModbusBaseClientStation.cs" />
     <Compile Include="ModbusSerialClientStation.cs" />
     <Compile Include="ModifyChannelForm.cs">
       <SubType>Form</SubType>
