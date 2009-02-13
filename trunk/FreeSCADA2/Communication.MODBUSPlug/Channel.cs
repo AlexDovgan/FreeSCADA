@@ -10,7 +10,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
     /// TODO:  may be need to implement one abstract base class for implementation base functionality with 
     /// events
     /// </summary>
-    public class ModbusChannelImp:BaseChannel, IComparer<ModbusChannelImp>
+    public class ModbusChannelImp: BaseChannel, IComparer<ModbusChannelImp>
 	{
         string modbusStation;
         ModbusDataTypeEx modbusDataType;
@@ -130,6 +130,8 @@ namespace FreeSCADA.Communication.MODBUSPlug
             }
         }
 
+        public ModbusBaseClientStation MyStation { get; set; }
+
         public int BitIndex { get; set; }
 
         public double K { get; set; }
@@ -137,6 +139,22 @@ namespace FreeSCADA.Communication.MODBUSPlug
 
         public override void DoUpdate()
         {
+        }
+
+        public override object Value
+        {
+            get
+            {
+                return base.Value;
+            }
+            set
+            {
+                if (!IsReadOnly && plugin.IsConnected && MyStation != null)
+                {
+                    MyStation.SendValueUpdateToModbusLine(this);
+                    base.Value = value;
+                }
+            }
         }
 
         // Summary:
