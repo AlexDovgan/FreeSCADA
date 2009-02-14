@@ -3,14 +3,14 @@
 	<Product Id="{A0692C53-185D-4d97-BF57-6F6AD70D96F1}"
 	         Name="FreeSCADA 2"
 	         Language="1033"
-	         Version="2.0.0.5"
+	         Version="2.0.0.6"
 	         Manufacturer="FreeSCADA Project [http://free-scada.sourceforge.net]"
 	         UpgradeCode="{3E3F16AD-E81B-482a-968A-77EAD18BFB8E}">
 		
 		<Package InstallerVersion="200" Compressed="yes" />
 		
-		<PropertyRef Id="NETFRAMEWORK30"/>
-		<Condition Message="The .NET Framework 3.0 must be installed">NETFRAMEWORK30</Condition>
+		<PropertyRef Id="NETFRAMEWORK35"/>
+		<Condition Message="The .NET Framework 3.5 must be installed">NETFRAMEWORK35</Condition>
 		
 		<Media Id="1" Cabinet="FreeSCADA2.cab" EmbedCab="yes" />
 		
@@ -49,6 +49,12 @@
 						<File Name="log4net.dll" Source="..\3rdParty\NModbus\log4net.dll" Vital="yes"/>
 						
 						<File Name="nplot.dll" Source="..\3rdParty\NPlot\nplot.dll" Vital="yes"/>
+
+            <File Name="ironpython.dll" Source="..\3rdParty\IronPython\ironpython.dll" Vital="yes"/>
+            <File Name="ironpython.modules.dll" Source="..\3rdParty\IronPython\ironpython.modules.dll" Vital="yes"/>
+            <File Name="microsoft.scripting.core.dll" Source="..\3rdParty\IronPython\microsoft.scripting.core.dll" Vital="yes"/>
+            <File Name="microsoft.scripting.dll" Source="..\3rdParty\IronPython\microsoft.scripting.dll" Vital="yes"/>
+            <File Name="microsoft.scripting.extensionattribute.dll" Source="..\3rdParty\IronPython\microsoft.scripting.extensionattribute.dll" Vital="yes"/>
 					</Component>
 					
 					<Directory Id="SQLite_root" Name="SQLite">
@@ -79,6 +85,7 @@
 							<File Name="sharpziplib.rtf" Source="..\3rdParty\SharpZipLib\readme.rtf"/>
 							<File Name="weifenluo.dockpanel.txt" Source="..\3rdParty\DockPanel\license.txt"/>
 							<File Name="sourcegrid.txt" Source="..\3rdParty\SourceGrid4_11\sourcegrid.license.txt"/>
+              <File Name="IronPython.rtf" Source="..\3rdParty\IronPython\license.rtf"/>
 						</Component>
 					</Directory>
 					
@@ -114,12 +121,11 @@
 					
 					<Directory Id="SamplesDir" Name="Samples">
 						<Component Id="Samples" Guid="{7F40F8DD-969A-453e-BB60-33CB249A6050}">
-							<File Name="Chart.xaml" Source="..\Samples\Chart.xaml"/>
-							<File Name="clinton.svg" Source="..\Samples\clinton.svg"/>
 							<File Name="lion.svg" Source="..\Samples\lion.svg"/>
 							<File Name="picasso.svg" Source="..\Samples\picasso.svg"/>
 							<File Name="tiger.svg" Source="..\Samples\tiger.svg"/>
-							<File Name="water.svg" Source="..\Samples\water.svg"/>
+							<File Name="bouncing_ball.fs2" Source="..\Samples\bouncing_ball.fs2"/>
+              <File Name="coffeemachine.fs2" Source="..\Samples\coffeemachine.fs2"/>
 						</Component>
 					</Directory>
 					
@@ -129,6 +135,18 @@
 							<File Name="svg2xaml.xsl" Source="..\Designer\Resources\svg2xaml.xsl"/>
 						</Component>
 					</Directory>
+
+          <Directory Id="StylesDir" Name="Styles">
+            <Component Id="DesignerStyles" Guid="{47D299E4-94B0-42f8-907D-E21152B56423}">
+              <File Name="3dslider.xaml" Source="..\Samples\Styles\3dslider.xaml"/>
+              <File Name="bigchecbox.xaml" Source="..\Samples\Styles\bigchecbox.xaml"/>
+              <File Name="guegetemplate.xaml" Source="..\Samples\Styles\guegetemplate.xaml"/>
+              <File Name="nofrillsscroll.xaml" Source="..\Samples\Styles\nofrillsscroll.xaml"/>
+              <File Name="springscroll.xaml" Source="..\Samples\Styles\springscroll.xaml"/>
+              <File Name="textval.xaml" Source="..\Samples\Styles\textval.xaml"/>
+              <File Name="thermotemplate.xaml" Source="..\Samples\Styles\thermotemplate.xaml"/>
+            </Component>
+          </Directory>
 				
 				</Directory>
 			</Directory>
@@ -145,6 +163,7 @@
 			<Feature Id="DesignerFeature" Title="Designer" Level="1" AllowAdvertise="no" Description="Install component which allows you to create HMI schemas, data connections, events and etc.">
 				<ComponentRef Id="Designer" />
 				<ComponentRef Id="DesignerResources" />
+        <ComponentRef Id="DesignerStyles" />
 			</Feature>
 			
 			<Feature Id="RuntimeFeature" Title="Runtime" Level="1" AllowAdvertise="no" Description="Install component which allows you to view and execute HMI schemas created by Designer.">
