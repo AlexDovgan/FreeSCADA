@@ -56,30 +56,27 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			}
 		}
 
-		protected override void OnSave()
+		public override System.Windows.Data.BindingBase GetBinding()
 		{
-			base.OnSave();
-			if (channels.Count > 0)
-			{
-				System.Windows.Data.MultiBinding multiBind = new MultiBinding();
-				foreach (IChannel channel in channels)
-				{
-					System.Windows.Data.Binding bind = new System.Windows.Data.Binding("Value");
-					ChannelDataProvider cdp=new ChannelDataProvider();
-    				cdp.ChannelName = channel.PluginId + "." + channel.Name;
-    				bind.Source = cdp;
+			
+            if (channels.Count > 0)
+            {
+                System.Windows.Data.MultiBinding multiBind = new MultiBinding();
+                foreach (IChannel channel in channels)
+                {
+                    System.Windows.Data.Binding bind = new System.Windows.Data.Binding("Value");
+                    ChannelDataProvider cdp = new ChannelDataProvider();
+                    cdp.ChannelName = channel.PluginId + "." + channel.Name;
+                    bind.Source = cdp;
 
-					bind.FallbackValue = "xx.xx";
-					multiBind.Bindings.Add(bind);
-				}
-				multiBind.Converter = new Kent.Boogaart.Converters.FormatConverter(expressionEdit.Text);
+                    bind.FallbackValue = "xx.xx";
+                    multiBind.Bindings.Add(bind);
+                }
+                multiBind.Converter = new Kent.Boogaart.Converters.FormatConverter(expressionEdit.Text);
 
-				DependencyObject depObj;
-				DependencyProperty depProp;
-				GetPropertyObjects(element, property, out depObj, out depProp);
-				if (depObj != null && depProp != null)
-					BindingOperations.SetBinding(depObj, depProp, multiBind);
-			}
+                return multiBind;
+            }
+            else return base.GetBinding();
 		}
 
 		public override void AddChannel(IChannel channel)

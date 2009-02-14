@@ -211,5 +211,20 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			if (bindingPanel != null)
 				bindingPanel.EnableInDesigner = enableInDesignerCheckbox.Checked;
 		}
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            if (bindingPanel != null)
+            {
+                DependencyObject depObj;
+				DependencyProperty depProp;
+                System.Windows.Data.BindingBase b;
+                BaseBindingPanel.GetPropertyObjects(element,propertyList.SelectedItem as PropertyInfo,out depObj,out depProp);
+                if (depObj != null && depProp!= null&& (b=bindingPanel.GetBinding())!=null )
+                    BindingOperations.SetBinding(depObj, depProp,b);
+                bindingPanel.Dispose();
+            }
+
+        }
 	}
 }
