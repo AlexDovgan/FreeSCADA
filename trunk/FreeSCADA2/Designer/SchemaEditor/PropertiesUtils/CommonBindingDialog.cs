@@ -17,6 +17,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 	{
 		object element;
 		BaseBindingPanel bindingPanel;
+		Dictionary<PropertyInfo, BindingBase> activeBindings = new Dictionary<PropertyInfo,BindingBase>();
 
 		/// <summary>
 		/// Constructor
@@ -29,6 +30,28 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
 			FillChannels();
 			FillProperties();
+		}
+
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="element"></param>
+		internal CommonBindingDialog(object element, PropertyInfo activeProperty)
+		{
+			this.element = element;
+			InitializeComponent();
+
+			FillChannels();
+			FillProperties();
+
+			for(int i=0;i<propertyList.Items.Count;i++)
+			{
+				if ((propertyList.Items[i] as PropertyInfo).SourceProperty == activeProperty.SourceProperty)
+				{
+					propertyList.SelectedIndex = i;
+					break;
+				}
+			}
 		}
 
 		void FillProperties()
@@ -73,11 +96,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
 		private void CreateAssociationButton_Click(object sender, EventArgs e)
 		{
-			if (bindingPanel != null)
-			{
-				bindingPanel.Close();
-				bindingPanel = null;
-			}
+			SavePanelStateAndClose();
 
 			if (propertyList.SelectedIndex >= 0 && bindingTypes.SelectedIndex >= 0)
 			{
@@ -93,11 +112,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
 		void ShowBindingPanel()
 		{
-			if (bindingPanel != null)
-			{
-				bindingPanel.Close();
-				bindingPanel = null;
-			}
+			SavePanelStateAndClose();
 
 			if (propertyList.SelectedIndex >= 0)
 			{
@@ -123,22 +138,41 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 						enableInDesignerCheckbox.Checked = bindingPanel.EnableInDesigner;
 					}
 					CreateAssociationButton.Enabled = false;
+					bindingTypes.Enabled = false;
 				}
+			}
+		}
+
+		private void SavePanelStateAndClose()
+		{
+			if (bindingPanel != null)
+			{
+				BindingBase binding = bindingPanel.Save();
+				if (binding != null)
+					activeBindings[bindingPanel.Property] = binding;
+
+				bindingPanel.Dispose();
+				bindingPanel = null;
 			}
 		}
 
 		System.Windows.Data.BindingBase GetExistingBinding(PropertyInfo property)
 		{
-			PropertyDescriptor pd = TypeDescriptor.GetProperties(element).Find(property.SourceProperty, true);
-			if(pd == null || !(pd is PropertiesUtils.PropertyWrapper))
-				return null;
+			if (activeBindings.ContainsKey(property))
+				return activeBindings[property];
+			else
+			{
+				PropertyDescriptor pd = TypeDescriptor.GetProperties(element).Find(property.SourceProperty, true);
+				if (pd == null || !(pd is PropertiesUtils.PropertyWrapper))
+					return null;
 
-			DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty((pd as PropertiesUtils.PropertyWrapper).ControlledProperty);
-            if (dpd == null)
-                return null;
+				DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty((pd as PropertiesUtils.PropertyWrapper).ControlledProperty);
+				if (dpd == null)
+					return null;
 
-			DependencyObject depObj = (pd as PropertiesUtils.PropertyWrapper).ControlledObject as DependencyObject;
-			return BindingOperations.GetBindingBase(depObj, dpd.DependencyProperty);
+				DependencyObject depObj = (pd as PropertiesUtils.PropertyWrapper).ControlledObject as DependencyObject;
+				return BindingOperations.GetBindingBase(depObj, dpd.DependencyProperty);
+			}
 		}
 
 		List<BaseBindingPanelFactory> GetAvailableBindingPanels()
@@ -197,15 +231,6 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			}
 		}
 
-		private void CommonBindingDialog_FormClosing(object sender, FormClosingEventArgs e)
-		{
-			if (bindingPanel != null)
-			{
-				bindingPanel.Close();
-				bindingPanel = null;
-			}
-		}
-
 		private void enableInDesignerCheckbox_CheckedChanged(object sender, EventArgs e)
 		{
 			if (bindingPanel != null)
@@ -214,17 +239,21 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            if (bindingPanel != null)
+			SavePanelStateAndClose();
+            if (activeBindings.Count > 0)
             {
-                DependencyObject depObj;
-				DependencyProperty depProp;
-                System.Windows.Data.BindingBase b;
-                BaseBindingPanel.GetPropertyObjects(element,propertyList.SelectedItem as PropertyInfo,out depObj,out depProp);
-                if (depObj != null && depProp!= null&& (b=bindingPanel.GetBinding())!=null )
-                    BindingOperations.SetBinding(depObj, depProp,b);
-                bindingPanel.Dispose();
+				foreach (PropertyInfo key in activeBindings.Keys)
+				{
+					DependencyObject depObj;
+					DependencyProperty depProp;
+					System.Windows.Data.BindingBase binding = activeBindings[key];
+					BaseBindingPanel.GetPropertyObjects(element, key, out depObj, out depProp);
+					if (depObj != null && depProp != null && binding != null)
+						BindingOperations.SetBinding(depObj, depProp, binding);
+				}
             }
-
+			DialogResult = DialogResult.OK;
+			Close();
         }
 	}
 }

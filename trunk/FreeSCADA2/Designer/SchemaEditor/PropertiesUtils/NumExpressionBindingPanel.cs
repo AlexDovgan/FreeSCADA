@@ -59,7 +59,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			}
 		}
 
-		public override System.Windows.Data.BindingBase GetBinding()
+		public override System.Windows.Data.BindingBase Save()
 		{
     		if (channels.Count > 0)
 			{
@@ -82,12 +82,13 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                 
 				DependencyObject depObj;
 				DependencyProperty depProp;
-				GetPropertyObjects(element, property, out depObj, out depProp);
+				GetPropertyObjects(element, Property, out depObj, out depProp);
                 if (depObj != null && depProp != null)
                     multiBind.FallbackValue = depObj.GetValue(depProp);
                 return multiBind;
-    		}else
-                return base.GetBinding();
+    		}
+			else
+                return base.Save();
 		}
 
 		public override void AddChannel(IChannel channel)
