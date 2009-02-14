@@ -269,6 +269,9 @@
   <data name="SchemasItemName" xml:space="preserve">
     <value>Schemas</value>
   </data>
+  <data name="ScriptsItemName" xml:space="preserve">
+    <value>Scripts</value>
+  </data>
   <data name="StringBindingPanelName" xml:space="preserve">
     <value>Bind to string value</value>
   </data>
@@ -322,5 +325,8 @@
   </data>
   <data name="UntitledSchema" xml:space="preserve">
     <value>Untitled</value>
+  </data>
+  <data name="UntitledScript" xml:space="preserve">
+    <value>Script</value>
   </data>
 </root>

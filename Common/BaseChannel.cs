@@ -132,8 +132,12 @@ namespace FreeSCADA.Common
 			}
 			set
 			{
-				lock (this)
-					status = value;
+                lock (this)
+                {
+                    status = value;
+                    modifyTime = DateTime.Now;
+                }
+                FireValueChanged();
 			}
 		}
 

@@ -186,6 +186,13 @@ namespace FreeSCADA.Designer.Properties
             }
         }
         
+        internal static System.Drawing.Bitmap script_add {
+            get {
+                object obj = ResourceManager.GetObject("script_add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap shape_ellipse_add {
             get {
                 object obj = ResourceManager.GetObject("shape_ellipse_add", resourceCulture);
