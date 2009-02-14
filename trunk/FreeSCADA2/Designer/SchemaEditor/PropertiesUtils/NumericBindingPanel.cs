@@ -53,9 +53,9 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				}
 			}
 		}
-		protected override void OnSave()
+		public override System.Windows.Data.BindingBase GetBinding()
 		{
-			base.OnSave();
+			
 			if (channel != null)
 			{
 				System.Windows.Data.Binding bind = new System.Windows.Data.Binding("Value");
@@ -83,11 +83,11 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				DependencyProperty depProp;
 				GetPropertyObjects(element, property, out depObj, out depProp);
                 if (depObj != null && depProp != null)
-                {
                     bind.FallbackValue = depObj.GetValue(depProp);
-                    BindingOperations.SetBinding(depObj, depProp, bind);
-                }
+
+                return bind;
 			}
+            else return base.GetBinding();
 		}
 
 		private void checkBox1_CheckedChanged(object sender, EventArgs e)

@@ -62,8 +62,10 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		{
 		}
 
-		virtual protected void OnSave()
+		virtual public System.Windows.Data.BindingBase GetBinding()
 		{
+        
+            return null;
 		}
 
 		internal static Type GetPropertyType(object element, PropertyInfo property)
@@ -75,7 +77,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				return null;
 		}
 
-		internal static void GetPropertyObjects(object element, PropertyInfo property, out DependencyObject depObj, out DependencyProperty depProp)
+		public static void GetPropertyObjects(object element, PropertyInfo property, out DependencyObject depObj, out DependencyProperty depProp)
 		{
 			depObj = null;
 			depProp = null;
@@ -95,7 +97,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		public void Close()
 		{
 			if (element != null && property != null)
-				OnSave();
+				GetBinding();
 			Dispose();
 		}
 	}
