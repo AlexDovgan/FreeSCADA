@@ -32,7 +32,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			if (depObj != null && depProp != null)
 			{
 				if (depObj.GetValue(depProp) is String)
-				    expressionEdit.Text = (string)depObj.GetValue(depProp);
+					expressionEdit.Text = (string)depObj.GetValue(depProp);
 			}
 
 			System.Windows.Data.MultiBinding bind = binding as System.Windows.Data.MultiBinding;
@@ -47,7 +47,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 						System.Windows.Data.Binding b = bindingBase as System.Windows.Data.Binding;
 						if (b.Source is ChannelDataProvider)
 						{
-                            ChannelDataProvider src = (ChannelDataProvider)b.Source;
+							ChannelDataProvider src = (ChannelDataProvider)b.Source;
 							channels.Add(src.Channel);
 						}
 					}
@@ -56,27 +56,27 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			}
 		}
 
-		public override System.Windows.Data.BindingBase GetBinding()
+		public override System.Windows.Data.BindingBase Save()
 		{
-			
-            if (channels.Count > 0)
-            {
-                System.Windows.Data.MultiBinding multiBind = new MultiBinding();
-                foreach (IChannel channel in channels)
-                {
-                    System.Windows.Data.Binding bind = new System.Windows.Data.Binding("Value");
-                    ChannelDataProvider cdp = new ChannelDataProvider();
-                    cdp.ChannelName = channel.PluginId + "." + channel.Name;
-                    bind.Source = cdp;
+			if (channels.Count > 0)
+			{
+				System.Windows.Data.MultiBinding multiBind = new MultiBinding();
+				foreach (IChannel channel in channels)
+				{
+					System.Windows.Data.Binding bind = new System.Windows.Data.Binding("Value");
+					ChannelDataProvider cdp = new ChannelDataProvider();
+					cdp.ChannelName = channel.PluginId + "." + channel.Name;
+					bind.Source = cdp;
 
-                    bind.FallbackValue = "xx.xx";
-                    multiBind.Bindings.Add(bind);
-                }
-                multiBind.Converter = new Kent.Boogaart.Converters.FormatConverter(expressionEdit.Text);
+					bind.FallbackValue = cdp.ChannelName;
+					multiBind.Bindings.Add(bind);
+				}
+				multiBind.Converter = new Kent.Boogaart.Converters.FormatConverter(expressionEdit.Text);
 
-                return multiBind;
-            }
-            else return base.GetBinding();
+				return multiBind;
+			}
+			else
+				return base.Save();
 		}
 
 		public override void AddChannel(IChannel channel)
@@ -97,7 +97,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				int curRow = channelsGrid.RowsCount;
 				channelsGrid.RowsCount++;
 
-				channelsGrid[curRow, 0] = new SourceGrid.Cells.Cell(curRow-1);
+				channelsGrid[curRow, 0] = new SourceGrid.Cells.Cell(curRow - 1);
 				channelsGrid[curRow, 1] = new SourceGrid.Cells.Cell(ch.Name);
 
 				channelsGrid[curRow, 2] = new SourceGrid.Cells.Button("remove");

@@ -26,7 +26,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 	internal partial class BaseBindingPanel : UserControl
 	{
 		protected object element;
-		protected PropertyInfo property;
+		private PropertyInfo property;
+
 		private bool enableInDesigner = false;
 
 		public BaseBindingPanel()
@@ -38,6 +39,12 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		{
 			get { return enableInDesigner; }
 			set { enableInDesigner = value; }
+		}
+
+		public PropertyInfo Property
+		{
+			get { return property; }
+			set { property = value; }
 		}
 
 		virtual public void Initialize(object element, PropertyInfo property, System.Windows.Data.BindingBase binding)
@@ -62,10 +69,9 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		{
 		}
 
-		virtual public System.Windows.Data.BindingBase GetBinding()
+		virtual public System.Windows.Data.BindingBase Save()
 		{
-        
-            return null;
+			return null;
 		}
 
 		internal static Type GetPropertyType(object element, PropertyInfo property)
@@ -92,13 +98,6 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
 			depObj = (pd as PropertiesUtils.PropertyWrapper).ControlledObject as DependencyObject;
 			depProp = dpd.DependencyProperty;
-		}
-
-		public void Close()
-		{
-			if (element != null && property != null)
-				GetBinding();
-			Dispose();
 		}
 	}
 }
