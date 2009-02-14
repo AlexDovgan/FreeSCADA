@@ -48,6 +48,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 						if (b.Source is ChannelDataProvider)
 						{
 							ChannelDataProvider src = (ChannelDataProvider)b.Source;
+                            
 							channels.Add(src.Channel);
 						}
 					}
@@ -67,8 +68,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 					ChannelDataProvider cdp = new ChannelDataProvider();
 					cdp.ChannelName = channel.PluginId + "." + channel.Name;
 					bind.Source = cdp;
-
-					bind.FallbackValue = cdp.ChannelName;
+                    cdp.Refresh();
+					bind.FallbackValue = "{"+cdp.ChannelName+"}";
 					multiBind.Bindings.Add(bind);
 				}
 				multiBind.Converter = new Kent.Boogaart.Converters.FormatConverter(expressionEdit.Text);
