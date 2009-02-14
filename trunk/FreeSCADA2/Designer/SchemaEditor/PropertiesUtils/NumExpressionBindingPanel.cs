@@ -69,8 +69,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 					System.Windows.Data.Binding bind = new System.Windows.Data.Binding("Value");
 					ChannelDataProvider cdp=new ChannelDataProvider();
     				cdp.ChannelName = channel.PluginId + "." + channel.Name;
-                    cdp.Refresh();
-    				bind.Source = cdp;
+       				bind.Source = cdp;
                     bind.FallbackValue = 0;
                     bind.Converter = new Kent.Boogaart.Converters.TypeConverter(typeof(Double), typeof(Double));
     				multiBind.Bindings.Add(bind);
