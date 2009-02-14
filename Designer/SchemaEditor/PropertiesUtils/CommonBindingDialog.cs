@@ -75,7 +75,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		{
 			if (bindingPanel != null)
 			{
-				bindingPanel.Dispose();
+				bindingPanel.Close();
 				bindingPanel = null;
 			}
 
@@ -95,7 +95,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		{
 			if (bindingPanel != null)
 			{
-				bindingPanel.Dispose();
+				bindingPanel.Close();
 				bindingPanel = null;
 			}
 
@@ -201,7 +201,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		{
 			if (bindingPanel != null)
 			{
-				bindingPanel.Dispose();
+				bindingPanel.Close();
 				bindingPanel = null;
 			}
 		}
