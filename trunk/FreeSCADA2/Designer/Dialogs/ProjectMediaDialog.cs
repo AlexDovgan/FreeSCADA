@@ -52,7 +52,7 @@ namespace FreeSCADA.Designer.Dialogs
 			{
 				//Check that we don't have duplicates
 				string entryName = Path.GetFileName(fileName);
-				if (Env.Current.Project.ContainsEntity(ProjectEntityType.Image, entryName) == false)
+				if (Env.Current.Project.ContainsEntity(ProjectEntityType.Image, entryName) == true)
 				{
 					MessageBox.Show(string.Format(DialogMessages.DuplicateImageFound, entryName),
 						DialogMessages.ErrorCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
