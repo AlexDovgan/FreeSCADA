@@ -260,6 +260,9 @@
   <data name="NumericBindingPanelName" xml:space="preserve">
     <value>Bind to numeric value</value>
   </data>
+  <data name="NumExpressionBindingPanelName" xml:space="preserve">
+    <value>Numeric expression binding</value>
+  </data>
   <data name="OpenMediaDialogFilter" xml:space="preserve">
     <value>Media files|*.gif;*.BMP;*.PNG;*.JPEG;*.JPG;*.TIFF|All files (*.*)|*.*</value>
   </data>

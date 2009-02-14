@@ -13,11 +13,11 @@ using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {
-	internal partial class StringBindingPanel : BaseBindingPanel
+	internal partial class NumExpressionBindingPanel: BaseBindingPanel
 	{
 		List<IChannel> channels = new List<IChannel>();
 
-		public StringBindingPanel()
+        public NumExpressionBindingPanel()
 		{
 			InitializeComponent();
 		}
@@ -36,9 +36,11 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			}
 
 			System.Windows.Data.MultiBinding bind = binding as System.Windows.Data.MultiBinding;
-			if (bind != null)
+            if (bind != null)
 			{
-				expressionEdit.Text = (bind.Converter as Kent.Boogaart.Converters.FormatConverter).FormatString;
+                
+				expressionEdit.Text = (bind.Converter as Kent.Boogaart.Converters.ExpressionConverter).Expression;
+
 				channels.Clear();
 				foreach (System.Windows.Data.BindingBase bindingBase in bind.Bindings)
 				{
@@ -52,7 +54,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 						}
 					}
 				}
-				FillChannelsGrid();
+                FillChannelsGrid();
+
 			}
 		}
 
@@ -67,18 +70,26 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 					System.Windows.Data.Binding bind = new System.Windows.Data.Binding("Value");
 					ChannelDataProvider cdp=new ChannelDataProvider();
     				cdp.ChannelName = channel.PluginId + "." + channel.Name;
+                    cdp.Refresh();
     				bind.Source = cdp;
-
-					bind.FallbackValue = "xx.xx";
-					multiBind.Bindings.Add(bind);
+                    bind.FallbackValue = 0;
+                    bind.Converter = new Kent.Boogaart.Converters.TypeConverter(typeof(Double), typeof(Double));
+    				multiBind.Bindings.Add(bind);
 				}
-				multiBind.Converter = new Kent.Boogaart.Converters.FormatConverter(expressionEdit.Text);
-
+                multiBind.Mode = BindingMode.TwoWay;
+                Kent.Boogaart.Converters.ExpressionConverter ec=new Kent.Boogaart.Converters.ExpressionConverter(expressionEdit.Text);
+                
+                multiBind.Converter = ec;
+                
 				DependencyObject depObj;
 				DependencyProperty depProp;
 				GetPropertyObjects(element, property, out depObj, out depProp);
-				if (depObj != null && depProp != null)
-					BindingOperations.SetBinding(depObj, depProp, multiBind);
+                if (depObj != null && depProp != null)
+                {
+
+                    multiBind.FallbackValue = depObj.GetValue(depProp);
+                    BindingOperations.SetBinding(depObj, depProp, multiBind);
+                }
 			}
 		}
 
@@ -141,12 +152,12 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		}
 	}
 
-	internal class StringBindingPanelFactory : BaseBindingPanelFactory
+    internal class NumExpressionBindingPanelFactory : BaseBindingPanelFactory
 	{
 		override public bool CheckApplicability(object element, PropertyInfo property)
 		{
 			Type type = BaseBindingPanel.GetPropertyType(element, property);
-			if (type.Equals(typeof(String)))
+			if (type.Equals(typeof(Double)))
 				return true;
 
 			return false;
@@ -157,23 +168,21 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			if (binding != null && binding is System.Windows.Data.MultiBinding)
 			{
 				System.Windows.Data.MultiBinding bind = binding as System.Windows.Data.MultiBinding;
-				if (bind.Converter is Kent.Boogaart.Converters.FormatConverter == false)
+                if (bind.Converter is Kent.Boogaart.Converters.ExpressionConverter == false)
 					return false;
-
 				return true;
 			}
-
-			return false;
+            return false;
 		}
 
 		override public BaseBindingPanel CreateInstance()
 		{
-			return new StringBindingPanel();
+			return new NumExpressionBindingPanel();
 		}
 
 		override public string Name
 		{
-			get { return StringResources.StringBindingPanelName; }
+            get { return StringResources.NumExpressionBindingPanelName; }
 		}
 	}
 }

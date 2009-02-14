@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using FreeSCADA.Common;
+using FreeSCADA.Archiver;
 using FreeSCADA.RunTime.Views;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -108,6 +109,7 @@ namespace FreeSCADA.RunTime
             Close();
             Env.Current.Project.Load(fd.FileName);
 			mruManager.Add(fd.FileName);
+            
             return true;
         }
 
@@ -142,7 +144,30 @@ namespace FreeSCADA.RunTime
 			queryView.OpenTableView += new QueryView.ExecuteQueryHandler(OnOpenTableView);
 			queryView.OpenGraphView += new QueryView.ExecuteQueryHandler(OnOpenGraphView);
 		}
+        public bool StartRuntime()
+        {
+            if (Env.Current.CommunicationPlugins.Connect())
+            {
+                if (ArchiverMain.Current.DatabaseSettings.EnableArchiving)
+                {
+                    if (ArchiverMain.Current.Start() == false)
+                    {
+                        Env.Current.CommunicationPlugins.Disconnect();
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+        public void StopRuntime()
+        {
+            if (ArchiverMain.Current.DatabaseSettings.EnableArchiving)
+                ArchiverMain.Current.Stop();
 
+            Env.Current.CommunicationPlugins.Disconnect();
+			
+        }
 		void OnOpenTableView(QueryInfo query)
 		{
 			ArchiverTableView view = new ArchiverTableView();
@@ -177,6 +202,7 @@ namespace FreeSCADA.RunTime
 		{
 			LoadProject(file);
 		}
+      
 
 		#region IDisposable Members
 

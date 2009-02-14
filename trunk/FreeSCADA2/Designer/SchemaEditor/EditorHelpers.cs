@@ -320,6 +320,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             else
                 dobj.SetValue(dp, value);
         }
+        
     }
 
 }

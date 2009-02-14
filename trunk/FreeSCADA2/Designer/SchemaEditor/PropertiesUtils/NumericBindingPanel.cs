@@ -37,8 +37,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			System.Windows.Data.Binding bind = binding as System.Windows.Data.Binding;
 			if (bind != null)
 			{
-				Common.Schema.ChannelDataSource chs = ((ObjectDataProvider)bind.Source).ObjectInstance as Common.Schema.ChannelDataSource;
-				AddChannel(chs.GetChannel());
+                ChannelDataProvider cdp = (ChannelDataProvider)bind.Source;
+				AddChannel(cdp.Channel);
 
 				ComposingConverter conv = bind.Converter as ComposingConverter;
 				foreach (IValueConverter converter in conv.Converters)
@@ -59,12 +59,10 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			if (channel != null)
 			{
 				System.Windows.Data.Binding bind = new System.Windows.Data.Binding("Value");
-				System.Windows.Data.ObjectDataProvider dp = new System.Windows.Data.ObjectDataProvider();
-				Common.Schema.ChannelDataSource chs = new Common.Schema.ChannelDataSource();
-				chs.ChannelName = channel.PluginId + "." + channel.Name;
-				dp.ObjectInstance = chs;
-				dp.MethodName = "GetChannel";
-				bind.Source = dp;
+                ChannelDataProvider cdp = new ChannelDataProvider();
+				cdp.ChannelName = channel.PluginId + "." + channel.Name;
+				bind.Source = cdp;
+                cdp.Refresh();
 
 				ComposingConverter conv = new ComposingConverter();
 				if (checkBox1.Checked)
@@ -75,17 +73,20 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 					conv.Converters.Add(rc);
 				}
 
-				conv.Converters.Add(new Kent.Boogaart.Converters.TypeConverter(chs.GetChannel().Type, GetPropertyType(element, property)));
+				conv.Converters.Add(new Kent.Boogaart.Converters.TypeConverter(cdp.Channel.Type, GetPropertyType(element, property)));
 				bind.Converter = conv;
 
 				bind.Mode = BindingMode.TwoWay;
-				bind.FallbackValue = channel.Value;
+                
 
 				DependencyObject depObj;
 				DependencyProperty depProp;
 				GetPropertyObjects(element, property, out depObj, out depProp);
-				if(depObj != null && depProp != null)
-					BindingOperations.SetBinding(depObj, depProp, bind);
+                if (depObj != null && depProp != null)
+                {
+                    bind.FallbackValue = depObj.GetValue(depProp);
+                    BindingOperations.SetBinding(depObj, depProp, bind);
+                }
 			}
 		}
 
@@ -111,7 +112,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			if (binding != null && binding is System.Windows.Data.Binding)
 			{
 				System.Windows.Data.Binding bind = binding as System.Windows.Data.Binding;
-				if (((ObjectDataProvider)bind.Source).ObjectInstance is Common.Schema.ChannelDataSource == false)
+				if (bind.Source is ChannelDataProvider==false)
 					return false;
 
 				if (bind.Converter is ComposingConverter == false)

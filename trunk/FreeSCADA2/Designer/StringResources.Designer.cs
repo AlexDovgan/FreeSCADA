@@ -364,6 +364,15 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Numeric expression binding.
+        /// </summary>
+        internal static string NumExpressionBindingPanelName {
+            get {
+                return ResourceManager.GetString("NumExpressionBindingPanelName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Media files|*.gif;*.BMP;*.PNG;*.JPEG;*.JPG;*.TIFF|All files (*.*)|*.*.
         /// </summary>
         internal static string OpenMediaDialogFilter {

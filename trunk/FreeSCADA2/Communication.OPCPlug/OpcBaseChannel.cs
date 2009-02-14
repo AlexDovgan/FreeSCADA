@@ -4,8 +4,9 @@ namespace FreeSCADA.Communication.OPCPlug
     /// <summary>
     /// TODO:  may be need to implement one abstract base class for implementation base functionality with 
     /// events
+    /// must be a public for possibility loading from XAML murkup
     /// </summary>
-    class OPCBaseChannel:BaseChannel
+    public class OPCBaseChannel:BaseChannel
 	{
 		string opcChannel;
 		string opcServer;

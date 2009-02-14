@@ -55,17 +55,14 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
 
                 if (edSvc.ShowDialog(control) == DialogResult.OK)
                 {
-
-                    System.Windows.Data.Binding bind = new System.Windows.Data.Binding("Value");
-                    System.Windows.Data.ObjectDataProvider dp;
-                    dp = new System.Windows.Data.ObjectDataProvider();
-                    Common.Schema.ChannelDataSource chs = new Common.Schema.ChannelDataSource();
-                    chs.ChannelName = control.SelectedNode.Tag + "." + control.SelectedNode.Text;
-                    dp.ObjectInstance = chs;
-                    dp.MethodName = "GetChannel";
-                    bind.Source = dp;
+                    System.Windows.Data.Binding bind = new System.Windows.Data.Binding();
+                    bind.Path = new PropertyPath("Value");
+                    //System.Windows.Data.Binding bind = new System.Windows.Data.Binding("Value");
+                    ChannelDataProvider cdp = new ChannelDataProvider();
+                    cdp.ChannelName = control.SelectedNode.Tag + "." + control.SelectedNode.Text;
+                    bind.Source = cdp;
+                    cdp.Refresh();
                     ComposingConverter conv = new ComposingConverter();
-
                     RangeConverter rc = new RangeConverter();
                     rc.Min = control.Min;
                     rc.Max = control.Max;
@@ -80,11 +77,14 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
                     }
                     catch (System.Exception)
                     {
-                        conv.Converters.Add(new Kent.Boogaart.Converters.TypeConverter(chs.GetChannel().Type, depProp.PropertyType));
+                        conv.Converters.Add(new Kent.Boogaart.Converters.TypeConverter(cdp.Channel.Type, depProp.PropertyType));
                     }
                     bind.Converter = conv;
                     bind.Mode = BindingMode.TwoWay;
                     bind.FallbackValue = value;
+                    
+                    //depObj.SetValue(depProp, new TemplateBindingExpression());
+                    
                     BindingOperations.SetBinding(depObj, depProp, bind);
 
                 }
