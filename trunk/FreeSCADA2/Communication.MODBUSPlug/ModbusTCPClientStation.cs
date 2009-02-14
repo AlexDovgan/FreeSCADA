@@ -17,7 +17,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
         private Thread channelUpdaterThread;
 
         public ModbusTCPClientStation(string name, Plugin plugin, string ipAddress, int tcpPort, int cycleTimeout, int retryTimeout, int retryCount, int failedCount)
-            :base(name, plugin, cycleTimeout, retryTimeout, retryCount, failedCount)
+            : base(name, plugin, cycleTimeout, retryTimeout, retryCount, failedCount)
         {
             this.ipAddress = ipAddress;
             this.tcpPort = tcpPort;
@@ -36,6 +36,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
 
         public new int Start()
         {
+            if (!StationActive) return 1;
             if (base.Start() == 0)
             {
                 //// Run Thread
@@ -49,21 +50,24 @@ namespace FreeSCADA.Communication.MODBUSPlug
 
         public new void Stop()
         {
+            if (!StationActive) return;
             base.Stop();
             if (channelUpdaterThread != null)
             {
-                channelUpdaterThread.Abort();
+                //channelUpdaterThread.Abort();
                 channelUpdaterThread.Join();
                 channelUpdaterThread = null;
             }
         }
 
-       private static void ChannelUpdaterThreadProc(object obj)
+        private static void ChannelUpdaterThreadProc(object obj)
         {
+            ModbusTCPClientStation self = null;
             try
             {
-                ModbusTCPClientStation self = (ModbusTCPClientStation)obj;
-                for (; ; )
+                self = (ModbusTCPClientStation)obj;
+                self.runThread = true;
+                while (self.runThread)
                 {
                     try
                     {
@@ -80,17 +84,22 @@ namespace FreeSCADA.Communication.MODBUSPlug
                             ModbusIpMaster master = ModbusIpMaster.CreateIp(client);
                             master.Transport.Retries = self.retryCount;
                             master.Transport.WaitToRetryMilliseconds = self.retryTimeout;
-
-                            for (; ; )
+                            // Before a new TCP connection is used, delete all data in send queue
+                            lock (self.sendQueueSyncRoot)
                             {
-                                // READING
+                                self.sendQueue.Clear();
+                            }
+
+                            while (self.runThread)
+                            {
+                                // READING -------------------------------------------------------- //
                                 foreach (ModbusBuffer buf in self.buffers)
                                 {
                                     // Read an actual Buffer first
                                     self.ReadBuffer(self, master, buf);
                                 }   // Foreach buffer
 
-                                // WRITING
+                                // WRITING -------------------------------------------------------- //
                                 // This implementation causes new reading cycle after writing
                                 // anything to MODBUS
                                 // The sending strategy should be also considered and enhanced, but:
@@ -112,8 +121,9 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                 // ... and the slow action last - writing to MODBUS
                                 // NO optimization, each channel is written into its own MODBUS message
                                 // and waited for an answer
-                                if (self.channelsToSend.Count > 0) {
-                                    for (int i = self.channelsToSend.Count; i > 0 ; i--)
+                                if (self.channelsToSend.Count > 0)
+                                {
+                                    for (int i = self.channelsToSend.Count; i > 0; i--)
                                     {
                                         ModbusChannelImp ch = self.channelsToSend[i - 1];
                                         // One try ONLY
@@ -121,7 +131,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                         self.WriteChannel(self, master, ch);
                                     }
                                 }
-                            }   // for endless
+                            }   // while runThread
                         }   // Using TCP client
                     }   // Try
                     catch (Exception e)
@@ -136,16 +146,24 @@ namespace FreeSCADA.Communication.MODBUSPlug
                             Env.Current.Logger.LogWarning(string.Format(StringConstants.ErrException, self.Name, e.Message));
                         if (e is ThreadAbortException)
                             throw e;
-                        // if (e is )   // Communication timeout to a device
                     }
                     // safety Sleep()
                     Thread.Sleep(5000);
-                }
-            }
+                }  // while runThread
+            }   // try
             catch (ThreadAbortException e)
             {
                 if (((ModbusTCPClientStation)obj).LoggingLevel >= ModbusLog.logErrors)
                     Env.Current.Logger.LogError(string.Format(StringConstants.ErrException, ((ModbusTCPClientStation)obj).Name, e.Message));
+            }
+            finally
+            {
+                if (self != null)
+                    foreach (ModbusChannelImp ch in self.channels)
+                    {
+                        if (ch.StatusFlags != ChannelStatusFlags.Unknown)
+                            ch.StatusFlags = ChannelStatusFlags.Bad;
+                    }
             }
         }
     }

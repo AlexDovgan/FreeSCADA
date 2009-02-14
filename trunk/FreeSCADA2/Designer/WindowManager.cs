@@ -99,7 +99,45 @@ namespace FreeSCADA.Designer
 			view.Show(dockPanel, DockState.Document);
 		}
 
-		void OnDocumentWindowClosing(object sender, FormClosingEventArgs e)
+        public void CreateNewScript()
+        {
+            ScriptView view = new ScriptView();
+            if (view.CreateNewDocument() == false)
+            {
+                System.Windows.MessageBox.Show(DialogMessages.CannotCreateScript,
+                                                DialogMessages.ErrorCaption,
+                                                System.Windows.MessageBoxButton.OK,
+                                                System.Windows.MessageBoxImage.Error);
+                return;
+            }
+
+            //Generate unique name
+            for (int i = 1; i < 1000; i++)
+            {
+                string newName = string.Format("{0} {1}", StringResources.UntitledScript, i);
+                bool hasTheSameDocument = false;
+                foreach (DocumentView doc in documentViews)
+                {
+                    if (doc is ScriptView && doc.DocumentName == newName)
+                    {
+                        hasTheSameDocument = true;
+                        break;
+                    }
+                }
+                if (hasTheSameDocument == false && Env.Current.Project.ContainsEntity(ProjectEntityType.Script, newName))
+                {
+                    view.DocumentName = newName;
+                    break;
+                }
+            }
+            //view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
+            //view.SetCurrentTool += toolBoxView.OnSetCurrentTool;
+            view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
+            documentViews.Add(view);
+            view.Show(dockPanel, DockState.Document);
+        }
+
+        void OnDocumentWindowClosing(object sender, FormClosingEventArgs e)
 		{
 			DocumentView doc = (DocumentView)sender;
 			if (doc.HandleModifiedOnClose && doc.IsModified)
@@ -159,6 +197,7 @@ namespace FreeSCADA.Designer
                     ShowArchiverSettings();
                     break;
                 case ProjectEntityType.Script:
+                    ShowScriptSettings();
                     break;
                 // etc....
                 default:
@@ -208,7 +247,28 @@ namespace FreeSCADA.Designer
 			documentViews.Add(view);
 		}
 
-		/// <summary>
+        /// <summary>
+        /// Create or active existing "Archiver Settings" view.
+        /// </summary>
+        public void ShowScriptSettings()
+        {
+            foreach (DocumentView doc in documentViews)
+            {
+                if (doc is ScriptView)
+                {
+                    doc.Activate();
+                    return;
+                }
+            }
+
+            ScriptView view = new ScriptView();
+            view.Show(dockPanel, DockState.Document);
+
+            view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
+            documentViews.Add(view);
+        }
+
+        /// <summary>
 		/// SaveDocument current document
 		/// </summary>
 		public void SaveDocument()

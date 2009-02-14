@@ -31,6 +31,9 @@ namespace FreeSCADA.Communication.MODBUSPlug
             int loggingLevel = 0;
             try { loggingLevel = int.Parse(node.Attributes["loggingLevel"].Value); }
             catch { };
+            bool stationActive = true;
+            try { stationActive = bool.Parse(node.Attributes["stationActive"].Value); }
+            catch { };
             switch (type)
             {
                 case "ModbusTCPClientStation":
@@ -56,6 +59,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                     break;
             }
             ist.LoggingLevel = loggingLevel;
+            ist.StationActive = stationActive;
             return ist;
         }
 
@@ -96,6 +100,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
             node.SetAttribute("retryCount", stat.RetryCount.ToString());
             node.SetAttribute("failedCount", stat.FailedCount.ToString());
             node.SetAttribute("loggingLevel", stat.LoggingLevel.ToString());
+            node.SetAttribute("stationActive", stat.StationActive.ToString());
         }
 	}
 }

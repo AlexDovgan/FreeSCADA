@@ -24,6 +24,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
         protected object sendQueueSyncRoot = new object();
         protected ManualResetEvent sendQueueEndWaitEvent = new ManualResetEvent(false);
         protected List<ModbusChannelImp> channelsToSend = new List<ModbusChannelImp>();
+        protected volatile bool runThread;
 
         public ModbusBaseClientStation(string name, Plugin plugin, int cycleTimeout, int retryTimeout, int retryCount, int failedCount)
         {
@@ -34,6 +35,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
             this.retryCount = Math.Max(retryCount, 1);
             this.failedCount = Math.Max(failedCount, 1);
             this.LoggingLevel = 0;
+            this.StationActive = true;
         }
 
         public string Name
@@ -70,6 +72,12 @@ namespace FreeSCADA.Communication.MODBUSPlug
             set;
         }
 
+        public bool StationActive
+        {
+            get;
+            set;
+        }
+
         public void AddChannel(ModbusChannelImp channel)
         {
             channels.Add(channel);
@@ -82,23 +90,38 @@ namespace FreeSCADA.Communication.MODBUSPlug
 
         public void SendValueUpdateToModbusLine(ModbusChannelImp ch)
         {
-            lock (sendQueueSyncRoot)
+            if (runThread)
             {
-                sendQueue.Enqueue(ch);
+                lock (sendQueueSyncRoot)
+                {
+                    sendQueue.Enqueue(ch);
+                }
                 sendQueueEndWaitEvent.Set();
             }
         }
 
+        public bool Running { get { return runThread; } }
+
         public void Stop()
         {
             //MessageBox.Show("Stopping Modbus station " + name, "Info");
+            if (!StationActive) return;
+
+            runThread = false;
+            lock (sendQueueSyncRoot)
+            {
+                sendQueue.Clear();
+            }
         }
 
         public int Start()
         {
             //MessageBox.Show("Starting Modbus station " + name, "Info");
+            if (!StationActive) return 1;
+
             buffers.Clear();
             failures.Clear();
+            sendQueue.Clear();
 
             if (channels.Count > 0)
             {
@@ -125,7 +148,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                 {
                                     buf.lastAddress = (ushort)(ch.ModbusDataAddress + ch.DeviceDataLen - 1);
                                     buf.numInputs = (ushort)(buf.lastAddress - buf.startAddress + ch.DeviceDataLen);
-                                    buf.channels.Add(ch);
+                                    buf.channels.Add(ch); ch.StatusFlags = ChannelStatusFlags.Bad;
                                     found = true;
                                 }
                             }
@@ -138,7 +161,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                             buf.numInputs = 1;
                             buf.startAddress = buf.lastAddress = ch.ModbusDataAddress;
                             buf.ModbusDataType = ch.ModbusDataType;
-                            buf.channels.Add(ch);
+                            buf.channels.Add(ch); ch.StatusFlags = ChannelStatusFlags.Bad;
                             buf.pauseCounter = 0;
                             buffers.Add(buf);
                         }
@@ -161,72 +184,6 @@ namespace FreeSCADA.Communication.MODBUSPlug
                 return 0;
             }
             return 1;
-        }
-
-        byte[] SwapBytesIn(byte[] adr0, byte[] adr1, ModbusConversionType con)
-        {
-            byte[] res = new byte[4];
-            switch (con)
-            {
-                case ModbusConversionType.SwapBytes:
-                    res[0] = adr1[1];
-                    res[1] = adr1[0];
-                    res[2] = adr0[1];
-                    res[3] = adr0[0];
-                    break;
-                case ModbusConversionType.SwapWords:
-                    res[0] = adr0[0];
-                    res[1] = adr0[1];
-                    res[2] = adr1[0];
-                    res[3] = adr1[1];
-                    break;
-                case ModbusConversionType.SwapAll:
-                    res[0] = adr0[1];
-                    res[1] = adr0[0];
-                    res[2] = adr1[1];
-                    res[3] = adr1[0];
-                    break;
-                default:
-                    res[0] = adr1[0];
-                    res[1] = adr1[1];
-                    res[2] = adr0[0];
-                    res[3] = adr0[1];
-                    break;
-            }
-            return res;
-        }
-
-        void SwapBytesOut(byte[] inp, out byte[] adr0, out byte[] adr1, ModbusConversionType con)
-        {
-            adr0 = new byte[2];
-            adr1 = new byte[2];
-            switch (con)
-            {
-                case ModbusConversionType.SwapBytes:
-                    adr1[1] = inp[0];
-                    adr1[0] = inp[1];
-                    adr0[1] = inp[2];
-                    adr0[0] = inp[3];
-                    break;
-                case ModbusConversionType.SwapWords:
-                    adr0[0] = inp[0];
-                    adr0[1] = inp[1];
-                    adr1[0] = inp[2];
-                    adr1[1] = inp[3];
-                    break;
-                case ModbusConversionType.SwapAll:
-                    adr0[1] = inp[0];
-                    adr0[0] = inp[1];
-                    adr1[1] = inp[2];
-                    adr1[0] = inp[3];
-                    break;
-                default:
-                    adr1[0] = inp[0];
-                    adr1[1] = inp[1];
-                    adr0[0] = inp[2];
-                    adr0[1] = inp[3];
-                    break;
-            }
         }
 
         protected void ReadBuffer(ModbusBaseClientStation self, IModbusMaster master, ModbusBuffer buf)
@@ -451,6 +408,10 @@ namespace FreeSCADA.Communication.MODBUSPlug
                     // failure signal defined
                     self.failures[buf.slaveId].Value = true;
                 }
+                foreach (ModbusChannelImp ch in buf.channels)
+                {
+                    ch.StatusFlags = ChannelStatusFlags.Bad;
+                }
                 if (self.LoggingLevel >= ModbusLog.logWarnings)
                     Env.Current.Logger.LogWarning(string.Format(StringConstants.ErrReceive,
                         self.Name, buf.slaveId, buf.ModbusDataType.ToString(), buf.startAddress, buf.numInputs, e.Message));
@@ -462,6 +423,10 @@ namespace FreeSCADA.Communication.MODBUSPlug
                 {
                     // failure signal defined
                     self.failures[buf.slaveId].Value = true;
+                }
+                foreach (ModbusChannelImp ch in buf.channels)
+                {
+                    ch.StatusFlags = ChannelStatusFlags.Bad;
                 }
                 if (self.LoggingLevel >= ModbusLog.logWarnings)
                     Env.Current.Logger.LogWarning(string.Format(StringConstants.ErrReceive,
@@ -623,6 +588,72 @@ namespace FreeSCADA.Communication.MODBUSPlug
                 if (self.LoggingLevel >= ModbusLog.logWarnings)
                     Env.Current.Logger.LogWarning(string.Format(StringConstants.ErrException,
                         self.Name, e.Message));
+            }
+        }
+
+        byte[] SwapBytesIn(byte[] adr0, byte[] adr1, ModbusConversionType con)
+        {
+            byte[] res = new byte[4];
+            switch (con)
+            {
+                case ModbusConversionType.SwapBytes:
+                    res[0] = adr1[1];
+                    res[1] = adr1[0];
+                    res[2] = adr0[1];
+                    res[3] = adr0[0];
+                    break;
+                case ModbusConversionType.SwapWords:
+                    res[0] = adr0[0];
+                    res[1] = adr0[1];
+                    res[2] = adr1[0];
+                    res[3] = adr1[1];
+                    break;
+                case ModbusConversionType.SwapAll:
+                    res[0] = adr0[1];
+                    res[1] = adr0[0];
+                    res[2] = adr1[1];
+                    res[3] = adr1[0];
+                    break;
+                default:
+                    res[0] = adr1[0];
+                    res[1] = adr1[1];
+                    res[2] = adr0[0];
+                    res[3] = adr0[1];
+                    break;
+            }
+            return res;
+        }
+
+        void SwapBytesOut(byte[] inp, out byte[] adr0, out byte[] adr1, ModbusConversionType con)
+        {
+            adr0 = new byte[2];
+            adr1 = new byte[2];
+            switch (con)
+            {
+                case ModbusConversionType.SwapBytes:
+                    adr1[1] = inp[0];
+                    adr1[0] = inp[1];
+                    adr0[1] = inp[2];
+                    adr0[0] = inp[3];
+                    break;
+                case ModbusConversionType.SwapWords:
+                    adr0[0] = inp[0];
+                    adr0[1] = inp[1];
+                    adr1[0] = inp[2];
+                    adr1[1] = inp[3];
+                    break;
+                case ModbusConversionType.SwapAll:
+                    adr0[1] = inp[0];
+                    adr0[0] = inp[1];
+                    adr1[1] = inp[2];
+                    adr1[0] = inp[3];
+                    break;
+                default:
+                    adr1[0] = inp[0];
+                    adr1[1] = inp[1];
+                    adr0[0] = inp[2];
+                    adr0[1] = inp[3];
+                    break;
             }
         }
 

@@ -41,15 +41,17 @@ namespace FreeSCADA.Designer.Dialogs
 			b.SetWidth(0);
 			channelsGrid.Selection.Border = b;
 			channelsGrid.Selection.FocusBackColor = channelsGrid.Selection.BackColor;
-			channelsGrid.ColumnsCount = 4;
+			channelsGrid.ColumnsCount = 6;
 
 			SourceGrid.Cells.Views.Cell categoryView = GetCategoryCellView();
 
 			channelsGrid.RowsCount++;
 			channelsGrid[0, 0] = new SourceGrid.Cells.ColumnHeader("Channel");
-			channelsGrid[0, 1] = new SourceGrid.Cells.ColumnHeader("Value");
-			channelsGrid[0, 2] = new SourceGrid.Cells.ColumnHeader("Access");
-			channelsGrid[0, 3] = new SourceGrid.Cells.ColumnHeader("Type");
+            channelsGrid[0, 1] = new SourceGrid.Cells.ColumnHeader("Value");
+            channelsGrid[0, 2] = new SourceGrid.Cells.ColumnHeader("Status");
+            channelsGrid[0, 3] = new SourceGrid.Cells.ColumnHeader("Time");
+            channelsGrid[0, 4] = new SourceGrid.Cells.ColumnHeader("Access");
+			channelsGrid[0, 5] = new SourceGrid.Cells.ColumnHeader("Type");
 
 			foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
 				LoadPlugin(categoryView, plugId);
@@ -127,9 +129,11 @@ namespace FreeSCADA.Designer.Dialogs
 				curRow++;
 
 				channelsGrid[curRow, 0] = new SourceGrid.Cells.Cell(ch.Name);
-				channelsGrid[curRow, 1] = new SourceGrid.Cells.Cell(ch.Value == null?"{null}":ch.Value);
-				channelsGrid[curRow, 2] = new SourceGrid.Cells.Cell(ch.IsReadOnly?"R":"RW");
-				channelsGrid[curRow, 3] = new SourceGrid.Cells.Cell(ch.Type);
+                channelsGrid[curRow, 1] = new SourceGrid.Cells.Cell(ch.Value == null ? "{null}" : ch.Value);
+                channelsGrid[curRow, 2] = new SourceGrid.Cells.Cell(ch.StatusFlags);
+                channelsGrid[curRow, 3] = new SourceGrid.Cells.Cell(ch.ModifyTime);
+                channelsGrid[curRow, 4] = new SourceGrid.Cells.Cell(ch.IsReadOnly ? "R" : "RW");
+				channelsGrid[curRow, 5] = new SourceGrid.Cells.Cell(ch.Type);
 				channelsGrid.Rows[curRow].Tag = ch;
 				ch.Tag = curRow;
 				ch.ValueChanged += new EventHandler(OnChannelValueChanged);
@@ -178,14 +182,16 @@ namespace FreeSCADA.Designer.Dialogs
 		private void UpdateChannelFunc(IChannel channel, int rowIndex)
 		{
 			channelsGrid[rowIndex, 1].Value = (channel.Value == null) ? "{null}" : channel.Value;
-			//Console.WriteLine("{0} UpdateChannelFunc",System.DateTime.Now);
+            channelsGrid[rowIndex, 2].Value = channel.StatusFlags;
+            channelsGrid[rowIndex, 3].Value = channel.ModifyTime;
+            //Console.WriteLine("{0} UpdateChannelFunc",System.DateTime.Now);
 		}
 
 		void OnChannelValueChanged(object sender, EventArgs e)
 		{
 			IChannel ch = (IChannel)sender;
 			object[] args = { ch, ch.Tag };
-			channelsGrid.Invoke(new UpdateChannelDelegate(UpdateChannelFunc), args);
+			channelsGrid.BeginInvoke(new UpdateChannelDelegate(UpdateChannelFunc), args);
 		}
 
 		private void VariablesForm_FormClosing(object sender, FormClosingEventArgs e)

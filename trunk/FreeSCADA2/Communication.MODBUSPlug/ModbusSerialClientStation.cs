@@ -20,12 +20,12 @@ namespace FreeSCADA.Communication.MODBUSPlug
         private Parity parity = Parity.None;
         private Handshake handshake = Handshake.None;
         private Thread channelUpdaterThread;
-        private volatile bool runThread;
 
         public ModbusSerialClientStation(string name, Plugin plugin, string comPort, int cycleTimeout, int retryTimeout, int retryCount, int failedCount)
             : base(name, plugin, cycleTimeout, retryTimeout, retryCount, failedCount)
         {
             this.comPort = comPort;
+            //StationActive = false;
         }
 
         public string ComPort
@@ -67,7 +67,6 @@ namespace FreeSCADA.Communication.MODBUSPlug
             if (base.Start() == 0)
             {
                 //// Run Thread
-                runThread = true;
                 channelUpdaterThread = new Thread(new ParameterizedThreadStart(ChannelUpdaterThreadProc));
                 channelUpdaterThread.Start(this);
                 return 0;
@@ -82,7 +81,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
             if (channelUpdaterThread != null)
             {
                 //channelUpdaterThread.Abort();
-                runThread = false;
+                sendQueueEndWaitEvent.Set();
                 channelUpdaterThread.Join();
                 channelUpdaterThread = null;
             }
@@ -90,10 +89,12 @@ namespace FreeSCADA.Communication.MODBUSPlug
 
         private static void ChannelUpdaterThreadProc(object obj)
         {
-            SerialPort sport = null;
             try
             {
+                SerialPort sport = null;
                 ModbusSerialClientStation self = (ModbusSerialClientStation)obj;
+                self.runThread = true;
+
                 while (self.runThread)
                 {
                     try
@@ -137,6 +138,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                 // The sending strategy should be also considered and enhanced, but:
                                 // As I think for now ... it does not matter...
                                 self.sendQueueEndWaitEvent.WaitOne(self.cycleTimeout);
+                                self.sendQueueEndWaitEvent.Reset();
 
                                 // fast action first - copy from the queue content to my own buffer
                                 lock (self.sendQueueSyncRoot)
@@ -164,11 +166,6 @@ namespace FreeSCADA.Communication.MODBUSPlug
                     catch (Exception e)
                     {
                         self.sendQueueEndWaitEvent.Reset();
-                        if (sport != null)
-                        {
-                            sport.Close();
-                            sport.Dispose();
-                        }
 
                         foreach (byte b in self.failures.Keys)
                         {
@@ -180,6 +177,14 @@ namespace FreeSCADA.Communication.MODBUSPlug
                         if (e is ThreadAbortException)
                             throw e;
                         // if (e is )   // Communication timeout to a device
+                    }
+                    finally
+                    {
+                        if (sport != null)
+                        {
+                            sport.Close();
+                            sport.Dispose();
+                        }
                         // safety Sleep()
                         Thread.Sleep(5000);
                     }

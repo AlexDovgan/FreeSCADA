@@ -150,5 +150,15 @@ namespace FreeSCADA.Designer
                 UpdateCaptionAndCommands();
             }
         }
+
+        private void toolStripButtonNewScript_Click(object sender, EventArgs e)
+        {
+            windowManager.CreateNewScript();
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OnLoadProjectClick(sender, e);
+        }
     }
 }

@@ -50,6 +50,10 @@
     <Reference Include="PresentationFramework">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="ScintillaNet, Version=2.0.3138.25704, Culture=neutral, PublicKeyToken=948d6c9751444115, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\Scintilla\ScintillaNet.dll</HintPath>
+    </Reference>
     <Reference Include="SourceGrid, Version=4.11.2887.1415, Culture=neutral, PublicKeyToken=df6f5e538749e85d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\SourceGrid4_11\SourceGrid.dll</HintPath>
@@ -188,6 +192,9 @@
     <Compile Include="Views\ArchiverSettingsView.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Views\ScriptView.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Views\DocumentView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -256,6 +263,9 @@
     <EmbeddedResource Include="Views\ArchiverSettingsView.resx">
       <DependentUpon>ArchiverSettingsView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\ScriptView.resx">
+      <DependentUpon>ScriptView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\ProjectContentView.resx">
       <DependentUpon>ProjectContentView.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -313,6 +323,10 @@
       <Project>{047EED80-A3C6-4A7F-BB4C-E4A64F96B210}</Project>
       <Name>RunTime</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Scripting\Scripting.csproj">
+      <Project>{1609E424-B074-40BC-B67A-54A4D27A93AB}</Project>
+      <Name>Scripting</Name>
+    </ProjectReference>
     <Page Include="SchemaEditor\Manipulators\Controlls\styles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -340,6 +354,7 @@
     <None Include="Resources\page_white_code_red.png" />
     <Content Include="Resources\save_file.png" />
     <None Include="Resources\table_add.png" />
+    <Content Include="Resources\script_add.png" />
     <Content Include="Resources\shape_ellipse_add.png" />
     <Content Include="Resources\shape_group.png" />
     <Content Include="Resources\shape_line_add.png" />
