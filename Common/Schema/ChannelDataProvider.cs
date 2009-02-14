@@ -12,6 +12,7 @@ namespace FreeSCADA.Common.Schema
     public class ChannelDataProvider : DataSourceProvider
     {
         string channelName;
+        Interfaces.IChannel channel;
         public bool IsBindInDesign
         {
             get;
@@ -19,8 +20,8 @@ namespace FreeSCADA.Common.Schema
         }
         public Interfaces.IChannel Channel
         {
-            get;
-            protected set;
+            get{Refresh();return channel;}
+           
         }
         public string ChannelName
         {
@@ -43,7 +44,7 @@ namespace FreeSCADA.Common.Schema
                 return;
             FreeSCADA.Interfaces.IChannel ch;
             ch=Env.Current.CommunicationPlugins.GetChannel(ChannelName);
-            Channel = ch;
+            channel = ch;
             if (Env.Current.Mode == FreeSCADA.Interfaces.EnvironmentMode.Designer)
                 ch=null;
             base.OnQueryFinished(ch);
