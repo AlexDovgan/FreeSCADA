@@ -19,6 +19,7 @@ namespace FreeSCADA.Common.Schema
 
         public object Convert(object o, Type targetType, object parameter, CultureInfo culture)
         {
+            
             for (int i = 0; i < this.converters.Count; i++)
             {
                 o = converters[i].Convert(o, targetType, parameter, culture);

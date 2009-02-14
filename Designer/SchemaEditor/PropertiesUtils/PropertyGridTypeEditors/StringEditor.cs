@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using FreeSCADA.Common;
+using FreeSCADA.Common.Schema;
 using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditors
@@ -20,7 +21,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
         private ListView listView1;
         private Button button1;
         private Button button2;
-        public string BindString
+        public string EditedText
         {
             get { return textBox1.Text; }
             set { textBox1.Text = value; }
@@ -51,7 +52,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
                 return;
             DependencyProperty depProp = dpd.DependencyProperty;
             if (depObj.GetValue(depProp) is String)
-                BindString = (String)depObj.GetValue(depProp);
+                EditedText = (String)depObj.GetValue(depProp);
             foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
             {
                 TreeNode plugNode = channelsTree.Nodes.Add(Env.Current.CommunicationPlugins[plugId].Name);
@@ -68,14 +69,13 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
 
             if ((bind = BindingOperations.GetMultiBinding(depObj, depProp)) != null)
             {
-
-                BindString = (bind.Converter as Kent.Boogaart.Converters.FormatConverter).FormatString;
-                //bind.Bindings.Select<System.Windows.Data.Binding,String>(=>(((ObjectDataProvider)x.Source).ObjectInstance as Common.Schema.ChannelDataSource).ChannelName).ToList()
+                EditedText = (bind.Converter as Kent.Boogaart.Converters.FormatConverter).FormatString;
+      
                 BindedChannels = (from b in bind.Bindings
-                                  select (((ObjectDataProvider)(((System.Windows.Data.Binding)b).Source)).ObjectInstance as Common.Schema.ChannelDataSource).ChannelName).ToList();
+                                  select ((ChannelDataProvider)(((System.Windows.Data.Binding)b).Source)).ChannelName).ToList();
                 return;
             }
-            textBox1.Text = BindString;
+            textBox1.Text = EditedText;
             
         }
         public TreeNode SelectedNode
@@ -240,21 +240,15 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
                     foreach (String item in control.BindedChannels)
                     {
                         System.Windows.Data.Binding bind = new System.Windows.Data.Binding("Value");
-                        System.Windows.Data.ObjectDataProvider dp;
-                        dp = new System.Windows.Data.ObjectDataProvider();
-                        Common.Schema.ChannelDataSource chs = new Common.Schema.ChannelDataSource();
-                        chs.ChannelName = item;
-                        dp.ObjectInstance = chs;
-                        dp.MethodName = "GetChannel";
-                        bind.Source = dp;
-                        
-                        bind.FallbackValue = " xx ";
+                        ChannelDataProvider  cdp=new ChannelDataProvider();
+                        cdp.ChannelName= item;
+                        bind.Source = cdp;
+                        bind.FallbackValue = "xx.xx";
                         multiBind.Bindings.Add(bind);
                     }
-                    multiBind.Converter = new Kent.Boogaart.Converters.FormatConverter(control.BindString);
-                    //multiBind.FallbackValue = control.BindString;
+                    multiBind.Converter = new Kent.Boogaart.Converters.FormatConverter(control.EditedText);
                     BindingOperations.SetBinding(depObj, depProp, multiBind);
-                    
+                
 
                 }
             }
@@ -267,8 +261,6 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
             PropertiesUtils.PropertyWrapper pw;
             if ((pw = e.Context.PropertyDescriptor as PropertiesUtils.PropertyWrapper) == null)
                 return;
-
-
             DependencyObject depObj = pw.ControlledObject as DependencyObject;
             DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(pw.ControlledProperty);
             if (depObj == null || dpd == null)

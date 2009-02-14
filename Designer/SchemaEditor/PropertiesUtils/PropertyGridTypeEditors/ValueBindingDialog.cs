@@ -41,8 +41,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
 
             if ((bind = BindingOperations.GetBinding(depObj, depProp)) != null)
             {
-                Common.Schema.ChannelDataSource chs = ((ObjectDataProvider)bind.Source).ObjectInstance as Common.Schema.ChannelDataSource;
-                channelName = chs.ChannelName;
+                channelName = ((ChannelDataProvider)bind.Source).ChannelName;
+  
                 try
                 {
                     ComposingConverter conv = bind.Converter as ComposingConverter;

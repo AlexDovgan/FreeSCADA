@@ -94,6 +94,7 @@
     <Compile Include="Dialogs\ProjectMediaDialog.Designer.cs">
       <DependentUpon>ProjectMediaDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="SchemaEditor\BidingHelper.cs" />
     <Compile Include="SchemaEditor\BindingSerializing.cs" />
     <Compile Include="SchemaEditor\EditorHelpers.cs" />
     <Compile Include="SchemaEditor\Manipulators\ActionsEditManipulator.cs" />
@@ -160,6 +161,12 @@
     </Compile>
     <Compile Include="SchemaEditor\SchemaMenuContext.cs" />
     <Compile Include="SchemaEditor\SelectionHelper.cs" />
+    <Compile Include="SchemaEditor\PropertiesUtils\NumExpressionBindingPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\NumExpressionBindingPanel.Designer.cs">
+      <DependentUpon>NumExpressionBindingPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="SchemaEditor\StylesLibrary\StylesLibrary.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\TypeConverters\DependencyObjectConverter.cs" />
     <Compile Include="SchemaEditor\ToolDescriptor.cs" />
@@ -238,6 +245,9 @@
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\StringBindingPanel.resx">
       <DependentUpon>StringBindingPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SchemaEditor\PropertiesUtils\NumExpressionBindingPanel.resx">
+      <DependentUpon>NumExpressionBindingPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StringResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>StringResources.Designer.cs</LastGenOutput>
@@ -309,7 +319,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="Resources\cut.png" />
     <None Include="Resources\disk.png" />
     <None Include="Resources\arrow_undo.png" />

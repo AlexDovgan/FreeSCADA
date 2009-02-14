@@ -27,6 +27,7 @@ namespace FreeSCADA.Common.Schema
         {
             try
             {
+
                 Double val = Double.Parse(o.ToString());
                 if (val < _min)
                     return _min;

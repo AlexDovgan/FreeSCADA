@@ -60,29 +60,18 @@ namespace FreeSCADA.RunTime
 
 		private void OnRunClick(object sender, System.EventArgs e)
 		{
-			if (Env.Current.CommunicationPlugins.Connect())
-			{
-				if (ArchiverMain.Current.DatabaseSettings.EnableArchiving)
-				{
-					if (ArchiverMain.Current.Start() == false)
-					{
-						Env.Current.CommunicationPlugins.Disconnect();
-						return;
-					}
-				}
-				runButton.Enabled = false;
-				refreshButton.Enabled = false;
-				stopButton.Enabled = true;
-			}
+            if(windowManager.StartRuntime())
+            {    runButton.Enabled = false;
+                refreshButton.Enabled = false;
+                stopButton.Enabled = true;
+            }
+
 		}
 
 		private void OnStopClick(object sender, System.EventArgs e)
 		{
-			if (ArchiverMain.Current.DatabaseSettings.EnableArchiving)
-				ArchiverMain.Current.Stop();
-
-			Env.Current.CommunicationPlugins.Disconnect();
-			runButton.Enabled = true;
+            windowManager.StopRuntime();
+            runButton.Enabled = true;
             refreshButton.Enabled = true;
             stopButton.Enabled = false;
 		}
