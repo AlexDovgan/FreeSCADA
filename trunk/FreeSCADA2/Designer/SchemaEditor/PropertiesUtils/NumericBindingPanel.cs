@@ -81,14 +81,6 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				bind.Mode = BindingMode.TwoWay;
 				bind.FallbackValue = channel.Value;
 
-				PropertyDescriptor pd = TypeDescriptor.GetProperties(element).Find(property.SourceProperty, true);
-				if (pd == null || !(pd is PropertiesUtils.PropertyWrapper))
-					return;
-
-				DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty((pd as PropertiesUtils.PropertyWrapper).ControlledProperty);
-				if (dpd == null)
-					return;
-
 				DependencyObject depObj;
 				DependencyProperty depProp;
 				GetPropertyObjects(element, property, out depObj, out depProp);
