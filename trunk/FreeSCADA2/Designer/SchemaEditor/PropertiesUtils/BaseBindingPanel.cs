@@ -32,7 +32,6 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		public BaseBindingPanel()
 		{
 			InitializeComponent();
-			this.Disposed += new EventHandler(OnDisposed);
 		}
 
 		public bool EnableInDesigner
@@ -93,12 +92,11 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			depProp = dpd.DependencyProperty;
 		}
 
-		void OnDisposed(object sender, EventArgs e)
+		public void Close()
 		{
-			this.Disposed -= new EventHandler(OnDisposed);
-
 			if (element != null && property != null)
 				OnSave();
+			Dispose();
 		}
 	}
 }
