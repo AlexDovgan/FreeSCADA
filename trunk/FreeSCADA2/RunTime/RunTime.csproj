@@ -31,6 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevAge.Core, Version=4.10.2845.21697, Culture=neutral, PublicKeyToken=faad465d84242dbf, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\SourceGrid4_11\DevAge.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevAge.Windows.Forms, Version=4.10.2845.21698, Culture=neutral, PublicKeyToken=faad465d84242dbf, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\SourceGrid4_11\DevAge.Windows.Forms.dll</HintPath>
+    </Reference>
     <Reference Include="NPlot, Version=0.9.10.0, Culture=neutral, PublicKeyToken=4eda430eb4395eb1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\NPlot\NPlot.dll</HintPath>
@@ -40,6 +48,10 @@
     </Reference>
     <Reference Include="PresentationFramework">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="SourceGrid, Version=4.11.2887.1415, Culture=neutral, PublicKeyToken=df6f5e538749e85d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\SourceGrid4_11\SourceGrid.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -75,6 +87,9 @@
     <Compile Include="Views\ArchiverGraphView.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Views\VariablesView.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Views\LogConsoleView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,6 +108,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ArchiverGraphView.resx">
       <DependentUpon>ArchiverGraphView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\VariablesView.resx">
+      <DependentUpon>VariablesView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\LogConsoleView.resx">
       <DependentUpon>LogConsoleView.cs</DependentUpon>

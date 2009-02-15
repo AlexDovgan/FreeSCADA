@@ -147,4 +147,7 @@
   <data name="SchemasItemName" xml:space="preserve">
     <value>Schemas</value>
   </data>
+  <data name="VariablesItemName" xml:space="preserve">
+    <value>Variables</value>
+  </data>
 </root>

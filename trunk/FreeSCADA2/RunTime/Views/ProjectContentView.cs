@@ -13,8 +13,8 @@ namespace FreeSCADA.RunTime.Views
 		/// Notify that user double clicked on some node
 		/// </summary>
 		/// <param name="entity_name">Full name of the node how it is in the project</param>
-		public delegate void OpenEntityHandler(string entity_name);
-		/// <summary>Occurs when user double clicks a node from the list</summary>
+        public delegate void OpenEntityHandler(ProjectEntityType entity_type, string entity_name);
+        /// <summary>Occurs when user double clicks a node from the list</summary>
 		public event OpenEntityHandler OpenEntity;
 
 		#region Windows Form FreeSCADA.Designer generated code
@@ -55,6 +55,9 @@ namespace FreeSCADA.RunTime.Views
 		{
 			projectTree.Nodes.Clear();
 			TreeNode root = projectTree.Nodes.Add(project.FileName);
+            // variables
+            root.Nodes.Add(StringResources.VariablesItemName);
+            // schemas
 			TreeNode schemas = root.Nodes.Add(StringResources.SchemasItemName);
 			foreach (string entity in Env.Current.Project.GetEntities(ProjectEntityType.Schema))
 			{
@@ -62,7 +65,7 @@ namespace FreeSCADA.RunTime.Views
 				node.Tag = entity;
 				node.EnsureVisible();
 			}
-		}
+        }
 
 		void OnProjectLoad(object sender, EventArgs e)
 		{
@@ -71,9 +74,11 @@ namespace FreeSCADA.RunTime.Views
 
 		private void OnNodeDblClick(object sender, TreeNodeMouseClickEventArgs e)
 		{
-            if (OpenEntity != null && e.Node.Tag!=null)
-				OpenEntity((string)e.Node.Tag);
-		}
+            if (OpenEntity != null && e.Node.Tag != null && e.Node.Parent.Text == StringResources.SchemasItemName)
+                OpenEntity(ProjectEntityType.Schema, (string)e.Node.Tag);
+            else if (OpenEntity != null && (e.Node.Text == StringResources.VariablesItemName))
+                OpenEntity(ProjectEntityType.VariableList, (string)e.Node.Text);
+        }
 	}
   
 }
