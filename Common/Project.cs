@@ -18,6 +18,7 @@ namespace FreeSCADA.Common
         Report,
         EventList,
         AlarmList,
+        VariableList,
         Archiver
     }
 
