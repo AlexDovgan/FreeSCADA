@@ -42,12 +42,12 @@ namespace FreeSCADA.Common.Schema
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             double val;
-
-            if (Double.TryParse(value.ToString(), out val) && targetType == typeof(Brush))
+            
+            if (targetType == typeof(Brush))
             {
 
                 Color color = new Color();
-                double curPos = (val - MinValue) / (MaxValue - MinValue);
+                double curPos = (System.Convert.ToDouble(value)- MinValue) / (MaxValue - MinValue);
                 color.A = (byte)(Math.Abs(StartColor.A - Math.Abs(EndColor.A - StartColor.A) * curPos));
                 color.R = (byte)(Math.Abs(StartColor.R - Math.Abs(EndColor.R - StartColor.R) * curPos));
                 color.G = (byte)(Math.Abs(StartColor.G - Math.Abs(EndColor.G - StartColor.G) * curPos));
