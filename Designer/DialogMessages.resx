@@ -120,9 +120,6 @@
   <data name="CannotCreateSchema" xml:space="preserve">
     <value>Failure on new schema creation. Please report about this problem to developers.</value>
   </data>
-  <data name="CannotCreateScript" xml:space="preserve">
-    <value>Failure on new script creation. Please report about this problem to developers.</value>
-  </data>
   <data name="CannotLoadSchema" xml:space="preserve">
     <value>Fatal error has been occurred during schema loading. Please check the schema for correctness.</value>
   </data>

@@ -36,6 +36,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		/// Constructor
 		/// </summary>
 		/// <param name="element"></param>
+		/// <param name="activeProperty"></param>
 		internal CommonBindingDialog(object element, PropertyInfo activeProperty)
 		{
 			this.element = element;
