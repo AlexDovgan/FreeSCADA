@@ -116,14 +116,9 @@ namespace FreeSCADA.Designer.Views
             {
                 TreeNode chNode;
                 chNode = archivers.Nodes.Add(rule.Name);
-            }
+                //chNode.Tag = plugId;
 
-            TreeNode scripts = root.Nodes.Add(StringResources.ScriptsItemName);
-            /*foreach (Rule rule in ArchiverMain.Current.ChannelsSettings.Rules)
-            {
-                TreeNode chNode;
-                chNode = archivers.Nodes.Add(rule.Name);
-            }*/
+            }
         }
 
 		void OnProjectLoad(object sender, EventArgs e)
@@ -140,10 +135,8 @@ namespace FreeSCADA.Designer.Views
 		{
             if (OpenEntity != null && e.Node.Tag != null && e.Node.Parent.Text == StringResources.SchemasItemName)
                 OpenEntity(ProjectEntityType.Schema, (string)e.Node.Tag);
-            else if (OpenEntity != null && (e.Node.Text == StringResources.ArchiverItemName || (e.Node.Parent != null && e.Node.Parent.Text == StringResources.ArchiverItemName)))
+            else if (OpenEntity != null && (e.Node.Text == StringResources.ArchiverItemName || (e.Node.Parent!=null&&e.Node.Parent.Text == StringResources.ArchiverItemName)))
                 OpenEntity(ProjectEntityType.Archiver, (string)e.Node.Text);
-            else if (OpenEntity != null && (e.Node.Text == StringResources.ScriptsItemName || (e.Node.Parent != null && e.Node.Parent.Text == StringResources.ScriptsItemName)))
-                OpenEntity(ProjectEntityType.Script, (string)e.Node.Text);
         }
        
 	}

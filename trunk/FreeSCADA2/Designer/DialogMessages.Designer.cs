@@ -70,15 +70,6 @@ namespace FreeSCADA.Designer
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failure on new script creation. Please report about this problem to developers..
-        /// </summary>
-        internal static string CannotCreateScript {
-            get {
-                return ResourceManager.GetString("CannotCreateScript", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Fatal error has been occurred during schema loading. Please check the schema for correctness..
         /// </summary>
         internal static string CannotLoadSchema {

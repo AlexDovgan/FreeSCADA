@@ -297,27 +297,7 @@ namespace FreeSCADA.Common
 			return schemas.ToArray();
 		}
 
-        /// <summary>
-        /// Return all available entities
-        /// </summary>
-        /// <returns>return array of entities</returns>
-        public string[] GetScripts()
-        {
-            List<string> scripts = new List<string>();
-            foreach (string entity in data.Keys)
-            {
-                Regex rx = new Regex(@"^scripts[\/]+(?<name>.*)[\/]+.*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-                Match match = rx.Match(entity);
-                if (match.Success)
-                {
-                    if (scripts.IndexOf(match.Groups["name"].Value) < 0)
-                        scripts.Add(match.Groups["name"].Value);
-                }
-            }
-            return scripts.ToArray();
-        }
-
-        public Stream this[string name]
+		public Stream this[string name]
 		{
 			get{ return GetData(name); }
 			set { SetData(name, value); }
