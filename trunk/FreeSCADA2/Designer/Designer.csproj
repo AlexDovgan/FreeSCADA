@@ -126,6 +126,12 @@
     <Compile Include="SchemaEditor\PropertiesUtils\CommonBindingDialog.Designer.cs">
       <DependentUpon>CommonBindingDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\SolidBrushBindingPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\SolidBrushBindingPanel.Designer.cs">
+      <DependentUpon>SolidBrushBindingPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\NumericBindingPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -238,6 +244,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\CommonBindingDialog.resx">
       <DependentUpon>CommonBindingDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SchemaEditor\PropertiesUtils\SolidBrushBindingPanel.resx">
+      <DependentUpon>SolidBrushBindingPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\NumericBindingPanel.resx">
       <DependentUpon>NumericBindingPanel.cs</DependentUpon>
