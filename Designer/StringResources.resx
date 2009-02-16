@@ -326,7 +326,7 @@
   <data name="UntitledSchema" xml:space="preserve">
     <value>Untitled</value>
   </data>
-  <data name="UntitledScript" xml:space="preserve">
-    <value>Script</value>
+  <data name="SolidColorBindingPanelName" xml:space="preserve">
+    <value>Solid Color Binding</value>
   </data>
 </root>

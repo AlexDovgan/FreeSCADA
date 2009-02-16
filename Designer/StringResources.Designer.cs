@@ -400,6 +400,15 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Solid Color Binding.
+        /// </summary>
+        internal static string SolidColorBindingPanelName {
+            get {
+                return ResourceManager.GetString("SolidColorBindingPanelName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bind to string value.
         /// </summary>
         internal static string StringBindingPanelName {
@@ -558,15 +567,6 @@ namespace FreeSCADA.Designer {
         internal static string UntitledSchema {
             get {
                 return ResourceManager.GetString("UntitledSchema", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Script.
-        /// </summary>
-        internal static string UntitledScript {
-            get {
-                return ResourceManager.GetString("UntitledScript", resourceCulture);
             }
         }
     }

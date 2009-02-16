@@ -93,6 +93,7 @@
     <Compile Include="Schema\AnimatedImage.cs" />
     <Compile Include="Schema\ChannelDataProvider.cs" />
     <Compile Include="Schema\ChannelDataSource.cs" />
+    <Compile Include="Schema\SolidBrushConverter.cs" />
     <Compile Include="Schema\ComposingConverter.cs" />
     <Compile Include="Schema\MediaProvider.cs" />
     <Compile Include="Schema\RangeConverter.cs" />

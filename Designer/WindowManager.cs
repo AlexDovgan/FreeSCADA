@@ -114,7 +114,7 @@ namespace FreeSCADA.Designer
             //Generate unique name
             for (int i = 1; i < 1000; i++)
             {
-                string newName = string.Format("{0} {1}", StringResources.UntitledScript, i);
+                string newName = string.Format("{0} {1}", StringResources.SolidColorBindingPanelName, i);
                 bool hasTheSameDocument = false;
                 foreach (DocumentView doc in documentViews)
                 {
