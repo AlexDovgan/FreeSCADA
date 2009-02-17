@@ -116,26 +116,25 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			//RegisterProperty(typeof(FrameworkElement), "Width", "Width1", typeof(DoubleEditor), "Description for width1 property");
 			//RegisterProperty(typeof(FrameworkElement), "Width", "Width2", typeof(DoubleEditor), "Description for width2 property");
 
-			RegisterProperty(typeof(FrameworkElement), "Width", typeof(DoubleEditor));
-			RegisterProperty(typeof(FrameworkElement), "Height", typeof(DoubleEditor));
-			RegisterProperty(typeof(FrameworkElement), "Background", typeof(DoubleEditor));
-			RegisterProperty(typeof(FrameworkElement), "Foreground", typeof(DoubleEditor));
-			RegisterProperty(typeof(FrameworkElement), "Opacity", typeof(DoubleEditor));
-			RegisterProperty(typeof(FrameworkElement), "Canvas.Top", typeof(DoubleEditor));
-			RegisterProperty(typeof(FrameworkElement), "Canvas.Left", typeof(DoubleEditor));
+			RegisterProperty(typeof(FrameworkElement), "Width", typeof(CommonTypeEditor));
+            RegisterProperty(typeof(FrameworkElement), "Height", typeof(CommonTypeEditor));
+            RegisterProperty(typeof(FrameworkElement), "Background", typeof(CommonTypeEditor));
+            RegisterProperty(typeof(FrameworkElement), "Foreground", typeof(CommonTypeEditor));
+            RegisterProperty(typeof(FrameworkElement), "Opacity", typeof(CommonTypeEditor));
+            RegisterProperty(typeof(FrameworkElement), "Canvas.Top", typeof(CommonTypeEditor));
+            RegisterProperty(typeof(FrameworkElement), "Canvas.Left", typeof(CommonTypeEditor));
 			RegisterProperty(typeof(FrameworkElement), "Canvas.ZIndex", null);
 			RegisterProperty(typeof(FrameworkElement), "RenderTransform", null);
 			RegisterProperty(typeof(FrameworkElement), "RenderTransformOrigin", null);
 			RegisterProperty(typeof(FrameworkElement), "Name", null);
-			RegisterProperty(typeof(RangeBase), "Value", typeof(DoubleEditor));
-			RegisterProperty(typeof(RangeBase), "Maximum", typeof(DoubleEditor));
-			RegisterProperty(typeof(RangeBase), "Minimum", typeof(DoubleEditor));
+            RegisterProperty(typeof(RangeBase), "Value", typeof(CommonTypeEditor));
+            RegisterProperty(typeof(RangeBase), "Maximum", typeof(CommonTypeEditor));
+            RegisterProperty(typeof(RangeBase), "Minimum", typeof(CommonTypeEditor));
 			RegisterProperty(typeof(RangeBase), "Orientation", null);
 			RegisterProperty(typeof(Button), "Content","Image",  typeof(ImageEditor),"Image" );
-            RegisterProperty(typeof(Button), "Content", "Text", typeof(StringEditor), "Text");
+            RegisterProperty(typeof(Button), "Content", "Text", typeof(CommonTypeEditor), "Text");
             RegisterProperty(typeof(FreeSCADA.Common.Schema.AnimatedImage), "ImageName", "Image", typeof(ImageEditor), "Image");
-            RegisterProperty(typeof(FreeSCADA.Common.Schema.AnimatedImage), "AnimatedControl", "AnimatedControl", typeof(NullableBoolEditor), "Animation controling");
-			//RegisterProperty(typeof(ContentControl), "ContentTemplate", null);
+            RegisterProperty(typeof(FreeSCADA.Common.Schema.AnimatedImage), "AnimatedControl", "AnimatedControl", typeof(CommonTypeEditor), "Animation controling");
 			RegisterProperty(typeof(Control), "Style", typeof(StyleEditor));
 			RegisterProperty(typeof(Shape), "StrokeThickness", null);
 			RegisterProperty(typeof(Shape), "Stroke", typeof(ColorEditor));
@@ -145,14 +144,14 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			RegisterProperty(typeof(BaseAction), "MaxChannelValue", null);
 			RegisterProperty(typeof(RotateAction), "MinAngle", null);
 			RegisterProperty(typeof(RotateAction), "MaxAngle", null);
-			RegisterProperty(typeof(TextBlock), "Text", typeof(StringEditor));
+            RegisterProperty(typeof(TextBlock), "Text", typeof(CommonTypeEditor));
 			RegisterProperty(typeof(TextBlock), "FontFamily", null);
 			RegisterProperty(typeof(TextBlock), "FontSize", null);
 			RegisterProperty(typeof(TextBlock), "FontStretch", null);
 			RegisterProperty(typeof(TextBlock), "FontStyle", null);
 			RegisterProperty(typeof(TextBlock), "FontWeight", null);
 			RegisterProperty(typeof(TextBlock), "TextAlignment", null);
-			RegisterProperty(typeof(CheckBox), "IsChecked", typeof(NullableBoolEditor));
+            RegisterProperty(typeof(CheckBox), "IsChecked", typeof(CommonTypeEditor));
 		}
 
 	}

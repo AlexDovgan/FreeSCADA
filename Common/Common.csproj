@@ -98,6 +98,7 @@
     <Compile Include="Schema\MediaProvider.cs" />
     <Compile Include="Schema\RangeConverter.cs" />
     <Compile Include="Schema\SchemaDocument.cs" />
+    <Compile Include="Schema\Triggers\FSEventTrigger.cs" />
     <Compile Include="Schema\WPFShemaContainer.cs" />
     <Compile Include="StringResources.Designer.cs">
       <AutoGen>True</AutoGen>

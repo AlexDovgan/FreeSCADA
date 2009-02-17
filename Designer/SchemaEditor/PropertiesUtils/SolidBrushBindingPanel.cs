@@ -30,7 +30,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
             }
         }
 
-        public override void Initialize(object element, PropertyInfo property, System.Windows.Data.BindingBase binding)
+        public override void Initialize(object element, PropertyWrapper property, System.Windows.Data.BindingBase binding)
         {
             base.Initialize(element, property, binding);
 
@@ -88,8 +88,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
                 DependencyObject depObj;
                 DependencyProperty depProp;
-                GetPropertyObjects(element, Property, out depObj, out depProp);
-                if (depObj != null && depProp != null)
+                if (Property.GetWpfObjects(out depObj, out depProp))
                     bind.FallbackValue = depObj.GetValue(depProp);
 
                 return bind;
@@ -113,9 +112,9 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
     internal class BrushBindingPanelFactory : BaseBindingPanelFactory
     {
-        override public bool CheckApplicability(object element, PropertyInfo property)
+        override public bool CheckApplicability(object element, PropertyWrapper property)
         {
-            Type type = BaseBindingPanel.GetPropertyType(element, property);
+            Type type = property.PropertyType;
             if (type.Equals(typeof(System.Windows.Media.Brush)))
                 return true;
 

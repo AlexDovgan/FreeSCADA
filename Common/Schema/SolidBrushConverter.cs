@@ -14,6 +14,7 @@ namespace FreeSCADA.Common.Schema
     /// </summary>
     public class SolidBrushConverter : IValueConverter
     {
+        SolidColorBrush brush = new SolidColorBrush();
         public Color StartColor
         {
             get;
@@ -41,8 +42,7 @@ namespace FreeSCADA.Common.Schema
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double val;
-            
+                        
             if (targetType == typeof(Brush))
             {
 
@@ -52,7 +52,8 @@ namespace FreeSCADA.Common.Schema
                 color.R = (byte)(Math.Abs(StartColor.R - Math.Abs(EndColor.R - StartColor.R) * curPos));
                 color.G = (byte)(Math.Abs(StartColor.G - Math.Abs(EndColor.G - StartColor.G) * curPos));
                 color.B = (byte)(Math.Abs(StartColor.B - Math.Abs(EndColor.B - StartColor.B) * curPos));
-                return new SolidColorBrush(color);
+                brush.Color = color;
+                return brush;
             }
             return null;
 

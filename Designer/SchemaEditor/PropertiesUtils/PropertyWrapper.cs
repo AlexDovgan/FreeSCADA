@@ -108,6 +108,9 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		public override object GetValue(object component)
 		{
 			//TODO: probably we need some type convertor here for "compound" properties
+            System.Windows.Data.BindingBase binding;
+            if ((binding = GetBinding()) != null)
+                return "Binding";
 			return controlledProperty.GetValue(controlledObject);
 		}
 
@@ -145,5 +148,35 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		{
 			return true;
 		}
+        public System.Windows.Data.BindingBase GetBinding()
+        {
+            if (controlledObject is System.Windows.DependencyObject
+                && DependencyPropertyDescriptor.FromProperty(controlledProperty)!=null)
+                return System.Windows.Data.BindingOperations.GetBinding(
+                    (controlledObject as System.Windows.DependencyObject),
+                    DependencyPropertyDescriptor.FromProperty(controlledProperty).DependencyProperty);
+            return null;
+
+        }
+        internal bool GetWpfObjects(
+            out System.Windows.DependencyObject depObj,
+            out System.Windows.DependencyProperty depProp)
+        {
+            if (controlledObject is System.Windows.DependencyObject
+                && DependencyPropertyDescriptor.FromProperty(controlledProperty) != null)
+            {
+                depObj = controlledObject as System.Windows.DependencyObject;
+                depProp = DependencyPropertyDescriptor.FromProperty(controlledProperty).DependencyProperty;
+                return true;
+            }
+            depObj = null;
+            depProp = null;
+            return false;
+        }
+        public override string ToString()
+        {
+            return DisplayName;
+        }
+
 	}
 }

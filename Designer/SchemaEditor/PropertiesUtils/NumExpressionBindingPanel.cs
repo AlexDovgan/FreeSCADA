@@ -22,14 +22,14 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			InitializeComponent();
 		}
 
-		public override void Initialize(object element, PropertyInfo property, System.Windows.Data.BindingBase binding)
+		public override void Initialize(object element, PropertyWrapper property, System.Windows.Data.BindingBase binding)
 		{
 			base.Initialize(element, property, binding);
 
 			DependencyObject depObj;
 			DependencyProperty depProp;
-			GetPropertyObjects(element, property, out depObj, out depProp);
-			if (depObj != null && depProp != null)
+            
+			if (property.GetWpfObjects(out depObj, out depProp))
 			{
 				if (depObj.GetValue(depProp) is String)
 				    expressionEdit.Text = (string)depObj.GetValue(depProp);
@@ -81,8 +81,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                 
 				DependencyObject depObj;
 				DependencyProperty depProp;
-				GetPropertyObjects(element, Property, out depObj, out depProp);
-                if (depObj != null && depProp != null)
+                if (Property.GetWpfObjects(out depObj, out depProp))
                     multiBind.FallbackValue = depObj.GetValue(depProp);
                 return multiBind;
     		}
@@ -151,9 +150,9 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
     internal class NumExpressionBindingPanelFactory : BaseBindingPanelFactory
 	{
-		override public bool CheckApplicability(object element, PropertyInfo property)
+		override public bool CheckApplicability(object element, PropertyWrapper property)
 		{
-			Type type = BaseBindingPanel.GetPropertyType(element, property);
+            Type type = property.PropertyType;
 			if (type.Equals(typeof(Double)))
 				return true;
 

@@ -122,6 +122,7 @@
     <Compile Include="SchemaEditor\PropertiesUtils\CommonBindingDialog.Designer.cs">
       <DependentUpon>CommonBindingDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\CommonTypeEditor.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\SolidBrushBindingPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -174,7 +175,6 @@
       <DependentUpon>NumExpressionBindingPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="SchemaEditor\StylesLibrary\StylesLibrary.cs" />
-    <Compile Include="SchemaEditor\PropertiesUtils\TypeConverters\DependencyObjectConverter.cs" />
     <Compile Include="SchemaEditor\ToolDescriptor.cs" />
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
     <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
