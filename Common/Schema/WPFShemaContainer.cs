@@ -76,6 +76,7 @@ namespace FreeSCADA.Common.Schema
         private void Initialize()
         {
             Child = scroll = new myHelpScrollViewer();
+			System.Windows.Automation.AutomationProperties.SetAutomationId(Child, "SchemaCanvas");
 			
 			Child.SnapsToDevicePixels = true;
             scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;

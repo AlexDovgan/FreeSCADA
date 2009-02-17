@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Repository</name>
+    </assembly>
+    <members>
+        <member name="T:Repository.EntityMapping.Entity">
+            <summary>
+            Represents an entity which can be mapped to the screen objects.
+            </summary>
+        </member>
+        <member name="M:Repository.FieldMap.GetFieldNameFor(System.String,System.Type)">
+            <summary>
+            Derives the field on the Entity, which would be populated for the given controlName and controlType
+            </summary>
+            <param name="controlName"></param>
+            <param name="controlType"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Repository.Interceptors.UIItemInterceptor">
+            <summary>
+            Lazily initializes the UIItem.
+            </summary>
+        </member>
+        <member name="T:Repository.Sessions.WorkSession">
+            <summary>
+            Represents white session for test/automation. There should be only one instance of this.
+            </summary>
+        </member>
+    </members>
+</doc>
