@@ -1,60 +1,67 @@
 ﻿using FreeSCADA.Designer;
-using NUnit.Extensions.Forms;
+using White;
 using NUnit.Framework;
+using Core;
+using Core.UIItems;
+using White.NUnit;
+using System.Windows;
+using Core.UIItems.Finders;
 
 namespace Designer.Tests
 {
 	[TestFixture]
-	public class SaveLoadFunctionalityTest : NUnitFormTest
+	public class SaveLoadFunctionalityTest
 	{
-		string projectFile;
-		bool shownSaveProjectDialog = false;
-		MainForm mainForm;
-
-		public override void Setup()
-		{
-			projectFile = System.IO.Path.GetTempFileName();
-			if (System.IO.File.Exists(projectFile))
-				System.IO.File.Delete(projectFile);
-
-			mainForm = new MainForm();
-			mainForm.Show();
-		}
-
-		public override void TearDown()
-		{
-			mainForm.Dispose();
-			System.IO.File.Delete(projectFile);
-			System.GC.Collect();
-		}
+		const string designer_executable = @"Designer.exe";
 
 		[Test]
 		public void CloseMainFormWithEmptyProject()
 		{
 			//Should not show any additional dialogs
-			mainForm.Close();
-			Assert.IsFalse(mainForm.Visible);
+			Application app = Application.Launch(designer_executable);
+			Assert.IsNotNull(app);
+			Core.UIItems.WindowItems.Window window = app.GetWindow("Designer");
+			window.Close();
+
+			Assert.IsTrue(app.HasExited);
 		}
 
 		[Test]
 		public void SaveProjectOnClosing()
 		{
-			ToolStripButtonTester newSchemaButton = new ToolStripButtonTester("toolStripButtonNewSchema");
-			newSchemaButton.Click();
+			Application app = Application.Launch(designer_executable);
+			Assert.IsNotNull(app);
+			Core.UIItems.WindowItems.Window window = app.GetWindow("Designer");
+			
+			//Create new schema
+			IUIItem new_schema_button = window.Get(SearchCriteria.ByText("New Schema"));
+			Assert.IsNotNull(new_schema_button);
+			System.Drawing.Point pt = new System.Drawing.Point(System.Convert.ToInt32(new_schema_button.Location.X) + 5, System.Convert.ToInt32(new_schema_button.Location.Y) + 5);
+			window.Mouse.Click(pt);
 
-			ExpectModal("SaveDocumentsDialog", "SaveProjectDialog_Cancel");
-			shownSaveProjectDialog = false;
+			//Add new rectangle
+			IUIItem toolboxPanel = window.Get(SearchCriteria.ByAutomationId("_toolBox"));
 
-			mainForm.Close();
-			Assert.IsTrue(shownSaveProjectDialog);
-			Assert.IsFalse(mainForm.Visible);
-		}
+			window.Close();
+			Assert.IsFalse(window.IsClosed);
 
-		private void SaveProjectDialog_Cancel()
-		{
-			ButtonTester noButton = new ButtonTester("noButton", "SaveDocumentsDialog");
-			noButton.Click();
-			shownSaveProjectDialog = true;
+			//Check that there is Save dialog
+			Core.UIItems.WindowItems.Window saveDlg = null;
+			foreach (Core.UIItems.WindowItems.Window wnd in app.GetWindows())
+			{
+				if (wnd.PrimaryIdentification == "SaveDocumentsDialog")
+				{
+					saveDlg = wnd;
+					break;
+				}
+			}
+			Assert.IsNotNull(saveDlg);
+			Button saveDlgNoBtn = saveDlg.Get<Button>(SearchCriteria.ByAutomationId("noButton"));
+			Assert.IsNotNull(saveDlgNoBtn);
+			saveDlgNoBtn.Click();
+
+			Assert.IsTrue(window.IsClosed);
+			Assert.IsTrue(app.HasExited);
 		}
 	}
 }
