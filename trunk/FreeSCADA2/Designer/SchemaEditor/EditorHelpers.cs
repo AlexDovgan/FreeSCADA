@@ -44,7 +44,6 @@ namespace FreeSCADA.Designer.SchemaEditor
             inst = new TypeConverterAttribute(typeof(BindingConvertor));
             RegisterAttribute<MultiBindingExpression>(inst);
             TypeDescriptor.AddProvider(new BindingTypeDescriptionProvider(), typeof(System.Windows.Data.Binding));
-            inst = new TypeConverterAttribute(typeof(PropertiesUtils.TypeConverters.DependencyObjectConverter));
             RegisterAttribute<Style>(inst);
          //   RegisterAttribute<AnimatedImage>(inst);
         }

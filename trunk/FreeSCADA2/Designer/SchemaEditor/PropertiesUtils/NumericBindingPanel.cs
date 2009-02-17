@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows;
@@ -30,7 +31,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			}
 		}
 
-		public override void Initialize(object element, PropertyInfo property, System.Windows.Data.BindingBase binding)
+		public override void Initialize(object element, PropertyWrapper property, System.Windows.Data.BindingBase binding)
 		{
 			base.Initialize(element, property, binding);
 
@@ -72,7 +73,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 					conv.Converters.Add(rc);
 				}
 
-				conv.Converters.Add(new Kent.Boogaart.Converters.TypeConverter(cdp.Channel.Type, GetPropertyType(element, Property)));
+				conv.Converters.Add(new Kent.Boogaart.Converters.TypeConverter(cdp.Channel.Type, Property.PropertyType));
 				bind.Converter = conv;
 
 				bind.Mode = BindingMode.TwoWay;
@@ -80,8 +81,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
 				DependencyObject depObj;
 				DependencyProperty depProp;
-				GetPropertyObjects(element, Property, out depObj, out depProp);
-				if (depObj != null && depProp != null)
+				if (Property.GetWpfObjects(out depObj, out depProp))
 					bind.FallbackValue = depObj.GetValue(depProp);
 
 				return bind;
@@ -98,10 +98,20 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
 	internal class NumericBindingPanelFactory : BaseBindingPanelFactory
 	{
-		override public bool CheckApplicability(object element, PropertyInfo property)
+		override public bool CheckApplicability(object element, PropertyWrapper property)
 		{
-			Type type = BaseBindingPanel.GetPropertyType(element, property);
-			if (type.Equals(typeof(Double)))
+            Type type = property.PropertyType;
+            List<Type> types = new List<Type>(new Type[] { 
+                typeof(Double), 
+                typeof(Int16), 
+                typeof(Int32), 
+                typeof(Boolean), 
+                typeof(Byte), 
+                typeof(Single),
+                typeof(Char)
+
+            });
+			if (types.Contains(type))
 				return true;
 
 			return false;

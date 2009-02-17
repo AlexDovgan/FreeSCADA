@@ -81,7 +81,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
         {
 
             return GetProperties(new Attribute[] { });
-        }
+        } 
         #endregion
     }
 }

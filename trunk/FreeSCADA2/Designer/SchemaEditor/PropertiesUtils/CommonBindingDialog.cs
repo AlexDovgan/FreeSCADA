@@ -17,7 +17,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 	{
 		object element;
 		BaseBindingPanel bindingPanel;
-		Dictionary<PropertyInfo, BindingBase> activeBindings = new Dictionary<PropertyInfo,BindingBase>();
+        Dictionary<PropertyWrapper, BindingBase> activeBindings = new Dictionary<PropertyWrapper, BindingBase>();
 
 		/// <summary>
 		/// Constructor
@@ -47,7 +47,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
 			for(int i=0;i<propertyList.Items.Count;i++)
 			{
-				if ((propertyList.Items[i] as PropertyInfo).SourceProperty == activeProperty.SourceProperty)
+                if ((propertyList.Items[i] as PropertyWrapper).PropertyInfo.SourceProperty == activeProperty.SourceProperty)
 				{
 					propertyList.SelectedIndex = i;
 					break;
@@ -63,7 +63,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			foreach (PropertyDescriptor property in properties)
 			{
 				if (property is PropertyWrapper)
-					propertyList.Items.Add((property as PropertyWrapper).PropertyInfo);
+					propertyList.Items.Add(property);
 			}
 
 			if (propertyList.Items.Count > 0)
@@ -103,7 +103,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			{
 				BaseBindingPanelFactory factory = (BaseBindingPanelFactory)bindingTypes.SelectedItem;
 				bindingPanel = factory.CreateInstance();
-				bindingPanel.Initialize(element, propertyList.SelectedItem as PropertyInfo, null);
+				bindingPanel.Initialize(element, propertyList.SelectedItem as PropertyWrapper, null);
 				bindingPanel.Parent = panel1;
 				bindingPanel.Dock = DockStyle.Fill;
 				CreateAssociationButton.Enabled = false;
@@ -117,10 +117,10 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
 			if (propertyList.SelectedIndex >= 0)
 			{
-				System.Windows.Data.BindingBase binding = GetExistingBinding(propertyList.SelectedItem as PropertyInfo);
+                System.Windows.Data.BindingBase binding = GetExistingBinding(propertyList.SelectedItem as PropertyWrapper);
 				if (binding != null)
 				{
-					PropertyInfo propInfo = propertyList.Items[propertyList.SelectedIndex] as PropertyInfo;
+					PropertyInfo propInfo = propertyList.SelectedItem as PropertyInfo;
 					List<BaseBindingPanelFactory> panels = GetAvailableBindingPanels();
 					foreach (BaseBindingPanelFactory panel in panels)
 					{
@@ -133,7 +133,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
 					if (bindingPanel != null)
 					{
-						bindingPanel.Initialize(element, propertyList.SelectedItem as PropertyInfo, binding);
+                        bindingPanel.Initialize(element, propertyList.SelectedItem as PropertyWrapper, binding);
 						bindingPanel.Parent = panel1;
 						bindingPanel.Dock = DockStyle.Fill;
 						enableInDesignerCheckbox.Checked = bindingPanel.EnableInDesigner;
@@ -157,34 +157,25 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			}
 		}
 
-		System.Windows.Data.BindingBase GetExistingBinding(PropertyInfo property)
+		System.Windows.Data.BindingBase GetExistingBinding(PropertyWrapper property)
 		{
 			if (activeBindings.ContainsKey(property))
 				return activeBindings[property];
 			else
 			{
-				PropertyDescriptor pd = TypeDescriptor.GetProperties(element).Find(property.SourceProperty, true);
-				if (pd == null || !(pd is PropertiesUtils.PropertyWrapper))
-					return null;
-
-				DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty((pd as PropertiesUtils.PropertyWrapper).ControlledProperty);
-				if (dpd == null)
-					return null;
-
-				DependencyObject depObj = (pd as PropertiesUtils.PropertyWrapper).ControlledObject as DependencyObject;
-				return BindingOperations.GetBindingBase(depObj, dpd.DependencyProperty);
+                return property.GetBinding();
 			}
 		}
 
 		List<BaseBindingPanelFactory> GetAvailableBindingPanels()
 		{
-			PropertyInfo propInfo = null;
+			PropertyWrapper property = null;
 			List<BaseBindingPanelFactory> result = new List<BaseBindingPanelFactory>();
 
 			if (propertyList.SelectedIndex >= 0)
-				propInfo = propertyList.Items[propertyList.SelectedIndex] as PropertyInfo;
+				property = propertyList.Items[propertyList.SelectedIndex] as PropertyWrapper;
 
-			if (propInfo == null)
+			if (property == null)
 				return result;
 
 			Assembly archiverAssembly = this.GetType().Assembly;
@@ -193,7 +184,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				if (type.IsSubclassOf(typeof(BaseBindingPanelFactory)))
 				{
 					BaseBindingPanelFactory factory = (BaseBindingPanelFactory)Activator.CreateInstance(type);
-					if (factory != null && factory.CheckApplicability(element, propInfo))
+					if (factory != null && factory.CheckApplicability(element, property))
 						result.Add(factory);
 				}
 			}
@@ -243,13 +234,13 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			SavePanelStateAndClose();
             if (activeBindings.Count > 0)
             {
-				foreach (PropertyInfo key in activeBindings.Keys)
+				foreach (PropertyWrapper key in activeBindings.Keys)
 				{
 					DependencyObject depObj;
 					DependencyProperty depProp;
 					System.Windows.Data.BindingBase binding = activeBindings[key];
-					BaseBindingPanel.GetPropertyObjects(element, key, out depObj, out depProp);
-					if (depObj != null && depProp != null && binding != null)
+
+                    if (key.GetWpfObjects(out depObj, out depProp) && binding != null)
 						BindingOperations.SetBinding(depObj, depProp, binding);
 				}
             }

@@ -8,7 +8,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {
 	internal abstract class BaseBindingPanelFactory
 	{
-		abstract public bool CheckApplicability(object element, PropertyInfo property);
+		abstract public bool CheckApplicability(object element, PropertyWrapper property);
 		abstract public bool CanWorkWithBinding(System.Windows.Data.BindingBase binding);
 		abstract public BaseBindingPanel CreateInstance();
 
@@ -26,7 +26,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 	internal partial class BaseBindingPanel : UserControl
 	{
 		protected object element;
-		private PropertyInfo property;
+		private PropertyWrapper property;
 
 		private bool enableInDesigner = false;
 
@@ -41,13 +41,13 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			set { enableInDesigner = value; }
 		}
 
-		public PropertyInfo Property
+        public PropertyWrapper Property
 		{
 			get { return property; }
 			set { property = value; }
 		}
 
-		virtual public void Initialize(object element, PropertyInfo property, System.Windows.Data.BindingBase binding)
+		virtual public void Initialize(object element, PropertyWrapper property, System.Windows.Data.BindingBase binding)
 		{
 			this.element = element;
 			this.property = property;
@@ -57,7 +57,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		{
 			if (element != null && property != null && channel != null)
 			{
-				Type type = GetPropertyType(element, property);
+				Type type = property.PropertyType;
 				if (type.Equals(channel.GetType()))
 					return true;
 			}
@@ -74,30 +74,6 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			return null;
 		}
 
-		internal static Type GetPropertyType(object element, PropertyInfo property)
-		{
-			PropertyDescriptor pd = TypeDescriptor.GetProperties(element).Find(property.SourceProperty, true);
-			if (pd != null)
-				return pd.PropertyType;
-			else
-				return null;
-		}
-
-		public static void GetPropertyObjects(object element, PropertyInfo property, out DependencyObject depObj, out DependencyProperty depProp)
-		{
-			depObj = null;
-			depProp = null;
-
-			PropertyDescriptor pd = TypeDescriptor.GetProperties(element).Find(property.SourceProperty, true);
-			if (pd == null || !(pd is PropertiesUtils.PropertyWrapper))
-				return;
-
-			DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty((pd as PropertiesUtils.PropertyWrapper).ControlledProperty);
-			if (dpd == null)
-				return;
-
-			depObj = (pd as PropertiesUtils.PropertyWrapper).ControlledObject as DependencyObject;
-			depProp = dpd.DependencyProperty;
-		}
+	
 	}
 }
