@@ -39,9 +39,6 @@ namespace Designer.Tests
 			System.Drawing.Point pt = new System.Drawing.Point(System.Convert.ToInt32(new_schema_button.Location.X) + 5, System.Convert.ToInt32(new_schema_button.Location.Y) + 5);
 			window.Mouse.Click(pt);
 
-			//Add new rectangle
-			IUIItem toolboxPanel = window.Get(SearchCriteria.ByAutomationId("_toolBox"));
-
 			window.Close();
 			Assert.IsFalse(window.IsClosed);
 
