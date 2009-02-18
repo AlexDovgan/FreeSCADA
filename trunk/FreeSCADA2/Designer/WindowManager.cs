@@ -152,6 +152,8 @@ namespace FreeSCADA.Designer
                     view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
                     view.SetCurrentTool += toolBoxView.OnSetCurrentTool;
                     view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
+                    documentViews.Add(view);
+                    view.Show(dockPanel, DockState.Document);
                     break;
                 case ProjectEntityType.Archiver:
                     ShowArchiverSettings();
@@ -162,8 +164,6 @@ namespace FreeSCADA.Designer
                 default:
                     break;
             }
-            documentViews.Add(view);
-            view.Show(dockPanel, DockState.Document);
 		}
 
 		/// <summary>
