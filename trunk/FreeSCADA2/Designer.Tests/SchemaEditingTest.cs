@@ -27,8 +27,10 @@ namespace Designer.Tests
 
 			mainWindow = app.GetWindow("Designer");
 			Assert.IsNotNull(mainWindow);
+		}
 
-			//Create new schema
+		protected void CreateNewSchema()
+		{
 			IUIItem new_schema_button = mainWindow.Get(SearchCriteria.ByText("New Schema"));
 			Assert.IsNotNull(new_schema_button);
 			System.Drawing.Point pt = new System.Drawing.Point(System.Convert.ToInt32(new_schema_button.Location.X) + 5, System.Convert.ToInt32(new_schema_button.Location.Y) + 5);
@@ -62,26 +64,6 @@ namespace Designer.Tests
 			Assert.IsTrue(app.HasExited);
 		}
 
-		void ClickToolboxItem(IUIItem toolbox, int group, bool top)
-		{
-			System.Drawing.Point pt = new System.Drawing.Point();
-			pt.X = Convert.ToInt32(toolbox.Bounds.Left + toolbox.Bounds.Width/2);
-
-			const int groupHeight = 18;
-			int offset = 4;
-			if (group > 0)
-				offset += group * groupHeight;
-			offset += groupHeight / 2;
-
-			if (top)
-				pt.Y = Convert.ToInt32(toolbox.Bounds.Top) + offset;
-			else
-				pt.Y = Convert.ToInt32(toolbox.Bounds.Bottom) - offset;
-
-			mainWindow.Mouse.Click(pt);
-			System.Threading.Thread.Sleep(500);
-		}
-
 		object GetPropertyGridValue(string Name)
 		{
 			Panel propertyView = mainWindow.Get<Panel>(SearchCriteria.ByAutomationId("propertyGrid"));
@@ -101,47 +83,104 @@ namespace Designer.Tests
 		}
 
 		[Test]
-		public void CreateRectangle()
+		public void CreateRectangularElements()
 		{
-			Panel toolbox = mainWindow.Get<Panel>(SearchCriteria.ByAutomationId("_toolBox"));
-			Assert.IsNotNull(toolbox);
+			ToolBoxWrapper.Entries[] elements = new ToolBoxWrapper.Entries[]
+			{ 
+				ToolBoxWrapper.Entries.Rectangle,
+				ToolBoxWrapper.Entries.TextBox,
+				ToolBoxWrapper.Entries.Button,
+				ToolBoxWrapper.Entries.ProgressBar,
+				ToolBoxWrapper.Entries.ScrollBar,
+				ToolBoxWrapper.Entries.Image,
+				ToolBoxWrapper.Entries.Slider,
+				ToolBoxWrapper.Entries.Checkbox
+			};
+			
+			foreach(ToolBoxWrapper.Entries entry in elements)
+			{
+				CreateNewSchema();
+				Panel schemaView = mainWindow.Get<Panel>(SearchCriteria.ByAutomationId("SchemaCanvas"));
+				Assert.IsNotNull(schemaView);
+				ToolBoxWrapper toolbox = new ToolBoxWrapper(mainWindow);
 
-			ClickToolboxItem(toolbox, 1, false); //Open "graphics tools" group
-			ClickToolboxItem(toolbox, 2, true); //Select "Rectangle" tool
+				toolbox.Select(entry);
 
+				//Draw rect
+				System.Drawing.Point pt = new System.Drawing.Point();
+				
+				pt.X = Convert.ToInt32(schemaView.Bounds.Left + 100);
+				pt.Y = Convert.ToInt32(schemaView.Bounds.Top + 100);
+				mainWindow.Mouse.Location = pt;
+
+				Core.InputDevices.Mouse.LeftDown();
+
+				pt.X = Convert.ToInt32(schemaView.Bounds.Left + 200);
+				pt.Y = Convert.ToInt32(schemaView.Bounds.Top + 200);
+				mainWindow.Mouse.Location = pt;
+
+				System.Threading.Thread.Sleep(500);
+				Core.InputDevices.Mouse.LeftUp();
+				System.Threading.Thread.Sleep(500);
+
+				//Select Selection tool
+				toolbox.Select(ToolBoxWrapper.Entries.Selection);
+
+				//Select object
+				pt.X = Convert.ToInt32(schemaView.Bounds.Left + 150);
+				pt.Y = Convert.ToInt32(schemaView.Bounds.Top + 150);
+				mainWindow.Mouse.Location = pt;
+				mainWindow.Mouse.Click();
+
+				//Check values of property grid
+				Assert.IsTrue(GetPropertyGridValue("Height") as string == "100");
+				Assert.IsTrue(GetPropertyGridValue("Width") as string == "100");
+			}
+		}
+
+		[Test]
+		public void CreatePolyline()
+		{
+			CreateNewSchema();
 			Panel schemaView = mainWindow.Get<Panel>(SearchCriteria.ByAutomationId("SchemaCanvas"));
 			Assert.IsNotNull(schemaView);
+			ToolBoxWrapper toolbox = new ToolBoxWrapper(mainWindow);
+
+			toolbox.Select(ToolBoxWrapper.Entries.Polyline);
 
 			//Draw rect
 			System.Drawing.Point pt = new System.Drawing.Point();
-			
+
 			pt.X = Convert.ToInt32(schemaView.Bounds.Left + 100);
 			pt.Y = Convert.ToInt32(schemaView.Bounds.Top + 100);
 			mainWindow.Mouse.Location = pt;
-
-			Core.InputDevices.Mouse.LeftDown();
+			mainWindow.Mouse.Click();
 
 			pt.X = Convert.ToInt32(schemaView.Bounds.Left + 200);
 			pt.Y = Convert.ToInt32(schemaView.Bounds.Top + 200);
 			mainWindow.Mouse.Location = pt;
+			mainWindow.Mouse.Click();
 
-			System.Threading.Thread.Sleep(500);
-			Core.InputDevices.Mouse.LeftUp();
-			System.Threading.Thread.Sleep(500);
+			pt.X = Convert.ToInt32(schemaView.Bounds.Left + 300);
+			pt.Y = Convert.ToInt32(schemaView.Bounds.Top + 100);
+			mainWindow.Mouse.Location = pt;
+			mainWindow.Mouse.Click();
+
+			mainWindow.Mouse.RightClick();
+			
 
 			//Select Selection tool
-			ClickToolboxItem(toolbox, 0, true); //Select "Editing Tools" group
-			ClickToolboxItem(toolbox, 1, true); //Select "Selection" tool
+			toolbox.Select(ToolBoxWrapper.Entries.Selection);
 
 			//Select object
-			pt.X = Convert.ToInt32(schemaView.Bounds.Left + 150);
-			pt.Y = Convert.ToInt32(schemaView.Bounds.Top + 150);
+			pt.X = Convert.ToInt32(schemaView.Bounds.Left + 100);
+			pt.Y = Convert.ToInt32(schemaView.Bounds.Top + 100);
 			mainWindow.Mouse.Location = pt;
 			mainWindow.Mouse.Click();
 
 			//Check values of property grid
-			Assert.IsTrue(GetPropertyGridValue("Height") as string == "101");
-			Assert.IsTrue(GetPropertyGridValue("Width") as string == "101");
+			Assert.IsTrue(GetPropertyGridValue("Height") as string == "100");
+			Assert.IsTrue(GetPropertyGridValue("Width") as string == "200");
 		}
 	}
 }
