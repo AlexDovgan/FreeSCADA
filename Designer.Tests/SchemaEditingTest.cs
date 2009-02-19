@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using White;
-using NUnit.Framework;
+using System.Windows.Automation;
 using Core;
 using Core.UIItems;
-using White.NUnit;
-using System.Windows;
 using Core.UIItems.Finders;
-using System.Windows.Automation;
+using NUnit.Framework;
 
 namespace Designer.Tests
 {
@@ -29,30 +24,13 @@ namespace Designer.Tests
 			Assert.IsNotNull(mainWindow);
 		}
 
-		protected void CreateNewSchema()
-		{
-			IUIItem new_schema_button = mainWindow.Get(SearchCriteria.ByText("New Schema"));
-			Assert.IsNotNull(new_schema_button);
-			System.Drawing.Point pt = new System.Drawing.Point(System.Convert.ToInt32(new_schema_button.Location.X) + 5, System.Convert.ToInt32(new_schema_button.Location.Y) + 5);
-			mainWindow.Mouse.Click(pt);
-		}
-
 		[TearDown]
 		public void TearDown()
 		{
 			mainWindow.Close();
 
 			//Check that there is Save dialog
-			Core.UIItems.WindowItems.Window saveDlg = null;
-			foreach (Core.UIItems.WindowItems.Window wnd in app.GetWindows())
-			{
-				if (wnd.PrimaryIdentification == "SaveDocumentsDialog")
-				{
-					saveDlg = wnd;
-					break;
-				}
-			}
-
+			Core.UIItems.WindowItems.Window saveDlg = Helpers.FindTopWindow(app, "SaveDocumentsDialog");
 			if (saveDlg != null)
 			{
 				Button saveDlgNoBtn = saveDlg.Get<Button>(SearchCriteria.ByAutomationId("noButton"));
@@ -62,24 +40,6 @@ namespace Designer.Tests
 
 			Assert.IsTrue(mainWindow.IsClosed);
 			Assert.IsTrue(app.HasExited);
-		}
-
-		object GetPropertyGridValue(string Name)
-		{
-			Panel propertyView = mainWindow.Get<Panel>(SearchCriteria.ByAutomationId("propertyGrid"));
-			Assert.IsNotNull(propertyView);
-			System.Windows.Automation.AutomationElement elem = propertyView.GetElement(SearchCriteria.ByControlType(System.Windows.Automation.ControlType.Table));
-			Assert.IsNotNull(elem);
-
-			Core.UIItems.TableItems.Table table = new Core.UIItems.TableItems.Table(elem, new Core.UIItems.Actions.ProcessActionListener(elem));
-			Assert.IsNotNull(table);
-
-			System.Windows.Automation.AutomationElement row = table.GetElement(SearchCriteria.ByText(Name));
-			Assert.IsNotNull(row);
-
-			object obj = row.GetCurrentPropertyValue(ValuePattern.ValueProperty);
-			Assert.IsNotNull(obj);
-			return obj;
 		}
 
 		[Test]
@@ -99,7 +59,7 @@ namespace Designer.Tests
 			
 			foreach(ToolBoxWrapper.Entries entry in elements)
 			{
-				CreateNewSchema();
+                Helpers.CreateNewSchema(mainWindow);
 				Panel schemaView = mainWindow.Get<Panel>(SearchCriteria.ByAutomationId("SchemaCanvas"));
 				Assert.IsNotNull(schemaView);
 				ToolBoxWrapper toolbox = new ToolBoxWrapper(mainWindow);
@@ -133,15 +93,15 @@ namespace Designer.Tests
 				mainWindow.Mouse.Click();
 
 				//Check values of property grid
-				Assert.IsTrue(GetPropertyGridValue("Height") as string == "100");
-				Assert.IsTrue(GetPropertyGridValue("Width") as string == "100");
+				Assert.IsTrue(Helpers.GetPropertyGridValue(mainWindow, "Height") as string == "100");
+                Assert.IsTrue(Helpers.GetPropertyGridValue(mainWindow, "Width") as string == "100");
 			}
 		}
 
 		[Test]
 		public void CreatePolyline()
 		{
-			CreateNewSchema();
+            Helpers.CreateNewSchema(mainWindow);
 			Panel schemaView = mainWindow.Get<Panel>(SearchCriteria.ByAutomationId("SchemaCanvas"));
 			Assert.IsNotNull(schemaView);
 			ToolBoxWrapper toolbox = new ToolBoxWrapper(mainWindow);
@@ -179,8 +139,8 @@ namespace Designer.Tests
 			mainWindow.Mouse.Click();
 
 			//Check values of property grid
-			Assert.IsTrue(GetPropertyGridValue("Height") as string == "100");
-			Assert.IsTrue(GetPropertyGridValue("Width") as string == "200");
+            Assert.IsTrue(Helpers.GetPropertyGridValue(mainWindow, "Height") as string == "100");
+            Assert.IsTrue(Helpers.GetPropertyGridValue(mainWindow, "Width") as string == "200");
 		}
 	}
 }

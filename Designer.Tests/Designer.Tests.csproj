@@ -59,6 +59,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindingEditingTest.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="SaveLoadFunctionalityTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchemaEditingTest.cs" />
