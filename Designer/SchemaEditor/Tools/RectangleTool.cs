@@ -11,6 +11,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     /// </summary>
     class RectangleTool : BaseTool
     {
+        Rect rect;
 
         Point startPos;
         bool isDragged;
@@ -48,7 +49,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 else
                     rectStart = startPos;
  
-                Rect rect = new Rect(rectStart, v);
+                rect = new Rect(rectStart, v);
                 drawingContext.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 1), rect);
                 drawingContext.Close();
             }
@@ -59,14 +60,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
              if (isDragged)
              {
-                Rect b = VisualTreeHelper.GetContentBounds(objectPrview);
-                if (!b.IsEmpty)
+                //Rect b = VisualTreeHelper.GetContentBounds(objectPrview);
+                if (!rect.IsEmpty)
                 {
                     Rectangle r = new Rectangle();
-                    Canvas.SetLeft(r, b.X);
-                    Canvas.SetTop(r, b.Y);
-                    r.Width = b.Width;
-                    r.Height = b.Height;
+                    Canvas.SetLeft(r, rect.X);
+                    Canvas.SetTop(r, rect.Y);
+                    r.Width = rect.Width;
+                    r.Height = rect.Height;
                     r.Stroke = Brushes.Black;
                     r.Fill = Brushes.Gray;
                     NotifyObjectCreated(r);

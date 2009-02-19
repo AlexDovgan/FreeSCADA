@@ -6,6 +6,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
     class TextBoxTool:BaseTool
     {
+        Rect rect;
         Point startPos;
         bool isDragged;
         DrawingVisual objectPrview = new DrawingVisual();
@@ -38,7 +39,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 else
                     rectStart = startPos;
 
-                Rect rect = new Rect(rectStart, v);
+                rect= new Rect(rectStart, v);
                 drawingContext.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 1), rect);
                 drawingContext.Close();
             }
@@ -49,15 +50,15 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             if (isDragged)
             {
-                Rect b = VisualTreeHelper.GetContentBounds(objectPrview);
-                if (!b.IsEmpty)
+                //Rect b = VisualTreeHelper.GetContentBounds(objectPrview);
+                if (!rect.IsEmpty)
                 {
                     TextBlock text = new TextBlock();
-                    Canvas.SetLeft(text, b.X);
-                    Canvas.SetTop(text, b.Y);
+                    Canvas.SetLeft(text, rect.X);
+                    Canvas.SetTop(text, rect.Y);
           
-                    text.Width = b.Width;
-                    text.Height = b.Height;
+                    text.Width = rect.Width;
+                    text.Height = rect.Height;
                     text.Text = "You can write text here"; 
                     text.TextWrapping = TextWrapping.Wrap;
                     NotifyObjectCreated(text);

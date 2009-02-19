@@ -12,7 +12,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     /// 
     class EllipseTool : BaseTool
     {
-
+        Vector vec;
         Point startPos;
         bool isDragged;
         DrawingVisual objectPrview = new DrawingVisual();
@@ -26,11 +26,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             if (isDragged)
             {
-                Vector v = e.GetPosition(this) - startPos;
+                vec = e.GetPosition(this) - startPos;
                 DrawingContext drawingContext = objectPrview.RenderOpen();
                 if ((System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Control) != 0)
-                    v = new Vector(System.Math.Max(v.X, v.Y), System.Math.Max(v.X, v.Y));
-                drawingContext.DrawEllipse(Brushes.Gray, new Pen(Brushes.Black, 1), startPos, v.X, v.Y);
+                    vec = new Vector(System.Math.Max(vec.X, vec.Y), System.Math.Max(vec.X, vec.Y));
+                drawingContext.DrawEllipse(Brushes.Gray, new Pen(Brushes.Black, 1), startPos, vec.X, vec.Y);
                 drawingContext.Close();
            }
 
@@ -40,14 +40,15 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             if (isDragged)
             {
-                Rect b = VisualTreeHelper.GetContentBounds(objectPrview);
-                if (!b.IsEmpty)
+                //Rect b = VisualTreeHelper.GetContentBounds(objectPrview);
+
+                if (vec.Length>0)
                 {
                     Ellipse el = new Ellipse();
-                    Canvas.SetLeft(el, b.X);
-                    Canvas.SetTop(el, b.Y);
-                    el.Width = b.Width;
-                    el.Height = b.Height;
+                    Canvas.SetLeft(el, startPos.X - vec.X);
+                    Canvas.SetTop(el, startPos.Y - vec.Y);
+                    el.Width = vec.X*2;
+                    el.Height = vec.Y*2;
                     el.Stroke = Brushes.Black;
                     el.Fill = Brushes.Gray;
                     NotifyObjectCreated(el);
