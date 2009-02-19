@@ -67,15 +67,24 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 NotifyToolFinished();
             if (pointsCollection.Count > 1)
             {
-                Rect b = VisualTreeHelper.GetContentBounds(objectPrview);
+                
                 Polyline poly = new Polyline();
-                for (int i = 0; i < pointsCollection.Count; i++)
+                Rect b = new Rect();
+                b.Y = b.X = System.Double.MaxValue;
+                b.Width = b.Height = 0;
+                foreach(Point p in pointsCollection)
                 {
-                    Point p=pointsCollection[i];
-                    p.X -= b.X;
-                    p.Y -= b.Y;
-                    pointsCollection[i] = p;
+                    if (p.X < b.X)
+                        b.X = p.X;
+                    if (p.Y < b.Y)
+                        b.Y = p.Y;
+                    if (p.X > b.Width)
+                        b.Width = p.X;
+                    if (p.Y > b.Height)
+                        b.Height = p.Y;
                 }
+                b.Width -= b.X;
+                b.Height -= b.Y;
                 poly.Points = pointsCollection.Clone();
                 pointsCollection.Clear();
                 Canvas.SetLeft(poly, b.X);
