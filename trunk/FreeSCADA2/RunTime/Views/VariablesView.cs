@@ -10,10 +10,10 @@ namespace FreeSCADA.RunTime.Views
 {
 	class VariablesView : DocumentView
 	{
-		private System.Windows.Forms.BindingSource bindingSource1;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private SourceGrid.Grid channelsGrid;
-		private System.ComponentModel.IContainer components;
+        private SplitContainer splitContainer1;
+        private ReadOnlyPropertyGrid propertyGrid;
+		//private System.ComponentModel.IContainer components;
 
         public VariablesView()
 		{
@@ -24,31 +24,13 @@ namespace FreeSCADA.RunTime.Views
 
 		private void InitializeComponent()
 		{
-            this.components = new System.ComponentModel.Container();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.channelsGrid = new SourceGrid.Grid();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.propertyGrid = new ReadOnlyPropertyGrid();   //System.Windows.Forms.PropertyGrid();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToResizeRows = false;
-            this.dataGridView1.AutoGenerateColumns = false;
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.DataSource = this.bindingSource1;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(744, 400);
-            this.dataGridView1.TabIndex = 1;
             // 
             // channelsGrid
             // 
@@ -57,23 +39,53 @@ namespace FreeSCADA.RunTime.Views
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.channelsGrid.AutoStretchColumnsToFitWidth = true;
             this.channelsGrid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.channelsGrid.Location = new System.Drawing.Point(0, 0);
+            this.channelsGrid.Location = new System.Drawing.Point(3, 3);
             this.channelsGrid.Name = "channelsGrid";
             this.channelsGrid.OptimizeMode = SourceGrid.CellOptimizeMode.ForRows;
             this.channelsGrid.SelectionMode = SourceGrid.GridSelectionMode.Row;
-            this.channelsGrid.Size = new System.Drawing.Size(744, 400);
+            this.channelsGrid.Size = new System.Drawing.Size(567, 394);
             this.channelsGrid.TabIndex = 2;
             this.channelsGrid.TabStop = true;
             this.channelsGrid.ToolTipText = "";
             // 
-            // ArchiverTableView
+            // splitContainer1
+            // 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.channelsGrid);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.propertyGrid);
+            this.splitContainer1.Size = new System.Drawing.Size(744, 400);
+            this.splitContainer1.SplitterDistance = 573;
+            this.splitContainer1.TabIndex = 3;
+            // 
+            // propertyGrid
+            // 
+            this.propertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            //this.propertyGrid.Enabled = false;
+            this.propertyGrid.Location = new System.Drawing.Point(3, 3);
+            this.propertyGrid.Name = "propertyGrid";
+            this.propertyGrid.Size = new System.Drawing.Size(163, 393);
+            this.propertyGrid.TabIndex = 0;
+            // 
+            // VariablesView
             // 
             this.ClientSize = new System.Drawing.Size(744, 400);
-            this.Controls.Add(this.channelsGrid);
-            this.Controls.Add(this.dataGridView1);
-            this.Name = "ArchiverTableView";
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.Controls.Add(this.splitContainer1);
+            this.Name = "VariablesView";
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
 		}
@@ -101,8 +113,20 @@ namespace FreeSCADA.RunTime.Views
 
             channelsGrid.AutoStretchColumnsToFitWidth = true;
             channelsGrid.AutoSizeCells();
+            channelsGrid.Selection.EnableMultiSelection = false;
 
             this.FormClosing += new FormClosingEventHandler(VariablesView_FormClosing);
+            this.channelsGrid.Selection.SelectionChanged += new SourceGrid.RangeRegionChangedEventHandler(Selection_SelectionChanged);
+        }
+
+        void Selection_SelectionChanged(object sender, SourceGrid.RangeRegionChangedEventArgs e)
+        {
+            int [] rows = channelsGrid.Selection.GetSelectionRegion().GetRowsIndex();
+            if (rows.Length > 0)
+            {
+                this.propertyGrid.SelectedObject = this.channelsGrid.Rows[rows[0]].Tag;
+                this.propertyGrid.ReadOnly = true;
+            }
         }
 
         private SourceGrid.Cells.Views.Cell GetCategoryCellView()
@@ -152,11 +176,14 @@ namespace FreeSCADA.RunTime.Views
             channelsGrid[rowIndex, 3].Value = channel.ModifyTime;
         }
 
+        delegate void InvokeDelegate();
         void OnChannelValueChanged(object sender, EventArgs e)
         {
             IChannel ch = (IChannel)sender;
             object[] args = { ch, ch.Tag };
             channelsGrid.BeginInvoke(new UpdateChannelDelegate(UpdateChannelFunc), args);
+            if (ch == propertyGrid.SelectedObject)
+                propertyGrid.BeginInvoke(new InvokeDelegate(delegate() { propertyGrid.Refresh(); }));
         }
 
         private void VariablesView_FormClosing(object sender, FormClosingEventArgs e)
