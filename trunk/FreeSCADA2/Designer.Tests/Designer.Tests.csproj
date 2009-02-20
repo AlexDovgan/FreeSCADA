@@ -59,7 +59,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindingDialogWrapper.cs" />
     <Compile Include="BindingEditingTest.cs" />
+    <Compile Include="GridWrapper.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="SaveLoadFunctionalityTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

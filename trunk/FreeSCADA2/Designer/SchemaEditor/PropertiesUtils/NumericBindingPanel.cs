@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Windows;
 using System.Windows.Data;
 using FreeSCADA.Common.Schema;
+using FreeSCADA.Common;
 using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
@@ -17,7 +18,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		{
 			InitializeComponent();
 			label3.ForeColor = Color.Red;
-			label4.Text = "";
+			channelNameLabel.Text = "";
 		}
 
 		public override void AddChannel(IChannel channel)
@@ -27,7 +28,9 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				this.channel = channel;
 
 				label3.ForeColor = Color.FromKnownColor(KnownColor.ControlText);
-				label4.Text = channel.Name;
+				
+                string plugName = Env.Current.CommunicationPlugins[channel.PluginId].Name;
+                channelNameLabel.Text = string.Format("{0} [{1}]", channel.Name, plugName);
 			}
 		}
 
