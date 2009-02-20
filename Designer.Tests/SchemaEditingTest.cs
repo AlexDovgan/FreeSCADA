@@ -3,6 +3,7 @@ using System.Windows.Automation;
 using Core;
 using Core.UIItems;
 using Core.UIItems.Finders;
+using Core.UIItems.MenuItems;
 using NUnit.Framework;
 
 namespace Designer.Tests
@@ -67,26 +68,13 @@ namespace Designer.Tests
 				toolbox.Select(entry);
 
 				//Draw rect
-				System.Drawing.Point pt = new System.Drawing.Point();
-				
-				pt.X = Convert.ToInt32(schemaView.Bounds.Left + 100);
-				pt.Y = Convert.ToInt32(schemaView.Bounds.Top + 100);
-				mainWindow.Mouse.Location = pt;
-
-				Core.InputDevices.Mouse.LeftDown();
-
-				pt.X = Convert.ToInt32(schemaView.Bounds.Left + 200);
-				pt.Y = Convert.ToInt32(schemaView.Bounds.Top + 200);
-				mainWindow.Mouse.Location = pt;
-
-				System.Threading.Thread.Sleep(500);
-				Core.InputDevices.Mouse.LeftUp();
-				System.Threading.Thread.Sleep(500);
+                DoRectCreationByMouse(schemaView, 100, 100, 200, 200);
 
 				//Select Selection tool
 				toolbox.Select(ToolBoxWrapper.Entries.Selection);
 
 				//Select object
+                System.Drawing.Point pt = new System.Drawing.Point();
 				pt.X = Convert.ToInt32(schemaView.Bounds.Left + 150);
 				pt.Y = Convert.ToInt32(schemaView.Bounds.Top + 150);
 				mainWindow.Mouse.Location = pt;
@@ -97,6 +85,25 @@ namespace Designer.Tests
                 Assert.IsTrue(Helpers.GetPropertyGridValue(mainWindow, "Width") as string == "100");
 			}
 		}
+
+        private void DoRectCreationByMouse(Panel schemaView, int x1, int y1, int x2, int y2)
+        {
+            System.Drawing.Point pt = new System.Drawing.Point();
+
+            pt.X = Convert.ToInt32(schemaView.Bounds.Left + x1);
+            pt.Y = Convert.ToInt32(schemaView.Bounds.Top + y1);
+            mainWindow.Mouse.Location = pt;
+
+            Core.InputDevices.Mouse.LeftDown();
+
+            pt.X = Convert.ToInt32(schemaView.Bounds.Left + x2);
+            pt.Y = Convert.ToInt32(schemaView.Bounds.Top + y2);
+            mainWindow.Mouse.Location = pt;
+
+            System.Threading.Thread.Sleep(500);
+            Core.InputDevices.Mouse.LeftUp();
+            System.Threading.Thread.Sleep(500);
+        }
 
 		[Test]
 		public void CreatePolyline()
@@ -142,5 +149,43 @@ namespace Designer.Tests
             Assert.IsTrue(Helpers.GetPropertyGridValue(mainWindow, "Height") as string == "100");
             Assert.IsTrue(Helpers.GetPropertyGridValue(mainWindow, "Width") as string == "200");
 		}
+
+        /// <summary>
+        /// There is a bug, when copy, cut and binding commands are not available right
+        /// after element creation
+        /// </summary>
+        [Test]
+        public void CheckCommandsWithoutSelectionTool()
+        {
+            Helpers.CreateNewSchema(mainWindow);
+            Panel schemaView = mainWindow.Get<Panel>(SearchCriteria.ByAutomationId("SchemaCanvas"));
+            Assert.IsNotNull(schemaView);
+            ToolBoxWrapper toolbox = new ToolBoxWrapper(mainWindow);
+
+            toolbox.Select(ToolBoxWrapper.Entries.Rectangle);
+
+            //Draw rect
+            DoRectCreationByMouse(schemaView, 100, 100, 200, 200);
+
+
+            Menu editMenu = mainWindow.MenuBar.MenuItem("Edit");
+            Assert.IsNotNull(editMenu);
+            editMenu.Click();
+            
+            Menu cutCmd = editMenu.SubMenu("Cut");
+            Assert.IsNotNull(cutCmd);
+            Assert.IsTrue(cutCmd.Visible);
+            Assert.IsTrue(cutCmd.Enabled);
+
+            Menu copyCmd = editMenu.SubMenu("Copy");
+            Assert.IsNotNull(copyCmd);
+            Assert.IsTrue(copyCmd.Visible);
+            Assert.IsTrue(copyCmd.Enabled);
+
+            Menu bindCmd = editMenu.SubMenu("Associate with data...");
+            Assert.IsNotNull(bindCmd);
+            Assert.IsTrue(bindCmd.Visible);
+            Assert.IsTrue(bindCmd.Enabled);
+        }
 	}
 }

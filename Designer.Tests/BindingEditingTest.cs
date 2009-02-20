@@ -60,6 +60,11 @@ namespace Designer.Tests
 
             addButton.Click();
 
+            //Change type to "Ramp channel"
+            GridWrapper grid = new GridWrapper(mainWindow, simulatorDlg.Get(SearchCriteria.ByAutomationId("grid")));
+            grid.MoveToCell(0, 1);
+            grid.Select(2);
+
             Button okButton = simulatorDlg.Get<Button>(SearchCriteria.ByAutomationId("okButton"));
             Assert.IsNotNull(okButton);
 
@@ -105,13 +110,18 @@ namespace Designer.Tests
             editMenu.Click();
             editMenu.SubMenu("Associate with data...").Click();
 
-            Window bindingDlg = Helpers.FindTopWindow(app, "CommonBindingDialog");
-            Assert.IsNotNull(editMenu);
+            //Tune binding
+            BindingDialogWrapper bindingDlg = new BindingDialogWrapper(app);
+            bindingDlg.SelectProperty("Height");
+            bindingDlg.CreateBinding("Bind to numeric value");
+            //bindingDlg.CreateBinding("Numeric expression binding");
 
-            Button okButton = bindingDlg.Get<Button>(SearchCriteria.ByAutomationId("saveButton"));
-            Assert.IsNotNull(okButton);
+            bindingDlg.DblClickChannel("Data Simulator", "variable_1");
+            
+            Label channelNameLabel = bindingDlg.Window.Get<Label>(SearchCriteria.ByAutomationId("channelNameLabel"));
+            Assert.AreEqual("variable_1 [Data Simulator]", channelNameLabel.Text);
 
-            okButton.Click();
+            bindingDlg.Close(true);
         }
     }
 }
