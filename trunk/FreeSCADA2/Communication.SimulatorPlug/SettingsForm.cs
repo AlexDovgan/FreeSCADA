@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using FreeSCADA.Common;
+using System.IO;
+using Alsing.SourceCode;
 
 namespace FreeSCADA.Communication.SimulatorPlug
 {
@@ -42,6 +44,10 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			grid[0, 1] = new SourceGrid.Cells.ColumnHeader("Type");
 			grid[0, 2] = new SourceGrid.Cells.ColumnHeader("Read only");
 
+            string iPyFormatXML = (new StreamReader(new MemoryStream(global::FreeSCADA.Communication.SimulatorPlug.Properties.Resources.IronPython))).ReadToEnd();
+            SyntaxDefinition syntax = SyntaxDefinition.FromSyntaxXml(iPyFormatXML);
+            expressionEditBox.Document.Parser.Init(syntax);
+
 			grid.Selection.SelectionChanged += new SourceGrid.RangeRegionChangedEventHandler(OnSelectionChanged);
 
 			LoadChannels();
@@ -50,7 +56,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			grid.AutoSizeCells();
 
 			InitializeTooltips();
-		}
+        }
 
 		void InitializeTooltips()
 		{
@@ -68,7 +74,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 						"      result = 1\n"+
 						"   else:\n"+
 						"      result = 0";
-			expressionTooltip.SetToolTip(expressionEditBox, tip);
+            expressionTooltip.SetToolTip(tipLabel, tip);
 		}
 
 		void OnSelectionChanged(object sender, SourceGrid.RangeRegionChangedEventArgs e)
@@ -108,15 +114,15 @@ namespace FreeSCADA.Communication.SimulatorPlug
 				codeTemplateButton.Enabled = true;
 
 				if (grid.Rows[row].Tag != null)
-					expressionEditBox.Text = (string)grid.Rows[row].Tag;
+					expressionEditBox.Document.Text = (string)grid.Rows[row].Tag;
 				else
-					expressionEditBox.Text = "";
+                    expressionEditBox.Document.Text = "";
 			}
 			else
 			{
 				expressionEditBox.Enabled = false;
 				codeTemplateButton.Enabled = false;
-				expressionEditBox.Text = "";
+                expressionEditBox.Document.Text = "";
 			}
 		}
 
@@ -250,7 +256,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 		{
 			foreach (int row in grid.Selection.GetSelectionRegion().GetRowsIndex())
 			{
-				grid.Rows[row].Tag = expressionEditBox.Text;
+                grid.Rows[row].Tag = expressionEditBox.Document.Text;
 			}
 		}
 
@@ -269,7 +275,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 				"    else: result = 1\r\n"+
 				"else: result = "+channelName+"\r\n";
 
-			expressionEditBox.Text += template;
+			expressionEditBox.Document.Text += template;
 		}
 
 		private void counterToolStripMenuItem_Click(object sender, EventArgs e)
@@ -278,7 +284,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 				"counter_var = counter_var + 1\r\n" +
 				"result = counter_var\r\n";
 
-			expressionEditBox.Text += template;
+			expressionEditBox.Document.Text += template;
 		}
 
 		private void codeTemplateButton_Click(object sender, EventArgs e)

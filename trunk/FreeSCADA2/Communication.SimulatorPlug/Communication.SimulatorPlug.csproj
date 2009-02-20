@@ -55,6 +55,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\IronPython\Microsoft.Scripting.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Puzzle.SyntaxBox.NET3.5, Version=1.4.10.36575, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\SyntaxBox\Puzzle.SyntaxBox.NET3.5.dll</HintPath>
+    </Reference>
     <Reference Include="SourceGrid, Version=4.11.2887.1415, Culture=neutral, PublicKeyToken=df6f5e538749e85d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\SourceGrid4_11\SourceGrid.dll</HintPath>
@@ -68,6 +72,11 @@
   <ItemGroup>
     <Compile Include="ChannelFactory.cs" />
     <Compile Include="ComputableChannel.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SinusDoubleChannel.cs" />
     <Compile Include="RampIntegerChannel.cs" />
     <Compile Include="SawIntegerChannel.cs" />
@@ -92,10 +101,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\IronPython.syn" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
