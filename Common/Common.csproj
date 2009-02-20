@@ -84,6 +84,9 @@
     <Compile Include="NullCommand.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadOnlyPropertyGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Schema\Actions\BaseAction.cs" />
     <Compile Include="Schema\Actions\ActionsCollection.cs" />
     <Compile Include="Schema\Actions\MoveAction.cs" />

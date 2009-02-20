@@ -112,6 +112,7 @@ namespace FreeSCADA.RunTime
                     break;
             }
             documentViews.Add(view);
+            view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
             view.Show(dockPanel, DockState.Document);
             currentDocument = (DocumentView)dockPanel.ActiveDocument;
         }
