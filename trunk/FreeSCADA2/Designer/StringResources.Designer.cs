@@ -255,6 +255,42 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move the object to the bottom of the schema.
+        /// </summary>
+        internal static string CommandZMoveBottomDescription {
+            get {
+                return ResourceManager.GetString("CommandZMoveBottomDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ToBottom.
+        /// </summary>
+        internal static string CommandZMoveBottomName {
+            get {
+                return ResourceManager.GetString("CommandZMoveBottomName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move the object to the top of the schema.
+        /// </summary>
+        internal static string CommandZMoveTopDescription {
+            get {
+                return ResourceManager.GetString("CommandZMoveTopDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ToTop.
+        /// </summary>
+        internal static string CommandZMoveTopName {
+            get {
+                return ResourceManager.GetString("CommandZMoveTopName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zoom.
         /// </summary>
         internal static string CommandZoomDescription {
@@ -472,7 +508,7 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Image.
+        ///   Looks up a localized string similar to Image Tool.
         /// </summary>
         internal static string ToolImageControl {
             get {

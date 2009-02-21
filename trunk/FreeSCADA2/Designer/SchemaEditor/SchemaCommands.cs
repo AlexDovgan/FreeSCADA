@@ -111,6 +111,114 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 		#endregion ICommand Members
 	}
 
+    class ZMoveTopCommand : SchemaCommand
+    {
+        public override void CheckApplicability()
+        {
+            SelectionTool tool = ControlledObject as SelectionTool;
+            if (tool != null && tool.SelectedObjects.Count > 0)
+                CanExecute = true;
+            else
+                CanExecute = false;
+        }
+
+        #region ICommand Members
+
+        public override void Execute()
+        {
+            base.Execute();
+            SelectionTool tool = ControlledObject as SelectionTool;
+            Canvas currCanvas = tool.AdornedElement as Canvas;
+            List<UIElement> sortedList = new List<UIElement>();
+
+            foreach (UIElement uie in currCanvas.Children)
+            {
+                if (tool.SelectedObjects.Contains(uie))
+                {
+                    sortedList.Add(uie);
+                }
+            }
+            foreach (UIElement suie in sortedList)
+            {
+                currCanvas.Children.Remove(suie);
+                currCanvas.Children.Add(suie);
+            }
+        }
+
+        public override string Name
+        {
+            get { return StringResources.CommandZMoveTopName; }
+        }
+
+        public override string Description
+        {
+            get { return StringResources.CommandZMoveTopDescription; }
+        }
+
+        public override Bitmap Icon
+        {
+            get
+            {
+                return global::FreeSCADA.Designer.Properties.Resources.move_object_front;
+            }
+        }
+        #endregion
+    }
+
+    class ZMoveBottomCommand : SchemaCommand
+	{
+		public override void CheckApplicability()
+		{
+			SelectionTool tool = ControlledObject as SelectionTool;
+			if (tool != null && tool.SelectedObjects.Count > 0)
+				CanExecute = true;
+			else
+				CanExecute = false;
+		}
+
+		#region ICommand Members
+
+		public override void Execute()
+		{
+            base.Execute();
+            SelectionTool tool = ControlledObject as SelectionTool;
+            Canvas currCanvas = tool.AdornedElement as Canvas;
+            List<UIElement> sortedList = new List<UIElement>();
+
+            for (int i = currCanvas.Children.Count -1;i >= 0;i--)
+            {
+                if (tool.SelectedObjects.Contains(currCanvas.Children[i]))
+                {
+                    sortedList.Add(currCanvas.Children[i]);
+                }
+            }
+            foreach (UIElement suie in sortedList)
+            {
+                currCanvas.Children.Remove(suie);
+                currCanvas.Children.Insert(0, suie);
+            }
+		}
+
+		public override string Name
+		{
+			get { return StringResources.CommandZMoveBottomName; }
+		}
+
+		public override string Description
+		{
+			get { return StringResources.CommandZMoveBottomDescription; }
+		}
+
+		public override Bitmap Icon
+		{
+			get
+			{
+				return global::FreeSCADA.Designer.Properties.Resources.move_object_back;
+			}
+		}
+		#endregion ICommand Members
+	}
+	
 	class CopyCommand : SchemaCommand
 	{
 		public override void CheckApplicability()
