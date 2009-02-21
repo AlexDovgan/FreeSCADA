@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{93466C99-5637-4243-A01A-7AF12F706889}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -337,6 +337,8 @@
     <None Include="Resources\db_settings.png" />
     <None Include="Resources\mark_bad.png" />
     <None Include="Resources\mark_ok.png" />
+    <Content Include="Resources\move_object_back.png" />
+    <Content Include="Resources\move_object_front.png" />
     <Content Include="Resources\new_file.png" />
     <Content Include="Resources\open_events.png" />
     <Content Include="Resources\open_file.png" />

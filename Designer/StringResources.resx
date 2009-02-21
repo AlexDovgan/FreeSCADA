@@ -323,6 +323,18 @@
   <data name="UntitledSchema" xml:space="preserve">
     <value>Untitled</value>
   </data>
+  <data name="CommandZMoveTopName" xml:space="preserve">
+    <value>To front</value>
+  </data>
+  <data name="CommandZMoveTopDescription" xml:space="preserve">
+    <value>Move the object to the front of the schema</value>
+  </data>
+  <data name="CommandZMoveBottomDescription" xml:space="preserve">
+    <value>Move the object to the back of the schema</value>
+  </data>
+  <data name="CommandZMoveBottomName" xml:space="preserve">
+    <value>To back</value>
+  </data>
   <data name="SolidColorBindingPanelName" xml:space="preserve">
     <value>Solid Color Binding</value>
   </data>
