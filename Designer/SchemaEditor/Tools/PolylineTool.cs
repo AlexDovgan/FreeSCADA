@@ -47,7 +47,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         }
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-
+            UIElement selObj = SelectedObject;
             if (pointsCollection.Count == 0)
                 base.OnPreviewMouseLeftButtonDown(e);
             if (SelectedObject==null)
@@ -56,10 +56,35 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 pointsCollection.Add(e.GetPosition(this));
 
             }
+            // creating a new polyline point when clicking to the line with Ctrl key
+            else if (selObj == SelectedObject && (System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Control) != 0)
+            {
+                if (selObj is Polyline)
+                {
+                    for (int i = 0; i < (selObj as Polyline).Points.Count - 1; i++)
+                    {
+                        // Hit test
+                        LineGeometry lg = new LineGeometry((selObj as Polyline).Points[i], (selObj as Polyline).Points[i + 1]);
+                        EllipseGeometry eg = new EllipseGeometry(e.GetPosition(this), (selObj as Polyline).StrokeThickness, (selObj as Polyline).StrokeThickness);
+                        IntersectionDetail id = eg.FillContainsWithDetail(lg);
+                        if (id == IntersectionDetail.Intersects)
+                        {
+                            // Insert point to the polyline
+                            (selObj as Polyline).Points.Insert(i+1, e.GetPosition(this));
+                            // Rendering (new thumbs)
+                            if (ToolManipulator != null)
+                            {
+                                (ToolManipulator as PolylineEditManipulantor).AddThumb(e.GetPosition(this));
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
             
             e.Handled = false;
-
         }
+
         protected override void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
         {
             ReleaseMouseCapture();
@@ -99,7 +124,15 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             }
             pointsCollection.Clear();
             objectPrview.RenderOpen().Close();
+            e.Handled = true;
         }
+
+        protected override void OnPreviewMouseRightButtonUp(MouseButtonEventArgs e)
+        {
+            // We do not want the context menu when closing line
+            e.Handled = true;
+        }
+
         protected override BaseManipulator CreateToolManipulator(UIElement obj)
         {
             if (obj is Polyline)

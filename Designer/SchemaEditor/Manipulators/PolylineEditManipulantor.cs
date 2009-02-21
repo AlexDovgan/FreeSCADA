@@ -7,7 +7,7 @@ using FreeSCADA.Designer.SchemaEditor.Manipulators.Controls;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
-    class PolylineEditManipulantor:BaseManipulator
+    class PolylineEditManipulantor : BaseManipulator
     {
         //List<PointDragThumb> pointsDrags =new List<PointDragThumb>();
         public PolylineEditManipulantor(UIElement el)
@@ -18,19 +18,20 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         }
         public override void Activate()
         {
-           Polyline poly = AdornedElement as Polyline;
-            
+            Polyline poly = AdornedElement as Polyline;
+
             foreach (Point p in poly.Points)
             {
                 PointDragThumb pd = new PointDragThumb();
                 pd.DragDelta += pointDragDelta;
+                pd.PreviewMouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler(pd_PreviewMouseLeftButtonUp);
                 visualChildren.Add(pd);
             }
             poly.UpdateLayout();
             for (int i = 0; i < poly.Points.Count; i++)
             {
-                Matrix m= poly.GeometryTransform.Value;
-                
+                Matrix m = poly.GeometryTransform.Value;
+
                 Point p = m.Transform(poly.Points[i]);
                 p = poly.TranslatePoint(p, (UIElement)poly.Parent);
                 poly.Points[i] = p;
@@ -53,10 +54,25 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             poly.RenderTransform = t;
             poly.UpdateLayout();
             base.Activate();
-        } 
+        }
+
+        void pd_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Polyline poly = AdornedElement as Polyline;
+            if (poly.Points.Count > 2 && (System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Shift) != 0)
+            {
+                Point p = poly.Points[visualChildren.IndexOf(sender as PointDragThumb)];
+
+                (sender as PointDragThumb).DragDelta -= pointDragDelta;
+                visualChildren.Remove((Visual)sender);
+                poly.Points.Remove(p);
+                poly.UpdateLayout();
+            }
+        }
+
         public override void Deactivate()
         {
-            
+
             Polyline poly = AdornedElement as Polyline;
             Rect b = VisualTreeHelper.GetContentBounds(poly);
             poly.Stretch = Stretch.Fill;
@@ -79,7 +95,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             foreach (PointDragThumb pdt in visualChildren)
             {
                 pdt.DragDelta -= pointDragDelta;
-                
+
             }
             visualChildren.Clear(); ;
             poly.UpdateLayout();
@@ -90,17 +106,17 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             Polyline poly = AdornedElement as Polyline;
             double gridDelta = (double)poly.FindResource("DesignerSettings_GridDelta");
             bool gridOn = (bool)poly.FindResource("DesignerSettings_GridOn");
-            
-            Point p=poly.Points[visualChildren.IndexOf(sender as PointDragThumb)];
-            p.X+=e.HorizontalChange;
-            p.Y+= e.VerticalChange;
+
+            Point p = poly.Points[visualChildren.IndexOf(sender as PointDragThumb)];
+            p.X += e.HorizontalChange;
+            p.Y += e.VerticalChange;
             if (gridOn)
             {
                 p.X -= p.X % gridDelta;
                 p.X -= p.X % gridDelta;
             }
             poly.Points[visualChildren.IndexOf(sender as PointDragThumb)] = p;
-            
+
             InvalidateArrange();
 
         }
@@ -115,23 +131,33 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            Polyline poly = AdornedElement as Polyline;            
+            Polyline poly = AdornedElement as Polyline;
 
             foreach (PointDragThumb pdt in visualChildren)
             {
                 Point p =/*poly.TranslatePoint(*/poly.Points[visualChildren.IndexOf(pdt)];//,this);
-                p.X-=pdt.DesiredSize.Width/2;
-                p.Y-=pdt.DesiredSize.Height/2;
+                p.X -= pdt.DesiredSize.Width / 2;
+                p.Y -= pdt.DesiredSize.Height / 2;
                 pdt.Arrange(new Rect(p, pdt.DesiredSize));
             }
             return finalSize;
         }
 
-        public override  bool IsSelactable(UIElement el)
+        public override bool IsSelactable(UIElement el)
         {
             if (el is Polyline)
                 return true;
             else return false;
+        }
+
+        public void AddThumb(Point p)
+        {
+            Polyline poly = AdornedElement as Polyline;
+
+            PointDragThumb pd = new PointDragThumb();
+            pd.DragDelta += pointDragDelta;
+            visualChildren.Add(pd);
+            poly.UpdateLayout();
         }
     }
 }
