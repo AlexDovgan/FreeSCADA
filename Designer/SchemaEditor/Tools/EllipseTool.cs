@@ -45,10 +45,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 if (vec.Length>0)
                 {
                     Ellipse el = new Ellipse();
-                    Canvas.SetLeft(el, startPos.X - vec.X);
-                    Canvas.SetTop(el, startPos.Y - vec.Y);
-                    el.Width = vec.X*2;
-                    el.Height = vec.Y*2;
+                    Canvas.SetLeft(el, startPos.X - System.Math.Abs(vec.X));
+                    Canvas.SetTop(el, startPos.Y - System.Math.Abs(vec.Y));
+                    el.Width = System.Math.Abs(vec.X*2);
+                    el.Height = System.Math.Abs(vec.Y*2);
                     el.Stroke = Brushes.Black;
                     el.Fill = Brushes.Gray;
                     NotifyObjectCreated(el);
