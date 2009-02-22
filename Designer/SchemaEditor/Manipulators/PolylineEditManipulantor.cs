@@ -113,7 +113,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             if (gridOn)
             {
                 p.X -= p.X % gridDelta;
-                p.X -= p.X % gridDelta;
+                p.Y -= p.Y % gridDelta;
             }
             poly.Points[visualChildren.IndexOf(sender as PointDragThumb)] = p;
 
