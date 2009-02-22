@@ -202,12 +202,8 @@ namespace FreeSCADA.Designer.Views
             DocumentCommands.Add(new CommandInfo(new GroupCommand()));
             DocumentCommands.Add(new CommandInfo(new UngroupCommand()));
 			DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
-            ICommand cmd = new ZMoveTopCommand();
-            cmd.Executing += new EventHandler(Command_Executing);
-            DocumentCommands.Add(new CommandInfo(cmd));
-            cmd = new ZMoveBottomCommand();
-            cmd.Executing += new EventHandler(Command_Executing);
-            DocumentCommands.Add(new CommandInfo(cmd)); 
+            DocumentCommands.Add(new CommandInfo(new ZMoveTopCommand()));
+            DocumentCommands.Add(new CommandInfo(new ZMoveBottomCommand())); 
             DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
 			DocumentCommands.Add(new CommandInfo(bindingCommand));
 
@@ -353,11 +349,6 @@ namespace FreeSCADA.Designer.Views
         {
             undoBuff.AddCommand(new ModifyGraphicsObject((System.Windows.UIElement)sender));
             UpdateXamlView();
-        }
-
-        void Command_Executing(object sender, EventArgs e)
-        {
-            return;
         }
 
         void WpfKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
