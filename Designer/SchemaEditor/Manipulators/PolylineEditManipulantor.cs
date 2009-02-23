@@ -24,7 +24,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             {
                 PointDragThumb pd = new PointDragThumb();
                 pd.DragDelta += pointDragDelta;
-                pd.PreviewMouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler(pd_PreviewMouseLeftButtonUp);
+                pd.PreviewMouseLeftButtonUp += pd_PreviewMouseLeftButtonUp;
                 visualChildren.Add(pd);
             }
             poly.UpdateLayout();
@@ -64,6 +64,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 Point p = poly.Points[visualChildren.IndexOf(sender as PointDragThumb)];
 
                 (sender as PointDragThumb).DragDelta -= pointDragDelta;
+                (sender as PointDragThumb).PreviewMouseLeftButtonUp -= pd_PreviewMouseLeftButtonUp;
                 visualChildren.Remove((Visual)sender);
                 poly.Points.Remove(p);
                 poly.UpdateLayout();
@@ -95,7 +96,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             foreach (PointDragThumb pdt in visualChildren)
             {
                 pdt.DragDelta -= pointDragDelta;
-
+                pdt.PreviewMouseLeftButtonUp -= pd_PreviewMouseLeftButtonUp;
             }
             visualChildren.Clear(); ;
             poly.UpdateLayout();
@@ -156,6 +157,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 
             PointDragThumb pd = new PointDragThumb();
             pd.DragDelta += pointDragDelta;
+            pd.PreviewMouseLeftButtonUp += pd_PreviewMouseLeftButtonUp;
             visualChildren.Add(pd);
             poly.UpdateLayout();
         }

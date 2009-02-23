@@ -42,6 +42,8 @@ namespace FreeSCADA.Common.Schema.Actions
                 
                 return true;
             }
+            else
+                Env.Current.Logger.LogWarning(string.Format("BaseAction: Failed to activate Channel '{0}' for an action on object Name: '{1}', Type {2}", ActionChannelName, obj.Name, obj.GetType()));
             return false;
         }
         public void DeactivateAction()
