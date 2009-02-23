@@ -62,7 +62,7 @@
             this.grid.OptimizeMode = SourceGrid.CellOptimizeMode.ForRows;
             this.grid.RowsCount = 1;
             this.grid.SelectionMode = SourceGrid.GridSelectionMode.Row;
-            this.grid.Size = new System.Drawing.Size(609, 178);
+            this.grid.Size = new System.Drawing.Size(609, 177);
             this.grid.TabIndex = 0;
             this.grid.TabStop = true;
             this.grid.ToolTipText = "";
@@ -70,7 +70,7 @@
             // addButton
             // 
             this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.addButton.Location = new System.Drawing.Point(8, 157);
+            this.addButton.Location = new System.Drawing.Point(8, 158);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(75, 23);
             this.addButton.TabIndex = 1;
@@ -81,7 +81,7 @@
             // removeButton
             // 
             this.removeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.removeButton.Location = new System.Drawing.Point(89, 157);
+            this.removeButton.Location = new System.Drawing.Point(89, 158);
             this.removeButton.Name = "removeButton";
             this.removeButton.Size = new System.Drawing.Size(75, 23);
             this.removeButton.TabIndex = 1;
@@ -92,7 +92,7 @@
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.Location = new System.Drawing.Point(436, 157);
+            this.okButton.Location = new System.Drawing.Point(436, 158);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 2;
@@ -103,7 +103,7 @@
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.Location = new System.Drawing.Point(517, 157);
+            this.cancelButton.Location = new System.Drawing.Point(517, 158);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 3;
@@ -118,25 +118,23 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.expressionEditBox.AutoListPosition = null;
-            this.expressionEditBox.AutoListSelectedText = "";
+            this.expressionEditBox.AutoListSelectedText = "a123";
             this.expressionEditBox.AutoListVisible = false;
             this.expressionEditBox.BackColor = System.Drawing.Color.White;
             this.expressionEditBox.BorderStyle = Alsing.Windows.Forms.BorderStyle.None;
             this.expressionEditBox.CopyAsRTF = false;
             this.expressionEditBox.Document = this.syntaxDocument1;
-            this.expressionEditBox.Enabled = false;
             this.expressionEditBox.FontName = "Courier new";
             this.expressionEditBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.expressionEditBox.InfoTipCount = 1;
             this.expressionEditBox.InfoTipPosition = null;
-            this.expressionEditBox.InfoTipSelectedIndex = 0;
+            this.expressionEditBox.InfoTipSelectedIndex = 1;
             this.expressionEditBox.InfoTipVisible = false;
             this.expressionEditBox.Location = new System.Drawing.Point(0, 30);
             this.expressionEditBox.LockCursorUpdate = false;
             this.expressionEditBox.Name = "expressionEditBox";
-            this.expressionEditBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.expressionEditBox.ShowScopeIndicator = false;
-            this.expressionEditBox.Size = new System.Drawing.Size(615, 123);
+            this.expressionEditBox.Size = new System.Drawing.Size(615, 124);
             this.expressionEditBox.SmoothScroll = false;
             this.expressionEditBox.SplitviewH = -4;
             this.expressionEditBox.SplitviewV = -4;
@@ -231,7 +229,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.cancelButton);
             this.splitContainer1.Panel2.Controls.Add(this.removeButton);
             this.splitContainer1.Size = new System.Drawing.Size(615, 376);
-            this.splitContainer1.SplitterDistance = 184;
+            this.splitContainer1.SplitterDistance = 183;
             this.splitContainer1.TabIndex = 9;
             // 
             // SettingsForm
