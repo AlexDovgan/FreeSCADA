@@ -20,7 +20,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
     abstract class BaseTool : Adorner
     {
-        BaseManipulator toolManipulator;
+        protected BaseManipulator toolManipulator;
+        protected GridManager gridManager;
         protected VisualCollection visualChildren;
         protected UIElement workedLayer;
   
@@ -120,7 +121,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             drawingContext.Close();
             drawingVisual.Opacity = 0;
             visualChildren.Add(drawingVisual);
-           
+            gridManager = GridManager.GetGridManagerFor(element);
         }
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
@@ -162,6 +163,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         }
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
+        
 			NotifyToolWorking();
         }
         protected override Size ArrangeOverride(Size finalSize)
@@ -251,6 +253,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             return transform;//new MatrixTransform(m); //this code neded for right manipulators zooming
 
         }
+        
        
     }
 

@@ -48,6 +48,7 @@ namespace FreeSCADA.Common.Schema
                 using (Stream ms = Env.Current.Project.GetData("Schemas/" + schemaName + "/xaml"))
                 using (XmlReader xmlReader = XmlReader.Create(ms))
                 {
+                    System.Windows.Forms.Application.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
                     Object obj = XamlReader.Load(xmlReader);
                     if (obj is Canvas)
                     {

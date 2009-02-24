@@ -34,6 +34,7 @@ namespace FreeSCADA.Designer.Views
         
         List<ToolDescriptor> toolsList=new List<ToolDescriptor>();
 		SchemaCommand undoCommand, redoCommand;
+        
 
         public TextBox XamlView
         {
@@ -70,11 +71,19 @@ namespace FreeSCADA.Designer.Views
             set
             {
                 schema = value;
+                if (schema.MainCanvas != null)
+                    schema.MainCanvas.Loaded -= MainCanvas_Loaded;
                 DocumentName = value.Name;
                 wpfSchemaContainer.View= value.MainCanvas;
                 undoBuff = UndoRedoManager.GetUndoBuffer(Schema);
                 undoBuff.CanExecuteChanged += new EventHandler(undoBuff_CanExecuteChanged);
+                value.MainCanvas.Loaded += MainCanvas_Loaded;
             }
+        }
+
+        void MainCanvas_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            GridManager.GetGridManagerFor(schema.MainCanvas);
         }
 
         public Type CurrentTool
@@ -218,6 +227,8 @@ namespace FreeSCADA.Designer.Views
 			DocumentCommands.Add(new CommandInfo(bindingCommand, CommandManager.documentMenuContext));
 
             CreateToolList();
+            
+
             this.wpfSchemaContainer.Child.AllowDrop = true;
             this.wpfSchemaContainer.Child.DragEnter += new System.Windows.DragEventHandler(Child_DragEnter);
             this.wpfSchemaContainer.Child.Drop += new System.Windows.DragEventHandler(Child_Drop);

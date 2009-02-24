@@ -5,78 +5,44 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
-{
+{//drawingContext.DrawEllipse(Brushes.Gray, new Pen(Brushes.Black, 1), startPos, vec.X, vec.Y);
+              
     /// <summary>
     /// Ellipse object creation tool
     /// </summary>
     /// 
-    class EllipseTool : BaseTool
+    class EllipseTool : DrawTool
     {
-        Vector vec;
-        Point startPos;
-        bool isDragged;
-        DrawingVisual objectPrview = new DrawingVisual();
         public EllipseTool(UIElement element)
             : base(element)
         {
-            objectPrview.Opacity = 0.5;
-            visualChildren.Add(objectPrview);
+
         }
-        protected override void OnPreviewMouseMove(MouseEventArgs e)
+
+        protected override void DrawPreview(DrawingContext context, Rect rect)
         {
-            if (isDragged)
-            {
-                vec = e.GetPosition(this) - startPos;
-                DrawingContext drawingContext = objectPrview.RenderOpen();
-                if ((System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Control) != 0)
-                    vec = new Vector(System.Math.Max(vec.X, vec.Y), System.Math.Max(vec.X, vec.Y));
-                drawingContext.DrawEllipse(Brushes.Gray, new Pen(Brushes.Black, 1), startPos, vec.X, vec.Y);
-                drawingContext.Close();
-           }
-
+            context.DrawEllipse(Brushes.Gray, new Pen(Brushes.Black, 1),
+                new Point(rect.X + rect.Width / 2,
+                    rect.Y + rect.Height / 2),
+                rect.Width / 2,
+                rect.Height / 2);
         }
-
-        protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
+        protected override UIElement DrawEnded(Rect rect)
         {
-            if (isDragged)
-            {
-                //Rect b = VisualTreeHelper.GetContentBounds(objectPrview);
-
-                if (vec.Length>0)
-                {
-                    Ellipse el = new Ellipse();
-                    Canvas.SetLeft(el, startPos.X - System.Math.Abs(vec.X));
-                    Canvas.SetTop(el, startPos.Y - System.Math.Abs(vec.Y));
-                    el.Width = System.Math.Abs(vec.X*2);
-                    el.Height = System.Math.Abs(vec.Y*2);
-                    el.Stroke = Brushes.Black;
-                    el.Fill = Brushes.Gray;
-                    NotifyObjectCreated(el);
-                    SelectedObject = el;
-                    
-                }
-                isDragged = false;
-                objectPrview.RenderOpen().Close();
-            }
-            ReleaseMouseCapture();
-            base.OnPreviewMouseLeftButtonUp(e);
+            Ellipse ellipse = new Ellipse();
+            Canvas.SetLeft(ellipse, rect.X);
+            Canvas.SetTop(ellipse, rect.Y);
+            ellipse.Width = rect.Width;
+            ellipse.Height = rect.Height;
+            ellipse.Stroke = Brushes.Black;
+            ellipse.Fill = Brushes.Gray;
+            return ellipse;
         }
 
-        protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
+        protected override SnapOrgin SnapTo
         {
-
-            base.OnPreviewMouseLeftButtonDown(e);
-            if (!e.Handled)
-            {
-                CaptureMouse();
-                startPos = e.GetPosition(this);
-                isDragged = true;
-            }
-
-            e.Handled = false; 
-
+            get { return SnapOrgin.TopLeft; } //Should probably be center but that's not implemented yet.
         }
-        
         
     }
 }

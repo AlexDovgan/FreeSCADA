@@ -7,7 +7,7 @@ using FreeSCADA.Designer.SchemaEditor.Manipulators;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
-    class ControlCreateTool<T>:BaseTool
+    class ControlCreateTool<T>:DrawTool
     {
         Point startPos;
 		bool isDragging;
@@ -21,90 +21,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 throw new Exception();
             visualChildren.Add(boundce);
 		}
-		protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
-		{
-			base.OnPreviewMouseLeftButtonDown(e);
-			if (!e.Handled)
-			{
-				startPos = e.GetPosition(this);
-
-				createdObject = (FrameworkElement)System.Activator.CreateInstance(typeof(T));
-    			createdObject.Opacity = 0.75;
-				Canvas.SetLeft(createdObject, startPos.X);
-				Canvas.SetTop(createdObject, startPos.Y);
-				createdObject.Width = 0;
-				createdObject.Height = 0;
-                if(typeof(T)==typeof(ContentControl)||typeof(T).IsSubclassOf(typeof(ContentControl)))
-                    (createdObject as ContentControl).Content = "Content";
-
-				visualChildren.Add(createdObject);
-
-				isDragging = true;
-				CaptureMouse();
-
-				e.Handled = true;
-			}
-            e.Handled = false;
-		}
-
-		protected override void OnPreviewMouseMove(MouseEventArgs e)
-		{
-			if (isDragging)
-			{
-				Vector v = e.GetPosition(this) - startPos;
-                if (v.X <=0 || v.Y <= 0)
-                {
-                    
-                }
-                else
-                {
-                    createdObject.Width = v.X;
-                    createdObject.Height = v.Y;
-                    
-                    DrawingContext drawingContext = boundce.RenderOpen();
-                    Rect rect = new Rect(startPos, v);
-                    Pen pen = new Pen(Brushes.Black, 0.1);
-                    pen.DashStyle = DashStyles.DashDotDot;
-                    drawingContext.DrawRectangle(null,pen , rect);
-
-                    drawingContext.Close();
-                }
-
-				InvalidateArrange();
-
-				e.Handled = true;
-			}
-
-			base.OnPreviewMouseMove(e);
-		}
-
-		protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
-		{
-			if(isDragging)
-			{
-                boundce.RenderOpen().Close();
-                visualChildren.Remove(createdObject);
-				createdObject.Opacity = 1;
-                ReleaseMouseCapture();
-                if (createdObject.Width < 10 || createdObject.Height < 10)
-                {
-                    createdObject = null;
-                    isDragging = false;
-                    return;
-                }
-    			
-				
-                NotifyObjectCreated(createdObject);
-				SelectedObject = createdObject;
-
-				isDragging = false;
-				createdObject = null;
-				
-
-				e.Handled = true;
-			}
-			base.OnPreviewMouseLeftButtonUp(e);
-		}
+		
 
 		protected override Size MeasureOverride(Size finalSize)
 		{
@@ -130,6 +47,28 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             return ObjectsFactory.CreateDefaultManipulator(obj);
         }
 
+
+        protected override void DrawPreview(DrawingContext context, Rect rect)
+        {
+            context.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 1), rect);
+        }
+        protected override UIElement DrawEnded(Rect rect)
+        {
+            createdObject = (FrameworkElement)System.Activator.CreateInstance(typeof(T));
+            createdObject.Opacity = 0.75;
+            if (typeof(T) == typeof(ContentControl) || typeof(T).IsSubclassOf(typeof(ContentControl)))
+                (createdObject as ContentControl).Content = "Content";
+
+            Canvas.SetLeft(createdObject, rect.X);
+            Canvas.SetTop(createdObject, rect.Y);
+            createdObject.Width = rect.Width;
+            createdObject.Height = rect.Height;
+            return createdObject;
+        }
+        protected override SnapOrgin SnapTo
+        {
+            get { return SnapOrgin.TopLeft; }
+        }
     }
     
 }

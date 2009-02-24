@@ -140,8 +140,8 @@ namespace Designer.Tests
 			toolbox.Select(ToolBoxWrapper.Entries.Selection);
 
 			//Select object
-			pt.X = Convert.ToInt32(schemaView.Bounds.Left + 100);
-			pt.Y = Convert.ToInt32(schemaView.Bounds.Top + 100);
+			pt.X = Convert.ToInt32(schemaView.Bounds.Left + 200);
+			pt.Y = Convert.ToInt32(schemaView.Bounds.Top + 200);
 			mainWindow.Mouse.Location = pt;
 			mainWindow.Mouse.Click();
 

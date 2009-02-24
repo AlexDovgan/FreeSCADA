@@ -17,14 +17,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
         private Vector startVector;
         private Point centerPoint;
 
-        private FrameworkElement designerItem;
-        private FrameworkElement DesignerItem
+        private FrameworkElement controlledItem;
+        private FrameworkElement Controlledtem
         {
             get
             {
-                designerItem = this.DataContext as FrameworkElement;;
+                controlledItem = this.DataContext as FrameworkElement;;
                 
-                return designerItem;
+                return controlledItem;
             }
         }
         private RotateTransform rotateTransform;
@@ -34,7 +34,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
         {
             get
             {
-                return (rotateTransform = (DesignerItem.RenderTransform as TransformGroup).Children[1] as RotateTransform);
+                return (rotateTransform = (Controlledtem.RenderTransform as TransformGroup).Children[1] as RotateTransform);
          
             }
         }
@@ -42,7 +42,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
         {
             get
             {
-                return (matrixTransform = (DesignerItem.RenderTransform as TransformGroup).Children[0] as MatrixTransform);
+                return (matrixTransform = (Controlledtem.RenderTransform as TransformGroup).Children[0] as MatrixTransform);
 
             }
         }
@@ -67,20 +67,20 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 
         void RotateThumb_DragStarted(object sender, DragStartedEventArgs e)
         {
-            Canvas canvas = VisualTreeHelper.GetParent(DesignerItem) as Canvas;
-            if (DesignerItem != null && canvas != null)
+            Canvas canvas = VisualTreeHelper.GetParent(Controlledtem) as Canvas;
+            if (Controlledtem != null && canvas != null)
             {
                 // the RenderTransformOrigin property of DesignerItem defines
                 // transformation center relative to its bounds
               
-                centerPoint = DesignerItem.TranslatePoint(
-                    new Point(DesignerItem.DesiredSize.Width * DesignerItem.RenderTransformOrigin.X,
-                              DesignerItem.DesiredSize.Height * DesignerItem.RenderTransformOrigin.Y),
+                centerPoint = Controlledtem.TranslatePoint(
+                    new Point(Controlledtem.DesiredSize.Width * Controlledtem.RenderTransformOrigin.X,
+                              Controlledtem.DesiredSize.Height * Controlledtem.RenderTransformOrigin.Y),
                                canvas);
             
             
                 // calculate startVector, that is the vector from centerPoint to startPoint
-                Point startPoint = Mouse.GetPosition(canvas);
+                Point startPoint = GridManager.GetGridManagerFor(controlledItem).GetMousePos();
                 startVector = Point.Subtract(startPoint, centerPoint);
 
                 // check if the DesignerItem already has a RotateTransform set ...
@@ -91,12 +91,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 
         void RotateThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            Canvas canvas = VisualTreeHelper.GetParent(DesignerItem) as Canvas;
+            Canvas canvas = VisualTreeHelper.GetParent(Controlledtem) as Canvas;
 
-            if (DesignerItem != null && canvas != null)
+            if (Controlledtem != null && canvas != null)
             {
                 // calculate deltaVector, that is the vector from centerPoint to current mouse position                
-                Point currentPoint = Mouse.GetPosition(canvas);
+                Point currentPoint = GridManager.GetGridManagerFor(controlledItem).GetMousePos();
                 Vector deltaVector = Point.Subtract(currentPoint, centerPoint);
 
                 //calculate the angle between startVector and dragVector

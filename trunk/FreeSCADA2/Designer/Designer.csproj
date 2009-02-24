@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{93466C99-5637-4243-A01A-7AF12F706889}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -97,6 +97,7 @@
     <Compile Include="SchemaEditor\BidingHelper.cs" />
     <Compile Include="SchemaEditor\BindingSerializing.cs" />
     <Compile Include="SchemaEditor\EditorHelpers.cs" />
+    <Compile Include="SchemaEditor\GridManager.cs" />
     <Compile Include="SchemaEditor\Manipulators\ActionsEditManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\BaseManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\Controlls\PointDragThumb.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
     <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
     <Compile Include="SchemaEditor\Tools\ControlCreateTool.cs" />
+    <Compile Include="SchemaEditor\Tools\DrawTool.cs" />
     <Compile Include="SchemaEditor\Tools\EllipseTool.cs" />
     <Compile Include="SchemaEditor\Tools\PolylineTool.cs" />
     <Compile Include="SchemaEditor\Tools\RectangleTool.cs" />

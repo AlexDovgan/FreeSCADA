@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using System.Xml;
 using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.SchemaEditor.Tools;
+using FreeSCADA.Designer.Views;
 
 namespace FreeSCADA.Designer.SchemaEditor
 {
@@ -55,6 +56,15 @@ namespace FreeSCADA.Designer.SchemaEditor
                 top = VisualTreeHelper.GetParent(top);  
             }
             return top as UIElement;
+        }
+        public static Canvas FindTopParent( DependencyObject el)
+        {
+            DependencyObject top = el;
+            while (!(VisualTreeHelper.GetParent(top) is ScrollContentPresenter))
+            {
+                top = VisualTreeHelper.GetParent(top);
+            }
+            return top as Canvas;
         }
 
         public static void BreakGroup(SelectionTool tool)
@@ -318,7 +328,14 @@ namespace FreeSCADA.Designer.SchemaEditor
             }
             else
                 dobj.SetValue(dp, value);
+            //if (dobj is UIElement)
+            //{
+            //    (dobj as UIElement).InvalidateVisual();
+            //    AdornerLayer.GetAdornerLayer(dobj as UIElement).InvalidateVisual();
+            //}
+
         }
+
         
     }
 
