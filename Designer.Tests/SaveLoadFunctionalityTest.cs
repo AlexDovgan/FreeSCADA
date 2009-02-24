@@ -60,5 +60,32 @@ namespace Designer.Tests
 			Assert.IsTrue(window.IsClosed);
 			Assert.IsTrue(app.HasExited);
 		}
+
+        [Test]
+        public void ClickOnNewProjectCrashTest()
+        {
+            Application app = Application.Launch(designer_executable);
+            Assert.IsNotNull(app);
+            Core.UIItems.WindowItems.Window window = app.GetWindow("Designer");
+
+            //Create new schema
+            IUIItem new_project_button = window.Get(SearchCriteria.ByText("New Project"));
+            Assert.IsNotNull(new_project_button);
+            System.Drawing.Point pt = new System.Drawing.Point(System.Convert.ToInt32(new_project_button.Location.X) + 5, System.Convert.ToInt32(new_project_button.Location.Y) + 5);
+            
+            //Do click several times
+            window.Mouse.Click(pt);
+            System.Threading.Thread.Sleep(1000);
+
+            window.Mouse.Click(pt);
+            System.Threading.Thread.Sleep(1000);
+
+            window.Mouse.Click(pt);
+
+            window.Close();
+
+            Assert.IsTrue(window.IsClosed);
+            Assert.IsTrue(app.HasExited);
+        }
 	}
 }

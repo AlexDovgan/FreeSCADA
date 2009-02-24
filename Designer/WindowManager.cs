@@ -434,7 +434,6 @@ namespace FreeSCADA.Designer
 			toolBoxView.Dispose();
 			propertyBrowserView.Dispose();
 
-			dockPanel.Dispose();
 			mruManager.Dispose();
 		}
 
