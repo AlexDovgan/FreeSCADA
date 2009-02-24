@@ -25,8 +25,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 
             if (item != null)
             {
-                double gridDelta = (double)item.FindResource("DesignerSettings_GridDelta");
-                bool gridOn = (bool)item.FindResource("DesignerSettings_GridOn");
+           
                 Point dragDelta = new Point(e.HorizontalChange, e.VerticalChange);
 
                 dragDelta = RenderTransform.Transform(dragDelta);
@@ -39,13 +38,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 
                 double x = left + dragDelta.X;
                 double y = top + dragDelta.Y;
-                //if (gridOn)
-                //{
-                //    x -= x % gridDelta;
-                //    y -= y % gridDelta;
-                //}
-                //Canvas.SetLeft(item, x);
-                //Canvas.SetTop(item, y);
+             
                 EditorHelper.SetDependencyProperty(item, Canvas.LeftProperty, x);
                 EditorHelper.SetDependencyProperty(item, Canvas.TopProperty, y);
             }

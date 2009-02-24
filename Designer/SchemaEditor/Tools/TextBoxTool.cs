@@ -26,7 +26,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             if (isDragged)
             {
-                Vector v = e.GetPosition(this) - startPos;
+                Vector v = gridManager.GetMousePos() - startPos;
                 Point rectStart;
                 DrawingContext drawingContext = objectPrview.RenderOpen();
                 if ((System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Control) != 0)
@@ -80,7 +80,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             if (!e.Handled)
             {
                 CaptureMouse();
-                startPos = e.GetPosition(this);
+                startPos = gridManager.GetMousePos();
                 isDragged = true;
             }
 

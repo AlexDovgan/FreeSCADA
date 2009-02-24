@@ -27,7 +27,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 pd.PreviewMouseLeftButtonUp += pd_PreviewMouseLeftButtonUp;
                 visualChildren.Add(pd);
             }
-            poly.UpdateLayout();
+            
+           // double tmpThnk = poly.StrokeThickness;
+           // poly.StrokeThickness = 0;
+            //poly.UpdateLayout();
             for (int i = 0; i < poly.Points.Count; i++)
             {
                 Matrix m = poly.GeometryTransform.Value;
@@ -36,18 +39,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 p = poly.TranslatePoint(p, (UIElement)poly.Parent);
                 poly.Points[i] = p;
             }
+           // poly.StrokeThickness = tmpThnk;
+           // poly.UpdateLayout();
             poly.Stretch = Stretch.None;
-            //poly.SetValue(Canvas.LeftProperty, DependencyProperty.UnsetValue);
-            //poly.SetValue(Canvas.TopProperty, DependencyProperty.UnsetValue);
-            //poly.SetValue(FrameworkElement.WidthProperty, DependencyProperty.UnsetValue);
-            //poly.SetValue(FrameworkElement.HeightProperty, DependencyProperty.UnsetValue);
             EditorHelper.SetDependencyProperty(poly, Canvas.LeftProperty, DependencyProperty.UnsetValue);
             EditorHelper.SetDependencyProperty(poly, Canvas.TopProperty, DependencyProperty.UnsetValue);
             EditorHelper.SetDependencyProperty(poly, FrameworkElement.WidthProperty, DependencyProperty.UnsetValue);
             EditorHelper.SetDependencyProperty(poly, FrameworkElement.HeightProperty, DependencyProperty.UnsetValue);
 
-
-            //poly.SetValue(UIElement.RenderTransformProperty, DependencyProperty.UnsetValue);
             TransformGroup t = new TransformGroup();
             t.Children.Add(new MatrixTransform());
             t.Children.Add(new RotateTransform());
@@ -75,24 +74,37 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         {
 
             Polyline poly = AdornedElement as Polyline;
-            Rect b = VisualTreeHelper.GetContentBounds(poly);
+            Rect b = new Rect();
+            b.Y = b.X = System.Double.MaxValue;
+            b.Width = b.Height = 0;
+            foreach (Point p in poly.Points)
+            {
+                if (p.X < b.X)
+                    b.X = p.X;
+                if (p.Y < b.Y)
+                    b.Y = p.Y;
+                if (p.X > b.Width)
+                    b.Width = p.X;
+                if (p.Y > b.Height)
+                    b.Height = p.Y;
+            }
+            b.Width -= b.X;
+            b.Height -= b.Y;
+
             poly.Stretch = Stretch.Fill;
-            //poly.SetValue(Canvas.LeftProperty, b.X);
-            //poly.SetValue(Canvas.TopProperty, b.Y);
-            //poly.SetValue(FrameworkElement.WidthProperty, b.Width);
-            //poly.SetValue(FrameworkElement.HeightProperty, b.Height);
+
+            /*for (int i = 0; i < poly.Points.Count; i++)
+            {
+                Point pp = new Point();
+                pp.X = poly.Points[i].X - b.X;
+                pp.Y = poly.Points[i].Y - b.Y;
+                poly.Points[i] = pp; ;
+            }*/
             EditorHelper.SetDependencyProperty(poly, Canvas.LeftProperty, b.X);
             EditorHelper.SetDependencyProperty(poly, Canvas.TopProperty, b.Y);
             EditorHelper.SetDependencyProperty(poly, FrameworkElement.WidthProperty, b.Width);
             EditorHelper.SetDependencyProperty(poly, FrameworkElement.HeightProperty, b.Height);
 
-            for (int i = 0; i < poly.Points.Count; i++)
-            {
-                Point p = poly.Points[i];
-                p.X -= b.X;
-                p.Y -= b.Y;
-                poly.Points[i] = p;
-            }
             foreach (PointDragThumb pdt in visualChildren)
             {
                 pdt.DragDelta -= pointDragDelta;
@@ -105,17 +117,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         void pointDragDelta(object sender, DragDeltaEventArgs e)
         {
             Polyline poly = AdornedElement as Polyline;
-            double gridDelta = (double)poly.FindResource("DesignerSettings_GridDelta");
-            bool gridOn = (bool)poly.FindResource("DesignerSettings_GridOn");
-
+            
             Point p = poly.Points[visualChildren.IndexOf(sender as PointDragThumb)];
             p.X += e.HorizontalChange;
             p.Y += e.VerticalChange;
-            if (gridOn)
-            {
-                p.X -= p.X % gridDelta;
-                p.Y -= p.Y % gridDelta;
-            }
+            GridManager.GetGridManagerFor(adornedElement).AdjustPointToGrid(ref p);
             poly.Points[visualChildren.IndexOf(sender as PointDragThumb)] = p;
 
             InvalidateArrange();
@@ -136,9 +142,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 
             foreach (PointDragThumb pdt in visualChildren)
             {
-                Point p =/*poly.TranslatePoint(*/poly.Points[visualChildren.IndexOf(pdt)];//,this);
+                Point p =poly.Points[visualChildren.IndexOf(pdt)];
+                
                 p.X -= pdt.DesiredSize.Width / 2;
                 p.Y -= pdt.DesiredSize.Height / 2;
+                
+                
                 pdt.Arrange(new Rect(p, pdt.DesiredSize));
             }
             return finalSize;
