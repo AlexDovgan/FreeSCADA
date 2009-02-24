@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using FreeSCADA.Common;
 using FreeSCADA.Interfaces;
+using FreeSCADA.RunTime.Dialogs;
 
 namespace FreeSCADA.RunTime.Views
 {
@@ -117,6 +118,8 @@ namespace FreeSCADA.RunTime.Views
 
             this.FormClosing += new FormClosingEventHandler(VariablesView_FormClosing);
             this.channelsGrid.Selection.SelectionChanged += new SourceGrid.RangeRegionChangedEventHandler(Selection_SelectionChanged);
+            channelsGrid.MouseDoubleClick += new MouseEventHandler(channelsGrid_MouseDoubleClick);
+
         }
 
         void Selection_SelectionChanged(object sender, SourceGrid.RangeRegionChangedEventArgs e)
@@ -205,5 +208,23 @@ namespace FreeSCADA.RunTime.Views
                 }
             }
         }
+
+        void channelsGrid_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            int[] rows = channelsGrid.Selection.GetSelectionRegion().GetRowsIndex();
+            if (rows.Length > 0)
+            {
+                IChannel chan = (IChannel)channelsGrid.Rows[rows[0]].Tag;
+                if (chan != null)
+                {
+                    if (!chan.IsReadOnly) 
+                    {
+                        SetVariableValue svv = new SetVariableValue(chan);
+                        svv.ShowDialog();
+                    }
+                }
+            }
+        }
+
     }
 }
