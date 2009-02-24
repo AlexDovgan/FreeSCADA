@@ -55,17 +55,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                         gridManager.GetMousePos().X,
                         gridManager.GetMousePos().Y));
 
-
-                    switch (this.SnapTo)
-                    {
-                        case SnapOrgin.TopLeft :
-                            
-                            rect = new Rect(startPos, gridManager.GetMousePos());
-                            break;
-                        case SnapOrgin.Center:
-                            throw new NotImplementedException();
-                    }
-                
                 if ((System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Shift) != 0)
                 {
                     rect.X = startPos.X - rect.Width / 2;
@@ -122,11 +111,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
         protected abstract void DrawPreview(DrawingContext context, Rect rect);
         protected abstract UIElement DrawEnded(Rect rect);
-        protected abstract SnapOrgin SnapTo
-        {
-            get;
-        }
-
     }
 
 }

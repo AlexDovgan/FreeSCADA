@@ -65,10 +65,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             createdObject.Height = rect.Height;
             return createdObject;
         }
-        protected override SnapOrgin SnapTo
-        {
-            get { return SnapOrgin.TopLeft; }
-        }
     }
     
 }
