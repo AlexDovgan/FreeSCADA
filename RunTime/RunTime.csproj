@@ -76,6 +76,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DialogMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\SetVariableValue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\SetVariableValue.Designer.cs">
+      <DependentUpon>SetVariableValue.cs</DependentUpon>
+    </Compile>
     <Compile Include="DocumentCommands.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -101,6 +107,9 @@
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>DialogMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\SetVariableValue.resx">
+      <DependentUpon>SetVariableValue.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
