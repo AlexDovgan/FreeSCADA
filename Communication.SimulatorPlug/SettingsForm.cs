@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Drawing;
 using FreeSCADA.Common;
 using System.IO;
 using Alsing.SourceCode;
@@ -56,6 +57,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			grid.AutoSizeCells();
 
 			InitializeTooltips();
+            UpdateExpressionField();
         }
 
 		void InitializeTooltips()
@@ -88,6 +90,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			{
 				expressionEditBox.Enabled = false;
 				codeTemplateButton.Enabled = false;
+                UpdateStyledTextColors(false);
 			}
 
 			foreach (int row in grid.Selection.GetSelectionRegion().GetRowsIndex())
@@ -112,6 +115,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			{
 				expressionEditBox.Enabled = true;
 				codeTemplateButton.Enabled = true;
+                UpdateStyledTextColors(true);
 
 				if (grid.Rows[row].Tag != null)
 					expressionEditBox.Document.Text = (string)grid.Rows[row].Tag;
@@ -123,8 +127,44 @@ namespace FreeSCADA.Communication.SimulatorPlug
 				expressionEditBox.Enabled = false;
 				codeTemplateButton.Enabled = false;
                 expressionEditBox.Document.Text = "";
+                UpdateStyledTextColors(false);
 			}
 		}
+
+        private void UpdateStyledTextColors(bool enabled)
+        {
+            if (enabled)
+            {
+                expressionEditBox.BackColor = Color.FromKnownColor(KnownColor.Window);
+
+                expressionEditBox.ShowLineNumbers = true;
+                expressionEditBox.LineNumberBackColor = Color.FromKnownColor(KnownColor.ControlLight);
+
+                foreach (TextStyle style in expressionEditBox.Document.Parser.SyntaxDefinition.Styles)
+                {
+                    if (style.Name == "Code")
+                    {
+                        style.BackColor = Color.FromKnownColor(KnownColor.Window);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                expressionEditBox.BackColor = Color.FromKnownColor(KnownColor.Control);
+
+                expressionEditBox.ShowLineNumbers = false;
+                
+                foreach (TextStyle style in expressionEditBox.Document.Parser.SyntaxDefinition.Styles)
+                {
+                    if (style.Name == "Code")
+                    {
+                        style.BackColor = Color.FromKnownColor(KnownColor.Control);
+                        break;
+                    }
+                }
+            }
+        }
 
 		private void OnAddRow(object sender, EventArgs e)
 		{

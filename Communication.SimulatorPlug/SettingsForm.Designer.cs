@@ -133,9 +133,11 @@
             this.expressionEditBox.Location = new System.Drawing.Point(0, 30);
             this.expressionEditBox.LockCursorUpdate = false;
             this.expressionEditBox.Name = "expressionEditBox";
+            this.expressionEditBox.ShowGutterMargin = false;
             this.expressionEditBox.ShowScopeIndicator = false;
             this.expressionEditBox.Size = new System.Drawing.Size(615, 124);
             this.expressionEditBox.SmoothScroll = false;
+            this.expressionEditBox.SplitView = false;
             this.expressionEditBox.SplitviewH = -4;
             this.expressionEditBox.SplitviewV = -4;
             this.expressionEditBox.TabGuideColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(219)))), ((int)(((byte)(214)))));
@@ -157,19 +159,19 @@
             this.triggerToolStripMenuItem,
             this.counterToolStripMenuItem});
             this.expressionContextMenu.Name = "expressionContextMenu";
-            this.expressionContextMenu.Size = new System.Drawing.Size(125, 48);
+            this.expressionContextMenu.Size = new System.Drawing.Size(118, 48);
             // 
             // triggerToolStripMenuItem
             // 
             this.triggerToolStripMenuItem.Name = "triggerToolStripMenuItem";
-            this.triggerToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.triggerToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.triggerToolStripMenuItem.Text = "Trigger";
             this.triggerToolStripMenuItem.Click += new System.EventHandler(this.triggerToolStripMenuItem_Click);
             // 
             // counterToolStripMenuItem
             // 
             this.counterToolStripMenuItem.Name = "counterToolStripMenuItem";
-            this.counterToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.counterToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.counterToolStripMenuItem.Text = "Counter";
             this.counterToolStripMenuItem.Click += new System.EventHandler(this.counterToolStripMenuItem_Click);
             // 

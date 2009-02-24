@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Language Name="Python" Startblock="Code">
 <FileTypes>
-	<FileType Extension=".PY" Name="Python file"/>
+	<FileType Extension=".PY" Name="Python file"/>
+
 </FileTypes>
 
 	<Block Name="Code" Style="Code" IsMultiline="true">
