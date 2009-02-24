@@ -152,9 +152,9 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			RegisterProperty(typeof(TextBlock), "FontWeight", null);
 			RegisterProperty(typeof(TextBlock), "TextAlignment", null);
             RegisterProperty(typeof(CheckBox), "IsChecked", typeof(CommonTypeEditor));
-            RegisterProperty(typeof(Canvas), "GridManager.GridOn", null);
-            RegisterProperty(typeof(Canvas), "GridManager.GridDelta", null);
-            RegisterProperty(typeof(Canvas), "GridManager.ShowGrid", null);
+            RegisterProperty(typeof(Canvas), "GridManager.GridOn", "GridOn",null,"Grid snaping on/off");
+            RegisterProperty(typeof(Canvas), "GridManager.GridDelta","GridDelta", null,"Grid step");
+            RegisterProperty(typeof(Canvas), "GridManager.ShowGrid","ShowGrid" ,null,"Grid showing on/off");
 		}
 
 	}
