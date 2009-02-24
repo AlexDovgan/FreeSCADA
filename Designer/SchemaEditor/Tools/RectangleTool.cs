@@ -34,12 +34,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             return recttangle;
         }
-        
-        protected override SnapOrgin SnapTo
-        {
-            get {return DrawTool.SnapOrgin.TopLeft;}
-        }
-        
     }
 
 }

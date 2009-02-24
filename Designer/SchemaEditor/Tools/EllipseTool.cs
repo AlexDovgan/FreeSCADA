@@ -39,10 +39,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             return ellipse;
         }
 
-        protected override SnapOrgin SnapTo
-        {
-            get { return SnapOrgin.TopLeft; } //Should probably be center but that's not implemented yet.
-        }
         
     }
 }
