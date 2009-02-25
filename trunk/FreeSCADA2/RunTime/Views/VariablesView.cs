@@ -5,26 +5,26 @@ using System.Windows.Forms;
 using System.Drawing;
 using FreeSCADA.Common;
 using FreeSCADA.Interfaces;
-using FreeSCADA.RunTime.Dialogs;
 
 namespace FreeSCADA.RunTime.Views
 {
-	class VariablesView : DocumentView
-	{
+    class VariablesView : DocumentView
+    {
         private SourceGrid.Grid channelsGrid;
         private SplitContainer splitContainer1;
         private ReadOnlyPropertyGrid propertyGrid;
-		//private System.ComponentModel.IContainer components;
+        int lockedForEditRow = 0;
+        //private System.ComponentModel.IContainer components;
 
         public VariablesView()
-		{
-			DocumentName = "Variables view [table]";
-			InitializeComponent();
+        {
+            DocumentName = "Variables view [table]";
+            InitializeComponent();
             Initialize();
-		}
+        }
 
-		private void InitializeComponent()
-		{
+        private void InitializeComponent()
+        {
             this.channelsGrid = new SourceGrid.Grid();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.propertyGrid = new ReadOnlyPropertyGrid();   //System.Windows.Forms.PropertyGrid();
@@ -89,7 +89,7 @@ namespace FreeSCADA.RunTime.Views
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
-		}
+        }
 
         void Initialize()
         {
@@ -119,12 +119,11 @@ namespace FreeSCADA.RunTime.Views
             this.FormClosing += new FormClosingEventHandler(VariablesView_FormClosing);
             this.channelsGrid.Selection.SelectionChanged += new SourceGrid.RangeRegionChangedEventHandler(Selection_SelectionChanged);
             channelsGrid.MouseDoubleClick += new MouseEventHandler(channelsGrid_MouseDoubleClick);
-
         }
 
         void Selection_SelectionChanged(object sender, SourceGrid.RangeRegionChangedEventArgs e)
         {
-            int [] rows = channelsGrid.Selection.GetSelectionRegion().GetRowsIndex();
+            int[] rows = channelsGrid.Selection.GetSelectionRegion().GetRowsIndex();
             if (rows.Length > 0)
             {
                 this.propertyGrid.SelectedObject = this.channelsGrid.Rows[rows[0]].Tag;
@@ -174,9 +173,12 @@ namespace FreeSCADA.RunTime.Views
         private delegate void UpdateChannelDelegate(IChannel channel, int rowIndex);
         private void UpdateChannelFunc(IChannel channel, int rowIndex)
         {
-            channelsGrid[rowIndex, 1].Value = (channel.Value == null) ? "{null}" : channel.Value;
-            channelsGrid[rowIndex, 2].Value = channel.StatusFlags;
-            channelsGrid[rowIndex, 3].Value = channel.ModifyTime;
+            if (rowIndex != lockedForEditRow)
+            {
+                channelsGrid[rowIndex, 1].Value = (channel.Value == null) ? "{null}" : channel.Value;
+                channelsGrid[rowIndex, 2].Value = channel.StatusFlags;
+                channelsGrid[rowIndex, 3].Value = channel.ModifyTime;
+            }
         }
 
         delegate void InvokeDelegate();
@@ -211,20 +213,52 @@ namespace FreeSCADA.RunTime.Views
 
         void channelsGrid_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            if (!Env.Current.CommunicationPlugins.IsConnected) return;
+
             int[] rows = channelsGrid.Selection.GetSelectionRegion().GetRowsIndex();
             if (rows.Length > 0)
             {
                 IChannel chan = (IChannel)channelsGrid.Rows[rows[0]].Tag;
                 if (chan != null)
                 {
-                    if (!chan.IsReadOnly) 
+                    if (!chan.IsReadOnly)
                     {
-                        SetVariableValue svv = new SetVariableValue(chan);
-                        svv.ShowDialog();
+                        channelsGrid[rows[0], 1] = new SourceGrid.Cells.Cell(chan.Value == null ? "{null}" : chan.Value, chan.Value.GetType());
+                        SourceGrid.CellContext context = new SourceGrid.CellContext(channelsGrid, new SourceGrid.Position(rows[0], 1));
+                        context.StartEdit();
+                        if (channelsGrid[rows[0], 1].FindController(typeof(myController)) == null)
+                            channelsGrid[rows[0], 1].AddController(new myController(this));
+                        lockedForEditRow = rows[0];
                     }
                 }
             }
         }
 
+        class myController : SourceGrid.Cells.Controllers.ControllerBase
+        {
+            SourceGrid.Grid channelsGrid;
+            VariablesView variablesView;
+
+            public myController(VariablesView variablesView)
+            {
+                this.channelsGrid = variablesView.channelsGrid;
+                this.variablesView = variablesView;
+            }
+
+            public override void OnValueChanged(SourceGrid.CellContext sender, EventArgs e)
+            {
+                base.OnValueChanged(sender, e);
+
+                if (channelsGrid.Rows[sender.Position.Row].Tag != null && variablesView.lockedForEditRow == sender.Position.Row)
+                    if ((channelsGrid.Rows[sender.Position.Row].Tag as IChannel).Value != sender.Value)
+                        (channelsGrid.Rows[sender.Position.Row].Tag as IChannel).Value = sender.Value;
+                sender.EndEdit(false);
+            }
+            public override void OnFocusLeft(SourceGrid.CellContext sender, EventArgs e)
+            {
+                variablesView.lockedForEditRow = 0;
+                sender.Value = (channelsGrid.Rows[sender.Position.Row].Tag as IChannel).Value;
+            }
+        }
     }
 }
