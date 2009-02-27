@@ -60,11 +60,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
                 GridManager.GetGridManagerFor(controledItem).AdjustPointToGrid(ref dragDelta);
                 dragDelta= ControledItem.RenderTransform.Inverse.Transform(dragDelta);
                 
-                double w, h,l,t;
                 Rect r = new Rect(Canvas.GetLeft(ControledItem), Canvas.GetTop(ControledItem),
                                 ControledItem.Width,
                                 ControledItem.Height);
-                //GridManager.GetGridManagerFor(controledItem).AdjustRectToGrid(ref r);                
+                GridManager.GetGridManagerFor(controledItem).AdjustRectToGrid(ref r);                
                 
                 switch (base.VerticalAlignment)
                 {

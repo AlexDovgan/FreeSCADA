@@ -33,7 +33,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                         
                }
 
-                drawingContext.DrawLine(new Pen(Brushes.Black, 1), pointsCollection[pointsCollection.Count - 1], gridManager.GetMousePos());
+                drawingContext.DrawLine(new Pen(Brushes.Black, 1), pointsCollection[pointsCollection.Count - 1], GridManager.GetMousePos());
 
                 drawingContext.Close();
             }
@@ -53,7 +53,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             if (SelectedObject==null)
             {
                 CaptureMouse();
-                pointsCollection.Add(gridManager.GetMousePos());
+                pointsCollection.Add(GridManager.GetMousePos());
 
             }
             // creating a new polyline point when clicking to the line with Ctrl key
@@ -65,16 +65,16 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     {
                         // Hit test
                         LineGeometry lg = new LineGeometry((selObj as Polyline).Points[i], (selObj as Polyline).Points[i + 1]);
-                        EllipseGeometry eg = new EllipseGeometry(gridManager.GetMousePos(), (selObj as Polyline).StrokeThickness, (selObj as Polyline).StrokeThickness);
+                        EllipseGeometry eg = new EllipseGeometry(GridManager.GetMousePos(), (selObj as Polyline).StrokeThickness, (selObj as Polyline).StrokeThickness);
                         IntersectionDetail id = eg.FillContainsWithDetail(lg);
                         if (id == IntersectionDetail.Intersects)
                         {
                             // Insert point to the polyline
-                            (selObj as Polyline).Points.Insert(i + 1, gridManager.GetMousePos());
+                            (selObj as Polyline).Points.Insert(i + 1, GridManager.GetMousePos());
                             // Rendering (new thumbs)
                             if (ToolManipulator != null)
                             {
-                                (ToolManipulator as PolylineEditManipulantor).AddThumb(gridManager.GetMousePos());
+                                (ToolManipulator as PolylineEditManipulantor).AddThumb(GridManager.GetMousePos());
                             }
                             break;
                         }

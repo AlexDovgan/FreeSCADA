@@ -21,7 +21,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     abstract class BaseTool : Adorner
     {
         protected BaseManipulator toolManipulator;
-        protected GridManager gridManager;
+        protected GridManager GridManager
+        {
+            get
+            {
+                return GridManager.GetGridManagerFor(AdornedElement);
+            }
+        }
         protected VisualCollection visualChildren;
         protected UIElement workedLayer;
   
@@ -121,7 +127,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             drawingContext.Close();
             drawingVisual.Opacity = 0;
             visualChildren.Add(drawingVisual);
-            gridManager = GridManager.GetGridManagerFor(element);
+            
         }
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
@@ -163,8 +169,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         }
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
-        
-			NotifyToolWorking();
+        	NotifyToolWorking();
+            base.OnPreviewMouseMove(e);
         }
         protected override Size ArrangeOverride(Size finalSize)
         {

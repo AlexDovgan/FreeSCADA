@@ -53,7 +53,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 DrawingContext drawingContext = selectionRectangle.RenderOpen();
 
                 // Create a rectangle and draw it in the DrawingContext.
-                finalSize = gridManager.GetMousePos() - startPos;
+                finalSize = GridManager.GetMousePos() - startPos;
                 Rect rect = new Rect(startPos, finalSize);
 
                 drawingContext.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 0.2), rect);
@@ -66,8 +66,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             if (isSelectionMoved)
             {
                 Vector newPosDelta;
-                newPosDelta = gridManager.GetMousePos() - movePos;
-                movePos = gridManager.GetMousePos();
+                newPosDelta = GridManager.GetMousePos() - movePos;
+                movePos = GridManager.GetMousePos();
                 MoveHelper(newPosDelta.X, newPosDelta.Y);
                 
                 System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.SizeAll;
@@ -101,7 +101,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             selectionRectangle.RenderOpen().Close();
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
             RaiseObjectSelected(SelectedObject);
-            LastClickedPoint = gridManager.GetMousePos();
+            LastClickedPoint = GridManager.GetMousePos();
         }
 
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -132,7 +132,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             {
 
                 CaptureMouse();
-                startPos = gridManager.GetMousePos();
+                startPos = GridManager.GetMousePos();
                 isDragged = true;
                 SelectedObject = null;
 
@@ -144,7 +144,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 {
 
                     isSelectionMoved = true;
-                    movePos = gridManager.GetMousePos();
+                    movePos = GridManager.GetMousePos();
                     System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.SizeAll;
                     moveUndoInfo = true;
                     if (!selectedElements.Contains(el))

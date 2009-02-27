@@ -97,7 +97,7 @@ namespace FreeSCADA.Designer.SchemaEditor
         {
             return (Boolean)c.GetValue(ShowGridProperty);
         }
-        
+
         #endregion AttachedProperties
         #region Properties
         /// <summary>
@@ -107,12 +107,12 @@ namespace FreeSCADA.Designer.SchemaEditor
         {
             get
             {
-               return GetGridOn(AdornedElement as Canvas);
+                return GetGridOn(AdornedElement as Canvas);
             }
             set
             {
-                SetGridOn(AdornedElement as Canvas,value);
-          
+                SetGridOn(AdornedElement as Canvas, value);
+
             }
         }
         /// <summary>
@@ -127,7 +127,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             set
             {
                 SetGridDelta(AdornedElement as Canvas, value);
-                
+
             }
         }
         /// <summary>
@@ -142,22 +142,23 @@ namespace FreeSCADA.Designer.SchemaEditor
             set
             {
                 SetShowGrid(AdornedElement as Canvas, value);
-          
+
             }
         }
         #endregion Properties
 
         private Vector delta = new Vector();
+        bool snapActive = false;
         /// <summary>
         /// return grid manager for any object belong to canvas
         /// </summary>
         /// <param name="el">any uielement belonged to canvas</param>
         /// <returns>GridManager instance registerd as adorner</returns>
-        
+
         public static GridManager GetGridManagerFor(UIElement el)
         {
-            AdornerLayer al=AdornerLayer.GetAdornerLayer(el);
-            Canvas c= EditorHelper.FindTopParent(el);
+            AdornerLayer al = AdornerLayer.GetAdornerLayer(el);
+            Canvas c = EditorHelper.FindTopParent(el);
             if (al.GetAdorners(c) != null)
                 foreach (Adorner ad in al.GetAdorners(c))
                     if (ad is GridManager)
@@ -165,7 +166,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             GridManager gm = new GridManager(c);
             al.Add(gm);
             return gm;
-            
+
         }
         /// <summary>
         /// object can be constructed only with calling  GetGridManagerFor
@@ -182,6 +183,33 @@ namespace FreeSCADA.Designer.SchemaEditor
                 SetShowGrid(el, true);
             DependencyPropertyDescriptor.FromProperty(ShowGridProperty, typeof(Canvas)).AddValueChanged(el, PropertyChanged);
             DependencyPropertyDescriptor.FromProperty(GridDeltaProperty, typeof(Canvas)).AddValueChanged(el, PropertyChanged);
+            //AdornerLayer.GetAdornerLayer(AdornedElement).MouseMove += new MouseEventHandler(GridManager_MouseMove);
+        }
+        /// <summary>
+        /// try to implementing grid snapping throug mouse snapping
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void GridManager_MouseMove(object sender, MouseEventArgs e)
+        {
+            
+            Point pos = e.GetPosition(AdornedElement);
+            Point oldPos = pos;
+            GridManager.GetGridManagerFor(AdornedElement).AdjustPointToGrid(ref pos);
+            delta = (oldPos - pos);
+            if (!snapActive&& (Math.Abs(delta.X) > GridDelta / 3 || Math.Abs(delta.Y) > GridDelta / 3 ))
+            {
+                snapActive = true;
+            }
+            else if (snapActive && (Math.Abs(delta.X) < GridDelta / 3 || Math.Abs(delta.Y) < GridDelta / 3))
+            {
+                GridManager.GetGridManagerFor(AdornedElement).AdjustPointToGrid(ref pos);
+                pos = PointToScreen(pos);
+                System.Windows.Forms.Cursor.Position = new System.Drawing.Point((int)pos.X, (int)pos.Y);
+                snapActive = false;
+
+            }
+
 
         }
 
@@ -200,7 +228,7 @@ namespace FreeSCADA.Designer.SchemaEditor
 
             // Add the geometry to the drawing.
             aDrawing.Geometry = rect1;
-            
+
             // Specify the drawing's fill.
 
             aDrawing.Brush = Brushes.Transparent;
@@ -211,7 +239,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             stroke.Thickness = 0.1;
             stroke.Brush = new SolidColorBrush(c);
             aDrawing.Pen = stroke;
-           
+
             // Create a DrawingBrush
             DrawingBrush myDrawingBrush = new DrawingBrush();
             myDrawingBrush.Drawing = aDrawing;
@@ -219,9 +247,9 @@ namespace FreeSCADA.Designer.SchemaEditor
             myDrawingBrush.TileMode = TileMode.Tile;
             myDrawingBrush.Viewport = new Rect(0, 0, GridDelta, GridDelta);
             myDrawingBrush.ViewportUnits = BrushMappingMode.Absolute;
-            
+
             myDrawingBrush.Opacity = 0.5;
-            return  myDrawingBrush;
+            return myDrawingBrush;
         }
         /// <summary>
         /// OnRender overriding 
@@ -229,7 +257,7 @@ namespace FreeSCADA.Designer.SchemaEditor
         /// <param name="dc"></param>
         protected override void OnRender(DrawingContext dc)
         {
-            if(ShowGrid)
+            if (ShowGrid)
                 dc.DrawRectangle(CreateGridBrush(), null, new Rect(AdornedElement.RenderSize));
         }
         /// <summary>
@@ -241,32 +269,7 @@ namespace FreeSCADA.Designer.SchemaEditor
         {
             InvalidateVisual();
         }
-        
-        /// <summary>
-        /// try to make common point for grid snaping
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnPreviewMouseMove(MouseEventArgs e)
-        {
-            
-            /*Point pos =  e.GetPosition(AdornedElement);
-            Point oldPos = pos;
-            GridManager.GetGridManagerFor(AdornedElement).AdjustPointToGrid(ref pos);
-            delta += (oldPos - pos);
-            if (Math.Abs(delta.X) > GridDelta / 2 || Math.Abs(delta.Y) > GridDelta / 2)
-            {
-                pos.X += delta.X;
-                pos.Y += delta.Y;
-                delta.X = 0; delta.Y = 0;
-                GridManager.GetGridManagerFor(AdornedElement).AdjustPointToGrid(ref pos);
-            }
-            pos = PointToScreen(pos);
-            System.Windows.Forms.Cursor.Position = new System.Drawing.Point((int)pos.X, (int)pos.Y); ;
-              */  
-            
-            
-            base.OnPreviewMouseMove(e);
-        }
+
         /// <summary>
         /// return curent mouse pos snapped to grid
         /// </summary>
@@ -281,7 +284,7 @@ namespace FreeSCADA.Designer.SchemaEditor
         /// Adjusting point to grid 
         /// </summary>
         /// <param name="point">Point reference</param>
-       
+
         public void AdjustPointToGrid(ref Point point)
         {
             if (!GridOn)
@@ -297,7 +300,7 @@ namespace FreeSCADA.Designer.SchemaEditor
         {
             if (!GridOn)
                 return;
-            
+
             size.Height = Math.Round(size.Height / GridDelta, 0) * GridDelta;
             size.Width = Math.Round(size.Width / GridDelta, 0) * GridDelta;
         }
@@ -322,7 +325,7 @@ namespace FreeSCADA.Designer.SchemaEditor
 
             rect = new Rect(p1, p2);
         }
-       
+
 
     }
 }
