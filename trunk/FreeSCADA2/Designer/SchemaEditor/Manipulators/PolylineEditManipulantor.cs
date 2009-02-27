@@ -121,7 +121,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             Point p = poly.Points[visualChildren.IndexOf(sender as PointDragThumb)];
             p.X += e.HorizontalChange;
             p.Y += e.VerticalChange;
-            GridManager.GetGridManagerFor(adornedElement).AdjustPointToGrid(ref p);
+            //GridManager.GetGridManagerFor(adornedElement).AdjustPointToGrid(ref p);
             poly.Points[visualChildren.IndexOf(sender as PointDragThumb)] = p;
 
             InvalidateArrange();

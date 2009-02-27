@@ -94,7 +94,6 @@
     <Compile Include="Dialogs\ProjectMediaDialog.Designer.cs">
       <DependentUpon>ProjectMediaDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="SchemaEditor\BidingHelper.cs" />
     <Compile Include="SchemaEditor\BindingSerializing.cs" />
     <Compile Include="SchemaEditor\EditorHelpers.cs" />
     <Compile Include="SchemaEditor\GridManager.cs" />
@@ -165,6 +164,7 @@
     <Compile Include="SchemaEditor\PropertiesUtils\StringBindingPanel.Designer.cs">
       <DependentUpon>StringBindingPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\TypeConverters\DependencyObjectConverter.cs" />
     <Compile Include="SchemaEditor\SchemaCommands.cs">
     </Compile>
     <Compile Include="SchemaEditor\SchemaMenuContext.cs" />

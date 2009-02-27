@@ -15,6 +15,8 @@ using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 {
+    //TDOD:refactor commands to common usage
+ 
 	class SchemaCommand : BaseCommand
 	{
 		object controlledObject;
@@ -702,4 +704,5 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 		}
 		#endregion Informational properties
 	}
+    
 }
