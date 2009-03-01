@@ -146,8 +146,8 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                 // Optimization - "holes" in address space less than 4 words
                                 // will be included in one read until max frame 2*120 bytes is reached
                                 {
-                                    buf.lastAddress = (ushort)(ch.ModbusDataAddress + ch.DeviceDataLen - 1);
-                                    buf.numInputs = (ushort)(buf.lastAddress - buf.startAddress + ch.DeviceDataLen);
+                                    buf.lastAddress = (ushort)((ch.ModbusDataAddress + ch.DeviceDataLen - 1) > buf.lastAddress ? ch.ModbusDataAddress + ch.DeviceDataLen - 1 : buf.lastAddress);
+                                    buf.numInputs = (ushort)((buf.lastAddress - buf.startAddress + ch.DeviceDataLen) > buf.numInputs ? buf.lastAddress - buf.startAddress + ch.DeviceDataLen : buf.numInputs);
                                     buf.channels.Add(ch); ch.StatusFlags = ChannelStatusFlags.Bad;
                                     found = true;
                                 }
@@ -158,8 +158,9 @@ namespace FreeSCADA.Communication.MODBUSPlug
                             // Set up a new buffer
                             ModbusBuffer buf = new ModbusBuffer();
                             buf.slaveId = ch.SlaveId;
-                            buf.numInputs = 1;
-                            buf.startAddress = buf.lastAddress = ch.ModbusDataAddress;
+                            buf.numInputs = ch.DeviceDataLen;
+                            buf.startAddress = ch.ModbusDataAddress;
+                            buf.lastAddress = (ushort)(ch.ModbusDataAddress + ch.DeviceDataLen - 1);
                             buf.ModbusDataType = ch.ModbusDataType;
                             buf.channels.Add(ch); ch.StatusFlags = ChannelStatusFlags.Bad;
                             buf.pauseCounter = 0;
@@ -336,21 +337,40 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                         int bytesUsed = 0;
                                         int charsUsed = 0;
                                         bool completed = false;
-
+                                        int j = 0;
+                                        // Conversion strategy: FIRST NONPRINTABLE CHARACTER (ORD < 32) BREAKS CONVERSION, string consists of printables converted before
                                         for (int i = 0; i < ch.DeviceDataLen; i++)
                                         {
+                                            byte[] word = BitConverter.GetBytes(registers[ch.ModbusDataAddress - buf.startAddress + i]);
                                             if (ch.ConversionType == ModbusConversionType.SwapBytes)
                                             {
-                                                byte[] word = BitConverter.GetBytes(registers[ch.ModbusDataAddress - buf.startAddress + i]);
-                                                str[2 * i] = word[1];
-                                                str[2 * i + 1] = word[0];
+                                                if (word[1] < 32)
+                                                    break;  // nonprintable character
+                                                str[j++] = word[1];
+                                                if (word[0] < 32)
+                                                    break;  // nonprintable character
+                                                str[j++] = word[0];
                                             }
                                             else
-                                                Array.Copy(BitConverter.GetBytes(registers[ch.ModbusDataAddress - buf.startAddress + i]), 0, str, 2 * i, 2);
+                                            {
+                                                if (word[0] < 32)
+                                                    break;  // nonprintable character
+                                                str[j++] = word[0];
+                                                if (word[1] < 32)
+                                                    break;  // nonprintable character
+                                                str[j++] = word[1];
+                                                //Array.Copy(BitConverter.GetBytes(registers[ch.ModbusDataAddress - buf.startAddress + i]), 0, str, 2 * i, 2);
+                                            }
                                         }
-                                        char[] chars = new char[2 * ch.DeviceDataLen];
-                                        ascii.Convert(str, 0, (int)(2 * ch.DeviceDataLen), chars, 0, 2 * ch.DeviceDataLen, true, out bytesUsed, out charsUsed, out completed);
-                                        string sresult = new String(chars);
+                                        string sresult;
+                                        if (j > 0)
+                                        {
+                                            char[] chars = new char[j];
+                                            ascii.Convert(str, 0, j, chars, 0, j, true, out bytesUsed, out charsUsed, out completed);
+                                            sresult = new String(chars);
+                                        }
+                                        else
+                                            sresult = "";
                                         if (ch.ModbusFs2InternalType == ModbusFs2InternalType.String)
                                         {
                                             ch.DoUpdate(sresult, dt, ChannelStatusFlags.Good);

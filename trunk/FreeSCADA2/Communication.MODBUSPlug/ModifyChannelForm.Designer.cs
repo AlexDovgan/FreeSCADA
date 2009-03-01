@@ -201,7 +201,7 @@
             // 
             this.modbusDataAddressNumericUpDown.Location = new System.Drawing.Point(210, 186);
             this.modbusDataAddressNumericUpDown.Maximum = new decimal(new int[] {
-            2000,
+            65535,
             0,
             0,
             0});
