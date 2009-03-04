@@ -16,10 +16,11 @@ namespace FreeSCADA.Communication.MODBUSPlug
         List<string> forbiddenNames;
         List<string> stations;
         string selectedStation;
-        
+
         public ModifyChannelForm(ModbusChannelImp ch, List<string> forbiddenNames, List<string> stations, string selectedStation)
         {
             InitializeComponent();
+            InitializeTooltips();
             this.Tag = ch;
             this.forbiddenNames = forbiddenNames;
             this.stations = stations;
@@ -47,13 +48,29 @@ namespace FreeSCADA.Communication.MODBUSPlug
             kMaskedTextBox.Text = ch.K.ToString(ci.NumberFormat);
             dMaskedTextBox.Text = ch.D.ToString(ci.NumberFormat);
 
-            
+
             MakeControlsValidation(ch);
 
             // must be AFTER makeControlValidation
             modbusDataTypeComboBox.SelectedIndexChanged += new EventHandler(modRegisterComboBox_SelectedIndexChanged);
             deviceDataTypeComboBox.SelectedIndexChanged += new EventHandler(modRegisterComboBox_SelectedIndexChanged);
             modbusFs2InternalTypeComboBox.SelectedIndexChanged += new EventHandler(modRegisterComboBox_SelectedIndexChanged);
+        }
+
+        void InitializeTooltips()
+        {
+            ToolTip expressionTooltip = new ToolTip();
+            expressionTooltip.AutomaticDelay = 180000;
+            expressionTooltip.InitialDelay = 100;
+            expressionTooltip.ShowAlways = true;
+
+            string tip = "Offset from the start register of the respective data space.\n\n" +
+                "The IO ranges in MODICON PLC and other devices are:\n" +
+                "00001 - 09999 Coils / Discrete Outputs\n" +
+                "10001 - 19999 Inputs (Discrete, Read only)\n" +
+                "30001 - 39999 Input registers/analog/counters (Read only)\n" +
+                "40001 - 49999 Holding registers / analog output";
+            expressionTooltip.SetToolTip(modbusDataAddressNumericUpDown, tip);
         }
 
         void ModifyChannelForm_FormClosing(object sender, FormClosingEventArgs e)
