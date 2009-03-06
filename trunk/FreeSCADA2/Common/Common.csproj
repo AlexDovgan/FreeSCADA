@@ -71,6 +71,9 @@
     <Compile Include="Commands.cs" />
     <Compile Include="CommunationPlugs.cs" />
     <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="IVisualControlDescriptor.cs" />
+    <Compile Include="IVisualControlsPlug.cs" />
+    <Compile Include="VisualControlsPlugs.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="Env.cs" />
     <Compile Include="IChannel.cs" />

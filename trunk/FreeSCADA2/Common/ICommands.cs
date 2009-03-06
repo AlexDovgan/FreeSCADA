@@ -6,6 +6,7 @@ namespace FreeSCADA.Interfaces
 	{
 		Global,
 		Communication,
+        VisualControls,
 		Project
 	}
 	public interface ICommands

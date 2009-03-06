@@ -7,7 +7,8 @@ namespace FreeSCADA.Interfaces
 	{
 		Unknown = 0,
 		Good	= 1,
-		Bad		= 2
+		Bad		= 2,
+        NotUsed = 0xFFFF
 	}
         
 	public interface IChannel:INotifyPropertyChanged

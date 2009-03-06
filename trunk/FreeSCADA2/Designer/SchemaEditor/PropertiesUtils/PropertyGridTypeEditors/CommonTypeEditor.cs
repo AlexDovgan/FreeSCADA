@@ -6,18 +6,30 @@ using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using FreeSCADA.Common.Schema;
+using FreeSCADA.Interfaces.Plugins;
+using FreeSCADA.Interfaces;
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditors
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-    class CommonTypeEditor: System.Drawing.Design.UITypeEditor
+    public class CommonTypeEditor: System.Drawing.Design.UITypeEditor
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public CommonTypeEditor()
         {
         }
-
-        // Indicates whether the UITypeEditor provides a form-based (modal) dialog, 
-        // drop down dialog, or no UI outside of the properties window.
+        /// <summary>
+        /// Indicates whether the UITypeEditor provides a form-based (modal) dialog, 
+        /// drop down dialog, or no UI outside of the properties window.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override System.Drawing.Design.UITypeEditorEditStyle GetEditStyle(System.ComponentModel.ITypeDescriptorContext context)
         {
             if(context==null)
@@ -32,8 +44,13 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
             else
                 return UITypeEditorEditStyle.None;
         }
-
-        // Displays the UI for value selection.
+        /// <summary>
+        /// Displays the UI for value selection.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="provider"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value)
         {
 
@@ -48,18 +65,41 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
             if (edSvc != null)
             {
                 // Display an angle selection control and retrieve the value.
-                CommonBindingDialog control = new CommonBindingDialog(new PropProxy(depObj),pw.PropertyInfo);
-                if (edSvc.ShowDialog(control) == DialogResult.OK)
+                bool found = false;
+                foreach (IVisualControlsPlug p in Env.Current.VisualPlugins.Plugins)
                 {
-                    return pw.GetValue(depObj);
+                    foreach (IVisualControlDescriptor d in p.Controls)
+                    {
+                        if (depObj.GetType() == d.Type)
+                        {
+                            CommonBindingDialog control = new CommonBindingDialog(d.getPropProxy(depObj), pw.PropertyInfo);
+                            if (edSvc.ShowDialog(control) == DialogResult.OK)
+                            {
+                                return pw.GetValue(depObj);
+                            }
+                            found = true;
+                        }
+                    }
+                }
+                if (!found)
+                {
+                    CommonBindingDialog control = new CommonBindingDialog(new PropProxy(depObj), pw.PropertyInfo);
+                    if (edSvc.ShowDialog(control) == DialogResult.OK)
+                    {
+                        return pw.GetValue(depObj);
+                    }
                 }
             }
             return value;
         }
         
 
-        // Indicates whether the UITypeEditor supports painting a 
-        // representation of a property's value.
+        /// <summary>
+        /// Indicates whether the UITypeEditor supports painting a 
+        /// representation of a property's value.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override bool GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context)
         {
         

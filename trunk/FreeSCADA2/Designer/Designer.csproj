@@ -180,6 +180,7 @@
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
     <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
     <Compile Include="SchemaEditor\Tools\ControlCreateTool.cs" />
+    <Compile Include="SchemaEditor\Tools\UserControlCreateTool.cs" />
     <Compile Include="SchemaEditor\Tools\DrawTool.cs" />
     <Compile Include="SchemaEditor\Tools\EllipseTool.cs" />
     <Compile Include="SchemaEditor\Tools\PolylineTool.cs" />

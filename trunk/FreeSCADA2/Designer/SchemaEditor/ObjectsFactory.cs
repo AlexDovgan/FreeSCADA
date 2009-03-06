@@ -5,6 +5,9 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Shapes;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
+using FreeSCADA.Interfaces.Plugins;
+using FreeSCADA.Common;
+using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor
 {
@@ -20,7 +23,9 @@ namespace FreeSCADA.Designer.SchemaEditor
         public Type ObjectManipulatorType;
         
     }
-
+    /// <summary>
+    /// /
+    /// </summary>
     static class ObjectsFactory
     {
         static Dictionary<Type, ObjectDescriptor> descriptorsDictionary = new Dictionary<Type, ObjectDescriptor>();
@@ -35,6 +40,17 @@ namespace FreeSCADA.Designer.SchemaEditor
             descriptorsDictionary[typeof(ContentControl)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
             descriptorsDictionary[typeof(RangeBase)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
             descriptorsDictionary[typeof(Canvas)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
+            //---
+            foreach (IVisualControlsPlug p in Env.Current.VisualPlugins.Plugins)
+            {
+                foreach (IVisualControlDescriptor d in p.Controls)
+                {
+                    if (d.ManipulatorKind == ManipulatorKind.DragResizeRotateManipulator)
+                        descriptorsDictionary[d.Type] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
+                    else if (d.ManipulatorKind == ManipulatorKind.PolylineManipulator)
+                        descriptorsDictionary[d.Type] = new ObjectDescriptor(typeof(PolylineEditManipulantor));
+                }
+            }
         }
         private static ObjectDescriptor FindDescriptor(Type type)
         {
