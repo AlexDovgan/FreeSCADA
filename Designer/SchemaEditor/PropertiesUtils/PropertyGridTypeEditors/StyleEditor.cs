@@ -58,8 +58,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
 
             return value;
         }
-
-
+        
         public override void PaintValue(System.Drawing.Design.PaintValueEventArgs e)
         {
             return;

@@ -8,12 +8,16 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 	/// This class wraps given property. Almost all calls go directly to original property, but some of 
 	/// them (customization of user visible strings) are handled by this class.
 	/// </summary>
-	class PropertyWrapper : PropertyDescriptor
+	public class PropertyWrapper : PropertyDescriptor
 	{
 		object controlledObject;
 		PropertyDescriptor controlledProperty;
 		PropertyInfo propertyInfo;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="controlledObject"></param>
+        /// <param name="propertyInfo"></param>
 		public PropertyWrapper(object controlledObject, PropertyInfo propertyInfo)
 			: base(propertyInfo.GetTargetPropertyName(), null)
 		{
@@ -31,7 +35,12 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			if (this.controlledProperty == null)
 				throw new System.InvalidOperationException("sourceProperty is not found in controlled object");
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="controlledObject"></param>
+        /// <param name="propertyInfo"></param>
+        /// <returns></returns>
 		public static bool CheckIfApplicable(object controlledObject, PropertyInfo propertyInfo)
 		{
 			foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(controlledObject))
@@ -42,17 +51,23 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
 			return false;
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
         public object ControlledObject
         {
             get { return controlledObject; }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public PropertyDescriptor ControlledProperty
         {
             get { return controlledProperty; }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
 		public override AttributeCollection Attributes
 		{
 			get
@@ -66,12 +81,18 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                 return new AttributeCollection(attrs.ToArray());
 			}
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
 		public override bool CanResetValue(object component)
 		{
 			return true;
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
 		public override Type ComponentType
 		{
 			get
@@ -80,7 +101,9 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				
 			}
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
 		public override string DisplayName
 		{
 			get
@@ -88,7 +111,9 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				return propertyInfo.GetTargetPropertyDisplayName();
 			}
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
 		public override string Description
 		{
 			get
@@ -104,7 +129,11 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		{
 			get { return propertyInfo; }
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
 		public override object GetValue(object component)
 		{
 			//TODO: probably we need some type convertor here for "compound" properties
@@ -113,7 +142,11 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                 return "Binding";
 			return controlledProperty.GetValue(controlledObject);
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="component"></param>
+        /// <param name="value"></param>
 		public override void SetValue(object component, object value)
 		{
 			//TODO: probably we need some type convertor here for "compound" properties
@@ -123,12 +156,16 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                 controlledProperty.SetValue(controlledObject, value);
             
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
 		public override bool IsReadOnly
 		{
 			get { return controlledProperty.IsReadOnly; }
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
 		public override string Name
 		{
             get 
@@ -136,18 +173,31 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				return propertyInfo.GetTargetPropertyName();
 			}
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
 		public override Type PropertyType
 		{
 			get { return controlledProperty.PropertyType; }
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="component"></param>
 		public override void ResetValue(object component) { }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
 		public override bool ShouldSerializeValue(object component)
 		{
 			return true;
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public System.Windows.Data.BindingBase GetBinding()
         {
             if (controlledObject is System.Windows.DependencyObject
@@ -173,6 +223,10 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
             depProp = null;
             return false;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return DisplayName;

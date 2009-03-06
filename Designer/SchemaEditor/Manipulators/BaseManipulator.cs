@@ -10,21 +10,23 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
     /// 
     /// /// </summary>
         
-    class BaseManipulator :FrameworkElement//Adorner
+    public class BaseManipulator :FrameworkElement//Adorner
     {
         
         /// <summary>
         /// Element that manipulator is decorate
         /// </summary>
-        protected UIElement adornedElement;
+        protected UIElement adornedElement_;
         /// <summary>
         /// Container for manipulator controlls
         /// </summary>
         protected VisualCollection visualChildren;
-
+        /// <summary>
+        /// 
+        /// </summary>
         public  UIElement AdornedElement
         {
-            get { return adornedElement; }
+            get { return adornedElement_; }
             /*set
             {
                 if (adornedElement == value) return;
@@ -48,18 +50,21 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
       
             }*/
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="element"></param>
         public BaseManipulator(UIElement element)
             //: base(element)
         {
-            adornedElement = element;
-            if (!(adornedElement.RenderTransform is TransformGroup))
+            adornedElement_ = element;
+            if (!(adornedElement_.RenderTransform is TransformGroup))
             {
                 TransformGroup t = new TransformGroup();
                 t.Children.Add(new MatrixTransform());
                 t.Children.Add(new RotateTransform());
-                adornedElement.RenderTransform = t;
-                adornedElement.RenderTransformOrigin = new Point(0.5, 0.5);
+                adornedElement_.RenderTransform = t;
+                adornedElement_.RenderTransformOrigin = new Point(0.5, 0.5);
 
             }
             ThumbsResources tr = new ThumbsResources();
@@ -79,24 +84,40 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
          /// event thet emit when decorated element is changed
          /// </summary>
         public event ObjectChangedDelegate ObjectChanged;
+        /// <summary>
+        /// 
+        /// </summary>
         public event ObjectChangedDelegate ObjectChangedPreview;
-        
+        /// <summary>
+        /// 
+        /// </summary>
         protected void  RaiseObjectChangedPrevewEvent()
         {
             if (ObjectChangedPreview != null)
                 ObjectChangedPreview(AdornedElement);
         }
+        /// <summary>
+        /// 
+        /// </summary>
         protected void RaiseObjectChangedEvent()
         {
             if (ObjectChanged != null)
                 ObjectChanged(AdornedElement);
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
-
-        
-
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual void Activate()
         {
             this.Visibility = Visibility.Visible;
@@ -104,6 +125,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             InvalidateMeasure();
             InvalidateArrange();
         }
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual void Deactivate()
         {
             this.Visibility = Visibility.Collapsed;
@@ -111,6 +135,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             InvalidateMeasure();
             InvalidateArrange();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="el"></param>
+        /// <returns></returns>
         public virtual bool IsSelactable(UIElement el)
         {
             return true;

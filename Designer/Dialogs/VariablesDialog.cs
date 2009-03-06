@@ -14,7 +14,6 @@ namespace FreeSCADA.Designer.Dialogs
 	{
 		bool selectMode = false;
 		List<IChannel> selectedChannels = new List<IChannel>();
-
 		/// <summary>
 		/// Constructor
 		/// </summary>
@@ -23,19 +22,41 @@ namespace FreeSCADA.Designer.Dialogs
 			InitializeComponent();
 			Initialize();			
 		}
-
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		public VariablesDialog(bool selectMode)
-		{
-			this.selectMode = selectMode;
+        public VariablesDialog(bool selectMode)
+        {
+            this.selectMode = selectMode;
 
-			InitializeComponent();
-			Initialize();
-		}
+            InitializeComponent();
+            Initialize();
+        }
+		/// <summary>
+		/// Constructor
+		/// </summary>
+        public VariablesDialog(bool selectMode, string varname)
+        {
+            this.selectMode = selectMode;
 
-		void Initialize()
+            InitializeComponent();
+            Initialize();
+
+            channelsGrid.Selection.EnableMultiSelection = false;
+            for (int i = 0; i < channelsGrid.Rows.Count; i++)
+            {
+                if (channelsGrid.Rows[i].Tag != null)
+                {
+                    if ((channelsGrid.Rows[i].Tag as IChannel).PluginId + "." + (channelsGrid.Rows[i].Tag as IChannel).Name == varname)
+                    {
+                        channelsGrid.Selection.SelectRow(i, true);
+                        break;
+                    }
+                }
+            }
+        }
+
+        void Initialize()
 		{
 			DevAge.Drawing.RectangleBorder b = channelsGrid.Selection.Border;
 			b.SetWidth(0);

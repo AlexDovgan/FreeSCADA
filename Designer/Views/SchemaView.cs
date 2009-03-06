@@ -14,27 +14,31 @@ using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using FreeSCADA.Interfaces;
+using FreeSCADA.Interfaces.Plugins;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Windows;
 
 namespace FreeSCADA.Designer.Views
 {
     class SchemaView : DocumentView
     {
-        
+
         // TODO: make all actions by Commands, make command execution by pattern Vistor - one 
-     
+
         private WPFShemaContainer wpfSchemaContainer;
-        
+
         private BaseTool activeTool;
         private Type defaultTool = typeof(SelectionTool);
         private ScaleTransform SchemaScale = new ScaleTransform();
         private System.Windows.Point SavedScrollPosition;
         private SchemaDocument schema;
-		System.Windows.Forms.ContextMenu contextMenu = new System.Windows.Forms.ContextMenu();
-		ICommandContext documentMenuContext;
-        
-        List<ToolDescriptor> toolsList=new List<ToolDescriptor>();
-		SchemaCommand undoCommand, redoCommand;
-        
+        System.Windows.Forms.ContextMenu contextMenu = new System.Windows.Forms.ContextMenu();
+        ICommandContext documentMenuContext;
+
+        List<ToolDescriptor> toolsList = new List<ToolDescriptor>();
+        SchemaCommand undoCommand, redoCommand;
+
 
         public TextBox XamlView
         {
@@ -74,7 +78,7 @@ namespace FreeSCADA.Designer.Views
                 if (schema.MainCanvas != null)
                     schema.MainCanvas.Loaded -= MainCanvas_Loaded;
                 DocumentName = value.Name;
-                wpfSchemaContainer.View= value.MainCanvas;
+                wpfSchemaContainer.View = value.MainCanvas;
                 undoBuff = UndoRedoManager.GetUndoBuffer(Schema);
                 undoBuff.CanExecuteChanged += new EventHandler(undoBuff_CanExecuteChanged);
                 value.MainCanvas.Loaded += MainCanvas_Loaded;
@@ -99,7 +103,7 @@ namespace FreeSCADA.Designer.Views
                     activeTool.ObjectCreated += activeTool_ObjectCreated;
                     activeTool.ObjectDeleted += activeTool_ObjectDeleted;
                     activeTool.ObjectChanged += OnObjectChenged;
-					UpdateCommandState();
+                    UpdateCommandState();
                 }
                 return activeTool.GetType();
             }
@@ -125,27 +129,27 @@ namespace FreeSCADA.Designer.Views
                     activeTool.ObjectChanged += OnObjectChenged;
                     activeTool.ObjectDeleted += activeTool_ObjectDeleted;
                     activeTool.Activate();
-					UpdateCommandState();
+                    UpdateCommandState();
                 }
             }
         }
 
-        
-		private void UpdateCommandState()
-		{
-			foreach (CommandInfo cmdInfo in DocumentCommands)
-			{
-				if (cmdInfo.command is SchemaCommand)
-				{
-					SchemaCommand cmd = (SchemaCommand)cmdInfo.command;
+
+        private void UpdateCommandState()
+        {
+            foreach (CommandInfo cmdInfo in DocumentCommands)
+            {
+                if (cmdInfo.command is SchemaCommand)
+                {
+                    SchemaCommand cmd = (SchemaCommand)cmdInfo.command;
                     //TDODO: Need in refactoring, make using commands in common way
-					if (cmd is ZoomInCommand || cmd is ZoomOutCommand || cmd is UndoCommand || cmd is RedoCommand || cmd is ZoomLevelCommand)
-						cmd.ControlledObject = this;
-					else
-						cmd.ControlledObject = activeTool;
-				}
-			}
-		}
+                    if (cmd is ZoomInCommand || cmd is ZoomOutCommand || cmd is UndoCommand || cmd is RedoCommand || cmd is ZoomLevelCommand)
+                        cmd.ControlledObject = this;
+                    else
+                        cmd.ControlledObject = activeTool;
+                }
+            }
+        }
 
 
         public SchemaView()
@@ -167,8 +171,8 @@ namespace FreeSCADA.Designer.Views
             this.wpfSchemaContainer.TabIndex = 0;
             this.wpfSchemaContainer.Text = "WPFSchemaContainer";
             this.wpfSchemaContainer.Child.KeyDown += new System.Windows.Input.KeyEventHandler(WpfKeyDown);
-            this.wpfSchemaContainer.ZoomInEvent+=new WPFShemaContainer.ZoomDelegate(ZoomIn);
-            this.wpfSchemaContainer.ZoomOutEvent+=new WPFShemaContainer.ZoomDelegate(ZoomOut);
+            this.wpfSchemaContainer.ZoomInEvent += new WPFShemaContainer.ZoomDelegate(ZoomIn);
+            this.wpfSchemaContainer.ZoomOutEvent += new WPFShemaContainer.ZoomDelegate(ZoomOut);
             this.XamlView = new TextBox();
             this.XamlView.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.XamlView.Multiline = true;
@@ -187,52 +191,52 @@ namespace FreeSCADA.Designer.Views
             this.ResumeLayout(false);
             this.SavedScrollPosition = new System.Windows.Point(0.0, 0.0);
 
-			documentMenuContext = new SchemaMenuContext(contextMenu);
-			CommandManager.documentMenuContext = documentMenuContext;
-			this.ContextMenu = contextMenu;
+            documentMenuContext = new SchemaMenuContext(contextMenu);
+            CommandManager.documentMenuContext = documentMenuContext;
+            this.ContextMenu = contextMenu;
 
-			// Commands
-			ICommand copyCommand = new CopyCommand();
-			ICommand pasteCommand = new PasteCommand();
-			ICommand cutCommand = new CutCommand();
-			ICommand bindingCommand = new CommonBindingCommand();
+            // Commands
+            ICommand copyCommand = new CopyCommand();
+            ICommand pasteCommand = new PasteCommand();
+            ICommand cutCommand = new CutCommand();
+            ICommand bindingCommand = new CommonBindingCommand();
 
 
             // Commands to ToolStrip
-			DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
+            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
             DocumentCommands.Add(new CommandInfo(undoCommand = new UndoCommand()));
             DocumentCommands.Add(new CommandInfo(redoCommand = new RedoCommand()));
             DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
-			DocumentCommands.Add(new CommandInfo(cutCommand));
-			DocumentCommands.Add(new CommandInfo(copyCommand));
-			DocumentCommands.Add(new CommandInfo(pasteCommand));
-			DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
+            DocumentCommands.Add(new CommandInfo(cutCommand));
+            DocumentCommands.Add(new CommandInfo(copyCommand));
+            DocumentCommands.Add(new CommandInfo(pasteCommand));
+            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
             DocumentCommands.Add(new CommandInfo(new XamlViewCommand(this)));
             DocumentCommands.Add(new CommandInfo(new GroupCommand()));
             DocumentCommands.Add(new CommandInfo(new UngroupCommand()));
-			DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
-            DocumentCommands.Add(new CommandInfo(new ZMoveTopCommand()));
-            DocumentCommands.Add(new CommandInfo(new ZMoveBottomCommand())); 
             DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
-			DocumentCommands.Add(new CommandInfo(bindingCommand));
+            DocumentCommands.Add(new CommandInfo(new ZMoveTopCommand()));
+            DocumentCommands.Add(new CommandInfo(new ZMoveBottomCommand()));
+            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
+            DocumentCommands.Add(new CommandInfo(bindingCommand));
 
-			DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.ViewCommands), CommandManager.viewContext));    // Separator
-			DocumentCommands.Add(new CommandInfo(new ZoomLevelCommand(), CommandManager.viewContext));
+            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.ViewCommands), CommandManager.viewContext));    // Separator
+            DocumentCommands.Add(new CommandInfo(new ZoomLevelCommand(), CommandManager.viewContext));
             DocumentCommands.Add(new CommandInfo(new ZoomOutCommand(), CommandManager.viewContext));
             DocumentCommands.Add(new CommandInfo(new ZoomInCommand(), CommandManager.viewContext));
 
-			DocumentCommands.Add(new CommandInfo(cutCommand, CommandManager.documentMenuContext));
-			DocumentCommands.Add(new CommandInfo(copyCommand, CommandManager.documentMenuContext));
-			DocumentCommands.Add(new CommandInfo(pasteCommand, CommandManager.documentMenuContext));
-			DocumentCommands.Add(new CommandInfo(bindingCommand, CommandManager.documentMenuContext));
+            DocumentCommands.Add(new CommandInfo(cutCommand, CommandManager.documentMenuContext));
+            DocumentCommands.Add(new CommandInfo(copyCommand, CommandManager.documentMenuContext));
+            DocumentCommands.Add(new CommandInfo(pasteCommand, CommandManager.documentMenuContext));
+            DocumentCommands.Add(new CommandInfo(bindingCommand, CommandManager.documentMenuContext));
 
             CreateToolList();
-            
+
 
             this.wpfSchemaContainer.Child.AllowDrop = true;
             this.wpfSchemaContainer.Child.DragEnter += new System.Windows.DragEventHandler(Child_DragEnter);
             this.wpfSchemaContainer.Child.Drop += new System.Windows.DragEventHandler(Child_Drop);
-			//this.wpfSchemaContainer.View.ContextMenu = contextMenu;
+            //this.wpfSchemaContainer.View.ContextMenu = contextMenu;
         }
 
 
@@ -240,7 +244,7 @@ namespace FreeSCADA.Designer.Views
         void Child_Drop(object sender, System.Windows.DragEventArgs e)
         {
             TreeNode node = (TreeNode)e.Data.GetData("System.Windows.Forms.TreeNode");
-            
+
             System.Windows.Controls.ContentControl content = new System.Windows.Controls.ContentControl();
             System.Windows.Data.Binding bind = new System.Windows.Data.Binding();
             System.Windows.Data.ObjectDataProvider dp;
@@ -250,11 +254,11 @@ namespace FreeSCADA.Designer.Views
             dp.ObjectInstance = chs;
             dp.MethodName = "GetChannel";
             bind.Source = dp;
-            
+
             System.Windows.Data.BindingOperations.SetBinding(content, System.Windows.Controls.ContentControl.ContentProperty, bind);
             //TODO:need to solve problem with drag mouse capturing
-           // System.Windows.Point p=System.Windows.Input.Mouse.GetPosition(Schema.MainCanvas); 
-            
+            // System.Windows.Point p=System.Windows.Input.Mouse.GetPosition(Schema.MainCanvas); 
+
             System.Windows.Controls.Canvas.SetLeft(content, 0);
             System.Windows.Controls.Canvas.SetTop(content, 0);
             content.Width = 60; content.Height = 50;
@@ -263,11 +267,11 @@ namespace FreeSCADA.Designer.Views
                 System.Windows.DataTemplate dt = ((System.Windows.DataTemplate)XamlReader.Load(new XmlTextReader(new StringReader(StringResources.ChannelDefaultTemplate))));
                 dt.DataType = typeof(BaseChannel);
                 System.Windows.DataTemplateKey dk = new System.Windows.DataTemplateKey(typeof(BaseChannel));
-                
+
                 Schema.MainCanvas.Resources[dk] = dt;
             }
             undoBuff.AddCommand(new AddGraphicsObject(content));
-            
+
         }
 
         void Child_DragEnter(object sender, System.Windows.DragEventArgs e)
@@ -276,27 +280,27 @@ namespace FreeSCADA.Designer.Views
             if (node != null)
             {
                 e.Effects = System.Windows.DragDropEffects.Copy;
-                               
+
             }
         }
 
         private void CreateToolList()
         {
             System.Drawing.Bitmap blankBitmap = new System.Drawing.Bitmap(10, 10);
-			toolsList.Add(new ToolDescriptor(StringResources.ToolSelection,
-				StringResources.ToolEditorGroupName,
+            toolsList.Add(new ToolDescriptor(StringResources.ToolSelection,
+                StringResources.ToolEditorGroupName,
                 global::FreeSCADA.Designer.Properties.Resources.cursor,
                 typeof(SelectionTool)));
             toolsList.Add(new ToolDescriptor(StringResources.ToolRectangle,
-				StringResources.ToolGrphicsGroupName,
+                StringResources.ToolGrphicsGroupName,
                 global::FreeSCADA.Designer.Properties.Resources.shape_square_add,
                 typeof(RectangleTool)));
             toolsList.Add(new ToolDescriptor(StringResources.ToolEllipse,
-				StringResources.ToolGrphicsGroupName,
+                StringResources.ToolGrphicsGroupName,
                 global::FreeSCADA.Designer.Properties.Resources.shape_ellipse_add,
                 typeof(EllipseTool)));
             toolsList.Add(new ToolDescriptor(StringResources.ToolTextbox,
-				StringResources.ToolGrphicsGroupName,
+                StringResources.ToolGrphicsGroupName,
                 global::FreeSCADA.Designer.Properties.Resources.textfield_add,
                 typeof(TextBoxTool)));
             toolsList.Add(new ToolDescriptor(StringResources.ToolPolyline,
@@ -309,34 +313,82 @@ namespace FreeSCADA.Designer.Views
                 typeof(ActionEditTool)));
             toolsList.Add(new ToolDescriptor(StringResources.ToolButton,
                 StringResources.ToolControlsGroupName,
-                blankBitmap ,
+                blankBitmap,
                  typeof(ControlCreateTool<System.Windows.Controls.Button>)));
             toolsList.Add(new ToolDescriptor(StringResources.ToolProgressbar,
-				StringResources.ToolControlsGroupName,
+                StringResources.ToolControlsGroupName,
                 blankBitmap,
                 typeof(ControlCreateTool<System.Windows.Controls.ProgressBar>)));
             toolsList.Add(new ToolDescriptor(StringResources.ToolScrollbar,
-				StringResources.ToolControlsGroupName,
+                StringResources.ToolControlsGroupName,
                 blankBitmap,
                 typeof(ControlCreateTool<System.Windows.Controls.Primitives.ScrollBar>)));
             toolsList.Add(new ToolDescriptor(StringResources.ToolImageControl,
-				StringResources.ToolControlsGroupName,
+                StringResources.ToolControlsGroupName,
                 blankBitmap,
                 typeof(ControlCreateTool<FreeSCADA.Common.Schema.AnimatedImage>)));
             toolsList.Add(new ToolDescriptor(StringResources.ToolSlider,
-				StringResources.ToolControlsGroupName,
+                StringResources.ToolControlsGroupName,
                 blankBitmap,
                 typeof(ControlCreateTool<System.Windows.Controls.Slider>)));
             toolsList.Add(new ToolDescriptor(StringResources.CheckBox,
                 StringResources.ToolControlsGroupName,
                 blankBitmap,
                 typeof(ControlCreateTool<System.Windows.Controls.CheckBox>)));
+
+            //--- DYNAMIC GENERATION OF TOOLS ---//
+            AssemblyName asmName = new AssemblyName("DynamicAssembly.SchemaView");
+            AssemblyBuilder asmBuilder =
+            AppDomain.CurrentDomain.DefineDynamicAssembly(
+                asmName,
+                AssemblyBuilderAccess.RunAndSave);
+
+            ModuleBuilder modBuilder =
+            asmBuilder.DefineDynamicModule(
+                asmName.Name,
+                asmName.Name + ".dll");
+            foreach (IVisualControlsPlug p in Env.Current.VisualPlugins.Plugins)
+            {
+                foreach (IVisualControlDescriptor d in p.Controls)
+                {
+                    Type baseType = typeof(UserControlCreateTool);
+                    TypeBuilder typeBuilder = modBuilder.DefineType(
+                                "UserControlCreateTool_" + d.Name,
+                                TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.Class,
+                                baseType);
+                    // Constructor 1 PARAMETERLESS
+                    ConstructorBuilder myCtor1 = typeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, new Type[0]);
+                    ILGenerator ctorIL1 = myCtor1.GetILGenerator();
+                    ConstructorInfo baseCtor1 = baseType.GetConstructor(new Type[0]);
+                    ctorIL1.Emit(OpCodes.Ldarg_0);
+                    ctorIL1.Emit(OpCodes.Call, baseCtor1);
+                    ctorIL1.Emit(OpCodes.Ret);
+                    // Constructor 2 with 1 parameter
+                    ConstructorBuilder myCtor2 = typeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, new Type[] { typeof(UIElement) });
+                    ILGenerator ctorIL2 = myCtor2.GetILGenerator();
+                    ConstructorInfo baseCtor2 = baseType.GetConstructor(new Type[] { typeof(UIElement) });
+                    ctorIL2.Emit(OpCodes.Ldarg_0);
+                    ctorIL2.Emit(OpCodes.Ldarg_1);
+                    ctorIL2.Emit(OpCodes.Call, baseCtor2);
+                    ctorIL2.Emit(OpCodes.Ret);
+
+                    Type myType = typeBuilder.CreateType();
+                    MethodInfo mi = myType.GetMethod("setControlType");
+                    Object obj = Activator.CreateInstance(myType);
+                    Object[] par = { d.Type };
+                    mi.Invoke(obj, par);    // Trick with static base type field
+                    toolsList.Add(new ToolDescriptor(d.Name,
+                        p.Name,
+                        blankBitmap,
+                        myType));
+                }
+            }
         }
 
         void undoBuff_CanExecuteChanged(object sender, EventArgs e)
         {
-			undoCommand.ControlledObject = this;
-			redoCommand.ControlledObject = this;
+            undoCommand.ControlledObject = this;
+            redoCommand.ControlledObject = this;
         }
 
         void activeTool_ObjectCreated(object sender, EventArgs e)
@@ -380,32 +432,32 @@ namespace FreeSCADA.Designer.Views
             else if (e.Key == System.Windows.Input.Key.X &&
                 (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
             {
-				if (activeTool is SelectionTool && activeTool.SelectedObject != null)
-				{
-					SchemaCommand cmd = new CutCommand();
-					cmd.ControlledObject = activeTool;
-					cmd.Execute();
-				}
+                if (activeTool is SelectionTool && activeTool.SelectedObject != null)
+                {
+                    SchemaCommand cmd = new CutCommand();
+                    cmd.ControlledObject = activeTool;
+                    cmd.Execute();
+                }
             }
             else if (e.Key == System.Windows.Input.Key.C &&
                 (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
             {
                 if (activeTool is SelectionTool && activeTool.SelectedObject != null)
-				{
-					SchemaCommand cmd = new CopyCommand();
-					cmd.ControlledObject = activeTool;
-					cmd.Execute();
-				}
+                {
+                    SchemaCommand cmd = new CopyCommand();
+                    cmd.ControlledObject = activeTool;
+                    cmd.Execute();
+                }
             }
             else if (e.Key == System.Windows.Input.Key.V &&
                 (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
             {
                 if (activeTool is SelectionTool)
-				{
-					SchemaCommand cmd = new PasteCommand();
-					cmd.ControlledObject = activeTool;
-					cmd.Execute();
-				}
+                {
+                    SchemaCommand cmd = new PasteCommand();
+                    cmd.ControlledObject = activeTool;
+                    cmd.Execute();
+                }
             }
             else if (e.Key == System.Windows.Input.Key.Delete)
             {
@@ -441,7 +493,7 @@ namespace FreeSCADA.Designer.Views
             else if (e.Key == System.Windows.Input.Key.F5)
             {
                 UpdateCanvasByXaml();
-            
+
             }
             else if (activeTool is SelectionTool)
             {
@@ -463,26 +515,38 @@ namespace FreeSCADA.Designer.Views
                 }
             }
 
-  
+
             Schema.MainCanvas.UpdateLayout();
             activeTool.Update();
         }
-        
+
         void activeTool_ObjectSelected(Object obj)
         {
-            
+
             if (obj == null)
                 obj = Schema.MainCanvas;
+            foreach (IVisualControlsPlug p in Env.Current.VisualPlugins.Plugins)
+            {
+                foreach (IVisualControlDescriptor d in p.Controls)
+                {
+                    if (obj.GetType() == d.Type)
+                    {
+                        RaiseObjectSelected(d.getPropProxy(obj));
+                        UpdateCommandState();
+                        return;
+                    }
+                }
+            }
             RaiseObjectSelected(new PropProxy(obj));
 
-			UpdateCommandState();
+            UpdateCommandState();
         }
 
         public override void OnActivated()
         {
             base.OnActivated();
 
-			CommandManager.documentMenuContext = documentMenuContext;
+            CommandManager.documentMenuContext = documentMenuContext;
 
             //Notify connected windows about new tool collection
             NotifyToolsCollectionChanged(AvailableTools, CurrentTool);
@@ -514,7 +578,7 @@ namespace FreeSCADA.Designer.Views
             Focus();
         }
 
-        
+
         void OnSchemaIsModifiedChanged(object sender, EventArgs e)
         {
             IsModified = ((SchemaDocument)sender).IsModified;
@@ -546,11 +610,11 @@ namespace FreeSCADA.Designer.Views
 
             if ((schema = SchemaDocument.CreateNewSchema()) == null)
                 return false;
-            
+
             Schema = schema;
             Schema.IsModifiedChanged += new EventHandler(OnSchemaIsModifiedChanged);
             IsModified = true;
-        
+
             return true;
         }
 
@@ -568,7 +632,7 @@ namespace FreeSCADA.Designer.Views
                 rsettings.ProhibitDtd = false;
                 rsettings.ConformanceLevel = ConformanceLevel.Fragment;
                 XmlReader reader = XmlReader.Create(filename, rsettings);
-                
+
                 try
                 {
                     reader.MoveToContent();
@@ -576,7 +640,7 @@ namespace FreeSCADA.Designer.Views
                     xslt.Load("resources\\svg2xaml.xsl", new XsltSettings(true, true), null);
 
                     //XmlReader.Create(new StringReader (StringResources.svg2xaml))
-                    
+
                     XmlWriterSettings settings = new XmlWriterSettings();
                     settings.Indent = true;
                     settings.IndentChars = "\t";
@@ -598,10 +662,10 @@ namespace FreeSCADA.Designer.Views
                 catch (Exception ex)
                 {
                     if (ex is DirectoryNotFoundException)
-                        MessageBox.Show("File resources/svg2xaml.xsl not found");
-                    else if((ex is XmlException)&&ex.Message.Contains("DTD"))
-                        MessageBox.Show("Please remove DTD declaration from your SVG file");
-                    else MessageBox.Show("Sorry but this SVG file can not be converted");
+                        System.Windows.Forms.MessageBox.Show("File resources/svg2xaml.xsl not found");
+                    else if ((ex is XmlException) && ex.Message.Contains("DTD"))
+                        System.Windows.Forms.MessageBox.Show("Please remove DTD declaration from your SVG file");
+                    else System.Windows.Forms.MessageBox.Show("Sorry but this SVG file can not be converted");
                     reader.Close();
                 }
 
@@ -636,10 +700,10 @@ namespace FreeSCADA.Designer.Views
             SchemaScale.ScaleX *= 1.05;
             SchemaScale.ScaleY *= 1.05;
             Schema.MainCanvas.LayoutTransform = SchemaScale;
-            msv.ScrollToVerticalOffset(msv.VerticalOffset * 1.05 + center.Y* 0.05);
+            msv.ScrollToVerticalOffset(msv.VerticalOffset * 1.05 + center.Y * 0.05);
             msv.ScrollToHorizontalOffset(msv.HorizontalOffset * 1.05 + center.X * 0.05);
 
-			UpdateZoomLevel();
+            UpdateZoomLevel();
         }
 
         public void ZoomOut()
@@ -656,18 +720,18 @@ namespace FreeSCADA.Designer.Views
             msv.ScrollToVerticalOffset(msv.VerticalOffset / 1.05 - center.Y * 0.05);
             msv.ScrollToHorizontalOffset(msv.HorizontalOffset / 1.05 - center.X * 0.05);
 
-			UpdateZoomLevel();
+            UpdateZoomLevel();
         }
 
-		private void UpdateZoomLevel()
-		{
-			foreach (CommandInfo cmdInfo in DocumentCommands)
-			{
-				if (cmdInfo.command is ZoomLevelCommand)
-					(cmdInfo.command as ZoomLevelCommand).Level = SchemaScale.ScaleX;
-			}
-		}
-      
+        private void UpdateZoomLevel()
+        {
+            foreach (CommandInfo cmdInfo in DocumentCommands)
+            {
+                if (cmdInfo.command is ZoomLevelCommand)
+                    (cmdInfo.command as ZoomLevelCommand).Level = SchemaScale.ScaleX;
+            }
+        }
+
         public void UpdateCanvasByXaml()
         {
             if (XamlView.Visible)
@@ -702,10 +766,10 @@ namespace FreeSCADA.Designer.Views
         {
             if (XamlView.Visible)
             {
-               
+
                 XamlView.Text = EditorHelper.SerializeObject(Schema.MainCanvas);
             }
         }
-        
+
     }
 }

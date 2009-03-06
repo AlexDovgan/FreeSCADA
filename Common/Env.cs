@@ -7,8 +7,9 @@ namespace FreeSCADA.Common
 	{
 		Commands commands;
 		Control mainWindow;
-		CommunationPlugs communicationPlugins;
-		FreeSCADA.Common.Project project;
+        CommunationPlugs communicationPlugins;
+        VisualControlsPlugs visualPlugins;
+        FreeSCADA.Common.Project project;
 		EnvironmentMode mode;
 		Logger logger;
 
@@ -25,9 +26,11 @@ namespace FreeSCADA.Common
 				environmentInstance.CreateNewProject();
 				environmentInstance.commands = new Commands(mainMenu, mainToolbar);
 				environmentInstance.mainWindow = mainWindow;
-				environmentInstance.communicationPlugins = new CommunationPlugs();
+                environmentInstance.communicationPlugins = new CommunationPlugs();
+                environmentInstance.visualPlugins = new VisualControlsPlugs();
 
 				environmentInstance.communicationPlugins.Load();
+                environmentInstance.visualPlugins.Load();
 			}
 		}
         
@@ -78,6 +81,11 @@ namespace FreeSCADA.Common
 		public CommunationPlugs CommunicationPlugins
 		{
 			get { return communicationPlugins; }
+		}
+
+		public VisualControlsPlugs VisualPlugins
+		{
+			get { return visualPlugins; }
 		}
 
 		public void CreateNewProject()

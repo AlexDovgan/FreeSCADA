@@ -9,15 +9,39 @@ using FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditors;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {
-	class PropertyInfo
+    /// <summary>
+    /// 
+    /// </summary>
+	public class PropertyInfo
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public string SourceProperty = "";
+        /// <summary>
+        /// 
+        /// </summary>
 		public string TargetProperty = "";
+        /// <summary>
+        /// 
+        /// </summary>
 		public string DisplayName = "";
+        /// <summary>
+        /// 
+        /// </summary>
 		public string Description = "";
+        /// <summary>
+        /// 
+        /// </summary>
 		public string Group = "";
+        /// <summary>
+        /// 
+        /// </summary>
 		public Type Editor;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public string GetTargetPropertyName()
 		{
 			if (string.IsNullOrEmpty(TargetProperty))
@@ -25,7 +49,10 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			else
 				return TargetProperty;
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public string GetTargetPropertyDisplayName()
 		{
 			if (string.IsNullOrEmpty(DisplayName))
@@ -38,7 +65,10 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			else
 				return DisplayName;
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 		public override string ToString()
 		{
 			return GetTargetPropertyDisplayName();

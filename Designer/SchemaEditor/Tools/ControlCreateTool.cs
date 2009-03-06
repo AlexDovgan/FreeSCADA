@@ -9,8 +9,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
     class ControlCreateTool<T>:DrawTool
     {
-        Point startPos;
-		bool isDragging;
+        //Point startPos;
+		//bool isDragging;
 		FrameworkElement createdObject;
         DrawingVisual boundce = new DrawingVisual();
 

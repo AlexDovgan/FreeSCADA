@@ -10,7 +10,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     /// <summary>
     /// Base tool implementation for tools that just draw a single object.
     /// </summary>
-    abstract class DrawTool : BaseTool
+    abstract public class DrawTool : BaseTool
     {
         Point startPos;
         Rect rect;
@@ -19,14 +19,27 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         GridManager gridManager;
 
         DrawingVisual objectPrview = new DrawingVisual();
-
+        /// <summary>
+        /// 
+        /// </summary>
         public enum SnapOrgin {
+            /// <summary>
+            /// 
+            /// </summary>
             TopLeft,
+            /// <summary>
+            /// 
+            /// </summary>
             Center
         }
-        
-        
         /// <summary>
+        /// 
+        /// </summary>
+        public DrawTool()
+            : base()
+        {
+        }
+       /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="element"></param>
@@ -39,9 +52,20 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             gridManager = GridManager.GetGridManagerFor(element);
         }
+        /// <summary>
+        /// 
+        /// </summary>
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
  
@@ -76,7 +100,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             }
             base.OnPreviewMouseMove(e);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
              if (isDragged)
@@ -94,7 +121,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             ReleaseMouseCapture();
             base.OnPreviewMouseLeftButtonUp(e);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnPreviewMouseLeftButtonDown( MouseButtonEventArgs e)
         {
 
@@ -108,8 +138,17 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             e.Handled = false;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="rect"></param>
         protected abstract void DrawPreview(DrawingContext context, Rect rect);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <returns></returns>
         protected abstract UIElement DrawEnded(Rect rect);
     }
 

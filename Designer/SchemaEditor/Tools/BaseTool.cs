@@ -18,9 +18,15 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     /// </summary>
     /// 
 
-    abstract class BaseTool : Adorner
+    abstract public class BaseTool : Adorner
     {
-        protected BaseManipulator toolManipulator;
+        /// <summary>
+        /// 
+        /// </summary>
+        protected BaseManipulator toolManipulator_;
+        /// <summary>
+        /// 
+        /// </summary>
         protected GridManager GridManager
         {
             get
@@ -28,20 +34,55 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 return GridManager.GetGridManagerFor(AdornedElement);
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
         protected VisualCollection visualChildren;
+        /// <summary>
+        /// 
+        /// </summary>
         protected UIElement workedLayer;
   
-        
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler ToolFinished;
+        /// <summary>
+        /// 
+        /// </summary>
 		public event EventHandler ToolStarted;
+        /// <summary>
+        /// 
+        /// </summary>
 		public event EventHandler ToolWorking;
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler ObjectCreated;
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler ObjectDeleted;
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler ObjectChanged;    
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
         public delegate void ObjectSeletedDelegate(Object obj);
+        /// <summary>
+        /// 
+        /// </summary>
         public event ObjectSeletedDelegate ObjectSelected;
-
+        /// <summary>
+        /// 
+        /// </summary>
         protected List<UIElement> selectedElements = new List<UIElement>();
+        /// <summary>
+        /// 
+        /// </summary>
         public List<UIElement> SelectedObjects
         {
             get { return selectedElements; }
@@ -55,22 +96,22 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             get
             {
-                return toolManipulator;
+                return toolManipulator_;
             }
             set
             {
-                if (toolManipulator != value)
+                if (toolManipulator_ != value)
                 {
-                    if (toolManipulator != null)
+                    if (toolManipulator_ != null)
                     {
-                        toolManipulator.ObjectChangedPreview -= OnObjectChanged;
-                        visualChildren.Remove(toolManipulator);
-                        toolManipulator.Deactivate();
+                        toolManipulator_.ObjectChangedPreview -= OnObjectChanged;
+                        visualChildren.Remove(toolManipulator_);
+                        toolManipulator_.Deactivate();
                     }
-                    if ((toolManipulator=value) != null)
+                    if ((toolManipulator_=value) != null)
                     { 
-                        visualChildren.Add(toolManipulator);
-                        toolManipulator.ObjectChangedPreview += OnObjectChanged;
+                        visualChildren.Add(toolManipulator_);
+                        toolManipulator_.ObjectChangedPreview += OnObjectChanged;
                         //toolManipulator.Activate();
                         
                     }
@@ -111,7 +152,17 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             }
 
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        public BaseTool()
+            : base(new UIElement())
+        {
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="element"></param>
         public BaseTool(UIElement element)
             : base(element)
         {
@@ -129,9 +180,20 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             visualChildren.Add(drawingVisual);
             
         }
+        /// <summary>
+        /// 
+        /// </summary>
         protected override int VisualChildrenCount { get { return visualChildren.Count; } }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnPreviewMouseLeftButtonDown( MouseButtonEventArgs e)
         {
 			NotifyToolStarted();
@@ -162,22 +224,34 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 }
             AdornerLayer.GetAdornerLayer(AdornedElement).Update();
         }
-    
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
 		//	NotifyToolFinished();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
         	NotifyToolWorking();
             base.OnPreviewMouseMove(e);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="finalSize"></param>
+        /// <returns></returns>
         protected override Size ArrangeOverride(Size finalSize)
         {
-            if (toolManipulator != null)
+            if (toolManipulator_ != null)
             {
         
-                toolManipulator.Arrange(new Rect(finalSize));
+                toolManipulator_.Arrange(new Rect(finalSize));
             }
             return finalSize;
         }
@@ -190,6 +264,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
            AdornerLayer.GetAdornerLayer(AdornedElement).Add(this);
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
         public void Update()
         {
             if (ToolManipulator != null)
@@ -208,48 +285,83 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             if(AdornerLayer.GetAdornerLayer(AdornedElement)!=null)
                 AdornerLayer.GetAdornerLayer(AdornedElement).Remove(this);
         }
+        /// <summary>
+        /// 
+        /// </summary>
         protected  void NotifyToolFinished()
         {
 			if(ToolFinished != null)
 				ToolFinished(this, new EventArgs());
         }
+        /// <summary>
+        /// 
+        /// </summary>
         protected void NotifyToolStarted()
         {
 			if (ToolStarted != null)
 				ToolStarted(this, new EventArgs());
         }
+        /// <summary>
+        /// 
+        /// </summary>
         protected void NotifyToolWorking()
         {
 			if (ToolWorking != null)
 				ToolWorking(this, new EventArgs());
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
         public void NotifyObjectCreated(UIElement obj)
         {
             if (ObjectCreated != null)
                 ObjectCreated(obj, new EventArgs());
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
         public void NotifyObjectDeleted(UIElement obj)
         {
             if (ObjectDeleted != null)
                 ObjectDeleted(obj, new EventArgs());
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
         public void OnObjectChanged(UIElement obj)
         {
             if (ObjectChanged != null)
                 ObjectChanged(obj, new EventArgs()); 
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         protected virtual BaseManipulator CreateToolManipulator(UIElement obj)
         {
             return new DragResizeRotateManipulator(obj);//GeometryHilightManipulator(obj);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
         protected void RaiseObjectSelected(Object obj)
         {
             if (ObjectSelected != null)
                 ObjectSelected(obj);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="transform"></param>
+        /// <returns></returns>
         public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
         {
             Matrix m = new Matrix();
