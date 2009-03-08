@@ -278,22 +278,7 @@ namespace FreeSCADA.Designer
 			return true;
 		}
 
-        public bool ImportSchema()
-        {
-            if(!(currentDocument is SchemaView)) 
-                return false;
-            OpenFileDialog fd = new OpenFileDialog();
-
-            fd.Filter = StringResources.FileImportDialogFilter;
-            fd.FilterIndex = 0;
-            fd.RestoreDirectory = true;
-
-            if (fd.ShowDialog() != DialogResult.OK )
-                return false;
-            return  (currentDocument as SchemaView).ImportFile(fd.FileName);
-            
-        }
-
+      
 		void OnMRUItemClicked(object sender, string file)
 		{
 			Close();
@@ -411,11 +396,11 @@ namespace FreeSCADA.Designer
 
         public void ExecuteCommand(FreeSCADA.Interfaces.ICommand command, Object param)
         {
-			SchemaEditor.SchemaCommands.SchemaCommand cmd = (SchemaEditor.SchemaCommands.SchemaCommand)command;
-			if(cmd != null)
-				cmd.ControlledObject = (param == null) ? currentDocument : param;
+			//SchemaEditor.SchemaCommands.SchemaCommand cmd = (SchemaEditor.SchemaCommands.SchemaCommand)command;
+			//if(cmd != null)
+			//	cmd.ControlledObject = (param == null) ? currentDocument : param;
 
-			command.Execute();
+			//command.Execute();
         }
 
 

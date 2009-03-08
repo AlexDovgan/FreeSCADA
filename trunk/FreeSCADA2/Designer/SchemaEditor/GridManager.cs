@@ -19,7 +19,7 @@ namespace FreeSCADA.Designer.SchemaEditor
     {
         #region AttachedProperties
         /// <summary>
-        /// Grid snapling on attached property
+        /// Grid snapling on attached€ property
         /// </summary>
         public static readonly DependencyProperty GridOnProperty = DependencyProperty.RegisterAttached(
             "GridOn",

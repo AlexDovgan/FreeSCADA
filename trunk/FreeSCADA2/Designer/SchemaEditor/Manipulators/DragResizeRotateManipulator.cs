@@ -129,7 +129,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 
         void control_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            RaiseObjectChangedEvent();
+            
             InvalidateArrange();
         }
 
@@ -145,7 +145,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         {
         
             InvalidateArrange();
-            RaiseObjectChangedPrevewEvent();
+            
         }
 
         protected override Size ArrangeOverride(Size finalSize)

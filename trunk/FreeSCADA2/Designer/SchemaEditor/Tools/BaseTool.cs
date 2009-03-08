@@ -23,7 +23,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// <summary>
         /// 
         /// </summary>
-        protected BaseManipulator toolManipulator_;
+        protected BaseManipulator toolManipulator;
         /// <summary>
         /// 
         /// </summary>
@@ -96,26 +96,26 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             get
             {
-                return toolManipulator_;
+                return toolManipulator;
             }
             set
             {
-                if (toolManipulator_ != value)
+                if (toolManipulator != value)
                 {
-                    if (toolManipulator_ != null)
+                    if (toolManipulator != null)
                     {
-                        toolManipulator_.ObjectChangedPreview -= OnObjectChanged;
-                        visualChildren.Remove(toolManipulator_);
-                        toolManipulator_.Deactivate();
+                       
+                        visualChildren.Remove(toolManipulator);
+                        toolManipulator.Deactivate();
                     }
-                    if ((toolManipulator_=value) != null)
+                    if ((toolManipulator=value) != null)
                     { 
-                        visualChildren.Add(toolManipulator_);
-                        toolManipulator_.ObjectChangedPreview += OnObjectChanged;
+                        visualChildren.Add(toolManipulator);
+                        
                         //toolManipulator.Activate();
                         
                     }
-                    AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+                    InvalidateVisual();
                 }
             }
 
@@ -147,7 +147,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 }
                 else
                     ToolManipulator = null;
-                AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+                InvalidateVisual();
                 RaiseObjectSelected(value);
             }
 
@@ -222,7 +222,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     //e.Handled = true;
 
                 }
-            AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+            InvalidateVisual();
         }
         /// <summary>
         /// 
@@ -248,10 +248,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// <returns></returns>
         protected override Size ArrangeOverride(Size finalSize)
         {
-            if (toolManipulator_ != null)
+            if (toolManipulator != null)
             {
-        
-                toolManipulator_.Arrange(new Rect(finalSize));
+                ToolManipulator.InvalidateVisual(); 
+                toolManipulator.Arrange(new Rect(finalSize));
             }
             return finalSize;
         }
@@ -262,19 +262,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             
            AdornerLayer.GetAdornerLayer(AdornedElement).Add(this);
-
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Update()
-        {
-            if (ToolManipulator != null)
-            {
-                ToolManipulator.InvalidateMeasure();
-                ToolManipulator.InvalidateArrange();
-            }
-        }
+         }
+     
         /// <summary>
         /// tool deactiavaion on working Canvas
         ///
@@ -333,16 +322,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// 
         /// </summary>
         /// <param name="obj"></param>
-        public void OnObjectChanged(UIElement obj)
-        {
-            if (ObjectChanged != null)
-                ObjectChanged(obj, new EventArgs()); 
-
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
         /// <returns></returns>
         protected virtual BaseManipulator CreateToolManipulator(UIElement obj)
         {
@@ -368,10 +347,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             m.OffsetX = ((MatrixTransform)transform).Matrix.OffsetX;
             m.OffsetY = ((MatrixTransform)transform).Matrix.OffsetY;
 
-            return transform;//new MatrixTransform(m); //this code neded for right manipulators zooming
+            return transform;//new MatrixTransform(m); ;// //this code neded for right manipulators zooming
 
         }
-        
+     
        
     }
 

@@ -176,7 +176,6 @@
 			this.importSchemaToolStripMenuItem.Name = "importSchemaToolStripMenuItem";
 			this.importSchemaToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
 			this.importSchemaToolStripMenuItem.Text = "Import Graphics";
-			this.importSchemaToolStripMenuItem.Click += new System.EventHandler(this.importSchemaToolStripMenuItem_Click);
 			// 
 			// exitToolStripMenuItem
 			// 

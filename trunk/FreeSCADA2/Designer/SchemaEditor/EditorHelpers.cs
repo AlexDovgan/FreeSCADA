@@ -207,6 +207,7 @@ namespace FreeSCADA.Designer.SchemaEditor
 
             return boundce;
         }
+        
         public static IList<DependencyProperty> GetSetedProperties(DependencyObject obj)
         {
             List<DependencyProperty> seted = new List<DependencyProperty>();
@@ -225,6 +226,7 @@ namespace FreeSCADA.Designer.SchemaEditor
 
             return seted;
         }
+
         public static void CopyObjects(DependencyObject source, DependencyObject destination)
         {
             if (source is IAddChild)
@@ -282,14 +284,7 @@ namespace FreeSCADA.Designer.SchemaEditor
 
 
         }
-        public static BaseTool GetActiveTool(SchemaDocument doc)
-        {
-            AdornerLayer al = AdornerLayer.GetAdornerLayer(doc.MainCanvas);
-            Adorner[] adorners= al.GetAdorners(doc.MainCanvas);
-            if (adorners.Length> 0 && adorners[0] is BaseTool)
-                return adorners[0] as BaseTool;
-            else return null;
-        }
+      
         public static string SerializeObject(object instance)
         {
            

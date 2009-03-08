@@ -10,21 +10,7 @@ namespace FreeSCADA.Common.Schema
 {
     public class SchemaDocument
     {
-        public event EventHandler IsModifiedChanged;
-
-
-        bool isModified = false;
-        public bool IsModified
-        {
-            get { return isModified; }
-            set
-            {
-                isModified = value;
-                if (IsModifiedChanged != null)
-                    IsModifiedChanged(this, new EventArgs());
-            }
-        }
-
+       
         public String Name
         {
             get;
@@ -77,7 +63,6 @@ namespace FreeSCADA.Common.Schema
             schema.MainCanvas.Background = System.Windows.Media.Brushes.White;
             schema.MainCanvas.Width = 800;	//TODO: Get default values from application settings
             schema.MainCanvas.Height = 600;	//TODO: Get default values from application settings
-            schema.isModified = true;
             return schema;
         }
 
@@ -94,8 +79,7 @@ namespace FreeSCADA.Common.Schema
                 XamlWriter.Save(MainCanvas, dsm);
                 Env.Current.Project.SetData("Schemas/" + Name + "/xaml", ms);
             }
-            IsModified = false;
-        
+  
         }
         public void LinkActions()
         {

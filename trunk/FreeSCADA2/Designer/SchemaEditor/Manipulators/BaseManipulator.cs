@@ -16,7 +16,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         /// <summary>
         /// Element that manipulator is decorate
         /// </summary>
-        protected UIElement adornedElement_;
+        protected UIElement adornedElement;
         /// <summary>
         /// Container for manipulator controlls
         /// </summary>
@@ -26,7 +26,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         /// </summary>
         public  UIElement AdornedElement
         {
-            get { return adornedElement_; }
+            get { return adornedElement; }
             /*set
             {
                 if (adornedElement == value) return;
@@ -57,14 +57,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         public BaseManipulator(UIElement element)
             //: base(element)
         {
-            adornedElement_ = element;
-            if (!(adornedElement_.RenderTransform is TransformGroup))
+            adornedElement = element;
+            if (!(adornedElement.RenderTransform is TransformGroup))
             {
                 TransformGroup t = new TransformGroup();
                 t.Children.Add(new MatrixTransform());
                 t.Children.Add(new RotateTransform());
-                adornedElement_.RenderTransform = t;
-                adornedElement_.RenderTransformOrigin = new Point(0.5, 0.5);
+                adornedElement.RenderTransform = t;
+                adornedElement.RenderTransformOrigin = new Point(0.5, 0.5);
 
             }
             ThumbsResources tr = new ThumbsResources();
@@ -75,36 +75,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             
         }
         
-        /// <summary>
-        /// delegate for ObjectChanged event
-        /// </summary>
-        /// <param name="sender"></param>
-        public delegate void ObjectChangedDelegate(UIElement sender);
-         /// <summary>
-         /// event thet emit when decorated element is changed
-         /// </summary>
-        public event ObjectChangedDelegate ObjectChanged;
-        /// <summary>
-        /// 
-        /// </summary>
-        public event ObjectChangedDelegate ObjectChangedPreview;
-        /// <summary>
-        /// 
-        /// </summary>
-        protected void  RaiseObjectChangedPrevewEvent()
-        {
-            if (ObjectChangedPreview != null)
-                ObjectChangedPreview(AdornedElement);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        protected void RaiseObjectChangedEvent()
-        {
-            if (ObjectChanged != null)
-                ObjectChanged(AdornedElement);
 
-        }
         /// <summary>
         /// 
         /// </summary>
