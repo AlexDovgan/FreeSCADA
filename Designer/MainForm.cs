@@ -124,10 +124,7 @@ namespace FreeSCADA.Designer
 			}
 		}
 
-        private void importSchemaToolStripMenuItem_Click(object sender, System.EventArgs e)
-        {
-            windowManager.ImportSchema();
-        }
+       
 
         private void runButton_Click(object sender, EventArgs e)
         {

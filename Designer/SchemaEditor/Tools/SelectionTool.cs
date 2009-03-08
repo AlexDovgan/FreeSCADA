@@ -99,7 +99,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             }
             selectionRectangle.RenderOpen().Close();
-            AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+            InvalidateVisual();
             RaiseObjectSelected(SelectedObject);
             LastClickedPoint = GridManager.GetMousePos();
         }
@@ -167,7 +167,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             }
 
-            AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+            InvalidateVisual();
             RaiseObjectSelected(SelectedObject);
             e.Handled = false;
         }
@@ -196,18 +196,18 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             foreach (UIElement se in selectedElements)
             {
                 // undo
-                this.OnObjectChanged(se);
+                
                 double x = Canvas.GetLeft((se as FrameworkElement));
                 double y = Canvas.GetTop((se as FrameworkElement));
                 Canvas.SetLeft((se as FrameworkElement), x + delta_x);
                 Canvas.SetTop((se as FrameworkElement), y + delta_y);
-                if (moveUndoInfo)
-                    this.OnObjectChanged(se);
+               
             }
             moveUndoInfo = false;
 
             selectionRectangle.RenderOpen().Close();
-            //AdornerLayer.GetAdornerLayer(AdornedElement).Update();
+            InvalidateVisual();
+         
 
         }
 

@@ -5,9 +5,9 @@ using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using FreeSCADA.Interfaces;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace FreeSCADA.Designer.Views
+namespace FreeSCADA.Designer
 {
-	class DocumentView : DockContent
+	abstract class DocumentView : DockContent
 	{
 
         public BasicUndoBuffer undoBuff;
@@ -24,7 +24,12 @@ namespace FreeSCADA.Designer.Views
 		bool modifiedFlag;
 		bool handleModifiedFlagOnClose = true;
 
-		public struct CommandInfo
+        public event EventHandler IsModifiedChanged;
+
+
+      
+        
+        public struct CommandInfo
 		{
 			public ICommand command;
 			public ICommandContext defaultContext;
@@ -68,7 +73,10 @@ namespace FreeSCADA.Designer.Views
 		public virtual bool IsModified
 		{
 			get { return modifiedFlag; }
-			set { modifiedFlag = value; UpdateCaption(); }
+			set { modifiedFlag = value;
+                if (IsModifiedChanged != null)
+                    IsModifiedChanged(this, new EventArgs());
+                UpdateCaption(); }
 		}
 
 		public bool HandleModifiedOnClose

@@ -8,6 +8,7 @@ using System.Xml;
 using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 
+
 namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
 {
     /// <summary>
@@ -19,7 +20,7 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
         /// exexute command 
         /// exexuted when comman add to undo redo buffer
         /// </summary>
-        void Do(SchemaDocument doc);
+        void Do(DocumentView doc);
         /// <summary>
         /// executed when undo redo buffer execute redo for document
         /// </summary>
@@ -36,11 +37,11 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
     {
         static UndoRedoManager()
         {
-            undoBuffers=new Dictionary<SchemaDocument,BasicUndoBuffer>();
+            undoBuffers=new Dictionary<DocumentView ,BasicUndoBuffer>();
         }
-        
 
-        public static BasicUndoBuffer GetUndoBuffer(SchemaDocument doc)
+        
+        public static BasicUndoBuffer GetUndoBuffer(DocumentView doc)
         {
             if(!undoBuffers.ContainsKey(doc)) 
             {
@@ -49,7 +50,8 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
             }
             return undoBuffers[doc];
         }
-        public static void ReleaseUndoBuffer(SchemaDocument doc)
+
+        public static void ReleaseUndoBuffer(DocumentView doc)
         {
             if (undoBuffers.ContainsKey(doc))
             {
@@ -57,35 +59,38 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
   
             }
         }
-        static Dictionary<SchemaDocument,BasicUndoBuffer> undoBuffers;
+        static Dictionary<DocumentView, BasicUndoBuffer> undoBuffers;
     }
     /// <summary>
     /// Undo Redo buffer for document instance
     /// </summary>
     class BasicUndoBuffer
     {
-        SchemaDocument schemaDocument;
+        DocumentView view;
+        bool documentModifiedState;
         public event EventHandler CanExecuteChanged;
         public void RaiseCanExecuteChanged()
         {
             if (CanExecuteChanged != null)
                 CanExecuteChanged(this, new EventArgs());
         }
-        
 
-        public BasicUndoBuffer(SchemaDocument doc)
+
+        public BasicUndoBuffer(DocumentView doc)
         {
-            schemaDocument = doc;
+            view = doc;
         }
         public void AddCommand(IUndoCommand command)
         {
              redoStack.Clear();
-             command.Do(schemaDocument);
+             command.Do(view);
+             documentModifiedState = view.IsModified;
+             view.IsModified = true;
+
              undoStack.Push(command);
-            //(Env.Current.MainWindow as MainForm).undoButton.Enabled = true;
-            //(Env.Current.MainWindow as MainForm).redoButton.Enabled = false;
              RaiseCanExecuteChanged();
         }
+
         public void UndoCommand()
         {
             if(undoStack.Count==0)
@@ -95,13 +100,14 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
             try
             {
                 cmd.Undo();
-                //if (!CanUndo()) (Env.Current.MainWindow as MainForm).undoButton.Enabled = false;
+                view.IsModified = documentModifiedState;
+                
             }
             finally
             {
                 redoStack.Push(cmd);
                 RaiseCanExecuteChanged();
-                //(Env.Current.MainWindow as MainForm).redoButton.Enabled = true;
+              
             }
         }
 
@@ -115,6 +121,9 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
             {
                 cmd.Redo();
                 //if (!CanRedo()) (Env.Current.MainWindow as MainForm).redoButton.Enabled = false;
+                documentModifiedState = view.IsModified;
+                view.IsModified = true;
+
             }
             finally
             {
@@ -144,174 +153,162 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
     class AddGraphicsObject : IUndoCommand
     {
         UIElement addedObject;
-        SchemaDocument schemaDocument;
         protected bool documentModifiedState;
-
+        Views.SchemaView schemaView;
         public AddGraphicsObject(UIElement el)
         {
             addedObject = el;
         }
-        public void Do(SchemaDocument doc)
+        public void Do(DocumentView doc)
         {
-
-            schemaDocument = doc;
-            schemaDocument.MainCanvas.Children.Add(addedObject);
-            documentModifiedState = schemaDocument.IsModified;
-            schemaDocument.IsModified = true;
+            if (!(doc is Views.SchemaView))
+                throw new Exception("this is not schema");
+            schemaView = doc as Views.SchemaView;
+            schemaView.Schema.MainCanvas.Children.Add(addedObject);
         }
         public void Redo()
         {
-            schemaDocument.MainCanvas.Children.Add(addedObject);
-            documentModifiedState = schemaDocument.IsModified;
-            schemaDocument.IsModified = true;
+            schemaView.Schema.MainCanvas.Children.Add(addedObject);
+         
             
         }
         public void Undo()
         {
-            BaseTool activeTool;
-            schemaDocument.MainCanvas.Children.Remove(addedObject);
-            if ((activeTool = EditorHelper.GetActiveTool(schemaDocument)) != null)
-                activeTool.SelectedObject = null;
-            schemaDocument.IsModified=documentModifiedState;
-            
+            schemaView.Schema.MainCanvas.Children.Remove(addedObject);
+            if (schemaView.ActiveTool!= null)
+                schemaView.ActiveTool.SelectedObject = null;
+   
         }
 
     }
     class DeleteGraphicsObject : IUndoCommand
     {
         UIElement deletedObject;
-        SchemaDocument schemaDocument;
+
         protected bool documentModifiedState;
+        Views.SchemaView schemaView;
 
         public DeleteGraphicsObject(UIElement el)
         {
             deletedObject = el;
         }
-        public void Do(SchemaDocument doc)
+        public void Do(DocumentView doc)
         {
 
-            schemaDocument = doc;
-            schemaDocument.MainCanvas.Children.Remove(deletedObject);
-            documentModifiedState = schemaDocument.IsModified;
-            schemaDocument.IsModified = true;
+            if (!(doc is Views.SchemaView))
+                throw new Exception("this is not schema");
+            schemaView = doc as Views.SchemaView;
+
+            schemaView.Schema.MainCanvas.Children.Remove(deletedObject);
+            
         }
         public void Redo()
         {
-            schemaDocument.MainCanvas.Children.Remove(deletedObject);
-            documentModifiedState = schemaDocument.IsModified;
-            schemaDocument.IsModified = true;
-
+            schemaView.Schema.MainCanvas.Children.Remove(deletedObject);
+         
         }
         public void Undo()
         {
-         
-            schemaDocument.MainCanvas.Children.Add(deletedObject);
-            schemaDocument.IsModified = documentModifiedState;
 
-        }
+            schemaView.Schema.MainCanvas.Children.Add(deletedObject);
+       }
 
     }
-    /// <summary>
-    /// modify object command for undo redo buffer 
-    /// must added to buffer before object whill be changed
-    /// </summary>
-    class ModifyGraphicsObject : IUndoCommand
-    {
-        UIElement modifiedObject;
-        UIElement restoredObject;
-        string objectCopy;
-        SchemaDocument schemaDocument;
-        protected bool documentModifiedState;
-        public ModifyGraphicsObject(UIElement el)
-        {
-            modifiedObject = el;
+
+   // /// <summary>
+   // /// modify object command for undo redo buffer 
+   // /// must added to buffer before object whill be changed
+   // /// </summary>
+   // class ModifyGraphicsObject : IUndoCommand
+   // {
+   //     UIElement modifiedObject;
+   //     UIElement restoredObject;
+   //     string objectCopy;
+   //     SchemaDocument schemaDocument;
+   //     protected bool documentModifiedState;
+   //     public ModifyGraphicsObject(UIElement el)
+   //     {
+   //         modifiedObject = el;
          
-        }
-        public void Do(SchemaDocument doc)
-        {
-            objectCopy=XamlWriter.Save(modifiedObject);
-            schemaDocument = doc;
-            documentModifiedState = schemaDocument.IsModified;
-            schemaDocument.IsModified = true;
-        }
-        public void Redo()
-        {
+   //     }
+   //     public void Do(SchemaDocument doc)
+   //     {
+   //         objectCopy=XamlWriter.Save(modifiedObject);
+   //         schemaDocument = doc;
+      
+   //     }
+   //     public void Redo()
+   //     {
         
-            restoredObject = (UIElement)XamlReader.Load(new XmlTextReader(new StringReader(objectCopy)));
-            objectCopy = XamlWriter.Save(modifiedObject);
-            EditorHelper.CopyObjects(restoredObject, modifiedObject);
+   //         restoredObject = (UIElement)XamlReader.Load(new XmlTextReader(new StringReader(objectCopy)));
+   //         objectCopy = XamlWriter.Save(modifiedObject);
+   //         EditorHelper.CopyObjects(restoredObject, modifiedObject);
 
-            documentModifiedState = schemaDocument.IsModified;
-            schemaDocument.IsModified = true;
-            AdornerLayer.GetAdornerLayer(modifiedObject).Update();
-        }
-        public void Undo()
-        {
-            restoredObject = (UIElement)XamlReader.Load(new XmlTextReader(new StringReader(objectCopy)));
-            objectCopy = XamlWriter.Save(modifiedObject);
-            EditorHelper.CopyObjects(restoredObject, modifiedObject);
-            schemaDocument.IsModified = documentModifiedState;
-            if (AdornerLayer.GetAdornerLayer(modifiedObject) != null)
-                AdornerLayer.GetAdornerLayer(modifiedObject).Update();
-        }
+   //         AdornerLayer.GetAdornerLayer(modifiedObject).Update();
+   //     }
+   //     public void Undo()
+   //     {
+   //         restoredObject = (UIElement)XamlReader.Load(new XmlTextReader(new StringReader(objectCopy)));
+   //         objectCopy = XamlWriter.Save(modifiedObject);
+   //         EditorHelper.CopyObjects(restoredObject, modifiedObject);
+   //            if (AdornerLayer.GetAdornerLayer(modifiedObject) != null)
+   //             AdornerLayer.GetAdornerLayer(modifiedObject).Update();
+   //     }
 
-    }
+   // }
 
-    /// <summary>
-    /// change object command for undo redo buffer 
-    /// 
-    /// </summary>
-    class ChangeGraphicsObject : IUndoCommand
-    {
-        UIElement modifiedObject;
-        UIElement oldObject;
-        UIElement restoredObject;
-        string objectCopy;
-        SchemaDocument schemaDocument;
-        protected bool documentModifiedState;
-        public ChangeGraphicsObject(UIElement old, UIElement el)
-        {
-            oldObject = old;
-            modifiedObject = el;
+   // /// <summary>
+   // /// change object command for undo redo buffer 
+   // /// 
+   // /// </summary>
+   //class ChangeGraphicsObject : IUndoCommand
+   // {
+   //     UIElement modifiedObject;
+   //     UIElement oldObject;
+   //     UIElement restoredObject;
+   //     string objectCopy;
+   //     SchemaDocument schemaDocument;
+   //     protected bool documentModifiedState;
+   //     public ChangeGraphicsObject(UIElement old, UIElement el)
+   //     {
+   //         oldObject = old;
+   //         modifiedObject = el;
 
-        }
-        public void Do(SchemaDocument doc)
-        {
-            objectCopy = XamlWriter.Save(oldObject);
-            schemaDocument = doc;
-            int i = schemaDocument.MainCanvas.Children.IndexOf(oldObject);
-            schemaDocument.MainCanvas.Children.Remove(oldObject);
-            schemaDocument.MainCanvas.Children.Insert(i, modifiedObject);
-            documentModifiedState = schemaDocument.IsModified;
-            schemaDocument.IsModified = true;
-            AdornerLayer.GetAdornerLayer(modifiedObject).Update();
-        }
-        public void Redo()
-        {
+   //     }
+   //     public void Do(SchemaDocument doc)
+   //     {
+   //         objectCopy = XamlWriter.Save(oldObject);
+   //         schemaDocument = doc;
+   //         int i = schemaDocument.MainCanvas.Children.IndexOf(oldObject);
+   //         schemaDocument.MainCanvas.Children.Remove(oldObject);
+   //         schemaDocument.MainCanvas.Children.Insert(i, modifiedObject);
+        
+   //         AdornerLayer.GetAdornerLayer(modifiedObject).Update();
+   //     }
+   //     public void Redo()
+   //     {
 
-            modifiedObject = (UIElement)XamlReader.Load(new XmlTextReader(new StringReader(objectCopy)));
-            objectCopy = XamlWriter.Save(restoredObject);
+   //         modifiedObject = (UIElement)XamlReader.Load(new XmlTextReader(new StringReader(objectCopy)));
+   //         objectCopy = XamlWriter.Save(restoredObject);
 
-            int i = schemaDocument.MainCanvas.Children.IndexOf(restoredObject);
-            schemaDocument.MainCanvas.Children.Remove(restoredObject);
-            schemaDocument.MainCanvas.Children.Insert(i, modifiedObject);
+   //         int i = schemaDocument.MainCanvas.Children.IndexOf(restoredObject);
+   //         schemaDocument.MainCanvas.Children.Remove(restoredObject);
+   //         schemaDocument.MainCanvas.Children.Insert(i, modifiedObject);
 
-            documentModifiedState = schemaDocument.IsModified;
-            schemaDocument.IsModified = true;
-            AdornerLayer.GetAdornerLayer(modifiedObject).Update();
-        }
-        public void Undo()
-        {
-            restoredObject = (UIElement)XamlReader.Load(new XmlTextReader(new StringReader(objectCopy)));
-            objectCopy = XamlWriter.Save(modifiedObject);
+        
+   //         AdornerLayer.GetAdornerLayer(modifiedObject).Update();
+   //     }
+   //     public void Undo()
+   //     {
+   //         restoredObject = (UIElement)XamlReader.Load(new XmlTextReader(new StringReader(objectCopy)));
+   //         objectCopy = XamlWriter.Save(modifiedObject);
 
-            int i = schemaDocument.MainCanvas.Children.IndexOf(modifiedObject);
-            schemaDocument.MainCanvas.Children.Remove(modifiedObject);
-            schemaDocument.MainCanvas.Children.Insert(i, restoredObject);
+   //         int i = schemaDocument.MainCanvas.Children.IndexOf(modifiedObject);
+   //         schemaDocument.MainCanvas.Children.Remove(modifiedObject);
+   //         schemaDocument.MainCanvas.Children.Insert(i, restoredObject);
 
-            schemaDocument.IsModified = documentModifiedState;
-            AdornerLayer.GetAdornerLayer(restoredObject).Update();
-        }
+   //         AdornerLayer.GetAdornerLayer(restoredObject).Update();
+   //     }
 
-    }
+   // }
 }
