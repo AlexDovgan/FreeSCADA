@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace FreeSCADA.VisualControls.FS2EasyControls
 {
-    public class AnalogTextValueDescriptor : IVisualControlDescriptor
+    public class BinaryColorTextDescriptor : IVisualControlDescriptor
     {
         public static Plugin Plugin { get; set; }
 
@@ -17,7 +17,7 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
 
         public string Name
         {
-            get { return "AnalogTextValue"; }
+            get { return "BinaryColorText"; }
         }
 
         public string PluginId
@@ -27,7 +27,7 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
 
         public Type Type
         {
-            get { return typeof(AnalogTextValue); }
+            get { return typeof(BinaryColorText); }
         }
 
         public ManipulatorKind ManipulatorKind
@@ -37,7 +37,7 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
 
         public UIElement CreateControl()
         {
-            return new AnalogTextValue();
+            return new BinaryColorText();
         }
 
         public object Tag
@@ -48,7 +48,7 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
 
         public ICustomTypeDescriptor getPropProxy(object o)
         {
-            return (ICustomTypeDescriptor)new AnalogTextValuePropProxy(o);
+            return (ICustomTypeDescriptor)new BinaryColorTextPropProxy(o);
         }
         #endregion interface IVisualControlDescriptor
     }
@@ -56,13 +56,13 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
     /// Proxy class for Property editing in the Designer. Not all properties should be visible to and edited by the user,
     /// this class is a filter and passes through the necessary properties only
     /// </summary>
-    public class AnalogTextValuePropProxy : PropProxy
+    public class BinaryColorTextPropProxy : PropProxy
     {
         /// <summary>
         /// Pass the argument to base constructor
         /// </summary>
         /// <param name="controlledObject"></param>
-        public AnalogTextValuePropProxy(object controlledObject)
+        public BinaryColorTextPropProxy(object controlledObject)
             : base(controlledObject)
         {
         }
@@ -74,25 +74,23 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
         public override PropertyDescriptorCollection GetProperties(Attribute[] attributes)
         {
             List<PropertyWrapper> result = new List<PropertyWrapper>();
-            RegisterProperty(typeof(AnalogTextValue), "Canvas.Top", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "Canvas.Left", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "Width", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "Height", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "Canvas.Top", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "Canvas.Left", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "Width", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "Height", typeof(CommonTypeEditor), result);
 
-            RegisterProperty(typeof(AnalogTextValue), "Background", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "Foreground", typeof(CommonTypeEditor), result);
-            //RegisterProperty(typeof(AnalogTextValue), "BorderThickness", typeof(CommonTypeEditor), result);
-            //RegisterProperty(typeof(AnalogTextValue), "BorderBrush", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "Opacity", typeof(CommonTypeEditor), result);
-            //RegisterProperty(typeof(AnalogTextValue), "RenderTransform", null, result);
-            //RegisterProperty(typeof(AnalogTextValue), "RenderTransformOrigin", null, result);
+            RegisterProperty(typeof(BinaryColorText), "Background", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "Foreground", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "Background1", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "Foreground1", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "Text", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "Text1", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "Opacity", typeof(CommonTypeEditor), result);
 
-            RegisterProperty(typeof(AnalogTextValue), "DecimalPlaces", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "FontSize", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "FontFamily", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "ChannelBadEdge", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "ChannelName", typeof(ChannelSelectEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "Unit", typeof(ChannelSelectEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "FontSize", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "FontFamily", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "ChannelBadEdge", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "ChannelName", typeof(ChannelSelectEditor), result);
 
             return new PropertyDescriptorCollection(result.ToArray());
         }
@@ -109,7 +107,7 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
             PropertyInfo info = new PropertyInfo();
             info.SourceProperty = sourceProperty;
             info.Editor = editor;
-            result.Add(new PropertyWrapper(ControlledObject, info));
+            result.Add(new PropertyWrapper(base.ControlledObject, info));
         }
     }
 }

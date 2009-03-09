@@ -15,7 +15,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// <summary>
         /// 
         /// </summary>
-        static Type controlType = typeof(Control);      // Trick / this field will be set to another value in a dynamically defined child class
+        //protected Type controlType = typeof(Control);      // Trick / this field will be set to another value in a dynamically defined child class
+        protected virtual Type getControlType()
+        {
+            return null;
+        }
 
 		FrameworkElement createdObject;
         DrawingVisual boundce = new DrawingVisual();
@@ -33,7 +37,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         public UserControlCreateTool(UIElement element)
             : base(element)
 		{
-            if (!controlType.IsSubclassOf(typeof(FrameworkElement)))
+            if (!getControlType().IsSubclassOf(typeof(FrameworkElement)))
                 throw new Exception();
             visualChildren.Add(boundce);
 		}
@@ -49,13 +53,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 				createdObject.Measure(finalSize);
 			return finalSize;
 		}
-        ///
+        /// <summary>
         /// 
-        /// 
-        public void setControlType(Type ctrlType)
-        {
-            controlType = ctrlType;
-        }
+        /// </summary>
+        /// <returns></returns>
+        //public abstract Type getControlType();
         /// <summary>
         /// 
         /// </summary>
@@ -98,7 +100,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// <returns></returns>
         protected override UIElement DrawEnded(Rect rect)
         {
-            createdObject = (FrameworkElement)System.Activator.CreateInstance(controlType);
+            createdObject = (FrameworkElement)System.Activator.CreateInstance(getControlType());
             createdObject.Opacity = 1.0;
             //if (controlType == typeof(ContentControl) || controlType.IsSubclassOf(typeof(ContentControl)))
             //    (createdObject as ContentControl).Content = "Content";
@@ -110,5 +112,4 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             return createdObject;
         }
     }
-    
 }

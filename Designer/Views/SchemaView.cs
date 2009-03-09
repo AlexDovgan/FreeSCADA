@@ -269,12 +269,19 @@ namespace FreeSCADA.Designer.Views
                     ctorIL2.Emit(OpCodes.Ldarg_1);
                     ctorIL2.Emit(OpCodes.Call, baseCtor2);
                     ctorIL2.Emit(OpCodes.Ret);
+                    // Public static field with typeof(control)
+                    FieldBuilder fb = typeBuilder.DefineField("controlType", typeof(Type), FieldAttributes.Public | FieldAttributes.Static);
+                    MethodBuilder myGetControlType = typeBuilder.DefineMethod("getControlType", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Virtual, typeof(Type), null);
+                    ILGenerator methIL = myGetControlType.GetILGenerator();
+                    methIL.Emit(OpCodes.Ldsfld, fb);
+                    methIL.Emit(OpCodes.Ret);
 
                     Type myType = typeBuilder.CreateType();
                     MethodInfo mi = myType.GetMethod("setControlType");
-                    Object obj = Activator.CreateInstance(myType);
-                    Object[] par = { d.Type };
-                    mi.Invoke(obj, par);    // Trick with static base type field
+                    // Trick with static base type field
+                    FieldInfo fi = myType.GetField("controlType", BindingFlags.Public | BindingFlags.Static);
+                    fi.SetValue(null, d.Type);
+                    
                     toolsList.Add(new ToolDescriptor(d.Name,
                         p.Name,
                         blankBitmap,
@@ -473,6 +480,17 @@ namespace FreeSCADA.Designer.Views
 
             if (obj == null)
                 obj = Schema.MainCanvas;
+            foreach (IVisualControlsPlug p in Env.Current.VisualPlugins.Plugins)
+            {
+                foreach (IVisualControlDescriptor d in p.Controls)
+                {
+                    if (obj.GetType() == d.Type)
+                    {
+                        RaiseObjectSelected(d.getPropProxy(obj));
+                        return;
+                    }
+                }
+            }
             RaiseObjectSelected(new PropProxy(obj));
 
         }
