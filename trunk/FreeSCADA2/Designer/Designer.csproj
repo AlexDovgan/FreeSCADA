@@ -50,6 +50,10 @@
     <Reference Include="PresentationFramework">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="Puzzle.SyntaxBox.NET3.5, Version=1.4.10.36575, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\SyntaxBox\Puzzle.SyntaxBox.NET3.5.dll</HintPath>
+    </Reference>
     <Reference Include="SourceGrid, Version=4.11.2887.1415, Culture=neutral, PublicKeyToken=df6f5e538749e85d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\SourceGrid4_11\SourceGrid.dll</HintPath>
@@ -197,6 +201,9 @@
     <Compile Include="Views\ArchiverSettingsView.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Views\ScriptView.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Views\DocumentView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -268,6 +275,12 @@
     <EmbeddedResource Include="Views\ArchiverSettingsView.resx">
       <DependentUpon>ArchiverSettingsView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\ScriptsToolBoxView.resx">
+      <DependentUpon>ScriptsToolBoxView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ScriptView.resx">
+      <DependentUpon>ScriptView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\ProjectContentView.resx">
       <DependentUpon>ProjectContentView.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -299,6 +312,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\ToolBoxView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\ScriptsToolBoxView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\ToolWindow.cs">
@@ -335,11 +351,13 @@
     <None Include="Resources\disk.png" />
     <None Include="Resources\arrow_undo.png" />
     <None Include="Resources\arrow_redo.png" />
+    <None Include="Resources\checkmark.png" />
     <Content Include="Resources\cog_edit.png" />
     <Content Include="Resources\cursor.png" />
     <None Include="Resources\db_settings.png" />
-    <None Include="Resources\mark_bad.png" />
-    <None Include="Resources\mark_ok.png" />
+    <None Include="Resources\IronPython.syn" />
+    <None Include="Resources\log_error.png" />
+    <None Include="Resources\log_warning.png" />
     <Content Include="Resources\move_object_back.png" />
     <Content Include="Resources\move_object_front.png" />
     <Content Include="Resources\new_file.png" />
@@ -354,6 +372,9 @@
     <None Include="Resources\page_white_code_red.png" />
     <Content Include="Resources\save_file.png" />
     <None Include="Resources\table_add.png" />
+    <None Include="Resources\script.png" />
+    <None Include="Resources\script_add.png" />
+    <None Include="Resources\script_remove.png" />
     <Content Include="Resources\shape_ellipse_add.png" />
     <Content Include="Resources\shape_group.png" />
     <Content Include="Resources\shape_line_add.png" />

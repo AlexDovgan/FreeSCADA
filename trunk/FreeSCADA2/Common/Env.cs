@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using FreeSCADA.Common.Scripting;
 using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Common
@@ -12,6 +13,8 @@ namespace FreeSCADA.Common
         FreeSCADA.Common.Project project;
 		EnvironmentMode mode;
 		Logger logger;
+		ScriptManager scriptManager;
+
 
 		#region Initialization and singleton implementation
 		static Env environmentInstance = null;
@@ -27,6 +30,7 @@ namespace FreeSCADA.Common
 				environmentInstance.commands = new Commands(mainMenu, mainToolbar);
 				environmentInstance.mainWindow = mainWindow;
                 environmentInstance.communicationPlugins = new CommunationPlugs();
+                environmentInstance.scriptManager = new ScriptManager();
                 environmentInstance.visualPlugins = new VisualControlsPlugs();
 
 				environmentInstance.communicationPlugins.Load();
@@ -86,6 +90,11 @@ namespace FreeSCADA.Common
 		public VisualControlsPlugs VisualPlugins
 		{
 			get { return visualPlugins; }
+		}
+		
+		public ScriptManager ScriptManager
+		{
+			get { return scriptManager; }
 		}
 
 		public void CreateNewProject()

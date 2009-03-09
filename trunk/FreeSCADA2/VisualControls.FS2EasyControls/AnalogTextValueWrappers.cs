@@ -109,7 +109,7 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
             PropertyInfo info = new PropertyInfo();
             info.SourceProperty = sourceProperty;
             info.Editor = editor;
-            result.Add(new PropertyWrapper(base.controlledObject, info));
+            result.Add(new PropertyWrapper(ControlledObject, info));
         }
     }
 }

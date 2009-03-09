@@ -21,11 +21,37 @@ namespace FreeSCADA.Common.Schema
             get;
             set;
         }
-         
-        public SchemaDocument()
-        {
-               MainCanvas = new Canvas();
-        }
+
+		public SchemaDocument()
+		{
+			MainCanvas = new Canvas();
+			MainCanvas.Tag = this;
+		}
+
+		public static SchemaDocument GetSchemaDocument(DependencyObject element)
+		{
+			if (element == null)
+				return null;
+
+			DependencyObject parent = element;
+			while(parent != null)
+			{
+				if((parent is Canvas) && (parent as Canvas).Tag != null && (parent as Canvas).Tag is SchemaDocument)
+					break;
+
+				parent = VisualTreeHelper.GetParent(parent);
+			}
+
+			if(parent != null && parent is Canvas)
+			{
+				Canvas top = parent as Canvas;
+				if(top.Tag != null && top.Tag is SchemaDocument)
+					return top.Tag as SchemaDocument;
+			}
+
+			return null;
+		}
+
         public static SchemaDocument LoadSchema(string schemaName)
         {
             try
@@ -39,6 +65,7 @@ namespace FreeSCADA.Common.Schema
                     if (obj is Canvas)
                     {
                         schema.MainCanvas = obj as Canvas;
+						schema.MainCanvas.Tag = schema;
                         schema.Name = schemaName;
 
                     }
@@ -68,6 +95,7 @@ namespace FreeSCADA.Common.Schema
 
         public void SaveSchema()
         {
+			MainCanvas.Tag = null;
          //   WPFShemaContainer.ViewGrid(MainCanvas as Canvas, false);    // delete grid before save
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
@@ -79,7 +107,7 @@ namespace FreeSCADA.Common.Schema
                 XamlWriter.Save(MainCanvas, dsm);
                 Env.Current.Project.SetData("Schemas/" + Name + "/xaml", ms);
             }
-  
+			MainCanvas.Tag = this;
         }
         public void LinkActions()
         {

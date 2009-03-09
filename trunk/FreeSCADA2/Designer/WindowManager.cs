@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using FreeSCADA.Common;
+using FreeSCADA.Common.Scripting;
 using FreeSCADA.Designer.Dialogs;
 using FreeSCADA.Designer.Views;
 using WeifenLuo.WinFormsUI.Docking;
@@ -19,6 +20,7 @@ namespace FreeSCADA.Designer
 		ProjectContentView projectContentView;
         PropertyBrowserView propertyBrowserView;
 		ToolBoxView toolBoxView;
+		ScriptsToolBoxView scriptsToolBoxView;
 
 		public WindowManager(DockPanel dockPanel, MRUManager mruManager)
 		{
@@ -38,8 +40,15 @@ namespace FreeSCADA.Designer
             propertyBrowserView = new PropertyBrowserView();
 			propertyBrowserView.Show(toolBoxView.Pane, DockAlignment.Bottom, 0.6);
 
+			scriptsToolBoxView = new ScriptsToolBoxView();
+			scriptsToolBoxView.Show(projectContentView.Pane, projectContentView);
+			scriptsToolBoxView.OpenScript += new ScriptManager.NewScriptCreatedHandler(OnOpenScript);
+			projectContentView.Activate();
+
 			//Connect Windows Manager to heleper events
 			dockPanel.ActiveDocumentChanged += new EventHandler(OnActiveDocumentChanged);
+
+			Env.Current.ScriptManager.NewScriptCreated += new ScriptManager.NewScriptCreatedHandler(OnOpenScript);
 		}
 
 		public void ForceWindowsClose()
@@ -56,6 +65,7 @@ namespace FreeSCADA.Designer
 			projectContentView.Close();
 			toolBoxView.Close();
 			propertyBrowserView.Close();
+			scriptsToolBoxView.Close();
 
 			dockPanel.ActiveDocumentChanged -= new EventHandler(OnActiveDocumentChanged);
 		}
@@ -99,7 +109,7 @@ namespace FreeSCADA.Designer
 			view.Show(dockPanel, DockState.Document);
 		}
 
-		void OnDocumentWindowClosing(object sender, FormClosingEventArgs e)
+        void OnDocumentWindowClosing(object sender, FormClosingEventArgs e)
 		{
 			DocumentView doc = (DocumentView)sender;
 			if (doc.HandleModifiedOnClose && doc.IsModified)
@@ -158,8 +168,9 @@ namespace FreeSCADA.Designer
                 case ProjectEntityType.Archiver:
                     ShowArchiverSettings();
                     break;
-                case ProjectEntityType.Script:
-                    break;
+				//case ProjectEntityType.Script:
+				//    ShowScriptSettings();
+				//    break;
                 // etc....
                 default:
                     break;
@@ -208,7 +219,16 @@ namespace FreeSCADA.Designer
 			documentViews.Add(view);
 		}
 
-		/// <summary>
+		void OnOpenScript(object sender, Script script)
+		{
+			ScriptView view = new ScriptView(script);
+			view.Show(dockPanel, DockState.Document);
+
+			view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
+			documentViews.Add(view);
+		}
+
+        /// <summary>
 		/// SaveDocument current document
 		/// </summary>
 		public void SaveDocument()
@@ -418,6 +438,7 @@ namespace FreeSCADA.Designer
 			projectContentView.Dispose();
 			toolBoxView.Dispose();
 			propertyBrowserView.Dispose();
+			scriptsToolBoxView.Dispose();
 
 			mruManager.Dispose();
 		}

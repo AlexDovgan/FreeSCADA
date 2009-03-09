@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using FreeSCADA.Common;
 using OpcRcw.Comn;
 using OpcRcw.Da;
-using FreeSCADA.Common;
 
 namespace FreeSCADA.Communication.OPCPlug
 {

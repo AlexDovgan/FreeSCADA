@@ -74,6 +74,13 @@ namespace FreeSCADA.Designer.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap checkmark {
+            get {
+                object obj = ResourceManager.GetObject("checkmark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap cog_edit {
             get {
                 object obj = ResourceManager.GetObject("cog_edit", resourceCulture);
@@ -109,6 +116,27 @@ namespace FreeSCADA.Designer.Properties {
             }
         }
         
+        internal static byte[] IronPython {
+            get {
+                object obj = ResourceManager.GetObject("IronPython", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap log_error {
+            get {
+                object obj = ResourceManager.GetObject("log_error", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap log_warning {
+            get {
+                object obj = ResourceManager.GetObject("log_warning", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+
         internal static System.Drawing.Bitmap move_object_back {
             get {
                 object obj = ResourceManager.GetObject("move_object_back", resourceCulture);
@@ -196,6 +224,27 @@ namespace FreeSCADA.Designer.Properties {
         internal static System.Drawing.Bitmap save_file {
             get {
                 object obj = ResourceManager.GetObject("save_file", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap script {
+            get {
+                object obj = ResourceManager.GetObject("script", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap script_add {
+            get {
+                object obj = ResourceManager.GetObject("script_add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap script_remove {
+            get {
+                object obj = ResourceManager.GetObject("script_remove", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

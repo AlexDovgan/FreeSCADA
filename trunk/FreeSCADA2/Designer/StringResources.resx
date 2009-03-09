@@ -269,6 +269,9 @@
   <data name="SchemasItemName" xml:space="preserve">
     <value>Schemas</value>
   </data>
+  <data name="ScriptsItemName" xml:space="preserve">
+    <value>Scripts</value>
+  </data>
   <data name="StringBindingPanelName" xml:space="preserve">
     <value>Bind to string value</value>
   </data>
@@ -323,6 +326,12 @@
   <data name="UntitledSchema" xml:space="preserve">
     <value>Untitled</value>
   </data>
+  <data name="CommandValidateDescription" xml:space="preserve">
+    <value>Validate syntax of active script</value>
+  </data>
+  <data name="CommandValidateName" xml:space="preserve">
+    <value>Check syntax</value>
+  </data>
   <data name="CommandZMoveTopName" xml:space="preserve">
     <value>To front</value>
   </data>
@@ -337,5 +346,8 @@
   </data>
   <data name="SolidColorBindingPanelName" xml:space="preserve">
     <value>Solid Color Binding</value>
+  </data>
+  <data name="UntitledScript" xml:space="preserve">
+    <value>Script</value>
   </data>
 </root>

@@ -227,6 +227,7 @@ namespace FreeSCADA.Common
 			switch (type)
 			{
 				case ProjectEntityType.Image: return "images";
+				case ProjectEntityType.Script: return "scripts";
 				default:
 					throw new NotImplementedException();
 			}
@@ -297,7 +298,7 @@ namespace FreeSCADA.Common
 			return schemas.ToArray();
 		}
 
-		public Stream this[string name]
+        public Stream this[string name]
 		{
 			get{ return GetData(name); }
 			set { SetData(name, value); }
@@ -307,6 +308,20 @@ namespace FreeSCADA.Common
 		{
 			if (ProjectLoaded != null)
 				ProjectLoaded(this, new System.EventArgs());
+		}
+
+		public string GenerateUniqueName(ProjectEntityType type, string prefix)
+		{
+			int number = 1;
+			string newName;
+
+			do
+			{
+				newName = string.Format("{0} {1}", prefix, number);
+				number++;
+			}while(ContainsEntity(type, newName) == true);
+
+			return newName;
 		}
 	}
 }
