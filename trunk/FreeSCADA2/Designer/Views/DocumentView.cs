@@ -7,7 +7,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace FreeSCADA.Designer
 {
-	abstract class DocumentView : DockContent
+	class DocumentView : DockContent
 	{
 
         public BasicUndoBuffer undoBuff;
