@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using Microsoft.Scripting.Hosting;
 using IronPython.Hosting;
+using IronPython.Compiler;
 using System.Reflection;
 using System;
 using Microsoft.Scripting;
+using System.Text.RegularExpressions;
 
 namespace FreeSCADA.Common.Scripting
 {
@@ -87,6 +89,37 @@ namespace FreeSCADA.Common.Scripting
 		public string Name
 		{
 			get { return name; }
+		}
+
+		public static List<string> GetImportedModules(string text)
+		{
+			List<string> modules = new List<string>();
+
+			using (StringReader reader = new StringReader(text))
+			{
+				string line;
+				while ((line = reader.ReadLine()) != null)
+				{
+					Regex rx = new Regex(@".*import (?<name>.*).*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+					Match match = rx.Match(line);
+					if (match.Success && match.Groups["name"].Value != "*")
+					{
+						if (modules.IndexOf(match.Groups["name"].Value) < 0)
+							modules.Add(match.Groups["name"].Value);
+					}
+
+					//from System.Windows.Media import *
+					rx = new Regex(@".*from (?<name>.*).* import *.*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+					match = rx.Match(line);
+					if (match.Success)
+					{
+						if (modules.IndexOf(match.Groups["name"].Value) < 0)
+							modules.Add(match.Groups["name"].Value);
+					}
+				}
+			}
+
+			return modules;
 		}
 
 		public void Save()
@@ -187,18 +220,21 @@ namespace FreeSCADA.Common.Scripting
 			List<ErrorInfo> errors = listener.Errors;
 
 			//Try to execute script to get more errors
-			try
+			if (errors.Count == 0)
 			{
-				source.Execute(scope);
-			}
-			catch (System.Exception e)
-			{
-				ErrorInfo error = new ErrorInfo();
-				error.Message = e.Message;
-				error.Line = -1;
-				error.Severity = ErrorInfo.SeverityType.Error;
+				try
+				{
+					source.Execute(scope);
+				}
+				catch (System.Exception e)
+				{
+					ErrorInfo error = new ErrorInfo();
+					error.Message = e.Message;
+					error.Line = -1;
+					error.Severity = ErrorInfo.SeverityType.Error;
 
-				errors.Add(error);
+					errors.Add(error);
+				}
 			}
 
 			return errors;

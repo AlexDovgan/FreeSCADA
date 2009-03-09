@@ -625,7 +625,7 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Script.
+        ///   Looks up a localized string similar to script_.
         /// </summary>
         internal static string UntitledScript {
             get {

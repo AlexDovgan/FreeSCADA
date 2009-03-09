@@ -317,7 +317,7 @@ namespace FreeSCADA.Common
 
 			do
 			{
-				newName = string.Format("{0} {1}", prefix, number);
+				newName = string.Format("{0}{1}", prefix, number);
 				number++;
 			}while(ContainsEntity(type, newName) == true);
 

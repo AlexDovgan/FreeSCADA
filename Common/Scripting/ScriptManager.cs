@@ -24,6 +24,8 @@ namespace FreeSCADA.Common.Scripting
 
 		void OnProjectLoaded(object sender, EventArgs e)
 		{
+			Dictionary<string, string> scriptTexts = new Dictionary<string, string>();
+
 			foreach (string name in Env.Current.Project.GetEntities(ProjectEntityType.Script))
 			{
 				string scriptText = "";
@@ -38,10 +40,62 @@ namespace FreeSCADA.Common.Scripting
 						scriptText += line;
 					}
 				}
+				scriptTexts[name] = scriptText;
 
-				Script script = new Script(scriptText, python, name);
-				scripts.Add(script);
+				
 			}
+
+			while (scriptTexts.Count > 0)
+			{
+				//Get first script to load
+				string scriptName = "";
+				foreach(string key in scriptTexts.Keys)
+				{
+					scriptName = key;
+					break;
+				}
+
+				if (!string.IsNullOrEmpty(scriptName))
+				{
+					if (LoadScript(scriptTexts, scriptName, new List<string>()) == false)
+						return;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Load scripts with checking for dependencies (e.g. script_1 depends on script_2, then script_2 should be loaded first)
+		/// </summary>
+		/// <param name="scriptTexts"></param>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		bool LoadScript(Dictionary<string, string> scriptTexts, string name, List<string> loadingStack)
+		{
+			if (loadingStack.Contains(name))
+			{
+				Env.Current.Logger.LogError(string.Format("Circular dependency of module {0}: {1}", name, loadingStack.ToString()));
+				return false;
+			}
+			loadingStack.Add(name);
+
+			List<string> modules = Script.GetImportedModules(scriptTexts[name]);
+			foreach (string module in modules)
+			{
+				if (scriptTexts.ContainsKey(module))
+				{
+					if (LoadScript(scriptTexts, module, loadingStack) == false)
+						return false;
+				}
+			}
+
+			if (scriptTexts.ContainsKey(name))
+			{
+				Script script = new Script(scriptTexts[name], python, name);
+				scripts.Add(script);
+				scriptTexts.Remove(name);
+			}
+
+			return true;
 		}
 
 		void OnProjectClosed(object sender, EventArgs e)

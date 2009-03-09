@@ -10,8 +10,9 @@ namespace FreeSCADA.Designer.Views
 {
 	class ScriptView:DocumentView
 	{
-		private Alsing.Windows.Forms.SyntaxBoxControl syntaxBoxControl;
 		private System.ComponentModel.IContainer components;
+		private System.Windows.Forms.TextBox errorLog;
+		private Alsing.Windows.Forms.SyntaxBoxControl syntaxBoxControl;
 
 		Script script;
 	
@@ -33,12 +34,19 @@ namespace FreeSCADA.Designer.Views
 			script.TextUpdated += new EventHandler(OnScriptTextUpdated);
 			syntaxBoxControl.TextChanged += new System.EventHandler(this.syntaxBoxControl_TextChanged);
 
+			InitializeEditor();
+			InitializeCommands();
+		}
+
+		private void InitializeEditor()
+		{
 			System.Windows.Forms.ImageList imageList = new System.Windows.Forms.ImageList();
 			imageList.Images.Add(global::FreeSCADA.Designer.Properties.Resources.log_warning);
 			imageList.Images.Add(global::FreeSCADA.Designer.Properties.Resources.log_error);
 
 			syntaxBoxControl.GutterIcons = imageList;
-			InitializeCommands();
+
+			syntaxBoxControl.AllowBreakPoints = false;
 		}
 
 		private void InitializeCommands()
@@ -52,8 +60,22 @@ namespace FreeSCADA.Designer.Views
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			this.errorLog = new System.Windows.Forms.TextBox();
 			this.syntaxBoxControl = new Alsing.Windows.Forms.SyntaxBoxControl();
 			this.SuspendLayout();
+			// 
+			// errorLog
+			// 
+			this.errorLog.BackColor = System.Drawing.SystemColors.Window;
+			this.errorLog.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.errorLog.Location = new System.Drawing.Point(0, 319);
+			this.errorLog.Multiline = true;
+			this.errorLog.Name = "errorLog";
+			this.errorLog.ReadOnly = true;
+			this.errorLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.errorLog.Size = new System.Drawing.Size(799, 96);
+			this.errorLog.TabIndex = 2;
+			this.errorLog.Visible = false;
 			// 
 			// syntaxBoxControl
 			// 
@@ -75,12 +97,12 @@ namespace FreeSCADA.Designer.Views
 			this.syntaxBoxControl.LockCursorUpdate = false;
 			this.syntaxBoxControl.Name = "syntaxBoxControl";
 			this.syntaxBoxControl.ShowScopeIndicator = false;
-			this.syntaxBoxControl.Size = new System.Drawing.Size(799, 415);
+			this.syntaxBoxControl.Size = new System.Drawing.Size(799, 319);
 			this.syntaxBoxControl.SmoothScroll = false;
 			this.syntaxBoxControl.SplitviewH = -4;
 			this.syntaxBoxControl.SplitviewV = -4;
 			this.syntaxBoxControl.TabGuideColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(219)))), ((int)(((byte)(214)))));
-			this.syntaxBoxControl.TabIndex = 1;
+			this.syntaxBoxControl.TabIndex = 3;
 			this.syntaxBoxControl.Text = "syntaxBoxControl1";
 			this.syntaxBoxControl.WhitespaceColor = System.Drawing.SystemColors.ControlDark;
 			// 
@@ -88,8 +110,10 @@ namespace FreeSCADA.Designer.Views
 			// 
 			this.ClientSize = new System.Drawing.Size(799, 415);
 			this.Controls.Add(this.syntaxBoxControl);
+			this.Controls.Add(this.errorLog);
 			this.Name = "ScriptView";
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -126,6 +150,7 @@ namespace FreeSCADA.Designer.Views
 			script.Text = syntaxBoxControl.Document.Text;
 			List<Script.ErrorInfo> errors = script.Validate();
 
+			errorLog.Text = "";
 			foreach (Row row in syntaxBoxControl.Document)
 				row.Images.Clear();
 
@@ -144,7 +169,17 @@ namespace FreeSCADA.Designer.Views
 						syntaxBoxControl.Document[line].Images.Add(0);
 						break;
 				}
+
+				if (err.Line > 0)
+					errorLog.Text += string.Format("{0} line {1}: {2}\n", err.Severity.ToString(), err.Line, err.Message);
+				else
+					errorLog.Text += string.Format("{0}: {1}\n", err.Severity.ToString(), err.Message);
 			}
+
+			if (errors.Count == 0)
+				errorLog.Text += "The script doesn't have syntax errors\n";
+
+			errorLog.Visible = true;
 		}
 	}
 
