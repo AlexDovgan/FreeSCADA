@@ -12,7 +12,17 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
         /// <summary>
         /// 
         /// </summary>
-        protected object controlledObject;
+        object controlledObject;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public object ControlledObject
+		{
+			get { return controlledObject; }
+			set { controlledObject = value; }
+		}
+		
         /// <summary>
         /// 
         /// </summary>
@@ -87,7 +97,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
         /// <returns></returns>
         public EventDescriptorCollection GetEvents(Attribute[] attributes)
         {
-            return TypeDescriptor.GetEvents(this, attributes, true);
+			return TypeDescriptor.GetEvents(controlledObject, attributes, true);
         }
         /// <summary>
         /// 
@@ -95,7 +105,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
         /// <returns></returns>
         public EventDescriptorCollection GetEvents()
         {
-            return TypeDescriptor.GetEvents(this, true);
+			return TypeDescriptor.GetEvents(controlledObject, true);
         }
         /// <summary>
         /// 

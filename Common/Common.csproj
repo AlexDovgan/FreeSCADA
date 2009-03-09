@@ -37,6 +37,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\SharpZipLib\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="IronPython, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\IronPython\IronPython.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.Modules, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Kent.Boogaart.Converters, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc96fa93a217f7a1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\DataConverters\Kent.Boogaart.Converters.dll</HintPath>
@@ -44,6 +49,14 @@
     <Reference Include="Kent.Boogaart.HelperTrinity, Version=1.1.0.0, Culture=neutral, PublicKeyToken=cc96fa93a217f7a1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\DataConverters\Kent.Boogaart.HelperTrinity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\IronPython\Microsoft.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting.Core, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\IronPython\Microsoft.Scripting.Core.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -71,6 +84,7 @@
     <Compile Include="Commands.cs" />
     <Compile Include="CommunationPlugs.cs" />
     <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="Scripting\GenericEventHandler.cs" />
     <Compile Include="IVisualControlDescriptor.cs" />
     <Compile Include="IVisualControlsPlug.cs" />
     <Compile Include="VisualControlsPlugs.cs" />
@@ -99,6 +113,7 @@
     <Compile Include="Schema\AnimatedImage.cs" />
     <Compile Include="Schema\ChannelDataProvider.cs" />
     <Compile Include="Schema\ChannelDataSource.cs" />
+    <Compile Include="Scripting\EventScriptCollection.cs" />
     <Compile Include="Schema\SolidBrushConverter.cs" />
     <Compile Include="Schema\ComposingConverter.cs" />
     <Compile Include="Schema\MediaProvider.cs" />
@@ -106,6 +121,8 @@
     <Compile Include="Schema\SchemaDocument.cs" />
     <Compile Include="Schema\Commands\SchemaCommands.cs" />
     <Compile Include="Schema\WPFShemaContainer.cs" />
+    <Compile Include="Scripting\Script.cs" />
+    <Compile Include="Scripting\ScriptManager.cs" />
     <Compile Include="StringResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
