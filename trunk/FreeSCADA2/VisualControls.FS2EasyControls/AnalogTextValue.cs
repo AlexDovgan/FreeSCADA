@@ -16,7 +16,7 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
     public class AnalogTextValue : Control
     {
         // Dependency properties.
-        public static readonly DependencyProperty ChannelBadFillProperty;
+        public static readonly DependencyProperty ChannelBadEdgeProperty;
         public static readonly DependencyProperty UnitProperty;
         public static readonly DependencyProperty DecimalPlacesProperty;
         public static readonly DependencyProperty ChannelNameProperty;
@@ -25,20 +25,28 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
         ChannelStatusFlags statusFlags = ChannelStatusFlags.NotUsed;
         string format = "{0:F0}";
         string outTxt = "VarErr";
-        Pen framePen = new Pen(Brushes.Black, 1.0);
+        const double nokPenThickness = 4.0;
+        const double okPenThickness = 1.0;
+        Pen nokPen = new Pen(Brushes.DarkGray, nokPenThickness);
+        Pen okPen = new Pen(Brushes.Black, okPenThickness);
         Typeface font;
 
         // Public interfaces to dependency properties.
-        public Brush ChannelBadFill
+        public Brush ChannelBadEdge
         {
             set
             {
-                SetValue(ChannelBadFillProperty, value);
+                SetValue(ChannelBadEdgeProperty, value);
             }
             get
             {
-                return (Brush)GetValue(ChannelBadFillProperty);
+                return (Brush)GetValue(ChannelBadEdgeProperty);
             }
+        }
+
+        private static void OnChannelBadEdgeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            (d as AnalogTextValue).nokPen = new Pen((Brush)e.NewValue, nokPenThickness);
         }
 
         public string Unit
@@ -59,6 +67,7 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
                 (d as AnalogTextValue).format = "{0:F" + (d as AnalogTextValue).DecimalPlaces + "} " + e.NewValue.ToString();
             else
                 (d as AnalogTextValue).format = "{0:F" + (d as AnalogTextValue).DecimalPlaces + "}";
+            (d as AnalogTextValue).InvalidateVisual();
         }
 
         public int DecimalPlaces
@@ -100,14 +109,11 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
             {
                 (d as AnalogTextValue).fs2channel.ValueChanged -= new EventHandler((d as AnalogTextValue).OnChannelValueChanged);
             }
-            if ((d as AnalogTextValue).fs2channel == null)
-            {
-                if ((d as AnalogTextValue).ChannelName != null) (d as AnalogTextValue).fs2channel = Env.Current.CommunicationPlugins.GetChannel((d as AnalogTextValue).ChannelName);
-                if ((d as AnalogTextValue).fs2channel != null)
-                    (d as AnalogTextValue).fs2channel.ValueChanged += new EventHandler((d as AnalogTextValue).OnChannelValueChanged);
-                else
-                    (d as AnalogTextValue).outTxt = "VarErr";
-            }
+            if ((d as AnalogTextValue).ChannelName != null) (d as AnalogTextValue).fs2channel = Env.Current.CommunicationPlugins.GetChannel((d as AnalogTextValue).ChannelName);
+            if ((d as AnalogTextValue).fs2channel != null)
+                (d as AnalogTextValue).fs2channel.ValueChanged += new EventHandler((d as AnalogTextValue).OnChannelValueChanged);
+            else
+                (d as AnalogTextValue).outTxt = "VarErr";
         }
 
         private delegate void UpdateChannelDelegate(IChannel channel);
@@ -132,8 +138,8 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
         // Constructor
         public AnalogTextValue()
         {
-            Background = Brushes.White;
-            ChannelBadFill = Brushes.DarkGray;
+            Background = Brushes.WhiteSmoke;
+            ChannelBadEdge = Brushes.DarkGray;
             FontFamily = new FontFamily("Arial");
             FontSize = 25;
             ToolTip = new ToolTip();
@@ -150,10 +156,10 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
         // Static constructor.
         static AnalogTextValue()
         {
-            ChannelBadFillProperty =
-            DependencyProperty.Register("ChannelBadFill", typeof(Brush),
-            typeof(AnalogTextValue), new FrameworkPropertyMetadata(null,
-            FrameworkPropertyMetadataOptions.AffectsRender));
+            ChannelBadEdgeProperty =
+            DependencyProperty.Register("ChannelBadEdge", typeof(Brush),
+            typeof(AnalogTextValue), new FrameworkPropertyMetadata(Brushes.DarkGray,
+            FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(OnChannelBadEdgeChanged)));
             UnitProperty =
             DependencyProperty.Register("Unit", typeof(string),
             typeof(AnalogTextValue), new FrameworkPropertyMetadata("",
@@ -169,7 +175,6 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
         }
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            //MessageBox.Show("OnPropertyChanged: " + e.NewValue.ToString());
             if (e.Property == BackgroundProperty ||
                 e.Property == ForegroundProperty ||
                 e.Property == FontSizeProperty)
@@ -181,15 +186,20 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
                 font = new Typeface(FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
             }
             base.OnPropertyChanged(e);
-         }
+        }
 
         // Override of MeasureOverride.
         protected override Size MeasureOverride(Size sizeAvailable)
         {
             Size sizeDesired = base.MeasureOverride(sizeAvailable);
+            Pen actualPen = nokPen;
 
-            if (Unit != null)
-                sizeDesired = new Size(framePen.Thickness, framePen.Thickness);
+            if (fs2channel != null)
+            {
+                if (!(fs2channel.StatusFlags != ChannelStatusFlags.Good))
+                    actualPen = okPen;
+            }
+            sizeDesired = new Size(actualPen.Thickness, actualPen.Thickness);
 
             return sizeDesired;
         }
@@ -197,29 +207,25 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
         protected override void OnRender(DrawingContext dc)
         {
             Size size = RenderSize;
-
-            // Adjust rendering size for width of Pen.
-            if (Unit != null)
-            {
-                size.Width = Math.Max(0, size.Width - framePen.Thickness);
-                size.Height = Math.Max(0, size.Height - framePen.Thickness);
-            }
-
-            // Draw the rectangle.
+            Pen actualPen = nokPen;
 
             if (fs2channel != null)
             {
-                if (fs2channel.StatusFlags != ChannelStatusFlags.Good)
-                    dc.DrawRectangle(ChannelBadFill, framePen, new Rect(0, 0, size.Width, size.Height));
-                else
-                    dc.DrawRectangle(Background, framePen, new Rect(0, 0, size.Width, size.Height));
+                if (fs2channel.StatusFlags == ChannelStatusFlags.Good)
+                {
+                    actualPen = okPen;
+                }
                 if (fs2channel.Value != null)
                     outTxt = string.Format(format, fs2channel.Value);
                 else
                     outTxt = "{null}";
             }
-            else
-                dc.DrawRectangle(ChannelBadFill, framePen, new Rect(0, 0, size.Width, size.Height));
+            // Adjust rendering size for width of Pen.
+            size.Width = Math.Max(0, size.Width - actualPen.Thickness);
+            size.Height = Math.Max(0, size.Height - actualPen.Thickness);
+
+            // Draw the rectangle.
+            dc.DrawRectangle(Background, actualPen, new Rect(actualPen.Thickness / 2, actualPen.Thickness / 2, size.Width, size.Height));
             FormattedText formtxt =
                 new FormattedText(outTxt, CultureInfo.CurrentCulture, FlowDirection, font, FontSize, Foreground);
             Point textPt = new Point((RenderSize.Width - formtxt.Width) / 2, (RenderSize.Height - formtxt.Height) / 2);

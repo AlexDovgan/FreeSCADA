@@ -58,6 +58,8 @@
   <ItemGroup>
     <Compile Include="AnalogTextValue.cs" />
     <Compile Include="AnalogTextValueWrappers.cs" />
+    <Compile Include="BinaryColorText.cs" />
+    <Compile Include="BinaryColorTextWrappers.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyCommand.cs" />

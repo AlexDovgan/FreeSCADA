@@ -35,8 +35,13 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
             this.environment = environment;
             environment.Project.ProjectLoaded += new System.EventHandler(OnProjectLoad);
 
+            // Add (register) your controls Here
             AnalogTextValueDescriptor.Plugin = this;
             this.controls.Add(new AnalogTextValueDescriptor());
+
+            BinaryColorTextDescriptor.Plugin = this;
+            this.controls.Add(new BinaryColorTextDescriptor());
+            // --
 
             LoadSettings();
 
