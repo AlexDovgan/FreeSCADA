@@ -120,7 +120,7 @@ namespace FreeSCADA.Designer.Views
 		void OnScriptTextUpdated(object sender, EventArgs e)
 		{
 			syntaxBoxControl.Document.Text = script.Text;
-			Activate();
+			//Activate();
 		}
 
 		private void syntaxBoxControl_TextChanged(object sender, EventArgs e)
