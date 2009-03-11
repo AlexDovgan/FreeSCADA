@@ -221,6 +221,15 @@ namespace FreeSCADA.Designer
 
 		void OnOpenScript(object sender, Script script)
 		{
+			foreach (DocumentView doc in documentViews)
+			{
+				if (doc is ScriptView && doc.DocumentName == script.Name)
+				{
+					doc.Activate();
+					return;
+				}
+			}
+
 			ScriptView view = new ScriptView(script);
 			view.Show(dockPanel, DockState.Document);
 

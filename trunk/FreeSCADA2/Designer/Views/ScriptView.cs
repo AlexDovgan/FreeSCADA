@@ -181,6 +181,13 @@ namespace FreeSCADA.Designer.Views
 
 			errorLog.Visible = true;
 		}
+
+		protected override void UpdateCaption()
+		{
+			TabText = string.Format("{0} [Script]", DocumentName);
+			if (IsModified)
+				TabText += "*";
+		}
 	}
 
 

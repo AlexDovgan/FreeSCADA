@@ -118,12 +118,18 @@ namespace FreeSCADA.Designer.Views
                 DocumentName = value.Name;
                 wpfSchemaContainer.View = value.MainCanvas;
                 undoBuff = UndoRedoManager.GetUndoBuffer(this);
-            
-
-             
             }
         }
 
+		public override string DocumentName
+		{
+			set 
+			{
+				if (schema != null)
+					schema.Name = value;
+				base.DocumentName = value;
+			}
+		}
         
         #region ToolsImplementation
         //TODO: need to refator as ToolsManager
