@@ -16,7 +16,7 @@ namespace FreeSCADA.Common.Scripting
 	/// </summary>
 	class EventHandlerFactory
 	{
-		private static Hashtable eventHandlers = new Hashtable();
+		//private static Hashtable eventHandlers = new Hashtable();
 		private static EventHandlerTypeEmitter emitter;
 		private static string helperName;
 
@@ -38,18 +38,14 @@ namespace FreeSCADA.Common.Scripting
 		public static object GetEventHandler(EventInfo Info)
 		{
 			string handlerName = helperName + Info.Name;
-			object eventHandler = eventHandlers[handlerName];
-			if (eventHandler == null)
-			{
-				Type eventHandlerType = emitter.GetEventHandlerType(Info);
+			object eventHandler;
 
-				// Call constructor of event handler type to create event handler
-				ConstructorInfo myCtor = eventHandlerType.GetConstructor(new Type[] { typeof(EventInfo) });
-				object[] ctorArgs = new object[] { Info };
-				eventHandler = myCtor.Invoke(ctorArgs);
+			Type eventHandlerType = emitter.GetEventHandlerType(Info);
 
-				eventHandlers.Add(handlerName, eventHandler);
-			}
+			// Call constructor of event handler type to create event handler
+			ConstructorInfo myCtor = eventHandlerType.GetConstructor(new Type[] { typeof(EventInfo) });
+			object[] ctorArgs = new object[] { Info };
+			eventHandler = myCtor.Invoke(ctorArgs);
 			return eventHandler;
 		}
 
