@@ -16,7 +16,6 @@ namespace FreeSCADA.Common.Scripting
 	/// </summary>
 	class EventHandlerFactory
 	{
-		//private static Hashtable eventHandlers = new Hashtable();
 		private static EventHandlerTypeEmitter emitter;
 		private static string helperName;
 

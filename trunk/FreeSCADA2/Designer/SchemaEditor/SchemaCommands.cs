@@ -12,6 +12,7 @@ using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.Views;
 using FreeSCADA.Interfaces;
 using FreeSCADA.Interfaces.Plugins;
+using FreeSCADA.Common.Schema;
 
 
 namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
@@ -440,8 +441,11 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             {
                 if (!schemaView.XamlView.Visible)
                 {
+					schemaView.Schema.MainCanvas.Tag = null;
                     schemaView.XamlView.Show();
                     schemaView.UpdateXamlView();
+
+					schemaView.Schema.MainCanvas.Tag = schemaView.Schema.MainCanvas;
                 }
                 else
                 {
