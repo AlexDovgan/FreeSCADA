@@ -61,7 +61,7 @@ namespace FreeSCADA.Designer
 			UpdateCaption();
 		}
 
-		public string DocumentName
+		public virtual string DocumentName
 		{
 			get { return documentName; }
 			set { documentName = value; UpdateCaption();}
@@ -127,7 +127,7 @@ namespace FreeSCADA.Designer
 				ObjectSelected(sender);
         }
 
-		private void UpdateCaption()
+		protected virtual void UpdateCaption()
 		{
 			TabText = DocumentName;
 			if (IsModified)
