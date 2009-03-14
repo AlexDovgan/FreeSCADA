@@ -164,17 +164,17 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
             if (!(doc is Views.SchemaView))
                 throw new Exception("this is not schema");
             schemaView = doc as Views.SchemaView;
-            schemaView.Schema.MainCanvas.Children.Add(addedObject);
+            schemaView.MainCanvas.Children.Add(addedObject);
         }
         public void Redo()
         {
-            schemaView.Schema.MainCanvas.Children.Add(addedObject);
+            schemaView.MainCanvas.Children.Add(addedObject);
          
             
         }
         public void Undo()
         {
-            schemaView.Schema.MainCanvas.Children.Remove(addedObject);
+            schemaView.MainCanvas.Children.Remove(addedObject);
             if (schemaView.ActiveTool!= null)
                 schemaView.ActiveTool.SelectedObject = null;
    
@@ -199,18 +199,18 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
                 throw new Exception("this is not schema");
             schemaView = doc as Views.SchemaView;
 
-            schemaView.Schema.MainCanvas.Children.Remove(deletedObject);
+            schemaView.MainCanvas.Children.Remove(deletedObject);
             
         }
         public void Redo()
         {
-            schemaView.Schema.MainCanvas.Children.Remove(deletedObject);
+            schemaView.MainCanvas.Children.Remove(deletedObject);
          
         }
         public void Undo()
         {
 
-            schemaView.Schema.MainCanvas.Children.Add(deletedObject);
+            schemaView.MainCanvas.Children.Add(deletedObject);
        }
 
     }

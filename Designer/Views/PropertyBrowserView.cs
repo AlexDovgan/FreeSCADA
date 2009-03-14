@@ -180,12 +180,12 @@ namespace FreeSCADA.Designer.Views
 				object obj = (component as PropProxy).ControlledObject;
 				if (obj is DependencyObject)
 				{
-					SchemaDocument doc = SchemaDocument.GetSchemaDocument(obj as DependencyObject);
+					System.Windows.Controls.Canvas c= SchemaDocument.GetMainCanvas(obj as DependencyObject);
 					EventScriptCollection events = EventScriptCollection.GetEventScriptCollection(obj as DependencyObject);
 					ScriptCallInfo callInfo = new ScriptCallInfo();
 					callInfo.HandlerName = value as string;
-					if (doc != null)
-						callInfo.ScriptName = doc.Name;
+					if (c!= null)
+						callInfo.ScriptName = (c.Tag as DocumentView).DocumentName;
 					else
 						callInfo.ScriptName = "unnamed";
 
