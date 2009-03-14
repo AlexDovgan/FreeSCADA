@@ -11,7 +11,8 @@ namespace FreeSCADA.RunTime.Views
 		private WPFShemaContainer wpfSchemaContainer;
         private ScaleTransform SchemaScale = new ScaleTransform();
         private System.Windows.Point SavedScrollPosition;
-        private SchemaDocument document;
+        
+
 		public SchemaView()
 		{
 			InitializeComponent();
@@ -50,24 +51,26 @@ namespace FreeSCADA.RunTime.Views
         }
 
 
-		public SchemaDocument Schema
+		public System.Windows.Controls.Canvas MainCanvas
 		{
-            get { return document; }
+            get { return wpfSchemaContainer.View as System.Windows.Controls.Canvas; }
 			set
 			{
-				DocumentName = value.Name;
-                document = value;
-                wpfSchemaContainer.View = document.MainCanvas;
+				
+                if (wpfSchemaContainer.View == null)
+                    wpfSchemaContainer.View = value;
+                else
+                    throw new Exception("View has already attached canvas");
       		}
 		}
 
 		public bool LoadDocument(string name)
 		{
-			SchemaDocument schema;
-			if ((schema = SchemaDocument.LoadSchema(name)) == null)
+			
+			if ((MainCanvas = SchemaDocument.LoadSchema(name)) == null)
 				return false;
-			schema.LinkActions();
-			Schema = schema;
+            DocumentName = name;
+			//schema.LinkActions();
 			return true;
 		}
 
@@ -123,7 +126,7 @@ namespace FreeSCADA.RunTime.Views
             System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
             SchemaScale.ScaleX *= 1.05;
             SchemaScale.ScaleY *= 1.05;
-            Schema.MainCanvas.LayoutTransform = SchemaScale;
+            MainCanvas.LayoutTransform = SchemaScale;
             msv.ScrollToVerticalOffset(msv.VerticalOffset * 1.05 + center.Y* 0.05);
             msv.ScrollToHorizontalOffset(msv.HorizontalOffset * 1.05 + center.X * 0.05);
 
@@ -140,7 +143,7 @@ namespace FreeSCADA.RunTime.Views
             System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
             SchemaScale.ScaleX /= 1.05;
             SchemaScale.ScaleY /= 1.05;
-            Schema.MainCanvas.LayoutTransform = SchemaScale;
+            MainCanvas.LayoutTransform = SchemaScale;
             msv.ScrollToVerticalOffset(msv.VerticalOffset / 1.05 - center.Y * 0.05);
             msv.ScrollToHorizontalOffset(msv.HorizontalOffset / 1.05 - center.X* 0.05);
 
@@ -166,7 +169,7 @@ namespace FreeSCADA.RunTime.Views
             {
                 SchemaScale.ScaleX = value;
                 SchemaScale.ScaleY = value;
-                Schema.MainCanvas.LayoutTransform = SchemaScale;
+                MainCanvas.LayoutTransform = SchemaScale;
             }
         }
     }

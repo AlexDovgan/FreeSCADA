@@ -32,10 +32,20 @@ namespace FreeSCADA.Common.Schema.Actions
         
         public bool ActivateActionFor(FrameworkElement obj)
         {
+
             if ((actionChannel = Env.Current.CommunicationPlugins.GetChannel(ActionChannelName)) != null &&
                 CheckActionFor(obj))
             {
                 actionedObject = obj;
+                System.Windows.Media.TransformGroup tg = new System.Windows.Media.TransformGroup();
+                tg.Children.Add(actionedObject.RenderTransform);
+                tg.Children.Add(new System.Windows.Media.ScaleTransform());
+                tg.Children.Add(new System.Windows.Media.SkewTransform());
+                tg.Children.Add(new System.Windows.Media.RotateTransform());
+                tg.Children.Add(new System.Windows.Media.TranslateTransform());
+                actionedObject.RenderTransform = tg;
+
+                
                 isLinked = true;
                 PrepareExecute();
                 actionChannel.PropertyChanged += Execute;

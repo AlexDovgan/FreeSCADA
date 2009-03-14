@@ -158,7 +158,7 @@ namespace FreeSCADA.Designer.SchemaEditor
         public static GridManager GetGridManagerFor(UIElement el)
         {
             AdornerLayer al = AdornerLayer.GetAdornerLayer(el);
-            Canvas c = EditorHelper.FindTopParent(el);
+            Canvas c = Common.Schema.SchemaDocument.GetMainCanvas(el);
             if (al.GetAdorners(c) != null)
                 foreach (Adorner ad in al.GetAdorners(c))
                     if (ad is GridManager)

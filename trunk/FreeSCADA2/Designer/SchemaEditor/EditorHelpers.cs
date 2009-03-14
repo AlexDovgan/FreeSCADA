@@ -59,15 +59,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             }
             return top as UIElement;
         }
-        public static Canvas FindTopParent( DependencyObject el)
-        {
-            DependencyObject top = el;
-            while (!(VisualTreeHelper.GetParent(top) is ScrollContentPresenter))
-            {
-                top = VisualTreeHelper.GetParent(top);
-            }
-            return top as Canvas;
-        }
+        
 
         public static void BreakGroup(SelectionTool tool)
         {

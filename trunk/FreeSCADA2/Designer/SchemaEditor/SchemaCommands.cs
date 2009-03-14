@@ -441,11 +441,11 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             {
                 if (!schemaView.XamlView.Visible)
                 {
-					schemaView.Schema.MainCanvas.Tag = null;
+				
                     schemaView.XamlView.Show();
                     schemaView.UpdateXamlView();
 
-					schemaView.Schema.MainCanvas.Tag = schemaView.Schema.MainCanvas;
+					
                 }
                 else
                 {

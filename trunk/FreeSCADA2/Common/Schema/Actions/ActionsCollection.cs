@@ -10,7 +10,7 @@ namespace FreeSCADA.Common.Schema.Actions
     /// Actions manager class 
     /// </summary>
     [ContentProperty("ActionsList")]
-    public class ActionsCollection:DependencyObject
+    public class ActionsCollection
     {
         public static Type[] ActionsTypes = 
         { 
@@ -31,7 +31,7 @@ namespace FreeSCADA.Common.Schema.Actions
             "Actions",
             typeof(ActionsCollection),
             typeof(ActionsCollection),
-            new FrameworkPropertyMetadata());
+            new FrameworkPropertyMetadata(new ActionsCollection(), new PropertyChangedCallback(ActionCollectionChangedCallback)));
 
 
         public static ActionsCollection GetActions(FrameworkElement el)
@@ -44,6 +44,16 @@ namespace FreeSCADA.Common.Schema.Actions
         {
             el.SetValue(Actions,ac);
         }
+        static void ActionCollectionChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
 
-     }
+            ActionsCollection coll;
+            if ((coll=e.NewValue as ActionsCollection)!=null&&Env.Current.Mode==FreeSCADA.Interfaces.EnvironmentMode.Runtime)
+                foreach (BaseAction a in coll.ActionsList)
+                {
+                    a.ActivateActionFor(d as FrameworkElement);
+                }
+        }
+       
+    }
 }
