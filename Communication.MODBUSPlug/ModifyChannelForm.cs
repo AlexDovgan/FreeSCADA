@@ -172,6 +172,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                     break;
                 case ModbusDataTypeEx.HoldingRegister:
                 case ModbusDataTypeEx.InputRegister:
+                    modbusDataAddressNumericUpDown.Enabled = true;
                     deviceDataTypeComboBox.Items.Clear();
                     foreach (ModbusDeviceDataType r in Enum.GetValues(typeof(ModbusDeviceDataType)))
                     {
@@ -350,6 +351,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
             modbusDataTypeComboBox.SelectedIndexChanged += new EventHandler(modRegisterComboBox_SelectedIndexChanged);
             deviceDataTypeComboBox.SelectedIndexChanged += new EventHandler(modRegisterComboBox_SelectedIndexChanged);
             modbusFs2InternalTypeComboBox.SelectedIndexChanged += new EventHandler(modRegisterComboBox_SelectedIndexChanged);
+            setRegisterLabel();
         }
 
         private void OKButton_Click(object sender, EventArgs e)
@@ -394,6 +396,39 @@ namespace FreeSCADA.Communication.MODBUSPlug
         {
             //MessageBox.Show("Zmena");
             MakeControlsValidation((ModbusChannelImp)this.Tag);
+        }
+
+        private void modbusDataTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            setRegisterLabel();
+        }
+
+        private void modbusDataAddressNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            setRegisterLabel();
+        }
+
+        private void setRegisterLabel()
+        {
+            ModbusDataTypeEx data = (ModbusDataTypeEx)modbusDataTypeComboBox.SelectedItem;
+            switch (data)
+            {
+                case ModbusDataTypeEx.Input:
+                    registerLabel.Text = "1" + ((int)(modbusDataAddressNumericUpDown.Value + 1)).ToString("D4");
+                    break;
+                case ModbusDataTypeEx.Coil:
+                    registerLabel.Text = "0" + ((int)(modbusDataAddressNumericUpDown.Value + 1)).ToString("D4");
+                    break;
+                case ModbusDataTypeEx.InputRegister:
+                    registerLabel.Text = "3" + ((int)(modbusDataAddressNumericUpDown.Value + 1)).ToString("D4");
+                    break;
+                case ModbusDataTypeEx.HoldingRegister:
+                    registerLabel.Text = "4" + ((int)(modbusDataAddressNumericUpDown.Value + 1)).ToString("D4");
+                    break;
+                case ModbusDataTypeEx.DeviceFailureInfo:
+                    registerLabel.Text = "FS2 internal";
+                    break;
+            }
         }
     }
 }
