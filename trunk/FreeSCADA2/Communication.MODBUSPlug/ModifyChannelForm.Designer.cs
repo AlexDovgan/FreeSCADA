@@ -56,6 +56,8 @@
             this.label13 = new System.Windows.Forms.Label();
             this.kMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
             this.dMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.registerLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slaveIdUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.modbusDataAddressNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.deviceDataLenNumericUpDown)).BeginInit();
@@ -81,7 +83,7 @@
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(210, 375);
+            this.cancelButton.Location = new System.Drawing.Point(210, 401);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(87, 34);
             this.cancelButton.TabIndex = 12;
@@ -91,7 +93,7 @@
             // OKButton
             // 
             this.OKButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.OKButton.Location = new System.Drawing.Point(57, 375);
+            this.OKButton.Location = new System.Drawing.Point(57, 401);
             this.OKButton.Name = "OKButton";
             this.OKButton.Size = new System.Drawing.Size(87, 34);
             this.OKButton.TabIndex = 11;
@@ -161,6 +163,7 @@
             this.modbusDataTypeComboBox.Name = "modbusDataTypeComboBox";
             this.modbusDataTypeComboBox.Size = new System.Drawing.Size(103, 21);
             this.modbusDataTypeComboBox.TabIndex = 22;
+            this.modbusDataTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.modbusDataTypeComboBox_SelectedIndexChanged);
             // 
             // label4
             // 
@@ -193,9 +196,9 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(38, 188);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(73, 13);
+            this.label7.Size = new System.Drawing.Size(104, 13);
             this.label7.TabIndex = 26;
-            this.label7.Text = "MOD Address";
+            this.label7.Text = "MOD Address Offset";
             // 
             // modbusDataAddressNumericUpDown
             // 
@@ -208,16 +211,12 @@
             this.modbusDataAddressNumericUpDown.Name = "modbusDataAddressNumericUpDown";
             this.modbusDataAddressNumericUpDown.Size = new System.Drawing.Size(103, 20);
             this.modbusDataAddressNumericUpDown.TabIndex = 25;
-            this.modbusDataAddressNumericUpDown.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            this.modbusDataAddressNumericUpDown.ValueChanged += new System.EventHandler(this.modbusDataAddressNumericUpDown_ValueChanged);
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(38, 214);
+            this.label8.Location = new System.Drawing.Point(38, 240);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(94, 13);
             this.label8.TabIndex = 28;
@@ -225,7 +224,7 @@
             // 
             // deviceDataLenNumericUpDown
             // 
-            this.deviceDataLenNumericUpDown.Location = new System.Drawing.Point(210, 212);
+            this.deviceDataLenNumericUpDown.Location = new System.Drawing.Point(210, 238);
             this.deviceDataLenNumericUpDown.Maximum = new decimal(new int[] {
             64,
             0,
@@ -248,7 +247,7 @@
             // conversionTypeComboBox
             // 
             this.conversionTypeComboBox.FormattingEnabled = true;
-            this.conversionTypeComboBox.Location = new System.Drawing.Point(210, 238);
+            this.conversionTypeComboBox.Location = new System.Drawing.Point(210, 264);
             this.conversionTypeComboBox.Name = "conversionTypeComboBox";
             this.conversionTypeComboBox.Size = new System.Drawing.Size(103, 21);
             this.conversionTypeComboBox.TabIndex = 30;
@@ -256,7 +255,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(38, 241);
+            this.label9.Location = new System.Drawing.Point(38, 267);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(89, 13);
             this.label9.TabIndex = 29;
@@ -265,7 +264,7 @@
             // modbusReadWriteComboBox
             // 
             this.modbusReadWriteComboBox.FormattingEnabled = true;
-            this.modbusReadWriteComboBox.Location = new System.Drawing.Point(210, 265);
+            this.modbusReadWriteComboBox.Location = new System.Drawing.Point(210, 291);
             this.modbusReadWriteComboBox.Name = "modbusReadWriteComboBox";
             this.modbusReadWriteComboBox.Size = new System.Drawing.Size(103, 21);
             this.modbusReadWriteComboBox.TabIndex = 32;
@@ -273,7 +272,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(38, 268);
+            this.label10.Location = new System.Drawing.Point(38, 294);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(97, 13);
             this.label10.TabIndex = 31;
@@ -282,7 +281,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(38, 294);
+            this.label11.Location = new System.Drawing.Point(38, 320);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(76, 13);
             this.label11.TabIndex = 34;
@@ -290,7 +289,7 @@
             // 
             // bitIndexNumericUpDown
             // 
-            this.bitIndexNumericUpDown.Location = new System.Drawing.Point(210, 292);
+            this.bitIndexNumericUpDown.Location = new System.Drawing.Point(210, 318);
             this.bitIndexNumericUpDown.Maximum = new decimal(new int[] {
             15,
             0,
@@ -303,7 +302,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(38, 320);
+            this.label12.Location = new System.Drawing.Point(38, 346);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(106, 13);
             this.label12.TabIndex = 36;
@@ -312,7 +311,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(38, 346);
+            this.label13.Location = new System.Drawing.Point(38, 372);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(106, 13);
             this.label13.TabIndex = 38;
@@ -320,23 +319,46 @@
             // 
             // kMaskedTextBox
             // 
-            this.kMaskedTextBox.Location = new System.Drawing.Point(210, 317);
+            this.kMaskedTextBox.Location = new System.Drawing.Point(210, 343);
             this.kMaskedTextBox.Name = "kMaskedTextBox";
             this.kMaskedTextBox.Size = new System.Drawing.Size(103, 20);
             this.kMaskedTextBox.TabIndex = 39;
             // 
             // dMaskedTextBox
             // 
-            this.dMaskedTextBox.Location = new System.Drawing.Point(210, 343);
+            this.dMaskedTextBox.Location = new System.Drawing.Point(210, 369);
             this.dMaskedTextBox.Name = "dMaskedTextBox";
             this.dMaskedTextBox.Size = new System.Drawing.Size(103, 20);
             this.dMaskedTextBox.TabIndex = 40;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(38, 213);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(146, 13);
+            this.label14.TabIndex = 41;
+            this.label14.Text = "MOD Register (=base+Offset)";
+            // 
+            // registerLabel
+            // 
+            this.registerLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.registerLabel.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.registerLabel.Location = new System.Drawing.Point(210, 213);
+            this.registerLabel.Margin = new System.Windows.Forms.Padding(2);
+            this.registerLabel.Name = "registerLabel";
+            this.registerLabel.Size = new System.Drawing.Size(103, 20);
+            this.registerLabel.TabIndex = 42;
+            this.registerLabel.Text = "MOD Data Type";
+            this.registerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ModifyChannelForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(357, 419);
+            this.ClientSize = new System.Drawing.Size(357, 443);
+            this.Controls.Add(this.registerLabel);
+            this.Controls.Add(this.label14);
             this.Controls.Add(this.dMaskedTextBox);
             this.Controls.Add(this.kMaskedTextBox);
             this.Controls.Add(this.label13);
@@ -407,5 +429,7 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.MaskedTextBox kMaskedTextBox;
         private System.Windows.Forms.MaskedTextBox dMaskedTextBox;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label registerLabel;
     }
 }

@@ -15,9 +15,10 @@ namespace FreeSCADA.Communication.MODBUSPlug
         const int gridColMODType = 4;
         const int gridColDevDataType = 5;
         const int gridColAddress = 6;
-        const int gridColDevDataLen = 7;
-        const int gridColConversion = 8;
-        const int gridColReadWrite = 9;
+        const int gridColRegister = 7;
+        const int gridColDevDataLen = 8;
+        const int gridColConversion = 9;
+        const int gridColReadWrite = 10;
 
         const int stationGridColName = 0;
         const int stationGridColActive = 1;
@@ -37,17 +38,18 @@ namespace FreeSCADA.Communication.MODBUSPlug
             grid.Selection.Border = b;
             grid.Selection.FocusBackColor = grid.Selection.BackColor;
 
-			grid.ColumnsCount = 10;
+			grid.ColumnsCount = 11;
 			grid.RowsCount = 1;
             grid[0, gridColName] = new SourceGrid.Cells.ColumnHeader("Channel name");
             grid[0, gridColFSType] = new SourceGrid.Cells.ColumnHeader("FS2 Channel Type");
             grid[0, gridColStation] = new SourceGrid.Cells.ColumnHeader("Station Name");
-            grid[0, gridColMODType] = new SourceGrid.Cells.ColumnHeader("MOD Register Type");
-            grid[0, gridColAddress] = new SourceGrid.Cells.ColumnHeader("MOD Address");
-            grid[0, gridColDevice] = new SourceGrid.Cells.ColumnHeader("MOD Device Index");
+            grid[0, gridColMODType] = new SourceGrid.Cells.ColumnHeader("Register Type");
+            grid[0, gridColAddress] = new SourceGrid.Cells.ColumnHeader("Addr. Offset");
+            grid[0, gridColRegister] = new SourceGrid.Cells.ColumnHeader("Register Addr.");
+            grid[0, gridColDevice] = new SourceGrid.Cells.ColumnHeader("Device Idx");
             grid[0, gridColDevDataType] = new SourceGrid.Cells.ColumnHeader("MOD Data Type");
-            grid[0, gridColDevDataLen] = new SourceGrid.Cells.ColumnHeader("MOD Data Length");
-            grid[0, gridColConversion] = new SourceGrid.Cells.ColumnHeader("MOD Byte Swap");
+            grid[0, gridColDevDataLen] = new SourceGrid.Cells.ColumnHeader("Data Length");
+            grid[0, gridColConversion] = new SourceGrid.Cells.ColumnHeader("Byte Swap");
             grid[0, gridColReadWrite] = new SourceGrid.Cells.ColumnHeader("MOD R/W");
             grid.MouseDoubleClick += new MouseEventHandler(grid_MouseDoubleClick);
 
@@ -121,7 +123,6 @@ namespace FreeSCADA.Communication.MODBUSPlug
             }
             if (oldname != stat.Name)
             {
-                //MessageBox.Show("renaming");
                 for (int i = 1; i < grid.RowsCount; i++)
                 {
                     if (grid[i, gridColStation].DisplayText == oldname)
@@ -132,7 +133,6 @@ namespace FreeSCADA.Communication.MODBUSPlug
                     }
                 }
             }
-            //updateStationsInVariables();
         }
 
         private void AddTCPClientStation(ModbusTCPClientStation stat)
@@ -201,7 +201,6 @@ namespace FreeSCADA.Communication.MODBUSPlug
                         break;
                 }
             }
-            //updateStationsInVariables();
         }
 
         private void OnRemoveStation(object sender, EventArgs e)
@@ -222,7 +221,6 @@ namespace FreeSCADA.Communication.MODBUSPlug
                 else
                     stationGrid.Rows.Remove(row);
             }
-            //updateStationsInVariables();
         }
         
         private void LoadStations()
@@ -294,6 +292,30 @@ namespace FreeSCADA.Communication.MODBUSPlug
             grid[row, gridColMODType].Editor = null;
             grid[row, gridColAddress] = new SourceGrid.Cells.Cell(channel.ModbusDataAddress);
             grid[row, gridColAddress].Editor = null;
+            
+            string regaddr = "";
+            switch (channel.ModbusDataType)
+            {
+                case ModbusDataTypeEx.Input:
+                    regaddr = "1" + ((int)(channel.ModbusDataAddress + 1)).ToString("D4");
+                    break;
+                case ModbusDataTypeEx.Coil:
+                    regaddr = "0" + ((int)(channel.ModbusDataAddress + 1)).ToString("D4");
+                    break;
+                case ModbusDataTypeEx.InputRegister:
+                    regaddr = "3" + ((int)(channel.ModbusDataAddress + 1)).ToString("D4");
+                    break;
+                case ModbusDataTypeEx.HoldingRegister:
+                    regaddr = "4" + ((int)(channel.ModbusDataAddress + 1)).ToString("D4");
+                    break;
+                case ModbusDataTypeEx.DeviceFailureInfo:
+                    regaddr = "FS2 internal";
+                    break;
+            }
+            grid[row, gridColRegister] = new SourceGrid.Cells.Cell(regaddr);
+            grid[row, gridColRegister].Editor = null;
+            grid[row, gridColRegister].Tag = regaddr;
+
             grid[row, gridColDevice] = new SourceGrid.Cells.Cell(channel.SlaveId);
             grid[row, gridColDevice].Editor = null;
             grid[row, gridColDevDataType] = new SourceGrid.Cells.Cell(channel.DeviceDataType);
