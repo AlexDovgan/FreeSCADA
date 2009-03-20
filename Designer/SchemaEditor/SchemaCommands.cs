@@ -60,8 +60,9 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         }
         public override void CheckApplicability()
         {
-            SelectionTool tool = schemaView.ActiveTool as SelectionTool;
-            if (tool != null && tool.ToolManipulator != null && tool.ToolManipulator.AdornedElement is Viewbox)
+
+            if (schemaView.SelectionManager.SelectedObjects.Count>0
+                &&schemaView.SelectionManager.SelectedObjects[0] is Viewbox)
                 CanExecute = true;
             else
                 CanExecute = false;
@@ -70,7 +71,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         #region ICommand Members
         public override void Execute()
         {
-            EditorHelper.BreakGroup(schemaView.ActiveTool as SelectionTool);
+            EditorHelper.BreakGroup(schemaView);
         }
 
         public override string Name
@@ -101,8 +102,8 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         }
         public override void CheckApplicability()
         {
-            SelectionTool tool = schemaView.ActiveTool as SelectionTool;
-            if (tool != null && tool.SelectedObjects.Count > 0)
+            
+            if (schemaView.SelectionManager.SelectedObjects.Count > 1)
                 CanExecute = true;
             else
                 CanExecute = false;
@@ -112,7 +113,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         public override void Execute()
         {
-            EditorHelper.CreateGroup(schemaView.ActiveTool as SelectionTool);
+            EditorHelper.CreateGroup(schemaView);
         }
 
         public override string Name
@@ -143,8 +144,8 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         }
         public override void CheckApplicability()
         {
-            SelectionTool tool = schemaView.ActiveTool as SelectionTool;
-            if (tool != null && tool.SelectedObjects.Count > 0)
+            
+            if (schemaView.SelectionManager.SelectedObjects.Count > 0)
                 CanExecute = true;
             else
                 CanExecute = false;
@@ -155,21 +156,21 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public override void Execute()
         {
             base.Execute();
-            SelectionTool tool = schemaView.ActiveTool as SelectionTool;
-            Canvas currCanvas = tool.AdornedElement as Canvas;
+            
+            
             List<UIElement> sortedList = new List<UIElement>();
 
-            foreach (UIElement uie in currCanvas.Children)
+            foreach (UIElement uie in schemaView.MainCanvas.Children)
             {
-                if (tool.SelectedObjects.Contains(uie))
+                if (schemaView.SelectionManager.SelectedObjects.Contains(uie))
                 {
                     sortedList.Add(uie);
                 }
             }
             foreach (UIElement suie in sortedList)
             {
-                currCanvas.Children.Remove(suie);
-                currCanvas.Children.Add(suie);
+                schemaView.MainCanvas.Children.Remove(suie);
+                schemaView.MainCanvas.Children.Add(suie);
             }
         }
 
@@ -202,8 +203,8 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         public override void CheckApplicability()
         {
-            SelectionTool tool = schemaView.ActiveTool as SelectionTool;
-            if (tool != null && tool.SelectedObjects.Count > 0)
+            
+            if (schemaView.SelectionManager.SelectedObjects.Count > 0)
                 CanExecute = true;
             else
                 CanExecute = false;
@@ -214,13 +215,13 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public override void Execute()
         {
             base.Execute();
-            SelectionTool tool = schemaView.ActiveTool as SelectionTool;
-            Canvas currCanvas = tool.AdornedElement as Canvas;
+
+            Canvas currCanvas = schemaView.MainCanvas;
             List<UIElement> sortedList = new List<UIElement>();
 
             for (int i = currCanvas.Children.Count - 1; i >= 0; i--)
             {
-                if (tool.SelectedObjects.Contains(currCanvas.Children[i]))
+                if (schemaView.SelectionManager.SelectedObjects.Contains(currCanvas.Children[i]))
                 {
                     sortedList.Add(currCanvas.Children[i]);
                 }
@@ -261,8 +262,8 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         public override void CheckApplicability()
         {
-            SelectionTool tool = schemaView.ActiveTool as SelectionTool;
-            if (tool != null && tool.SelectedObjects.Count > 0)
+            
+            if (schemaView.SelectionManager.SelectedObjects.Count > 0)
                 CanExecute = true;
             else
                 CanExecute = false;
@@ -271,15 +272,15 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         #region ICommand Members
         public override void Execute()
         {
-            SelectionTool tool = schemaView.ActiveTool as SelectionTool;
+            
 
             System.Globalization.CultureInfo ci = System.Globalization.CultureInfo.CreateSpecificCulture("");
-            Rect b = EditorHelper.CalculateBounds(tool.SelectedObjects, tool.AdornedElement);
+            Rect b = schemaView.SelectionManager.CalculateBounds();
             string xaml = string.Format(ci.NumberFormat,
                 "<Canvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Left=\"{0}\" Top=\"{1}\">"
                 , b.X, b.Y);
 
-            foreach (UIElement el in tool.SelectedObjects)
+            foreach (UIElement el in schemaView.SelectionManager.SelectedObjects)
             {
 
                 xaml += XamlWriter.Save(el);
@@ -327,14 +328,14 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         #region ICommand Members
         public override void Execute()
         {
-            SelectionTool tool = schemaView.ActiveTool as SelectionTool;
+         
             copyCommand.Execute();
-            foreach (UIElement el in tool.SelectedObjects)
+            foreach (UIElement el in schemaView.SelectionManager.SelectedObjects)
             {
-                tool.NotifyObjectDeleted(el);
+                schemaView.ActiveTool.NotifyObjectDeleted(el);
             }
 
-            tool.SelectedObject = null;
+            schemaView.SelectionManager.SelectObject(null);
         }
 
         public override string Name
@@ -657,9 +658,9 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         public override void CheckApplicability()
         {
-            DocumentView doc = schemaView as DocumentView;
+            DocumentView doc = schemaView;
 
-            if (doc != null && doc.undoBuff.CanUndo())
+            if (doc.UndoBuff.CanUndo())
                 CanExecute = true;
             else
                 CanExecute = false;
@@ -668,7 +669,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public override void Execute()
         {
             DocumentView doc = (DocumentView)schemaView;
-            doc.undoBuff.UndoCommand();
+            doc.UndoBuff.UndoCommand();
         }
 
         #region Informational properties
@@ -705,7 +706,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             DocumentView doc = schemaView;
 
-            if (doc != null && doc.undoBuff.CanRedo())
+            if (doc != null && doc.UndoBuff.CanRedo())
                 CanExecute = true;
             else
                 CanExecute = false;
@@ -714,7 +715,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public override void Execute()
         {
             DocumentView doc = schemaView;
-            doc.undoBuff.RedoCommand();
+            doc.UndoBuff.RedoCommand();
         }
 
         #region Informational properties
@@ -749,8 +750,8 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         public override void CheckApplicability()
         {
-            SelectionTool tool = schemaView.ActiveTool as SelectionTool;
-            if (tool != null && tool.SelectedObjects.Count == 1)
+            
+            if (schemaView.SelectionManager.SelectedObjects.Count == 1)
                 CanExecute = true;
             else
                 CanExecute = false;
@@ -759,17 +760,15 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public override void Execute()
         {
             SelectionTool tool = schemaView.ActiveTool as SelectionTool;
- 
-
             
             bool found = false;
             foreach (IVisualControlsPlug p in Env.Current.VisualPlugins.Plugins)
             {
                 foreach (IVisualControlDescriptor d in p.Controls)
                 {
-                    if (tool.SelectedObjects[0].GetType() == d.Type)
+                    if (schemaView.SelectionManager.SelectedObjects[0].GetType() == d.Type)
                     {
-                        CommonBindingDialog dlg = new CommonBindingDialog(d.getPropProxy(tool.SelectedObjects[0]));
+                        CommonBindingDialog dlg = new CommonBindingDialog(d.getPropProxy(schemaView.SelectionManager.SelectedObjects[0]));
                         dlg.ShowDialog(Env.Current.MainWindow);
                         found = true;
                     }
@@ -777,7 +776,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             }
             if (!found)
             {
-                CommonBindingDialog dlg = new CommonBindingDialog(new PropProxy(tool.SelectedObjects[0]));
+                CommonBindingDialog dlg = new CommonBindingDialog(new PropProxy(schemaView.SelectionManager.SelectedObjects[0]));
                 dlg.ShowDialog(Env.Current.MainWindow);
             }
 

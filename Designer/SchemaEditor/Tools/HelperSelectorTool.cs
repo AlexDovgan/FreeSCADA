@@ -66,17 +66,17 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         }
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-            e.Handled = false;
+            /*e.Handled = false;
             if (ValidateMousePos(e.GetPosition(AdornedElement)) != null)
                 base.OnPreviewMouseLeftButtonDown(e);
             else
-                SelectedObject = null;
+                SelectedObject = null;*/
          }
         protected override void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
         {
-            SelectedObject = null;
+            //SelectedObject = null;
         }
-        protected override BaseManipulator CreateToolManipulator(UIElement obj)
+        public override BaseManipulator CreateToolManipulator(UIElement obj)
         {
             return null;
         }

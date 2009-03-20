@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
     class TextBoxTool:BaseTool
@@ -62,7 +64,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     text.Text = "You can write text here"; 
                     text.TextWrapping = TextWrapping.Wrap;
                     NotifyObjectCreated(text);
-                    SelectedObject = text;
+                    SelectionManager.GetSelectionManagerFor(AdornedElement).SelectObject(text);
 
                 }
                 isDragged = false;
@@ -86,10 +88,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             e.Handled = false;
         }
-        /*protected override BaseManipulator CreateToolManipulator(UIElement obj)
+        public override Manipulators.BaseManipulator CreateToolManipulator(UIElement obj)
         {
-            return new TextBoxManipulator(obj);
-        }*/
-
+            return new Manipulators.TextBoxManipulator(obj);
+        }
+        public override Type ToolEditingType()
+        {
+            return typeof(TextBox);
+        }
     }
 }

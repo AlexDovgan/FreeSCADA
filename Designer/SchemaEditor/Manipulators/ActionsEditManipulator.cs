@@ -45,8 +45,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 
             visualChildren.Add(AddActionPanel);
             visualChildren.Add(ActionsPanel);
-            Activate();
-
         }
 
         void DeleteActionClicked(object sender, RoutedEventArgs e)
@@ -147,7 +145,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                     }
                 }
             }
-            helperTool.ObjectSelected -= helperSelected;
+            //helperTool.ObjectSelected -= helperSelected;
             helperTool.Deactivate();
             helperTool = null;
 
@@ -163,7 +161,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             if (helperTool != null)
             {
                 helperTool.Deactivate();
-                helperTool.ObjectSelected -= helperSelected;
+                //helperTool.ObjectSelected -= helperSelected;
                 helperTool = null;
             }
  
@@ -173,7 +171,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             {
                 helperTool = new Tools.HelperSelectorTool((UIElement)VisualTreeHelper.GetParent(AdornedElement), AdornedElement);
                 helperTool.Activate();
-                helperTool.ObjectSelected += helperSelected;
+              //  helperTool.ObjectSelected += helperSelected;
             }
             else 
             {
@@ -240,7 +238,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                         break;
                 }
 
-          
+                aligmentRect.X = mainCanvas.TranslatePoint(aligmentRect.TopLeft, this).X;
+                aligmentRect.Y = mainCanvas.TranslatePoint(aligmentRect.TopLeft, this).Y;
 
                 control.Arrange(aligmentRect);
             }

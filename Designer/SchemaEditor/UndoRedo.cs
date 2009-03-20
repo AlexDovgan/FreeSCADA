@@ -30,40 +30,14 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
         /// </summary>
         void Undo();
     }
-    /// <summary>
-    /// static Manager for access undo redo buffers for documents from any context
-    /// </summary>
     static class UndoRedoManager
     {
-        static UndoRedoManager()
+        public static BasicUndoBuffer GetUndoBufferFor(UIElement el)
         {
-            undoBuffers=new Dictionary<DocumentView ,BasicUndoBuffer>();
+            System.Windows.Controls.Canvas c = SchemaDocument.GetMainCanvas(el);
+            return (c.Tag as Views.SchemaView).UndoBuff;
         }
-
-        
-        public static BasicUndoBuffer GetUndoBuffer(DocumentView doc)
-        {
-            if(!undoBuffers.ContainsKey(doc)) 
-            {
-                undoBuffers[doc]=new BasicUndoBuffer(doc);
-
-            }
-            return undoBuffers[doc];
-        }
-
-        public static void ReleaseUndoBuffer(DocumentView doc)
-        {
-            if (undoBuffers.ContainsKey(doc))
-            {
-                undoBuffers.Remove(doc);
-  
-            }
-        }
-        static Dictionary<DocumentView, BasicUndoBuffer> undoBuffers;
     }
-    /// <summary>
-    /// Undo Redo buffer for document instance
-    /// </summary>
     class BasicUndoBuffer
     {
         DocumentView view;
@@ -176,7 +150,7 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
         {
             schemaView.MainCanvas.Children.Remove(addedObject);
             if (schemaView.ActiveTool!= null)
-                schemaView.ActiveTool.SelectedObject = null;
+                schemaView.SelectionManager.SelectObject( null);
    
         }
 

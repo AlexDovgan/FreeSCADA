@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -38,7 +39,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             ellipse.Fill = Brushes.Gray;
             return ellipse;
         }
-
+        public override Type ToolEditingType()
+        {
+            return typeof(Ellipse);
+        }
         
     }
 }

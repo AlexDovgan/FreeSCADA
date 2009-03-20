@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -31,8 +32,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             recttangle.Height = rect.Height;
             recttangle.Stroke = Brushes.Black;
             recttangle.Fill = Brushes.Gray;
-
+            
             return recttangle;
+        }
+        public override Type ToolEditingType()
+        {
+            return typeof(Rectangle);
         }
     }
 

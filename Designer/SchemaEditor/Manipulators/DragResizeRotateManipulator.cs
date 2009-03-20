@@ -100,15 +100,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             resizeBottom.HorizontalAlignment = HorizontalAlignment.Center;
             resizeBottom.VerticalAlignment = VerticalAlignment.Bottom;
             visualChildren.Add(resizeBottom);
-            Activate();
-
         }
         public override void Activate()
         {
             if (!(AdornedElement is FrameworkElement))
                 throw new Exception("This is not FrameworkElement");
 
-            foreach (FrameworkElement control in visualChildren)
+            foreach (System.Windows.Media.Visual control in visualChildren)
             {
                 if(control is Thumb)
                 {
@@ -119,8 +117,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                     t.DragDelta += new DragDeltaEventHandler(control_DragDelta);
                     
                 }
-                if (control.Cursor == Cursors.SizeAll) 
-                    control.RenderTransform = AdornedElement.RenderTransform;
+                
 
             }
             base.Activate();
@@ -186,14 +183,16 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                     default:
                         break;
                 }
-               
-                //Point p = AdornedElement.TransformToVisual(this).Transform(new Point(aligmentRect.X, aligmentRect.Y));
+
+                if (control.Cursor == Cursors.SizeAll)
+                    control.RenderTransform = AdornedElement.TransformToVisual(this) as System.Windows.Media.MatrixTransform ;
+         
                 Point p = AdornedElement.TranslatePoint(new Point(aligmentRect.X, aligmentRect.Y), this);
                 p.X -= control.RenderTransform.Value.OffsetX;
                 p.Y -= control.RenderTransform.Value.OffsetY;
                 
-                aligmentRect.X =p.X-  (double.IsNaN(control.Width) ? 0 : control.Width) / 2;
-                aligmentRect.Y =p.Y-  (double.IsNaN(control.Height) ? 0 : control.Height) / 2;
+                 aligmentRect.X =p.X-  (double.IsNaN(control.Width) ? 0 : control.Width) / 2;
+                 aligmentRect.Y =p.Y-  (double.IsNaN(control.Height) ? 0 : control.Height) / 2;
                 
                 //aligmentRect.X -= (double.IsNaN(control.Width) ? 0 : control.Width) / 2;
                 //aligmentRect.Y -= (double.IsNaN(control.Height) ? 0 : control.Height) / 2; 

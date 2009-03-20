@@ -20,10 +20,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
     abstract public class BaseTool : Adorner
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        protected BaseManipulator toolManipulator;
+        
         /// <summary>
         /// 
         /// </summary>
@@ -63,95 +60,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// 
         /// </summary>
         public event EventHandler ObjectDeleted;
-        /// <summary>
-        /// 
-        /// </summary>
-        public event EventHandler ObjectChanged;    
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        public delegate void ObjectSeletedDelegate(Object obj);
-        /// <summary>
-        /// 
-        /// </summary>
-        public event ObjectSeletedDelegate ObjectSelected;
-        /// <summary>
-        /// 
-        /// </summary>
-        protected List<UIElement> selectedElements = new List<UIElement>();
-        /// <summary>
-        /// 
-        /// </summary>
-        public List<UIElement> SelectedObjects
-        {
-            get { return selectedElements; }
-        }
-
-        /// <summary>
-        /// active manipulator upon  selected object created by tool
-        /// may be as default manipulator so as an another manipulator that can be created by tool instance
-        /// </summary>
-        public BaseManipulator ToolManipulator
-        {
-            get
-            {
-                return toolManipulator;
-            }
-            set
-            {
-                if (toolManipulator != value)
-                {
-                    if (toolManipulator != null)
-                    {
-                       
-                        visualChildren.Remove(toolManipulator);
-                        toolManipulator.Deactivate();
-                    }
-                    if ((toolManipulator=value) != null)
-                    { 
-                        visualChildren.Add(toolManipulator);
-                        
-                        //toolManipulator.Activate();
-                        
-                    }
-                    InvalidateVisual();
-                }
-            }
-
-        }
-        /// <summary>
-        /// selected object by active manipulator
-        /// if object selected throw this proprty will be create default manipulator for tool instance
-        /// </summary>
-        public  UIElement SelectedObject
-        {
-            get
-            {
-                if (selectedElements.Count>0)
-                    return selectedElements[selectedElements.Count-1];
-                else return null;
-            }
-            set
-            {
-                selectedElements.Clear();
-                if (value != null)
-                {
-                    if (ToolManipulator == null || ToolManipulator.AdornedElement != value)
-                    {
-                        ToolManipulator = CreateToolManipulator(value);
-                        if (ToolManipulator != null)
-                            ToolManipulator.InvalidateArrange();
-                    }
-                    selectedElements.Add(value);
-                }
-                else
-                    ToolManipulator = null;
-                InvalidateVisual();
-                RaiseObjectSelected(value);
-            }
-
-        }
+        
+        
         /// <summary>
         /// 
         /// </summary>
@@ -171,7 +81,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             DrawingVisual drawingVisual = new DrawingVisual();
             DrawingContext drawingContext = drawingVisual.RenderOpen();
-            Rect rect = new Rect(new Point(0,0), AdornedElement.DesiredSize);
+            Rect rect = new Rect(new Point(0,0), AdornedElement.RenderSize);
 
             drawingContext.DrawRectangle(Brushes.Black, new Pen(Brushes.Black, 0.2), rect);
 
@@ -194,67 +104,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// 
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnPreviewMouseLeftButtonDown( MouseButtonEventArgs e)
-        {
-			NotifyToolStarted();
-            Point pt = e.GetPosition(this);
-
-            
-            IInputElement manipulatorHit = null;
-            if (ToolManipulator != null)
-                manipulatorHit = ToolManipulator.InputHitTest(e.GetPosition(ToolManipulator));
-     
-            if (manipulatorHit!=null)
-            {
-                e.Handled = true;
-                return;
-            }
-
-            HitTestResult result = VisualTreeHelper.HitTest(AdornedElement, pt);
-            if (result == null || result.VisualHit == AdornedElement)
-                SelectedObject = null;
-
-            else
-                if ((result = VisualTreeHelper.HitTest(AdornedElement, pt)).VisualHit != AdornedElement)
-                {
-                    FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(AdornedElement, (DependencyObject)result.VisualHit);
-                    SelectedObject = el;
-                    //e.Handled = true;
-
-                }
-            InvalidateVisual();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
-        {
-		//	NotifyToolFinished();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnPreviewMouseMove(MouseEventArgs e)
-        {
-        	NotifyToolWorking();
-            base.OnPreviewMouseMove(e);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="finalSize"></param>
-        /// <returns></returns>
-        protected override Size ArrangeOverride(Size finalSize)
-        {
-            if (toolManipulator != null)
-            {
-                ToolManipulator.InvalidateVisual(); 
-                toolManipulator.Arrange(new Rect(finalSize));
-            }
-            return finalSize;
-        }
         /// <summary>
         /// tool activating on working  Canvas
         /// </summary>
@@ -270,7 +119,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// </summary>
         public virtual void Deactivate()
         {
-            SelectedObject=null;
             if(AdornerLayer.GetAdornerLayer(AdornedElement)!=null)
                 AdornerLayer.GetAdornerLayer(AdornedElement).Remove(this);
         }
@@ -323,24 +171,19 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        protected virtual BaseManipulator CreateToolManipulator(UIElement obj)
+        public virtual BaseManipulator CreateToolManipulator(UIElement obj)
         {
             return new DragResizeRotateManipulator(obj);//GeometryHilightManipulator(obj);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        protected void RaiseObjectSelected(Object obj)
-        {
-            if (ObjectSelected != null)
-                ObjectSelected(obj);
-        }
+        
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="transform"></param>
         /// <returns></returns>
+        /// 
+ 
         public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
         {
             Matrix m = new Matrix();
@@ -350,7 +193,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             return transform;//new MatrixTransform(m); ;// //this code neded for right manipulators zooming
 
         }
-     
+        public virtual Type ToolEditingType()
+        {
+            return null;
+        }
        
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using FreeSCADA.Common.Schema.Actions;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
@@ -13,19 +14,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             
         }
-        protected override BaseManipulator CreateToolManipulator(UIElement obj)
+        public  override BaseManipulator CreateToolManipulator(UIElement obj)
         {
-            ActionsEditManipulator manipulator;
-            if (ToolManipulator != null)
-                (ToolManipulator as ActionsEditManipulator).ActionSelected -= manipulator_ActionSelected;
-            manipulator=new ActionsEditManipulator(obj);
-            manipulator.ActionSelected += new ActionsEditManipulator.ActionSelectedDelegate(manipulator_ActionSelected);
-            return manipulator;
-        }
-
-        void manipulator_ActionSelected(BaseAction a)
-        {
-            RaiseObjectSelected(a);
+            return new ActionsEditManipulator(obj);
+            
         }
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
@@ -37,6 +29,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             base.OnPreviewMouseLeftButtonDown(e);
             e.Handled = false;
         }
- 
+       
     }
 }

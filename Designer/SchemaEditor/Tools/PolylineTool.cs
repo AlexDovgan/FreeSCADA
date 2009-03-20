@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -47,40 +48,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         }
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-            UIElement selObj = SelectedObject;
+        
             if (pointsCollection.Count == 0)
                 base.OnPreviewMouseLeftButtonDown(e);
-            if (SelectedObject==null)
-            {
-                CaptureMouse();
-                pointsCollection.Add(GridManager.GetMousePos());
+            CaptureMouse();
+            pointsCollection.Add(GridManager.GetMousePos());
 
-            }
-            // creating a new polyline point when clicking to the line with Ctrl key
-            else if (selObj == SelectedObject && (System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Control) != 0)
-            {
-                if (selObj is Polyline)
-                {
-                    for (int i = 0; i < (selObj as Polyline).Points.Count - 1; i++)
-                    {
-                        // Hit test
-                        LineGeometry lg = new LineGeometry((selObj as Polyline).Points[i], (selObj as Polyline).Points[i + 1]);
-                        EllipseGeometry eg = new EllipseGeometry(GridManager.GetMousePos(), (selObj as Polyline).StrokeThickness, (selObj as Polyline).StrokeThickness);
-                        IntersectionDetail id = eg.FillContainsWithDetail(lg);
-                        if (id == IntersectionDetail.Intersects)
-                        {
-                            // Insert point to the polyline
-                            (selObj as Polyline).Points.Insert(i + 1, GridManager.GetMousePos());
-                            // Rendering (new thumbs)
-                            if (ToolManipulator != null)
-                            {
-                                (ToolManipulator as PolylineEditManipulantor).AddThumb(GridManager.GetMousePos());
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
+                
             
             e.Handled = false;
         }
@@ -110,6 +84,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 }
                 b.Width -= b.X;
                 b.Height -= b.Y;
+                for (int i = 0; i < pointsCollection.Count; i++)
+                {
+                    Point pp = new Point();
+                    pp.X = pointsCollection[i].X - b.X;
+                    pp.Y = pointsCollection[i].Y - b.Y;
+                    pointsCollection[i] = pp; ;        
+                }
+        
                 poly.Points = pointsCollection.Clone();
                 pointsCollection.Clear();
                 Canvas.SetLeft(poly, b.X);
@@ -120,7 +102,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 poly.Fill = Brushes.Transparent;
                 poly.Stretch = Stretch.Fill;
                 NotifyObjectCreated(poly);
-                SelectedObject = poly;
+                
             }
             pointsCollection.Clear();
             objectPrview.RenderOpen().Close();
@@ -133,11 +115,15 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             e.Handled = true;
         }
 
-        protected override BaseManipulator CreateToolManipulator(UIElement obj)
+        public override BaseManipulator CreateToolManipulator(UIElement obj)
         {
             if (obj is Polyline)
                 return new PolylineEditManipulantor(obj as Polyline);
             else return base.CreateToolManipulator(obj);
+        }
+        public override Type ToolEditingType()
+        {
+            return typeof(Polyline);
         }
 
     }
