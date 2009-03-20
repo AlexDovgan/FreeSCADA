@@ -10,7 +10,7 @@ namespace FreeSCADA.Designer
 	class DocumentView : DockContent
 	{
 
-        public BasicUndoBuffer undoBuff;
+  
 
         public delegate void ObjectSelectedDelegate(object sender);
         public event ObjectSelectedDelegate ObjectSelected;
@@ -48,6 +48,12 @@ namespace FreeSCADA.Designer
 		}
 
 		public virtual List<CommandInfo> DocumentCommands
+        {
+            get;
+            protected set;
+        }
+
+        public BasicUndoBuffer UndoBuff
         {
             get;
             protected set;

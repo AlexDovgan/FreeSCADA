@@ -42,9 +42,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
 			return finalSize;
 		}
-        protected override BaseManipulator CreateToolManipulator(UIElement obj)
+        public override BaseManipulator CreateToolManipulator(UIElement obj)
         {
-            return ObjectsFactory.CreateDefaultManipulator(obj);
+            //return ObjectsFactory.CreateDefaultManipulator(obj);
+            return new DragResizeRotateManipulator(obj);
         }
 
 
@@ -64,6 +65,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             createdObject.Width = rect.Width;
             createdObject.Height = rect.Height;
             return createdObject;
+        }
+        public override Type ToolEditingType()
+        {
+            return typeof(T);
         }
     }
     

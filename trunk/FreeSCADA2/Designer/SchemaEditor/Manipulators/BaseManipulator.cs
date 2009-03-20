@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Documents;
 using FreeSCADA.Designer.SchemaEditor.Manipulators.Controls;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
@@ -10,72 +11,38 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
     /// 
     /// /// </summary>
         
-    public class BaseManipulator :FrameworkElement//Adorner
+    public class BaseManipulator :Adorner
     {
         
-        /// <summary>
-        /// Element that manipulator is decorate
-        /// </summary>
-        protected UIElement adornedElement;
         /// <summary>
         /// Container for manipulator controlls
         /// </summary>
         protected VisualCollection visualChildren;
-        /// <summary>
-        /// 
-        /// </summary>
-        public  UIElement AdornedElement
-        {
-            get { return adornedElement; }
-            /*set
-            {
-                if (adornedElement == value) return;
-                if (adornedElement!=null) Deactivate();
-
-                adornedElement = value;
-                if (adornedElement != null)
-                {
-                    if (!(adornedElement.RenderTransform is TransformGroup))
-                    {
-                        TransformGroup t = new TransformGroup();
-                        t.Children.Add(new MatrixTransform());
-                        t.Children.Add(new RotateTransform());
-                        adornedElement.RenderTransform = t;
-                        adornedElement.RenderTransformOrigin = new Point(0.5, 0.5);
-
-                    }
- 
-                    Activate();
-                }
-      
-            }*/
-        }
+        protected System.Windows.Controls.Canvas mainCanvas;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="element"></param>
         public BaseManipulator(UIElement element)
-            //: base(element)
+            : base(element)
         {
-            adornedElement = element;
-            if (!(adornedElement.RenderTransform is TransformGroup))
+            if (!(AdornedElement.RenderTransform is TransformGroup))
             {
                 TransformGroup t = new TransformGroup();
                 t.Children.Add(new MatrixTransform());
                 t.Children.Add(new RotateTransform());
-                adornedElement.RenderTransform = t;
-                adornedElement.RenderTransformOrigin = new Point(0.5, 0.5);
-
+                AdornedElement.RenderTransform = t;
+                AdornedElement.RenderTransformOrigin = new Point(0.5, 0.5);
+                
             }
             ThumbsResources tr = new ThumbsResources();
             tr.InitializeComponent();
             Resources = tr;
             this.Visibility = Visibility.Collapsed;                       
             visualChildren = new VisualCollection(this);
-            
-        }
-        
-
+            mainCanvas=Common.Schema.SchemaDocument.GetMainCanvas(AdornedElement);
+       
+    }
         /// <summary>
         /// 
         /// </summary>
@@ -92,9 +59,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         public virtual void Activate()
         {
             this.Visibility = Visibility.Visible;
-            //UpdateLayout();
-            InvalidateMeasure();
-            InvalidateArrange();
+            InvalidateVisual();
         }
         /// <summary>
         /// 
@@ -102,9 +67,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         public virtual void Deactivate()
         {
             this.Visibility = Visibility.Collapsed;
-            //UpdateLayout();
-            InvalidateMeasure();
-            InvalidateArrange();
+            InvalidateVisual();
         }
         /// <summary>
         /// 
@@ -115,6 +78,16 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         {
             return true;
         }
+        public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
+        {
+            Matrix m = new Matrix();
+            m.OffsetX = ((MatrixTransform)transform).Matrix.OffsetX;
+            m.OffsetY = ((MatrixTransform)transform).Matrix.OffsetY;
+
+            return new MatrixTransform();//new MatrixTransform(m); ;// //this code neded for right manipulators zooming
+            
+        }
+     
 
     }
 

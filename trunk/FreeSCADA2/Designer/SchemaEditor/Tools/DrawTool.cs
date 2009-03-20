@@ -112,7 +112,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 {
                     UIElement uie = DrawEnded(rect);
                     NotifyObjectCreated(uie);
-                    SelectedObject = uie;
+              
                 }
                 isDragged = false;
                 objectPrview.RenderOpen().Close();

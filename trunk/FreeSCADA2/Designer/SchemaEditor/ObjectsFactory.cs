@@ -32,7 +32,7 @@ namespace FreeSCADA.Designer.SchemaEditor
 
         static ObjectsFactory()
         {
-            descriptorsDictionary[typeof(FrameworkElement)]=new ObjectDescriptor(typeof(DragResizeRotateManipulator));
+            descriptorsDictionary[typeof(FrameworkElement)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
             descriptorsDictionary[typeof(TextBlock)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
             descriptorsDictionary[typeof(Shape)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
             descriptorsDictionary[typeof(Polyline)] = new ObjectDescriptor(typeof(PolylineEditManipulantor));
@@ -40,7 +40,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             descriptorsDictionary[typeof(ContentControl)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
             descriptorsDictionary[typeof(RangeBase)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
             descriptorsDictionary[typeof(Canvas)] = new ObjectDescriptor(typeof(DragResizeRotateManipulator));
-            //---
+            
             foreach (IVisualControlsPlug p in Env.Current.VisualPlugins.Plugins)
             {
                 foreach (IVisualControlDescriptor d in p.Controls)
@@ -76,28 +76,13 @@ namespace FreeSCADA.Designer.SchemaEditor
                 {
                     object[] a = new object[1];
                     a[0] = frameworkElement;
-                    return (BaseManipulator)System.Activator.CreateInstance(desctiptor.ObjectManipulatorType,a);
+                    return (Manipulators.BaseManipulator)System.Activator.CreateInstance(desctiptor.ObjectManipulatorType,a);
+
                 }
 
             }
             return null;
         }
-       /* public static CommonShortProp CreateShortProp(Object obj)
-        {
-            FrameworkElement frameworkElement = obj as FrameworkElement;
-            ObjectDescriptor desctiptor;
-            if (frameworkElement != null)
-            {
-                desctiptor = FindDescriptor(frameworkElement.GetType());
 
-                if (desctiptor.ObjectShortPropType.IsSubclassOf(typeof(CommonShortProp)))
-                {
-                    object[] a = new object[1];
-                    a[0] = frameworkElement;
-                    return (CommonShortProp)System.Activator.CreateInstance(desctiptor.ObjectShortPropType, a);
-                }
-            }
-            return null;
-        }*/
     }
 }

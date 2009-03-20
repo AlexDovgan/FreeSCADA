@@ -61,11 +61,11 @@ namespace FreeSCADA.Designer.SchemaEditor
         }
         
 
-        public static void BreakGroup(SelectionTool tool)
+        public static void BreakGroup(SchemaView view)
         {
 
-            Canvas parent = tool.AdornedElement as Canvas;
-            Viewbox g = tool.SelectedObject as Viewbox;
+            Canvas parent = view.MainCanvas;
+            Viewbox g = view.SelectionManager.SelectedObjects[0] as Viewbox;
             try
             {
                 Canvas gc = (Canvas)g.Child;
@@ -131,21 +131,21 @@ namespace FreeSCADA.Designer.SchemaEditor
                 g.Child = null;
                 //tool.NotifyObjectDeleted(g);
                 parent.Children.Remove(g);
-                tool.SelectedObject = null;
+                view.SelectionManager.SelectObject(null);
             }
             catch (Exception)
             {
             }
 
         }
-        public static void CreateGroup(SelectionTool tool)
+        public static void CreateGroup(SchemaView view)
         {
 
             Viewbox Group = new Viewbox();
             Group.SetValue(Viewbox.StretchProperty, Stretch.Fill);
-            Canvas workCanvas = (Canvas)tool.AdornedElement;
+            Canvas workCanvas = view.MainCanvas;
             Canvas g = new Canvas();
-            Rect r = EditorHelper.CalculateBounds(tool.SelectedObjects, workCanvas);
+            Rect r = view.SelectionManager.CalculateBounds();
             Canvas.SetLeft(Group, r.X);
             Canvas.SetTop(Group, r.Y);
             Group.Width = g.Width = r.Width;
@@ -154,7 +154,7 @@ namespace FreeSCADA.Designer.SchemaEditor
 
 
 
-            foreach (UIElement ch in tool.SelectedObjects)
+            foreach (UIElement ch in view.SelectionManager.SelectedObjects)
             {
                 //tool.NotifyObjectDeleted(ch);
                 Vector off = VisualTreeHelper.GetOffset(ch);
@@ -167,9 +167,9 @@ namespace FreeSCADA.Designer.SchemaEditor
             Canvas.SetTop(g, 0); Canvas.SetLeft(g, 0);
             workCanvas.Children.Add(Group);
             //tool.NotifyObjectCreated(Group);
-            tool.SelectedObjects.Clear();
-            tool.AdornedElement.UpdateLayout();
-            tool.SelectedObject = Group;
+            view.SelectionManager.SelectObject(null);
+            view.MainCanvas.InvalidateVisual();
+            view.SelectionManager.SelectObject(Group);
             
             
         }

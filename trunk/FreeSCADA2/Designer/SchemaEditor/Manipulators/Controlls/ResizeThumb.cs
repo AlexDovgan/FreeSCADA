@@ -55,22 +55,26 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
         {
             if (ControledItem != null)
             {
-                double deltaVertical=0, deltaHorizontal=0;
+                double deltaVertical = 0, deltaHorizontal = 0;
                 Point dragDelta = new Point(e.HorizontalChange, e.VerticalChange);
                 GridManager.GetGridManagerFor(controledItem).AdjustPointToGrid(ref dragDelta);
-                dragDelta= ControledItem.RenderTransform.Inverse.Transform(dragDelta);
-                
+
+                Matrix m =((Transform)this.TransformToVisual(ControledItem)).Value;
+                m.OffsetX = 0;
+                m.OffsetY = 0;
+                System.Windows.Media.Transform t = new MatrixTransform(m);
+                dragDelta = t.Transform(dragDelta);
+
                 Rect r = new Rect(Canvas.GetLeft(ControledItem), Canvas.GetTop(ControledItem),
-                                ControledItem.Width,
-                                ControledItem.Height);
+                                ControledItem.Width,ControledItem.Height );
                 //GridManager.GetGridManagerFor(controledItem).AdjustRectToGrid(ref r);                
-                
+
                 switch (base.VerticalAlignment)
                 {
                     case System.Windows.VerticalAlignment.Bottom:
                         deltaVertical = Math.Min(-dragDelta.Y, ControledItem.ActualHeight - Height);
-                       
-                        r.Height-= deltaVertical;
+
+                        r.Height -= deltaVertical;
                         break;
                     case System.Windows.VerticalAlignment.Top:
                         deltaVertical = Math.Min(dragDelta.Y, ControledItem.ActualHeight - Height);
@@ -101,17 +105,17 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
                 }
                 Point sizeDelta = new Point(deltaHorizontal, deltaVertical);
                 Point sizeDeltaTrans = ControledItem.RenderTransform.Transform(sizeDelta);
-                Vector v=sizeDelta-sizeDeltaTrans;
-                
+                Vector v = sizeDelta - sizeDeltaTrans;
+
                 r.X = r.X + v.X * controledItem.RenderTransformOrigin.X;
-                r.Y = r.Y+ v.Y * controledItem.RenderTransformOrigin.Y;
+                r.Y = r.Y + v.Y * controledItem.RenderTransformOrigin.Y;
 
 
                 EditorHelper.SetDependencyProperty(ControledItem, Canvas.LeftProperty, r.X);
                 EditorHelper.SetDependencyProperty(ControledItem, Canvas.TopProperty, r.Y);
-                EditorHelper.SetDependencyProperty(ControledItem, FrameworkElement.WidthProperty, r.Width );
-                EditorHelper.SetDependencyProperty(ControledItem, FrameworkElement.HeightProperty, r.Height );
-
+                EditorHelper.SetDependencyProperty(ControledItem, FrameworkElement.WidthProperty, r.Width);
+                EditorHelper.SetDependencyProperty(ControledItem, FrameworkElement.HeightProperty, r.Height);
+               
 
             }
             //e.Handled = true;

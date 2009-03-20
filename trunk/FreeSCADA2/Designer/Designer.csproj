@@ -172,19 +172,18 @@
     <Compile Include="SchemaEditor\SchemaCommands.cs">
     </Compile>
     <Compile Include="SchemaEditor\SchemaMenuContext.cs" />
-    <Compile Include="SchemaEditor\SelectionHelper.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\NumExpressionBindingPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\NumExpressionBindingPanel.Designer.cs">
       <DependentUpon>NumExpressionBindingPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="SchemaEditor\SelectionManager.cs" />
     <Compile Include="SchemaEditor\StylesLibrary\StylesLibrary.cs" />
     <Compile Include="SchemaEditor\ToolDescriptor.cs" />
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
     <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
     <Compile Include="SchemaEditor\Tools\ControlCreateTool.cs" />
-    <Compile Include="SchemaEditor\Tools\UserControlCreateTool.cs" />
     <Compile Include="SchemaEditor\Tools\DrawTool.cs" />
     <Compile Include="SchemaEditor\Tools\EllipseTool.cs" />
     <Compile Include="SchemaEditor\Tools\PolylineTool.cs" />

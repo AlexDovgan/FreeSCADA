@@ -17,7 +17,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             : base(el)
         {
 
-            Activate();
+            
         }
         public override void Activate()
         {
