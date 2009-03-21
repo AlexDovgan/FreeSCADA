@@ -200,6 +200,7 @@
     <Compile Include="Views\ArchiverSettingsView.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Views\ProjectNodes.cs" />
     <Compile Include="Views\ScriptView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -380,6 +381,16 @@
     <Content Include="Resources\shape_square_add.png" />
     <Content Include="Resources\shape_ungroup.png" />
     <Content Include="Resources\textfield_add.png" />
+    <None Include="Resources\tree_archiver.png" />
+    <None Include="Resources\tree_channels.png" />
+    <None Include="Resources\tree_plugin.png" />
+    <None Include="Resources\tree_project.png" />
+    <None Include="Resources\tree_rule.png" />
+    <None Include="Resources\tree_schema.png" />
+    <None Include="Resources\tree_schemas.png" />
+    <None Include="Resources\tree_script.png" />
+    <None Include="Resources\tree_scripts.png" />
+    <None Include="Resources\tree_variable.png" />
     <Content Include="Resources\zoom_in.png" />
     <None Include="Resources\zoom_out.png" />
   </ItemGroup>

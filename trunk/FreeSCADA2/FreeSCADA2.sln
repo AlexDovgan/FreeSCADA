@@ -1,7 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C# Express 2008
+# Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Designer", "Designer\Designer.csproj", "{93466C99-5637-4243-A01A-7AF12F706889}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9EABAB10-2305-4DFF-8600-1456C0CD4729} = {9EABAB10-2305-4DFF-8600-1456C0CD4729}
+		{58770328-000A-41C0-85E7-58286173C25B} = {58770328-000A-41C0-85E7-58286173C25B}
+		{BA67D037-F40A-49CE-97B3-91DDE4A44062} = {BA67D037-F40A-49CE-97B3-91DDE4A44062}
+		{1B03906B-2421-4A52-86EE-842D90CA642C} = {1B03906B-2421-4A52-86EE-842D90CA642C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communication.SimulatorPlug", "Communication.SimulatorPlug\Communication.SimulatorPlug.csproj", "{58770328-000A-41C0-85E7-58286173C25B}"
 EndProject

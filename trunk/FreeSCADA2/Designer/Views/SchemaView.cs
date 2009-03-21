@@ -18,6 +18,7 @@ using FreeSCADA.Interfaces.Plugins;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Windows;
+using FreeSCADA.Designer.Views.ProjectNodes;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -486,13 +487,12 @@ namespace FreeSCADA.Designer.Views
 
         void Child_Drop(object sender, System.Windows.DragEventArgs e)
         {
-            TreeNode node = (TreeNode)e.Data.GetData("System.Windows.Forms.TreeNode");
-
             System.Windows.Controls.ContentControl content = new System.Windows.Controls.ContentControl();
             System.Windows.Data.Binding bind = new System.Windows.Data.Binding();
 
             ChannelDataProvider cdp = new ChannelDataProvider();
-            cdp.ChannelName = node.Tag + "." + node.Text;
+            //cdp.ChannelName = node.Tag + "." + node.Text;
+			cdp.ChannelName = (string)e.Data.GetData(typeof(string));
             bind.Source = cdp;
 
             bind.Source = cdp;
@@ -518,12 +518,16 @@ namespace FreeSCADA.Designer.Views
 
         void Child_DragEnter(object sender, System.Windows.DragEventArgs e)
         {
-            TreeNode node = (TreeNode)e.Data.GetData("System.Windows.Forms.TreeNode");
-            if (node != null)
-            {
-                e.Effects = System.Windows.DragDropEffects.Copy;
-
-            }
+			if (e.Data.GetDataPresent(typeof(string)))
+			{
+				string channelId = (string)e.Data.GetData(typeof(string));
+				if(Env.Current.CommunicationPlugins.GetChannel(channelId) != null)
+					e.Effects = System.Windows.DragDropEffects.Copy;
+				else
+					e.Effects = System.Windows.DragDropEffects.None;
+			}
+			else
+				e.Effects = System.Windows.DragDropEffects.None;
         }
 
 
