@@ -226,4 +226,34 @@
   <data name="log_warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\log_warning.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="tree_archiver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tree_archiver.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tree_channels" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tree_channels.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tree_plugin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tree_plugin.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tree_project" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tree_project.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tree_rule" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tree_rule.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tree_schema" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tree_schema.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tree_schemas" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tree_schemas.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tree_script" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tree_script.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tree_scripts" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tree_scripts.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tree_variable" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tree_variable.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

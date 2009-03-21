@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using FreeSCADA.Archiver;
 using FreeSCADA.Common;
+using FreeSCADA.Designer.Views.ProjectNodes;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -20,28 +21,27 @@ namespace FreeSCADA.Designer.Views
 		#region Windows Form FreeSCADA.Designer generated code
 		private void InitializeComponent()
 		{
-            this.projectTree = new System.Windows.Forms.TreeView();
-            this.SuspendLayout();
-            // 
-            // projectTree
-            // 
-            this.projectTree.AllowDrop = true;
-            this.projectTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.projectTree.Location = new System.Drawing.Point(0, 0);
-            this.projectTree.Name = "projectTree";
-            this.projectTree.Size = new System.Drawing.Size(292, 273);
-            this.projectTree.TabIndex = 0;
-            this.projectTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.OnNodeDblClick);
-            this.projectTree.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.projectTree_ItemDrag);
-            // 
-            // ProjectContentView
-            // 
-           
-            this.ClientSize = new System.Drawing.Size(292, 273);
-            this.Controls.Add(this.projectTree);
-            this.Name = "ProjectContentView";
-            this.ResumeLayout(false);
-            
+			this.projectTree = new System.Windows.Forms.TreeView();
+			this.SuspendLayout();
+			// 
+			// projectTree
+			// 
+			this.projectTree.AllowDrop = true;
+			this.projectTree.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.projectTree.Location = new System.Drawing.Point(0, 0);
+			this.projectTree.Name = "projectTree";
+			this.projectTree.Size = new System.Drawing.Size(292, 273);
+			this.projectTree.TabIndex = 0;
+			this.projectTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.OnNodeDblClick);
+			this.projectTree.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.projectTree_ItemDrag);
+			// 
+			// ProjectContentView
+			// 
+			this.ClientSize = new System.Drawing.Size(292, 273);
+			this.Controls.Add(this.projectTree);
+			this.Name = "ProjectContentView";
+			this.ResumeLayout(false);
+
         }
 
         #endregion
@@ -52,6 +52,8 @@ namespace FreeSCADA.Designer.Views
 			InitializeComponent();
 
 			TabText = "Project Content";
+
+			projectTree.ImageList = Resources.TreeIcons;
 
 			RefreshContent(Env.Current.Project);
             AllowDrop = true;
@@ -73,52 +75,24 @@ namespace FreeSCADA.Designer.Views
         {
             e.Effect = DragDropEffects.Copy;
         }
-        
 
         void projectTree_ItemDrag(object sender, ItemDragEventArgs e)
         {
-            if((e.Item as TreeNode).Tag!=null)
-                DoDragDrop(e.Item, DragDropEffects.All);
+			if ((e.Item as TreeNode).Tag != null && (e.Item as TreeNode).Tag is ChannelNode)
+			{
+				//By some reason I cannot pass channelNode object to this function. therefore I send just channel id string.
+				//We need better solution here.
+				ChannelNode node = (e.Item as TreeNode).Tag as ChannelNode;
+				DoDragDrop(node.FullId, DragDropEffects.All);
+			}
         }
 
 		public void RefreshContent(Project project)
 		{
-			projectTree.Nodes.Clear();
-			TreeNode root;
-			
-			if(string.IsNullOrEmpty(project.FileName))
-				root = projectTree.Nodes.Add(StringResources.UnsavedProjectName);
-			else
-				root = projectTree.Nodes.Add(project.FileName);
-
-			TreeNode schemas = root.Nodes.Add(StringResources.SchemasItemName);
-			foreach (string entity in Env.Current.Project.GetEntities(ProjectEntityType.Schema))
-			{
-				TreeNode node = schemas.Nodes.Add(entity);
-				node.Tag = entity;
-				node.EnsureVisible();
-			}
-            TreeNode channelsTree = root.Nodes.Add(StringResources.ChannelsItemName);
-            foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
-            {
-                TreeNode plugNode = channelsTree.Nodes.Add(Env.Current.CommunicationPlugins[plugId].Name);
-              
-                foreach (FreeSCADA.Interfaces.IChannel ch in Env.Current.CommunicationPlugins[plugId].Channels)
-                {
-                    TreeNode chNode;
-                    chNode = plugNode.Nodes.Add(ch.Name);
-                    chNode.Tag = plugId;
-              
-                }
-            }
-            TreeNode archivers = root.Nodes.Add(StringResources.ArchiverItemName);
-            foreach (Rule rule in ArchiverMain.Current.ChannelsSettings.Rules)
-            {
-                TreeNode chNode;
-                chNode = archivers.Nodes.Add(rule.Name);
-                //chNode.Tag = plugId;
-
-            }
+			projectTree.BeginUpdate();
+			ProjectNode prjNode = new ProjectNode();
+			prjNode.CreateTreeNode(projectTree.Nodes);
+			projectTree.EndUpdate();
         }
 
 		void OnProjectLoad(object sender, EventArgs e)
@@ -133,12 +107,14 @@ namespace FreeSCADA.Designer.Views
 
 		private void OnNodeDblClick(object sender, TreeNodeMouseClickEventArgs e)
 		{
-            if (OpenEntity != null && e.Node.Tag != null && e.Node.Parent.Text == StringResources.SchemasItemName)
-                OpenEntity(ProjectEntityType.Schema, (string)e.Node.Tag);
-            else if (OpenEntity != null && (e.Node.Text == StringResources.ArchiverItemName || (e.Node.Parent!=null&&e.Node.Parent.Text == StringResources.ArchiverItemName)))
-                OpenEntity(ProjectEntityType.Archiver, (string)e.Node.Text);
+			if (OpenEntity != null && e.Node.Tag != null)
+			{
+				if (e.Node.Tag is BaseEntityNode)
+				{
+					BaseEntityNode n = e.Node.Tag as BaseEntityNode;
+					OpenEntity(n.EntityType, n.Name);
+				}
+			}
         }
-       
 	}
-  
 }

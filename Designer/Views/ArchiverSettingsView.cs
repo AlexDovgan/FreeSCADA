@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using FreeSCADA.Archiver;
 using FreeSCADA.Interfaces;
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -478,18 +479,25 @@ namespace FreeSCADA.Designer.Views
 
 		private void listBox1_DragEnter(object sender, DragEventArgs e)
 		{
-			TreeNode node = (TreeNode)e.Data.GetData("System.Windows.Forms.TreeNode");
-			if (node != null)
-				e.Effect = DragDropEffects.Copy;
+			if (e.Data.GetDataPresent(typeof(string)))
+			{
+				string channelId = (string)e.Data.GetData(typeof(string));
+				if (Env.Current.CommunicationPlugins.GetChannel(channelId) != null)
+					e.Effect = DragDropEffects.Copy;
+				else
+					e.Effect = DragDropEffects.None;
+			}
+			else
+				e.Effect = DragDropEffects.None;
 		}
 
 		private void listBox1_DragDrop(object sender, DragEventArgs e)
 		{
-			TreeNode node = (TreeNode)e.Data.GetData("System.Windows.Forms.TreeNode");
-
+			IChannel ch = Env.Current.CommunicationPlugins.GetChannel((string)e.Data.GetData(typeof(string)));
+			
 			ChannelInfo channel = new ChannelInfo();
-			channel.ChannelName = node.Text;
-			channel.PluginId = node.Tag.ToString();
+			channel.ChannelName = ch.Name;
+			channel.PluginId = ch.PluginId;
 
 			Rule rule = rulesList.SelectedItems[0].Tag as Rule;
 			if (rule != null)

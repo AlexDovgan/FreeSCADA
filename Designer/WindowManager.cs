@@ -168,9 +168,9 @@ namespace FreeSCADA.Designer
                 case ProjectEntityType.Archiver:
                     ShowArchiverSettings();
                     break;
-				//case ProjectEntityType.Script:
-				//    ShowScriptSettings();
-				//    break;
+				case ProjectEntityType.Script:
+					OnOpenScript(this, Env.Current.ScriptManager.GetScript(name));
+					break;
                 // etc....
                 default:
                     break;
