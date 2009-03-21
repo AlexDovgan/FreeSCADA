@@ -4,10 +4,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Shapes;
-using FreeSCADA.Designer.SchemaEditor.Manipulators;
-using FreeSCADA.Interfaces.Plugins;
 using FreeSCADA.Common;
+using FreeSCADA.Designer.SchemaEditor.Manipulators;
 using FreeSCADA.Interfaces;
+using FreeSCADA.Interfaces.Plugins;
 
 namespace FreeSCADA.Designer.SchemaEditor
 {

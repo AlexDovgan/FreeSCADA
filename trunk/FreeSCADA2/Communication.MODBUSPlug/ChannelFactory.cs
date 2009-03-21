@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.Xml;
 using FreeSCADA.Interfaces;
-using System.Globalization;
 
 namespace FreeSCADA.Communication.MODBUSPlug
 {

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using FreeSCADA.Interfaces;
-using FreeSCADA.Common;
-using System.Reflection;
 using System.IO;
+using System.Reflection;
 using System.Xml;
+using FreeSCADA.Interfaces;
 
 
 namespace FreeSCADA.Common.Scripting
@@ -21,6 +19,17 @@ namespace FreeSCADA.Common.Scripting
 				associations[ch.FullId] = new Dictionary<string, ScriptCallInfo>();
 			
 			associations[ch.FullId][evnt] = info;
+			Save();
+		}
+
+		public void RemoveAssociation(string evnt, IChannel ch)
+		{
+			if (associations.ContainsKey(ch.FullId) && associations[ch.FullId].ContainsKey(evnt))
+			{
+				associations[ch.FullId].Remove(evnt);
+				if (associations[ch.FullId].Count == 0)
+					associations.Remove(ch.FullId);
+			}
 			Save();
 		}
 

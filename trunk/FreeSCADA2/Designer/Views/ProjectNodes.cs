@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
-using FreeSCADA.Common;
 using FreeSCADA.Archiver;
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer.Views.ProjectNodes
 {

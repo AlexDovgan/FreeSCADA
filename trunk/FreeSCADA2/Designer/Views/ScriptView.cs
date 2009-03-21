@@ -1,10 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Alsing.SourceCode;
-using FreeSCADA.Common.Scripting;
 using FreeSCADA.Common;
-using FreeSCADA.Interfaces;
-using System.Collections.Generic;
+using FreeSCADA.Common.Scripting;
 
 namespace FreeSCADA.Designer.Views
 {

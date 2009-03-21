@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Markup;
-using System.Collections.Generic;
-using System.Text;
 
 namespace FreeSCADA.Common.Schema.Commands
 {

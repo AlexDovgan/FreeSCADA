@@ -12,7 +12,6 @@ using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.Views;
 using FreeSCADA.Interfaces;
 using FreeSCADA.Interfaces.Plugins;
-using FreeSCADA.Common.Schema;
 
 
 namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands

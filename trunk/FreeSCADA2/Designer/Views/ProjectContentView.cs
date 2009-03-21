@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using FreeSCADA.Archiver;
 using FreeSCADA.Common;
 using FreeSCADA.Designer.Views.ProjectNodes;
 

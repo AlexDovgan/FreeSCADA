@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using FreeSCADA.Common;
-using Modbus.Data;
 
 
 namespace FreeSCADA.Communication.MODBUSPlug

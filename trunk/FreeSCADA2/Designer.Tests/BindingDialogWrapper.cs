@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Core;
-using Core.UIItems.ListBoxItems;
-using Core.UIItems.WindowItems;
-using Core.UIItems.Finders;
+﻿using Core;
 using Core.UIItems;
+using Core.UIItems.Finders;
+using Core.UIItems.ListBoxItems;
 using Core.UIItems.TreeItems;
+using Core.UIItems.WindowItems;
 using NUnit.Framework;
 
 namespace Designer.Tests

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Data;
-using System.Windows.Markup;
 using System.Windows.Media;
 
 namespace FreeSCADA.Common.Schema

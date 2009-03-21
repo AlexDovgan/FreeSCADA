@@ -11,7 +11,6 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Xml;
 using FreeSCADA.Common.Schema;
-using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.Views;
 
 namespace FreeSCADA.Designer.SchemaEditor

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Windows.Forms;
-using System.Windows;
 using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils

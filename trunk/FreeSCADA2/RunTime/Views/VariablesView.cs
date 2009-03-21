@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Data;
-using System.Threading;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
 using FreeSCADA.Common;
 using FreeSCADA.Interfaces;
 

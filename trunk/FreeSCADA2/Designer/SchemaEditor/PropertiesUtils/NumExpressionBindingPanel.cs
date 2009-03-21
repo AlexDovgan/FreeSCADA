@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Windows.Data;
 using System.Windows;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+using System.Windows.Data;
 using FreeSCADA.Common.Schema;
 using FreeSCADA.Interfaces;
 

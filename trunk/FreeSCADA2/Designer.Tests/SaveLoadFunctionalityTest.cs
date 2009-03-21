@@ -1,11 +1,7 @@
-﻿using FreeSCADA.Designer;
-using White;
-using NUnit.Framework;
-using Core;
+﻿using Core;
 using Core.UIItems;
-using White.NUnit;
-using System.Windows;
 using Core.UIItems.Finders;
+using NUnit.Framework;
 
 namespace Designer.Tests
 {

@@ -1,6 +1,6 @@
-﻿using System.Xml;
+﻿using System;
 using System.IO.Ports;
-using System;
+using System.Xml;
 
 namespace FreeSCADA.Communication.MODBUSPlug
 {
