@@ -21,8 +21,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         }
         public override void Activate()
         {
-         
-            
+
+            if (!(AdornedElement is TextBlock))
+                return;
             textBlock = AdornedElement as TextBlock;
            /* Paragraph pargraph = new Paragraph();
 
@@ -49,6 +50,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 textBlock.Inlines.Add(paragraph.Inlines.FirstInline);
 
             }*/
+            if (!(AdornedElement is TextBlock))
+                return;
+            
             textBlock.Text = textEditor.Text;
             base.Deactivate();
         }

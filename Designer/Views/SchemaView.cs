@@ -491,8 +491,7 @@ namespace FreeSCADA.Designer.Views
             ChannelDataProvider cdp = new ChannelDataProvider();
             //cdp.ChannelName = node.Tag + "." + node.Text;
 			cdp.ChannelName = (string)e.Data.GetData(typeof(string));
-            bind.Source = cdp;
-
+            cdp.IsBindInDesign = true;
             bind.Source = cdp;
 
             System.Windows.Data.BindingOperations.SetBinding(content, System.Windows.Controls.ContentControl.ContentProperty, bind);
