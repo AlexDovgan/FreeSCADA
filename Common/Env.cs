@@ -35,6 +35,9 @@ namespace FreeSCADA.Common
 
 				environmentInstance.communicationPlugins.Load();
                 environmentInstance.visualPlugins.Load();
+
+				//Should be called after all plugins
+				environmentInstance.scriptManager.Initialize();
 			}
 		}
         

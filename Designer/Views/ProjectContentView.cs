@@ -18,6 +18,10 @@ namespace FreeSCADA.Designer.Views
 		/// <summary>Occurs when user double clicks a node from the list</summary>
 		public event OpenEntityHandler OpenEntity;
 
+		public delegate void SelectNodeHandler(BaseNode node);
+		/// <summary>Occurs when user clicks on a node from the list</summary>
+		public event SelectNodeHandler SelectNode;
+
 		#region Windows Form FreeSCADA.Designer generated code
 		private void InitializeComponent()
 		{
@@ -33,6 +37,7 @@ namespace FreeSCADA.Designer.Views
 			this.projectTree.Size = new System.Drawing.Size(292, 273);
 			this.projectTree.TabIndex = 0;
 			this.projectTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.OnNodeDblClick);
+			this.projectTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.projectTree_AfterSelect);
 			this.projectTree.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.projectTree_ItemDrag);
 			// 
 			// ProjectContentView
@@ -61,6 +66,7 @@ namespace FreeSCADA.Designer.Views
 
 			Env.Current.Project.ProjectLoaded += new EventHandler(OnProjectLoad);
 			Env.Current.CommunicationPlugins.ChannelsChanged += new CommunationPlugs.ChannelsChangedHandler(OnCommunicationPluginsChannelsChanged);
+			Env.Current.ScriptManager.ScriptsUpdated += new EventHandler(OnScriptsUpdated);
 
 			this.FormClosed += new FormClosedEventHandler(OnFormClosed);
   		}
@@ -69,6 +75,7 @@ namespace FreeSCADA.Designer.Views
 		{
 			Env.Current.Project.ProjectLoaded -= new EventHandler(OnProjectLoad);
 			Env.Current.CommunicationPlugins.ChannelsChanged -= new CommunationPlugs.ChannelsChangedHandler(OnCommunicationPluginsChannelsChanged);
+			Env.Current.ScriptManager.ScriptsUpdated -= new EventHandler(OnScriptsUpdated);
 		}
 
         void projectTree_DragEnter(object sender, DragEventArgs e)
@@ -105,6 +112,11 @@ namespace FreeSCADA.Designer.Views
 			RefreshContent(Env.Current.Project);
 		}
 
+		void OnScriptsUpdated(object sender, EventArgs e)
+		{
+			RefreshContent(Env.Current.Project);
+		}
+
 		private void OnNodeDblClick(object sender, TreeNodeMouseClickEventArgs e)
 		{
 			if (OpenEntity != null && e.Node.Tag != null)
@@ -116,5 +128,14 @@ namespace FreeSCADA.Designer.Views
 				}
 			}
         }
+
+		private void projectTree_AfterSelect(object sender, TreeViewEventArgs e)
+		{
+			if (SelectNode != null && e.Node.Tag != null)
+			{
+				if (e.Node.Tag is BaseNode)
+					SelectNode(e.Node.Tag as BaseNode);
+			}
+		}
 	}
 }

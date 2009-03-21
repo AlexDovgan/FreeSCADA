@@ -19,7 +19,8 @@ namespace FreeSCADA.Common
         EventList,
         AlarmList,
         VariableList,
-        Archiver
+        Archiver,
+		Settings
     }
 
 	public class Project
@@ -228,6 +229,7 @@ namespace FreeSCADA.Common
 			{
 				case ProjectEntityType.Image: return "images";
 				case ProjectEntityType.Script: return "scripts";
+				case ProjectEntityType.Settings: return "settings";
 				default:
 					throw new NotImplementedException();
 			}

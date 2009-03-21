@@ -12,11 +12,21 @@ namespace FreeSCADA.Common.Scripting
 		public event NewScriptCreatedHandler NewScriptCreated;
 		public event EventHandler ScriptsUpdated;
 
+		public const string ChannelsScriptName = "ChannelHandlers";
 
 		ScriptEngine python = InitializePython();
 		List<Script> scripts = new List<Script>();
+		ChannelsScriptHandlers channelsScriptHandlers = new ChannelsScriptHandlers();
 
-		internal ScriptManager()
+		public ChannelsScriptHandlers ChannelsHandlers
+		{
+			get { return channelsScriptHandlers; }
+		}
+
+		/// <summary>
+		/// Initialize Script manager. This method should be called after all plugins are loaded. (In order to set right handlers for channels)
+		/// </summary>
+		internal void Initialize()
 		{
 			Env.Current.Project.ProjectClosed += new EventHandler(OnProjectClosed);
 			Env.Current.Project.ProjectLoaded += new EventHandler(OnProjectLoaded);
@@ -41,8 +51,6 @@ namespace FreeSCADA.Common.Scripting
 					}
 				}
 				scriptTexts[name] = scriptText;
-
-				
 			}
 
 			while (scriptTexts.Count > 0)
@@ -61,6 +69,9 @@ namespace FreeSCADA.Common.Scripting
 						return;
 				}
 			}
+
+			channelsScriptHandlers.Load();
+			channelsScriptHandlers.InstallHandlers();
 		}
 
 		/// <summary>
