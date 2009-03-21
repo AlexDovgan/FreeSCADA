@@ -41,7 +41,7 @@ namespace FreeSCADA.Common.Schema
             FreeSCADA.Interfaces.IChannel ch;
             ch=Env.Current.CommunicationPlugins.GetChannel(ChannelName);
             channel = ch;
-            if (Env.Current.Mode == FreeSCADA.Interfaces.EnvironmentMode.Designer)
+            if (Env.Current.Mode == FreeSCADA.Interfaces.EnvironmentMode.Designer && !IsBindInDesign)
                 ch=null;
             base.OnQueryFinished(ch);
         }

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-//using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -78,8 +78,14 @@ namespace FreeSCADA.Designer.SchemaEditor
             }
             if (SelectedObjects.Count > 0)
             {
-                AdornerLayer.GetAdornerLayer(_view.MainCanvas).Add(manipulator = _view.ActiveTool.CreateToolManipulator(SelectedObjects[0]));
-                manipulator.Activate();
+                try
+                {
+                    AdornerLayer.GetAdornerLayer(_view.MainCanvas).Add(manipulator = _view.ActiveTool.CreateToolManipulator(SelectedObjects[0]));
+                    manipulator.Activate();
+                }catch(Exception)
+                {
+                    SelectObject(null);
+                }
             }
             AdornerLayer.GetAdornerLayer(_view.MainCanvas).Update();
         }
