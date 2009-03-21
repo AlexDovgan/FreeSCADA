@@ -57,6 +57,15 @@ namespace FreeSCADA.Common
 			}
 		}
 
+		public string FullId
+		{
+			get
+			{
+				lock (this)
+					return plugin.PluginId + "." + name;
+			}
+		}
+
         public Type Type
         {
             get 

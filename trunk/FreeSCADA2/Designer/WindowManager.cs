@@ -20,7 +20,6 @@ namespace FreeSCADA.Designer
 		ProjectContentView projectContentView;
         PropertyBrowserView propertyBrowserView;
 		ToolBoxView toolBoxView;
-		ScriptsToolBoxView scriptsToolBoxView;
 
 		public WindowManager(DockPanel dockPanel, MRUManager mruManager)
 		{
@@ -33,17 +32,13 @@ namespace FreeSCADA.Designer
 			projectContentView = new ProjectContentView();
 			projectContentView.Show(dockPanel, DockState.DockLeft);
 			projectContentView.OpenEntity += new ProjectContentView.OpenEntityHandler(OnOpenProjectEntity);
+			projectContentView.SelectNode += new ProjectContentView.SelectNodeHandler(OnSelectProjectNode);
 
 			toolBoxView = new ToolBoxView();
 			toolBoxView.Show(dockPanel, DockState.DockRight);
             
             propertyBrowserView = new PropertyBrowserView();
 			propertyBrowserView.Show(toolBoxView.Pane, DockAlignment.Bottom, 0.6);
-
-			scriptsToolBoxView = new ScriptsToolBoxView();
-			scriptsToolBoxView.Show(projectContentView.Pane, projectContentView);
-			scriptsToolBoxView.OpenScript += new ScriptManager.NewScriptCreatedHandler(OnOpenScript);
-			projectContentView.Activate();
 
 			//Connect Windows Manager to heleper events
 			dockPanel.ActiveDocumentChanged += new EventHandler(OnActiveDocumentChanged);
@@ -65,7 +60,6 @@ namespace FreeSCADA.Designer
 			projectContentView.Close();
 			toolBoxView.Close();
 			propertyBrowserView.Close();
-			scriptsToolBoxView.Close();
 
 			dockPanel.ActiveDocumentChanged -= new EventHandler(OnActiveDocumentChanged);
 		}
@@ -175,6 +169,15 @@ namespace FreeSCADA.Designer
                 default:
                     break;
             }
+		}
+
+		void OnSelectProjectNode(FreeSCADA.Designer.Views.ProjectNodes.BaseNode node)
+		{
+			if (node is FreeSCADA.Designer.Views.ProjectNodes.ChannelNode)
+			{
+				FreeSCADA.Interfaces.IChannel ch = (node as FreeSCADA.Designer.Views.ProjectNodes.ChannelNode).Channel;
+				propertyBrowserView.ShowProperties(ch);
+			}
 		}
 
 		/// <summary>
@@ -441,13 +444,13 @@ namespace FreeSCADA.Designer
 
 			mruManager.ItemClicked -= new MRUManager.ItemClickedDelegate(OnMRUItemClicked);
 			projectContentView.OpenEntity -= new ProjectContentView.OpenEntityHandler(OnOpenProjectEntity);
+			projectContentView.SelectNode -= new ProjectContentView.SelectNodeHandler(OnSelectProjectNode);
 			dockPanel.ActiveDocumentChanged -= new EventHandler(OnActiveDocumentChanged);
 
 			//Create toolwindows
 			projectContentView.Dispose();
 			toolBoxView.Dispose();
 			propertyBrowserView.Dispose();
-			scriptsToolBoxView.Dispose();
 
 			mruManager.Dispose();
 		}

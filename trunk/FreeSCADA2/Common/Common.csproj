@@ -84,6 +84,8 @@
     <Compile Include="Commands.cs" />
     <Compile Include="CommunationPlugs.cs" />
     <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="Scripting\ChannelsScriptHandlers.cs" />
+    <Compile Include="Scripting\EventScriptCollection.cs" />
     <Compile Include="Scripting\GenericEventHandler.cs" />
     <Compile Include="IVisualControlDescriptor.cs" />
     <Compile Include="IVisualControlsPlug.cs" />
@@ -113,7 +115,6 @@
     <Compile Include="Schema\AnimatedImage.cs" />
     <Compile Include="Schema\ChannelDataProvider.cs" />
     <Compile Include="Schema\ChannelDataSource.cs" />
-    <Compile Include="Scripting\EventScriptCollection.cs" />
     <Compile Include="Schema\SolidBrushConverter.cs" />
     <Compile Include="Schema\ComposingConverter.cs" />
     <Compile Include="Schema\MediaProvider.cs" />

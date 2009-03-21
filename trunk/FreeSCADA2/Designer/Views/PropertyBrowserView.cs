@@ -5,6 +5,7 @@ using FreeSCADA.Common;
 using FreeSCADA.Common.Scripting;
 using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.SchemaEditor.PropertiesUtils;
+using FreeSCADA.Interfaces;
 using System.Reflection;
 
 namespace FreeSCADA.Designer.Views
@@ -82,7 +83,15 @@ namespace FreeSCADA.Designer.Views
 				return new PropertyDescriptorCollection(events);
 			}
 			else
-				return new PropertyDescriptorCollection(new PropertyDescriptor[] { });
+			{
+				EventDescriptorCollection events_info = TypeDescriptor.GetEvents(component, true);
+
+				PropertyDescriptor[] events = new PropertyDescriptor[events_info.Count];
+				for (int i = 0; i < events_info.Count; i++)
+					events[i] = new EventWrapper(events_info[i].Name);
+
+				return new PropertyDescriptorCollection(events);
+			}
 		}
 
 		public override string TabName
@@ -160,6 +169,16 @@ namespace FreeSCADA.Designer.Views
 				}
 			}
 
+			if (component is IChannel)
+			{
+				ScriptCallInfo callInfo = Env.Current.ScriptManager.ChannelsHandlers.GetAssosiation(name, component as IChannel);
+
+				if (callInfo == null)
+					return "";
+				else
+					return callInfo.HandlerName;
+			}
+
 			return null;
 		}
 
@@ -181,7 +200,6 @@ namespace FreeSCADA.Designer.Views
 				if (obj is DependencyObject)
 				{
 					System.Windows.Controls.Canvas c= SchemaDocument.GetMainCanvas(obj as DependencyObject);
-					EventScriptCollection events = EventScriptCollection.GetEventScriptCollection(obj as DependencyObject);
 					ScriptCallInfo callInfo = new ScriptCallInfo();
 					callInfo.HandlerName = value as string;
 					if (c!= null)
@@ -189,6 +207,7 @@ namespace FreeSCADA.Designer.Views
 					else
 						callInfo.ScriptName = "unnamed";
 
+					EventScriptCollection events = EventScriptCollection.GetEventScriptCollection(obj as DependencyObject);
 					events.AddAssociation(name, callInfo);
 					EventScriptCollection.SetEventScriptCollection(obj as DependencyObject, events);
 
@@ -199,6 +218,22 @@ namespace FreeSCADA.Designer.Views
 					EventInfo evnt = obj.GetType().GetEvent(name);
 					script.AddHandlerTemplate(callInfo.HandlerName, evnt);
 				}
+			}
+
+			if (component is IChannel)
+			{
+				ScriptCallInfo callInfo = new ScriptCallInfo();
+				callInfo.HandlerName = value as string;
+				callInfo.ScriptName = ScriptManager.ChannelsScriptName;
+
+				Env.Current.ScriptManager.ChannelsHandlers.AddAssociation(name, component as IChannel, callInfo);
+
+				Script script = Env.Current.ScriptManager.GetScript(ScriptManager.ChannelsScriptName);
+				if (script == null)
+					script = Env.Current.ScriptManager.CreateNewScript(ScriptManager.ChannelsScriptName);
+
+				EventInfo evnt = component.GetType().GetEvent(name);
+				script.AddHandlerTemplate(value as string, evnt);
 			}
 		}
 

@@ -24,6 +24,11 @@ namespace FreeSCADA.Interfaces
 			get;
 		}
 
+		string FullId
+		{
+			get;
+		}
+
 		Type Type
 		{
 			get;

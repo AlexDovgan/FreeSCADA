@@ -275,9 +275,6 @@
     <EmbeddedResource Include="Views\ArchiverSettingsView.resx">
       <DependentUpon>ArchiverSettingsView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\ScriptsToolBoxView.resx">
-      <DependentUpon>ScriptsToolBoxView.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Views\ScriptView.resx">
       <DependentUpon>ScriptView.cs</DependentUpon>
     </EmbeddedResource>
@@ -312,9 +309,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\ToolBoxView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\ScriptsToolBoxView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\ToolWindow.cs">
