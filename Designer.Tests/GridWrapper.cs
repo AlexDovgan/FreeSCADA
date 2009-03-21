@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Automation;
+﻿using Core.UIItems;
 using NUnit.Framework;
-using Core.UIItems;
 
 namespace Designer.Tests
 {

@@ -5,7 +5,6 @@ using System.Windows;
 using FreeSCADA.Designer.SchemaEditor.PropertiesUtils;
 using FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditors;
 using FreeSCADA.Interfaces;
-using System.Windows.Media;
 
 namespace FreeSCADA.VisualControls.FS2EasyControls
 {

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
 using FreeSCADA.Archiver;
-using FreeSCADA.Interfaces;
 using FreeSCADA.Common;
+using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.Views
 {

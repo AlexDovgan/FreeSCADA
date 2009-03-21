@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Windows.Automation;
 using Core;
 using Core.UIItems;
 using Core.UIItems.Finders;
 using Core.UIItems.MenuItems;
 using Core.UIItems.WindowItems;
 using NUnit.Framework;
-using System.Drawing;
 
 namespace Designer.Tests
 {

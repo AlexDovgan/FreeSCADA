@@ -95,6 +95,12 @@ namespace FreeSCADA.Common.Scripting
 			associations[evnt] = info;
 		}
 
+		public void RemoveAssociation(string evnt)
+		{
+			if (associations.ContainsKey(evnt))
+				associations.Remove(evnt);
+		}
+
 		public ScriptCallInfo GetAssosiation(string evnt)
 		{
 			if (associations.ContainsKey(evnt))

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Data;
-using FreeSCADA.Common.Schema;
 using FreeSCADA.Common;
+using FreeSCADA.Common.Schema;
 using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils

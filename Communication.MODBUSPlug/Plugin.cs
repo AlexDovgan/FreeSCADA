@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml;
 using System.Threading;
+using System.Xml;
 using FreeSCADA.Interfaces;
 using FreeSCADA.Interfaces.Plugins;
 

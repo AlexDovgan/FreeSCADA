@@ -1,6 +1,6 @@
-﻿using FreeSCADA.Common;
+﻿using System.Windows.Forms;
+using FreeSCADA.Common;
 using FreeSCADA.Interfaces;
-using System.Windows.Forms;
 
 namespace FreeSCADA.VisualControls.FS2EasyControls
 {

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Xml;
-using System.Xml.Xsl;
 using FreeSCADA.Common;
 using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.SchemaEditor;
@@ -15,10 +17,6 @@ using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using FreeSCADA.Interfaces;
 using FreeSCADA.Interfaces.Plugins;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Windows;
-using FreeSCADA.Designer.Views.ProjectNodes;
 
 namespace FreeSCADA.Designer.Views
 {

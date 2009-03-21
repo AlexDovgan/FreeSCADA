@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Automation;
 using Core;
 using Core.UIItems;
 using Core.UIItems.Finders;

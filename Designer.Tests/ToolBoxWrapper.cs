@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
 using Core.UIItems;
 using Core.UIItems.Finders;
+using NUnit.Framework;
 
 namespace Designer.Tests
 {

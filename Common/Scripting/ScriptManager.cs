@@ -17,10 +17,16 @@ namespace FreeSCADA.Common.Scripting
 		ScriptEngine python = InitializePython();
 		List<Script> scripts = new List<Script>();
 		ChannelsScriptHandlers channelsScriptHandlers = new ChannelsScriptHandlers();
+		Application application = new Application();
 
 		public ChannelsScriptHandlers ChannelsHandlers
 		{
 			get { return channelsScriptHandlers; }
+		}
+
+		internal Application ScriptApplication
+		{
+			get { return application; }
 		}
 
 		/// <summary>

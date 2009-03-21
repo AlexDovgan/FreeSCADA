@@ -84,6 +84,7 @@
     <Compile Include="Commands.cs" />
     <Compile Include="CommunationPlugs.cs" />
     <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="Scripting\Application.cs" />
     <Compile Include="Scripting\ChannelsScriptHandlers.cs" />
     <Compile Include="Scripting\EventScriptCollection.cs" />
     <Compile Include="Scripting\GenericEventHandler.cs" />

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
 using System.Drawing;
+using System.Windows.Automation;
 using Core;
 using Core.UIItems;
 using Core.UIItems.Finders;
-using System.Windows.Automation;
+using NUnit.Framework;
 
 namespace Designer.Tests
 {

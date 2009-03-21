@@ -1,12 +1,11 @@
-﻿using System.IO;
+﻿using System;
 using System.Collections.Generic;
-using Microsoft.Scripting.Hosting;
-using IronPython.Hosting;
-using IronPython.Compiler;
+using System.IO;
 using System.Reflection;
-using System;
-using Microsoft.Scripting;
 using System.Text.RegularExpressions;
+using IronPython.Hosting;
+using Microsoft.Scripting;
+using Microsoft.Scripting.Hosting;
 
 namespace FreeSCADA.Common.Scripting
 {
@@ -162,6 +161,7 @@ namespace FreeSCADA.Common.Scripting
 			{
 				source = python.CreateScriptSourceFromString(text, Microsoft.Scripting.SourceCodeKind.Statements);
 				scope = python.CreateScope();
+				scope.SetVariable("Application", Env.Current.ScriptManager.ScriptApplication);
 
 				//Try to execute script to get all its functions into 'scope'
 				try

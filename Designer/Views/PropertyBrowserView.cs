@@ -1,12 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows;
 using FreeSCADA.Common;
-using FreeSCADA.Common.Scripting;
 using FreeSCADA.Common.Schema;
+using FreeSCADA.Common.Scripting;
 using FreeSCADA.Designer.SchemaEditor.PropertiesUtils;
 using FreeSCADA.Interfaces;
-using System.Reflection;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -199,41 +199,57 @@ namespace FreeSCADA.Designer.Views
 				object obj = (component as PropProxy).ControlledObject;
 				if (obj is DependencyObject)
 				{
-					System.Windows.Controls.Canvas c= SchemaDocument.GetMainCanvas(obj as DependencyObject);
-					ScriptCallInfo callInfo = new ScriptCallInfo();
-					callInfo.HandlerName = value as string;
-					if (c!= null)
-						callInfo.ScriptName = (c.Tag as DocumentView).DocumentName;
+					if (string.IsNullOrEmpty(value as string))
+					{
+						EventScriptCollection events = EventScriptCollection.GetEventScriptCollection(obj as DependencyObject);
+						events.RemoveAssociation(name);
+						EventScriptCollection.SetEventScriptCollection(obj as DependencyObject, events);
+					}
 					else
-						callInfo.ScriptName = "unnamed";
+					{
+						System.Windows.Controls.Canvas c = SchemaDocument.GetMainCanvas(obj as DependencyObject);
+						ScriptCallInfo callInfo = new ScriptCallInfo();
+						callInfo.HandlerName = value as string;
+						if (c != null)
+							callInfo.ScriptName = (c.Tag as DocumentView).DocumentName;
+						else
+							callInfo.ScriptName = "unnamed";
 
-					EventScriptCollection events = EventScriptCollection.GetEventScriptCollection(obj as DependencyObject);
-					events.AddAssociation(name, callInfo);
-					EventScriptCollection.SetEventScriptCollection(obj as DependencyObject, events);
+						EventScriptCollection events = EventScriptCollection.GetEventScriptCollection(obj as DependencyObject);
+						events.AddAssociation(name, callInfo);
+						EventScriptCollection.SetEventScriptCollection(obj as DependencyObject, events);
 
-					Script script = Env.Current.ScriptManager.GetScript(callInfo.ScriptName);
-					if(script == null)
-						script = Env.Current.ScriptManager.CreateNewScript(callInfo.ScriptName);
+						Script script = Env.Current.ScriptManager.GetScript(callInfo.ScriptName);
+						if (script == null)
+							script = Env.Current.ScriptManager.CreateNewScript(callInfo.ScriptName);
 
-					EventInfo evnt = obj.GetType().GetEvent(name);
-					script.AddHandlerTemplate(callInfo.HandlerName, evnt);
+						EventInfo evnt = obj.GetType().GetEvent(name);
+						script.AddHandlerTemplate(callInfo.HandlerName, evnt);
+					}
 				}
 			}
 
 			if (component is IChannel)
 			{
-				ScriptCallInfo callInfo = new ScriptCallInfo();
-				callInfo.HandlerName = value as string;
-				callInfo.ScriptName = ScriptManager.ChannelsScriptName;
+				if (string.IsNullOrEmpty(value as string))
+				{
+					Env.Current.ScriptManager.ChannelsHandlers.RemoveAssociation(name, component as IChannel);
+				}
+				else
+				{
+					ScriptCallInfo callInfo = new ScriptCallInfo();
+					callInfo.HandlerName = value as string;
+					callInfo.ScriptName = ScriptManager.ChannelsScriptName;
 
-				Env.Current.ScriptManager.ChannelsHandlers.AddAssociation(name, component as IChannel, callInfo);
+					Env.Current.ScriptManager.ChannelsHandlers.AddAssociation(name, component as IChannel, callInfo);
 
-				Script script = Env.Current.ScriptManager.GetScript(ScriptManager.ChannelsScriptName);
-				if (script == null)
-					script = Env.Current.ScriptManager.CreateNewScript(ScriptManager.ChannelsScriptName);
+					Script script = Env.Current.ScriptManager.GetScript(ScriptManager.ChannelsScriptName);
+					if (script == null)
+						script = Env.Current.ScriptManager.CreateNewScript(ScriptManager.ChannelsScriptName);
 
-				EventInfo evnt = component.GetType().GetEvent(name);
-				script.AddHandlerTemplate(value as string, evnt);
+					EventInfo evnt = component.GetType().GetEvent(name);
+					script.AddHandlerTemplate(value as string, evnt);
+				}
 			}
 		}
 

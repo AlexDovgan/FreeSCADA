@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Threading;
-using FreeSCADA.Interfaces;
-using Modbus.Data;
-using Modbus.Device;
 using System.IO.Ports;
+using System.Threading;
 using FreeSCADA.Common;
+using Modbus.Device;
 
 namespace FreeSCADA.Communication.MODBUSPlug
 {
