@@ -25,6 +25,10 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
         /// <summary>
         /// 
         /// </summary>
+        public Type TargetType=null;
+        /// <summary>
+        /// 
+        /// </summary>
 		public string DisplayName = "";
         /// <summary>
         /// 
@@ -37,7 +41,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
         /// <summary>
         /// 
         /// </summary>
-		public Type Editor;
+        public Type Editor;
         /// <summary>
         /// 
         /// </summary>
@@ -112,6 +116,17 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			info.Description = description;
 			RegisterProperty(objectType, info);
 		}
+        static public void RegisterProperty(Type objectType, string sourceProperty, string targetProperty, Type editor, string description, Type targetType)
+        {
+
+            PropertyInfo info = new PropertyInfo();
+            info.SourceProperty = sourceProperty;
+            info.TargetProperty = targetProperty;
+            info.TargetType = targetType;
+            info.Editor = editor;
+            info.Description = description;
+            RegisterProperty(objectType, info);
+        }
 
 		static public void RegisterProperty(Type objectType, string sourceProperty)
 		{
@@ -161,8 +176,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
             RegisterProperty(typeof(RangeBase), "Maximum", typeof(CommonTypeEditor));
             RegisterProperty(typeof(RangeBase), "Minimum", typeof(CommonTypeEditor));
 			RegisterProperty(typeof(RangeBase), "Orientation", null);
-			RegisterProperty(typeof(Button), "Content","Image",  typeof(ImageEditor),"Image" );
-            RegisterProperty(typeof(Button), "Content", "Text", typeof(CommonTypeEditor), "Text");
+			RegisterProperty(typeof(System.Windows.Controls.Primitives.ButtonBase), "Content","Image",  typeof(ImageEditor),"Image" );
+            RegisterProperty(typeof(System.Windows.Controls.Primitives.ButtonBase), "Content", "Text", typeof(CommonTypeEditor), "Text",typeof(String));
             RegisterProperty(typeof(FreeSCADA.Common.Schema.AnimatedImage), "ImageName", "Image", typeof(ImageEditor), "Image");
             RegisterProperty(typeof(FreeSCADA.Common.Schema.AnimatedImage), "AnimatedControl", "AnimatedControl", typeof(CommonTypeEditor), "Animation controling");
 			RegisterProperty(typeof(Control), "Style", typeof(StyleEditor));

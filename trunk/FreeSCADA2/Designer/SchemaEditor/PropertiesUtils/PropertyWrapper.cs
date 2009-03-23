@@ -97,8 +97,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		{
 			get
 			{
-				return controlledProperty.ComponentType;
-				
+                    return controlledProperty.ComponentType;
+                
 			}
 		}
         /// <summary>
@@ -178,7 +178,13 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
         /// </summary>
 		public override Type PropertyType
 		{
-			get { return controlledProperty.PropertyType; }
+			get
+            {
+                if (propertyInfo.TargetType == null)
+                    return controlledProperty.PropertyType;
+                else return propertyInfo.TargetType;
+                 
+            }
 		}
         /// <summary>
         /// 
