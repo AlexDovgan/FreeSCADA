@@ -8,11 +8,11 @@ using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {
-	internal partial class NumExpressionBindingPanel: BaseBindingPanel
+	internal partial class ScriptExpressionBindingPanel: BaseBindingPanel
 	{
 		List<IChannel> channels = new List<IChannel>();
 
-        public NumExpressionBindingPanel()
+        public ScriptExpressionBindingPanel()
 		{
 			InitializeComponent();
 		}
@@ -34,7 +34,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
             if (bind != null)
 			{
                 
-				expressionEdit.Text = (bind.Converter as Kent.Boogaart.Converters.ExpressionConverter).Expression;
+				expressionEdit.Text = (bind.Converter as ScriptConverter).Expression;
 
 				channels.Clear();
 				foreach (System.Windows.Data.BindingBase bindingBase in bind.Bindings)
@@ -70,7 +70,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
     				multiBind.Bindings.Add(bind);
 				}
                 multiBind.Mode = BindingMode.TwoWay;
-                Kent.Boogaart.Converters.ExpressionConverter ec=new Kent.Boogaart.Converters.ExpressionConverter(expressionEdit.Text);
+                ScriptConverter ec = new ScriptConverter(expressionEdit.Text);
                 
                 multiBind.Converter = ec;
                 
@@ -159,7 +159,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			if (binding != null && binding is System.Windows.Data.MultiBinding)
 			{
 				System.Windows.Data.MultiBinding bind = binding as System.Windows.Data.MultiBinding;
-                if (bind.Converter is Kent.Boogaart.Converters.ExpressionConverter == false)
+                if (bind.Converter is ScriptConverter == false)
 					return false;
 				return true;
 			}
@@ -168,7 +168,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
 		override public BaseBindingPanel CreateInstance()
 		{
-			return new NumExpressionBindingPanel();
+			return new ScriptExpressionBindingPanel();
 		}
 
 		override public string Name

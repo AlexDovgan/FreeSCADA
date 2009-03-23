@@ -172,11 +172,11 @@
     <Compile Include="SchemaEditor\SchemaCommands.cs">
     </Compile>
     <Compile Include="SchemaEditor\SchemaMenuContext.cs" />
-    <Compile Include="SchemaEditor\PropertiesUtils\NumExpressionBindingPanel.cs">
+    <Compile Include="SchemaEditor\PropertiesUtils\ScriptExpressionBindingPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SchemaEditor\PropertiesUtils\NumExpressionBindingPanel.Designer.cs">
-      <DependentUpon>NumExpressionBindingPanel.cs</DependentUpon>
+    <Compile Include="SchemaEditor\PropertiesUtils\ScriptExpressionBindingPanel.Designer.cs">
+      <DependentUpon>ScriptExpressionBindingPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="SchemaEditor\SelectionManager.cs" />
     <Compile Include="SchemaEditor\StylesLibrary\StylesLibrary.cs" />
@@ -264,8 +264,8 @@
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\StringBindingPanel.resx">
       <DependentUpon>StringBindingPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SchemaEditor\PropertiesUtils\NumExpressionBindingPanel.resx">
-      <DependentUpon>NumExpressionBindingPanel.cs</DependentUpon>
+    <EmbeddedResource Include="SchemaEditor\PropertiesUtils\ScriptExpressionBindingPanel.resx">
+      <DependentUpon>ScriptExpressionBindingPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StringResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

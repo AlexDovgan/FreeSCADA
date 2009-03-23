@@ -134,7 +134,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                 return true;
             }
 
-            return true;
+            return false;
         }
 
         override public BaseBindingPanel CreateInstance()

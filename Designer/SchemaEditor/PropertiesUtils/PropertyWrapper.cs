@@ -208,9 +208,10 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
         {
             if (controlledObject is System.Windows.DependencyObject
                 && DependencyPropertyDescriptor.FromProperty(controlledProperty)!=null)
-                return System.Windows.Data.BindingOperations.GetBinding(
+                return System.Windows.Data.BindingOperations.GetBindingBase(
                     (controlledObject as System.Windows.DependencyObject),
                     DependencyPropertyDescriptor.FromProperty(controlledProperty).DependencyProperty);
+            
             return null;
 
         }

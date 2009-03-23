@@ -1,6 +1,6 @@
 ﻿namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {
-    partial class NumExpressionBindingPanel
+    partial class ScriptExpressionBindingPanel
 	{
 		/// <summary> 
 		/// Required designer variable.
