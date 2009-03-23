@@ -84,6 +84,7 @@
     <Compile Include="Commands.cs" />
     <Compile Include="CommunationPlugs.cs" />
     <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="Schema\Converters\ScriptConverter.cs" />
     <Compile Include="Scripting\Application.cs" />
     <Compile Include="Scripting\ChannelsScriptHandlers.cs" />
     <Compile Include="Scripting\EventScriptCollection.cs" />
@@ -117,9 +118,9 @@
     <Compile Include="Schema\ChannelDataProvider.cs" />
     <Compile Include="Schema\ChannelDataSource.cs" />
     <Compile Include="Schema\SolidBrushConverter.cs" />
-    <Compile Include="Schema\ComposingConverter.cs" />
+    <Compile Include="Schema\Converters\ComposingConverter.cs" />
     <Compile Include="Schema\MediaProvider.cs" />
-    <Compile Include="Schema\RangeConverter.cs" />
+    <Compile Include="Schema\Converters\RangeConverter.cs" />
     <Compile Include="Schema\SchemaDocument.cs" />
     <Compile Include="Schema\Commands\SchemaCommands.cs" />
     <Compile Include="Schema\WPFShemaContainer.cs" />
