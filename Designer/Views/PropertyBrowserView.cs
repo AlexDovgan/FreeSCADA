@@ -72,26 +72,20 @@ namespace FreeSCADA.Designer.Views
 		public override System.ComponentModel.PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes)
 		{
 			//Return list of known events
+            EventDescriptorCollection events_info;
 			if (component is PropProxy)
-			{
-				EventDescriptorCollection events_info = (component as PropProxy).GetEvents();
+				events_info = (component as PropProxy).GetEvents();
+            else
+				events_info = TypeDescriptor.GetEvents(component, true);
 
-				PropertyDescriptor[] events = new PropertyDescriptor[events_info.Count];
-				for (int i = 0; i < events_info.Count; i++)
-					events[i] = new EventWrapper(events_info[i].Name);
+            
 
-				return new PropertyDescriptorCollection(events);
-			}
-			else
-			{
-				EventDescriptorCollection events_info = TypeDescriptor.GetEvents(component, true);
+            PropertyDescriptor[] events = new PropertyDescriptor[events_info.Count];
+            for (int i = 0; i < events_info.Count; i++)
+                events[i] = new EventWrapper(events_info[i].Name);
 
-				PropertyDescriptor[] events = new PropertyDescriptor[events_info.Count];
-				for (int i = 0; i < events_info.Count; i++)
-					events[i] = new EventWrapper(events_info[i].Name);
+            return new PropertyDescriptorCollection(events);
 
-				return new PropertyDescriptorCollection(events);
-			}
 		}
 
 		public override string TabName
@@ -199,6 +193,10 @@ namespace FreeSCADA.Designer.Views
 				object obj = (component as PropProxy).ControlledObject;
 				if (obj is DependencyObject)
 				{
+
+                    SchemaEditor.UndoRedo.BasicUndoBuffer ub = SchemaEditor.UndoRedo.UndoRedoManager.GetUndoBufferFor(obj as System.Windows.UIElement);
+                    ub.AddCommand(new SchemaEditor.UndoRedo.ModifyGraphicsObject(obj as System.Windows.UIElement));
+            
 					if (string.IsNullOrEmpty(value as string))
 					{
 						EventScriptCollection events = EventScriptCollection.GetEventScriptCollection(obj as DependencyObject);

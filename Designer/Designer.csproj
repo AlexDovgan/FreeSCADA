@@ -130,7 +130,12 @@
     <Compile Include="SchemaEditor\PropertiesUtils\CommonBindingDialog.Designer.cs">
       <DependentUpon>CommonBindingDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\CommonTypeEditor.cs" />
+    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ContentEditorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ContentEditorDialog.Designer.cs">
+      <DependentUpon>ContentEditorDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\SolidBrushBindingPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -146,25 +151,9 @@
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ChannelSelectEditor.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ColorEditor.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ImageEditor.cs" />
-    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\DoubleEditor.cs">
-    </Compile>
-    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\NullableBoolEditor.cs">
-    </Compile>
-    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ContentEditorDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ContentEditorDialog.Designer.cs">
-      <DependentUpon>ContentEditorDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\StringEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\StyleEditor.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyWrapper.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\PropProxy.cs" />
-    <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ValueBindingDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\PropertiesMap.cs" />
     <Compile Include="SchemaEditor\PropertiesUtils\StringBindingPanel.cs">
       <SubType>UserControl</SubType>
@@ -183,7 +172,7 @@
       <DependentUpon>ScriptExpressionBindingPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="SchemaEditor\SelectionManager.cs" />
-    <Compile Include="SchemaEditor\StylesLibrary\StylesLibrary.cs" />
+    <Compile Include="SchemaEditor\StylesLibrary.cs" />
     <Compile Include="SchemaEditor\ToolDescriptor.cs" />
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
     <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
@@ -252,18 +241,14 @@
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\CommonBindingDialog.resx">
       <DependentUpon>CommonBindingDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ContentEditorDialog.resx">
+      <DependentUpon>ContentEditorDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\SolidBrushBindingPanel.resx">
       <DependentUpon>SolidBrushBindingPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\NumericBindingPanel.resx">
       <DependentUpon>NumericBindingPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ContentEditorDialog.resx">
-      <DependentUpon>ContentEditorDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\StringEditor.resx">
-      <DependentUpon>StringEditor.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\StringBindingPanel.resx">
       <DependentUpon>StringBindingPanel.cs</DependentUpon>

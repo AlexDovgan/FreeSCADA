@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Windows;
 using FreeSCADA.Common.Schema;
@@ -184,47 +185,97 @@ namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
 
     }
 
-   // /// <summary>
-   // /// modify object command for undo redo buffer 
-   // /// must added to buffer before object whill be changed
-   // /// </summary>
-   // class ModifyGraphicsObject : IUndoCommand
-   // {
-   //     UIElement modifiedObject;
-   //     UIElement restoredObject;
-   //     string objectCopy;
-   //     SchemaDocument schemaDocument;
-   //     protected bool documentModifiedState;
-   //     public ModifyGraphicsObject(UIElement el)
-   //     {
-   //         modifiedObject = el;
-         
-   //     }
-   //     public void Do(SchemaDocument doc)
-   //     {
-   //         objectCopy=XamlWriter.Save(modifiedObject);
-   //         schemaDocument = doc;
-      
-   //     }
-   //     public void Redo()
-   //     {
+    /// <summary>
+    /// modify object command for undo redo buffer 
+    /// must added to buffer before object whill be changed
+    /// </summary>
+    class ModifyGraphicsObject : IUndoCommand
+    {
+        UIElement modifiedObject;
+        Views.SchemaView schemaView;
+        Dictionary<DependencyProperty, object> values=new Dictionary<DependencyProperty,object>();
+
+        protected bool documentModifiedState;
+        public ModifyGraphicsObject(UIElement el)
+        {
+            modifiedObject = el;
+
+
+        }
+        public void Do(DocumentView doc)
+        {
         
-   //         restoredObject = (UIElement)XamlReader.Load(new XmlTextReader(new StringReader(objectCopy)));
-   //         objectCopy = XamlWriter.Save(modifiedObject);
-   //         EditorHelper.CopyObjects(restoredObject, modifiedObject);
+            schemaView = doc as Views.SchemaView;
+            foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(modifiedObject,
+                 new Attribute[] { new PropertyFilterAttribute(PropertyFilterOptions.All) }))
+            {
+                DependencyPropertyDescriptor dpd =
+                    DependencyPropertyDescriptor.FromProperty(pd);
 
-   //         AdornerLayer.GetAdornerLayer(modifiedObject).Update();
-   //     }
-   //     public void Undo()
-   //     {
-   //         restoredObject = (UIElement)XamlReader.Load(new XmlTextReader(new StringReader(objectCopy)));
-   //         objectCopy = XamlWriter.Save(modifiedObject);
-   //         EditorHelper.CopyObjects(restoredObject, modifiedObject);
-   //            if (AdornerLayer.GetAdornerLayer(modifiedObject) != null)
-   //             AdornerLayer.GetAdornerLayer(modifiedObject).Update();
-   //     }
+                if (dpd != null
+                    && modifiedObject.ReadLocalValue(dpd.DependencyProperty) != DependencyProperty.UnsetValue
+                    && dpd.GetValue(modifiedObject) != dpd.Metadata.DefaultValue)
+                {
 
-   // }
+                    values.Add(dpd.DependencyProperty, CopyValue(dpd.DependencyProperty));
+                }
+            }
+
+        }
+
+        public void Redo()
+        {
+            DependencyProperty []dps=new DependencyProperty[values.Keys.Count];
+            values.Keys.CopyTo(dps, 0);
+            foreach (DependencyProperty dp in dps)
+            {
+                object val = CopyValue(dp);
+                modifiedObject.SetValue(dp, values[dp]);
+                values[dp] = val;
+            }
+          
+            modifiedObject.InvalidateVisual();
+        }
+
+        public void Undo()
+        {
+            foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(modifiedObject,
+                 new Attribute[] { new PropertyFilterAttribute(PropertyFilterOptions.All) }))
+            {
+                DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(pd);
+                if (dpd != null
+                    && modifiedObject.ReadLocalValue(dpd.DependencyProperty) != DependencyProperty.UnsetValue
+                    && dpd.GetValue(modifiedObject) != dpd.Metadata.DefaultValue)
+                {
+
+                    if (values.ContainsKey(dpd.DependencyProperty))
+                    {
+                        object val = CopyValue(dpd.DependencyProperty);
+                        modifiedObject.SetValue(dpd.DependencyProperty, values[dpd.DependencyProperty]);
+                        values[dpd.DependencyProperty] = val;
+                    }
+                    else
+                    {
+                        values.Add(dpd.DependencyProperty, CopyValue(dpd.DependencyProperty));
+                        dpd.ResetValue(modifiedObject);
+                    }
+                    
+                }
+            }
+               
+            
+            modifiedObject.InvalidateVisual();
+        }
+        protected object CopyValue(DependencyProperty dp)
+        {
+            object val = modifiedObject.GetValue(dp);
+            if (val is Freezable)
+                return  (val as Freezable).Clone();
+            else
+                return  val;
+        }
+
+    }
 
    // /// <summary>
    // /// change object command for undo redo buffer 

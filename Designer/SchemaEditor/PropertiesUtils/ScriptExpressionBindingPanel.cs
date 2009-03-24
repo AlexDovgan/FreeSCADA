@@ -77,7 +77,10 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				DependencyObject depObj;
 				DependencyProperty depProp;
                 if (Property.GetWpfObjects(out depObj, out depProp))
+                {
                     multiBind.FallbackValue = depObj.GetValue(depProp);
+                 
+                }
                 return multiBind;
     		}
 			else

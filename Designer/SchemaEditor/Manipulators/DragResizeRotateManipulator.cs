@@ -140,7 +140,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 
         void control_DragStarted(object sender, DragStartedEventArgs e)
         {
-        
+
+            UndoRedo.BasicUndoBuffer ub=UndoRedo.UndoRedoManager.GetUndoBufferFor(AdornedElement);
+            ub.AddCommand(new UndoRedo.ModifyGraphicsObject(AdornedElement));
             InvalidateArrange();
             
         }

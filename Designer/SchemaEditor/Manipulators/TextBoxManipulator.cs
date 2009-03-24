@@ -37,6 +37,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             textEditor.RenderTransform = AdornedElement.RenderTransform;
             textEditor.Focus();
             visualChildren.Add(textEditor);
+            UndoRedo.BasicUndoBuffer ub = UndoRedo.UndoRedoManager.GetUndoBufferFor(AdornedElement);
+            ub.AddCommand(new UndoRedo.ModifyGraphicsObject(AdornedElement));
+            
             base.Activate();
         }
 
@@ -53,7 +56,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             if (!(AdornedElement is TextBlock))
                 return;
             
-            textBlock.Text = textEditor.Text;
+             EditorHelper.SetDependencyProperty(textBlock,TextBlock.TextProperty , textEditor.Text);
             base.Deactivate();
         }
         protected override Size ArrangeOverride(Size finalSize)

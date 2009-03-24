@@ -23,6 +23,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             foreach (Point p in poly.Points)
             {
                 PointDragThumb pd = new PointDragThumb();
+                pd.DragStarted += pointDragStarted;
                 pd.DragDelta += pointDragDelta;
                 pd.PreviewMouseLeftButtonUp += pd_PreviewMouseLeftButtonUp;
                 visualChildren.Add(pd);
@@ -82,7 +83,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             if (poly.Points.Count > 2 && (System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Shift) != 0)
             {
                 Point p = poly.Points[visualChildren.IndexOf(sender as PointDragThumb)];
-
+                (sender as PointDragThumb).DragStarted -= pointDragStarted;
                 (sender as PointDragThumb).DragDelta -= pointDragDelta;
                 (sender as PointDragThumb).PreviewMouseLeftButtonUp -= pd_PreviewMouseLeftButtonUp;
                 visualChildren.Remove((Visual)sender);
@@ -128,6 +129,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 
             foreach (PointDragThumb pdt in visualChildren)
             {
+                pdt.DragStarted -= pointDragStarted;
                 pdt.DragDelta -= pointDragDelta;
                 pdt.PreviewMouseLeftButtonUp -= pd_PreviewMouseLeftButtonUp;
             }
@@ -136,6 +138,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             poly.UpdateLayout();
             base.Deactivate();
         }
+        void pointDragStarted(object sender, DragStartedEventArgs e)
+        {
+            UndoRedo.BasicUndoBuffer ub = UndoRedo.UndoRedoManager.GetUndoBufferFor(AdornedElement);
+            ub.AddCommand(new UndoRedo.ModifyGraphicsObject(AdornedElement));
+        }   
         void pointDragDelta(object sender, DragDeltaEventArgs e)
         {
             Polyline poly = AdornedElement as Polyline;
