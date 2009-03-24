@@ -124,8 +124,6 @@ namespace FreeSCADA.Designer
 			}
 		}
 
-       
-
         private void runButton_Click(object sender, EventArgs e)
         {
 
@@ -139,6 +137,9 @@ namespace FreeSCADA.Designer
             SaveFileDialog sfd = new SaveFileDialog();
 
             sfd.FileName = Env.Current.Project.FileName;
+			sfd.Filter = StringResources.FileOpenDialogFilter;
+			sfd.FilterIndex = 0;
+			sfd.RestoreDirectory = true;
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
@@ -147,5 +148,11 @@ namespace FreeSCADA.Designer
                 UpdateCaptionAndCommands();
             }
         }
+
+		private void OnAddNewScriptClick(object sender, EventArgs e)
+		{
+			string newScriptName = Env.Current.Project.GenerateUniqueName(ProjectEntityType.Script, StringResources.UntitledScript);
+			Env.Current.ScriptManager.CreateNewScript(newScriptName);
+		}
     }
 }

@@ -38,6 +38,8 @@
 			this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mRU1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.importSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,8 +60,7 @@
 			this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
 			this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
 			this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-			this.mRU1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
 			newProjectButton = new System.Windows.Forms.ToolStripButton();
 			openProjectButton = new System.Windows.Forms.ToolStripButton();
 			toolStripButton3 = new System.Windows.Forms.ToolStripButton();
@@ -166,6 +167,18 @@
 			this.loadToolStripMenuItem.Text = "Load project...";
 			this.loadToolStripMenuItem.Click += new System.EventHandler(this.OnLoadProjectClick);
 			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(156, 6);
+			// 
+			// mRU1ToolStripMenuItem
+			// 
+			this.mRU1ToolStripMenuItem.Name = "mRU1ToolStripMenuItem";
+			this.mRU1ToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+			this.mRU1ToolStripMenuItem.Text = "MRU_start";
+			this.mRU1ToolStripMenuItem.Visible = false;
+			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -267,6 +280,7 @@
             toolStripButtonNewSchema,
             toolStripButton5,
             this.toolStripButton1,
+            this.toolStripButton2,
             this.runButton});
 			this.mainToolbar.Location = new System.Drawing.Point(0, 24);
 			this.mainToolbar.Name = "mainToolbar";
@@ -335,17 +349,15 @@
 			this.dockPanel.Size = new System.Drawing.Size(699, 337);
 			this.dockPanel.TabIndex = 4;
 			// 
-			// toolStripMenuItem1
+			// toolStripButton2
 			// 
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(156, 6);
-			// 
-			// mRU1ToolStripMenuItem
-			// 
-			this.mRU1ToolStripMenuItem.Name = "mRU1ToolStripMenuItem";
-			this.mRU1ToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-			this.mRU1ToolStripMenuItem.Text = "MRU_start";
-			this.mRU1ToolStripMenuItem.Visible = false;
+			this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton2.Image = global::FreeSCADA.Designer.Properties.Resources.script_add;
+			this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton2.Name = "toolStripButton2";
+			this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton2.Text = "Add new script";
+			this.toolStripButton2.Click += new System.EventHandler(this.OnAddNewScriptClick);
 			// 
 			// MainForm
 			// 
@@ -400,5 +412,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mediaContentToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mRU1ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripButton toolStripButton2;
 	}
 }

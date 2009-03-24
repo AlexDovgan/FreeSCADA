@@ -107,9 +107,12 @@ namespace FreeSCADA.RunTime.Views
 
 		void OnMessage(FreeSCADA.Common.Logger.Severity severity, string message)
 		{
+			listView1.BeginUpdate();
 			ListViewItem item = listView1.Items.Add("", (int)severity);
 			item.SubItems.Add(System.DateTime.Now.ToString("HH:mm:ss"));
 			item.SubItems.Add(message);
+			item.EnsureVisible();
+			listView1.EndUpdate();
 			if (severity == FreeSCADA.Common.Logger.Severity.Error || severity == FreeSCADA.Common.Logger.Severity.Warning)
 				Activate();
 		}

@@ -24,7 +24,7 @@ namespace FreeSCADA.Common.Scripting
 			get { return channelsScriptHandlers; }
 		}
 
-		internal Application ScriptApplication
+		public Application ScriptApplication
 		{
 			get { return application; }
 		}

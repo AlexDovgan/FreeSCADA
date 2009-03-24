@@ -49,52 +49,52 @@ namespace Designer.Tests
 					break;
 				case Entries.Rectangle:
 					ClickToolboxItem(0, true);
-					ClickToolboxItem(1, false);
+					ClickToolboxItem(2, false);
 					ClickToolboxItem(2, true);
 					break;
 				case Entries.Ellipse:
 					ClickToolboxItem(0, true);
-					ClickToolboxItem(1, false);
+					ClickToolboxItem(2, false);
 					ClickToolboxItem(3, true);
 					break;
 				case Entries.TextBox:
 					ClickToolboxItem(0, true);
-					ClickToolboxItem(1, false);
+					ClickToolboxItem(2, false);
 					ClickToolboxItem(4, true);
 					break;
 				case Entries.Polyline:
 					ClickToolboxItem(0, true);
-					ClickToolboxItem(1, false);
+					ClickToolboxItem(2, false);
 					ClickToolboxItem(5, true);
 					break;
 				case Entries.Button:
 					ClickToolboxItem(0, true);
-					ClickToolboxItem(0, false);
+					ClickToolboxItem(1, false);
 					ClickToolboxItem(3, true);
 					break;
 				case Entries.ProgressBar:
 					ClickToolboxItem(0, true);
-					ClickToolboxItem(0, false);
+					ClickToolboxItem(1, false);
 					ClickToolboxItem(4, true);
 					break;
 				case Entries.ScrollBar:
 					ClickToolboxItem(0, true);
-					ClickToolboxItem(0, false);
+					ClickToolboxItem(1, false);
 					ClickToolboxItem(5, true);
 					break;
 				case Entries.Image:
 					ClickToolboxItem(0, true);
-					ClickToolboxItem(0, false);
+					ClickToolboxItem(1, false);
 					ClickToolboxItem(6, true);
 					break;
 				case Entries.Slider:
 					ClickToolboxItem(0, true);
-					ClickToolboxItem(0, false);
+					ClickToolboxItem(1, false);
 					ClickToolboxItem(7, true);
 					break;
 				case Entries.Checkbox:
 					ClickToolboxItem(0, true);
-					ClickToolboxItem(0, false);
+					ClickToolboxItem(1, false);
 					ClickToolboxItem(8, true);
 					break;
 			}
