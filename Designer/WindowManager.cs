@@ -446,6 +446,7 @@ namespace FreeSCADA.Designer
 			projectContentView.OpenEntity -= new ProjectContentView.OpenEntityHandler(OnOpenProjectEntity);
 			projectContentView.SelectNode -= new ProjectContentView.SelectNodeHandler(OnSelectProjectNode);
 			dockPanel.ActiveDocumentChanged -= new EventHandler(OnActiveDocumentChanged);
+			Env.Current.ScriptManager.NewScriptCreated -= new ScriptManager.NewScriptCreatedHandler(OnOpenScript);
 
 			//Create toolwindows
 			projectContentView.Dispose();

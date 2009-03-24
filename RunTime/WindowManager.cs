@@ -40,6 +40,8 @@ namespace FreeSCADA.RunTime
 
             //Connect Windows Manager to heleper events
             dockPanel.ActiveDocumentChanged += new EventHandler(OnActiveDocumentChanged);
+
+			Env.Current.ScriptManager.ScriptApplication.OpenEntity += new FreeSCADA.Common.Scripting.Application.OpenEntityHandler(OnOpenProjectEntity);
         }
 
         public void Close()
@@ -249,6 +251,7 @@ namespace FreeSCADA.RunTime
             mruManager.ItemClicked -= new MRUManager.ItemClickedDelegate(OnMRUItemClicked);
             projectContentView.OpenEntity -= new ProjectContentView.OpenEntityHandler(OnOpenProjectEntity);
             dockPanel.ActiveDocumentChanged -= new EventHandler(OnActiveDocumentChanged);
+			Env.Current.ScriptManager.ScriptApplication.OpenEntity -= new FreeSCADA.Common.Scripting.Application.OpenEntityHandler(OnOpenProjectEntity);
 
             projectContentView.Dispose();
             logConsoleView.Dispose();
