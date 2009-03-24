@@ -201,28 +201,56 @@ namespace FreeSCADA.Designer
 			documentViews.Add(view);
 		}
 
-		/// <summary>
-		/// Create or active existing "Archiver Settings" view.
-		/// </summary>
-		public void ShowArchiverSettings()
-		{
-			foreach (DocumentView doc in documentViews)
-			{
-				if (doc is ArchiverSettingsView)
-				{
-					doc.Activate();
-					return;
-				}
-			}
+        /// <summary>
+        /// Create or active existing "Archiver Settings" view.
+        /// </summary>
+        public void ShowArchiverSettings()
+        {
+            foreach (DocumentView doc in documentViews)
+            {
+                if (doc is ArchiverSettingsView)
+                {
+                    doc.Activate();
+                    return;
+                }
+            }
 
-			ArchiverSettingsView view = new ArchiverSettingsView();
-			view.Show(dockPanel, DockState.Document);
+            ArchiverSettingsView view = new ArchiverSettingsView();
+            view.Show(dockPanel, DockState.Document);
 
-			view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
-			documentViews.Add(view);
-		}
+            view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
+            documentViews.Add(view);
+        }
 
-		void OnOpenScript(object sender, Script script)
+        /// <summary>
+        /// Create or active existing "Variables" view.
+        /// </summary>
+        public void ShowVariablesView()
+        {
+            foreach (DocumentView doc in documentViews)
+            {
+                if (doc is VariablesView)
+                {
+                    doc.Activate();
+                    return;
+                }
+            }
+
+            VariablesView view = new VariablesView();
+            view.Show(dockPanel, DockState.Document);
+
+            view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
+            view.SelectChannel += new VariablesView.SelectChannelHandler(OnSelectChannel);
+            documentViews.Add(view);
+        }
+
+        void OnSelectChannel(object channel)
+        {
+            if (propertyBrowserView != null)
+                propertyBrowserView.ShowProperties(channel);
+        }
+
+        void OnOpenScript(object sender, Script script)
 		{
 			foreach (DocumentView doc in documentViews)
 			{

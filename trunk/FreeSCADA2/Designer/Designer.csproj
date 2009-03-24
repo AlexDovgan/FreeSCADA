@@ -36,6 +36,10 @@
     <DocumentationFile>..\bin\Release\Designer.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevAge.Core, Version=4.10.2845.21697, Culture=neutral, PublicKeyToken=faad465d84242dbf, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\SourceGrid4_11\DevAge.Core.dll</HintPath>
+    </Reference>
     <Reference Include="DevAge.Windows.Forms, Version=4.10.2845.21698, Culture=neutral, PublicKeyToken=faad465d84242dbf, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\SourceGrid4_11\DevAge.Windows.Forms.dll</HintPath>
@@ -282,6 +286,9 @@
       <DependentUpon>ProjectContentView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\VariablesView.resx">
+      <DependentUpon>VariablesView.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -319,6 +326,9 @@
     </Compile>
     <Compile Include="Dialogs\VariablesDialog.Designer.cs">
       <DependentUpon>VariablesDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VariablesView.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="WindowManager.cs" />
   </ItemGroup>
