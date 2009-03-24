@@ -60,9 +60,9 @@ namespace FreeSCADA.Designer
 			windowManager.ShowEvents();
 		}
 
-		private void OnArchiverSettingsClick(object sender, EventArgs e)
+		private void OnVariablesSettingsClick(object sender, EventArgs e)
 		{
-			windowManager.ShowArchiverSettings();
+            windowManager.ShowVariablesView();
 		}
 
 		private void OnSaveProjectClick(object sender, System.EventArgs e)
@@ -149,10 +149,20 @@ namespace FreeSCADA.Designer
             }
         }
 
+        private void OnArchiverSettingsClick(object sender, EventArgs e)
+        {
+            windowManager.ShowArchiverSettings();
+        }
+
 		private void OnAddNewScriptClick(object sender, EventArgs e)
 		{
 			string newScriptName = Env.Current.Project.GenerateUniqueName(ProjectEntityType.Script, StringResources.UntitledScript);
 			Env.Current.ScriptManager.CreateNewScript(newScriptName);
 		}
+
+        private void OnVariablesViewClick(object sender, EventArgs e)
+        {
+            windowManager.ShowVariablesView();
+        }
     }
 }
