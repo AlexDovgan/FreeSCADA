@@ -563,14 +563,14 @@ namespace FreeSCADA.Designer.Views
                 (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
             {
                 UndoBuff.UndoCommand();
-                SelectionManager.SelectObject(null);
+                //SelectionManager.SelectObject(null);
 
             }
             else if (e.Key == System.Windows.Input.Key.Y &&
                 (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
             {
                 UndoBuff.RedoCommand();
-                SelectionManager.SelectObject(null);
+                //SelectionManager.SelectObject(null);
             }
             else if (e.Key == System.Windows.Input.Key.X &&
                 (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)

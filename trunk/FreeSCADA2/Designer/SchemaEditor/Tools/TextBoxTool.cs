@@ -53,7 +53,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             if (isDragged)
             {
                 //Rect b = VisualTreeHelper.GetContentBounds(objectPrview);
-                if (!rect.IsEmpty)
+                if (Math.Max(rect.Width, rect.Height) > 2.0)
                 {
                     TextBlock text = new TextBlock();
                     Canvas.SetLeft(text, rect.X);
@@ -64,12 +64,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     text.Text = "You can write text here"; 
                     text.TextWrapping = TextWrapping.Wrap;
                     NotifyObjectCreated(text);
-                    SelectionManager.GetSelectionManagerFor(AdornedElement).SelectObject(text);
+                    
 
                 }
                 isDragged = false;
                 objectPrview.RenderOpen().Close();
-
+                rect = Rect.Empty;
             }
             ReleaseMouseCapture();
             base.OnPreviewMouseLeftButtonUp(e);
