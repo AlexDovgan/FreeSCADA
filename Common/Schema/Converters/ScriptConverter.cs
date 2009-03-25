@@ -32,8 +32,8 @@ namespace FreeSCADA.Common.Schema
             ScriptSource source= python.CreateScriptSourceFromString(pyExpr, Microsoft.Scripting.SourceCodeKind.Statements);;
             ScriptScope scope = python.CreateScope();
             scope.SetVariable("values",values);
-            scope.SetVariable("res", 0.0);
-            scope.SetVariable("object", parameter);
+            scope.SetVariable("result", Binding.DoNothing  );
+            //scope.SetVariable("object", obj);
 
             if (source != null)
             {
@@ -47,7 +47,7 @@ namespace FreeSCADA.Common.Schema
                     return null;
                 }
             }
-            return scope.GetVariable("res");
+            return scope.GetVariable("result");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -66,7 +66,7 @@ namespace FreeSCADA.Common.Schema
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         #endregion

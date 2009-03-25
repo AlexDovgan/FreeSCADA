@@ -73,23 +73,23 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
         public override PropertyDescriptorCollection GetProperties(Attribute[] attributes)
         {
             List<PropertyWrapper> result = new List<PropertyWrapper>();
-            RegisterProperty(typeof(AnalogTextValue), "Canvas.Top", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "Canvas.Left", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "Width", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "Height", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(AnalogTextValue), "Canvas.Top", null, result);
+            RegisterProperty(typeof(AnalogTextValue), "Canvas.Left", null, result);
+            RegisterProperty(typeof(AnalogTextValue), "Width", null, result);
+            RegisterProperty(typeof(AnalogTextValue), "Height", null, result);
 
-            RegisterProperty(typeof(AnalogTextValue), "Background", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "Foreground", typeof(CommonTypeEditor), result);
-            //RegisterProperty(typeof(AnalogTextValue), "BorderThickness", typeof(CommonTypeEditor), result);
-            //RegisterProperty(typeof(AnalogTextValue), "BorderBrush", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "Opacity", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(AnalogTextValue), "Background", null, result);
+            RegisterProperty(typeof(AnalogTextValue), "Foreground", null, result);
+            //RegisterProperty(typeof(AnalogTextValue), "BorderThickness", null, result);
+            //RegisterProperty(typeof(AnalogTextValue), "BorderBrush", null, result);
+            RegisterProperty(typeof(AnalogTextValue), "Opacity", null, result);
             //RegisterProperty(typeof(AnalogTextValue), "RenderTransform", null, result);
             //RegisterProperty(typeof(AnalogTextValue), "RenderTransformOrigin", null, result);
 
-            RegisterProperty(typeof(AnalogTextValue), "DecimalPlaces", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "FontSize", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "FontFamily", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(AnalogTextValue), "ChannelBadEdge", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(AnalogTextValue), "DecimalPlaces", null, result);
+            RegisterProperty(typeof(AnalogTextValue), "FontSize", null, result);
+            RegisterProperty(typeof(AnalogTextValue), "FontFamily", null, result);
+            RegisterProperty(typeof(AnalogTextValue), "ChannelBadEdge", null, result);
             RegisterProperty(typeof(AnalogTextValue), "ChannelName", typeof(ChannelSelectEditor), result);
             RegisterProperty(typeof(AnalogTextValue), "Unit", typeof(ChannelSelectEditor), result);
 

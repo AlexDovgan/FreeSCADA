@@ -73,22 +73,22 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
         public override PropertyDescriptorCollection GetProperties(Attribute[] attributes)
         {
             List<PropertyWrapper> result = new List<PropertyWrapper>();
-            RegisterProperty(typeof(BinaryColorText), "Canvas.Top", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(BinaryColorText), "Canvas.Left", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(BinaryColorText), "Width", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(BinaryColorText), "Height", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "Canvas.Top", null, result);
+            RegisterProperty(typeof(BinaryColorText), "Canvas.Left", null, result);
+            RegisterProperty(typeof(BinaryColorText), "Width", null, result);
+            RegisterProperty(typeof(BinaryColorText), "Height", null, result);
 
-            RegisterProperty(typeof(BinaryColorText), "Background", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(BinaryColorText), "Foreground", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(BinaryColorText), "Background1", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(BinaryColorText), "Foreground1", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(BinaryColorText), "Text", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(BinaryColorText), "Text1", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(BinaryColorText), "Opacity", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "Background", null, result);
+            RegisterProperty(typeof(BinaryColorText), "Foreground", null, result);
+            RegisterProperty(typeof(BinaryColorText), "Background1", null, result);
+            RegisterProperty(typeof(BinaryColorText), "Foreground1", null, result);
+            RegisterProperty(typeof(BinaryColorText), "Text", null, result);
+            RegisterProperty(typeof(BinaryColorText), "Text1", null, result);
+            RegisterProperty(typeof(BinaryColorText), "Opacity", null, result);
 
-            RegisterProperty(typeof(BinaryColorText), "FontSize", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(BinaryColorText), "FontFamily", typeof(CommonTypeEditor), result);
-            RegisterProperty(typeof(BinaryColorText), "ChannelBadEdge", typeof(CommonTypeEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "FontSize", null, result);
+            RegisterProperty(typeof(BinaryColorText), "FontFamily", null, result);
+            RegisterProperty(typeof(BinaryColorText), "ChannelBadEdge", null, result);
             RegisterProperty(typeof(BinaryColorText), "ChannelName", typeof(ChannelSelectEditor), result);
 
             return new PropertyDescriptorCollection(result.ToArray());
