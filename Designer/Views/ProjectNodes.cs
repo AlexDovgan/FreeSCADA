@@ -187,11 +187,10 @@ namespace FreeSCADA.Designer.Views.ProjectNodes
 		{
 			TreeNode root = base.CreateTreeNode(nodes);
 
+			List<BaseNode> newNodes = new List<BaseNode>();
 			foreach (string entity in Env.Current.Project.GetEntities(ProjectEntityType.Schema))
-			{
-				SchemaNode node = new SchemaNode(entity);
-				node.CreateTreeNode(root.Nodes).EnsureVisible();
-			}
+				newNodes.Add(new SchemaNode(entity));
+			UpdateNodes(newNodes.ToArray(), root);
 
 			return root;
 		}
@@ -213,11 +212,10 @@ namespace FreeSCADA.Designer.Views.ProjectNodes
 		{
 			TreeNode root = base.CreateTreeNode(nodes);
 
+			List<BaseNode> newNodes = new List<BaseNode>();
 			if (Env.Current.Project.ContainsEntity(ProjectEntityType.Script, Name))
-			{
-				ScriptNode node = new ScriptNode(Name);
-				node.CreateTreeNode(root.Nodes);
-			}
+				newNodes.Add(new ScriptNode(Name));
+			UpdateNodes(newNodes.ToArray(), root);
 
 			return root;
 		}
