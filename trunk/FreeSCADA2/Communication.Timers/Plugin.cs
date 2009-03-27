@@ -71,8 +71,8 @@ namespace FreeSCADA.Communication.Timers
             {
                 if (ch is RelativeTimerChannel)
                     (ch as RelativeTimerChannel).Enable = true;
-                else if (ch is AbsoluteTimerChannel)
-                    ;
+                //else if (ch is AbsoluteTimerChannel)
+                //    ;
             }
 			return IsConnected;
 		}
@@ -84,8 +84,8 @@ namespace FreeSCADA.Communication.Timers
             {
                 if (ch is RelativeTimerChannel)
                     (ch as RelativeTimerChannel).Enable = false;
-                else if (ch is AbsoluteTimerChannel)
-                    ;
+                //else if (ch is AbsoluteTimerChannel)
+                //    ;
             }
 		}
 

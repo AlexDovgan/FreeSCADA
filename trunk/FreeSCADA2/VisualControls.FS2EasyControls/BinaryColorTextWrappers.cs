@@ -78,17 +78,17 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
             RegisterProperty(typeof(BinaryColorText), "Width", null, result);
             RegisterProperty(typeof(BinaryColorText), "Height", null, result);
 
-            RegisterProperty(typeof(BinaryColorText), "Background", null, result);
-            RegisterProperty(typeof(BinaryColorText), "Foreground", null, result);
-            RegisterProperty(typeof(BinaryColorText), "Background1", null, result);
-            RegisterProperty(typeof(BinaryColorText), "Foreground1", null, result);
+            RegisterProperty(typeof(BinaryColorText), "Background", typeof(BrushEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "Foreground", typeof(BrushEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "Background1", typeof(BrushEditor), result);
+            RegisterProperty(typeof(BinaryColorText), "Foreground1", typeof(BrushEditor), result);
             RegisterProperty(typeof(BinaryColorText), "Text", null, result);
             RegisterProperty(typeof(BinaryColorText), "Text1", null, result);
             RegisterProperty(typeof(BinaryColorText), "Opacity", null, result);
 
             RegisterProperty(typeof(BinaryColorText), "FontSize", null, result);
             RegisterProperty(typeof(BinaryColorText), "FontFamily", null, result);
-            RegisterProperty(typeof(BinaryColorText), "ChannelBadEdge", null, result);
+            RegisterProperty(typeof(BinaryColorText), "ChannelBadEdge", typeof(BrushEditor), result);
             RegisterProperty(typeof(BinaryColorText), "ChannelName", typeof(ChannelSelectEditor), result);
 
             return new PropertyDescriptorCollection(result.ToArray());

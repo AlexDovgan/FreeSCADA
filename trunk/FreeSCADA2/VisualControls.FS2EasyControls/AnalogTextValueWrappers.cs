@@ -78,8 +78,8 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
             RegisterProperty(typeof(AnalogTextValue), "Width", null, result);
             RegisterProperty(typeof(AnalogTextValue), "Height", null, result);
 
-            RegisterProperty(typeof(AnalogTextValue), "Background", null, result);
-            RegisterProperty(typeof(AnalogTextValue), "Foreground", null, result);
+            RegisterProperty(typeof(AnalogTextValue), "Background", typeof(BrushEditor), result);
+            RegisterProperty(typeof(AnalogTextValue), "Foreground", typeof(BrushEditor), result);
             //RegisterProperty(typeof(AnalogTextValue), "BorderThickness", null, result);
             //RegisterProperty(typeof(AnalogTextValue), "BorderBrush", null, result);
             RegisterProperty(typeof(AnalogTextValue), "Opacity", null, result);
@@ -89,7 +89,7 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
             RegisterProperty(typeof(AnalogTextValue), "DecimalPlaces", null, result);
             RegisterProperty(typeof(AnalogTextValue), "FontSize", null, result);
             RegisterProperty(typeof(AnalogTextValue), "FontFamily", null, result);
-            RegisterProperty(typeof(AnalogTextValue), "ChannelBadEdge", null, result);
+            RegisterProperty(typeof(AnalogTextValue), "ChannelBadEdge", typeof(BrushEditor), result);
             RegisterProperty(typeof(AnalogTextValue), "ChannelName", typeof(ChannelSelectEditor), result);
             RegisterProperty(typeof(AnalogTextValue), "Unit", typeof(ChannelSelectEditor), result);
 

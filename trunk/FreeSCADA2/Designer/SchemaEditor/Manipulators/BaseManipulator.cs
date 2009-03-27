@@ -18,6 +18,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         /// Container for manipulator controlls
         /// </summary>
         protected VisualCollection visualChildren;
+        /// <summary>
+        /// 
+        /// </summary>
         protected System.Windows.Controls.Canvas mainCanvas;
         /// <summary>
         /// 
@@ -78,6 +81,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         {
             return true;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="transform"></param>
+        /// <returns></returns>
         public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
         {
             Matrix m = new Matrix();

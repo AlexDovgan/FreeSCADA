@@ -163,8 +163,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 
 			RegisterProperty(typeof(FrameworkElement), "Width", null);
             RegisterProperty(typeof(FrameworkElement), "Height", null);
-            RegisterProperty(typeof(FrameworkElement), "Background", null);
-            RegisterProperty(typeof(FrameworkElement), "Foreground", null);
+            RegisterProperty(typeof(FrameworkElement), "Background", typeof(BrushEditor));
+            RegisterProperty(typeof(FrameworkElement), "Foreground", typeof(BrushEditor));
             RegisterProperty(typeof(FrameworkElement), "Opacity", null);
             RegisterProperty(typeof(FrameworkElement), "Canvas.Top", null);
             RegisterProperty(typeof(FrameworkElement), "Canvas.Left", null);

@@ -9,14 +9,24 @@ using FreeSCADA.Common.Schema;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditors
 {
-    class BrushEditor:UITypeEditor
+    /// <summary>
+    /// 
+    /// </summary>
+    public class BrushEditor:UITypeEditor
 	{
+        /// <summary>
+        /// 
+        /// </summary>
         public BrushEditor()
 		{
 		}
 
-		// Indicates whether the UITypeEditor provides a form-based (modal) dialog, 
-		// drop down dialog, or no UI outside of the properties window.
+        /// <summary>
+        /// Indicates whether the UITypeEditor provides a form-based (modal) dialog, 
+        /// drop down dialog, or no UI outside of the properties window.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
 		public override System.Drawing.Design.UITypeEditorEditStyle GetEditStyle(System.ComponentModel.ITypeDescriptorContext context)
 		{
 			// if(context.Instance is System.Windows.Controls.ContentControl)
@@ -24,9 +34,10 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
 			// else
 			//     return UITypeEditorEditStyle.None;
 		}
-
-		// Displays the UI for value selection.
-		public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value)
+        /// <summary>
+        /// Displays the UI for value selection.
+        /// </summary>
+        public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value)
 		{
 
 			PropertiesUtils.PropertyWrapper pw;
@@ -59,7 +70,10 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
 			return value;
 		}
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
 		public override void PaintValue(System.Drawing.Design.PaintValueEventArgs e)
 		{
             System.Windows.Media.SolidColorBrush b = (System.Windows.Media.SolidColorBrush)e.Value;
@@ -73,8 +87,12 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
 		}
 
 
-		// Indicates whether the UITypeEditor supports painting a 
-		// representation of a property's value.
+        /// <summary>
+        /// Indicates whether the UITypeEditor supports painting a 
+        /// representation of a property's value.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
 		public override bool GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context)
 		{
 

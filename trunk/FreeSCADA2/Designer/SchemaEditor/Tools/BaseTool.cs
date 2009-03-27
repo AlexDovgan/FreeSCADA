@@ -101,7 +101,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="e"></param>
         /// <summary>
         /// tool activating on working  Canvas
         /// </summary>
@@ -191,6 +190,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             return transform;//new MatrixTransform(m); ;// //this code neded for right manipulators zooming
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public virtual Type ToolEditingType()
         {
             return null;

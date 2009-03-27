@@ -13,7 +13,7 @@ namespace FreeSCADA.Designer.SchemaEditor
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="el"></param>
         public delegate void SelectionChangedDelegate(UIElement el);
 
         /// <summary>
