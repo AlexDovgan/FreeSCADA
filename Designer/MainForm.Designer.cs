@@ -55,13 +55,15 @@
             this.mainToolbar = new System.Windows.Forms.ToolStrip();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.runButton = new System.Windows.Forms.ToolStripButton();
             this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             newProjectButton = new System.Windows.Forms.ToolStripButton();
             openProjectButton = new System.Windows.Forms.ToolStripButton();
             toolStripButton3 = new System.Windows.Forms.ToolStripButton();
@@ -277,12 +279,14 @@
             newProjectButton,
             openProjectButton,
             toolStripButton3,
-            this.toolStripSeparator1,
+            this.toolStripSeparator3,
             toolStripButtonNewSchema,
             toolStripButton5,
+            this.toolStripButton2,
+            this.toolStripSeparator4,
             this.toolStripButton1,
             this.toolStripButton4,
-            this.toolStripButton2,
+            this.toolStripSeparator1,
             this.runButton});
             this.mainToolbar.Location = new System.Drawing.Point(0, 24);
             this.mainToolbar.Name = "mainToolbar";
@@ -304,6 +308,16 @@
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton1.Text = "Archiver Settings";
             this.toolStripButton1.Click += new System.EventHandler(this.OnArchiverSettingsClick);
+            // 
+            // toolStripButton4
+            // 
+            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton4.Image = global::FreeSCADA.Designer.Properties.Resources.tree_channels;
+            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton4.Name = "toolStripButton4";
+            this.toolStripButton4.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton4.Text = "Channels and Plugins";
+            this.toolStripButton4.Click += new System.EventHandler(this.OnVariablesViewClick);
             // 
             // toolStripButton2
             // 
@@ -361,15 +375,15 @@
             this.dockPanel.Size = new System.Drawing.Size(699, 337);
             this.dockPanel.TabIndex = 4;
             // 
-            // toolStripButton4
+            // toolStripSeparator3
             // 
-            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton4.Image = global::FreeSCADA.Designer.Properties.Resources.tree_channels;
-            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton4.Text = "Channels and Plugins";
-            this.toolStripButton4.Click += new System.EventHandler(this.OnVariablesViewClick);
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
             // MainForm
             // 
@@ -426,5 +440,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mRU1ToolStripMenuItem;
 		private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ToolStripButton toolStripButton4;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
 	}
 }

@@ -46,7 +46,7 @@ namespace FreeSCADA.Designer.Views
             this.channelsGrid.Name = "channelsGrid";
             this.channelsGrid.OptimizeMode = SourceGrid.CellOptimizeMode.ForRows;
             this.channelsGrid.SelectionMode = SourceGrid.GridSelectionMode.Row;
-            this.channelsGrid.Size = new System.Drawing.Size(737, 249);
+            this.channelsGrid.Size = new System.Drawing.Size(737, 280);
             this.channelsGrid.TabIndex = 2;
             this.channelsGrid.TabStop = true;
             this.channelsGrid.ToolTipText = "";
@@ -70,7 +70,7 @@ namespace FreeSCADA.Designer.Views
             this.splitContainer1.Panel2.Controls.Add(this.channelsGrid);
             this.splitContainer1.Panel2.Controls.Add(this.label1);
             this.splitContainer1.Size = new System.Drawing.Size(743, 384);
-            this.splitContainer1.SplitterDistance = 102;
+            this.splitContainer1.SplitterDistance = 71;
             this.splitContainer1.TabIndex = 3;
             // 
             // pluginsGrid
@@ -84,7 +84,7 @@ namespace FreeSCADA.Designer.Views
             this.pluginsGrid.Name = "pluginsGrid";
             this.pluginsGrid.OptimizeMode = SourceGrid.CellOptimizeMode.ForRows;
             this.pluginsGrid.SelectionMode = SourceGrid.GridSelectionMode.Row;
-            this.pluginsGrid.Size = new System.Drawing.Size(737, 75);
+            this.pluginsGrid.Size = new System.Drawing.Size(737, 44);
             this.pluginsGrid.TabIndex = 3;
             this.pluginsGrid.TabStop = true;
             this.pluginsGrid.ToolTipText = "";
@@ -151,6 +151,26 @@ namespace FreeSCADA.Designer.Views
             this.FormClosing += new FormClosingEventHandler(VariablesView_FormClosing);
             this.channelsGrid.Selection.SelectionChanged += new SourceGrid.RangeRegionChangedEventHandler(Selection_SelectionChanged);
             channelsGrid.MouseDoubleClick += new MouseEventHandler(channelsGrid_MouseDoubleClick);
+
+            pluginsGrid.Selection.Border = b;
+            pluginsGrid.Selection.FocusBackColor = channelsGrid.Selection.BackColor;
+            pluginsGrid.ColumnsCount = 5;
+
+            pluginsGrid.RowsCount++;
+            pluginsGrid[0, 0] = new SourceGrid.Cells.ColumnHeader("Plugin Name");
+            pluginsGrid[0, 1] = new SourceGrid.Cells.ColumnHeader("Variables");
+            pluginsGrid[0, 2] = new SourceGrid.Cells.ColumnHeader("Start Plugin");
+            pluginsGrid[0, 3] = new SourceGrid.Cells.ColumnHeader("Stop Plugin");
+            pluginsGrid[0, 4] = new SourceGrid.Cells.ColumnHeader("Test mode");
+
+            foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
+            {
+                pluginsGrid.RowsCount++;
+                pluginsGrid[pluginsGrid.RowsCount - 1, 0] = new SourceGrid.Cells.Cell(plugId);
+                pluginsGrid[pluginsGrid.RowsCount - 1, 1] = new SourceGrid.Cells.Cell(Env.Current.CommunicationPlugins[plugId].Channels.Length);
+                //pluginsGrid[pluginsGrid.RowsCount - 1, 2] = new SourceGrid.Cells.Button(new Object());
+
+            }
         }
 
         public delegate void SelectChannelHandler(object channel);
