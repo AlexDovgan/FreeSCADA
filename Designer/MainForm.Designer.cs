@@ -41,7 +41,6 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.mRU1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.importSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewSubMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.projectContentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -140,17 +139,16 @@
             this.toolStripMenuItem1,
             this.mRU1ToolStripMenuItem,
             this.toolStripSeparator2,
-            this.importSchemaToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Image = global::FreeSCADA.Designer.Properties.Resources.save_file;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.saveToolStripMenuItem.Text = "Save project";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.OnSaveProjectClick);
             // 
@@ -158,7 +156,7 @@
             // 
             this.saveAsToolStripMenuItem.Image = global::FreeSCADA.Designer.Properties.Resources.save_file;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.saveAsToolStripMenuItem.Text = "Save project As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
@@ -166,37 +164,31 @@
             // 
             this.loadToolStripMenuItem.Image = global::FreeSCADA.Designer.Properties.Resources.open_file;
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.loadToolStripMenuItem.Text = "Load project...";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.OnLoadProjectClick);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(158, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(151, 6);
             // 
             // mRU1ToolStripMenuItem
             // 
             this.mRU1ToolStripMenuItem.Name = "mRU1ToolStripMenuItem";
-            this.mRU1ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.mRU1ToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.mRU1ToolStripMenuItem.Text = "MRU_start";
             this.mRU1ToolStripMenuItem.Visible = false;
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(158, 6);
-            // 
-            // importSchemaToolStripMenuItem
-            // 
-            this.importSchemaToolStripMenuItem.Name = "importSchemaToolStripMenuItem";
-            this.importSchemaToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.importSchemaToolStripMenuItem.Text = "Import Graphics";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(151, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnMenuExitClick);
             // 
@@ -205,13 +197,13 @@
             this.viewSubMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.projectContentToolStripMenuItem});
             this.viewSubMenu.Name = "viewSubMenu";
-            this.viewSubMenu.Size = new System.Drawing.Size(41, 20);
+            this.viewSubMenu.Size = new System.Drawing.Size(44, 20);
             this.viewSubMenu.Text = "View";
             // 
             // projectContentToolStripMenuItem
             // 
             this.projectContentToolStripMenuItem.Name = "projectContentToolStripMenuItem";
-            this.projectContentToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.projectContentToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.projectContentToolStripMenuItem.Text = "Project Content";
             // 
             // projectToolStripMenuItem
@@ -220,20 +212,20 @@
             this.variablesToolStripMenuItem,
             this.mediaContentToolStripMenuItem});
             this.projectToolStripMenuItem.Name = "projectToolStripMenuItem";
-            this.projectToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
+            this.projectToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.projectToolStripMenuItem.Text = "Project";
             // 
             // variablesToolStripMenuItem
             // 
             this.variablesToolStripMenuItem.Name = "variablesToolStripMenuItem";
-            this.variablesToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.variablesToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.variablesToolStripMenuItem.Text = "Variables...";
             this.variablesToolStripMenuItem.Click += new System.EventHandler(this.OnMenuVariables);
             // 
             // mediaContentToolStripMenuItem
             // 
             this.mediaContentToolStripMenuItem.Name = "mediaContentToolStripMenuItem";
-            this.mediaContentToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.mediaContentToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.mediaContentToolStripMenuItem.Text = "Media content...";
             this.mediaContentToolStripMenuItem.Click += new System.EventHandler(this.OnMenuMediaContent);
             // 
@@ -253,7 +245,7 @@
             // editSubMenu
             // 
             this.editSubMenu.Name = "editSubMenu";
-            this.editSubMenu.Size = new System.Drawing.Size(37, 20);
+            this.editSubMenu.Size = new System.Drawing.Size(39, 20);
             this.editSubMenu.Text = "Edit";
             // 
             // BottomToolStripPanel
@@ -421,8 +413,7 @@
 		private System.Windows.Forms.ToolStripMenuItem projectContentToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem projectToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem variablesToolStripMenuItem;
-		private System.Windows.Forms.MenuStrip mainMenu;
-		private System.Windows.Forms.ToolStripMenuItem importSchemaToolStripMenuItem;
+        private System.Windows.Forms.MenuStrip mainMenu;
 		private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem editSubMenu;
 		private System.Windows.Forms.ToolStrip mainToolbar;

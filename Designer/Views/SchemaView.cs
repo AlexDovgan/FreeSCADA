@@ -355,7 +355,8 @@ namespace FreeSCADA.Designer.Views
             DocumentCommands.Add(new CommandInfo(copyCommand, CommandManager.documentMenuContext));
             DocumentCommands.Add(new CommandInfo(pasteCommand, CommandManager.documentMenuContext));
             DocumentCommands.Add(new CommandInfo(bindingCommand, CommandManager.documentMenuContext));
-
+            DocumentCommands.Add(new CommandInfo(new ImportElementCommand(this), CommandManager.fileContext));
+            
             CreateToolList();
 
 

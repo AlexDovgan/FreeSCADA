@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
+using System.Xml;
+using System.Xml.Xsl;
 using FreeSCADA.Common;
 using FreeSCADA.Designer.SchemaEditor.PropertiesUtils;
 using FreeSCADA.Designer.SchemaEditor.Tools;
@@ -744,7 +746,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public CommonBindingCommand(SchemaView sv) :
             base(sv)
         {
-
+            
         }
 
         public override void CheckApplicability()
@@ -797,10 +799,24 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
     class ImportElementCommand : SchemaCommand
     {
+        public override string Description 
+        {
+            get { return "Import Graphics"; } 
+        }
+        
+        public override string Name
+        {
+            get { return "Import Graphics"; }
+        }
+        public override void CheckApplicability()
+        {
+
+                CanExecute = true;
+        }
         public ImportElementCommand(SchemaView sv)
             : base(sv)
         {
-
+            Priority = (int)CommandManager.Priorities.FileCommands;
         }
         public override void Execute()
         {
@@ -811,17 +827,19 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             fd.FilterIndex = 0;
             fd.RestoreDirectory = true;
 
-            if (fd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-                return;
-            //   return ImportFile(fd.FileName);
+            if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                ImportFile(fd.FileName);
+          
         }
-        /*bool ImportFile(String filename)
+        bool ImportFile(String filename)
          {
              if (filename.Contains("xaml"))
              {
                  XmlReader xmlReader = XmlReader.Create(filename);
-                 Object obj = XamlReader.Load(xmlReader);
-                 Schema.MainCanvas.Children.Add(obj as System.Windows.UIElement);
+                 UIElement obj = XamlReader.Load(xmlReader) as UIElement;
+                 Canvas.SetTop(obj, 0);
+                 Canvas.SetLeft(obj, 0);
+                 schemaView.MainCanvas.Children.Add(obj);
              }
              else if (filename.Contains("svg"))
              {
@@ -834,7 +852,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
                  {
                      reader.MoveToContent();
                      XslCompiledTransform xslt = new XslCompiledTransform(true);
-                     xslt.Load("resources\\svg2xaml.xsl", new XsltSettings(true, true), null);
+                        xslt.Load("resources\\svg2xaml.xsl", new XsltSettings(true, true), null);
 
                      //XmlReader.Create(new StringReader (StringResources.svg2xaml))
 
@@ -851,8 +869,10 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
                      v.Child = obj;
                      v.Width = 640;
                      v.Height = 480;
+                     Canvas.SetTop(v, 0);
+                     Canvas.SetLeft(v, 0);
                      v.Stretch = System.Windows.Media.Stretch.Fill;
-                     Schema.MainCanvas.Children.Add(v);
+                     schemaView.MainCanvas.Children.Add(v);
                      reader.Close();
 
                  }
@@ -868,7 +888,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
              }
              return true;
-         }*/
+         }
     }
 }
 
