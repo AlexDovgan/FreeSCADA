@@ -127,7 +127,7 @@
     <Compile Include="SchemaEditor\PropertiesUtils\CommonBindingDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SchemaEditor\PropertiesUtils\CommonBindingDialog.Designer.cs">
+    <Compile Include="SchemaEditor\PropertiesUtils\CommonBindingDialog.designer.cs">
       <DependentUpon>CommonBindingDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ContentEditorDialog.cs">

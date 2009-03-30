@@ -155,11 +155,18 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 {
 
                     isSelectionMoved = true;
+                    
                     movePos = GridManager.GetMousePos();
                     System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.SizeAll;
                     moveUndoInfo = true;
                     if (!selManeger.SelectedObjects.Contains(el))
                         selManeger.SelectObject(el);
+                    foreach (UIElement elm in selManeger.SelectedObjects)
+                    {
+                        UndoRedo.BasicUndoBuffer ub = UndoRedo.UndoRedoManager.GetUndoBufferFor(elm);
+                        ub.AddCommand(new UndoRedo.ModifyGraphicsObject(elm));
+                    }
+            
                 }
                 else
                 {
