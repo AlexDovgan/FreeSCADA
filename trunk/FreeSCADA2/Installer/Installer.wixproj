@@ -87,6 +87,11 @@
       <Project>{047eed80-a3c6-4a7f-bb4c-e4a64f96b210}</Project>
       <Private>True</Private>
     </ProjectReference>
+    <ProjectReference Include="..\VisualControls.FS2EasyControls\VisualControls.FS2EasyControls.csproj">
+      <Name>VisualControls.FS2EasyControls</Name>
+      <Project>{1c653b7c-cbed-4099-9790-e48b17f49c1b}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixNetFxExtension">

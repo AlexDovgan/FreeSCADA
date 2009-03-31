@@ -3,7 +3,7 @@
 	<Product Id="{A0692C53-185D-4d97-BF57-6F6AD70D96F1}"
 	         Name="FreeSCADA 2"
 	         Language="1033"
-	         Version="2.0.0.6"
+	         Version="2.0.0.7"
 	         Manufacturer="FreeSCADA Project [http://free-scada.sourceforge.net]"
 	         UpgradeCode="{3E3F16AD-E81B-482a-968A-77EAD18BFB8E}">
 		
@@ -55,6 +55,8 @@
             <File Name="microsoft.scripting.core.dll" Source="..\3rdParty\IronPython\microsoft.scripting.core.dll" Vital="yes"/>
             <File Name="microsoft.scripting.dll" Source="..\3rdParty\IronPython\microsoft.scripting.dll" Vital="yes"/>
             <File Name="microsoft.scripting.extensionattribute.dll" Source="..\3rdParty\IronPython\microsoft.scripting.extensionattribute.dll" Vital="yes"/>
+
+            <File Name="puzzle.syntaxbox.net3.5.dll" Source="..\3rdParty\SyntaxBox\puzzle.syntaxbox.net3.5.dll" Vital="yes"/>
 					</Component>
 					
 					<Directory Id="SQLite_root" Name="SQLite">
@@ -86,6 +88,7 @@
 							<File Name="weifenluo.dockpanel.txt" Source="..\3rdParty\DockPanel\license.txt"/>
 							<File Name="sourcegrid.txt" Source="..\3rdParty\SourceGrid4_11\sourcegrid.license.txt"/>
               <File Name="IronPython.rtf" Source="..\3rdParty\IronPython\license.rtf"/>
+              <File Name="puzzle.syntaxbox.txt" Source="..\3rdParty\SyntaxBox\license.txt"/>
 						</Component>
 					</Directory>
 					
@@ -118,7 +121,11 @@
 					<Component Id="CommTimersPlugin" Guid="{90E9C329-2012-48d0-AB48-1F7FBFFA694C}">
 						<File Name="$(var.Communication.Timers.TargetFileName)" Source="$(var.Communication.Timers.TargetPath)"/>
 					</Component>
-					
+
+          <Component Id="VisualControlsFS2EasyControls" Guid="{811A934A-DC24-4970-A3FF-63AA67438FAC}">
+            <File Name="$(var.VisualControls.FS2EasyControls.TargetFileName)" Source="$(var.VisualControls.FS2EasyControls.TargetPath)" KeyPath="yes"/>
+          </Component>
+          
 					<Directory Id="SamplesDir" Name="Samples">
 						<Component Id="Samples" Guid="{7F40F8DD-969A-453e-BB60-33CB249A6050}">
 							<File Name="lion.svg" Source="..\Samples\lion.svg"/>
@@ -126,6 +133,11 @@
 							<File Name="tiger.svg" Source="..\Samples\tiger.svg"/>
 							<File Name="bouncing_ball.fs2" Source="..\Samples\bouncing_ball.fs2"/>
               <File Name="coffeemachine.fs2" Source="..\Samples\coffeemachine.fs2"/>
+              <File Name="simple_script_1.fs2" Source="..\Samples\simple_script_1.fs2"/>
+              <File Name="simple_script_2.fs2" Source="..\Samples\simple_script_2.fs2"/>
+              <File Name="simple_script_3.fs2" Source="..\Samples\simple_script_3.fs2"/>
+              <File Name="simple_script_4.fs2" Source="..\Samples\simple_script_4.fs2"/>
+              <File Name="simple_script_5 (open schema).fs2" Source="..\Samples\simple_script_5 (open schema).fs2"/>
 						</Component>
 					</Directory>
 					
@@ -188,6 +200,13 @@
 					<ComponentRef Id="CommTimersPlugin" />
 				</Feature>
 			</Feature>
+
+      <Feature Id="VisualPluginsFeature" Title="Visual plugins" Level="1" AllowAdvertise="no" Description="A set of advanced controls for schema creation.">
+        <Feature Id="FS2EasyControlsFeature" Title="Easy controls" Level="1" AllowAdvertise="no" Description="A few simple visual elements">
+          <ComponentRef Id="VisualControlsFS2EasyControls" />
+        </Feature>
+      </Feature>
+      
 		</Feature>
 		
 		<UIRef Id="WixUI_FeatureTree" />

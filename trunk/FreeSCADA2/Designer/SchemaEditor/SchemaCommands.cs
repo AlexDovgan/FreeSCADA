@@ -816,7 +816,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public ImportElementCommand(SchemaView sv)
             : base(sv)
         {
-            Priority = (int)CommandManager.Priorities.FileCommands;
+            Priority = (int)CommandManager.Priorities.EditCommands;
         }
         public override void Execute()
         {

@@ -29,7 +29,13 @@ namespace FreeSCADA.Designer
 
 			MRUManager mruManager = new MRUManager(mRU1ToolStripMenuItem, toolStripSeparator2);
 			windowManager = new WindowManager(dockPanel, mruManager);
-			
+
+			Env.Current.Project.ProjectLoaded += new EventHandler(OnProjectLoaded);
+			UpdateCaptionAndCommands();
+		}
+
+		void OnProjectLoaded(object sender, EventArgs e)
+		{
 			UpdateCaptionAndCommands();
 		}
 
