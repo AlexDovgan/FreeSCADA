@@ -76,14 +76,17 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
         /// <param name="e"></param>
 		public override void PaintValue(System.Drawing.Design.PaintValueEventArgs e)
 		{
-            System.Windows.Media.SolidColorBrush b = (System.Windows.Media.SolidColorBrush)e.Value;
-            Color c = Color.FromArgb(
-                    b.Color.A,
-                    b.Color.R,
-                    b.Color.G,
-                    b.Color.B);
-            e.Graphics.FillRectangle(new SolidBrush(c), e.Bounds);
-           
+            if (e.Value == null) return;
+            if (e.Value is System.Windows.Media.SolidColorBrush)
+            {
+                System.Windows.Media.SolidColorBrush b = (System.Windows.Media.SolidColorBrush)e.Value;
+                Color c = Color.FromArgb(
+                        b.Color.A,
+                        b.Color.R,
+                        b.Color.G,
+                        b.Color.B);
+                e.Graphics.FillRectangle(new SolidBrush(c), e.Bounds);
+            }
 		}
 
 
