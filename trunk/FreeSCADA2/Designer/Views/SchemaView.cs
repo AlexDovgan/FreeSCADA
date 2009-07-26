@@ -414,9 +414,11 @@ namespace FreeSCADA.Designer.Views
 
         public override bool LoadDocument(string name)
         {
+			System.Windows.Controls.Canvas canvas = SchemaDocument.LoadSchema(name);
+			if(canvas == null)
+				return false;
 
-            if ((MainCanvas = SchemaDocument.LoadSchema(name)) == null)
-                return false;
+			MainCanvas = canvas;
             DocumentName = name;
             MainCanvas.Tag = this;
             return true;
@@ -667,25 +669,32 @@ namespace FreeSCADA.Designer.Views
         {
             if (XamlView.Visible)
             {
-                using (MemoryStream stream = new MemoryStream(this.XamlView.Text.Length))
-                {
-                    using (StreamWriter sw = new StreamWriter(stream))
-                    {
-                        sw.Write(this.XamlView.Text);
-                        sw.Flush();
-                        stream.Seek(0, SeekOrigin.Begin);
-                        System.Windows.Controls.Canvas canvas = XamlReader.Load(stream) as System.Windows.Controls.Canvas;
-                        CurrentTool = null;
-                        MainCanvas.Children.Clear();
-                        while (canvas.Children.Count > 0)
-                        {
-                            UIElement el = canvas.Children[0];
-                            canvas.Children.Remove(canvas.Children[0]); ;
-                            MainCanvas.Children.Add(el);
-                        }
-                        CurrentTool = defaultTool;
-                    }
-                }
+				try
+				{
+					using (MemoryStream stream = new MemoryStream(this.XamlView.Text.Length))
+					{
+						using (StreamWriter sw = new StreamWriter(stream))
+						{
+							sw.Write(this.XamlView.Text);
+							sw.Flush();
+							stream.Seek(0, SeekOrigin.Begin);
+							System.Windows.Controls.Canvas canvas = XamlReader.Load(stream) as System.Windows.Controls.Canvas;
+							CurrentTool = null;
+							MainCanvas.Children.Clear();
+							while (canvas.Children.Count > 0)
+							{
+								UIElement el = canvas.Children[0];
+								canvas.Children.Remove(canvas.Children[0]); ;
+								MainCanvas.Children.Add(el);
+							}
+							CurrentTool = defaultTool;
+						}
+					}
+				}
+				catch(Exception e)
+				{
+					Env.Current.Logger.LogError(string.Format("Cannot update Canvas using entered XAML code: {0}", e.Message));
+				}
             }
         }
 

@@ -28,17 +28,23 @@ namespace FreeSCADA.Common.Schema
             using (Stream ms = Env.Current.Project.GetData("Schemas/" + schemaName + "/xaml"))
             using (XmlReader xmlReader = XmlReader.Create(ms))
             {
+				System.Globalization.CultureInfo originalCulture = System.Windows.Forms.Application.CurrentCulture;
                 System.Windows.Forms.Application.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-                Object obj = XamlReader.Load(xmlReader);
-                if (obj is Canvas)
-                {
-                    Canvas c = obj as Canvas;
-
-                    
-                    return c;
-                }
-                else
-                    return null;
+				try
+				{
+					Object obj = XamlReader.Load(xmlReader);
+					System.Windows.Forms.Application.CurrentCulture = originalCulture;
+					if (obj is Canvas)
+						return obj as Canvas;
+					else
+						return null;
+				}
+				catch (Exception e)
+				{
+					System.Windows.Forms.Application.CurrentCulture = originalCulture;
+					Env.Current.Logger.LogError(string.Format("Cannot load schema: {0}", e.Message));
+					return null;
+				}				
             }
 
         }
