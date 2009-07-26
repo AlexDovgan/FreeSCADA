@@ -66,9 +66,12 @@ namespace FreeSCADA.RunTime.Views
 
 		public bool LoadDocument(string name)
 		{
-			
-			if ((MainCanvas = SchemaDocument.LoadSchema(name)) == null)
+
+			System.Windows.Controls.Canvas canvas = SchemaDocument.LoadSchema(name);
+			if (canvas == null)
 				return false;
+
+			MainCanvas = canvas;
             DocumentName = name;
 			//schema.LinkActions();
 			return true;
