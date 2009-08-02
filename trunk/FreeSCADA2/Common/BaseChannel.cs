@@ -176,8 +176,18 @@ namespace FreeSCADA.Common
                 OnPropertyChanged("Status");
 				OnPropertyChanged("StatusFlags");
             }
-            if (ValueChanged != null)
-                ValueChanged(this, new EventArgs());
+
+			if (ValueChanged != null)
+			{
+				try
+				{
+					ValueChanged(this, new EventArgs());
+				}
+				catch (Exception e)
+				{
+					Env.Current.Logger.LogWarning(string.Format("Fail to update some of '{0}' subscribers: {1}", Name, e.Message));
+				}
+			}
         }
 
         protected void InternalSetValue(object value, DateTime externalTime, ChannelStatusFlags status)

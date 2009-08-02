@@ -21,16 +21,19 @@ namespace FreeSCADA.Common
 
 		public Commands(MenuStrip menu, ToolStrip toolbar)
 		{
-			globalContext = new BaseCommandContext(menu, toolbar);
+			if (menu != null && toolbar != null)
+			{
+				globalContext = new BaseCommandContext(menu, toolbar);
 
-			ToolStrip communicationMenu = GetGroupItem(menu, StringResources.CommunicationCommandGroupName);
-			communicationContext = new BaseCommandContext(communicationMenu, null);
+				ToolStrip communicationMenu = GetGroupItem(menu, StringResources.CommunicationCommandGroupName);
+				communicationContext = new BaseCommandContext(communicationMenu, null);
 
-            ToolStrip visualControlsMenu = GetGroupItem(menu, "User Controls");
-            visualControlsContext = new BaseCommandContext(visualControlsMenu, null);
+				ToolStrip visualControlsMenu = GetGroupItem(menu, "User Controls");
+				visualControlsContext = new BaseCommandContext(visualControlsMenu, null);
 
-            ToolStrip projectMenu = GetGroupItem(menu, StringResources.ProjectCommandGroupName);
-			projectContext = new BaseCommandContext(projectMenu, null);
+				ToolStrip projectMenu = GetGroupItem(menu, StringResources.ProjectCommandGroupName);
+				projectContext = new BaseCommandContext(projectMenu, null);
+			}
 		}
 
 		public void AddCommand(ICommandContext context, ICommand cmd)
