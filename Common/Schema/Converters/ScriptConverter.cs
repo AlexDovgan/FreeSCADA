@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows;
 using System.Windows.Data;
-using Microsoft.Scripting.Hosting;
 using IronPython.Hosting;
+using Microsoft.Scripting.Hosting;
 
 namespace FreeSCADA.Common.Schema
 {

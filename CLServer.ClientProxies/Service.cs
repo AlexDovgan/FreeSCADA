@@ -10,10 +10,9 @@
 
 namespace FreeSCADA.CLServer
 {
-    using System.Runtime.Serialization;
-    
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
+
+
+	[System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "3.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ChannelInfo", Namespace="http://schemas.datacontract.org/2004/07/FreeSCADA.CLServer")]
     public partial class ChannelInfo : object, System.Runtime.Serialization.IExtensibleDataObject
@@ -177,7 +176,7 @@ public interface IDataRetrieverCallback
 {
     
     [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IDataRetriever/ValueChanged")]
-    void ValueChanged(string channelId, string value);
+    void ValueChanged(string channelId, string value, System.DateTime modifyTime, string status);
 }
 
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]

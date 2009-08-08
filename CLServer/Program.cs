@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ServiceModel;
-using System.ServiceModel.Web;
 using System.ServiceModel.Description;
 using FreeSCADA.Common;
 
@@ -35,7 +31,6 @@ namespace FreeSCADA.CLServer
 			CommunationPlugs plugs = Env.Current.CommunicationPlugins;
 			if (plugs.Connect() == false)
 			{
-				Console.WriteLine("Cannot connect to communication plugins.");
 				Env.Deinitialize();
 				return -1;
 			}
@@ -55,6 +50,7 @@ namespace FreeSCADA.CLServer
 				Console.WriteLine("Server address {0}", string.Format("http://localhost:{0}/", options.Port));
                 Console.WriteLine("Press <ENTER> to terminate");
                 Console.ReadLine();
+				Console.WriteLine("Terminating. Please wait...");
 
                 host.Close();
             }
@@ -66,6 +62,7 @@ namespace FreeSCADA.CLServer
 
 			plugs.Disconnect();
 			Env.Deinitialize();
+
 			return 0;
         }
 

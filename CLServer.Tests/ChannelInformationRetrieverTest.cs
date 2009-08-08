@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ServiceModel;
 using System.IO;
-using NUnit.Framework;
+using System.ServiceModel;
 using FreeSCADA.CLServer;
+using NUnit.Framework;
 
 namespace CLServer.Tests
 {
