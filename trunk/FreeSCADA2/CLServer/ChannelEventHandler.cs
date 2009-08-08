@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ServiceModel;
-using FreeSCADA.Common;
 using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.CLServer
@@ -42,7 +38,7 @@ namespace FreeSCADA.CLServer
 				IChannel channel = (IChannel)sender;
 				try
 				{
-					callback.ValueChanged(channel.FullId, channel.Value.ToString());
+					callback.ValueChanged(channel.FullId, channel.Value.ToString(), channel.ModifyTime, channel.Status);
 				}
 				catch (Exception)
 				{

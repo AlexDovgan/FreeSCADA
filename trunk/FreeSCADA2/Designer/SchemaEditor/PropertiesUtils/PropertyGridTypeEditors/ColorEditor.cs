@@ -1,10 +1,7 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.Drawing;
 using System.Drawing.Design;
-using System.Drawing;
 using System.Windows;
 using System.Windows.Forms.Design;
-using FreeSCADA.Common.Schema;
 
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditors

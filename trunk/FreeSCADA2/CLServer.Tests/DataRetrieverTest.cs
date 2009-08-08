@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ServiceModel;
 using System.IO;
+using System.ServiceModel;
 using NUnit.Framework;
-using FreeSCADA.CLServer;
 
 namespace CLServer.Tests
 {
@@ -52,8 +49,8 @@ namespace CLServer.Tests
 	{
 		public List<string> channelIds = new List<string>();
 		public List<string> values = new List<string>();
-		
-		public void ValueChanged(string channelId, string value)
+
+		public void ValueChanged(string channelId, string value, DateTime modifyTime, string status)
 		{
 			channelIds.Add(channelId);
 			values.Add(value);
