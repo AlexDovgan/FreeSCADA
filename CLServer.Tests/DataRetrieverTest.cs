@@ -23,6 +23,7 @@ namespace CLServer.Tests
 			callback = new DataUpdatedCallback();
 			EndpointAddress epAddress = new EndpointAddress(server.BaseAddress + "DataRetriever");
 			client = new DataRetrieverClient(new InstanceContext(callback), new WSDualHttpBinding(WSDualHttpSecurityMode.None), epAddress);
+			client.Open();
 		}
 		[TearDown]
 		public void DeInit()
@@ -41,6 +42,35 @@ namespace CLServer.Tests
 
 			Assert.IsNotEmpty(callback.channelIds);
 			Assert.IsNotEmpty(callback.states);
+		}
+
+		[Test]
+		public void StressTest()
+		{
+			client.SetChannelValue("data_simulator_plug.delta", "30");
+			client.RegisterCallback("data_simulator_plug.ball_position");
+
+			const int ClientCount = 1000;
+			DataUpdatedCallback[] callbacks = new DataUpdatedCallback[ClientCount];
+			DataRetrieverClient[] clients = new DataRetrieverClient[ClientCount];
+
+			for (int i = 0; i < ClientCount; i++)
+			{
+				callbacks[i] = new DataUpdatedCallback();
+				EndpointAddress epAddress = new EndpointAddress(server.BaseAddress + "DataRetriever");
+				clients[i] = new DataRetrieverClient(new InstanceContext(callbacks[i]), new WSDualHttpBinding(WSDualHttpSecurityMode.None), epAddress);
+				clients[i].RegisterCallback("data_simulator_plug.ball_position");
+			}
+		
+			System.Threading.Thread.Sleep(10000);
+
+			for (int i = 0; i < ClientCount; i++)
+			{
+				clients[i].Abort();
+
+				Assert.IsNotEmpty(callbacks[i].channelIds);
+				Assert.IsNotEmpty(callbacks[i].states);
+			}
 		}
 	}
 

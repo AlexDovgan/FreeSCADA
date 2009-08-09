@@ -26,6 +26,7 @@ namespace FreeSCADA.CLServer
 				return -1;
 			}
 
+			Console.Write("Initializing communication plugins... ");
 			Env.Initialize(null, null, null, FreeSCADA.Interfaces.EnvironmentMode.Runtime);
 			Env.Current.Project.Load(options.ProjectFile);
 			CommunationPlugs plugs = Env.Current.CommunicationPlugins;
@@ -34,6 +35,7 @@ namespace FreeSCADA.CLServer
 				Env.Deinitialize();
 				return -1;
 			}
+			Console.WriteLine("Done.");
 
 			Uri baseAddress = new Uri(string.Format("http://localhost:{0}/", options.Port));
 			ServiceHost host = new ServiceHost(typeof(Service), baseAddress);
@@ -45,6 +47,12 @@ namespace FreeSCADA.CLServer
 				ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
 				smb.HttpGetEnabled = true;
 				host.Description.Behaviors.Add(smb);
+
+				ServiceThrottlingBehavior throttlingBehavior = new ServiceThrottlingBehavior();
+				throttlingBehavior.MaxConcurrentCalls = Int32.MaxValue;
+				throttlingBehavior.MaxConcurrentInstances = Int32.MaxValue;
+				throttlingBehavior.MaxConcurrentSessions = Int32.MaxValue;
+				host.Description.Behaviors.Add(throttlingBehavior);
 
 				host.Authorization.PrincipalPermissionMode = PrincipalPermissionMode.None;
 				host.Open();

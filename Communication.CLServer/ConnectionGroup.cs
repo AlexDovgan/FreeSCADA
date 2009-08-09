@@ -33,7 +33,7 @@ namespace FreeSCADA.Communication.CLServer
 		public void Dispose()
 		{
 			if (client != null && client.State == CommunicationState.Opened)
-				client.Close();
+				client.Abort();
 		}
 
 		public void ValueChanged(string channelId, FreeSCADA.CLServer.ChannelState state)
