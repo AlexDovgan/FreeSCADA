@@ -22,7 +22,7 @@ namespace CLServer.Tests
 
 			callback = new DataUpdatedCallback();
 			EndpointAddress epAddress = new EndpointAddress(server.BaseAddress + "DataRetriever");
-			client = new DataRetrieverClient(new InstanceContext(callback), new WSDualHttpBinding(), epAddress);
+			client = new DataRetrieverClient(new InstanceContext(callback), new WSDualHttpBinding(WSDualHttpSecurityMode.None), epAddress);
 		}
 		[TearDown]
 		public void DeInit()
@@ -40,7 +40,7 @@ namespace CLServer.Tests
 			System.Threading.Thread.Sleep(5000);
 
 			Assert.IsNotEmpty(callback.channelIds);
-			Assert.IsNotEmpty(callback.values);
+			Assert.IsNotEmpty(callback.states);
 		}
 	}
 
@@ -48,12 +48,12 @@ namespace CLServer.Tests
 	class DataUpdatedCallback : IDataRetrieverCallback
 	{
 		public List<string> channelIds = new List<string>();
-		public List<string> values = new List<string>();
+		public List<FreeSCADA.CLServer.ChannelState> states = new List<FreeSCADA.CLServer.ChannelState>();
 
-		public void ValueChanged(string channelId, string value, DateTime modifyTime, string status)
+		public void ValueChanged(string channelId, FreeSCADA.CLServer.ChannelState state)
 		{
 			channelIds.Add(channelId);
-			values.Add(value);
+			states.Add(state);
 		}
 	}
 }

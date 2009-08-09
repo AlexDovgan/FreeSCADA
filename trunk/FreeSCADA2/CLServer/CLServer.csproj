@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="ChannelEventHandler.cs" />
     <Compile Include="ChannelInfo.cs" />
+    <Compile Include="ChannelState.cs" />
     <Compile Include="IDataRetriever.cs" />
     <Compile Include="IDataUpdatedCallback.cs" />
     <Compile Include="IChannelInformationRetriever.cs" />

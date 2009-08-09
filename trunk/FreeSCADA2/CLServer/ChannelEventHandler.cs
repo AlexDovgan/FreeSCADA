@@ -36,9 +36,29 @@ namespace FreeSCADA.CLServer
 			if (callback != null)
 			{
 				IChannel channel = (IChannel)sender;
+				ChannelState state = new ChannelState();
+				state.ModifyTime = channel.ModifyTime;
+				switch (channel.StatusFlags)
+				{
+					case FreeSCADA.Interfaces.ChannelStatusFlags.Bad:
+						state.Status = ChannelStatusFlags.Bad;
+						break;
+					case FreeSCADA.Interfaces.ChannelStatusFlags.Good:
+						state.Status = ChannelStatusFlags.Good;
+						break;
+					case FreeSCADA.Interfaces.ChannelStatusFlags.NotUsed:
+						state.Status = ChannelStatusFlags.NotUsed;
+						break;
+					default:
+						state.Status = ChannelStatusFlags.Unknown;
+						break;
+				}
+				state.Type = channel.Type.FullName;
+				state.Value = channel.Value.ToString();
+
 				try
 				{
-					callback.ValueChanged(channel.FullId, channel.Value.ToString(), channel.ModifyTime, channel.Status);
+					callback.ValueChanged(channel.FullId, state);
 				}
 				catch (Exception)
 				{

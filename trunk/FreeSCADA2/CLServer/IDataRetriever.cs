@@ -10,5 +10,8 @@ namespace FreeSCADA.CLServer
 
 		[OperationContract(IsOneWay = true)]
 		void SetChannelValue(string channelId, string value);
+
+		[OperationContract]
+		ChannelState GetChannelState(string channelId);
 	}	
 }

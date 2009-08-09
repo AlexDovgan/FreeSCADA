@@ -15,6 +15,7 @@ namespace FreeSCADA.Communication.CLServer
 			public string server;
 			public int port;
 			public string channelFullId;
+			public Type type;
 		}
 		List<RemoteChannelInfo> channels = new List<RemoteChannelInfo>();
 
@@ -41,7 +42,7 @@ namespace FreeSCADA.Communication.CLServer
 			{
 				statusTextBox.Text += "Connecting to server...\r\n";
 				EndpointAddress epAddress = new EndpointAddress(serverAddress);
-				client = new ChannelInformationRetrieverClient(new WSDualHttpBinding(), epAddress);
+				client = new ChannelInformationRetrieverClient(new WSDualHttpBinding(WSDualHttpSecurityMode.None), epAddress);
 				statusTextBox.Text += "Done\r\n";
 
 				statusTextBox.Text += "Getting channel data...\r\n";
@@ -87,6 +88,7 @@ namespace FreeSCADA.Communication.CLServer
 				channelInfo.channelFullId = channel.FullId;
 				channelInfo.port = int.Parse(portTextBox.Text);
 				channelInfo.server = localServerButton.Checked ? "localhost" : serverTextBox.Text;
+				channelInfo.type = Type.GetType(channel.Type);
 				channelNode.Tag = channelInfo;
 			}
 		}

@@ -10,9 +10,10 @@
 
 namespace FreeSCADA.CLServer
 {
-
-
-	[System.Diagnostics.DebuggerStepThroughAttribute()]
+    using System.Runtime.Serialization;
+    
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "3.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ChannelInfo", Namespace="http://schemas.datacontract.org/2004/07/FreeSCADA.CLServer")]
     public partial class ChannelInfo : object, System.Runtime.Serialization.IExtensibleDataObject
@@ -107,6 +108,105 @@ namespace FreeSCADA.CLServer
             }
         }
     }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "3.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ChannelState", Namespace="http://schemas.datacontract.org/2004/07/FreeSCADA.CLServer")]
+    public partial class ChannelState : object, System.Runtime.Serialization.IExtensibleDataObject
+    {
+        
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        private System.DateTime ModifyTimeField;
+        
+        private FreeSCADA.CLServer.ChannelStatusFlags StatusField;
+        
+        private string TypeField;
+        
+        private string ValueField;
+        
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
+        {
+            get
+            {
+                return this.extensionDataField;
+            }
+            set
+            {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime ModifyTime
+        {
+            get
+            {
+                return this.ModifyTimeField;
+            }
+            set
+            {
+                this.ModifyTimeField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public FreeSCADA.CLServer.ChannelStatusFlags Status
+        {
+            get
+            {
+                return this.StatusField;
+            }
+            set
+            {
+                this.StatusField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Type
+        {
+            get
+            {
+                return this.TypeField;
+            }
+            set
+            {
+                this.TypeField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Value
+        {
+            get
+            {
+                return this.ValueField;
+            }
+            set
+            {
+                this.ValueField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "3.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ChannelStatusFlags", Namespace="http://schemas.datacontract.org/2004/07/FreeSCADA.CLServer")]
+    public enum ChannelStatusFlags : int
+    {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Unknown = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Good = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Bad = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NotUsed = 65535,
+    }
 }
 
 
@@ -169,6 +269,9 @@ public interface IDataRetriever
     
     [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IDataRetriever/SetChannelValue")]
     void SetChannelValue(string channelId, string value);
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDataRetriever/GetChannelState", ReplyAction="http://tempuri.org/IDataRetriever/GetChannelStateResponse")]
+    FreeSCADA.CLServer.ChannelState GetChannelState(string channelId);
 }
 
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
@@ -176,7 +279,7 @@ public interface IDataRetrieverCallback
 {
     
     [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IDataRetriever/ValueChanged")]
-    void ValueChanged(string channelId, string value, System.DateTime modifyTime, string status);
+    void ValueChanged(string channelId, FreeSCADA.CLServer.ChannelState state);
 }
 
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
@@ -222,5 +325,10 @@ public partial class DataRetrieverClient : System.ServiceModel.DuplexClientBase<
     public void SetChannelValue(string channelId, string value)
     {
         base.Channel.SetChannelValue(channelId, value);
+    }
+    
+    public FreeSCADA.CLServer.ChannelState GetChannelState(string channelId)
+    {
+        return base.Channel.GetChannelState(channelId);
     }
 }

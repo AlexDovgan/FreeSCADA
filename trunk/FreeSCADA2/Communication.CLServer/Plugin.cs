@@ -4,6 +4,7 @@ using System.Xml;
 using FreeSCADA.Interfaces;
 using FreeSCADA.Interfaces.Plugins;
 
+
 namespace FreeSCADA.Communication.CLServer
 {
 	public class Plugin: ICommunicationPlug

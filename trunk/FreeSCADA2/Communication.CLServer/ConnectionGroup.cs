@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using System.Threading;
 using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Communication.CLServer
@@ -16,7 +17,7 @@ namespace FreeSCADA.Communication.CLServer
 				this.channels[channel.ServerFullId] = channel;
 
 			EndpointAddress epAddress = new EndpointAddress(string.Format("http://{0}:{1}/DataRetriever", server, port));
-			client = new DataRetrieverClient(new InstanceContext(this), new WSDualHttpBinding(), epAddress);
+			client = new DataRetrieverClient(new InstanceContext(this), new WSDualHttpBinding(WSDualHttpSecurityMode.None), epAddress);
 			if (client != null)
 				client.Open();
 
@@ -24,6 +25,8 @@ namespace FreeSCADA.Communication.CLServer
 			{
 				foreach (RemoutingChannel channel in channels)
 					client.RegisterCallback(channel.ServerFullId);
+
+				ThreadPool.QueueUserWorkItem(new WaitCallback(RefreshChannels), channels);
 			}
 		}
 
@@ -33,19 +36,53 @@ namespace FreeSCADA.Communication.CLServer
 				client.Close();
 		}
 
-		public void ValueChanged(string channelId, string value, DateTime modifyTime, string status)
+		public void ValueChanged(string channelId, FreeSCADA.CLServer.ChannelState state)
 		{
 			if (channels.ContainsKey(channelId))
-			{
-				RemoutingChannel channel = channels[channelId];
-				object channelValue = Convert.ChangeType(value, channel.Type);
-				ChannelStatusFlags flags = ChannelStatusFlags.Unknown;
-				if(status == "Good")
-					flags = ChannelStatusFlags.Good;
-				else if(status == "Bad")
-					flags = ChannelStatusFlags.Bad;
+				UpdateChannel(state, channels[channelId]);
+		}
 
-				channel.DoUpdate(channelValue, modifyTime, flags);
+		private static void UpdateChannel(FreeSCADA.CLServer.ChannelState state, RemoutingChannel channel)
+		{
+			object channelValue = null;
+			Type valueType = Type.GetType(state.Type);
+			if (valueType != null)
+				channelValue = Convert.ChangeType(state.Value, valueType);
+			else
+				channelValue = Convert.ChangeType(state.Value, channel.Type);
+
+			ChannelStatusFlags flags = ChannelStatusFlags.Unknown;
+			switch (state.Status)
+			{
+				case FreeSCADA.CLServer.ChannelStatusFlags.Bad:
+					flags = ChannelStatusFlags.Bad;
+					break;
+				case FreeSCADA.CLServer.ChannelStatusFlags.Good:
+					flags = ChannelStatusFlags.Good;
+					break;
+				case FreeSCADA.CLServer.ChannelStatusFlags.NotUsed:
+					flags = ChannelStatusFlags.NotUsed;
+					break;
+			}
+
+			channel.DoUpdate(channelValue, state.ModifyTime, flags);
+		}
+
+		private void RefreshChannels(object obj)
+		{
+			if (client == null || client.State != CommunicationState.Opened)
+				return;
+
+			List<RemoutingChannel> channelsToUpdate = obj as List<RemoutingChannel>;
+			foreach (RemoutingChannel ch in channelsToUpdate)
+			{
+				try
+				{
+					UpdateChannel(client.GetChannelState(ch.ServerFullId), ch);
+				}
+				catch(Exception)
+				{
+				}
 			}
 		}
 	}

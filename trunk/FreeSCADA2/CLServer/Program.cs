@@ -39,12 +39,14 @@ namespace FreeSCADA.CLServer
 			ServiceHost host = new ServiceHost(typeof(Service), baseAddress);
             try
             {
-				host.AddServiceEndpoint(typeof(IChannelInformationRetriever), new WSDualHttpBinding(), "ChannelInformationRetriever");
-				host.AddServiceEndpoint(typeof(IDataRetriever), new WSDualHttpBinding(), "DataRetriever");
+				host.AddServiceEndpoint(typeof(IChannelInformationRetriever), new WSDualHttpBinding(WSDualHttpSecurityMode.None), "ChannelInformationRetriever");
+				host.AddServiceEndpoint(typeof(IDataRetriever), new WSDualHttpBinding(WSDualHttpSecurityMode.None), "DataRetriever");
 
 				ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
 				smb.HttpGetEnabled = true;
 				host.Description.Behaviors.Add(smb);
+
+				host.Authorization.PrincipalPermissionMode = PrincipalPermissionMode.None;
 				host.Open();
 
 				Console.WriteLine("Server address {0}", string.Format("http://localhost:{0}/", options.Port));
