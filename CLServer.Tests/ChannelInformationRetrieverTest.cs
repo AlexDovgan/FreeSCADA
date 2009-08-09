@@ -19,7 +19,7 @@ namespace CLServer.Tests
 			projectPath = Path.GetFullPath(projectPath);
 			Assert.IsTrue(server.Start(projectPath));
 			EndpointAddress epAddress = new EndpointAddress(server.BaseAddress + "ChannelInformationRetriever");
-			client = new ChannelInformationRetrieverClient(new WSDualHttpBinding(), epAddress);			
+			client = new ChannelInformationRetrieverClient(new WSDualHttpBinding(WSDualHttpSecurityMode.None), epAddress);			
 		}
 		[TearDown]
 		public void DeInit()

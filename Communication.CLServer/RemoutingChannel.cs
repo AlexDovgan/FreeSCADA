@@ -9,8 +9,8 @@ namespace FreeSCADA.Communication.CLServer
 		string serverFullId;
 		int port;
 
-		public RemoutingChannel(string name, Plugin plugin, string server, string fullId, int port)
-			: base(name, false, plugin, typeof(object))
+		public RemoutingChannel(string name, Plugin plugin, string server, string fullId, int port, Type type)
+			: base(name, false, plugin, type)
 		{
 			this.server = server;
 			this.serverFullId = fullId;

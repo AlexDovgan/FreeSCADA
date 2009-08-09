@@ -41,11 +41,11 @@ namespace FreeSCADA.Communication.CLServer
 			foreach (ImportChannelsForm.RemoteChannelInfo ch in form.Channels)
 			{
 				string variableName = GetUniqueVariableName();
-				AddVariable(variableName, ch.server, ch.channelFullId, ch.port);
+				AddVariable(variableName, ch.server, ch.channelFullId, ch.port, ch.type);
 			}
 		}
 
-		private void AddVariable(string variableName, string server, string fullId, int port)
+		private void AddVariable(string variableName, string server, string fullId, int port, Type type)
 		{
 			int row = grid.RowsCount;
 			grid.RowsCount++;
@@ -54,6 +54,7 @@ namespace FreeSCADA.Communication.CLServer
 			grid[row, 1] = new SourceGrid.Cells.Cell(fullId, typeof(string));
 			grid[row, 2] = new SourceGrid.Cells.Cell(server, typeof(string));
 			grid[row, 3] = new SourceGrid.Cells.Cell(port, typeof(int));
+			grid.Rows[row].Tag = type;
 
 			grid.Selection.ResetSelection(true);
 			grid.Selection.SelectRow(row, true);
@@ -102,7 +103,7 @@ namespace FreeSCADA.Communication.CLServer
 		private void LoadChannels()
 		{
 			foreach (RemoutingChannel channel in plugin.Channels)
-				AddVariable(channel.Name, channel.Server, channel.ServerFullId, channel.Port);
+				AddVariable(channel.Name, channel.Server, channel.ServerFullId, channel.Port, channel.Type);
 		}
 
 		private void SaveChannels()
@@ -110,11 +111,16 @@ namespace FreeSCADA.Communication.CLServer
 			Interfaces.IChannel[] channels = new Interfaces.IChannel[grid.RowsCount - 1];
 			for (int i = 1; i < grid.RowsCount; i++)
 			{
+				Type type = typeof(object);
+				if (grid.Rows[i].Tag != null && grid.Rows[i].Tag is Type)
+					type = grid.Rows[i].Tag as Type;
+
 				channels[i - 1] = ChannelFactory.CreateChannel(	grid[i, 0].DisplayText,
 																plugin,
 																grid[i, 2].DisplayText,
 																grid[i, 1].DisplayText,
-																(int)grid[i, 3].Value);
+																(int)grid[i, 3].Value,
+																type);
 			}
 			plugin.Channels = channels;
 			plugin.SaveSettings();

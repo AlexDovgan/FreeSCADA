@@ -6,6 +6,6 @@ namespace FreeSCADA.CLServer
 	interface IDataUpdatedCallback
 	{
 		[OperationContract(IsOneWay = true)]
-		void ValueChanged(string channelId, string value, DateTime modifyTime, string status);
+		void ValueChanged(string channelId, ChannelState state);
 	}
 }

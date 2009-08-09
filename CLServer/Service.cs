@@ -65,5 +65,34 @@ namespace FreeSCADA.CLServer
 				channel.Value = Convert.ChangeType(value, channel.Type);
 			}
 		}
+
+		public ChannelState GetChannelState(string channelId)
+		{
+			ChannelState state = new ChannelState();
+			IChannel channel = Env.Current.CommunicationPlugins.GetChannel(channelId);
+			if (channel != null)
+			{
+				state.ModifyTime = channel.ModifyTime;
+				switch (channel.StatusFlags)
+				{
+					case FreeSCADA.Interfaces.ChannelStatusFlags.Bad:
+						state.Status = ChannelStatusFlags.Bad;
+						break;
+					case FreeSCADA.Interfaces.ChannelStatusFlags.Good:
+						state.Status = ChannelStatusFlags.Good;
+						break;
+					case FreeSCADA.Interfaces.ChannelStatusFlags.NotUsed:
+						state.Status = ChannelStatusFlags.NotUsed;
+						break;
+					default:
+						state.Status = ChannelStatusFlags.Unknown;
+						break;
+				}
+				state.Type = channel.Type.FullName;
+				state.Value = channel.Value.ToString();
+			}
+
+			return state;
+		}
 	}
 }
