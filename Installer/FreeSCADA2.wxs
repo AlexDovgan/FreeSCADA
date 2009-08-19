@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="{A0692C53-185D-4d97-BF57-6F6AD70D96F1}"
+	<Product Id="*"
 	         Name="FreeSCADA 2"
 	         Language="1033"
-	         Version="2.0.0.7"
+	         Version="2.0.0.8"
 	         Manufacturer="FreeSCADA Project [http://free-scada.sourceforge.net]"
 	         UpgradeCode="{3E3F16AD-E81B-482a-968A-77EAD18BFB8E}">
 		
@@ -13,8 +13,8 @@
 		<Condition Message="The .NET Framework 3.5 must be installed">NETFRAMEWORK35</Condition>
 		
 		<Media Id="1" Cabinet="FreeSCADA2.cab" EmbedCab="yes" />
-		
-		<Directory Id="TARGETDIR" Name="SourceDir">
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
 				<Directory Id="ProgramMenuFolder">
 					<Directory Id="ShortcutFolder" Name="FreeSCADA 2"/>
@@ -57,6 +57,9 @@
             <File Name="microsoft.scripting.extensionattribute.dll" Source="..\3rdParty\IronPython\microsoft.scripting.extensionattribute.dll" Vital="yes"/>
 
             <File Name="puzzle.syntaxbox.net3.5.dll" Source="..\3rdParty\SyntaxBox\puzzle.syntaxbox.net3.5.dll" Vital="yes"/>
+
+            <File Name="c5.dll" Source="..\3rdParty\plossum-commandline.bin\c5.dll" Vital="yes"/>
+            <File Name="plossum commandline.dll" Source="..\3rdParty\plossum-commandline.bin\plossum commandline.dll" Vital="yes"/>
 					</Component>
 					
 					<Directory Id="SQLite_root" Name="SQLite">
@@ -89,6 +92,8 @@
 							<File Name="sourcegrid.txt" Source="..\3rdParty\SourceGrid4_11\sourcegrid.license.txt"/>
               <File Name="IronPython.rtf" Source="..\3rdParty\IronPython\license.rtf"/>
               <File Name="puzzle.syntaxbox.txt" Source="..\3rdParty\SyntaxBox\license.txt"/>
+              <File Name="c5.txt" Source="..\3rdParty\plossum-commandline.bin\c5-license.txt"/>
+              <File Name="plossum commandline.txt" Source="..\3rdParty\plossum-commandline.bin\license.txt"/>
 						</Component>
 					</Directory>
 					
@@ -103,6 +108,12 @@
 							<Shortcut Id="RuntimeShortcut" Directory="ShortcutFolder" Name="Runtime" Advertise="yes"/>
 						</File>
 					</Component>
+
+          <Component Id="CLServer" Guid="{21C6F7FB-02B1-4cfc-A1A0-ED25198E5E3C}">
+            <File Name="$(var.CLServer.TargetFileName)" Source="$(var.CLServer.TargetPath)" KeyPath="yes">
+              <Shortcut Id="CLServerShortcut" Directory="ShortcutFolder" Name="CLServer" Advertise="yes"/>
+            </File>
+          </Component>
 					
 					<Component Id="CommOPCPlugin" Guid="{4B44C968-ACBB-4c7d-B203-A63B32B960CD}">
 						<File Name="$(var.Communication.OPCPlug.TargetFileName)" Source="$(var.Communication.OPCPlug.TargetPath)"/>
@@ -122,6 +133,11 @@
 						<File Name="$(var.Communication.Timers.TargetFileName)" Source="$(var.Communication.Timers.TargetPath)"/>
 					</Component>
 
+          <Component Id="CommCLServerPlugin" Guid="{3CCF7F09-8DCC-4502-BFED-6B398F97E13A}">
+            <File Name="$(var.Communication.CLServer.TargetFileName)" Source="$(var.Communication.CLServer.TargetPath)"/>
+            <File Name="$(var.CLServer.ClientProxies.TargetFileName)" Source="$(var.CLServer.ClientProxies.TargetPath)"/>
+          </Component>
+          
           <Component Id="VisualControlsFS2EasyControls" Guid="{811A934A-DC24-4970-A3FF-63AA67438FAC}">
             <File Name="$(var.VisualControls.FS2EasyControls.TargetFileName)" Source="$(var.VisualControls.FS2EasyControls.TargetPath)" KeyPath="yes"/>
           </Component>
@@ -181,6 +197,10 @@
 			<Feature Id="RuntimeFeature" Title="Runtime" Level="1" AllowAdvertise="no" Description="Install component which allows you to view and execute HMI schemas created by Designer.">
 				<ComponentRef Id="Runtime" />
 			</Feature>
+
+      <Feature Id="CLServerFeature" Title="CLServer" Level="1" AllowAdvertise="no" Description="Install component which allows you to setup command line server which retranslates data from communication plugins to clients via HTTP protocol.">
+        <ComponentRef Id="CLServer" />
+      </Feature>
 			
 			<Feature Id="SamplesFeature" Title="Samples" Level="1" AllowAdvertise="no" Description="Install few samples to start with.">
 				<ComponentRef Id="Samples" />
@@ -199,6 +219,9 @@
 				<Feature Id="CommTimersPluginFeature" Title="Timers" Level="1" AllowAdvertise="no" Description="Configurable timers which can be used as normal variables.">
 					<ComponentRef Id="CommTimersPlugin" />
 				</Feature>
+        <Feature Id="CommCLServerPluginFeature" Title="CLServer" Level="1" AllowAdvertise="no" Description="Provides remote access to FreeSCADA server.">
+          <ComponentRef Id="CommCLServerPlugin" />
+        </Feature>
 			</Feature>
 
       <Feature Id="VisualPluginsFeature" Title="Visual plugins" Level="1" AllowAdvertise="no" Description="A set of advanced controls for schema creation.">

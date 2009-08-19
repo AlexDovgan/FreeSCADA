@@ -9,6 +9,11 @@ namespace FreeSCADA.Interfaces
 
 	public interface IEnvironment
 	{
+		string Version
+		{
+			get;
+		}
+
 		ICommands Commands
 		{
 			get;

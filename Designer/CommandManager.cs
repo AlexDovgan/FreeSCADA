@@ -8,6 +8,7 @@ namespace FreeSCADA.Designer
 		static public ICommandContext viewContext;
 		static public ICommandContext fileContext;
 		static public ICommandContext documentMenuContext;
+		static public ICommandContext helpContext;
 
 		public enum Priorities
 		{
@@ -16,6 +17,9 @@ namespace FreeSCADA.Designer
 
 			ViewCommands = 100,
 			ViewCommandsEnd = 199,
+
+			HelpCommands = 200,
+			HelpCommandsEnd = 299,
 
 			EditCommands = 300,
 			EditCommandsEnd = 399

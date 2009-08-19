@@ -102,6 +102,7 @@
     <Compile Include="Dialogs\ProjectMediaDialog.Designer.cs">
       <DependentUpon>ProjectMediaDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="HelpCommands.cs" />
     <Compile Include="SchemaEditor\BindingSerializing.cs" />
     <Compile Include="SchemaEditor\EditorHelpers.cs" />
     <Compile Include="SchemaEditor\GridManager.cs" />

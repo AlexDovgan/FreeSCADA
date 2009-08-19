@@ -350,4 +350,22 @@
   <data name="UntitledScript" xml:space="preserve">
     <value>script_</value>
   </data>
+  <data name="CommandCheckForUpdatesDescription" xml:space="preserve">
+    <value>Connect to FreeSCADA web site to look for newer versions</value>
+  </data>
+  <data name="CommandCheckForUpdatesName" xml:space="preserve">
+    <value>Check for updates...</value>
+  </data>
+  <data name="CommandContextHelp" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="UpdatesHaveTheLatestVersion" xml:space="preserve">
+    <value>You have the latest version of FreeSCADA</value>
+  </data>
+  <data name="UpdatesNewVersionAvailable" xml:space="preserve">
+    <value>New version of FreeSCADA is available. Would you like to go to web site and download it?</value>
+  </data>
+  <data name="UpdatesFailToCheckForNewVersion" xml:space="preserve">
+    <value>Fail to connect to web site: {0}</value>
+  </data>
 </root>
