@@ -27,6 +27,11 @@ namespace FreeSCADA.Designer
 			CommandManager.viewContext = new BaseCommandContext(viewSubMenu.DropDown, mainToolbar);
 			CommandManager.documentContext = new BaseCommandContext(editSubMenu.DropDown, mainToolbar);
 
+			ToolStripMenuItem newItem = new ToolStripMenuItem(StringResources.CommandContextHelp);
+			mainMenu.Items.Add(newItem);
+			CommandManager.helpContext = new BaseCommandContext(newItem.DropDown, null);
+			CommandManager.helpContext.AddCommand(new CheckForUpdatesCommand());
+
 			MRUManager mruManager = new MRUManager(mRU1ToolStripMenuItem, toolStripSeparator2);
 			windowManager = new WindowManager(dockPanel, mruManager);
 

@@ -54,9 +54,24 @@
       <Project>{0BD3A946-E95E-46B7-A0B2-F89C2B03A5F9}</Project>
       <Name>Archiver</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CLServer.ClientProxies\CLServer.ClientProxies.csproj">
+      <Name>CLServer.ClientProxies</Name>
+      <Project>{391c298f-2fd8-4aa9-bb8c-9963fbd064f0}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\CLServer\CLServer.csproj">
+      <Name>CLServer</Name>
+      <Project>{6d44bc82-7856-47d6-816e-36fd4ee0cfe3}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Name>Common</Name>
       <Project>{a3d91ced-553f-4433-ad67-8706e0127d8d}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Communication.CLServer\Communication.CLServer.csproj">
+      <Name>Communication.CLServer</Name>
+      <Project>{e79e63d0-b89c-480a-9249-38afab4a650a}</Project>
       <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\Communication.MODBUSPlug\Communication.MODBUSPlug.csproj">

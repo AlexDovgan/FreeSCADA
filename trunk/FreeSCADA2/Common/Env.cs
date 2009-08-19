@@ -6,6 +6,8 @@ namespace FreeSCADA.Common
 {
 	public class Env : IEnvironment
 	{
+		const string version = "2.0.0.8";
+
 		Commands commands;
 		Control mainWindow;
         CommunationPlugs communicationPlugins;
@@ -62,6 +64,11 @@ namespace FreeSCADA.Common
 		#endregion
 
 		#region IEnvironment Members
+
+		public string Version
+		{
+			get { return version; }
+		}
 
 		public ICommands Commands
 		{
