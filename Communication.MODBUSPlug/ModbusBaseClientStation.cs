@@ -478,7 +478,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                     int v = (int)ch.Value;
                                     adr = BitConverter.GetBytes(v);
                                 }
-                                if (ch.Type == typeof(uint))     // ch.ModbusFs2InternalType == ModbusFs2InternalType.Int32)
+                                else if (ch.Type == typeof(uint))     // ch.ModbusFs2InternalType == ModbusFs2InternalType.Int32)
                                 {
                                     uint v = (uint)ch.Value;
                                     adr = BitConverter.GetBytes(v);
@@ -522,7 +522,7 @@ namespace FreeSCADA.Communication.MODBUSPlug
                                     int v = (int)ch.Value;
                                     adr = BitConverter.GetBytes(v);
                                 }
-                                if (ch.Type == typeof(uint))     // ch.ModbusFs2InternalType == ModbusFs2InternalType.Int32)
+                                else if (ch.Type == typeof(uint))     // ch.ModbusFs2InternalType == ModbusFs2InternalType.Int32)
                                 {
                                     uint v = (uint)ch.Value;
                                     adr = BitConverter.GetBytes(v);
