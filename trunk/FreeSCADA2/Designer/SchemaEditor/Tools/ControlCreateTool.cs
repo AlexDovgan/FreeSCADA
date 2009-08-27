@@ -56,7 +56,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             createdObject = (FrameworkElement)System.Activator.CreateInstance(typeof(T));
             createdObject.Opacity = 0.75;
-            if (typeof(T) == typeof(ContentControl) || typeof(T).IsSubclassOf(typeof(ContentControl)))
+            if (typeof(T) == typeof(ContentControl) || typeof(T).IsSubclassOf(typeof(ContentControl)) && (createdObject as ContentControl).Content==null)
                 (createdObject as ContentControl).Content = "Content";
 
             Canvas.SetLeft(createdObject, rect.X);

@@ -499,6 +499,24 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Two way string to value binding.
+        /// </summary>
+        internal static string StringValueBindingPanelName {
+            get {
+                return ResourceManager.GetString("StringValueBindingPanelName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TextBox Tool.
+        /// </summary>
+        internal static string TextBox {
+            get {
+                return ResourceManager.GetString("TextBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Action Edit Tool.
         /// </summary>
         internal static string ToolActionEdit {
@@ -513,6 +531,15 @@ namespace FreeSCADA.Designer {
         internal static string ToolButton {
             get {
                 return ResourceManager.GetString("ToolButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chart Tool.
+        /// </summary>
+        internal static string ToolChart {
+            get {
+                return ResourceManager.GetString("ToolChart", resourceCulture);
             }
         }
         

@@ -111,8 +111,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
                 typeof(Byte), 
                 typeof(Single),
                 typeof(Char),
-                typeof(Nullable<Boolean>) 
-
+                typeof(Nullable<Boolean>), 
+                typeof(String) 
 
             });
 			if (types.Contains(type))

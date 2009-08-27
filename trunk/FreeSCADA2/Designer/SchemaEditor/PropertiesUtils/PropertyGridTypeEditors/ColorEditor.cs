@@ -36,7 +36,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
         /// </summary>
         public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value)
 		{
-
+            /*
 			PropertiesUtils.PropertyWrapper pw;
 			if ((pw = context.PropertyDescriptor as PropertiesUtils.PropertyWrapper) == null)
 				return value;
@@ -46,7 +46,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
             pw.GetWpfObjects(out depObj, out depProp);
             if (depObj == null || depProp == null)
                 return value;
-            
+            */
 			IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
 			if (edSvc != null)
 			{

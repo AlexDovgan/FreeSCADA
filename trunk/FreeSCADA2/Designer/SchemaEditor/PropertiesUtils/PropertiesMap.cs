@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Shapes;
+using FreeSCADA.Common.Schema;
 using FreeSCADA.Common.Schema.Actions;
 using FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditors;
 
@@ -198,6 +199,11 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			RegisterProperty(typeof(TextBlock), "TextAlignment", null);
             RegisterProperty(typeof(CheckBox), "IsChecked", null);
 			RegisterProperty(typeof(CheckBox), "Content", "Text", null, "Text");
+            RegisterProperty(typeof(TextBox), "Text", null);
+            RegisterProperty(typeof(TextBox), "TextAlignment", null);
+            RegisterProperty(typeof(TimeChartControl), "ChartPeriod", null);
+            RegisterProperty(typeof(TimeChartControl), "ChartScale", null);
+            RegisterProperty(typeof(TimeChartControl), "Trends", null);
             RegisterProperty(typeof(Canvas), "GridManager.GridOn", "GridOn",null,"Grid snaping on/off");
             RegisterProperty(typeof(Canvas), "GridManager.GridDelta","GridDelta", null,"Grid step");
             RegisterProperty(typeof(Canvas), "GridManager.ShowGrid","ShowGrid" ,null,"Grid showing on/off");

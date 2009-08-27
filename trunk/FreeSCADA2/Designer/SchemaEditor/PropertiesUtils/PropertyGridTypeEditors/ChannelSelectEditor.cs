@@ -21,9 +21,9 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
         /// <returns></returns>
         public override System.Drawing.Design.UITypeEditorEditStyle GetEditStyle(System.ComponentModel.ITypeDescriptorContext context)
         {
-            PropertiesUtils.PropertyWrapper pw;
+            /*PropertiesUtils.PropertyWrapper pw;
             if (context == null)
-                return UITypeEditorEditStyle.DropDown;
+            return UITypeEditorEditStyle.DropDown;
             if ((pw = context.PropertyDescriptor as PropertiesUtils.PropertyWrapper) == null)
                 return UITypeEditorEditStyle.None;
 
@@ -31,7 +31,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
             if (pw.ControlledObject is DependencyObject)
                 return UITypeEditorEditStyle.Modal;
             else
-                return UITypeEditorEditStyle.None;
+                return UITypeEditorEditStyle.None;*/
+            return UITypeEditorEditStyle.Modal;
         }
         /// <summary>
         /// Displays the UI for value selection.
@@ -43,7 +44,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
         public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value)
         {
 
-            PropertiesUtils.PropertyWrapper pw;
+            /*PropertiesUtils.PropertyWrapper pw;
             if ((pw = context.PropertyDescriptor as PropertiesUtils.PropertyWrapper) == null)
                 return value;
 
@@ -51,7 +52,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditor
             DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(pw.ControlledProperty);
             if (depObj == null || dpd == null)
                 return value;
-            DependencyProperty depProp = dpd.DependencyProperty;
+            DependencyProperty depProp = dpd.DependencyProperty;*/
             IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
             if (edSvc != null)
             {
