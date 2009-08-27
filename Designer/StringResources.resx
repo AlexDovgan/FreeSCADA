@@ -350,6 +350,9 @@
   <data name="UntitledScript" xml:space="preserve">
     <value>script_</value>
   </data>
+  <data name="ToolChart" xml:space="preserve">
+    <value>Chart Tool</value>
+  </data>
   <data name="CommandCheckForUpdatesDescription" xml:space="preserve">
     <value>Connect to FreeSCADA web site to look for newer versions</value>
   </data>
@@ -367,5 +370,11 @@
   </data>
   <data name="UpdatesFailToCheckForNewVersion" xml:space="preserve">
     <value>Fail to connect to web site: {0}</value>
+  </data>
+  <data name="StringValueBindingPanelName" xml:space="preserve">
+    <value>Two way string to value binding</value>
+  </data>
+  <data name="TextBox" xml:space="preserve">
+    <value>TextBox Tool</value>
   </data>
 </root>

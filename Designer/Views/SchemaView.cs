@@ -159,7 +159,7 @@ namespace FreeSCADA.Designer.Views
                     activeTool.Activate();
                     activeTool.ToolFinished += activeTool_ToolFinished;
                     activeTool.ObjectCreated += activeTool_ObjectCreated;
-                    activeTool.ObjectDeleted += activeTool_ObjectDeleted;
+                    //activeTool.ObjectDeleted += activeTool_ObjectDeleted;
                     RaiseObjectSelected(new PropProxy(MainCanvas));
                     //activeTool.ObjectChanged += OnObjectChenged;
                 }
@@ -173,7 +173,7 @@ namespace FreeSCADA.Designer.Views
                     activeTool.ToolFinished -= activeTool_ToolFinished;
                     activeTool.ObjectCreated -= activeTool_ObjectCreated;
                     // activeTool.ObjectChanged -= OnObjectChenged;
-                    activeTool.ObjectDeleted -= activeTool_ObjectDeleted;
+                    //activeTool.ObjectDeleted -= activeTool_ObjectDeleted;
                     activeTool.Deactivate();
                     activeTool = null;
                 }
@@ -184,7 +184,7 @@ namespace FreeSCADA.Designer.Views
                     activeTool.ToolFinished += activeTool_ToolFinished;
                     activeTool.ObjectCreated += activeTool_ObjectCreated;
                     //activeTool.ObjectChanged += OnObjectChenged;
-                    activeTool.ObjectDeleted += activeTool_ObjectDeleted;
+                    //activeTool.ObjectDeleted += activeTool_ObjectDeleted;
                     activeTool.Activate();
                     SelectionManager.UpdateManipulator();
                 }
@@ -241,6 +241,15 @@ namespace FreeSCADA.Designer.Views
                 StringResources.ToolControlsGroupName,
                 blankBitmap,
                 typeof(ControlCreateTool<System.Windows.Controls.CheckBox>)));
+            toolsList.Add(new ToolDescriptor(StringResources.TextBox,
+                StringResources.ToolControlsGroupName,
+                blankBitmap,
+                typeof(ControlCreateTool<System.Windows.Controls.TextBox>)));
+            toolsList.Add(new ToolDescriptor(StringResources.ToolChart,
+                StringResources.ToolControlsGroupName,
+                blankBitmap,
+                typeof(ControlCreateTool<TimeChartControl>)));
+            
             //--- DYNAMIC GENERATION OF TOOLS ---//
             AssemblyName asmName = new AssemblyName("DynamicAssembly.SchemaView");
             AssemblyBuilder asmBuilder =
@@ -355,7 +364,8 @@ namespace FreeSCADA.Designer.Views
             DocumentCommands.Add(new CommandInfo(copyCommand, CommandManager.documentMenuContext));
             DocumentCommands.Add(new CommandInfo(pasteCommand, CommandManager.documentMenuContext));
             DocumentCommands.Add(new CommandInfo(bindingCommand, CommandManager.documentMenuContext));
-
+            DocumentCommands.Add(new CommandInfo(new ImportElementCommand(this), CommandManager.fileContext));
+            
 			DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
 			DocumentCommands.Add(new CommandInfo(new ImportElementCommand(this), CommandManager.documentContext));
             
@@ -544,11 +554,6 @@ namespace FreeSCADA.Designer.Views
             UpdateXamlView();
         }
 
-        void activeTool_ObjectDeleted(object sender, EventArgs e)
-        {
-            UndoBuff.AddCommand(new DeleteGraphicsObject(sender as System.Windows.UIElement));
-            UpdateXamlView();
-        }
 
         void activeTool_ToolFinished(object sender, EventArgs e)
         {
@@ -583,6 +588,7 @@ namespace FreeSCADA.Designer.Views
                 if (activeTool is SelectionTool && SelectionManager.SelectedObjects.Count > 0)
                 {
                     SchemaCommand cmd = new CutCommand(this);
+                    cmd.CheckApplicability();
                     cmd.Execute();
                     cmd.Dispose();
                 }

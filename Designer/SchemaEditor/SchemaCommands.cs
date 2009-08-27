@@ -14,7 +14,7 @@ using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.Views;
 using FreeSCADA.Interfaces;
 using FreeSCADA.Interfaces.Plugins;
-
+using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 
 namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 {
@@ -333,7 +333,8 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             copyCommand.Execute();
             foreach (UIElement el in schemaView.SelectionManager.SelectedObjects)
             {
-                schemaView.ActiveTool.NotifyObjectDeleted(el);
+                schemaView.UndoBuff.AddCommand(new DeleteGraphicsObject(el));
+                    //ActiveTool.NotifyObjectDeleted(el);
             }
 
             schemaView.SelectionManager.SelectObject(null);

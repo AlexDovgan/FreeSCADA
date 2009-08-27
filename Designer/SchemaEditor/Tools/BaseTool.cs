@@ -153,16 +153,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 ObjectCreated(obj, new EventArgs());
 
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        public void NotifyObjectDeleted(UIElement obj)
-        {
-            if (ObjectDeleted != null)
-                ObjectDeleted(obj, new EventArgs());
-
-        }
+    
         /// <summary>
         /// 
         /// </summary>
