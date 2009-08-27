@@ -207,6 +207,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
             RegisterProperty(typeof(Canvas), "GridManager.GridOn", "GridOn",null,"Grid snaping on/off");
             RegisterProperty(typeof(Canvas), "GridManager.GridDelta","GridDelta", null,"Grid step");
             RegisterProperty(typeof(Canvas), "GridManager.ShowGrid","ShowGrid" ,null,"Grid showing on/off");
+			RegisterProperty(typeof(ToggleButton), "IsChecked", "IsChecked", null, "Toggle button");
 		}
 
 	}
