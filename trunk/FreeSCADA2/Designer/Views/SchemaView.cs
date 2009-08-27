@@ -220,7 +220,11 @@ namespace FreeSCADA.Designer.Views
             toolsList.Add(new ToolDescriptor(StringResources.ToolButton,
                 StringResources.ToolControlsGroupName,
                 blankBitmap,
-                 typeof(ControlCreateTool<System.Windows.Controls.Button>)));
+                typeof(ControlCreateTool<System.Windows.Controls.Button>)));
+			toolsList.Add(new ToolDescriptor(StringResources.ToolToggleButton,
+				StringResources.ToolControlsGroupName,
+				blankBitmap,
+				typeof(ControlCreateTool<System.Windows.Controls.Primitives.ToggleButton>)));
             toolsList.Add(new ToolDescriptor(StringResources.ToolProgressbar,
                 StringResources.ToolControlsGroupName,
                 blankBitmap,

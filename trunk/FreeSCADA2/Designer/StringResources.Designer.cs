@@ -661,6 +661,15 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ToggleButton.
+        /// </summary>
+        internal static string ToolToggleButton {
+            get {
+                return ResourceManager.GetString("ToolToggleButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {unsaved project file}.
         /// </summary>
         internal static string UnsavedProjectName {

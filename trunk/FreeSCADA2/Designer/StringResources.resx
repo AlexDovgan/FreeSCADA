@@ -377,4 +377,7 @@
   <data name="TextBox" xml:space="preserve">
     <value>TextBox Tool</value>
   </data>
+  <data name="ToolToggleButton" xml:space="preserve">
+    <value>ToggleButton</value>
+  </data>
 </root>
