@@ -21,6 +21,11 @@ namespace FreeSCADA.Common.Schema
     public class TimeTrend
     {
 
+        public String Name
+        {
+            get;
+            set;
+        }
         [Editor("FreeSCADA.Designer.SchemaEditor.PropertiesUtils.PropertyGridTypeEditors.ChannelSelectEditor, Designer",
         typeof(System.Drawing.Design.UITypeEditor))]
         public String Channel
@@ -67,6 +72,15 @@ namespace FreeSCADA.Common.Schema
         public static readonly DependencyProperty TrendsProperty =
             DependencyProperty.Register(
                 "Trends", typeof(ObservableCollection<TimeTrend>), typeof(TimeChartControl));//, new FrameworkPropertyMetadata(null));
+        public String ChartName
+        {
+            get { return (String)GetValue(ChartNameProperty); }
+            set { SetValue(ChartNameProperty, value); }
+        }
+
+        public static readonly DependencyProperty ChartNameProperty =
+            DependencyProperty.Register(
+                "ChartName", typeof(String), typeof(TimeChartControl));
 
         public Point ChartScale
         {
@@ -140,7 +154,10 @@ namespace FreeSCADA.Common.Schema
             _chart.Axes.Add(la);
             ChartPeriod = 60;
             ChartScale = new Point(-1, 1);
-
+            System.Windows.Data.Binding b=new System.Windows.Data.Binding("ChartName");
+            b.Source=this;
+        
+            _chart.SetBinding(Chart.TitleProperty, b);
             Loaded += new RoutedEventHandler(TimeChartControl_Loaded);
         
         }
@@ -163,7 +180,9 @@ namespace FreeSCADA.Common.Schema
                     _chart.StylePalette.Clear();
                     _chart.StylePalette.Add(st);
                     //ls.Background = trend.Brush;
-                    ls.Title = trend.Channel;
+                    if (trend.Name == String.Empty)
+                        ls.Title = trend.Channel;
+                    else ls.Title = trend.Name;
                     _chart.Series.Add(ls);
                 }
                 dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
