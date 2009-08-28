@@ -201,9 +201,10 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			RegisterProperty(typeof(CheckBox), "Content", "Text", null, "Text");
             RegisterProperty(typeof(TextBox), "Text", null);
             RegisterProperty(typeof(TextBox), "TextAlignment", null);
-            RegisterProperty(typeof(TimeChartControl), "ChartPeriod", null);
+            RegisterProperty(typeof(TimeChartControl), "ChartPeriod", "TimeInterval",null,"Chart time interval");
             RegisterProperty(typeof(TimeChartControl), "ChartScale", null);
             RegisterProperty(typeof(TimeChartControl), "Trends", null);
+            RegisterProperty(typeof(TimeChartControl), "ChartName", null);
             RegisterProperty(typeof(Canvas), "GridManager.GridOn", "GridOn",null,"Grid snaping on/off");
             RegisterProperty(typeof(Canvas), "GridManager.GridDelta","GridDelta", null,"Grid step");
             RegisterProperty(typeof(Canvas), "GridManager.ShowGrid","ShowGrid" ,null,"Grid showing on/off");
