@@ -15,8 +15,8 @@ namespace FreeSCADA.Common.Schema
 {
     public class TimeChartData
     {
-        public DateTime _time { get; set; }
-        public object _value { get; set; }
+        public DateTime Time { get; set; }
+        public object Value { get; set; }
     }
     public class TimeTrend
     {
@@ -59,7 +59,7 @@ namespace FreeSCADA.Common.Schema
 
 
 
-        protected Chart _chart = new Chart();
+        protected Chart chart = new Chart();
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public ObservableCollection<TimeTrend> Trends
         {
@@ -108,19 +108,19 @@ namespace FreeSCADA.Common.Schema
             if (Env.Current.Mode != EnvironmentMode.Runtime)
             {
                 TimeChartControl tcc = o as TimeChartControl;
-                ((DateTimeAxis)tcc._chart.Axes[0]).Minimum = DateTime.Now.AddSeconds(-tcc.ChartPeriod / 2);
-                ((DateTimeAxis)tcc._chart.Axes[0]).Maximum = DateTime.Now.AddSeconds(tcc.ChartPeriod / 2);
-                //((DateTimeAxis)tcc._chart.Axes[0]).Interval=tcc.ChartPeriod/5;
-                tcc._chart.Refresh();
+                ((DateTimeAxis)tcc.chart.Axes[0]).Minimum = DateTime.Now.AddSeconds(-tcc.ChartPeriod / 2);
+                ((DateTimeAxis)tcc.chart.Axes[0]).Maximum = DateTime.Now.AddSeconds(tcc.ChartPeriod / 2);
+                //((DateTimeAxis)tcc.chart.Axes[0]).Interval=tcc.ChartPeriod/5;
+                tcc.chart.Refresh();
             }
         }
         private static void OnScaleChange(DependencyObject o, DependencyPropertyChangedEventArgs ea)
         {
             TimeChartControl tcc = o as TimeChartControl;
-            ((LinearAxis)tcc._chart.Axes[1]).Minimum = tcc.ChartScale.X;
-            ((LinearAxis)tcc._chart.Axes[1]).Maximum = tcc.ChartScale.Y;
-            ((LinearAxis)tcc._chart.Axes[1]).Interval = (tcc.ChartScale.Y - tcc.ChartScale.X) / 5;
-            tcc._chart.Refresh();
+            ((LinearAxis)tcc.chart.Axes[1]).Minimum = tcc.ChartScale.X;
+            ((LinearAxis)tcc.chart.Axes[1]).Maximum = tcc.ChartScale.Y;
+            ((LinearAxis)tcc.chart.Axes[1]).Interval = (tcc.ChartScale.Y - tcc.ChartScale.X) / 5;
+            tcc.chart.Refresh();
 
         }
 
@@ -131,7 +131,7 @@ namespace FreeSCADA.Common.Schema
         {
             foreach (TimeTrend trend in Trends)
             {
-                trend.ChartData.Add(new TimeChartData { _time = DateTime.Now, _value = Env.Current.CommunicationPlugins.GetChannel(trend.Channel).Value });
+                trend.ChartData.Add(new TimeChartData { Time = DateTime.Now, Value = Env.Current.CommunicationPlugins.GetChannel(trend.Channel).Value });
                 if (trend.ChartData.Count > ChartPeriod)
                     trend.ChartData.RemoveAt(0);
             }
@@ -143,21 +143,21 @@ namespace FreeSCADA.Common.Schema
         {
             SetValue(TimeChartControl.TrendsProperty, new ObservableCollection<TimeTrend>());
 
-            Content = _chart;
+            Content = chart;
             DateTimeAxis dta = new DateTimeAxis();
             dta.ShowGridLines = true;
             dta.Orientation = AxisOrientation.X;
-            _chart.Axes.Add(dta);
+            chart.Axes.Add(dta);
             LinearAxis la = new LinearAxis();
             la.Orientation = AxisOrientation.Y;
             la.ShowGridLines = true;
-            _chart.Axes.Add(la);
+            chart.Axes.Add(la);
             ChartPeriod = 60;
             ChartScale = new Point(-1, 1);
             System.Windows.Data.Binding b=new System.Windows.Data.Binding("ChartName");
             b.Source=this;
         
-            _chart.SetBinding(Chart.TitleProperty, b);
+            chart.SetBinding(Chart.TitleProperty, b);
             Loaded += new RoutedEventHandler(TimeChartControl_Loaded);
         
         }
@@ -170,20 +170,20 @@ namespace FreeSCADA.Common.Schema
                 {
                     LineSeries ls = new LineSeries();
                     ls.ItemsSource = trend.ChartData;
-                    ls.IndependentValueBinding = new System.Windows.Data.Binding("_time");
-                    ls.DependentValueBinding = new System.Windows.Data.Binding("_value");
+                    ls.IndependentValueBinding = new System.Windows.Data.Binding("Time");
+                    ls.DependentValueBinding = new System.Windows.Data.Binding("Value");
                     //ls.DataPointStyle = new Style();
                     //ls.DataPointStyle.Setters.Add(new Setter(DataPoint.VisibilityProperty, Visibility.Hidden));
                     Style st = new Style();
                     st.TargetType = typeof(Control);
                     st.Setters.Add(new Setter(Control.BackgroundProperty, trend.Brush));
-                    _chart.StylePalette.Clear();
-                    _chart.StylePalette.Add(st);
+                    chart.StylePalette.Clear();
+                    chart.StylePalette.Add(st);
                     //ls.Background = trend.Brush;
                     if (trend.Name == String.Empty)
                         ls.Title = trend.Channel;
                     else ls.Title = trend.Name;
-                    _chart.Series.Add(ls);
+                    chart.Series.Add(ls);
                 }
                 dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
                 dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
