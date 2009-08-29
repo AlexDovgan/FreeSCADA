@@ -9,8 +9,10 @@
 		
 		<Package InstallerVersion="200" Compressed="yes" />
 		
-		<PropertyRef Id="NETFRAMEWORK35"/>
-		<Condition Message="The .NET Framework 3.5 must be installed">NETFRAMEWORK35</Condition>
+		<PropertyRef Id="NETFRAMEWORK35_SP_LEVEL"/>
+    <Condition Message="This application requires .NET Framework 3.5 SP1. Please install the .NET Framework then run this installer again.">
+      <![CDATA[Installed OR (NETFRAMEWORK35_SP_LEVEL and NOT NETFRAMEWORK35_SP_LEVEL = "#0")]]>
+    </Condition>
 		
 		<Media Id="1" Cabinet="FreeSCADA2.cab" EmbedCab="yes" />
 
@@ -60,6 +62,9 @@
 
             <File Name="c5.dll" Source="..\3rdParty\plossum-commandline.bin\c5.dll" Vital="yes"/>
             <File Name="plossum commandline.dll" Source="..\3rdParty\plossum-commandline.bin\plossum commandline.dll" Vital="yes"/>
+
+            <File Name="system.windows.controls.datavisualization.toolkit.dll" Source="..\3rdParty\wpftoolkit\system.windows.controls.datavisualization.toolkit.dll" Vital="yes"/>
+            <File Name="wpftoolkit.dll" Source="..\3rdParty\wpftoolkit\wpftoolkit.dll" Vital="yes"/>
 					</Component>
 					
 					<Directory Id="SQLite_root" Name="SQLite">
@@ -94,6 +99,7 @@
               <File Name="puzzle.syntaxbox.txt" Source="..\3rdParty\SyntaxBox\license.txt"/>
               <File Name="c5.txt" Source="..\3rdParty\plossum-commandline.bin\c5-license.txt"/>
               <File Name="plossum commandline.txt" Source="..\3rdParty\plossum-commandline.bin\license.txt"/>
+              <File Name="wpftoolkit.txt" Source="..\3rdParty\wpftoolkit\license.txt"/>
 						</Component>
 					</Directory>
 					
