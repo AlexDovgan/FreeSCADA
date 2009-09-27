@@ -36,35 +36,20 @@ namespace FreeSCADA.Communication.CLServer
 			int port = int.Parse(portTextBox.Text);
 			string serverAddress = string.Format("http://{0}:{1}/ChannelInformationRetriever", serverName, port);
 
-			ChannelInfo[] channels = null;
-			ChannelInformationRetrieverClient client = null;
-			try
+			ImportProgressForm dlg = new ImportProgressForm(serverAddress);
+			if (dlg.ShowDialog(this) == DialogResult.OK)
 			{
-				statusTextBox.Text += "Connecting to server...\r\n";
-				EndpointAddress epAddress = new EndpointAddress(serverAddress);
-				client = new ChannelInformationRetrieverClient(new WSDualHttpBinding(WSDualHttpSecurityMode.None), epAddress);
-				statusTextBox.Text += "Done\r\n";
-
-				statusTextBox.Text += "Getting channel data...\r\n";
-				if(client != null)
-					channels = client.GetChannels();
-				statusTextBox.Text += "Done\r\n";
-				client.Close();
+				groupBox1.Enabled = false;
+				connectButton.Enabled = false;
+				FillChannels(dlg.Channels);
 			}
-			catch (Exception exception)
+			else
 			{
-				Env.Current.Logger.LogWarning(string.Format("Error during connection to server: {0}", exception.Message));
-				statusTextBox.Text += string.Format("Error during connection to server: {0}\r\n", exception.Message);
-				if (client != null && client.State == CommunicationState.Opened)
-					client.Close();
-				return;
+				statusTextBox.Text += dlg.ErrorMessage;
 			}
-
-			FillChannels(channels);
-
-			groupBox1.Enabled = false;
-			connectButton.Enabled = false;
 		}
+
+		
 
 		private void FillChannels(ChannelInfo[] channels)
 		{
@@ -154,5 +139,16 @@ namespace FreeSCADA.Communication.CLServer
 			SaveChannelInfo(channelsTree.Nodes);
 			Close();
 		}
+
+		private void channelsTree_AfterCheck(object sender, TreeViewEventArgs e)
+		{
+			if(e.Node.Nodes.Count > 0)
+			{
+				foreach(TreeNode node in e.Node.Nodes)
+					node.Checked = e.Node.Checked;
+			}
+		}
 	}
+
+	
 }

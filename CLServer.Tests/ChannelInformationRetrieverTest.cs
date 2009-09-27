@@ -48,5 +48,31 @@ namespace CLServer.Tests
 			Assert.IsTrue(channels[3].Name == "ball_height");
 			
 		}
+
+		[Test]
+		public void GetChannelInfoIterative()
+		{
+			Assert.IsTrue(client.GetChannelsCount() == 4);
+
+			ChannelInfo channel;
+			channel = client.GetChannel(0);
+			Assert.IsNotNull(channel);
+			Assert.IsTrue(channel.Name == "phase");
+
+			channel = client.GetChannel(1);
+			Assert.IsNotNull(channel);
+			Assert.IsTrue(channel.Name == "delta");
+
+			channel = client.GetChannel(2);
+			Assert.IsNotNull(channel);
+			Assert.IsTrue(channel.Name == "ball_position");
+
+			channel = client.GetChannel(3);
+			Assert.IsNotNull(channel);
+			Assert.IsTrue(channel.Name == "ball_height");
+
+			channel = client.GetChannel(4);
+			Assert.IsNull(channel);
+		}
 	}
 }

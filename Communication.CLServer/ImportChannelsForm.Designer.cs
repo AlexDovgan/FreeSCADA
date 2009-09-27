@@ -30,14 +30,14 @@
 		{
 			this.connectButton = new System.Windows.Forms.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.portTextBox = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.serverTextBox = new System.Windows.Forms.TextBox();
 			this.remoteServerButton = new System.Windows.Forms.RadioButton();
 			this.localServerButton = new System.Windows.Forms.RadioButton();
 			this.channelsTree = new System.Windows.Forms.TreeView();
 			this.okButton = new System.Windows.Forms.Button();
 			this.cancelButton = new System.Windows.Forms.Button();
-			this.label1 = new System.Windows.Forms.Label();
-			this.portTextBox = new System.Windows.Forms.TextBox();
 			this.statusTextBox = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
@@ -71,6 +71,24 @@
 			this.groupBox1.TabIndex = 2;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Server";
+			// 
+			// portTextBox
+			// 
+			this.portTextBox.Location = new System.Drawing.Point(132, 46);
+			this.portTextBox.Name = "portTextBox";
+			this.portTextBox.Size = new System.Drawing.Size(100, 20);
+			this.portTextBox.TabIndex = 4;
+			this.portTextBox.Text = "8080";
+			this.portTextBox.TextChanged += new System.EventHandler(this.portTextBox_TextChanged);
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(90, 49);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(31, 13);
+			this.label1.TabIndex = 3;
+			this.label1.Text = "Port:";
 			// 
 			// serverTextBox
 			// 
@@ -119,6 +137,7 @@
 			this.channelsTree.PathSeparator = ".";
 			this.channelsTree.Size = new System.Drawing.Size(454, 186);
 			this.channelsTree.TabIndex = 3;
+			this.channelsTree.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.channelsTree_AfterCheck);
 			// 
 			// okButton
 			// 
@@ -141,24 +160,6 @@
 			this.cancelButton.Text = "Cancel";
 			this.cancelButton.UseVisualStyleBackColor = true;
 			this.cancelButton.Click += new System.EventHandler(this.OnCancelClick);
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(90, 49);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(31, 13);
-			this.label1.TabIndex = 3;
-			this.label1.Text = "Port:";
-			// 
-			// portTextBox
-			// 
-			this.portTextBox.Location = new System.Drawing.Point(132, 46);
-			this.portTextBox.Name = "portTextBox";
-			this.portTextBox.Size = new System.Drawing.Size(100, 20);
-			this.portTextBox.TabIndex = 4;
-			this.portTextBox.Text = "8080";
-			this.portTextBox.TextChanged += new System.EventHandler(this.portTextBox_TextChanged);
 			// 
 			// statusTextBox
 			// 
@@ -199,6 +200,7 @@
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(494, 478);
 			this.Name = "ImportChannelsForm";
+			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Import channel definition from remote server";
 			this.groupBox1.ResumeLayout(false);

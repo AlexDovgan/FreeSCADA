@@ -111,6 +111,7 @@
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(568, 412);
 			this.Name = "SettingsForm";
+			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "FreeSCADA remouting settings";
 			this.ResumeLayout(false);

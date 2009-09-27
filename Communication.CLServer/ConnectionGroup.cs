@@ -26,7 +26,7 @@ namespace FreeSCADA.Communication.CLServer
 				foreach (RemoutingChannel channel in channels)
 					client.RegisterCallback(channel.ServerFullId);
 
-				ThreadPool.QueueUserWorkItem(new WaitCallback(RefreshChannels), channels);
+				//ThreadPool.QueueUserWorkItem(new WaitCallback(RefreshChannels), channels);
 			}
 		}
 
