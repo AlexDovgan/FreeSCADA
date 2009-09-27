@@ -32,6 +32,7 @@ namespace FreeSCADA.Common
 
 		public event EventHandler ProjectLoaded;
 		public event EventHandler ProjectClosed;
+		public event EventHandler EntitySetChanged;
 
         string fileName = "";
 
@@ -94,7 +95,11 @@ namespace FreeSCADA.Common
 					{
 						ICSharpCode.SharpZipLib.Core.StreamUtils.Copy(zipInput, ms, tmp_buff);
 						ms.Flush();
-						data.Add(entry.Name, ms.ToArray());
+						//Normalize path string
+						string resultingName = entry.Name;
+						resultingName = resultingName.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+
+						data.Add(resultingName, ms.ToArray());
 					}
 				}
 			}
@@ -153,14 +158,37 @@ namespace FreeSCADA.Common
 		/// </summary>
 		/// <param name="type">Entity type</param>
 		/// <param name="name">Entity name</param>
-		public void RemoveEntity(ProjectEntityType type, string name)
+		public bool RemoveEntity(ProjectEntityType type, string name)
 		{
-			if(data.ContainsKey(GetFullEntityName(type,name)))
+			if (ContainsEntity(type, name) == false)
+				return false;
+
+			List<string> keysToRemove = new List<string>();
+
+			foreach (string entity in data.Keys)
 			{
-				data.Remove(GetFullEntityName(type,name));
-				modifiedFlag = true;
+				string entityStartPath = Path.Combine(GetEntityTypeInternalName(type), name);
+				if (entity.StartsWith(entityStartPath, StringComparison.InvariantCultureIgnoreCase))
+					keysToRemove.Add(entity);
 			}
+
+			if (keysToRemove.Count == 0)
+				return false;
+
+			foreach (string key in keysToRemove)
+				data.Remove(key);
+
+			modifiedFlag = true;
+
+			if (type == ProjectEntityType.Schema && ContainsEntity(ProjectEntityType.Script, name))
+				RemoveEntity(ProjectEntityType.Script, name);
+
+			if (EntitySetChanged != null)
+				EntitySetChanged(this, new EventArgs());
+
+			return true;
 		}
+
 		/// <summary>
 		/// Return read only stream for specified entity
 		/// </summary>
@@ -168,6 +196,9 @@ namespace FreeSCADA.Common
 		/// <returns>Return Stream instance or null if there is no entity</returns>
 		public Stream GetData(string name)
 		{
+			//Normalize path string
+			name = name.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+
 			if (!data.ContainsKey(name))
 				return null;
 
@@ -230,6 +261,7 @@ namespace FreeSCADA.Common
 				case ProjectEntityType.Image: return "images";
 				case ProjectEntityType.Script: return "scripts";
 				case ProjectEntityType.Settings: return "settings";
+				case ProjectEntityType.Schema: return "Schemas";
 				default:
 					throw new NotImplementedException();
 			}
@@ -284,12 +316,94 @@ namespace FreeSCADA.Common
 				return data.ContainsKey(GetFullEntityName(type, name));
 		}
 
+		/// <summary>
+		/// Renames entities in the project
+		/// </summary>
+		/// <param name="type">Entity type</param>
+		/// <param name="oldName">Old entity name</param>
+		/// <param name="newName">New entity name</param>
+		/// <returns>Returns true if successed</returns>
+		public bool RenameEntity(ProjectEntityType type, string oldName, string newName)
+		{
+			if (ContainsEntity(type, oldName) == false)
+				return false;
+			if (ContainsEntity(type, newName) == true)
+				return false;
+
+			if (type == ProjectEntityType.Schema)
+			{
+				List<string> keysToRemove = new List<string>();
+				Dictionary<string, byte[]> keysToAdd = new Dictionary<string, byte[]>();
+
+				foreach (string entity in data.Keys)
+				{
+					Regex rx = new Regex(@"^schemas[\\/]+(?<name>.*)[\\/]+.*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+					Match match = rx.Match(entity);
+					if (match.Success)
+					{
+						if (match.Groups["name"].Value == oldName)
+						{
+							keysToRemove.Add(entity);
+							keysToAdd.Add(entity.Replace(oldName, newName), data[entity]);
+						}
+					}
+				}
+
+				if (keysToRemove.Count != keysToAdd.Count || keysToAdd.Count == 0)
+					return false;
+
+				foreach (string key in keysToRemove)
+					data.Remove(key);
+				foreach (string key in keysToAdd.Keys)
+					data[key] = keysToAdd[key];
+
+				if (ContainsEntity(ProjectEntityType.Script, oldName))
+					RenameEntity(ProjectEntityType.Script, oldName, newName);
+
+				modifiedFlag = true;
+
+				if (EntitySetChanged != null)
+					EntitySetChanged(this, new EventArgs());
+				return true;
+			}
+			else
+			{
+				List<string> keysToRemove = new List<string>();
+				Dictionary<string, byte[]> keysToAdd = new Dictionary<string, byte[]>();
+
+				foreach (string entity in data.Keys)
+				{
+					string entityStartPath = Path.Combine(GetEntityTypeInternalName(type), oldName);
+					if (entity.StartsWith(entityStartPath))
+					{
+						keysToRemove.Add(entity);
+						keysToAdd.Add(entity.Replace(oldName, newName), data[entity]);
+					}
+				}
+
+				if (keysToRemove.Count != keysToAdd.Count || keysToAdd.Count == 0)
+					return false;
+
+				foreach (string key in keysToRemove)
+					data.Remove(key);
+				foreach (string key in keysToAdd.Keys)
+					data[key] = keysToAdd[key];
+
+				modifiedFlag = true;
+
+				if (EntitySetChanged != null)
+					EntitySetChanged(this, new EventArgs());
+
+				return true;
+			}
+		}
+
 		string[] GetSchemas()
 		{
 			List<string> schemas = new List<string>();
 			foreach (string entity in data.Keys)
 			{
-				Regex rx = new Regex(@"^schemas[\/]+(?<name>.*)[\/]+.*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+				Regex rx = new Regex(@"^schemas[\\/]+(?<name>.*)[\\/]+.*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 				Match match = rx.Match(entity);
 				if (match.Success)
 				{

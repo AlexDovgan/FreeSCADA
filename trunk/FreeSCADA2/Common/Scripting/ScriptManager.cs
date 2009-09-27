@@ -36,6 +36,13 @@ namespace FreeSCADA.Common.Scripting
 		{
 			Env.Current.Project.ProjectClosed += new EventHandler(OnProjectClosed);
 			Env.Current.Project.ProjectLoaded += new EventHandler(OnProjectLoaded);
+			Env.Current.Project.EntitySetChanged += new EventHandler(OnProjectEntitySetChanged);
+		}
+
+		void OnProjectEntitySetChanged(object sender, EventArgs e)
+		{
+			OnProjectClosed(sender, e);
+			OnProjectLoaded(sender, e);
 		}
 
 		void OnProjectLoaded(object sender, EventArgs e)

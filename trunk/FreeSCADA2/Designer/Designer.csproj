@@ -102,6 +102,12 @@
     <Compile Include="Dialogs\ProjectMediaDialog.Designer.cs">
       <DependentUpon>ProjectMediaDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\RenameSchemaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\RenameSchemaForm.Designer.cs">
+      <DependentUpon>RenameSchemaForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="HelpCommands.cs" />
     <Compile Include="SchemaEditor\BindingSerializing.cs" />
     <Compile Include="SchemaEditor\EditorHelpers.cs" />
@@ -217,6 +223,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Dialogs\ProjectMediaDialog.resx">
       <DependentUpon>ProjectMediaDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\RenameSchemaForm.resx">
+      <DependentUpon>RenameSchemaForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\SaveDocumentsDialog.resx">
       <DependentUpon>SaveDocumentsDialog.cs</DependentUpon>

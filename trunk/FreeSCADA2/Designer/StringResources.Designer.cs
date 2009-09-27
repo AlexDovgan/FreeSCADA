@@ -463,6 +463,33 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        internal static string ProjectContextMenuOpen {
+            get {
+                return ResourceManager.GetString("ProjectContextMenuOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        internal static string ProjectContextMenuRemove {
+            get {
+                return ResourceManager.GetString("ProjectContextMenuRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename.
+        /// </summary>
+        internal static string ProjectContextMenuRename {
+            get {
+                return ResourceManager.GetString("ProjectContextMenuRename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Schemas.
         /// </summary>
         internal static string SchemasItemName {

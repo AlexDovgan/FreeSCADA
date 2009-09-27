@@ -120,7 +120,7 @@ namespace FreeSCADA.Designer.Views.ProjectNodes
 
 	abstract class BaseEntityNode : BaseNode
 	{
-		string entityName;
+		protected string entityName;
 		ProjectEntityType entityType;
 
 		public BaseEntityNode(ProjectEntityType entityType, string entityName)
@@ -139,7 +139,21 @@ namespace FreeSCADA.Designer.Views.ProjectNodes
 			get { return entityType; }
 		}
 
-		public virtual void Rename(string newName)
+		public virtual bool CanRename
+		{
+			get { return false; }
+		}
+
+		public virtual bool CanRemove
+		{
+			get { return false; }
+		}
+
+		public virtual void Rename(string newName, TreeNode treeNode)
+		{
+		}
+
+		public virtual void Remove(TreeNode treeNode)
 		{
 		}
 	}
@@ -236,6 +250,27 @@ namespace FreeSCADA.Designer.Views.ProjectNodes
 			UpdateNodes(newNodes.ToArray(), root);
 
 			return root;
+		}
+
+		public override bool CanRename { get { return true; } }
+		public override void Rename(string newName, TreeNode treeNode)
+		{
+			Env.Current.Project.RenameEntity(ProjectEntityType.Schema, Name, newName);
+			entityName = newName;
+
+			UpdateTreeNode(treeNode);
+
+			List<BaseNode> newNodes = new List<BaseNode>();
+			if (Env.Current.Project.ContainsEntity(ProjectEntityType.Script, Name))
+				newNodes.Add(new ScriptNode(Name));
+			UpdateNodes(newNodes.ToArray(), treeNode);
+		}
+
+		public override bool CanRemove { get { return true; } }
+		public override void Remove(TreeNode treeNode)
+		{
+			Env.Current.Project.RemoveEntity(ProjectEntityType.Schema, Name);
+			treeNode.Parent.Nodes.Remove(treeNode);
 		}
 	}
 
