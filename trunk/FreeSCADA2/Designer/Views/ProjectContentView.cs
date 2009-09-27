@@ -97,7 +97,7 @@ namespace FreeSCADA.Designer.Views
 		{
 			projectTree.BeginUpdate();
 			ProjectNode prjNode = new ProjectNode();
-			prjNode.CreateTreeNode(projectTree.Nodes);
+			prjNode.CreateTreeNode(projectTree.Nodes, null);
 			projectTree.EndUpdate();
         }
 

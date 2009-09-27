@@ -37,12 +37,25 @@ namespace FreeSCADA.Communication.CLServer
 		{
 			ImportChannelsForm form = new ImportChannelsForm();
 			form.ShowDialog(this);
-			
+
+			int varNumber = GetVariableInitialNumber();
+			int row = grid.RowsCount;
+			grid.RowsCount += form.Channels.Count;
 			foreach (ImportChannelsForm.RemoteChannelInfo ch in form.Channels)
 			{
-				string variableName = GetUniqueVariableName();
-				AddVariable(variableName, ch.server, ch.channelFullId, ch.port, ch.type);
+				string variableName = GetVariableName(varNumber);
+				varNumber++;
+
+				grid[row, 0] = new SourceGrid.Cells.Cell(variableName, typeof(string));
+				grid[row, 1] = new SourceGrid.Cells.Cell(ch.channelFullId, typeof(string));
+				grid[row, 2] = new SourceGrid.Cells.Cell(ch.server, typeof(string));
+				grid[row, 3] = new SourceGrid.Cells.Cell(ch.port, typeof(int));
+				grid.Rows[row].Tag = ch.type;
+
+				row++;
 			}
+			grid.Selection.ResetSelection(true);
+			grid.Selection.SelectRow(row-1, true);
 		}
 
 		private void AddVariable(string variableName, string server, string fullId, int port, Type type)
@@ -66,27 +79,28 @@ namespace FreeSCADA.Communication.CLServer
 				grid.Rows.Remove(row);
 		}
 
-		private string GetUniqueVariableName()
+		private string GetVariableName(int baseNumber)
+		{
+			string baseName = "variable_";
+			return string.Format(System.Globalization.CultureInfo.CurrentUICulture, "{0}{1}", baseName, baseNumber);
+		}
+
+		private int GetVariableInitialNumber()
 		{
 			string baseName = "variable_";
 			int baseNumber = 1;
-			for(;;)
+			for (int i = 1; i < grid.RowsCount; i++)
 			{
-				string newName = string.Format(System.Globalization.CultureInfo.CurrentUICulture, "{0}{1}", baseName, baseNumber);
-				bool exists = false;
-				for (int i = 1; i < grid.RowsCount; i++)
+				string gridText = grid[i, 0].DisplayText;
+				if (gridText.StartsWith(baseName))
 				{
-					if (grid[i, 0].DisplayText == newName)
-					{
-						exists = true;
-						break;
-					}
+					string number = gridText.Substring(baseName.Length);
+					int tmp;
+					if (int.TryParse(number, out tmp))
+						baseNumber = Math.Max(baseNumber, tmp + 1);
 				}
-				if (exists == false)
-					return newName;
-
-				baseNumber++;
 			}
+			return baseNumber;
 		}
 
 		private void OnOkClick(object sender, EventArgs e)

@@ -65,6 +65,12 @@
     <Compile Include="ImportChannelsForm.Designer.cs">
       <DependentUpon>ImportChannelsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImportProgressForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImportProgressForm.Designer.cs">
+      <DependentUpon>ImportProgressForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyCommand.cs" />
@@ -91,6 +97,9 @@
     <EmbeddedResource Include="ImportChannelsForm.resx">
       <DependentUpon>ImportChannelsForm.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImportProgressForm.resx">
+      <DependentUpon>ImportProgressForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>

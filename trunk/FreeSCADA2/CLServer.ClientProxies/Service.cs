@@ -217,6 +217,12 @@ public interface IChannelInformationRetriever
     
     [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChannelInformationRetriever/GetChannels", ReplyAction="http://tempuri.org/IChannelInformationRetriever/GetChannelsResponse")]
     FreeSCADA.CLServer.ChannelInfo[] GetChannels();
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChannelInformationRetriever/GetChannelsCount", ReplyAction="http://tempuri.org/IChannelInformationRetriever/GetChannelsCountResponse")]
+    long GetChannelsCount();
+    
+    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChannelInformationRetriever/GetChannel", ReplyAction="http://tempuri.org/IChannelInformationRetriever/GetChannelResponse")]
+    FreeSCADA.CLServer.ChannelInfo GetChannel(long index);
 }
 
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
@@ -256,6 +262,16 @@ public partial class ChannelInformationRetrieverClient : System.ServiceModel.Cli
     public FreeSCADA.CLServer.ChannelInfo[] GetChannels()
     {
         return base.Channel.GetChannels();
+    }
+    
+    public long GetChannelsCount()
+    {
+        return base.Channel.GetChannelsCount();
+    }
+    
+    public FreeSCADA.CLServer.ChannelInfo GetChannel(long index)
+    {
+        return base.Channel.GetChannel(index);
     }
 }
 

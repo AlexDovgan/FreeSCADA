@@ -7,5 +7,11 @@ namespace FreeSCADA.CLServer
 	{
 		[OperationContract]
 		ChannelInfo[] GetChannels();
+
+		[OperationContract]
+		long GetChannelsCount();
+
+		[OperationContract]
+		ChannelInfo GetChannel(long index);
 	}
 }

@@ -11,12 +11,12 @@ namespace FreeSCADA.CLServer
 	class Service:IChannelInformationRetriever,IDataRetriever
 	{
 		List<ChannelEventHandler> subscribers = new List<ChannelEventHandler>();
+		ChannelInfo[] channels;
 
 
 		public ChannelInfo[] GetChannels()
 		{
 			List<ChannelInfo> channels = new List<ChannelInfo>();
-			//return channels.ToArray();
 
 			foreach (string pluginId in Env.Current.CommunicationPlugins.PluginIds)
 			{
@@ -35,6 +35,25 @@ namespace FreeSCADA.CLServer
 			}
 
 			return channels.ToArray();
+		}
+
+		public long GetChannelsCount()
+		{
+			if (channels == null)
+				channels = GetChannels();
+
+			return channels.LongLength;
+		}
+
+		public ChannelInfo GetChannel(long index)
+		{
+			if (channels == null)
+				channels = GetChannels();
+
+			if (index < channels.LongLength)
+				return channels[index];
+
+			return null;
 		}
 
 		public void RegisterCallback(string channelId)

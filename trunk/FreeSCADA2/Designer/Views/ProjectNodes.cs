@@ -56,13 +56,27 @@ namespace FreeSCADA.Designer.Views.ProjectNodes
 			}
 		}
 
-		public virtual TreeNode CreateTreeNode(TreeNodeCollection nodes)
+		/// <summary>
+		/// Creates or updates current node in tree view control.
+		/// </summary>
+		/// <param name="nodes">Collection of nodes in TreeView control</param>
+		/// <param name="existingNodesMap">Map of node name and node objects existing in the treeView. If passed, then increases performance. Can be null, if not needed</param>
+		/// <returns>Existing or new tree node</returns>
+		public virtual TreeNode CreateTreeNode(TreeNodeCollection nodes, Dictionary<string, TreeNode> existingNodesMap)
 		{
 			//Don't create new node if it exists
-			TreeNode[] existingNodes = nodes.Find(Name, false);
-			if(existingNodes.Length > 0)
-				return existingNodes[0];
-			
+			if (existingNodesMap == null)
+			{
+				TreeNode[] existingNodes = nodes.Find(Name, false);
+				if (existingNodes.Length > 0)
+					return existingNodes[0];
+			}
+			else
+			{
+				if (existingNodesMap.ContainsKey(Name))
+					return existingNodesMap[Name];
+			}
+
 			TreeNode node = nodes.Add(Name);
 			UpdateTreeNode(node);
 
@@ -82,20 +96,24 @@ namespace FreeSCADA.Designer.Views.ProjectNodes
 
 		protected void UpdateNodes(BaseNode[] nodes, TreeNode root)
 		{
-			List<TreeNode> nodesToRemove = new List<TreeNode>();
+			if (nodes.Length > 100)
+			{
+				//System.Console.WriteLine("Number of nodes to update is too big. Consider to use SetNodes function");
+			}
+
+			Dictionary<string, TreeNode> existingNodesMap = new Dictionary<string, TreeNode>();
 			foreach (TreeNode node in root.Nodes)
-				nodesToRemove.Add(node);
+				existingNodesMap[node.Name] = node;
 
 			foreach (BaseNode node in nodes)
 			{
-				TreeNode[] existingNodes = root.Nodes.Find(node.Name, false);
-				if (existingNodes.Length > 0)
-					nodesToRemove.Remove(existingNodes[0]);
+				node.CreateTreeNode(root.Nodes, existingNodesMap);
 
-				node.CreateTreeNode(root.Nodes);
+				if (existingNodesMap.ContainsKey(node.Name))
+					existingNodesMap.Remove(node.Name);
 			}
 
-			foreach (TreeNode node in nodesToRemove)
+			foreach (TreeNode node in existingNodesMap.Values)
 				root.Nodes.Remove(node);
 		}
 	}
@@ -147,7 +165,7 @@ namespace FreeSCADA.Designer.Views.ProjectNodes
 			get { return (int)Resources.IconIndexes.Project; }
 		}
 
-		public override TreeNode CreateTreeNode(TreeNodeCollection nodes)
+		public override TreeNode CreateTreeNode(TreeNodeCollection nodes, Dictionary<string, TreeNode> existingNodesMap)
 		{
 			TreeNode node;
 			if (nodes.Count > 0)
@@ -156,7 +174,7 @@ namespace FreeSCADA.Designer.Views.ProjectNodes
 				base.UpdateTreeNode(node);
 			}
 			else
-				node = base.CreateTreeNode(nodes);
+				node = base.CreateTreeNode(nodes, existingNodesMap);
 
 			BaseNode[] newNodes =
 			{
@@ -183,9 +201,9 @@ namespace FreeSCADA.Designer.Views.ProjectNodes
 			get { return (int)Resources.IconIndexes.Schemas; }
 		}
 
-		public override TreeNode CreateTreeNode(TreeNodeCollection nodes)
+		public override TreeNode CreateTreeNode(TreeNodeCollection nodes, Dictionary<string, TreeNode> existingNodesMap)
 		{
-			TreeNode root = base.CreateTreeNode(nodes);
+			TreeNode root = base.CreateTreeNode(nodes, existingNodesMap);
 
 			List<BaseNode> newNodes = new List<BaseNode>();
 			foreach (string entity in Env.Current.Project.GetEntities(ProjectEntityType.Schema))
@@ -208,9 +226,9 @@ namespace FreeSCADA.Designer.Views.ProjectNodes
 			get { return (int)Resources.IconIndexes.Schema; }
 		}
 
-		public override TreeNode CreateTreeNode(TreeNodeCollection nodes)
+		public override TreeNode CreateTreeNode(TreeNodeCollection nodes, Dictionary<string, TreeNode> existingNodesMap)
 		{
-			TreeNode root = base.CreateTreeNode(nodes);
+			TreeNode root = base.CreateTreeNode(nodes, existingNodesMap);
 
 			List<BaseNode> newNodes = new List<BaseNode>();
 			if (Env.Current.Project.ContainsEntity(ProjectEntityType.Script, Name))
@@ -233,9 +251,9 @@ namespace FreeSCADA.Designer.Views.ProjectNodes
 			get { return (int)Resources.IconIndexes.Channels; }
 		}
 
-		public override TreeNode CreateTreeNode(TreeNodeCollection nodes)
+		public override TreeNode CreateTreeNode(TreeNodeCollection nodes, Dictionary<string, TreeNode> existingNodesMap)
 		{
-			TreeNode root = base.CreateTreeNode(nodes);
+			TreeNode root = base.CreateTreeNode(nodes, existingNodesMap);
 
 			List<BaseNode> newNodes = new List<BaseNode>();
 			foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
@@ -265,9 +283,9 @@ namespace FreeSCADA.Designer.Views.ProjectNodes
 			get { return (int)Resources.IconIndexes.Plugin; }
 		}
 
-		public override TreeNode CreateTreeNode(TreeNodeCollection nodes)
+		public override TreeNode CreateTreeNode(TreeNodeCollection nodes, Dictionary<string, TreeNode> existingNodesMap)
 		{
-			TreeNode root = base.CreateTreeNode(nodes);
+			TreeNode root = base.CreateTreeNode(nodes, existingNodesMap);
 
 			List<BaseNode> newNodes = new List<BaseNode>();
 			foreach (FreeSCADA.Interfaces.IChannel ch in Env.Current.CommunicationPlugins[pluginId].Channels)
@@ -330,9 +348,9 @@ namespace FreeSCADA.Designer.Views.ProjectNodes
 			get { return (int)Resources.IconIndexes.Archiver; }
 		}
 
-		public override TreeNode CreateTreeNode(TreeNodeCollection nodes)
+		public override TreeNode CreateTreeNode(TreeNodeCollection nodes, Dictionary<string, TreeNode> existingNodesMap)
 		{
-			TreeNode root = base.CreateTreeNode(nodes);
+			TreeNode root = base.CreateTreeNode(nodes, existingNodesMap);
 
 			List<BaseNode> newNodes = new List<BaseNode>();
 			foreach (Rule rule in ArchiverMain.Current.ChannelsSettings.Rules)
@@ -375,9 +393,9 @@ namespace FreeSCADA.Designer.Views.ProjectNodes
 			get { return (int)Resources.IconIndexes.Scripts; }
 		}
 
-		public override TreeNode CreateTreeNode(TreeNodeCollection nodes)
+		public override TreeNode CreateTreeNode(TreeNodeCollection nodes, Dictionary<string, TreeNode> existingNodesMap)
 		{
-			TreeNode root = base.CreateTreeNode(nodes);
+			TreeNode root = base.CreateTreeNode(nodes, existingNodesMap);
 
 			List<BaseNode> newNodes = new List<BaseNode>();
 			foreach (string script in Env.Current.Project.GetEntities(ProjectEntityType.Script))
