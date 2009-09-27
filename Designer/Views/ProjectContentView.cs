@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using FreeSCADA.Common;
 using FreeSCADA.Designer.Views.ProjectNodes;
+using FreeSCADA.Designer.Dialogs;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -37,6 +38,7 @@ namespace FreeSCADA.Designer.Views
 			this.projectTree.TabIndex = 0;
 			this.projectTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.OnNodeDblClick);
 			this.projectTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.projectTree_AfterSelect);
+			this.projectTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.projectTree_NodeMouseClick);
 			this.projectTree.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.projectTree_ItemDrag);
 			// 
 			// ProjectContentView
@@ -135,6 +137,73 @@ namespace FreeSCADA.Designer.Views
 				if (e.Node.Tag is BaseNode)
 					SelectNode(e.Node.Tag as BaseNode);
 			}
+		}
+
+		private void projectTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+		{
+			if (e.Button == MouseButtons.Right && e.Node != null)
+			{
+				projectTree.SelectedNode = e.Node;
+
+				ContextMenuStrip menu = new ContextMenuStrip();
+
+				if (e.Node.Tag != null && e.Node.Tag is BaseEntityNode)
+				{
+					ToolStripItem item;
+
+					item = menu.Items.Add(StringResources.ProjectContextMenuOpen);
+					item.Tag = e.Node;
+					item.Click += new EventHandler(OnOpenNodeClick);
+
+					if ((e.Node.Tag as BaseEntityNode).CanRename)
+					{
+						item = menu.Items.Add(StringResources.ProjectContextMenuRename);
+						item.Tag = e.Node;
+						item.Click += new EventHandler(OnRenameNodeClick);
+					}
+
+					if ((e.Node.Tag as BaseEntityNode).CanRemove)
+					{
+						item = menu.Items.Add(StringResources.ProjectContextMenuRemove);
+						item.Tag = e.Node;
+						item.Click += new EventHandler(OnRemoveNodeClick);
+					}
+				}
+				
+				if(menu.Items.Count > 0)
+					menu.Show(projectTree,e.Location);
+			}
+		}
+
+		void OnRemoveNodeClick(object sender, EventArgs e)
+		{
+			ToolStripItem item = sender as ToolStripItem;
+			TreeNode treeNode = item.Tag as TreeNode;
+			BaseEntityNode node = treeNode.Tag as BaseEntityNode;
+
+			node.Remove(treeNode);
+		}
+
+		void OnRenameNodeClick(object sender, EventArgs e)
+		{
+			ToolStripItem item = sender as ToolStripItem;
+			TreeNode treeNode = item.Tag as TreeNode;
+			BaseEntityNode node = treeNode.Tag as BaseEntityNode;
+
+			RenameSchemaForm dlg = new RenameSchemaForm(node.Name);
+			if (dlg.ShowDialog(this) == DialogResult.OK)
+			{
+				node.Rename(dlg.SchemaName, treeNode);
+			}
+		}
+
+		void OnOpenNodeClick(object sender, EventArgs e)
+		{
+			ToolStripItem item = sender as ToolStripItem;
+			TreeNode treeNode = item.Tag as TreeNode;
+			BaseEntityNode node = treeNode.Tag as BaseEntityNode;
+
+			OpenEntity(node.EntityType, node.Name);
 		}
 	}
 }
