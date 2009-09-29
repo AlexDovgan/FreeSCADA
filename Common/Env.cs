@@ -6,7 +6,7 @@ namespace FreeSCADA.Common
 {
 	public class Env : IEnvironment
 	{
-		const string version = "2.0.0.8";
+		const string version = "2.0.0.9";
 
 		Commands commands;
 		Control mainWindow;

@@ -457,5 +457,12 @@ namespace FreeSCADA.Designer.Views.ProjectNodes
 		{
 			get { return (int)Resources.IconIndexes.Script; }
 		}
+
+		public override bool CanRemove { get { return true; } }
+		public override void Remove(TreeNode treeNode)
+		{
+			Env.Current.Project.RemoveEntity(ProjectEntityType.Script, Name);
+			treeNode.Parent.Nodes.Remove(treeNode);
+		}
 	}
 }

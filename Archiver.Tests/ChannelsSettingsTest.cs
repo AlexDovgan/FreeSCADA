@@ -14,7 +14,7 @@ namespace FreeSCADA.Archiver.Tests
 	{
 		public override void Setup()
 		{
-			Env.Initialize(new Control(), new MenuStrip(), null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			Env.Initialize(new Control(), new MenuStrip(), new ToolStrip(), FreeSCADA.Interfaces.EnvironmentMode.Designer);
 			ArchiverMain.Initialize();
 		}
 		public override void TearDown()

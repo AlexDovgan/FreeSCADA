@@ -38,6 +38,9 @@ namespace FreeSCADA.Common
 
 		public void AddCommand(ICommandContext context, ICommand cmd)
 		{
+			if (context == null || cmd == null)
+				return;
+
 			CommandInfo commandInfo = new CommandInfo();
 			commandInfo.context = context;
 			commandInfo.cmd = cmd;

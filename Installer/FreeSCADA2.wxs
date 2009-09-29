@@ -3,7 +3,7 @@
 	<Product Id="*"
 	         Name="FreeSCADA 2"
 	         Language="1033"
-	         Version="2.0.0.8"
+	         Version="2.0.0.9"
 	         Manufacturer="FreeSCADA Project [http://free-scada.sourceforge.net]"
 	         UpgradeCode="{3E3F16AD-E81B-482a-968A-77EAD18BFB8E}">
 		
@@ -160,6 +160,7 @@
               <File Name="simple_script_3.fs2" Source="..\Samples\simple_script_3.fs2"/>
               <File Name="simple_script_4.fs2" Source="..\Samples\simple_script_4.fs2"/>
               <File Name="simple_script_5 (open schema).fs2" Source="..\Samples\simple_script_5 (open schema).fs2"/>
+              <File Name="simple_script_6 (modify channel).fs2" Source="..\Samples\simple_script_6 (modify channel).fs2"/>
 						</Component>
 					</Directory>
 					
