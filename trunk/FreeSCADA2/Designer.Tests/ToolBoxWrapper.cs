@@ -16,6 +16,7 @@ namespace Designer.Tests
 			TextBox,
 			Polyline,
 			Button,
+			ToggleButton,
 			ProgressBar,
 			ScrollBar,
 			Image,
@@ -72,30 +73,35 @@ namespace Designer.Tests
 					ClickToolboxItem(1, false);
 					ClickToolboxItem(3, true);
 					break;
-				case Entries.ProgressBar:
+				case Entries.ToggleButton:
 					ClickToolboxItem(0, true);
 					ClickToolboxItem(1, false);
 					ClickToolboxItem(4, true);
 					break;
-				case Entries.ScrollBar:
+				case Entries.ProgressBar:
 					ClickToolboxItem(0, true);
 					ClickToolboxItem(1, false);
 					ClickToolboxItem(5, true);
 					break;
-				case Entries.Image:
+				case Entries.ScrollBar:
 					ClickToolboxItem(0, true);
 					ClickToolboxItem(1, false);
 					ClickToolboxItem(6, true);
 					break;
-				case Entries.Slider:
+				case Entries.Image:
 					ClickToolboxItem(0, true);
 					ClickToolboxItem(1, false);
 					ClickToolboxItem(7, true);
 					break;
-				case Entries.Checkbox:
+				case Entries.Slider:
 					ClickToolboxItem(0, true);
 					ClickToolboxItem(1, false);
 					ClickToolboxItem(8, true);
+					break;
+				case Entries.Checkbox:
+					ClickToolboxItem(0, true);
+					ClickToolboxItem(1, false);
+					ClickToolboxItem(9, true);
 					break;
 			}
 		}
