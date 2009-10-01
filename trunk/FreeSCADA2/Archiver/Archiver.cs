@@ -203,5 +203,28 @@ namespace FreeSCADA.Archiver
 
 			return GetDataTable(query);
 		}
+        public DateTime GetChannelsOlderDate(List<ChannelInfo> channels)
+        {
+            
+            string query = "SELECT min(Time) FROM Channels WHERE ";
+            query += "(";
+            for (int i = 0; i < channels.Count; i++)
+            {
+                ChannelInfo ch = channels[i];
+                query += string.Format("(PluginId='{0}' AND ChannelName='{1}')", ch.PluginId, ch.ChannelName);
+                if (i != channels.Count - 1)
+                {
+                    query += " OR ";
+                }
+            }
+            query += ")";
+            DataTable dt= GetDataTable(query);
+            DateTime date=new DateTime();
+            if(dt.Rows.Count>0)
+                DateTime.TryParse(dt.Rows[0].ItemArray[0].ToString(),out date);
+            return date;
+
+        }
+
 	}
 }

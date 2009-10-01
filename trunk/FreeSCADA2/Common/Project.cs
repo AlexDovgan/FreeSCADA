@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using ICSharpCode.SharpZipLib.Checksums;
 using ICSharpCode.SharpZipLib.Zip;
+using System.Reflection;
 
 namespace FreeSCADA.Common
 {
@@ -25,7 +26,7 @@ namespace FreeSCADA.Common
 
 	public class Project
 	{
-		public const int CurrentVersion = 200;
+		public const int CurrentVersion = 201;
 
 		Dictionary<string, byte[]> data = new Dictionary<string, byte[]>();
 		bool modifiedFlag = false;
@@ -104,9 +105,51 @@ namespace FreeSCADA.Common
 				}
 			}
             this.fileName = fileName;
+            if (Version != CurrentVersion)
+                if (System.Windows.Forms.MessageBox.Show("Project version is difer from current version\n\rdo you whant try to convert?"
+                    , "Caution!", System.Windows.Forms.MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+                {
+                    ConvertProject();
+                    if (Version != CurrentVersion)
+                        System.Windows.Forms.MessageBox.Show("Project version stil difer from current version."
+                    , "Conversion Result");
+                }
 			FireProjectLoaded();
 		}
 
+        void ConvertProject()
+        {
+            List<ProjectConvertor> convertors = new List<ProjectConvertor>();
+            Assembly archiverAssembly = this.GetType().Assembly;
+            foreach (Type type in archiverAssembly.GetTypes())
+            {
+                if (type.IsSubclassOf(typeof(ProjectConvertor)))
+                     convertors.Add(Activator.CreateInstance(type) as ProjectConvertor);
+            }
+            if (CurrentVersion > Version)
+                for (int i = 0; i < convertors.Count; i++)
+                {
+                    ProjectConvertor conv = convertors[i];
+                    if (conv.AcceptedVersion == Version && conv.ResultVersion <= CurrentVersion)
+                    {
+                        conv.Convert(this);
+                        convertors.RemoveAt(i);
+                        i = 0;
+                    }
+                }
+            else
+                for (int i = 0; i < convertors.Count; i++)
+                {
+                    ProjectConvertor conv = convertors[i];
+                    if (conv.ResultVersion == CurrentVersion && conv.AcceptedVersion>=Version)
+                    {
+                        conv.ConvertBack(this);
+                        convertors.RemoveAt(i);
+                        i = 0;
+                    }
+                }
+
+        }
 		internal void Clear()
 		{
 			if (ProjectClosed != null)
@@ -261,8 +304,12 @@ namespace FreeSCADA.Common
 				case ProjectEntityType.Image: return "images";
 				case ProjectEntityType.Script: return "scripts";
 				case ProjectEntityType.Settings: return "settings";
+<<<<<<< .mine
+                default:
+=======
 				case ProjectEntityType.Schema: return "Schemas";
 				default:
+>>>>>>> .r409
 					throw new NotImplementedException();
 			}
 		}

@@ -340,6 +340,10 @@
       <Project>{047EED80-A3C6-4A7F-BB4C-E4A64F96B210}</Project>
       <Name>RunTime</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Schema\CommonGUI.csproj">
+      <Project>{2A7362C8-496E-4EE8-93E2-BBF73DB0E0CF}</Project>
+      <Name>CommonGUI</Name>
+    </ProjectReference>
     <Page Include="SchemaEditor\Manipulators\Controlls\styles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
