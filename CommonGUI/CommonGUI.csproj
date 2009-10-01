@@ -5,21 +5,19 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A3D91CED-553F-4433-AD67-8706E0127D8D}</ProjectGuid>
+    <ProjectGuid>{2A7362C8-496E-4EE8-93E2-BBF73DB0E0CF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FreeSCADA.Common</RootNamespace>
-    <AssemblyName>Common</AssemblyName>
+    <RootNamespace>FreeSCADA.Common.Schema</RootNamespace>
+    <AssemblyName>CommonGUI</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Common.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -27,28 +25,19 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\Release\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.4.369, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\SharpZipLib\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="IronPython, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\IronPython\IronPython.dll</HintPath>
     </Reference>
-    <Reference Include="IronPython.Modules, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="Kent.Boogaart.Converters, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc96fa93a217f7a1, processorArchitecture=MSIL">
+    <Reference Include="IronPython.Modules, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\DataConverters\Kent.Boogaart.Converters.dll</HintPath>
-    </Reference>
-    <Reference Include="Kent.Boogaart.HelperTrinity, Version=1.1.0.0, Culture=neutral, PublicKeyToken=cc96fa93a217f7a1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\DataConverters\Kent.Boogaart.HelperTrinity.dll</HintPath>
+      <HintPath>..\3rdParty\IronPython\IronPython.Modules.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Scripting, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -68,17 +57,21 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Windows.Controls.DataVisualization.Toolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\wpftoolkit\System.Windows.Controls.DataVisualization.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UIAutomationProvider">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -87,55 +80,38 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseChannel.cs" />
-    <Compile Include="BaseCommand.cs" />
-    <Compile Include="BaseCommandContext.cs" />
-    <Compile Include="BaseDropDownCommand.cs" />
-    <Compile Include="Commands.cs" />
-    <Compile Include="CommunationPlugs.cs" />
-    <Compile Include="ConfigurationManager.cs" />
-    <Compile Include="ProjectConvertor.cs" />
-    <Compile Include="ProjectConvertor1.cs" />
-    <Compile Include="Scripting\Application.cs" />
-    <Compile Include="Scripting\ChannelsScriptHandlers.cs" />
-    <Compile Include="Scripting\EventScriptCollection.cs" />
-    <Compile Include="Scripting\GenericEventHandler.cs" />
-    <Compile Include="IVisualControlDescriptor.cs" />
-    <Compile Include="IVisualControlsPlug.cs" />
-    <Compile Include="VisualControlsPlugs.cs" />
-    <Compile Include="ICommand.cs" />
-    <Compile Include="Env.cs" />
-    <Compile Include="IChannel.cs" />
-    <Compile Include="ICommandContext.cs" />
-    <Compile Include="ICommandItems.cs" />
-    <Compile Include="ICommands.cs" />
-    <Compile Include="ICommunicationPlug.cs" />
-    <Compile Include="IEnvironment.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="MRUManager.cs" />
-    <Compile Include="NullCommand.cs" />
-    <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadOnlyPropertyGrid.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Scripting\Script.cs" />
-    <Compile Include="Scripting\ScriptManager.cs" />
-    <Compile Include="StringResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StringResources.resx</DependentUpon>
-    </Compile>
+    <Compile Include="Actions\ActionsCollection.cs" />
+    <Compile Include="Actions\BaseAction.cs" />
+    <Compile Include="Actions\MoveAction.cs" />
+    <Compile Include="Actions\RotateAction.cs" />
+    <Compile Include="Actions\ShowAction.cs" />
+    <Compile Include="Actions\ValueAction.cs" />
+    <Compile Include="AnimatedImage.cs" />
+    <Compile Include="ChannelDataProvider.cs" />
+    <Compile Include="ChannelDataSource.cs" />
+    <Compile Include="Commands\SchemaCommands.cs" />
+    <Compile Include="Converters\ComposingConverter.cs" />
+    <Compile Include="Converters\RangeConverter.cs" />
+    <Compile Include="Converters\ScriptConverter.cs" />
+    <Compile Include="MediaProvider.cs" />
+    <Compile Include="SchemaDocument.cs" />
+    <Compile Include="SolidBrushConverter.cs" />
+    <Compile Include="TimeChartControl.cs" />
+    <Compile Include="WPFShemaContainer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Common.snk" />
+    <ProjectReference Include="..\Archiver\Archiver.csproj">
+      <Project>{0BD3A946-E95E-46B7-A0B2-F89C2B03A5F9}</Project>
+      <Name>Archiver</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{A3D91CED-553F-4433-AD67-8706E0127D8D}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="StringResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>StringResources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

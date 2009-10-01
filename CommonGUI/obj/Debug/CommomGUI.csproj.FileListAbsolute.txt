@@ -1,0 +1,17 @@
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\bin\Debug\Schema.dll
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\bin\Debug\Schema.pdb
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\bin\Debug\Archiver.dll
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\bin\Debug\Common.dll
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\bin\Debug\IronPython.dll
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\bin\Debug\IronPython.Modules.dll
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\bin\Debug\Microsoft.Scripting.Core.dll
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\bin\Debug\Microsoft.Scripting.dll
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\bin\Debug\System.Windows.Controls.DataVisualization.Toolkit.dll
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\bin\Debug\Microsoft.Scripting.ExtensionAttribute.dll
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\bin\Debug\WPFToolkit.dll
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\bin\Debug\Common.pdb
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\bin\Debug\Archiver.pdb
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\obj\Debug\ResolveAssemblyReference.cache
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\obj\Debug\Schema.dll
+C:\AlexProjects\myown\net\FreeSCADA2\Schema\obj\Debug\Schema.pdb
