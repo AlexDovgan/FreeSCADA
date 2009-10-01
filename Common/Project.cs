@@ -266,8 +266,9 @@ namespace FreeSCADA.Common
 		/// <param name="data_block">Data block for saving</param>
 		public void SetData(string name, Stream data_block)
 		{
+            name = name.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
 			data_block.Flush();
-			data_block.Seek(0, SeekOrigin.Begin);
+            data_block.Seek(0, SeekOrigin.Begin);
 			byte[] bytes = new byte[data_block.Length];
 			data_block.Read(bytes, 0, (int)data_block.Length);
 
@@ -304,13 +305,9 @@ namespace FreeSCADA.Common
 				case ProjectEntityType.Image: return "images";
 				case ProjectEntityType.Script: return "scripts";
 				case ProjectEntityType.Settings: return "settings";
-<<<<<<< .mine
-                default:
-=======
 				case ProjectEntityType.Schema: return "Schemas";
 				default:
->>>>>>> .r409
-					throw new NotImplementedException();
+    				throw new NotImplementedException();
 			}
 		}
 

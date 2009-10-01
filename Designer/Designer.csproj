@@ -332,6 +332,10 @@
       <Project>{0BD3A946-E95E-46B7-A0B2-F89C2B03A5F9}</Project>
       <Name>Archiver</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CommonGUI\CommonGUI.csproj">
+      <Project>{2A7362C8-496E-4EE8-93E2-BBF73DB0E0CF}</Project>
+      <Name>CommonGUI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{A3D91CED-553F-4433-AD67-8706E0127D8D}</Project>
       <Name>Common</Name>
@@ -339,10 +343,6 @@
     <ProjectReference Include="..\RunTime\RunTime.csproj">
       <Project>{047EED80-A3C6-4A7F-BB4C-E4A64F96B210}</Project>
       <Name>RunTime</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Schema\CommonGUI.csproj">
-      <Project>{2A7362C8-496E-4EE8-93E2-BBF73DB0E0CF}</Project>
-      <Name>CommonGUI</Name>
     </ProjectReference>
     <Page Include="SchemaEditor\Manipulators\Controlls\styles.xaml">
       <Generator>MSBuild:Compile</Generator>
