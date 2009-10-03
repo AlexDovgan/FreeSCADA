@@ -1,0 +1,132 @@
+===============================================================================
+Log File:             	C:\DEVEL\#SNMP\Help\H2Reg_Log.txt
+Date:                 	5.9.2009 19:20:21
+Operating System:      	Windows XP 5.1 (Build 2600) Service Pack 3
+SysLocale.DefaultLCID: 	0x0405 (1029)
+SysLocale.PriLangID:   	0x0005 (5)
+SysLocale.SubLangID:   	0x0001 (1)
+DecimalSeparator:      	,
+-------------------------------------------------------------------------------
+EXE Path =          	C:\DEVEL\#SNMP\Help\H2Reg.exe
+EXE Version =       	1.6.0.0
+Cmdline Param(s) =  	-u | cmdfile=H2Reg.ini
+Actual CmdLine =  	h2reg.exe -u cmdfile=H2Reg.ini
+_RunDir =           	C:\DEVEL\#SNMP\Help
+_ModuleName =       	H2Reg.exe
+_ModuleDir =        	C:\DEVEL\#SNMP\Help
+_ModulePath =        	C:\DEVEL\#SNMP\Help\H2Reg.exe
+Module Version =       	1.6.0.0
+-------------------------------------------------------------------------------
+_hhInstalled =      	YES
+_hhVerStr =         	5.2.3790.4110
+_hhFriendlyVerStr = 	> 1.4a
+-------------------------------------------------------------------------------
+_ieInstalled =      	YES
+_ieVerStr =         	6.0.2900.5512
+_ieFriendlyVerStr = 	Internet Explorer 6 (Windows XP SP2)
+===============================================================================
+MS Help 2.x Runtime Found: YES
+    2.7.61224.0, C:\Program Files\Common Files\Microsoft Shared\Help\hxds.dll
+    2.7.61224.0, C:\Program Files\Common Files\Microsoft Shared\Help\hxvz.dll
+NT Admin Log On: YES
+PC Language ID = cs
+-------------------------------------------------------------------------------
+Quiet Mode (-Q): No
+Registration Mode (-R): No
+UnRegistration Mode (-U): Yes
+Append Log Mode (-A): No
+No NT Admin Check (-N): No
+Merge Indexes Mode (-M): No
+Cmd Script File (CmdFile=): H2Reg.ini
+User Dir 1 (UserDir1=): 
+User Dir 2 (UserDir2=): 
+User Dir 3 (UserDir3=): 
+User Dir 4 (UserDir4=): 
+===============================================================================
+CmdFile = C:\DEVEL\#SNMP\Help\H2Reg.ini
+<windir> = C:\WINDOWS
+<winsysdir> = C:\WINDOWS\system32
+<programfilesdir> = C:\Program Files
+<exedir> = C:\DEVEL\#SNMP\Help
+<exedirparent> = C:\DEVEL\#SNMP
+<cmdfiledir> = C:\DEVEL\#SNMP\Help
+<cmdfiledirparent> = C:\DEVEL\#SNMP
+<userdir1> = 
+<userdir1parent> = 
+<userdir2> = 
+<userdir2parent> = 
+<userdir3> = 
+<userdir3parent> = 
+<userdir4> = 
+<userdir4parent> = 
+-------------------------------------------------------------------------------
+[Reg_Namespace]
+Documentation|Documentation.HxC|#SNMP Class Library Documentation
+
+[Reg_Title]
+Documentation|Documentation|1033|Documentation.HxS|Documentation.HxS||||||
+
+[Reg_Plugin]
+ms.vsipcc+|_DEFAULT|Documentation|_DEFAULT
+ms.vsexpresscc+|_DEFAULT|Documentation|_DEFAULT
+
+[Reg_Filter]
+Documentation|#SNMP Class Library Documentation|"DocSet"="Documentation"
+
+[UnReg_Filter]
+Documentation|#SNMP Class Library Documentation
+
+[UnReg_Plugin]
+ms.vsipcc+|_DEFAULT|Documentation|_DEFAULT
+ms.vsexpresscc+|_DEFAULT|Documentation|_DEFAULT
+
+[UnReg_Title]
+Documentation|Documentation|1033
+
+[UnReg_Namespace]
+Documentation
+
+[Merge_Namespace]
+ms.vsipcc+|AUTO
+ms.vsexpresscc+|AUTO
+-------------------------------------------------------------------------------
+19:20:21   [UnReg_Filter] - Lines To Process = 1
+19:20:21     <nsName>="Documentation"
+19:20:21     <FilterName>="#SNMP Class Library Documentation"
+19:20:21   Namespace not found on this PC: "Documentation"
+19:20:21   >>Since objective was to remove the item, and its already removed, don't log as an error.
+-------------------------------------------------------------------------------
+19:20:21   [UnReg_Plugin] - Lines To Process = 2
+19:20:21     <nsName_Parent>="ms.vsipcc+"
+19:20:21     <HxT_Parent>="_DEFAULT"
+19:20:21     <nsName_Child>="Documentation"
+19:20:21     <HxT_Child>="_DEFAULT"
+19:20:21     <HxA_Child>=""
+19:20:21     NS Wild Card "ms.vsipcc+" matches = 1 item(s): MS.VSIPCC.v90
+19:20:21   Child Namespace "Documentation" is not plugged into parent "MS.VSIPCC.v90"
+19:20:21   >>Since objective was to remove the item, and its already removed, don't log as an error.
+19:20:21   
+19:20:21     <nsName_Parent>="ms.vsexpresscc+"
+19:20:21     <HxT_Parent>="_DEFAULT"
+19:20:21     <nsName_Child>="Documentation"
+19:20:21     <HxT_Child>="_DEFAULT"
+19:20:21     <HxA_Child>=""
+19:20:21     NS Wild Card "ms.vsexpresscc+" matches = 0 item(s)
+19:20:21   Parent Namespace: No matching Namespace name(s) found on this PC: "ms.vsexpresscc+"
+19:20:21   >>Since objective was to remove the item(s), and its already removed, don't log as an error.
+-------------------------------------------------------------------------------
+19:20:21   [UnReg_Title] - Lines To Process = 1
+19:20:21     <nsName>="Documentation"
+19:20:21     <TitleID>="Documentation"
+19:20:21     <LangID>="1033"
+19:20:21   Namespace name not found on this PC "Documentation"
+19:20:21   >>Since objective was to remove the item, and its already removed, don't log as an error.
+-------------------------------------------------------------------------------
+19:20:21   [UnReg_Namespace] - Lines To Process = 1
+19:20:21     <nsName>="Documentation"
+19:20:21   Matching Namespace name(s) not found on this PC: "Documentation"
+19:20:21   >>Since objective was to remove the item, and its already removed, don't log as an error.
+===============================================================================
+
+--END OF FILE--
+

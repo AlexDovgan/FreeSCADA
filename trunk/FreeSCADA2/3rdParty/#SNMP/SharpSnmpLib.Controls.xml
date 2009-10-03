@@ -1,0 +1,852 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SharpSnmpLib.Controls</name>
+    </assembly>
+    <members>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.Agent">
+            <summary>
+            Agent component.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Agent.#ctor">
+            <summary>
+            Initiates an <see cref="T:Lextm.SharpSnmpLib.Messaging.Agent"/> instance.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Agent.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Lextm.SharpSnmpLib.Messaging.Agent"/> class.
+            </summary>
+            <param name="container">The container.</param>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Agent.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.AgentFoundEventArgs">
+            <summary>
+            Event arguments for agent found event.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.AgentFoundEventArgs.#ctor(System.Net.IPEndPoint,Lextm.SharpSnmpLib.Variable)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Lextm.SharpSnmpLib.Messaging.AgentFoundEventArgs"/> class.
+            </summary>
+            <param name="agent">The agent.</param>
+            <param name="variable">The variable.</param>
+        </member>
+        <member name="P:Lextm.SharpSnmpLib.Messaging.AgentFoundEventArgs.Agent">
+            <summary>
+            Gets the agent.
+            </summary>
+            <value>The agent.</value>
+        </member>
+        <member name="P:Lextm.SharpSnmpLib.Messaging.AgentFoundEventArgs.Variable">
+            <summary>
+            Gets the variable.
+            </summary>
+            <value>The variable.</value>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.AgentV1ListenerAdapter">
+            <summary>
+            Adapter for SNMP v1 agent.
+            </summary>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.IListenerAdapter">
+            <summary>
+            Listener adapter interface.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.IListenerAdapter.Process(Lextm.SharpSnmpLib.ISnmpMessage,System.Net.IPEndPoint)">
+            <summary>
+            Processes the message.
+            </summary>
+            <param name="message">Message.</param>
+            <param name="sender">Sender.</param>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.AgentV1ListenerAdapter.Process(Lextm.SharpSnmpLib.ISnmpMessage,System.Net.IPEndPoint)">
+            <summary>
+            Processes the message.
+            </summary>
+            <param name="message">Message.</param>
+            <param name="sender">Sender.</param>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.AgentV1ListenerAdapter.GetRequestReceived">
+            <summary>
+            Occurs when a <see cref="T:Lextm.SharpSnmpLib.Messaging.GetRequestMessage"/> is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.AgentV1ListenerAdapter.SetRequestReceived">
+            <summary>
+            Occurs when a SET request is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.AgentV1ListenerAdapter.GetNextRequestReceived">
+            <summary>
+            Occurs when a GET NEXT request is received.
+            </summary>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.AgentV2ListenerAdapter">
+            <summary>
+            Adapter for SNMP v2c agent.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.AgentV2ListenerAdapter.Process(Lextm.SharpSnmpLib.ISnmpMessage,System.Net.IPEndPoint)">
+            <summary>
+            Processes the message.
+            </summary>
+            <param name="message">Message.</param>
+            <param name="sender">Sender.</param>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.AgentV2ListenerAdapter.GetRequestReceived">
+            <summary>
+            Occurs when a <see cref="T:Lextm.SharpSnmpLib.Messaging.GetRequestMessage"/> is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.AgentV2ListenerAdapter.SetRequestReceived">
+            <summary>
+            Occurs when a SET request is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.AgentV2ListenerAdapter.GetNextRequestReceived">
+            <summary>
+            Occurs when a GET NEXT request is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.AgentV2ListenerAdapter.GetBulkRequestReceived">
+            <summary>
+            Occurs when a GET BULK request is received.
+            </summary>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.AgentV3ListenerAdapter">
+            <summary>
+            Description of AgentV3ListenerAdapter.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.AgentV3ListenerAdapter.Process(Lextm.SharpSnmpLib.ISnmpMessage,System.Net.IPEndPoint)">
+            <summary>
+            Processes the message.
+            </summary>
+            <param name="message">Message.</param>
+            <param name="sender">Sender.</param>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.AgentV3ListenerAdapter.GetRequestReceived">
+            <summary>
+            Occurs when a <see cref="T:Lextm.SharpSnmpLib.Messaging.GetRequestMessage"/> is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.AgentV3ListenerAdapter.SetRequestReceived">
+            <summary>
+            Occurs when a SET request is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.AgentV3ListenerAdapter.GetNextRequestReceived">
+            <summary>
+            Occurs when a GET NEXT request is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.AgentV3ListenerAdapter.GetBulkRequestReceived">
+            <summary>
+            Occurs when a GET BULK request is received.
+            </summary>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.DefaultListenerAdapter">
+            <summary>
+            Description of DefaultListenerAdapter.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.DefaultListenerAdapter.Process(Lextm.SharpSnmpLib.ISnmpMessage,System.Net.IPEndPoint)">
+            <summary>
+            Processes the message.
+            </summary>
+            <param name="message">Message.</param>
+            <param name="sender">Sender.</param>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.DefaultListenerAdapter.TrapV1Received">
+            <summary>
+            Occurs when a <see cref="T:Lextm.SharpSnmpLib.Messaging.TrapV1Message"/> is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.DefaultListenerAdapter.TrapV2Received">
+            <summary>
+            Occurs when a <see cref="T:Lextm.SharpSnmpLib.Messaging.TrapV2Message"/> is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.DefaultListenerAdapter.InformRequestReceived">
+            <summary>
+            Occurs when a <see cref="T:Lextm.SharpSnmpLib.Messaging.InformRequestMessage"/> is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.DefaultListenerAdapter.GetRequestReceived">
+            <summary>
+            Occurs when a <see cref="T:Lextm.SharpSnmpLib.Messaging.GetRequestMessage"/> is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.DefaultListenerAdapter.SetRequestReceived">
+            <summary>
+            Occurs when a SET request is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.DefaultListenerAdapter.GetNextRequestReceived">
+            <summary>
+            Occurs when a GET NEXT request is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.DefaultListenerAdapter.GetBulkRequestReceived">
+            <summary>
+            Occurs when a GET BULK request is received.
+            </summary>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.Discoverer">
+            <summary>
+            Discoverer class to discover SNMP agents in the same network.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Discoverer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Lextm.SharpSnmpLib.Messaging.Discoverer"/> class.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Discoverer.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Lextm.SharpSnmpLib.Messaging.Discoverer"/> class.
+            </summary>
+            <param name="container">The container.</param>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Discoverer.Discover(Lextm.SharpSnmpLib.VersionCode,System.Net.IPEndPoint,Lextm.SharpSnmpLib.OctetString,System.Int32)">
+            <summary>
+            Discovers the specified version.
+            </summary>
+            <param name="version">The version.</param>
+            <param name="broadcastAddress">The broadcast address.</param>
+            <param name="community">The community.</param>
+            <param name="timeout">The timeout.</param>
+        </member>
+        <member name="F:Lextm.SharpSnmpLib.Messaging.Discoverer.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Discoverer.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Discoverer.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.Discoverer.AgentFound">
+            <summary>
+            Occurs when an SNMP agent is found.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.Discoverer.ExceptionRaised">
+            <summary>
+            Occurs when an exception is raised.
+            </summary>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.ExceptionRaisedEventArgs">
+            <summary>
+            Provides data for exception raised event.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.ExceptionRaisedEventArgs.#ctor(System.Exception)">
+            <summary>
+            Creates an <see cref="T:Lextm.SharpSnmpLib.Messaging.ExceptionRaisedEventArgs"/>.
+            </summary>
+            <param name="ex">Exception.</param>
+        </member>
+        <member name="P:Lextm.SharpSnmpLib.Messaging.ExceptionRaisedEventArgs.Exception">
+            <summary>
+            Exception.
+            </summary>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.Listener">
+            <summary>
+            Listener component.
+            </summary>
+            <remarks>
+            Drag this component into your form in designer, or create an instance in code.
+            </remarks>
+        </member>
+        <member name="F:Lextm.SharpSnmpLib.Messaging.Listener.IPv6NotSupported">
+            <summary>
+            Error message for non IP v6 OS.
+            </summary>
+        </member>
+        <member name="F:Lextm.SharpSnmpLib.Messaging.Listener._active">
+            <summary>
+            1 = true, 0 = false
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Listener.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Lextm.SharpSnmpLib.Messaging.Listener"/> class.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Listener.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Lextm.SharpSnmpLib.Messaging.Listener"/> class.
+            </summary>
+            <param name="container">The container.</param>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Listener.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Listener.Dispose(System.Boolean)">
+            <summary>
+            Releases the unmanaged resources used by the <see cref="T:System.ComponentModel.Component"/> and optionally releases the managed resources.
+            </summary>
+            <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Listener.SendResponse(Lextm.SharpSnmpLib.Messaging.GetResponseMessage,System.Net.EndPoint)">
+            <summary>
+            Sends a response message. 
+            </summary>
+            <param name="response">
+            A <see cref="T:Lextm.SharpSnmpLib.Messaging.GetResponseMessage"/>.
+            </param>
+            <param name="receiver">Receiver.</param>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Listener.Start">
+            <summary>
+            Starts.
+            </summary>
+            <remarks><para>This function will only monitor IP v4 incoming packets. IP v6 packets will be ignored. </para><para>If you actually need to monitor IP v6 packets, please use the overloading version that requires an IPEndpoint object.</para></remarks>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Listener.Start(System.Int32)">
+            <summary>
+            Starts on a specific port number.
+            </summary>
+            <param name="port">Port number.</param>
+            <remarks><para>This function will only monitor IP v4 incoming packets. IP v6 packets will be ignored. </para><para>If you actually need to monitor IP v6 packets, please use the overloading version that requires an IPEndpoint object.</para></remarks>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Listener.Start(System.Net.IPEndPoint)">
+            <summary>
+            Starts on a specific end point.
+            </summary>
+            <param name="endpoint">End point.</param>
+            <remarks>This function supports both IP v4 and v6 packets.</remarks>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Listener.Stop">
+            <summary>
+            Stops.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Listener.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents a <see cref="T:Lextm.SharpSnmpLib.Messaging.Listener"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.Listener.TrapV1Received">
+            <summary>
+            Occurs when a <see cref="T:Lextm.SharpSnmpLib.Messaging.TrapV1Message"/> is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.Listener.TrapV2Received">
+            <summary>
+            Occurs when a <see cref="T:Lextm.SharpSnmpLib.Messaging.TrapV2Message"/> is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.Listener.InformRequestReceived">
+            <summary>
+            Occurs when a <see cref="T:Lextm.SharpSnmpLib.Messaging.InformRequestMessage"/> is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.Listener.GetRequestReceived">
+            <summary>
+            Occurs when a <see cref="T:Lextm.SharpSnmpLib.Messaging.GetRequestMessage"/> is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.Listener.SetRequestReceived">
+            <summary>
+            Occurs when a SET request is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.Listener.GetNextRequestReceived">
+            <summary>
+            Occurs when a GET NEXT request is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.Listener.GetBulkRequestReceived">
+            <summary>
+            Occurs when a GET BULK request is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.Listener.ExceptionRaised">
+            <summary>
+            Occurs when an exception is raised.
+            </summary>
+        </member>
+        <member name="P:Lextm.SharpSnmpLib.Messaging.Listener.Port">
+            <summary>
+            Port number.
+            </summary>
+        </member>
+        <member name="P:Lextm.SharpSnmpLib.Messaging.Listener.Active">
+            <summary>
+            Returns a value if the listener is still working.
+            </summary>
+        </member>
+        <member name="P:Lextm.SharpSnmpLib.Messaging.Listener.Adapters">
+            <summary>
+            Adapters.
+            </summary>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.Manager">
+            <summary>
+            SNMP manager component that provides SNMP operations.
+            </summary>
+            <remarks>
+            <para>Drag this component into your form in designer, or create an instance in code.</para>
+            <para>Currently only SNMP v1 and v2c operations are supported.</para>
+            </remarks>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.#ctor">
+            <summary>
+            Creates a <see cref="T:Lextm.SharpSnmpLib.Messaging.Manager"></see> instance.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Lextm.SharpSnmpLib.Messaging.Manager"/> class.
+            </summary>
+            <param name="container">The container.</param>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.GetSingle(System.Net.IPEndPoint,System.String,Lextm.SharpSnmpLib.Variable)">
+            <summary>
+            Gets a variable bind.
+            </summary>
+            <param name="endpoint">Endpoint.</param>
+            <param name="community">Community name.</param>
+            <param name="variable">Variable bind.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.GetSingle(System.String,System.String,Lextm.SharpSnmpLib.Variable)">
+            <summary>
+            Gets a variable bind.
+            </summary>
+            <param name="address">Address.</param>
+            <param name="community">Community name.</param>
+            <param name="variable">Variable bind.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.GetSingle(System.Net.IPAddress,System.String,Lextm.SharpSnmpLib.Variable)">
+            <summary>
+            Gets a variable bind.
+            </summary>
+            <param name="address">Address.</param>
+            <param name="community">Community name.</param>
+            <param name="variable">Variable bind.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.Get(System.Net.IPEndPoint,System.String,System.Collections.Generic.IList{Lextm.SharpSnmpLib.Variable})">
+            <summary>
+            Gets a list of variable binds.
+            </summary>
+            <param name="endpoint">Endpoint.</param>
+            <param name="community">Community name.</param>
+            <param name="variables">Variable binds.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.Get(System.String,System.String,System.Collections.Generic.IList{Lextm.SharpSnmpLib.Variable})">
+            <summary>
+            Gets a list of variable binds.
+            </summary>
+            <param name="address">Address.</param>
+            <param name="community">Community name.</param>
+            <param name="variables">Variable binds.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.Get(System.Net.IPAddress,System.String,System.Collections.Generic.IList{Lextm.SharpSnmpLib.Variable})">
+            <summary>
+            Gets a list of variable binds.
+            </summary>
+            <param name="address">Address.</param>
+            <param name="community">Community name.</param>
+            <param name="variables">Variable binds.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.SetSingle(System.Net.IPEndPoint,System.String,Lextm.SharpSnmpLib.Variable)">
+            <summary>
+            Sets a variable bind.
+            </summary>
+            <param name="endpoint">Endpoint.</param>
+            <param name="community">Community name.</param>
+            <param name="variable">Variable bind.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.SetSingle(System.Net.IPAddress,System.String,Lextm.SharpSnmpLib.Variable)">
+            <summary>
+            Sets a variable bind.
+            </summary>
+            <param name="address">Address.</param>
+            <param name="community">Community name.</param>
+            <param name="variable">Variable bind.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.SetSingle(System.String,System.String,Lextm.SharpSnmpLib.Variable)">
+            <summary>
+            Sets a variable bind.
+            </summary>
+            <param name="address">Address.</param>
+            <param name="community">Community name.</param>
+            <param name="variable">Variable bind.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.Set(System.Net.IPEndPoint,System.String,System.Collections.Generic.IList{Lextm.SharpSnmpLib.Variable})">
+            <summary>
+            Sets a list of variable binds.
+            </summary>
+            <param name="endpoint">Endpoint.</param>
+            <param name="community">Community name.</param>
+            <param name="variables">Variable binds.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.Set(System.String,System.String,System.Collections.Generic.IList{Lextm.SharpSnmpLib.Variable})">
+            <summary>
+            Sets a list of variable binds.
+            </summary>
+            <param name="address">Address.</param>
+            <param name="community">Community name.</param>
+            <param name="variables">Variable binds.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.Set(System.Net.IPAddress,System.String,System.Collections.Generic.IList{Lextm.SharpSnmpLib.Variable})">
+            <summary>
+            Sets a list of variable binds.
+            </summary>
+            <param name="address">Address.</param>
+            <param name="community">Community name.</param>
+            <param name="variables">Variable binds.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.GetTable(System.Net.IPEndPoint,System.String,Lextm.SharpSnmpLib.ObjectIdentifier)">
+            <summary>
+            Gets a table of variables.
+            </summary>
+            <param name="endpoint">Endpoint.</param>
+            <param name="community">Community name.</param>
+            <param name="table">Table OID.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.GetTable(System.Net.IPAddress,System.String,Lextm.SharpSnmpLib.ObjectIdentifier)">
+            <summary>
+            Gets a table of variables.
+            </summary>
+            <param name="address">Address.</param>
+            <param name="community">Community name.</param>
+            <param name="table">Table OID.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.GetTable(System.String,System.String,Lextm.SharpSnmpLib.ObjectIdentifier)">
+            <summary>
+            Gets a table of variables.
+            </summary>
+            <param name="address">Address.</param>
+            <param name="community">Community name.</param>
+            <param name="table">Table OID.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Manager.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents this <see cref="T:Lextm.SharpSnmpLib.Messaging.Manager"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Lextm.SharpSnmpLib.Messaging.Manager.DefaultVersion">
+            <summary>
+            Default protocol version for operations.
+            </summary>
+            <remarks>By default, the value is SNMP v1.</remarks>
+        </member>
+        <member name="P:Lextm.SharpSnmpLib.Messaging.Manager.Timeout">
+            <summary>
+            Timeout value.
+            </summary>
+            <remarks>By default, the value is 5,000-milliseconds (5 seconds).</remarks>
+        </member>
+        <member name="P:Lextm.SharpSnmpLib.Messaging.Manager.Objects">
+            <summary>
+            Gets or sets the objects.
+            </summary>
+            <value>The objects.</value>
+            <remarks>Changed from 2.0: it will return null if not set.</remarks>
+        </member>
+        <member name="P:Lextm.SharpSnmpLib.Messaging.Manager.MaxRepetitions">
+            <summary>
+            Gets or sets the max repetitions for GET BULK operations.
+            </summary>
+            <value>The max repetitions.</value>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.ManagerV1ListenerAdapter">
+            <summary>
+            Adapter for SNMP v1 manager.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.ManagerV1ListenerAdapter.Process(Lextm.SharpSnmpLib.ISnmpMessage,System.Net.IPEndPoint)">
+            <summary>
+            Processes the message.
+            </summary>
+            <param name="message">Message.</param>
+            <param name="sender">Sender.</param>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.ManagerV1ListenerAdapter.TrapV1Received">
+            <summary>
+            Occurs when a <see cref="T:Lextm.SharpSnmpLib.Messaging.TrapV1Message"/> is received.
+            </summary>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.ManagerV2ListenerAdapter">
+            <summary>
+            Adapter for SNMP v2c manager.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.ManagerV2ListenerAdapter.Process(Lextm.SharpSnmpLib.ISnmpMessage,System.Net.IPEndPoint)">
+            <summary>
+            Processes the message.
+            </summary>
+            <param name="message">Message.</param>
+            <param name="sender">Sender.</param>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.ManagerV2ListenerAdapter.TrapV2Received">
+            <summary>
+            Occurs when a <see cref="T:Lextm.SharpSnmpLib.Messaging.TrapV2Message"/> is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.ManagerV2ListenerAdapter.InformRequestReceived">
+            <summary>
+            Occurs when a <see cref="T:Lextm.SharpSnmpLib.Messaging.InformRequestMessage"/> is received.
+            </summary>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.ManagerV3ListenerAdapter">
+            <summary>
+            Description of ManagerV3ListenerAdapter.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.ManagerV3ListenerAdapter.Process(Lextm.SharpSnmpLib.ISnmpMessage,System.Net.IPEndPoint)">
+            <summary>
+            Processes the message.
+            </summary>
+            <param name="message">Message.</param>
+            <param name="sender">Sender.</param>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.ManagerV3ListenerAdapter.TrapV2Received">
+            <summary>
+            Occurs when a <see cref="T:Lextm.SharpSnmpLib.Messaging.TrapV2Message"/> is received.
+            </summary>
+        </member>
+        <member name="E:Lextm.SharpSnmpLib.Messaging.ManagerV3ListenerAdapter.InformRequestReceived">
+            <summary>
+            Occurs when a <see cref="T:Lextm.SharpSnmpLib.Messaging.InformRequestMessage"/> is received.
+            </summary>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.MessageReceivedEventArgs`1">
+            <summary>
+            The <see cref="T:System.EventArgs"/> for one kind of <see cref="T:Lextm.SharpSnmpLib.ISnmpMessage"/>, used when that kind of message is received.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.MessageReceivedEventArgs`1.#ctor(System.Net.IPEndPoint,`0)">
+            <summary>
+            Creates a <see cref="T:Lextm.SharpSnmpLib.Messaging.MessageReceivedEventArgs`1"/>.
+            </summary>
+            <param name="sender">Sender.</param>
+            <param name="message">The message received.</param>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.MessageReceivedEventArgs`1.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents this object.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Lextm.SharpSnmpLib.Messaging.MessageReceivedEventArgs`1.Message">
+            <summary>
+            The received message.
+            </summary>
+        </member>
+        <member name="P:Lextm.SharpSnmpLib.Messaging.MessageReceivedEventArgs`1.Sender">
+            <summary>
+            Sender.
+            </summary>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.Messenger">
+            <summary>
+            Messenger class contains all static helper methods you need to send out SNMP messages. 
+            Static methods in Manager or Agent class will be removed in the future.
+            </summary>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Messenger.Get(Lextm.SharpSnmpLib.VersionCode,System.Net.IPEndPoint,Lextm.SharpSnmpLib.OctetString,System.Collections.Generic.IList{Lextm.SharpSnmpLib.Variable},System.Int32)">
+            <summary>
+            Gets a list of variable binds.
+            </summary>
+            <param name="version">Protocol version.</param>
+            <param name="endpoint">Endpoint.</param>
+            <param name="community">Community name.</param>
+            <param name="variables">Variable binds.</param>
+            <param name="timeout">Timeout.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Messenger.Set(Lextm.SharpSnmpLib.VersionCode,System.Net.IPEndPoint,Lextm.SharpSnmpLib.OctetString,System.Collections.Generic.IList{Lextm.SharpSnmpLib.Variable},System.Int32)">
+            <summary>
+            Sets a list of variable binds.
+            </summary>
+            <param name="version">Protocol version.</param>
+            <param name="endpoint">Endpoint.</param>
+            <param name="community">Community name.</param>
+            <param name="variables">Variable binds.</param>
+            <param name="timeout">Timeout.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Messenger.Walk(Lextm.SharpSnmpLib.VersionCode,System.Net.IPEndPoint,Lextm.SharpSnmpLib.OctetString,Lextm.SharpSnmpLib.ObjectIdentifier,System.Collections.Generic.IList{Lextm.SharpSnmpLib.Variable},System.Int32,Lextm.SharpSnmpLib.Messaging.WalkMode)">
+            <summary>
+            Walks.
+            </summary>
+            <param name="version">Protocol version.</param>
+            <param name="endpoint">Endpoint.</param>
+            <param name="community">Community name.</param>
+            <param name="table">OID.</param>
+            <param name="list">A list to hold the results.</param>
+            <param name="timeout">Timeout.</param>
+            <param name="mode">Walk mode.</param>
+            <returns>
+            Returns row count if the OID is a table. Otherwise this value is meaningless.
+            </returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Messenger.HasNext(Lextm.SharpSnmpLib.VersionCode,System.Net.IPEndPoint,Lextm.SharpSnmpLib.OctetString,Lextm.SharpSnmpLib.Variable,System.Int32,Lextm.SharpSnmpLib.Variable@)">
+            <summary>
+            Determines whether the specified seed has next item.
+            </summary>
+            <param name="version">The version.</param>
+            <param name="endpoint">The endpoint.</param>
+            <param name="community">The community.</param>
+            <param name="seed">The seed.</param>
+            <param name="timeout">The timeout.</param>
+            <param name="next">The next.</param>
+            <returns>
+                <c>true</c> if the specified seed has next item; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Messenger.BulkWalk(Lextm.SharpSnmpLib.VersionCode,System.Net.IPEndPoint,Lextm.SharpSnmpLib.OctetString,Lextm.SharpSnmpLib.ObjectIdentifier,System.Collections.Generic.IList{Lextm.SharpSnmpLib.Variable},System.Int32,System.Int32,Lextm.SharpSnmpLib.Messaging.WalkMode)">
+            <summary>
+            Walks.
+            </summary>
+            <param name="version">Protocol version.</param>
+            <param name="endpoint">Endpoint.</param>
+            <param name="community">Community name.</param>
+            <param name="table">OID.</param>
+            <param name="list">A list to hold the results.</param>
+            <param name="timeout">Timeout.</param>
+            <param name="maxRepetitions">The max repetitions.</param>
+            <param name="mode">Walk mode.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Messenger.BulkHasNext(Lextm.SharpSnmpLib.VersionCode,System.Net.IPEndPoint,Lextm.SharpSnmpLib.OctetString,Lextm.SharpSnmpLib.Variable,System.Int32,System.Int32,System.Collections.Generic.IList{Lextm.SharpSnmpLib.Variable}@)">
+            <summary>
+            Determines whether the specified seed has next item.
+            </summary>
+            <param name="version">The version.</param>
+            <param name="endpoint">The endpoint.</param>
+            <param name="community">The community.</param>
+            <param name="seed">The seed.</param>
+            <param name="timeout">The timeout.</param>
+            <param name="maxRepetitions">The max repetitions.</param>
+            <param name="next">The next.</param>
+            <returns>
+                <c>true</c> if the specified seed has next item; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Messenger.SendTrapV1(System.Net.EndPoint,System.Net.IPAddress,Lextm.SharpSnmpLib.OctetString,Lextm.SharpSnmpLib.ObjectIdentifier,Lextm.SharpSnmpLib.GenericCode,System.Int32,System.UInt32,System.Collections.Generic.IList{Lextm.SharpSnmpLib.Variable})">
+            <summary>
+            Sends a TRAP v1 message.
+            </summary>
+            <param name="receiver">Receiver.</param>
+            <param name="agent">Agent.</param>
+            <param name="community">Community name.</param>
+            <param name="enterprise">Enterprise OID.</param>
+            <param name="generic">Generic code.</param>
+            <param name="specific">Specific code.</param>
+            <param name="timestamp">Timestamp.</param>
+            <param name="variables">Variable bindings.</param>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Messenger.SendTrapV2(System.Int32,Lextm.SharpSnmpLib.VersionCode,System.Net.EndPoint,Lextm.SharpSnmpLib.OctetString,Lextm.SharpSnmpLib.ObjectIdentifier,System.UInt32,System.Collections.Generic.IList{Lextm.SharpSnmpLib.Variable})">
+            <summary>
+            Sends TRAP v2 message.
+            </summary>
+            <param name="version">Protocol version.</param>
+            <param name="receiver">Receiver.</param>
+            <param name="community">Community name.</param>
+            <param name="enterprise">Enterprise OID.</param>
+            <param name="timestamp">Timestamp.</param>
+            <param name="variables">Variable bindings.</param>
+            <param name="requestId">Request ID.</param>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Messenger.SendInform(System.Int32,Lextm.SharpSnmpLib.VersionCode,System.Net.IPEndPoint,Lextm.SharpSnmpLib.OctetString,Lextm.SharpSnmpLib.ObjectIdentifier,System.UInt32,System.Collections.Generic.IList{Lextm.SharpSnmpLib.Variable},System.Int32)">
+            <summary>
+            Sends INFORM message.
+            </summary>
+            <param name="requestId">The request id.</param>
+            <param name="version">Protocol version.</param>
+            <param name="receiver">Receiver.</param>
+            <param name="community">Community name.</param>
+            <param name="enterprise">Enterprise OID.</param>
+            <param name="timestamp">Timestamp.</param>
+            <param name="variables">Variable bindings.</param>
+            <param name="timeout">Timeout.</param>
+        </member>
+        <member name="M:Lextm.SharpSnmpLib.Messaging.Messenger.GetTable(Lextm.SharpSnmpLib.VersionCode,System.Net.IPEndPoint,Lextm.SharpSnmpLib.OctetString,Lextm.SharpSnmpLib.ObjectIdentifier,System.Int32,System.Int32,Lextm.SharpSnmpLib.Mib.IObjectRegistry)">
+            <summary>
+            Gets a table of variables.
+            </summary>
+            <param name="version">Protocol version.</param>
+            <param name="endpoint">Endpoint.</param>
+            <param name="community">Community name.</param>
+            <param name="table">Table OID.</param>
+            <param name="timeout">Timeout.</param>
+            <param name="maxRepetitions">The max repetitions.</param>
+            <param name="registry">The registry.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Lextm.SharpSnmpLib.Messaging.Messenger.RequestCounter">
+            <summary>
+            Gets the request counter.
+            </summary>
+            <value>The request counter.</value>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.IdGenerator">
+            <summary>
+            A counter that generates ID.
+            </summary>
+            <remarks>The request ID is used to identifier sessions.</remarks>
+        </member>
+        <member name="P:Lextm.SharpSnmpLib.Messaging.IdGenerator.NextId">
+            <summary>
+            Returns next ID.
+            </summary>
+        </member>
+        <member name="T:Lextm.SharpSnmpLib.Messaging.WalkMode">
+            <summary>
+            Walk mode.
+            </summary>
+        </member>
+        <member name="F:Lextm.SharpSnmpLib.Messaging.WalkMode.Default">
+            <summary>
+            Default mode walk to the end of MIB view.
+            </summary>
+        </member>
+        <member name="F:Lextm.SharpSnmpLib.Messaging.WalkMode.WithinSubtree">
+            <summary>
+            In this mode, walk within subtree.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+# Visual C# Express 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Designer", "Designer\Designer.csproj", "{93466C99-5637-4243-A01A-7AF12F706889}"
 	ProjectSection(ProjectDependencies) = postProject
 		{9EABAB10-2305-4DFF-8600-1456C0CD4729} = {9EABAB10-2305-4DFF-8600-1456C0CD4729}
@@ -44,6 +44,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communication.CLServer", "Communication.CLServer\Communication.CLServer.csproj", "{E79E63D0-B89C-480A-9249-38AFAB4A650A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonGUI", "CommonGUI\CommonGUI.csproj", "{2A7362C8-496E-4EE8-93E2-BBF73DB0E0CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communication.SNMPPlug", "Communication.SNMPPlug\Communication.SNMPPlug.csproj", "{D6F55800-23DD-45F8-86D1-70ACC2110214}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,6 +129,10 @@ Global
 		{2A7362C8-496E-4EE8-93E2-BBF73DB0E0CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A7362C8-496E-4EE8-93E2-BBF73DB0E0CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A7362C8-496E-4EE8-93E2-BBF73DB0E0CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6F55800-23DD-45F8-86D1-70ACC2110214}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6F55800-23DD-45F8-86D1-70ACC2110214}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6F55800-23DD-45F8-86D1-70ACC2110214}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6F55800-23DD-45F8-86D1-70ACC2110214}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
