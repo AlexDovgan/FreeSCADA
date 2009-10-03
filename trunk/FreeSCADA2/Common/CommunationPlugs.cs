@@ -105,7 +105,8 @@ namespace FreeSCADA.Common
 		}
         
         public IChannel GetChannel(string name)
-        {                
+        {
+            if (name == null) return null;
             string[] splited = name.Split('.');
             if(splited.Length>1)
             {
