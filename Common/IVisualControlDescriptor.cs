@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Windows;
 
 namespace FreeSCADA.Interfaces
 {
@@ -32,7 +31,7 @@ namespace FreeSCADA.Interfaces
             get;
         }
 
-        UIElement CreateControl();
+        object CreateControl();
 
         object Tag
         {

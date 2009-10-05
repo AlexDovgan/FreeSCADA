@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Xml;
 
-namespace FreeSCADA.Common
+namespace FreeSCADA.Common.ProjectConverters
 {
-    public class ProjectConvertor1: ProjectConvertor
+	class ProjectConverter_200to201 : BaseProjectConverter
     {
         public override int AcceptedVersion
         {
@@ -21,7 +19,7 @@ namespace FreeSCADA.Common
             {
                 System.IO.StreamReader reader=new System.IO.StreamReader(prj.GetData("Schemas/" + schemaName + "/xaml"));
                 String xml=reader.ReadToEnd();
-                xml=xml.Replace("clr-namespace:FreeSCADA.Common.Schema;assembly=Common","clr-namespace:FreeSCADA.Common.Schema;assembly=CommonGUI");
+                xml = xml.Replace("clr-namespace:FreeSCADA.Common.Schema;assembly=Common", "clr-namespace:FreeSCADA.Common.Schema;assembly=CommonGUI");
                 xml = xml.Replace("clr-namespace:FreeSCADA.Common.Schema;assembly=Schema", "clr-namespace:FreeSCADA.Common.Schema;assembly=CommonGUI");
                 byte[] data=System.Text.ASCIIEncoding.Default.GetBytes(xml);
                 System.IO.MemoryStream ms = new System.IO.MemoryStream(data);

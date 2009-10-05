@@ -37,7 +37,7 @@ namespace FreeSCADA.CLServer
 			}
 			Console.WriteLine("Done.");
 
-			Uri baseAddress = new Uri(string.Format("http://localhost:{0}/", options.Port));
+			Uri baseAddress = new Uri(string.Format("http://{0}:{1}/", System.Windows.Forms.SystemInformation.ComputerName, options.Port));
 			ServiceHost host = new ServiceHost(typeof(Service), baseAddress);
             try
             {
@@ -57,7 +57,7 @@ namespace FreeSCADA.CLServer
 				host.Authorization.PrincipalPermissionMode = PrincipalPermissionMode.None;
 				host.Open();
 
-				Console.WriteLine("Server address {0}", string.Format("http://localhost:{0}/", options.Port));
+				Console.WriteLine("Server address {0}", baseAddress.AbsoluteUri);
                 Console.WriteLine("Press <ENTER> to terminate");
                 Console.ReadLine();
 				Console.WriteLine("Terminating. Please wait...");

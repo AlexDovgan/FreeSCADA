@@ -42,14 +42,6 @@
       <HintPath>..\3rdParty\IronPython\IronPython.dll</HintPath>
     </Reference>
     <Reference Include="IronPython.Modules, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="Kent.Boogaart.Converters, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc96fa93a217f7a1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\DataConverters\Kent.Boogaart.Converters.dll</HintPath>
-    </Reference>
-    <Reference Include="Kent.Boogaart.HelperTrinity, Version=1.1.0.0, Culture=neutral, PublicKeyToken=cc96fa93a217f7a1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\DataConverters\Kent.Boogaart.HelperTrinity.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Scripting, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\IronPython\Microsoft.Scripting.dll</HintPath>
@@ -58,33 +50,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\IronPython\Microsoft.Scripting.Core.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Controls.DataVisualization.Toolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\wpftoolkit\System.Windows.Controls.DataVisualization.Toolkit.dll</HintPath>
-    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIAutomationProvider">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsFormsIntegration">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseChannel.cs" />
@@ -94,11 +67,10 @@
     <Compile Include="Commands.cs" />
     <Compile Include="CommunationPlugs.cs" />
     <Compile Include="ConfigurationManager.cs" />
-    <Compile Include="ProjectConvertor.cs" />
-    <Compile Include="ProjectConvertor1.cs" />
+    <Compile Include="ProjectConverters\BaseProjectConverter.cs" />
+    <Compile Include="ProjectConverters\ProjectConverter_200to201.cs" />
     <Compile Include="Scripting\Application.cs" />
     <Compile Include="Scripting\ChannelsScriptHandlers.cs" />
-    <Compile Include="Scripting\EventScriptCollection.cs" />
     <Compile Include="Scripting\GenericEventHandler.cs" />
     <Compile Include="IVisualControlDescriptor.cs" />
     <Compile Include="IVisualControlsPlug.cs" />

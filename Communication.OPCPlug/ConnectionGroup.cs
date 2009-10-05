@@ -13,6 +13,16 @@ namespace FreeSCADA.Communication.OPCPlug
 		int callbackCookie;
 		IOPCServer server;
 
+		enum ServerWriteCapabilities
+		{
+			Unknown,
+			None,
+			Async,
+			Sync
+		};
+		ServerWriteCapabilities serverWriteCapabilities = ServerWriteCapabilities.Unknown;
+
+
 		const int OPC_READABLE = 1;
 		const int OPC_WRITEABLE = 2;
 
@@ -84,43 +94,75 @@ namespace FreeSCADA.Communication.OPCPlug
 		{
 			IOPCAsyncIO2 asyncIO = null;
 			IOPCSyncIO syncIO = null;
-			try
-			{
-				asyncIO = (IOPCAsyncIO2)group;
-			}
-			catch (System.Runtime.InteropServices.COMException)
-			{
-			}
 
-			if (asyncIO == null)
+			lock (this)
 			{
+				if (serverWriteCapabilities == ServerWriteCapabilities.Unknown)
+				{
+					try
+					{
+						asyncIO = (IOPCAsyncIO2)group;
+						if (asyncIO != null)
+							serverWriteCapabilities = ServerWriteCapabilities.Async;
+					}
+					catch (System.Runtime.InteropServices.COMException)
+					{
+					}
+
+					if (asyncIO == null)
+					{
+						try
+						{
+							syncIO = (IOPCSyncIO)group;
+							if (syncIO != null)
+								serverWriteCapabilities = ServerWriteCapabilities.Sync;
+						}
+						catch (System.Runtime.InteropServices.COMException)
+						{
+						}
+					}
+
+					if (asyncIO == null && syncIO == null)
+						serverWriteCapabilities = ServerWriteCapabilities.None;
+				}
+
 				try
 				{
-					syncIO = (IOPCSyncIO)group;
+					switch(serverWriteCapabilities)
+					{
+						case ServerWriteCapabilities.Async:
+							syncIO = (IOPCSyncIO)group;
+							break;
+						case ServerWriteCapabilities.Sync:
+							syncIO = (IOPCSyncIO)group;
+							break;
+						default:
+							return false;
+					}
 				}
 				catch (System.Runtime.InteropServices.COMException)
 				{
 				}
-			}
 
-			if (asyncIO == null && syncIO == null)
-				return false;
+				if (asyncIO == null && syncIO == null)
+					return false;
 
-			if (asyncIO != null)
-			{
-				int cancelID;
-				IntPtr ppErrors;
-				asyncIO.Write(1, new int[]{channelHandle}, new object[]{value}, 0, out cancelID, out ppErrors);
-				Marshal.FreeCoTaskMem(ppErrors);
-			}
-			else if (syncIO != null)
-			{
-				IntPtr ppErrors;
-				syncIO.Write(1, new int[] { channelHandle }, new object[] { value }, out ppErrors);
-				Marshal.FreeCoTaskMem(ppErrors);
-			}
+				if (asyncIO != null)
+				{
+					int cancelID;
+					IntPtr ppErrors;
+					asyncIO.Write(1, new int[] { channelHandle }, new object[] { value }, 0, out cancelID, out ppErrors);
+					Marshal.FreeCoTaskMem(ppErrors);
+				}
+				else if (syncIO != null)
+				{
+					IntPtr ppErrors;
+					syncIO.Write(1, new int[] { channelHandle }, new object[] { value }, out ppErrors);
+					Marshal.FreeCoTaskMem(ppErrors);
+				}
 
-			return true;
+				return true;
+			}
 		}
 	}
 }

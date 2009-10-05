@@ -16,7 +16,8 @@ namespace Communication.OPCPlug.Tests
 		public override void Setup()
 		{
 			System.Windows.Forms.MenuStrip menu = new System.Windows.Forms.MenuStrip();
-			Env.Initialize(null, menu, null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			System.Windows.Forms.ToolStrip toolbar = new System.Windows.Forms.ToolStrip();
+			Env.Initialize(null, menu, toolbar, FreeSCADA.Interfaces.EnvironmentMode.Designer);
 			plugin = (Plugin)Env.Current.CommunicationPlugins["opc_connection_plug"];
 
 			projectFile = System.IO.Path.GetTempFileName();
@@ -175,6 +176,34 @@ namespace Communication.OPCPlug.Tests
 				ch.Value = val;
 			}
 
+			plugin.Disconnect();
+		}
+
+		[Test]
+		public void WriteToAllChannelsAsync()
+		{
+			ExpectModal("SettingsForm", "ImportAllChannelsSettingsFormHandler");
+			ICommandContext context = Env.Current.Commands.GetPredefinedContext(PredefinedContexts.Communication);
+			Env.Current.Commands.FindCommandByName(context, StringConstants.PropertyCommandName).Execute();
+
+
+			Assert.IsTrue(plugin.Connect());
+
+			//Wait for some time until all channels get filled by OPC
+			System.Threading.Thread.Sleep(1000);
+
+			System.Threading.Thread updateThread = new System.Threading.Thread(() =>
+				{
+					foreach (IChannel ch in plugin.Channels)
+					{
+						object val = ch.Value;
+						ch.Value = val;
+						Assert.AreEqual(ch.Value, val);
+					}
+				}
+			);
+			updateThread.Start();
+			updateThread.Join();
 			plugin.Disconnect();
 		}
 	}

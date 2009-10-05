@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
+using FreeSCADA.Common.ProjectConverters;
 using ICSharpCode.SharpZipLib.Checksums;
 using ICSharpCode.SharpZipLib.Zip;
-using System.Reflection;
 
 namespace FreeSCADA.Common
 {
@@ -105,50 +106,55 @@ namespace FreeSCADA.Common
 				}
 			}
             this.fileName = fileName;
-            if (Version != CurrentVersion)
-                if (System.Windows.Forms.MessageBox.Show("Project version is difer from current version\n\rdo you whant try to convert?"
-                    , "Caution!", System.Windows.Forms.MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
-                {
-                    ConvertProject();
-                    if (Version != CurrentVersion)
-                        System.Windows.Forms.MessageBox.Show("Project version stil difer from current version."
-                    , "Conversion Result");
-                }
+
+			if (Version != CurrentVersion)
+			{
+				if (System.Windows.Forms.MessageBox.Show("Project version is difer from current version\n\rdo you whant try to convert?"
+					, "Caution!", System.Windows.Forms.MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+				{
+					ConvertProject();
+					if (Version != CurrentVersion)
+						System.Windows.Forms.MessageBox.Show("Project version stil difer from current version.", "Conversion Result");
+				}
+			}
 			FireProjectLoaded();
 		}
 
         void ConvertProject()
         {
-            List<ProjectConvertor> convertors = new List<ProjectConvertor>();
+			List<BaseProjectConverter> convertors = new List<BaseProjectConverter>();
             Assembly archiverAssembly = this.GetType().Assembly;
             foreach (Type type in archiverAssembly.GetTypes())
             {
-                if (type.IsSubclassOf(typeof(ProjectConvertor)))
-                     convertors.Add(Activator.CreateInstance(type) as ProjectConvertor);
+				if (type.IsSubclassOf(typeof(BaseProjectConverter)))
+					convertors.Add(Activator.CreateInstance(type) as BaseProjectConverter);
             }
-            if (CurrentVersion > Version)
-                for (int i = 0; i < convertors.Count; i++)
-                {
-                    ProjectConvertor conv = convertors[i];
-                    if (conv.AcceptedVersion == Version && conv.ResultVersion <= CurrentVersion)
-                    {
-                        conv.Convert(this);
-                        convertors.RemoveAt(i);
-                        i = 0;
-                    }
-                }
-            else
-                for (int i = 0; i < convertors.Count; i++)
-                {
-                    ProjectConvertor conv = convertors[i];
-                    if (conv.ResultVersion == CurrentVersion && conv.AcceptedVersion>=Version)
-                    {
-                        conv.ConvertBack(this);
-                        convertors.RemoveAt(i);
-                        i = 0;
-                    }
-                }
-
+			if (CurrentVersion > Version)
+			{
+				for (int i = 0; i < convertors.Count; i++)
+				{
+					BaseProjectConverter conv = convertors[i];
+					if (conv.AcceptedVersion == Version && conv.ResultVersion <= CurrentVersion)
+					{
+						conv.Convert(this);
+						convertors.RemoveAt(i);
+						i = 0;
+					}
+				}
+			}
+			else
+			{
+				for (int i = 0; i < convertors.Count; i++)
+				{
+					BaseProjectConverter conv = convertors[i];
+					if (conv.ResultVersion == CurrentVersion && conv.AcceptedVersion >= Version)
+					{
+						conv.ConvertBack(this);
+						convertors.RemoveAt(i);
+						i = 0;
+					}
+				}
+			}
         }
 		internal void Clear()
 		{
