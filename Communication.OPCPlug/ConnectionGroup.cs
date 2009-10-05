@@ -28,7 +28,12 @@ namespace FreeSCADA.Communication.OPCPlug
 
 		public ConnectionGroup(string opcServer, string opcHost, List<OPCBaseChannel> channels)
 		{
-			Type t = Type.GetTypeFromProgID(opcServer, opcHost);
+			Type t;
+			if(opcHost.ToLowerInvariant() == "localhost")
+				t = Type.GetTypeFromProgID(opcServer);
+			else
+				t = Type.GetTypeFromProgID(opcServer, opcHost);
+
 			server = (IOPCServer)Activator.CreateInstance(t);
 			int groupClientId = 1;
 			int groupId;

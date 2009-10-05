@@ -75,7 +75,19 @@ namespace FreeSCADA.Common
 		{
 			foreach (ICommunicationPlug plug in commPlugs)
 			{
-				if (plug.Connect() == false)
+				bool connectResult = false;
+				try
+				{
+					connectResult = plug.Connect();
+				}
+				catch (Exception e)
+				{
+					Env.Current.Logger.LogError(StringResources.msgFailedToConnectPlugins);
+					Env.Current.Logger.LogError(e.Message);
+					return false;
+				}
+
+				if (connectResult == false)
 				{
 					Env.Current.Logger.LogError(StringResources.msgFailedToConnectPlugins);
 					Disconnect();
