@@ -31,10 +31,14 @@ namespace FreeSCADA.Communication.OPCPlug
 
 		private void OnConnect(object sender, EventArgs e)
 		{
-			string hostName = localServerButton.Checked ? "localhost" : serverTextBox.Text;
 			string serverName = serversComboBox.Text;
 
-			Type t = Type.GetTypeFromProgID(serverName, hostName);
+			Type t;
+			if (localServerButton.Checked)
+				t = Type.GetTypeFromProgID(serverName);
+			else
+				t = Type.GetTypeFromProgID(serverName, serverTextBox.Text);
+
 			object obj = Activator.CreateInstance(t);
 			IOPCBrowseServerAddressSpace srv = (IOPCBrowseServerAddressSpace)obj;
 
