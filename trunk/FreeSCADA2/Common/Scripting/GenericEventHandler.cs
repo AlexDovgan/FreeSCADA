@@ -14,7 +14,7 @@ namespace FreeSCADA.Common.Scripting
 	/// <summary>
 	/// Summary description for EventHandlerFactory.
 	/// </summary>
-	class EventHandlerFactory
+	public class EventHandlerFactory
 	{
 		private static EventHandlerTypeEmitter emitter;
 		private static string helperName;

@@ -34,7 +34,7 @@ namespace FreeSCADA.VisualControls.FS2EasyControls
             get { return ManipulatorKind.DragResizeRotateManipulator; }
         }
 
-        public UIElement CreateControl()
+        public object CreateControl()
         {
             return new AnalogTextValue();
         }

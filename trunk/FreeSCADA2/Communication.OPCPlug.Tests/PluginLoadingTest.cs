@@ -12,7 +12,7 @@ namespace Communication.OPCPlug.Tests
 		public void Initialization()
 		{
 			System.Windows.Forms.MenuStrip menu = new System.Windows.Forms.MenuStrip();
-			Env.Initialize(null, menu, null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			Env.Initialize(null, menu, new System.Windows.Forms.ToolStrip(), FreeSCADA.Interfaces.EnvironmentMode.Designer);
 
 			Plugin plugin = (Plugin)Env.Current.CommunicationPlugins["opc_connection_plug"];
 

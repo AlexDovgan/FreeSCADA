@@ -2,26 +2,10 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows;
+using FreeSCADA.Common.Scripting;
 
 namespace FreeSCADA.Common.Scripting
 {
-	public class ScriptCallInfo
-	{
-		string scriptName;
-		string handlerName;
-
-		public string ScriptName
-		{
-			get { return scriptName; }
-			set { scriptName = value; }
-		}
-
-		public string HandlerName
-		{
-			get { return handlerName; }
-			set { handlerName = value; }
-		}
-	}
 
 	public class EventScriptCollection
 	{
