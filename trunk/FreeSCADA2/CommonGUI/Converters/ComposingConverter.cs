@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Windows.Data;
+using System.Windows.Data;  
 using System.Windows.Markup;
 
 namespace FreeSCADA.Common.Schema
@@ -38,3 +38,4 @@ namespace FreeSCADA.Common.Schema
     }
 }
 
+    

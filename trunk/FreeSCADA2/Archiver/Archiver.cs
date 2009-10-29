@@ -13,7 +13,7 @@ namespace FreeSCADA.Archiver
 		ChannelsSettings channelSettings = new ChannelsSettings();
 		DatabaseSettings databaseSettings = new DatabaseSettings();
 		DbWriter dbWriter;
-
+        DbReader dbReader;
 		Thread channelUpdaterThread;
 
 		#region Initialization and singleton implementation
@@ -130,6 +130,10 @@ namespace FreeSCADA.Archiver
 			channelUpdaterThread = new Thread(new ParameterizedThreadStart(ChannelUpdaterThreadProc));
 			channelUpdaterThread.Start(this);
 
+            dbReader = new DbReader();
+            if (dbReader.Open() == false)
+                return false;
+
 			return IsRunning;
 		}
 
@@ -144,48 +148,16 @@ namespace FreeSCADA.Archiver
 				if (dbWriter != null)
 					dbWriter.Close();
 			}
+            if (dbReader != null)
+                dbReader.Close();
 		}
 
-		public DataTable GetDataTable(string selectCommand)
-		{
-			DataTable data = new DataTable();
-			data.Locale = System.Globalization.CultureInfo.InvariantCulture;
-
-			DbProviderFactory dbProviderFactory = DatabaseFactory.Get(ArchiverMain.Current.DatabaseSettings.DbProvider);
-			DbConnection dbConnection = dbProviderFactory.CreateConnection();
-			dbConnection.ConnectionString = ArchiverMain.Current.DatabaseSettings.CreateConnectionString();
-			try
-			{
-				dbConnection.Open();
-			}
-			catch (System.Exception e)
-			{
-				System.Windows.Forms.MessageBox.Show(e.Message, "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-				return data;
-			}
-
-			DbDataAdapter dataAdapter = dbProviderFactory.CreateDataAdapter();
-			DbCommand command = dbConnection.CreateCommand();
-			command.CommandText = selectCommand;
-
-			try
-			{
-				dataAdapter.MissingMappingAction = MissingMappingAction.Passthrough;
-				dataAdapter.MissingSchemaAction = MissingSchemaAction.AddWithKey;
-				dataAdapter.SelectCommand = command;
-				dataAdapter.Fill(data);
-			}
-			catch(Exception e)
-			{
-				Console.WriteLine(e.Message);
-				return data;
-			}
 		
-			return data;
-		}
-
 		public DataTable GetChannelData(DateTime from, DateTime to, List<ChannelInfo> channels)
 		{
+            if (!IsRunning)
+                new DataTable();
+
 			string datePattern = "yyyy-MM-dd HH:mm:ss";
 			string query = "SELECT ChannelName, Time, Value FROM Channels WHERE ";
 			query += string.Format("Time >= '{0}' AND Time <= '{1}' ", from.ToString(datePattern), to.ToString(datePattern));
@@ -201,11 +173,14 @@ namespace FreeSCADA.Archiver
 			}
 			query += ") ORDER BY Time;";
 
-			return GetDataTable(query);
+			return dbReader.ExeсCommand(query);
 		}
         public DateTime GetChannelsOlderDate(List<ChannelInfo> channels)
         {
-            
+
+            if (!IsRunning)
+                return DateTime.Now;
+
             string query = "SELECT min(Time) FROM Channels WHERE ";
             query += "(";
             for (int i = 0; i < channels.Count; i++)
@@ -218,7 +193,7 @@ namespace FreeSCADA.Archiver
                 }
             }
             query += ")";
-            DataTable dt= GetDataTable(query);
+            DataTable dt = dbReader.ExeсCommand(query);
             DateTime date=new DateTime();
             if(dt.Rows.Count>0)
                 DateTime.TryParse(dt.Rows[0].ItemArray[0].ToString(),out date);
