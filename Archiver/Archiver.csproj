@@ -45,6 +45,7 @@
     <Compile Include="ChannelsSettings.cs" />
     <Compile Include="Conditions.cs" />
     <Compile Include="DatabaseFactory.cs" />
+    <Compile Include="DbReader.cs" />
     <Compile Include="DbWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyCommand.cs" />
