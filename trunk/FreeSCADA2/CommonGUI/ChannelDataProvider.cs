@@ -9,6 +9,11 @@ namespace FreeSCADA.Common.Schema
     {
         string channelName;
         Interfaces.IChannel channel;
+        public bool StopUpdate
+        {
+            get;
+            set;
+        }
         public bool IsBindInDesign
         {
             get;
@@ -41,9 +46,9 @@ namespace FreeSCADA.Common.Schema
             FreeSCADA.Interfaces.IChannel ch;
             ch=Env.Current.CommunicationPlugins.GetChannel(ChannelName);
             channel = ch;
-            if (Env.Current.Mode == FreeSCADA.Interfaces.EnvironmentMode.Designer && !IsBindInDesign)
+            if (Env.Current.Mode == FreeSCADA.Interfaces.EnvironmentMode.Designer && !IsBindInDesign || StopUpdate)
                 ch=null;
-            base.OnQueryFinished(ch);
+           base.OnQueryFinished(ch);
         }
     }
 }

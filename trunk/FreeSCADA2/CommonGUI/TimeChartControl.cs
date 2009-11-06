@@ -78,7 +78,6 @@ namespace FreeSCADA.Common.Schema
 
 
         protected CheckBox _mode;
-        protected ScrollBar _scroll;
         protected ChartPlotter _chart = new ChartPlotter();
         protected DatePicker _from;
         protected DatePicker _to;
@@ -145,6 +144,7 @@ namespace FreeSCADA.Common.Schema
             ((LinearAxis)tcc._chart.Axes[1]).Maximum = tcc.ChartScale.Y;
             ((LinearAxis)tcc._chart.Axes[1]).Interval = (tcc.ChartScale.Y - tcc.ChartScale.X) / 5;
             tcc._chart.Refresh();*/
+            
 
         }
 
@@ -213,8 +213,9 @@ namespace FreeSCADA.Common.Schema
             bind.Source = _mode;
             _from.SetBinding(DatePicker.IsEnabledProperty, bind);
             _to.SetBinding(DatePicker.IsEnabledProperty, bind);
-            //if (Env.Current.Mode != EnvironmentMode.Runtime)
-            //cb.IsEnabled = false;Al
+            bt.SetBinding(DatePicker.IsEnabledProperty, bind);
+            if (Env.Current.Mode != EnvironmentMode.Runtime)
+                _mode.IsEnabled = false;
             
         }
 

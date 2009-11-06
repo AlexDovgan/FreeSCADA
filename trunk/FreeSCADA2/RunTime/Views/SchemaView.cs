@@ -8,10 +8,10 @@ namespace FreeSCADA.RunTime.Views
 {
 	class SchemaView : DocumentView
 	{
-		private WPFShemaContainer wpfSchemaContainer;
+		//private WPFShemaContainer wpfSchemaContainer;
         private ScaleTransform SchemaScale = new ScaleTransform();
         private System.Windows.Point SavedScrollPosition;
-        
+        private VirtualSchemaContainer virtualSchemaContainer;
 
 		public SchemaView()
 		{
@@ -26,11 +26,12 @@ namespace FreeSCADA.RunTime.Views
 		private void InitializeComponent()
 		{
 			this.SuspendLayout();
-			this.wpfSchemaContainer = new WPFShemaContainer();
+			//this.wpfSchemaContainer = new WPFShemaContainer();
+
 			// 
 			// wpfContainerHost
 			// 
-			this.wpfSchemaContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+		/*	this.wpfSchemaContainer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.wpfSchemaContainer.Location = new System.Drawing.Point(0, 0);
 			this.wpfSchemaContainer.Name = "WPFSchemaContainer";
 			this.wpfSchemaContainer.Size = new System.Drawing.Size(292, 273);
@@ -38,11 +39,17 @@ namespace FreeSCADA.RunTime.Views
 			this.wpfSchemaContainer.Text = "WPFSchemaContainer";
             this.wpfSchemaContainer.ZoomInEvent += new WPFShemaContainer.ZoomDelegate(ZoomIn);
             this.wpfSchemaContainer.ZoomOutEvent += new WPFShemaContainer.ZoomDelegate(ZoomOut);
-			// 
+		*/	// 
 			// SchemaView
 			// 
 			this.ClientSize = new System.Drawing.Size(292, 273);
-			this.Controls.Add(this.wpfSchemaContainer);
+			//this.Controls.Add(this.wpfSchemaContainer);
+            this.virtualSchemaContainer = new VirtualSchemaContainer();
+            this.virtualSchemaContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.virtualSchemaContainer.Location = new System.Drawing.Point(0, 0);
+            this.virtualSchemaContainer.Size = new System.Drawing.Size(292, 273);
+            this.Controls.Add(this.virtualSchemaContainer);
+
 			this.Name = "SchemaView";
 
 			this.ResumeLayout(false);
@@ -53,12 +60,12 @@ namespace FreeSCADA.RunTime.Views
 
 		public System.Windows.Controls.Canvas MainCanvas
 		{
-            get { return wpfSchemaContainer.View as System.Windows.Controls.Canvas; }
+            get { return virtualSchemaContainer.MappedCanvas as System.Windows.Controls.Canvas; }
 			set
 			{
-				
-                if (wpfSchemaContainer.View == null)
-                    wpfSchemaContainer.View = value;
+
+                if (virtualSchemaContainer.MappedCanvas == null)
+                    virtualSchemaContainer.MappedCanvas = value;
                 else
                     throw new Exception("View has already attached canvas");
       		}
@@ -91,16 +98,16 @@ namespace FreeSCADA.RunTime.Views
 			}
 
             // Scroll to saved position
-            System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
-            msv.ScrollToVerticalOffset(SavedScrollPosition.Y);
-            msv.ScrollToHorizontalOffset(SavedScrollPosition.X);
+            //System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
+            //msv.ScrollToVerticalOffset(SavedScrollPosition.Y);
+            //msv.ScrollToHorizontalOffset(SavedScrollPosition.X);
         }
 
 		public override void OnDeactivated()
         {
 			base.OnDeactivated();
             // Save scroll position
-            if (wpfSchemaContainer != null)
+            /*if (wpfSchemaContainer != null)
             {
                 System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
                 if (msv != null)
@@ -108,17 +115,18 @@ namespace FreeSCADA.RunTime.Views
                     SavedScrollPosition.Y = msv.VerticalOffset;
                     SavedScrollPosition.X = msv.HorizontalOffset;
                 }
-            }
+            }*/
         }
         
         protected override void OnClosed(EventArgs e)
 		{
-			wpfSchemaContainer.Dispose();
-			wpfSchemaContainer = null;
-
-			base.OnClosed(e);
+			//wpfSchemaContainer.Dispose();
+			//wpfSchemaContainer = null;
+            virtualSchemaContainer.Dispose();
+            virtualSchemaContainer = null;
+            base.OnClosed(e);
 		}
-
+        
         public void ZoomIn()
         {
             ZoomIn(new System.Windows.Point (0,0));
@@ -126,13 +134,13 @@ namespace FreeSCADA.RunTime.Views
 
         public void ZoomIn(System.Windows.Point center)
         {
-            System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
+        /*    System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
             SchemaScale.ScaleX *= 1.05;
             SchemaScale.ScaleY *= 1.05;
             MainCanvas.LayoutTransform = SchemaScale;
             msv.ScrollToVerticalOffset(msv.VerticalOffset * 1.05 + center.Y* 0.05);
             msv.ScrollToHorizontalOffset(msv.HorizontalOffset * 1.05 + center.X * 0.05);
-
+            */
 			UpdateZoomLevel();
         }
 
@@ -143,13 +151,13 @@ namespace FreeSCADA.RunTime.Views
 
         public void ZoomOut(System.Windows.Point center)
         {
-            System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
+            /*System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
             SchemaScale.ScaleX /= 1.05;
             SchemaScale.ScaleY /= 1.05;
             MainCanvas.LayoutTransform = SchemaScale;
             msv.ScrollToVerticalOffset(msv.VerticalOffset / 1.05 - center.Y * 0.05);
             msv.ScrollToHorizontalOffset(msv.HorizontalOffset / 1.05 - center.X* 0.05);
-
+            */
 			UpdateZoomLevel();
         }
 
@@ -161,7 +169,7 @@ namespace FreeSCADA.RunTime.Views
 					(cmdInfo.command as ZoomLevelCommand).Level = SchemaScale.ScaleX;
 			}
 		}
-
+        
         public double ZoomLevel
         {
             get

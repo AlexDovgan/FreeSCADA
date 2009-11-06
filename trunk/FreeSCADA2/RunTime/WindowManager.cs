@@ -128,6 +128,9 @@ namespace FreeSCADA.RunTime
 
             if (currentDocument != null)
                 currentDocument.OnActivated();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
         }
 
         /// <summary>
