@@ -58,6 +58,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseChannel.cs" />
@@ -71,6 +74,7 @@
     <Compile Include="ProjectConverters\ProjectConverter_200to201.cs" />
     <Compile Include="Scripting\Application.cs" />
     <Compile Include="Scripting\ChannelsScriptHandlers.cs" />
+    <Compile Include="Scripting\EventScriptCollection.cs" />
     <Compile Include="Scripting\GenericEventHandler.cs" />
     <Compile Include="IVisualControlDescriptor.cs" />
     <Compile Include="IVisualControlsPlug.cs" />

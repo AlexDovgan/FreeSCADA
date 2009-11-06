@@ -58,6 +58,7 @@ namespace FreeSCADA.RunTime.Views
 		{
 			foreach (CommandInfo cmdInfo in DocumentCommands)
 				Env.Current.Commands.RemoveCommand(cmdInfo.command);
+                 
         }
 
 		private void UpdateCaption()
@@ -68,6 +69,7 @@ namespace FreeSCADA.RunTime.Views
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
+            
         }
     }
 }
