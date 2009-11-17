@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -14,7 +15,16 @@ namespace FreeSCADA.Designer.Dialogs
 	{
 		bool selectMode = false;
 		List<IChannel> selectedChannels = new List<IChannel>();
-		/// <summary>
+        private Thread updateThread;
+        private class chnlListMember
+        {
+            public IChannel chnl;
+            public int row;
+            public bool changedFlag = true;
+            public chnlListMember(IChannel ch, int r) { chnl = ch; row = r; }
+        }
+        private List<chnlListMember> channels = new List<chnlListMember>();
+        /// <summary>
 		/// Constructor
 		/// </summary>
 		public VariablesDialog()
@@ -156,12 +166,31 @@ namespace FreeSCADA.Designer.Dialogs
                 channelsGrid[curRow, 4] = new SourceGrid.Cells.Cell(ch.IsReadOnly ? "R" : "RW");
 				channelsGrid[curRow, 5] = new SourceGrid.Cells.Cell(ch.Type);
 				channelsGrid.Rows[curRow].Tag = ch;
-				ch.Tag = curRow;
-				ch.ValueChanged += new EventHandler(OnChannelValueChanged);
+				//ch.Tag = curRow;
+                channels.Add(new chnlListMember(ch, curRow));
+                ch.ValueChanged += new EventHandler(OnChannelValueChanged);
 			}
 		}
 
-		private void OnCloseButton(object sender, EventArgs e)
+        private static void updateThreadProc(object obj)
+        {
+            VariablesDialog v = (VariablesDialog)obj;
+            while (true)
+            {
+                foreach (chnlListMember m in v.channels)
+                {
+                    if (m.changedFlag)
+                    {
+                        object[] args = { m.chnl, m.row };
+                        v.channelsGrid.Invoke(new UpdateChannelDelegate(v.UpdateChannelFunc), args);
+                        m.changedFlag = false;
+                    }
+                }
+                Thread.Sleep(100);
+            }
+        }
+        
+        private void OnCloseButton(object sender, EventArgs e)
 		{
             CommunationPlugs plugs = Env.Current.CommunicationPlugins;
 			foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
@@ -177,6 +206,8 @@ namespace FreeSCADA.Designer.Dialogs
 			else
 				DialogResult = DialogResult.OK;
 
+            if (updateThread != null)
+                updateThread.Abort();
             Close();
 		}
 
@@ -189,12 +220,18 @@ namespace FreeSCADA.Designer.Dialogs
 		{
 			if (enable)
 			{
-				if (Env.Current.CommunicationPlugins.Connect() == true)
-					connectionStatusLabel.Text = "Connection status: connected";
+                if (Env.Current.CommunicationPlugins.Connect() == true)
+                {
+                    connectionStatusLabel.Text = "Connection status: connected";
+                    updateThread = new Thread(new ParameterizedThreadStart(updateThreadProc));
+                    updateThread.Start(this);
+                }
 			}
 			else
 			{
 				Env.Current.CommunicationPlugins.Disconnect();
+                if (updateThread != null)
+                    updateThread.Abort();
 				connectionStatusLabel.Text = "Connection status: disconnected";
 			}
 		}
@@ -211,8 +248,16 @@ namespace FreeSCADA.Designer.Dialogs
 		void OnChannelValueChanged(object sender, EventArgs e)
 		{
 			IChannel ch = (IChannel)sender;
-			object[] args = { ch, ch.Tag };
-			channelsGrid.BeginInvoke(new UpdateChannelDelegate(UpdateChannelFunc), args);
+            foreach (chnlListMember m in channels)
+            {
+                if (m.chnl.Equals(sender))
+                {
+                    m.changedFlag = true;
+                    break;
+                }
+            }
+            //object[] args = { ch, ch.Tag };
+			//channelsGrid.Invoke(new UpdateChannelDelegate(UpdateChannelFunc), args);
 		}
 
 		private void VariablesForm_FormClosing(object sender, FormClosingEventArgs e)
