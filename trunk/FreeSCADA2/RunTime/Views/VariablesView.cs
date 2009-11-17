@@ -3,6 +3,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using FreeSCADA.Common;
 using FreeSCADA.Interfaces;
+using System.Threading;
+using System.Collections.Generic;
 
 namespace FreeSCADA.RunTime.Views
 {
@@ -10,8 +12,19 @@ namespace FreeSCADA.RunTime.Views
     {
         private SourceGrid.Grid channelsGrid;
         private SplitContainer splitContainer1;
-        private ReadOnlyPropertyGrid propertyGrid;
+        private SourceGrid.Grid pluginsGrid;
+        private Label label2;
+        private Label label1;
         int lockedForEditRow = 0;
+        private Thread updateThread;
+        private class chnlListMember
+        {
+            public IChannel chnl;
+            public int row;
+            public bool changedFlag = true;
+            public chnlListMember(IChannel ch, int r) { chnl = ch; row = r; }
+        }
+        private List<chnlListMember> channels = new List<chnlListMember>();
         //private System.ComponentModel.IContainer components;
 
         public VariablesView()
@@ -25,7 +38,9 @@ namespace FreeSCADA.RunTime.Views
         {
             this.channelsGrid = new SourceGrid.Grid();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.propertyGrid = new ReadOnlyPropertyGrid();   //System.Windows.Forms.PropertyGrid();
+            this.pluginsGrid = new SourceGrid.Grid();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -38,11 +53,11 @@ namespace FreeSCADA.RunTime.Views
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.channelsGrid.AutoStretchColumnsToFitWidth = true;
             this.channelsGrid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.channelsGrid.Location = new System.Drawing.Point(3, 3);
+            this.channelsGrid.Location = new System.Drawing.Point(3, 26);
             this.channelsGrid.Name = "channelsGrid";
             this.channelsGrid.OptimizeMode = SourceGrid.CellOptimizeMode.ForRows;
             this.channelsGrid.SelectionMode = SourceGrid.GridSelectionMode.Row;
-            this.channelsGrid.Size = new System.Drawing.Size(567, 394);
+            this.channelsGrid.Size = new System.Drawing.Size(737, 280);
             this.channelsGrid.TabIndex = 2;
             this.channelsGrid.TabStop = true;
             this.channelsGrid.ToolTipText = "";
@@ -52,30 +67,58 @@ namespace FreeSCADA.RunTime.Views
             this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Location = new System.Drawing.Point(2, 4);
             this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.channelsGrid);
+            this.splitContainer1.Panel1.Controls.Add(this.pluginsGrid);
+            this.splitContainer1.Panel1.Controls.Add(this.label2);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.propertyGrid);
-            this.splitContainer1.Size = new System.Drawing.Size(744, 400);
-            this.splitContainer1.SplitterDistance = 573;
+            this.splitContainer1.Panel2.Controls.Add(this.channelsGrid);
+            this.splitContainer1.Panel2.Controls.Add(this.label1);
+            this.splitContainer1.Size = new System.Drawing.Size(743, 384);
+            this.splitContainer1.SplitterDistance = 71;
             this.splitContainer1.TabIndex = 3;
             // 
-            // propertyGrid
+            // pluginsGrid
             // 
-            this.propertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.pluginsGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            //this.propertyGrid.Enabled = false;
-            this.propertyGrid.Location = new System.Drawing.Point(3, 3);
-            this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.Size = new System.Drawing.Size(163, 393);
-            this.propertyGrid.TabIndex = 0;
+            this.pluginsGrid.AutoStretchColumnsToFitWidth = true;
+            this.pluginsGrid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pluginsGrid.Location = new System.Drawing.Point(3, 24);
+            this.pluginsGrid.Name = "pluginsGrid";
+            this.pluginsGrid.OptimizeMode = SourceGrid.CellOptimizeMode.ForRows;
+            this.pluginsGrid.SelectionMode = SourceGrid.GridSelectionMode.Row;
+            this.pluginsGrid.Size = new System.Drawing.Size(737, 44);
+            this.pluginsGrid.TabIndex = 3;
+            this.pluginsGrid.TabStop = true;
+            this.pluginsGrid.ToolTipText = "";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(3, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(258, 25);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Communication Plugins";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(3, -4);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(111, 25);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Channels";
             // 
             // VariablesView
             // 
@@ -83,7 +126,9 @@ namespace FreeSCADA.RunTime.Views
             this.Controls.Add(this.splitContainer1);
             this.Name = "VariablesView";
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -117,15 +162,62 @@ namespace FreeSCADA.RunTime.Views
             this.FormClosing += new FormClosingEventHandler(VariablesView_FormClosing);
             this.channelsGrid.Selection.SelectionChanged += new SourceGrid.RangeRegionChangedEventHandler(Selection_SelectionChanged);
             channelsGrid.MouseDoubleClick += new MouseEventHandler(channelsGrid_MouseDoubleClick);
+
+            pluginsGrid.Selection.Border = b;
+            pluginsGrid.Selection.FocusBackColor = channelsGrid.Selection.BackColor;
+            pluginsGrid.ColumnsCount = 5;
+
+            pluginsGrid.RowsCount++;
+            pluginsGrid[0, 0] = new SourceGrid.Cells.ColumnHeader("Plugin Name");
+            pluginsGrid[0, 1] = new SourceGrid.Cells.ColumnHeader("Variables");
+            pluginsGrid[0, 2] = new SourceGrid.Cells.ColumnHeader("Start Plugin");
+            pluginsGrid[0, 3] = new SourceGrid.Cells.ColumnHeader("Stop Plugin");
+            pluginsGrid[0, 4] = new SourceGrid.Cells.ColumnHeader("Test mode");
+
+            foreach (string plugId in Env.Current.CommunicationPlugins.PluginIds)
+            {
+                pluginsGrid.RowsCount++;
+                pluginsGrid[pluginsGrid.RowsCount - 1, 0] = new SourceGrid.Cells.Cell(plugId);
+                pluginsGrid[pluginsGrid.RowsCount - 1, 1] = new SourceGrid.Cells.Cell(Env.Current.CommunicationPlugins[plugId].Channels.Length);
+                //pluginsGrid[pluginsGrid.RowsCount - 1, 2] = new SourceGrid.Cells.Button(new Object());
+
+            }
+            updateThread = new Thread(new ParameterizedThreadStart(updateThreadProc));
+            updateThread.Start(this);
         }
+
+        private static void updateThreadProc(object obj)
+        {
+            VariablesView v = (VariablesView)obj;
+            while (true)
+            {
+                foreach (chnlListMember m in v.channels)
+                {
+                    if (m.changedFlag)
+                    {
+                        object[] args = { m.chnl, m.row };
+                        v.channelsGrid.Invoke(new UpdateChannelDelegate(v.UpdateChannelFunc), args);
+                        //v.UpdateChannelFunc(m.chnl, m.row);
+                        m.changedFlag = false;
+                    }
+                }
+                Thread.Sleep(100);
+            }
+        }
+
+        public delegate void SelectChannelHandler(object channel);
+        /// <summary>Occurs when user clicks on a node from the list</summary>
+        public event SelectChannelHandler SelectChannel;
 
         void Selection_SelectionChanged(object sender, SourceGrid.RangeRegionChangedEventArgs e)
         {
             int[] rows = channelsGrid.Selection.GetSelectionRegion().GetRowsIndex();
             if (rows.Length > 0)
             {
-                this.propertyGrid.SelectedObject = this.channelsGrid.Rows[rows[0]].Tag;
-                this.propertyGrid.ReadOnly = true;
+                if (SelectChannel != null)
+                    SelectChannel(this.channelsGrid.Rows[rows[0]].Tag);
+                //this.propertyGrid.SelectedObject = this.channelsGrid.Rows[rows[0]].Tag;
+                //this.propertyGrid.ReadOnly = true;
             }
         }
 
@@ -163,13 +255,14 @@ namespace FreeSCADA.RunTime.Views
                 channelsGrid[curRow, 4] = new SourceGrid.Cells.Cell(ch.IsReadOnly ? "R" : "RW");
                 channelsGrid[curRow, 5] = new SourceGrid.Cells.Cell(ch.Type);
                 channelsGrid.Rows[curRow].Tag = ch;
-                ch.Tag = curRow;
+                //ch.Tag = curRow;
+                channels.Add(new chnlListMember(ch, curRow));
                 ch.ValueChanged += new EventHandler(OnChannelValueChanged);
             }
         }
 
-        private delegate void UpdateChannelDelegate(IChannel channel, int rowIndex);
-        private void UpdateChannelFunc(IChannel channel, int rowIndex)
+        public delegate void UpdateChannelDelegate(IChannel channel, int rowIndex);
+        public void UpdateChannelFunc(IChannel channel, int rowIndex)
         {
             if (rowIndex != lockedForEditRow)
             {
@@ -183,10 +276,20 @@ namespace FreeSCADA.RunTime.Views
         void OnChannelValueChanged(object sender, EventArgs e)
         {
             IChannel ch = (IChannel)sender;
-            object[] args = { ch, ch.Tag };
-            channelsGrid.BeginInvoke(new UpdateChannelDelegate(UpdateChannelFunc), args);
-            if (ch == propertyGrid.SelectedObject)
-                propertyGrid.BeginInvoke(new InvokeDelegate(delegate() { propertyGrid.Refresh(); }));
+            foreach (chnlListMember m in channels)
+            {
+                if (m.chnl.Equals(sender))
+                {
+                    m.changedFlag = true;
+                    break;
+                }
+            }
+            //   object[] args = { ch, ch.Tag };
+            //   channelsGrid.BeginInvoke(new UpdateChannelDelegate(UpdateChannelFunc), args);
+            //if (SelectChannel != null)
+            //    SelectChannel(ch);
+            //if (ch == propertyGrid.SelectedObject)
+            //    propertyGrid.BeginInvoke(new InvokeDelegate(delegate() { propertyGrid.Refresh(); }));
         }
 
         private void VariablesView_FormClosing(object sender, FormClosingEventArgs e)
@@ -207,6 +310,7 @@ namespace FreeSCADA.RunTime.Views
                     ch.Tag = null; //Clear our tags
                 }
             }
+            updateThread.Abort();
         }
 
         void channelsGrid_MouseDoubleClick(object sender, MouseEventArgs e)

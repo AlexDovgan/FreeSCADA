@@ -3,6 +3,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using FreeSCADA.Common;
 using FreeSCADA.Interfaces;
+using System.Threading;
+using System.Collections.Generic;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -14,6 +16,15 @@ namespace FreeSCADA.Designer.Views
         private Label label2;
         private Label label1;
         int lockedForEditRow = 0;
+        private Thread updateThread;
+        private class chnlListMember
+        {
+            public IChannel chnl;
+            public int row;
+            public bool changedFlag = true;
+            public chnlListMember(IChannel ch, int r) { chnl = ch; row = r; }
+        }
+        private List<chnlListMember> channels = new List<chnlListMember>();
         //private System.ComponentModel.IContainer components;
 
         public VariablesView()
@@ -171,6 +182,26 @@ namespace FreeSCADA.Designer.Views
                 //pluginsGrid[pluginsGrid.RowsCount - 1, 2] = new SourceGrid.Cells.Button(new Object());
 
             }
+            updateThread = new Thread(new ParameterizedThreadStart(updateThreadProc));
+            updateThread.Start(this);
+        }
+
+        private static void updateThreadProc(object obj)
+        {
+            VariablesView v = (VariablesView)obj;
+            while (true)
+            {
+                foreach (chnlListMember m in v.channels)
+                {
+                    if (m.changedFlag)
+                    {
+                        object[] args = { m.chnl, m.row };
+                        v.channelsGrid.Invoke(new UpdateChannelDelegate(v.UpdateChannelFunc), args);
+                        m.changedFlag = false;
+                    }
+                }
+                Thread.Sleep(100);
+            }
         }
 
         public delegate void SelectChannelHandler(object channel);
@@ -223,13 +254,14 @@ namespace FreeSCADA.Designer.Views
                 channelsGrid[curRow, 4] = new SourceGrid.Cells.Cell(ch.IsReadOnly ? "R" : "RW");
                 channelsGrid[curRow, 5] = new SourceGrid.Cells.Cell(ch.Type);
                 channelsGrid.Rows[curRow].Tag = ch;
-                ch.Tag = curRow;
+                //ch.Tag = curRow;
+                channels.Add(new chnlListMember(ch, curRow));
                 ch.ValueChanged += new EventHandler(OnChannelValueChanged);
             }
         }
 
-        private delegate void UpdateChannelDelegate(IChannel channel, int rowIndex);
-        private void UpdateChannelFunc(IChannel channel, int rowIndex)
+        public delegate void UpdateChannelDelegate(IChannel channel, int rowIndex);
+        public void UpdateChannelFunc(IChannel channel, int rowIndex)
         {
             if (rowIndex != lockedForEditRow)
             {
@@ -243,8 +275,16 @@ namespace FreeSCADA.Designer.Views
         void OnChannelValueChanged(object sender, EventArgs e)
         {
             IChannel ch = (IChannel)sender;
-            object[] args = { ch, ch.Tag };
-            channelsGrid.BeginInvoke(new UpdateChannelDelegate(UpdateChannelFunc), args);
+            foreach (chnlListMember m in channels)
+            {
+                if (m.chnl.Equals(sender))
+                {
+                    m.changedFlag = true;
+                    break;
+                }
+            }
+         //   object[] args = { ch, ch.Tag };
+         //   channelsGrid.BeginInvoke(new UpdateChannelDelegate(UpdateChannelFunc), args);
             //if (SelectChannel != null)
             //    SelectChannel(ch);
             //if (ch == propertyGrid.SelectedObject)
@@ -269,6 +309,7 @@ namespace FreeSCADA.Designer.Views
                     ch.Tag = null; //Clear our tags
                 }
             }
+            updateThread.Abort();
         }
 
         void channelsGrid_MouseDoubleClick(object sender, MouseEventArgs e)
