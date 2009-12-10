@@ -113,7 +113,6 @@
     <Compile Include="SchemaEditor\EditorHelpers.cs" />
     <Compile Include="SchemaEditor\GridManager.cs" />
     <Compile Include="SchemaEditor\Manipulators\ActionsEditManipulator.cs" />
-    <Compile Include="SchemaEditor\Manipulators\BaseManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\Controlls\PointDragThumb.cs" />
     <Compile Include="SchemaEditor\Manipulators\PolylineEditManipulantor.cs" />
     <Compile Include="SchemaEditor\Manipulators\TextBoxManipulator.cs" />
@@ -182,7 +181,6 @@
     <Compile Include="SchemaEditor\StylesLibrary.cs" />
     <Compile Include="SchemaEditor\ToolDescriptor.cs" />
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
-    <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
     <Compile Include="SchemaEditor\Tools\ControlCreateTool.cs" />
     <Compile Include="SchemaEditor\Tools\DrawTool.cs" />
     <Compile Include="SchemaEditor\Tools\EllipseTool.cs" />

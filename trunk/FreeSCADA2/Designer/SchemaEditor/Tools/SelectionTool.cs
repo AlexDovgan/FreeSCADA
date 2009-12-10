@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
+using FreeSCADA.Common.Schema;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
@@ -55,7 +56,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 DrawingContext drawingContext = selectionRectangle.RenderOpen();
 
                 // Create a rectangle and draw it in the DrawingContext.
-                finalSize = GridManager.GetMousePos() - startPos;
+                finalSize = GridManager.GetGridManagerFor(AdornedElement).GetMousePos() - startPos;
                 Rect rect = new Rect(startPos, finalSize);
 
                 drawingContext.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 0.2), rect);
@@ -68,8 +69,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             if (isSelectionMoved)
             {
                 Vector newPosDelta;
-                newPosDelta = GridManager.GetMousePos() - movePos;
-                movePos = GridManager.GetMousePos();
+                newPosDelta = GridManager.GetGridManagerFor(AdornedElement).GetMousePos() - movePos;
+                movePos = GridManager.GetGridManagerFor(AdornedElement).GetMousePos();
                 MoveHelper(newPosDelta.X, newPosDelta.Y);
                 
                 System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.SizeAll;
@@ -102,7 +103,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             }
             selectionRectangle.RenderOpen().Close();
             InvalidateVisual();
-            LastClickedPoint = GridManager.GetMousePos();
+            LastClickedPoint = GridManager.GetGridManagerFor(AdornedElement).GetMousePos();
         }
 
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -143,7 +144,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             {
 
                 CaptureMouse();
-                startPos = GridManager.GetMousePos();
+                startPos = GridManager.GetGridManagerFor(AdornedElement).GetMousePos();
                 isDragged = true;
                 selManeger.SelectObject(null);
 
@@ -155,8 +156,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 {
 
                     isSelectionMoved = true;
-                    
-                    movePos = GridManager.GetMousePos();
+
+                    movePos = GridManager.GetGridManagerFor(AdornedElement).GetMousePos();
                     System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.SizeAll;
                     moveUndoInfo = true;
                     if (!selManeger.SelectedObjects.Contains(el))

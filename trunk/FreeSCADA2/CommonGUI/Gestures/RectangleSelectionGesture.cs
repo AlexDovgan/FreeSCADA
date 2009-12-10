@@ -16,14 +16,14 @@ namespace FreeSCADA.Common.Schema.Gestures
     /// <summary>
     /// This class provides the ability to draw a rectangle on a zoomable object and zoom into that location.
     /// </summary>
-    internal class RectangleSelectionGesture
+    public  class RectangleSelectionGesture:BaseTool
     {
         SelectionRectVisual _selectionRectVisual;
         Point _start;
         bool _watching;
         FrameworkElement _target;
         MapZoom _zoom;
-        Panel _container;
+        ScrollViewer _container;
         Point _mouseDownPoint;
         Rect _selectionRect;
         bool _zoomSelection;
@@ -38,19 +38,19 @@ namespace FreeSCADA.Common.Schema.Gestures
         /// </summary>
         /// <param name="target">A FrameworkElement</param>
         /// <param name="zoom">The MapZoom object that wraps this same target object</param>
-        public RectangleSelectionGesture(FrameworkElement target, MapZoom zoom, ModifierKeys mods)
+        public RectangleSelectionGesture(FrameworkElement target, MapZoom zoom, ModifierKeys mods):base(target)
         {
             _mods = mods;
             _target = target;
-            _container = target.Parent as Panel;
+            _container = target.Parent as ScrollViewer;
             if (_container == null)
             {
                 throw new ArgumentException("Target object must live in a Panel");
             }
             _zoom = zoom;
-            _container.MouseLeftButtonDown += new MouseButtonEventHandler(OnMouseLeftButtonDown);
-            _container.MouseLeftButtonUp += new MouseButtonEventHandler(OnMouseLeftButtonUp);
-            _container.MouseMove += new MouseEventHandler(OnMouseMove);
+            _target.MouseLeftButtonDown += new MouseButtonEventHandler(OnMouseLeftButtonDown);
+            _target.MouseLeftButtonUp += new MouseButtonEventHandler(OnMouseLeftButtonUp);
+            _target.MouseMove += new MouseEventHandler(OnMouseMove);
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace FreeSCADA.Common.Schema.Gestures
                     _watching = false;
                     Mouse.Capture(_target, CaptureMode.SubTree);
                     _selectionRectVisual = new SelectionRectVisual(_start, _start, _zoom.Zoom);
-                    _container.Children.Add(_selectionRectVisual);
+                    //_container.Children.Add(_selectionRectVisual);
                 }
             }
             if (_selectionRectVisual != null)
@@ -152,7 +152,7 @@ namespace FreeSCADA.Common.Schema.Gestures
                     _zoom.ZoomToRect(r);
                 }
 
-                _container.Children.Remove(_selectionRectVisual);
+                //_container.Children.Remove(_selectionRectVisual);
                 _selectionRectVisual = null;
             }
         }
@@ -166,6 +166,11 @@ namespace FreeSCADA.Common.Schema.Gestures
         {
             Rect r = new Rect(_start, p);
             return _container.TransformToDescendant(_target).TransformBounds(r);
+        }
+
+        public override BaseManipulator CreateToolManipulator(UIElement obj)
+        {
+            throw new NotImplementedException();
         }
     }
 }

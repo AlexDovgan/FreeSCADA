@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
+using FreeSCADA.Common.Schema;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
@@ -30,6 +31,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 			return finalSize;
 		}
 		protected override Size ArrangeOverride(Size finalSize)
+
 		{
 			base.ArrangeOverride(finalSize);
 			if (createdObject != null)

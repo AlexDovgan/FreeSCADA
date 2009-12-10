@@ -197,8 +197,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 			RegisterProperty(typeof(TextBlock), "FontStyle", null);
 			RegisterProperty(typeof(TextBlock), "FontWeight", null);
 			RegisterProperty(typeof(TextBlock), "TextAlignment", null);
-            RegisterProperty(typeof(CheckBox), "IsChecked", null);
-			RegisterProperty(typeof(CheckBox), "Content", "Text", null, "Text");
+            //RegisterProperty(typeof(CheckBox), "IsChecked", null);
+			//RegisterProperty(typeof(CheckBox), "Content", "Text", null, "Text");
             RegisterProperty(typeof(TextBox), "Text", null);
             RegisterProperty(typeof(TextBox), "TextAlignment", null);
             RegisterProperty(typeof(TimeChartControl), "ChartPeriod", "TimeInterval",null,"Chart time interval");

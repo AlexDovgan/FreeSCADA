@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using FreeSCADA.Common.Schema;
 
 namespace FreeSCADA.Designer.SchemaEditor
 {
     class SelectionManager
     {
-        Manipulators.BaseManipulator manipulator;
+        BaseManipulator manipulator;
         
         /// <summary>
         /// 

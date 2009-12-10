@@ -8,6 +8,7 @@ using FreeSCADA.Common;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
 using FreeSCADA.Interfaces;
 using FreeSCADA.Interfaces.Plugins;
+using FreeSCADA.Common.Schema;
 
 namespace FreeSCADA.Designer.SchemaEditor
 {
@@ -76,7 +77,7 @@ namespace FreeSCADA.Designer.SchemaEditor
                 {
                     object[] a = new object[1];
                     a[0] = frameworkElement;
-                    return (Manipulators.BaseManipulator)System.Activator.CreateInstance(desctiptor.ObjectManipulatorType,a);
+                    return (BaseManipulator)System.Activator.CreateInstance(desctiptor.ObjectManipulatorType,a);
 
                 }
 

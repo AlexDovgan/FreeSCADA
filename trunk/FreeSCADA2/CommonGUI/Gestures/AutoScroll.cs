@@ -16,9 +16,9 @@ namespace FreeSCADA.Common.Schema.Gestures
     /// <summary>
     /// This class implements a mouse middle-button auto-scrolling feature over any target view.
     /// </summary>
-    internal class AutoScroll
+    public class AutoScroll
     {
-        Panel _container;
+        FrameworkElement _container;
         FrameworkElement _target;
         bool _autoScrolling ;
         Point _startPos;
@@ -33,12 +33,12 @@ namespace FreeSCADA.Common.Schema.Gestures
         /// <param name="zoom">The master MapZoom object that manages the actual render transform</param>
         public AutoScroll(FrameworkElement target, MapZoom zoom)
         {
-            _container = target.Parent as Panel;
+            _container = target.Parent as FrameworkElement;
             _target = target;
-            _container.MouseDown += new MouseButtonEventHandler(OnMouseDown);
-            _container.MouseMove += new MouseEventHandler(OnMouseMove);
-            _container.MouseWheel += new MouseWheelEventHandler(OnMouseWheel);
-            Keyboard.AddKeyDownHandler(_container, new KeyEventHandler(OnKeyDown));
+            _target.MouseDown += new MouseButtonEventHandler(OnMouseDown);
+            _target.MouseMove += new MouseEventHandler(OnMouseMove);
+            _target.MouseWheel += new MouseWheelEventHandler(OnMouseWheel);
+            Keyboard.AddKeyDownHandler(_target, new KeyEventHandler(OnKeyDown));
             _zoom = zoom;
         }
 
@@ -169,7 +169,7 @@ namespace FreeSCADA.Common.Schema.Gestures
                         dot.RenderTransform = new TranslateTransform(18,18);
                         _marker.Children.Add(dot);
                     }
-                    _container.Children.Add(_marker);
+                    //_container.Children.Add(_marker);
                     _marker.Arrange(new Rect(_startPos.X - 20, _startPos.Y - 20, 40, 40));
                     _container.InvalidateVisual();
                 }
@@ -205,7 +205,7 @@ namespace FreeSCADA.Common.Schema.Gestures
                 Mouse.Capture(_container, CaptureMode.None);
                 _autoScrolling = false;
                 _container.Cursor = Cursors.Arrow;
-                _container.Children.Remove(_marker);
+                //_container.Children.Remove(_marker);
                 _container.InvalidateVisual();
             }
         }

@@ -26,8 +26,8 @@ namespace FreeSCADA.Common.ProjectConverters
                 ms.Seek(0,System.IO.SeekOrigin.Begin);
 
                 prj.SetData("Schemas/" + schemaName + "/xaml", ms);
-                prj.Version = ResultVersion;
             }
+            prj.Version = ResultVersion;
             return true;
         }
         public override bool ConvertBack(Project prj)

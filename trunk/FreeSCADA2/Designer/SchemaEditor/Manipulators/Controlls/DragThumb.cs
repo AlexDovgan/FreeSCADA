@@ -12,7 +12,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 
         public DragThumb()
         {
-
+            ThumbsResources tr = new ThumbsResources();
+            tr.InitializeComponent();
+            Resources = tr;
+           
                
             //base.DragDelta += new DragDeltaEventHandler(DragThumb_DragDelta);
            

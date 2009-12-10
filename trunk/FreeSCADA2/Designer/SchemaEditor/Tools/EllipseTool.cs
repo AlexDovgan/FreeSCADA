@@ -3,10 +3,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using FreeSCADA.Common.Schema;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
-{//drawingContext.DrawEllipse(Brushes.Gray, new Pen(Brushes.Black, 1), startPos, vec.X, vec.Y);
-              
+{             
     /// <summary>
     /// Ellipse object creation tool
     /// </summary>
@@ -42,6 +42,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             return typeof(Ellipse);
         }
-        
+        public override BaseManipulator CreateToolManipulator(UIElement obj)
+        {
+            return new Manipulators.DragResizeRotateManipulator(obj as FrameworkElement);
+        }
+       
     }
 }

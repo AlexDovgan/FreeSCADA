@@ -12,8 +12,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
         
         public PointDragThumb()
         {
-        
-            
+
+            ThumbsResources tr = new ThumbsResources();
+            tr.InitializeComponent();
+            Resources = tr;
+                       
         }
       
     }
