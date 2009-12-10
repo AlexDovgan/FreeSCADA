@@ -51,6 +51,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 		/// </summary>
         public RotateThumb()
         {
+            ThumbsResources tr = new ThumbsResources();
+            tr.InitializeComponent();
+            Resources = tr;
+           
             base.DragDelta += new DragDeltaEventHandler(RotateThumb_DragDelta);
             base.DragStarted += new DragStartedEventHandler(RotateThumb_DragStarted);
             base.DragCompleted += new DragCompletedEventHandler(RotateThumb_DragCompleted);

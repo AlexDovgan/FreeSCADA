@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
+using FreeSCADA.Common.Schema;
 
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
@@ -34,7 +35,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                         
                }
 
-                drawingContext.DrawLine(new Pen(Brushes.Black, 1), pointsCollection[pointsCollection.Count - 1], GridManager.GetMousePos());
+                drawingContext.DrawLine(new Pen(Brushes.Black, 1), pointsCollection[pointsCollection.Count - 1], GridManager.GetGridManagerFor(AdornedElement).GetMousePos());
 
                 drawingContext.Close();
             }
@@ -52,7 +53,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             if (pointsCollection.Count == 0)
                 base.OnPreviewMouseLeftButtonDown(e);
             CaptureMouse();
-            pointsCollection.Add(GridManager.GetMousePos());
+            pointsCollection.Add(GridManager.GetGridManagerFor(AdornedElement).GetMousePos());
 
                 
             
@@ -119,7 +120,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             if (obj is Polyline)
                 return new PolylineEditManipulantor(obj as Polyline);
-            else return base.CreateToolManipulator(obj);
+            else return new DragResizeRotateManipulator(obj);
         }
         public override Type ToolEditingType()
         {

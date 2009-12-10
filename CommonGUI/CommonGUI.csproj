@@ -78,6 +78,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseManipulator.cs" />
+    <Compile Include="BaseTool.cs" />
     <Compile Include="Gestures\AutoScroll.cs" />
     <Compile Include="Gestures\ExponentialAnimation.cs" />
     <Compile Include="Gestures\MapZoom.cs" />
@@ -105,7 +107,7 @@
     <Compile Include="SolidBrushConverter.cs" />
     <Compile Include="TimeChartControl.cs" />
     <Compile Include="VirtualCanvas.cs" />
-    <Compile Include="VirtualSchemaContainer.cs" />
+    <Compile Include="VirtualElement.cs" />
     <Compile Include="WPFShemaContainer.cs" />
   </ItemGroup>
   <ItemGroup>

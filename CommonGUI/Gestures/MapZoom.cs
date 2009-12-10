@@ -12,6 +12,7 @@ using System.Windows.Media.Animation;
 using System.Text;
 using System.Windows.Input;
 using System.Windows.Controls.Primitives;
+using System.Windows.Documents;
 
 namespace FreeSCADA.Common.Schema.Gestures
 {
@@ -20,7 +21,7 @@ namespace FreeSCADA.Common.Schema.Gestures
     /// general management of the scale and translate transformations and a "ScrollIntoView" 
     /// method than can be used by other gestures.
     /// </summary>
-    class MapZoom : Animatable
+    public class MapZoom : Animatable
     {
         // sensitivity is a number between 0 and 1 that controls how much each mouse wheel click
         // zooms in.  This value means one mouse click will zoom to 0.90 of the original size, but
@@ -33,7 +34,7 @@ namespace FreeSCADA.Common.Schema.Gestures
         const double _defaultZoomTime = 100;
         const double _maxZoomTime = 300;
 
-        FrameworkElement _container;
+        ScrollViewer _container;
         FrameworkElement _target;
                 
         // Note that because we want to animate the zoom and translate while spinning the mouse
@@ -45,10 +46,10 @@ namespace FreeSCADA.Common.Schema.Gestures
         // step.  If some external change is made to the _scale and _translate transforms then
         // we "StopAnimation" and sync up the _offset and _zoom variables.
         ScaleTransform _scale;
-        TranslateTransform _translate;
+        
         double _zoom = 1;
         double _newZoom = 1;
-        Point _offset;
+        
         Point _mouse;
         Point _onTarget;
         double _zoomTime = _defaultZoomTime;
@@ -59,6 +60,7 @@ namespace FreeSCADA.Common.Schema.Gestures
         /// <summary>
         /// The offset property that can be animated.
         /// </summary>
+        /// 
         public static readonly DependencyProperty OffsetProperty = DependencyProperty.Register("Offset", typeof(Point), typeof(MapZoom));
         /// <summary>
         /// When we are zooming to a point this property can be animated
@@ -81,59 +83,26 @@ namespace FreeSCADA.Common.Schema.Gestures
         /// <param name="target">The target object we will be zooming.</param>
         public MapZoom(FrameworkElement target)
         {
-            this._container = target.Parent as FrameworkElement;
+            this._container = target.Parent  as ScrollViewer;
             this._target = target;
 
-            _container.MouseMove += new MouseEventHandler(OnMouseMove);
-            _container.MouseWheel += new MouseWheelEventHandler(OnMouseWheel);
+            _target.MouseMove += new MouseEventHandler(OnMouseMove);
+            _target.MouseWheel += new MouseWheelEventHandler(OnMouseWheel);
+
+            Keyboard.AddKeyDownHandler(_target, new KeyEventHandler(OnKeyDown));
+            Keyboard.AddKeyUpHandler(_target, new KeyEventHandler(OnKeyUp));
+
+            //_target.Focusable = true;
+            //_target.Focus();
             
-            Keyboard.AddKeyDownHandler(_container, new KeyEventHandler(OnKeyDown));
-            Keyboard.AddKeyUpHandler(_container, new KeyEventHandler(OnKeyUp));
-
-            _container.Focusable = true;
-            _container.Focus();
-
-            // Try and reuse the existing TransformGroup if we can.
-            TransformGroup g = target.RenderTransform as TransformGroup;
-            if (g != null)
-            {
-                this._scale = g.Children.Count > 1 ? g.Children[0] as ScaleTransform : null;
-                this._translate = g.Children.Count > 0 ? g.Children[1] as TranslateTransform : null;
-                if (this._scale == null || this._translate == null)
-                {
-                    g = null; // then the TransformGroup cannot be re-used
-                }
-            }
-            if (g == null)
-            {
-                g = new TransformGroup();
-                this._scale = new ScaleTransform(1, 1);
-                g.Children.Add(this._scale);
-                this._translate = new TranslateTransform();
-                g.Children.Add(this._translate);
-                target.RenderTransform = g;
-            }
-
+            _scale = _target.LayoutTransform as ScaleTransform;
+            if(_scale==null)
+                _target.LayoutTransform = _scale = new ScaleTransform();
             this._zoom = this._newZoom = _scale.ScaleX;
 
             // track changes made by the ScrolLViewer.
-            this._translate.Changed += new EventHandler(OnTranslateChanged);
+            //this._translate.Changed += new EventHandler(OnTranslateChanged);
             this._scale.Changed += new EventHandler(OnScaleChanged);
-        }
-
-        /// <summary>
-        /// Handle event when the TranslateTransform is changed by keeping our offset member in sync
-        /// the new TranslateTransform values.
-        /// </summary>
-        /// <param name="sender">The TranslateTransform object</param>
-        /// <param name="e">noop</param>
-        void OnTranslateChanged(object sender, EventArgs e)
-        {
-            if (_offset.X != _translate.X || _offset.Y != _translate.Y)
-            {
-                _offset.X = _translate.X;
-                _offset.Y = _translate.Y;
-            }
         }
 
         /// <summary>
@@ -147,6 +116,7 @@ namespace FreeSCADA.Common.Schema.Gestures
             if (_zoom != _scale.ScaleX)
             {
                 _zoom = _scale.ScaleX;
+                
             }
         }
 
@@ -272,8 +242,8 @@ namespace FreeSCADA.Common.Schema.Gestures
 
             Point delta = new Point(moved.X - this._onTarget.X, moved.Y - this._onTarget.Y);
 
-            double x = this._translate.X + (delta.X * _zoom);
-            double y = this._translate.Y + (delta.Y * _zoom);
+            double x = Offset.X + (delta.X * _zoom);
+            double y = Offset.Y + (delta.Y * _zoom);
 
             Size containerSize = ContainerSize;
             double width = containerSize.Width;
@@ -309,8 +279,8 @@ namespace FreeSCADA.Common.Schema.Gestures
             
             double cx = (width - cr.Width) / 2;
             double cy = (height - cr.Height) / 2;
-            double dx = _translate.X + cx - cr.X;
-            double dy = _translate.Y + cy - cr.Y;
+            double dx = Offset.X + cx - cr.X;
+            double dy = Offset.Y + cy - cr.Y;
             Translate(dx, dy);
         }
 
@@ -321,23 +291,9 @@ namespace FreeSCADA.Common.Schema.Gestures
         /// <param name="y">The y-coordinate</param>
         void Translate(double x, double y)
         {
-            IScrollInfo si = _target as IScrollInfo;
-            if (si != null)
-            {
-                // If the target object is smaller than the current viewport size then ignore this request.
-                Size s = this.ContainerSize;
-                if (_target.ActualWidth <= s.Width && _target.ActualHeight <= s.Height)
-                {
-                    x = y = 0;
-                }
-            }
-            if (x > 0) x = 0;
-            if (y > 0) y = 0;
-
-            _translate.X = _offset.X = x;
-            _translate.Y = _offset.Y = y;
-
-            // focus rectangles may need to be repainted.
+            
+            _container.ScrollToHorizontalOffset(-x);
+            _container.ScrollToVerticalOffset(-y);
             _target.InvalidateVisual();
         }
 
@@ -361,7 +317,10 @@ namespace FreeSCADA.Common.Schema.Gestures
         /// </summary>
         public Point Offset
         {
-            get { return this._offset; }
+            get 
+            { 
+                return new Point(_container.HorizontalOffset,_container.VerticalOffset); 
+            }
             set
             {
                 StopAnimations();
@@ -382,7 +341,7 @@ namespace FreeSCADA.Common.Schema.Gestures
             this.BeginAnimation(ZoomToRectProperty, null);
 
             // make sure offset and translate are in sync.
-            Point t = new Point(_translate.X, _translate.Y);
+            Point t = Offset;
             this.BeginAnimation(OffsetProperty, null);
             Translate(t.X, t.Y);
         }
@@ -433,8 +392,8 @@ namespace FreeSCADA.Common.Schema.Gestures
         {
             StopAnimations();
             _scale.ScaleX = _scale.ScaleY = this._zoom = this._newZoom = 1;
-            this._translate.X = _offset.X = 0;
-            this._translate.Y = _offset.Y = 0;
+            Offset = new Point(0,0);
+            
             this._startTime = 0;
             OnZoomChanged();
             // focus rectangles may need to be repainted.
@@ -619,7 +578,7 @@ namespace FreeSCADA.Common.Schema.Gestures
                 // the selected node is visble.  We need to change the current translation by the 'delta'
                 // amount.
 
-                Point startPos = new Point(_translate.X, _translate.Y);
+                Point startPos = Offset;
                 double x = startPos.X + delta.X;
                 if (x > 0) x = 0;
                 double y = startPos.Y + delta.Y;
@@ -669,15 +628,9 @@ namespace FreeSCADA.Common.Schema.Gestures
                 }
             }
         }
-
-        /// <summary>
-        /// Every Freezable subclass must implement this method.
-        /// </summary>
-        /// <returns>A new instance of this object</returns>
         protected override Freezable CreateInstanceCore()
         {
-            return new MapZoom(this._target);
+            return new MapZoom(_target);
         }
-
     }
 }

@@ -66,7 +66,9 @@ namespace FreeSCADA.Designer
 
 		public void CreateNewSchema()
 		{
+            string name=Env.Current.Project.GenerateUniqueName(ProjectEntityType.Schema, "Untitled");
 			SchemaView view = new SchemaView();
+
 			if(view.CreateNewDocument() == false)
 			{
 				System.Windows.MessageBox.Show( DialogMessages.CannotCreateSchema,

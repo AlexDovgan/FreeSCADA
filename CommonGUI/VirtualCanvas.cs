@@ -73,7 +73,7 @@ namespace FreeSCADA.Common.Schema
     /// visuals.  This helps manage the memory consumption when you have so many objects that creating
     /// all the WPF visuals would take too much memory.
     /// </summary>
-    public class VirtualCanvas : VirtualizingPanel, IScrollInfo
+    public class VirtualCanvas : Canvas, IScrollInfo
     {
         ScrollViewer _owner;
         Size _viewPortSize;
@@ -82,9 +82,9 @@ namespace FreeSCADA.Common.Schema
         QuadTree<IVirtualChild> _index;
         ObservableCollection<IVirtualChild> _children;
         Size _smallScrollIncrement = new Size(0, 0);
-        Canvas _content;
-        Border _backdrop;
-        TranslateTransform _translate;
+        Canvas _originalCanvas;
+
+        Point _translate;
         ScaleTransform _scale;
         Size _extent;
         IList<Rect> _dirtyRegions = new List<Rect>();
@@ -105,25 +105,36 @@ namespace FreeSCADA.Common.Schema
         /// <summary>
         /// Construct empty virtual canvas.
         /// </summary>
-        public VirtualCanvas()
+        public VirtualCanvas(Canvas originalCanvas)
         {
             _index = new QuadTree<IVirtualChild>();
             _children = new ObservableCollection<IVirtualChild>();
             _children.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(OnChildrenCollectionChanged);
-            _content = new Canvas();
-            _backdrop = new Border();
-            _content.Children.Add(_backdrop);
-
-            TransformGroup g = new TransformGroup();
+            
             _scale = new ScaleTransform();
-            _translate = new TranslateTransform();
-            g.Children.Add(_scale);
-            g.Children.Add(_translate);
-            _content.RenderTransform = g;
+            
+            TransformGroup tg = new TransformGroup();
+            tg.Children.Add(_scale);
 
-            _translate.Changed += new EventHandler(OnTranslateChanged);
+            LayoutTransform = _scale;
+            
+            //_translate.Changed += new EventHandler(OnTranslateChanged);
             _scale.Changed += new EventHandler(OnScaleChanged);
-            this.Children.Add(_content);
+            //Background = new SolidColorBrush(Color.FromRgb(0xd0, 0xd0, 0xd0));
+            Background = originalCanvas.Background;
+            _originalCanvas = originalCanvas;
+            
+                        
+            VirtualChildren.Clear();
+
+            while (originalCanvas.Children.Count > 0)
+            {
+                Resources = originalCanvas.Resources;
+                System.Windows.UIElement el = originalCanvas.Children[0];
+                originalCanvas.Children.RemoveAt(0);
+                AddVirtualChild(new VirtualElement(el as System.Windows.FrameworkElement));
+            }
+
         }
 
         /// <summary>
@@ -165,7 +176,7 @@ namespace FreeSCADA.Common.Schema
             _visualPositions = null;
             _visible = Rect.Empty;
             _done = false;
-            foreach (UIElement e in _content.Children)
+            foreach (UIElement e in Children)
             {
                 IVirtualChild n = e.GetValue(VirtualChildProperty) as IVirtualChild;
                 if (n != null)
@@ -175,9 +186,8 @@ namespace FreeSCADA.Common.Schema
                     
                 }
             }
-            _content.UpdateLayout();
-            _content.Children.Clear();
-            _content.Children.Add(_backdrop);
+            UpdateLayout();
+            Children.Clear();
             InvalidateArrange();
             StartLazyUpdate();
         }
@@ -193,7 +203,7 @@ namespace FreeSCADA.Common.Schema
         /// <summary>
         /// The current translate transform.
         /// </summary>
-        public TranslateTransform Translate
+        public Point  Translate
         {
             get { return _translate; }
         }
@@ -273,7 +283,7 @@ namespace FreeSCADA.Common.Schema
         /// </summary>
         public int LiveVisualCount
         {
-            get { return _content.Children.Count - 1; }
+            get { return Children.Count - 1; }
         }
         
         /// <summary>
@@ -296,23 +306,7 @@ namespace FreeSCADA.Common.Schema
             OnScrollChanged();
         }
 
-        /// <summary>
-        /// The ContentCanvas that is actually the parent of all the VirtualChildren Visuals.
-        /// </summary>
-        public Canvas ContentCanvas
-        {
-            get { return _content; }
-        }
-
-        /// <summary>
-        /// The backgrop is the back most child of the ContentCanvas used for drawing any sort
-        /// of background that is guarenteed to fill the ViewPort.
-        /// </summary>
-        public Border Backdrop
-        {
-            get { return _backdrop; }
-        }
-
+        
         /// <summary>
         /// Calculate the size needed to display all the virtual children.
         /// </summary>
@@ -324,14 +318,17 @@ namespace FreeSCADA.Common.Schema
             {
                 rebuild= true;
                 bool first = true;
-                Rect extent = new Rect();
+
+                _extent.Width = _originalCanvas.Width;
+                _extent.Height = _originalCanvas.Height;
+            
                 _visualPositions = new Dictionary<IVirtualChild, int>();
                 int index = 0;
                 foreach (IVirtualChild c in _children)
                 {
                     _visualPositions[c] = index++;
 
-                    Rect childBounds = c.Bounds;
+                    /*Rect childBounds = c.Bounds;
                     if (childBounds.Width != 0 && childBounds.Height != 0)
                     {
                         if (double.IsNaN(childBounds.Width) || double.IsNaN(childBounds.Height))
@@ -348,12 +345,13 @@ namespace FreeSCADA.Common.Schema
                         {
                             extent = Rect.Union(extent, childBounds);
                         }
-                    }
+                    }*/
                 }
-                _extent = extent.Size;
+                //_extent = extent.Size;
                 // Ok, now we know the size we can create the index.
+            
                 _index = new QuadTree<IVirtualChild>();
-                _index.Bounds = new Rect(0, 0, extent.Width, extent.Height);
+                _index.Bounds = new Rect(0, 0, _extent.Width, _extent.Height);
                 foreach (IVirtualChild n in _children)
                 {
                     if (n.Bounds.Width > 0 && n.Bounds.Height > 0)
@@ -362,22 +360,22 @@ namespace FreeSCADA.Common.Schema
                     }
                 }
             }
-
+            
             // Make sure we honor the min width & height.
-            double w = Math.Max(_content.MinWidth, _extent.Width);
-            double h = Math.Max(_content.MinHeight, _extent.Height);
-            _content.Width = w;
-            _content.Height = h;
+
+            //double w = Math.Max(_content.MinWidth, _extent.Width);
+            //double h = Math.Max(_content.MinHeight, _extent.Height);
+            //_content.Width = w;
+            //_content.Height = h;
 
             // Make sure the backdrop covers the ViewPort bounds.
             double zoom = _scale.ScaleX;
             if (!double.IsInfinity(this.ViewportHeight) &&
                 !double.IsInfinity(this.ViewportHeight))
             {
-                w = Math.Max(w, this.ViewportWidth / zoom);
-                h = Math.Max(h, this.ViewportHeight / zoom);
-                _backdrop.Width = w;
-                _backdrop.Height = h;
+                double w = Math.Max(Width, this.ViewportWidth / zoom);
+                double h = Math.Max(Height, this.ViewportHeight / zoom);
+                
             }
 
             if (_owner != null)
@@ -398,7 +396,7 @@ namespace FreeSCADA.Common.Schema
         /// <returns>availableSize</returns>
         protected override Size MeasureOverride(Size availableSize)
         {
-            base.MeasureOverride(availableSize);
+            //base.MeasureOverride(availableSize);
 
             // We will be given the visible size in the scroll viewer here.
             CalculateExtent();
@@ -434,7 +432,7 @@ namespace FreeSCADA.Common.Schema
         /// <returns>finalSize</returns>
         protected override Size ArrangeOverride(Size finalSize)
         {
-            base.ArrangeOverride(finalSize);
+            //base.ArrangeOverride(finalSize);
             
             CalculateExtent();
 
@@ -443,7 +441,18 @@ namespace FreeSCADA.Common.Schema
                 SetViewportSize(finalSize);
             }
             
-            _content.Arrange(new Rect(0, 0, _content.Width, _content.Height));
+//            base.Arrange(new Rect(0, 0, Width, Height));
+            foreach (UIElement child in this.InternalChildren)
+            {
+                IVirtualChild n = child.GetValue(VirtualChildProperty) as IVirtualChild;
+                if (n != null)
+                {
+                    Rect bounds = n.Bounds;
+                    bounds.X-= _translate.X/_scale.ScaleX;
+                    bounds.Y-= _translate.Y/_scale.ScaleY;
+                    child.Arrange(bounds);
+                }
+            }
 
             if (_index == null) 
             {
@@ -536,7 +545,7 @@ namespace FreeSCADA.Common.Schema
                 //this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new UpdateHandler(LazyUpdateVisuals));
             }
             this.InvalidateVisual();
-            _content.InvalidateArrange();
+            InvalidateArrange();
         }
 
         /// <summary>
@@ -653,13 +662,13 @@ namespace FreeSCADA.Common.Schema
 
             // Now do a binary search for the correct insertion position based
             // on the visual positions of the existing visible children.
-            UIElementCollection c = _content.Children;
+            UIElementCollection c = Children;
             int min = 0;
-            int max = c.Count - 1;
+            int max = c.Count-1;
             while (max > min + 1)
             {
                 int i = (min + max) / 2;
-                UIElement v = _content.Children[i];
+                UIElement v = Children[i];
                 IVirtualChild n = v.GetValue(VirtualChildProperty) as IVirtualChild;
                 if (n != null)
                 {
@@ -685,7 +694,7 @@ namespace FreeSCADA.Common.Schema
 
             // If 'max' is the last child in the collection, then we need to see
             // if we have a new last child.
-            if (max == c.Count - 1)
+            if (c.Count>0&&max == c.Count - 1)
             {
                 UIElement v = c[max];
                 IVirtualChild maxchild = v.GetValue(VirtualChildProperty) as IVirtualChild;
@@ -696,8 +705,10 @@ namespace FreeSCADA.Common.Schema
                     max++;
                 }
             }
-
-            c.Insert(max, e);
+            if (max < 0)
+                c.Add(e);
+            else
+                c.Insert(max, e);
 
         }
 
@@ -763,7 +774,7 @@ namespace FreeSCADA.Common.Schema
                             e.ClearValue(VirtualChildProperty);
                             n.DisposeVisual();
                             e.UpdateLayout();
-                            _content.Children.Remove(e);
+                            Children.Remove(e);
                             _removed++;                            
                         }
                     }
@@ -799,9 +810,9 @@ namespace FreeSCADA.Common.Schema
             int count = 0;
             // Now after every update also do a full incremental scan over all the children
             // to make sure we didn't leak any nodes that need to be removed.
-            while (count < quantum && _nodeCollectCycle < _content.Children.Count)
+            while (count < quantum && _nodeCollectCycle < Children.Count)
             {
-                UIElement e = _content.Children[_nodeCollectCycle++];
+                UIElement e = Children[_nodeCollectCycle++];
                 IVirtualChild n = e.GetValue(VirtualChildProperty) as IVirtualChild;                
                 if (n != null) {
                     Rect nrect = n.Bounds;
@@ -810,7 +821,7 @@ namespace FreeSCADA.Common.Schema
                         
                         n.DisposeVisual();
                         e.UpdateLayout();
-                        _content.Children.Remove(e);
+                        Children.Remove(e);
                         _removed++;
                     }
                     count++;
@@ -818,7 +829,7 @@ namespace FreeSCADA.Common.Schema
                 _nodeCollectCycle++;
             }
             
-            if (_nodeCollectCycle < _content.Children.Count) {
+            if (_nodeCollectCycle < Children.Count) {
                 _done = false;
             }
 
@@ -1026,7 +1037,7 @@ namespace FreeSCADA.Common.Schema
         public void SetHorizontalOffset(double offset)
         {
             double xoffset = Math.Max(Math.Min(offset, ExtentWidth - ViewportWidth), 0);
-            _translate.X = -xoffset;
+            _translate.X = xoffset;
             OnScrollChanged();
         }
 
@@ -1037,7 +1048,8 @@ namespace FreeSCADA.Common.Schema
         public void SetVerticalOffset(double offset)
         {
             double yoffset = Math.Max(Math.Min(offset, ExtentHeight - ViewportHeight), 0);
-            _translate.Y = -yoffset;
+            _translate.Y = yoffset;
+            //_owner.ScrollToVerticalOffset(-offset);
             OnScrollChanged();
         }
 
@@ -1046,15 +1058,15 @@ namespace FreeSCADA.Common.Schema
         /// </summary>
         public double HorizontalOffset
         {
-            get { return -_translate.X; }
+            get { return _translate.X; }
         }
 
-        /// <summary>
-        /// Return the current vertical scroll position.
-        /// </summary>
+        ///// <summary>
+        ///// Return the current vertical scroll position.
+        ///// </summary>
         public double VerticalOffset
         {
-            get { return -_translate.Y; }
+            get { return _translate.Y; }
         }
 
         /// <summary>
@@ -1083,16 +1095,16 @@ namespace FreeSCADA.Common.Schema
         Rect GetVisibleRect()
         {
             // Add a bit of extra around the edges so we are sure to create nodes that have a tiny bit showing.
-            double xstart = (this.HorizontalOffset - _smallScrollIncrement.Width) / _scale.ScaleX;
-            double ystart = (this.VerticalOffset - _smallScrollIncrement.Height) / _scale.ScaleY;
-            double xend = (this.HorizontalOffset + (_viewPortSize.Width + (2 * _smallScrollIncrement.Width))) / _scale.ScaleX;
-            double yend = (this.VerticalOffset + (_viewPortSize.Height + (2 * _smallScrollIncrement.Height))) / _scale.ScaleY;
+            double xstart = (this.HorizontalOffset - _smallScrollIncrement.Width)/_scale.ScaleX;
+            double ystart = (this.VerticalOffset - _smallScrollIncrement.Height)/ _scale.ScaleY;
+            double xend = (this.HorizontalOffset/_scale.ScaleX + (_viewPortSize.Width + (2 * _smallScrollIncrement.Width)));//_scale.ScaleX;
+            double yend = (this.VerticalOffset/_scale.ScaleY + (_viewPortSize.Height + (2 * _smallScrollIncrement.Height)));//_scale.ScaleY;
             return new Rect(xstart, ystart, xend - xstart, yend - ystart);
         }
 
         /// <summary>
         /// The visible region has changed, so we need to queue up work for dirty regions and new visible regions
-        /// then start asynchronously building new visuals via StartLazyUpdate.
+        /// then start asynchronlously building new visuals via StartLazyUpdate.
         /// </summary>
         void OnScrollChanged()
         {
@@ -1100,6 +1112,7 @@ namespace FreeSCADA.Common.Schema
             AddVisibleRegion();
             _nodeCollectCycle = 0;
             _done = false;
+
 
             Rect intersection = Rect.Intersect(dirty, _visible);
             if (intersection == Rect.Empty)

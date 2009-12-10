@@ -16,7 +16,7 @@ namespace FreeSCADA.Common.Schema
                 return null;
 
             DependencyObject top = element;
-            while (!(VisualTreeHelper.GetParent(top) is ScrollContentPresenter))
+            while (!(VisualTreeHelper.GetParent(top) is ScrollContentPresenter) && VisualTreeHelper.GetParent(top)!=null)
             {
                 top = VisualTreeHelper.GetParent(top);
             }

@@ -11,7 +11,7 @@ namespace FreeSCADA.RunTime.DocumentCommands
 {
 	class BaseDocumentCommand : BaseCommand
 	{
-		object controlledObject;
+		protected object controlledObject;
 
 		public virtual object ControlledObject
 		{
@@ -30,6 +30,21 @@ namespace FreeSCADA.RunTime.DocumentCommands
 	{
 		double level;
 		public event EventHandler CurrentChanged;
+        public override  object ControlledObject
+        {
+            get { return controlledObject; }
+            set
+            {
+                controlledObject = value;
+                (controlledObject as SchemaView).ZoomGesture.ZoomChanged += new EventHandler(ZoomGesture_ZoomChanged);
+                CheckApplicability();
+            }
+        }
+
+        void ZoomGesture_ZoomChanged(object sender, EventArgs e)
+        {
+            Level = (sender as FreeSCADA.Common.Schema.Gestures.MapZoom).Zoom;
+        }
 
 		public ZoomLevelCommand()
 		{
@@ -67,7 +82,7 @@ namespace FreeSCADA.RunTime.DocumentCommands
 		public override void Execute()
 		{
 			SchemaView view = (SchemaView)ControlledObject;
-			view.ZoomLevel = level;
+			view.ZoomGesture.Zoom = level;
 			view.Focus();
 		}
 
@@ -133,7 +148,7 @@ namespace FreeSCADA.RunTime.DocumentCommands
 		public override void Execute()
 		{
 			SchemaView view = (SchemaView)ControlledObject;
-			view.ZoomIn();
+			view.ZoomGesture.Zoom*=1.05;
 		}
 
 		public override string Name
@@ -171,7 +186,8 @@ namespace FreeSCADA.RunTime.DocumentCommands
 		public override void Execute()
 		{
 			SchemaView view = (SchemaView)ControlledObject;
-			view.ZoomOut();
+            view.ZoomGesture.Zoom /= 1.05;
+			//view.ZoomOut();
 		}
 
 		#region Informational properties

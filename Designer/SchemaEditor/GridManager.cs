@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -143,7 +144,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             }
         }
         #endregion Properties
-
+        
         private Vector delta = new Vector();
         bool snapActive = false;
         /// <summary>

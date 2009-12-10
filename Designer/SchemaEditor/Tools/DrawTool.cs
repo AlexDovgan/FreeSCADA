@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using FreeSCADA.Common.Schema;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
@@ -77,14 +78,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                         gridManager.GetMousePos().X,
                         gridManager.GetMousePos().Y));
 
-                if ((System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Shift) != 0)
+                if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0)
                 {
                     rect.X = startPos.X - rect.Width / 2;
                     rect.Y = startPos.Y - rect.Height / 2;
                 }
 
 
-                if ((System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Control) != 0)
+                if ((Keyboard.Modifiers & ModifierKeys.Control) != 0)
                 {
                     rect.Height = Math.Min(rect.Height, rect.Width);
                     rect.Width = rect.Height;

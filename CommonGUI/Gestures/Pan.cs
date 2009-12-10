@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace FreeSCADA.Common.Schema.Gestures
 {
@@ -17,13 +18,14 @@ namespace FreeSCADA.Common.Schema.Gestures
     /// <summary>
     /// This class provides the ability to pan the target object when dragging the mouse 
     /// </summary>
-    class Pan {
+    public class Pan:BaseTool
+    {
 
         bool _dragging;
         FrameworkElement _target;
         MapZoom _zoom;
         bool _captured;
-        Panel _container;
+        FrameworkElement _container;
         Point _mouseDownPoint;
         Point _startTranslate;
         ModifierKeys _mods = ModifierKeys.None;
@@ -33,17 +35,16 @@ namespace FreeSCADA.Common.Schema.Gestures
         /// </summary>
         /// <param name="target">The target to be panned, must live inside a container Panel</param>
         /// <param name="zoom"></param>
-        public Pan(FrameworkElement target, MapZoom zoom) {
+        public Pan(FrameworkElement target, MapZoom zoom):base(target)
+        {
             this._target = target;
-            this._container = target.Parent as Panel;
+            this._container = target.Parent as FrameworkElement;
             if (this._container == null) {
                 // todo: localization
                 throw new ArgumentException("Target object must live in a Panel");
             }
             this._zoom = zoom;
-            _container.MouseLeftButtonDown += new MouseButtonEventHandler(OnMouseLeftButtonDown);
-            _container.MouseLeftButtonUp += new MouseButtonEventHandler(OnMouseLeftButtonUp);
-            _container.MouseMove += new MouseEventHandler(OnMouseMove);
+         
         }
 
         /// <summary>
@@ -52,13 +53,15 @@ namespace FreeSCADA.Common.Schema.Gestures
         /// </summary>
         /// <param name="sender">Container</param>
         /// <param name="e">Mouse information</param>
-        void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+        protected override void  OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+ 	        base.OnPreviewMouseLeftButtonDown(e);
 
             ModifierKeys mask = Keyboard.Modifiers & _mods;
             if (!e.Handled && mask == _mods && mask == Keyboard.Modifiers)
             {
-                this._container.Cursor = Cursors.Hand;
-                _mouseDownPoint = e.GetPosition(this._container);
+                Cursor = Cursors.Hand;
+                _mouseDownPoint = e.GetPosition(this._target);
                 Point offset = _zoom.Offset;
                 _startTranslate = new Point(offset.X, offset.Y);
                 _dragging = true;
@@ -72,14 +75,18 @@ namespace FreeSCADA.Common.Schema.Gestures
         /// </summary>
         /// <param name="sender">Mouse</param>
         /// <param name="e">Move information</param>
-        void OnMouseMove(object sender, MouseEventArgs e) {
+        protected override void  OnPreviewMouseMove(MouseEventArgs e)
+        {
+ 	
+            base.OnPreviewMouseMove(e);
+
             if (this._dragging) {
                 if (!_captured) {
                     _captured = true;
-                    _target.Cursor = Cursors.Hand;
-                    Mouse.Capture(this._target, CaptureMode.SubTree);
+                    Cursor = Cursors.Hand;
+                    Mouse.Capture(this, CaptureMode.SubTree);
                 }
-                this.MoveBy(_mouseDownPoint - e.GetPosition(this._container));
+                this.MoveBy(_mouseDownPoint - e.GetPosition(this._target));
             }
         }
 
@@ -88,12 +95,13 @@ namespace FreeSCADA.Common.Schema.Gestures
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-
+        protected override void  OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
+        {
+ 	        base.OnPreviewMouseLeftButtonUp(e);
             if (_captured) {
-                Mouse.Capture(this._target, CaptureMode.None);
+                Mouse.Capture(this, CaptureMode.None);
                 e.Handled = true;
-                _target.Cursor = Cursors.Arrow; ;
+                Cursor = Cursors.Arrow; ;
                 _captured = false;   
             }
 
@@ -105,10 +113,12 @@ namespace FreeSCADA.Common.Schema.Gestures
         /// </summary>
         /// <param name="v">A vector containing the delta from recorded mouse down position and current mouse position</param>
         public void MoveBy(Vector v) {
-            _zoom.Offset = new Point(_startTranslate.X - v.X, _startTranslate.Y - v.Y);
+            _zoom.Offset = new Point(-_startTranslate.X - v.X, -_startTranslate.Y - v.Y);
             _target.InvalidateVisual();
         }
-
-
+        public override BaseManipulator CreateToolManipulator(UIElement obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

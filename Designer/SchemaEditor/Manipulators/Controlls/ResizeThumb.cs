@@ -31,7 +31,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
         {
             Width = 10;
             Height = 10;
-            
+            ThumbsResources tr = new ThumbsResources();
+            tr.InitializeComponent();
+            Resources = tr;
+                  
             base.DragStarted += new DragStartedEventHandler(ResizeThumb_DragStarted);
             base.DragDelta += new DragDeltaEventHandler(ResizeThumb_DragDelta);
         }

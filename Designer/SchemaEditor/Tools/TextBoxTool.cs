@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using FreeSCADA.Common.Schema;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
@@ -28,7 +29,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             if (isDragged)
             {
-                Vector v = GridManager.GetMousePos() - startPos;
+                Vector v = GridManager.GetGridManagerFor(AdornedElement).GetMousePos() - startPos;
                 Point rectStart;
                 DrawingContext drawingContext = objectPrview.RenderOpen();
                 if ((System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Control) != 0)
@@ -82,13 +83,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             if (!e.Handled)
             {
                 CaptureMouse();
-                startPos = GridManager.GetMousePos();
+                startPos = GridManager.GetGridManagerFor(AdornedElement).GetMousePos();
                 isDragged = true;
             }
 
             e.Handled = false;
         }
-        public override Manipulators.BaseManipulator CreateToolManipulator(UIElement obj)
+        public override BaseManipulator CreateToolManipulator(UIElement obj)
         {
             return new Manipulators.TextBoxManipulator(obj);
         }

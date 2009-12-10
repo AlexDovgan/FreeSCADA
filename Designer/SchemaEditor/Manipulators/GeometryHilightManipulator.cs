@@ -2,6 +2,8 @@
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using FreeSCADA.Common.Schema;
+
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
     class GeometryHilightManipulator:BaseManipulator

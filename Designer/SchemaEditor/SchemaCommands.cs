@@ -487,7 +487,13 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             base(sv)
         {
             Priority = (int)CommandManager.Priorities.ViewCommands;
+            sv.ZoomManager.ZoomChanged += new EventHandler(ZoomGesture_ZoomChanged);
             this.level = 1.0;
+        }
+
+        void ZoomGesture_ZoomChanged(object sender, EventArgs e)
+        {
+            Level = (sender as FreeSCADA.Common.Schema.Gestures.MapZoom).Zoom;
         }
 
         #region Informational properties
@@ -520,7 +526,8 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public override void Execute()
         {
 
-            schemaView.ZoomLevel = level;
+            schemaView.ZoomManager.Zoom =level ;
+
             schemaView.Focus();
         }
 
@@ -587,7 +594,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public override void Execute()
         {
 
-            schemaView.ZoomIn();
+            schemaView.ZoomManager.Zoom *= 1.05;
         }
 
         public override string Name
@@ -626,7 +633,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public override void Execute()
         {
 
-            schemaView.ZoomOut();
+            schemaView.ZoomManager.Zoom /= 1.05;
         }
 
         #region Informational properties

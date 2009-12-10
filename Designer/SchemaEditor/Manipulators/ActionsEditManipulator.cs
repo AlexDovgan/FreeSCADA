@@ -5,6 +5,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using FreeSCADA.Common.Schema.Actions;
+using FreeSCADA.Common.Schema;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
@@ -15,7 +16,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         StackPanel ActionsPanel = new StackPanel();
         public delegate void ActionSelectedDelegate(BaseAction a);
         public event ActionSelectedDelegate ActionSelected;
-        Tools.BaseTool helperTool;
+        BaseTool helperTool;
         
         DrawingVisual helperObject= new DrawingVisual();
         public ActionsEditManipulator(UIElement element)

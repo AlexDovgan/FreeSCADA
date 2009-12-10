@@ -109,12 +109,12 @@ namespace FreeSCADA.Common
 
 			if (Version != CurrentVersion)
 			{
-				if (System.Windows.Forms.MessageBox.Show("Project version is difer from current version\n\rdo you whant try to convert?"
+				if (System.Windows.Forms.MessageBox.Show("Project version is differ from current version\n\rdo you whant try to convert?"
 					, "Caution!", System.Windows.Forms.MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
 				{
 					ConvertProject();
 					if (Version != CurrentVersion)
-						System.Windows.Forms.MessageBox.Show("Project version stil difer from current version.", "Conversion Result");
+						System.Windows.Forms.MessageBox.Show("Project version stil differ from current version.", "Conversion Result");
 				}
 			}
 			FireProjectLoaded();

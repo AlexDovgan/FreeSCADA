@@ -65,6 +65,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 					bind.Source = cdp;
                     cdp.Refresh();
 					bind.FallbackValue = "{"+cdp.ChannelName+"}";
+                    bind.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
 					multiBind.Bindings.Add(bind);
 				}
 				multiBind.Converter = new Kent.Boogaart.Converters.FormatConverter(expressionEdit.Text);

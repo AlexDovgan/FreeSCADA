@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -10,6 +11,7 @@ using System.Windows.Media;
 using System.Xml;
 using FreeSCADA.Common;
 using FreeSCADA.Common.Schema;
+using FreeSCADA.Common.Schema.Gestures;
 using FreeSCADA.Designer.SchemaEditor;
 using FreeSCADA.Designer.SchemaEditor.PropertiesUtils;
 using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
@@ -18,30 +20,42 @@ using FreeSCADA.Designer.SchemaEditor.UndoRedo;
 using FreeSCADA.Interfaces;
 using FreeSCADA.Interfaces.Plugins;
 
+
 namespace FreeSCADA.Designer.Views
 {
     class SchemaView : DocumentView
     {
 
         // TODO: make all actions by Commands, make command execution by pattern Vistor - one 
-
+        #region fields
         WPFShemaContainer wpfSchemaContainer;
+        
 
         BaseTool activeTool;
         Type defaultTool = typeof(SelectionTool);
 
         GridManager gridManger;
+
         System.Windows.Forms.ContextMenu contextMenu = new System.Windows.Forms.ContextMenu();
         ICommandContext documentMenuContext;
         List<ToolDescriptor> toolsList = new List<ToolDescriptor>();
         SchemaCommand undoCommand, redoCommand;
-
-
+        #endregion
+        #region properties
+        public WPFShemaContainer WpfSchemaContainer
+        {
+            get { return wpfSchemaContainer; }
+        }
 
         public TextBox XamlView
         {
             get;
             private set;
+        }
+        public MapZoom ZoomManager
+        {
+            get;
+            protected set;
         }
 
         public System.Windows.Controls.Canvas MainCanvas
@@ -49,90 +63,76 @@ namespace FreeSCADA.Designer.Views
             get { return wpfSchemaContainer.View as System.Windows.Controls.Canvas; }
             set
             {
-
-
                 wpfSchemaContainer.View = value;
-
             }
         }
-
-        public override string DocumentName
-        {
-            set
-            {
-
-                base.DocumentName = value;
-            }
-        }
+        
         public SelectionManager SelectionManager
+
         {
             get;
             protected set;
         }
-
-        #region ZoomImplementation
-
-        //TODO: should be implemented as separate class - ZoomManager like GridManager
-        private ScaleTransform SchemaScale = new ScaleTransform();
-        private System.Windows.Point SavedScrollPosition;
-
-        public double ZoomLevel
-        {
-            get
-            {
-                return SchemaScale.ScaleX;
-            }
-            set
-            {
-                SchemaScale.ScaleX = value;
-                SchemaScale.ScaleY = value;
-                MainCanvas.LayoutTransform = SchemaScale;
-            }
-        }
-        public void ZoomIn()
-        {
-            ZoomIn(new System.Windows.Point(0.0, 0.0));
-        }
-
-        public void ZoomIn(System.Windows.Point center)
-        {
-            System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
-            SchemaScale.ScaleX *= 1.05;
-            SchemaScale.ScaleY *= 1.05;
-            MainCanvas.LayoutTransform = SchemaScale;
-            msv.ScrollToVerticalOffset(msv.VerticalOffset * 1.05 + center.Y * 0.05);
-            msv.ScrollToHorizontalOffset(msv.HorizontalOffset * 1.05 + center.X * 0.05);
-
-            UpdateZoomLevel();
-        }
-
-        public void ZoomOut()
-        {
-            ZoomOut(new System.Windows.Point(0.0, 0.0));
-        }
-
-        public void ZoomOut(System.Windows.Point center)
-        {
-            System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
-            SchemaScale.ScaleX /= 1.05;
-            SchemaScale.ScaleY /= 1.05;
-            MainCanvas.LayoutTransform = SchemaScale;
-            msv.ScrollToVerticalOffset(msv.VerticalOffset / 1.05 - center.Y * 0.05);
-            msv.ScrollToHorizontalOffset(msv.HorizontalOffset / 1.05 - center.X * 0.05);
-
-            UpdateZoomLevel();
-        }
-
-        private void UpdateZoomLevel()
-        {
-            foreach (CommandInfo cmdInfo in DocumentCommands)
-            {
-                if (cmdInfo.command is ZoomLevelCommand)
-                    (cmdInfo.command as ZoomLevelCommand).Level = SchemaScale.ScaleX;
-            }
-        }
         #endregion
 
+        #region Initialization
+        public SchemaView()
+        {
+            InitializeComponent();
+        }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            this.wpfSchemaContainer = new WPFShemaContainer();
+            // 
+            // wpfContainerHost
+            // 
+            this.wpfSchemaContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wpfSchemaContainer.Location = new System.Drawing.Point(0, 0);
+            this.wpfSchemaContainer.Name = "WPFSchemaContainer";
+            this.wpfSchemaContainer.Size = new System.Drawing.Size(292, 273);
+            this.wpfSchemaContainer.TabIndex = 0;
+            this.wpfSchemaContainer.Text = "WPFSchemaContainer";
+            this.wpfSchemaContainer.Child.KeyDown += new System.Windows.Input.KeyEventHandler(WpfKeyDown);
+            this.XamlView = new TextBox();
+            this.XamlView.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.XamlView.Multiline = true;
+            this.XamlView.ScrollBars = ScrollBars.Both;
+            this.XamlView.Size = new System.Drawing.Size(200, 200);
+            this.XamlView.Hide();
+            XamlView.MaxLength = int.MaxValue;
+            // 
+            // SchemaView
+            // 
+            this.ClientSize = new System.Drawing.Size(292, 273);
+            this.Controls.Add(this.wpfSchemaContainer);
+            this.Controls.Add(XamlView);
+            this.Name = "SchemaView";
+
+            this.ResumeLayout(false);
+
+            this.UndoBuff = new BasicUndoBuffer(this);
+            this.SelectionManager = new SelectionManager(this);
+            this.SelectionManager.SelectionChanged += OnObjectSelected;
+            documentMenuContext = new SchemaMenuContext(contextMenu);
+            CommandManager.documentMenuContext = documentMenuContext;
+            this.ContextMenu = contextMenu;
+
+
+            this.wpfSchemaContainer.Child.AllowDrop = true;
+            this.wpfSchemaContainer.Child.DragEnter += new System.Windows.DragEventHandler(Child_DragEnter);
+            this.wpfSchemaContainer.Child.Drop += new System.Windows.DragEventHandler(Child_Drop);
+            //this.wpfSchemaContainer.View.ContextMenu = contextMenu;
+
+        }
+        void InitEditor()
+        {
+            gridManger = GridManager.GetGridManagerFor(MainCanvas);
+        }
+
+
+        #endregion
         #region ToolsImplementation
         //TODO: need to refator as ToolsManager
 
@@ -152,7 +152,6 @@ namespace FreeSCADA.Designer.Views
         {
             get
             {
-                gridManger = GridManager.GetGridManagerFor(MainCanvas);
                 if (activeTool == null)
                 {
                     activeTool = (BaseTool)System.Activator.CreateInstance(defaultTool, new object[] { MainCanvas });
@@ -165,6 +164,7 @@ namespace FreeSCADA.Designer.Views
                 }
 
                 return activeTool.GetType();
+
             }
             set
             {
@@ -192,6 +192,7 @@ namespace FreeSCADA.Designer.Views
         }
         private void CreateToolList()
         {
+            toolsList.Clear();
             System.Drawing.Bitmap blankBitmap = new System.Drawing.Bitmap(10, 10);
             toolsList.Add(new ToolDescriptor(StringResources.ToolSelection,
                 StringResources.ToolEditorGroupName,
@@ -221,10 +222,10 @@ namespace FreeSCADA.Designer.Views
                 StringResources.ToolControlsGroupName,
                 blankBitmap,
                 typeof(ControlCreateTool<System.Windows.Controls.Button>)));
-			toolsList.Add(new ToolDescriptor(StringResources.ToolToggleButton,
-				StringResources.ToolControlsGroupName,
-				blankBitmap,
-				typeof(ControlCreateTool<System.Windows.Controls.Primitives.ToggleButton>)));
+            toolsList.Add(new ToolDescriptor(StringResources.ToolToggleButton,
+                StringResources.ToolControlsGroupName,
+                blankBitmap,
+                typeof(ControlCreateTool<System.Windows.Controls.Primitives.ToggleButton>)));
             toolsList.Add(new ToolDescriptor(StringResources.ToolProgressbar,
                 StringResources.ToolControlsGroupName,
                 blankBitmap,
@@ -253,7 +254,7 @@ namespace FreeSCADA.Designer.Views
                 StringResources.ToolControlsGroupName,
                 blankBitmap,
                 typeof(ControlCreateTool<TimeChartControl>)));
-            
+
             //--- DYNAMIC GENERATION OF TOOLS ---//
             AssemblyName asmName = new AssemblyName("DynamicAssembly.SchemaView");
             AssemblyBuilder asmBuilder =
@@ -269,9 +270,9 @@ namespace FreeSCADA.Designer.Views
             {
                 foreach (IVisualControlDescriptor d in p.Controls)
                 {
-                    Type toolType= typeof(ControlCreateTool<>);
+                    Type toolType = typeof(ControlCreateTool<>);
                     toolType = toolType.MakeGenericType(new Type[] { d.Type });
-    
+
                     toolsList.Add(new ToolDescriptor(d.Name,
                         p.Name,
                         blankBitmap,
@@ -280,59 +281,11 @@ namespace FreeSCADA.Designer.Views
             }
         }
 
-
-        #endregion
-
-
-        #region Initialization
-        public SchemaView()
+        private void CreateCommands()
         {
-            InitializeComponent();
-        }
+            DocumentCommands.Clear();
 
-        private void InitializeComponent()
-        {
-            this.SuspendLayout();
-            this.wpfSchemaContainer = new WPFShemaContainer();
-            // 
-            // wpfContainerHost
-            // 
-            this.wpfSchemaContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wpfSchemaContainer.Location = new System.Drawing.Point(0, 0);
-            this.wpfSchemaContainer.Name = "WPFSchemaContainer";
-            this.wpfSchemaContainer.Size = new System.Drawing.Size(292, 273);
-            this.wpfSchemaContainer.TabIndex = 0;
-            this.wpfSchemaContainer.Text = "WPFSchemaContainer";
-            this.wpfSchemaContainer.Child.KeyDown += new System.Windows.Input.KeyEventHandler(WpfKeyDown);
-            this.wpfSchemaContainer.ZoomInEvent += new WPFShemaContainer.ZoomDelegate(ZoomIn);
-            this.wpfSchemaContainer.ZoomOutEvent += new WPFShemaContainer.ZoomDelegate(ZoomOut);
-            this.XamlView = new TextBox();
-            this.XamlView.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.XamlView.Multiline = true;
-            this.XamlView.ScrollBars = ScrollBars.Both;
-            this.XamlView.Size = new System.Drawing.Size(200, 200);
-            this.XamlView.Hide();
-            XamlView.MaxLength = int.MaxValue;
-            // 
-            // SchemaView
-            // 
-            this.ClientSize = new System.Drawing.Size(292, 273);
-            this.Controls.Add(this.wpfSchemaContainer);
-            this.Controls.Add(XamlView);
-            this.Name = "SchemaView";
-
-            this.ResumeLayout(false);
-            this.SavedScrollPosition = new System.Windows.Point(0.0, 0.0);
-
-            this.UndoBuff = new BasicUndoBuffer(this);
-            this.SelectionManager = new SelectionManager(this);
-            this.SelectionManager.SelectionChanged += OnObjectSelected;
-            documentMenuContext = new SchemaMenuContext(contextMenu);
-            CommandManager.documentMenuContext = documentMenuContext;
-            this.ContextMenu = contextMenu;
-
-
-            // Commands
+            // Commands to ToolStrip
             ICommand copyCommand = new CopyCommand(this);
             ICommand pasteCommand = new PasteCommand(this);
             ICommand cutCommand = new CutCommand(this);
@@ -369,60 +322,51 @@ namespace FreeSCADA.Designer.Views
             DocumentCommands.Add(new CommandInfo(pasteCommand, CommandManager.documentMenuContext));
             DocumentCommands.Add(new CommandInfo(bindingCommand, CommandManager.documentMenuContext));
             DocumentCommands.Add(new CommandInfo(new ImportElementCommand(this), CommandManager.fileContext));
-            
-			DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
-			DocumentCommands.Add(new CommandInfo(new ImportElementCommand(this), CommandManager.documentContext));
-            
-            CreateToolList();
 
+            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
+            DocumentCommands.Add(new CommandInfo(new ImportElementCommand(this), CommandManager.documentContext));
 
-            this.wpfSchemaContainer.Child.AllowDrop = true;
-            this.wpfSchemaContainer.Child.DragEnter += new System.Windows.DragEventHandler(Child_DragEnter);
-            this.wpfSchemaContainer.Child.Drop += new System.Windows.DragEventHandler(Child_Drop);
-            //this.wpfSchemaContainer.View.ContextMenu = contextMenu;
         }
+
         #endregion
+
 
         #region DocumentBehavior
 
+        public override string DocumentName
+        {
+            set
+            {
 
-
+                base.DocumentName = value;
+            }
+        }
         public override void OnActivated()
         {
+            ZoomManager = new MapZoom(MainCanvas);
+            CreateCommands();
+            CreateToolList();
             base.OnActivated();
-
-            CommandManager.documentMenuContext = documentMenuContext;
-
             //Notify connected windows about new tool collection
+          
+            CommandManager.documentMenuContext = documentMenuContext;
             NotifyToolsCollectionChanged(AvailableTools, CurrentTool);
-            // Scroll to saved position
-            System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
-            msv.ScrollToVerticalOffset(SavedScrollPosition.Y);
-            msv.ScrollToHorizontalOffset(SavedScrollPosition.X);
+            
 
         }
 
         public override void OnDeactivated()
         {
             base.OnDeactivated();
-
-            // Save scroll position
-            if (wpfSchemaContainer != null)
-            {
-                System.Windows.Controls.ScrollViewer msv = (System.Windows.Controls.ScrollViewer)wpfSchemaContainer.Child;
-                if (msv != null)
-                {
-                    SavedScrollPosition.Y = msv.VerticalOffset;
-                    SavedScrollPosition.X = msv.HorizontalOffset;
-                }
-            }
         }
+        
         public override bool SaveDocument()
         {
             MainCanvas.Tag = null;
             SchemaDocument.SaveSchema(MainCanvas, DocumentName);
             IsModified = false;
             MainCanvas.Tag = this;
+
             return true;
         }
 
@@ -435,7 +379,14 @@ namespace FreeSCADA.Designer.Views
 			MainCanvas = canvas;
             DocumentName = name;
             MainCanvas.Tag = this;
+            MainCanvas.Loaded += new RoutedEventHandler(MainCanvas_Loaded);
+
             return true;
+        }
+
+        void MainCanvas_Loaded(object sender, RoutedEventArgs e)
+        {
+            InitEditor();
         }
 
         public override bool CreateNewDocument()
@@ -445,17 +396,6 @@ namespace FreeSCADA.Designer.Views
                 return false;
             IsModified = true;
             MainCanvas.Tag = this;
-
-            /*   System.Windows.Shapes.Rectangle r = new System.Windows.Shapes.Rectangle();
-               r.Width = 100;
-               r.Height = 100;
-               r.Fill = System.Windows.Media.Brushes.AliceBlue;
-               System.Windows.Input.MouseBinding mb=new System.Windows.Input.MouseBinding();
-               mb.Command=new FreeSCADA.Common.Schema.Commands.SchemaOpenCommand();
-               mb.CommandParameter="test";
-               r.InputBindings.Add(mb);
-               mb.MouseAction = System.Windows.Input.MouseAction.LeftClick;
-               Schema.MainCanvas.Children.Add(r);*/
             return true;
         }
 
@@ -474,7 +414,13 @@ namespace FreeSCADA.Designer.Views
             wpfSchemaContainer = null;
             base.OnClosed(e);
         }
+        public override void OnToolActivated(object sender, Type tool)
+        {
+            CurrentTool = tool;
+        }
+
         #endregion
+        
 
         void OnObjectSelected(Object obj)
         {
@@ -495,11 +441,7 @@ namespace FreeSCADA.Designer.Views
             RaiseObjectSelected(new PropProxy(obj));
 
         }
-        public override void OnToolActivated(object sender, Type tool)
-        {
-            CurrentTool = tool;
-        }
-
+        
 
 
         void Child_Drop(object sender, System.Windows.DragEventArgs e)
@@ -566,8 +508,7 @@ namespace FreeSCADA.Designer.Views
         }
         void OnObjectChenged(object sender, EventArgs e)
         {
-            //undoBuff.AddCommand(new ModifyGraphicsObject((System.Windows.UIElement)sender));
-            UpdateXamlView();
+               UpdateXamlView();
         }
 
         void WpfKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -632,12 +573,12 @@ namespace FreeSCADA.Designer.Views
             }
             else if (e.Key == System.Windows.Input.Key.Add && (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
             {
-                ZoomIn();
+                DocumentCommands.First(c => c.command is ZoomInCommand).command.Execute();
 
             }
             else if (e.Key == System.Windows.Input.Key.Subtract && (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != System.Windows.Input.ModifierKeys.None)
             {
-                ZoomOut();
+                DocumentCommands.First(c => c.command is ZoomOutCommand).command.Execute();
             }
 
             else if (e.Key == System.Windows.Input.Key.Escape)

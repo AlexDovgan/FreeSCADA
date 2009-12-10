@@ -64,6 +64,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				ChannelDataProvider cdp = new ChannelDataProvider();
 				cdp.ChannelName = channel.PluginId + "." + channel.Name;
 				bind.Source = cdp;
+                bind.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
 				cdp.Refresh();
 
 				ComposingConverter conv = new ComposingConverter();
