@@ -187,7 +187,7 @@ namespace FreeSCADA.Communication.SNMPPlug
                 {
                     return;
                 }
-                XmlNodeList snodes = doc.GetElementsByTagName("station");
+                XmlNodeList snodes = doc.GetElementsByTagName("agent");
                 foreach (XmlElement snode in snodes)
                     agents.Add(AgentFactory.CreateAgent(snode, this));
                 XmlNodeList nodes = doc.GetElementsByTagName("channel");

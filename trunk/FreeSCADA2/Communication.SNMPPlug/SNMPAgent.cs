@@ -10,10 +10,10 @@ namespace FreeSCADA.Communication.SNMPPlug
 {
     public class SNMPAgent
 	{
-        private readonly string _get;
-	    private readonly string _set;
-	    private readonly VersionCode _version;
-        private readonly IPEndPoint _agentIP;
+        private string _get;
+	    private string _set;
+	    private VersionCode _version;
+        private IPEndPoint _agentIP;
         private string _name;
         private bool _agentActive = true;
         protected List<SNMPChannelImp> channels = new List<SNMPChannelImp>();
@@ -58,17 +58,22 @@ namespace FreeSCADA.Communication.SNMPPlug
             set { _name = value; }
         }
 
-        internal IPEndPoint AgentIP
+        public IPEndPoint AgentIP
         {
             get
             {
                 return _agentIP;
+            }
+            set
+            {
+                _agentIP = value;
             }
         }
 
         internal VersionCode VersionCode
         {
             get { return _version; }
+            set { _version = value; }
         }
 
         public bool AgentActive
@@ -107,14 +112,16 @@ namespace FreeSCADA.Communication.SNMPPlug
             set { _loggingLevel = value; }
         }
 
-        internal string GetCommunity
+        public string GetCommunity
         {
             get { return _get; }
+            set { _get = value; }
         }
 
-        internal string SetCommunity
+        public string SetCommunity
         {
             get { return _set; }
+            set { _set = value; }
         }
 	
         internal string Get(Manager manager, string textual)

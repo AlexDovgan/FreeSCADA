@@ -10,19 +10,19 @@ namespace FreeSCADA.Communication.SNMPPlug
 {
     internal partial class FormProfile : Form
     {
-        private SNMPAgent _profile;
+        private SNMPAgent _agent;
         List<string> _forbiddenNames;
 
         public FormProfile(SNMPAgent agent)
         {
             InitializeComponent();
-            _profile = agent;
+            _agent = agent;
         }
 
         public FormProfile(SNMPAgent agent, List<string> forbiddenNames)
         {
             InitializeComponent();
-            _profile = agent;
+            _agent = agent;
             _forbiddenNames = forbiddenNames;
         }
 
@@ -58,14 +58,27 @@ namespace FreeSCADA.Communication.SNMPPlug
 
         private void FormProfile_Load(object sender, EventArgs e)
         {
-            if (_profile != null)
+            if (_agent != null)
             {
-                txtIP.Text = _profile.AgentIP.Address.ToString();
-                txtIP.ReadOnly = true;
-                txtGet.Text = _profile.GetCommunity;
-                txtSet.Text = _profile.SetCommunity;
-                txtName.Text = _profile.Name;
-                cbVersionCode.SelectedIndex = (int)_profile.VersionCode;
+                txtIP.Text = _agent.AgentIP.Address.ToString();
+                txtPort.Text = _agent.AgentIP.Port.ToString();
+                txtGet.Text = _agent.GetCommunity;
+                txtSet.Text = _agent.SetCommunity;
+                txtName.Text = _agent.Name;
+                if ((int)_agent.VersionCode != 3)
+                    cbVersionCode.SelectedIndex = (int)_agent.VersionCode;
+                else
+                    cbVersionCode.SelectedIndex = 2;
+                this.PauseNumericUpDown.Value = _agent.CycleTimeout;
+                this.TimeoutNumericUpDown.Value = _agent.RetryTimeout;
+                this.NuberNumericUpDown.Value = _agent.RetryCount;
+                this.failedNumericUpDown.Value = _agent.FailedCount;
+                this.loggingComboBox.Items.Add(0);
+                this.loggingComboBox.Items.Add(1);
+                this.loggingComboBox.Items.Add(2);
+                this.loggingComboBox.Items.Add(3);
+                this.loggingComboBox.Items.Add(4);
+                this.loggingComboBox.SelectedItem = _agent.LoggingLevel;
             }
             else
             {
@@ -159,6 +172,19 @@ namespace FreeSCADA.Communication.SNMPPlug
                 
                 ValidateAllChildren(c);
             }
+            _agent.Name = AgentName;
+            _agent.AgentIP = new IPEndPoint(IP, Port);
+            _agent.GetCommunity = GetCommunity;
+            _agent.SetCommunity = SetCommunity;
+            if (cbVersionCode.SelectedIndex != 2)
+                _agent.VersionCode = (VersionCode)cbVersionCode.SelectedIndex;
+            else
+                _agent.VersionCode = (VersionCode)3;
+            _agent.CycleTimeout = (int)this.PauseNumericUpDown.Value;
+            _agent.RetryTimeout = (int)this.TimeoutNumericUpDown.Value;
+            _agent.RetryCount = (int)this.NuberNumericUpDown.Value;
+            _agent.FailedCount = (int)this.failedNumericUpDown.Value;
+            _agent.LoggingLevel = (int)this.loggingComboBox.SelectedItem;
         }
     }
 }
