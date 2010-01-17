@@ -69,7 +69,7 @@ namespace FreeSCADA.Communication.SNMPPlug
         public static void SaveAgent(XmlElement node, SNMPAgent agent)
 		{
             node.SetAttribute("name", agent.Name);
-            node.SetAttribute("ipAddress", agent.AgentIP.Address.Address.ToString());
+            node.SetAttribute("ipAddress", agent.AgentIP.Address.ToString());                 //Address.ToString());
             node.SetAttribute("udpPort", agent.AgentIP.Port.ToString());
             node.SetAttribute("versionCode", agent.VersionCode.ToString());
             node.SetAttribute("getCommunity", agent.GetCommunity);

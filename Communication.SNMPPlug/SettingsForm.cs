@@ -80,7 +80,7 @@ namespace FreeSCADA.Communication.SNMPPlug
                 agentGrid[rows[0], agentGridColName].Value = agent.Name;
                 agentGrid[rows[0], agentGridColActive].Value = agent.AgentActive;
                 agentGrid[rows[0], agentGridColAddr].Value = "IP: " + agent.AgentIP.ToString();
-                agentGrid[rows[0], agentGridColPara].Value = "Param: = ";
+                agentGrid[rows[0], agentGridColPara].Value = "Version = " + agent.VersionCode.ToString() + ", GetCommunity = " + agent.GetCommunity + ", SetCommunity = " + agent.SetCommunity;
                 agentGrid.Invalidate();
             }
             else return;
@@ -105,8 +105,8 @@ namespace FreeSCADA.Communication.SNMPPlug
             agentGrid[row, agentGridColName] = new SourceGrid.Cells.Cell(agent.Name);
             agentGrid[row, agentGridColName].Tag = agent;
             agentGrid[row, agentGridColActive]   = new SourceGrid.Cells.CheckBox("", agent.AgentActive);
-            agentGrid[row, agentGridColAddr] = new SourceGrid.Cells.Cell("IP: " + agent.AgentIP.Address.Address.ToString(), typeof(string));
-            agentGrid[row, agentGridColPara] = new SourceGrid.Cells.Cell("Param: = " + agent.AgentIP.Port.ToString(), typeof(string));
+            agentGrid[row, agentGridColAddr] = new SourceGrid.Cells.Cell("IP: " + agent.AgentIP.ToString(), typeof(string));
+            agentGrid[row, agentGridColPara] = new SourceGrid.Cells.Cell("Version = " + agent.VersionCode.ToString() + ", GetCommunity = " + agent.GetCommunity + ", SetCommunity = " + agent.SetCommunity, typeof(string));
             agentGrid[row, agentGridColName].Editor = null;
             agentGrid[row, agentGridColAddr].Editor = null;
             agentGrid[row, agentGridColPara].Editor = null;
@@ -122,7 +122,12 @@ namespace FreeSCADA.Communication.SNMPPlug
             string name = GetUniqueAgentName();
 
             SNMPAgent agent = new SNMPAgent(version, agentIP, getCommunity, setCommunity, name);
-            FormProfile fpr = new FormProfile(agent, null);
+            List<string> forbiddenNames = new List<string>();
+            for (int i = 1; i < agentGrid.RowsCount; i++)
+            {
+                forbiddenNames.Add(agentGrid[i, agentGridColName].DisplayText);
+            }
+            FormProfile fpr = new FormProfile(agent, forbiddenNames);
             if (fpr.ShowDialog() == DialogResult.OK)
             {
                 AddAgent(agent);
