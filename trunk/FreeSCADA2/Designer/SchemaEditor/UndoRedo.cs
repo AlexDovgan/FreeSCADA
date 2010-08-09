@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using FreeSCADA.Common.Schema;
+using FreeSCADA.Designer.Views;
 
 
-namespace FreeSCADA.Designer.SchemaEditor.UndoRedo
+namespace FreeSCADA.Designer.SchemaEditor
 {
     /// <summary>
     /// Interface for undo redo command

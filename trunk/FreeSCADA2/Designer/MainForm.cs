@@ -26,6 +26,7 @@ namespace FreeSCADA.Designer
 			CommandManager.fileContext = new BaseCommandContext(fileToolStripMenuItem.DropDown, mainToolbar);
 			CommandManager.viewContext = new BaseCommandContext(viewSubMenu.DropDown, mainToolbar);
 			CommandManager.documentContext = new BaseCommandContext(editSubMenu.DropDown, mainToolbar);
+            
 
 			ToolStripMenuItem newItem = new ToolStripMenuItem(StringResources.CommandContextHelp);
 			mainMenu.Items.Add(newItem);

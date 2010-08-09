@@ -27,9 +27,9 @@ namespace FreeSCADA.Designer.Views
         private List<chnlListMember> channels = new List<chnlListMember>();
         //private System.ComponentModel.IContainer components;
 
-        public VariablesView()
+        public VariablesView():base("Variables view [table]")
         {
-            DocumentName = "Variables view [table]";
+            
             InitializeComponent();
             Initialize();
         }

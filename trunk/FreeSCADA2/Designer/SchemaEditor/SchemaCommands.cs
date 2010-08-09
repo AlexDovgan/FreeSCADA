@@ -9,12 +9,13 @@ using System.Windows.Markup;
 using System.Xml;
 using System.Xml.Xsl;
 using FreeSCADA.Common;
+using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.SchemaEditor.PropertiesUtils;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.Views;
 using FreeSCADA.Interfaces;
 using FreeSCADA.Interfaces.Plugins;
-using FreeSCADA.Designer.SchemaEditor.UndoRedo;
+
 
 namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 {
@@ -53,6 +54,71 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         #endregion
     }
 
+    class ToolCommand : SchemaCommand
+    {
+        public ToolCommand(SchemaView sv,string name,string group,Bitmap icon,Type type):base(sv)
+        {
+            ToolName = name;
+            ToolGroup = group;
+            ToolIcon = icon;
+            ToolType = type;
+
+        }
+        public String ToolName
+        {
+            get;
+            protected set;
+        }
+        public String ToolGroup
+        {
+            get;
+            protected set;
+        }
+        public Bitmap ToolIcon
+        {
+            get;
+            protected set;
+        }
+        public Type ToolType
+        {
+            get;
+            protected set;
+        }
+        public bool IsActive
+        {
+            get
+            {
+
+                return schemaView.ActiveTool==null?false:schemaView.ActiveTool.GetType() == ToolType;
+            }
+        }
+
+        #region ICommand Members
+        public override void Execute()
+        {
+            schemaView.ActiveTool=(BaseTool)System.Activator.CreateInstance(ToolType, new object[] { schemaView.MainCanvas });
+        }
+
+        public override string Name
+        {
+            get { return ToolName; }
+        }
+
+        public override string Description
+        {
+            get { return ToolGroup+' '+ToolName; }
+        }
+
+        public override Bitmap Icon
+        {
+            get
+            {
+                return ToolIcon;
+            }
+        }
+        #endregion ICommand Members
+    }
+    
     class UngroupCommand : SchemaCommand
     {
         public UngroupCommand(SchemaView sv)

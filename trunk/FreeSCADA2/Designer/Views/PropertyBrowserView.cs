@@ -80,7 +80,7 @@ namespace FreeSCADA.Designer.Views
 
             
 
-            PropertyDescriptor[] events = new PropertyDescriptor[events_info.Count];
+            var events = new PropertyDescriptor[events_info.Count];
             for (int i = 0; i < events_info.Count; i++)
                 events[i] = new EventWrapper(events_info[i].Name);
 
@@ -154,8 +154,8 @@ namespace FreeSCADA.Designer.Views
 				object obj = (component as PropProxy).ControlledObject;
 				if (obj is DependencyObject)
 				{
-					EventScriptCollection events = EventScriptCollection.GetEventScriptCollection(obj as DependencyObject);
-					ScriptCallInfo callInfo = events.GetAssosiation(name);
+					var events = EventScriptCollection.GetEventScriptCollection(obj as DependencyObject);
+					var callInfo = events.GetAssosiation(name);
 					if (callInfo == null)
 						return "";
 					else
@@ -165,7 +165,7 @@ namespace FreeSCADA.Designer.Views
 
 			if (component is IChannel)
 			{
-				ScriptCallInfo callInfo = Env.Current.ScriptManager.ChannelsHandlers.GetAssosiation(name, component as IChannel);
+				var callInfo = Env.Current.ScriptManager.ChannelsHandlers.GetAssosiation(name, component as IChannel);
 
 				if (callInfo == null)
 					return "";
@@ -194,34 +194,34 @@ namespace FreeSCADA.Designer.Views
 				if (obj is DependencyObject)
 				{
 
-                    SchemaEditor.UndoRedo.BasicUndoBuffer ub = SchemaEditor.UndoRedo.UndoRedoManager.GetUndoBufferFor(obj as System.Windows.UIElement);
-                    ub.AddCommand(new SchemaEditor.UndoRedo.ModifyGraphicsObject(obj as System.Windows.UIElement));
+                    var ub = SchemaEditor.UndoRedoManager.GetUndoBufferFor(obj as System.Windows.UIElement);
+                    ub.AddCommand(new SchemaEditor.ModifyGraphicsObject(obj as System.Windows.UIElement));
             
 					if (string.IsNullOrEmpty(value as string))
 					{
-						EventScriptCollection events = EventScriptCollection.GetEventScriptCollection(obj as DependencyObject);
+						var events = EventScriptCollection.GetEventScriptCollection(obj as DependencyObject);
 						events.RemoveAssociation(name);
 						EventScriptCollection.SetEventScriptCollection(obj as DependencyObject, events);
 					}
 					else
 					{
-						System.Windows.Controls.Canvas c = SchemaDocument.GetMainCanvas(obj as DependencyObject);
-						ScriptCallInfo callInfo = new ScriptCallInfo();
+						var c = SchemaDocument.GetMainCanvas(obj as DependencyObject);
+						var callInfo = new ScriptCallInfo();
 						callInfo.HandlerName = value as string;
 						if (c != null)
 							callInfo.ScriptName = (c.Tag as DocumentView).DocumentName;
 						else
 							callInfo.ScriptName = "unnamed";
 
-						EventScriptCollection events = EventScriptCollection.GetEventScriptCollection(obj as DependencyObject);
+						var events = EventScriptCollection.GetEventScriptCollection(obj as DependencyObject);
 						events.AddAssociation(name, callInfo);
 						EventScriptCollection.SetEventScriptCollection(obj as DependencyObject, events);
 
-						Script script = Env.Current.ScriptManager.GetScript(callInfo.ScriptName);
+						var script = Env.Current.ScriptManager.GetScript(callInfo.ScriptName);
 						if (script == null)
 							script = Env.Current.ScriptManager.CreateNewScript(callInfo.ScriptName);
 
-						EventInfo evnt = obj.GetType().GetEvent(name);
+						var evnt = obj.GetType().GetEvent(name);
 						script.AddHandlerTemplate(callInfo.HandlerName, evnt);
 					}
 				}
@@ -235,17 +235,17 @@ namespace FreeSCADA.Designer.Views
 				}
 				else
 				{
-					ScriptCallInfo callInfo = new ScriptCallInfo();
+					var callInfo = new ScriptCallInfo();
 					callInfo.HandlerName = value as string;
 					callInfo.ScriptName = ScriptManager.ChannelsScriptName;
 
 					Env.Current.ScriptManager.ChannelsHandlers.AddAssociation(name, component as IChannel, callInfo);
 
-					Script script = Env.Current.ScriptManager.GetScript(ScriptManager.ChannelsScriptName);
+					var script = Env.Current.ScriptManager.GetScript(ScriptManager.ChannelsScriptName);
 					if (script == null)
 						script = Env.Current.ScriptManager.CreateNewScript(ScriptManager.ChannelsScriptName);
 
-					EventInfo evnt = component.GetType().GetEvent(name);
+					var evnt = component.GetType().GetEvent(name);
 					script.AddHandlerTemplate(value as string, evnt);
 				}
 			}

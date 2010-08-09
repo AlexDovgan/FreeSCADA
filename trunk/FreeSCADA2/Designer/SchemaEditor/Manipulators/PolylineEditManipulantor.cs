@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
@@ -12,43 +13,44 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
     class PolylineEditManipulantor : BaseManipulator
     {
-        
+        private Polyline _poly;
         public PolylineEditManipulantor(UIElement el)
             : base(el)
         {
-
+            _poly = AdornedElement as Polyline;
+            if (_poly!=null)
+                throw new ArgumentException();
         }
         public override void Activate()
         {
-            Polyline poly = AdornedElement as Polyline;
-
-            foreach (Point p in poly.Points)
+            
+            foreach (var p in _poly.Points)
             {
-                PointDragThumb pd = new PointDragThumb();
-                pd.DragStarted += pointDragStarted;
-                pd.DragDelta += pointDragDelta;
-                pd.PreviewMouseLeftButtonUp += pd_PreviewMouseLeftButtonUp;
+                var pd = new PointDragThumb();
+                pd.DragStarted += PointDragStarted;
+                pd.DragDelta += PointDragDelta;
+                pd.PreviewMouseLeftButtonUp += OnPreviewMouseLeftButtonUp;
                 visualChildren.Add(pd);
             }
             
-            for (int i = 0; i < poly.Points.Count; i++)
+            for (int i = 0; i < _poly.Points.Count; i++)
             {
-                Matrix m = poly.GeometryTransform.Value;
+                var m = _poly.GeometryTransform.Value;
                
-                Point p = m.Transform(poly.Points[i]);
-                p = poly.TranslatePoint(p,mainCanvas);
-                poly.Points[i] = p;
+                var p = m.Transform(_poly.Points[i]);
+                p = _poly.TranslatePoint(p,mainCanvas);
+                _poly.Points[i] = p;
             }
-            poly.Stretch = Stretch.None;
-            EditorHelper.SetDependencyProperty(poly, Canvas.LeftProperty, DependencyProperty.UnsetValue);
-            EditorHelper.SetDependencyProperty(poly, Canvas.TopProperty, DependencyProperty.UnsetValue);
-            EditorHelper.SetDependencyProperty(poly, FrameworkElement.WidthProperty, DependencyProperty.UnsetValue);
-            EditorHelper.SetDependencyProperty(poly, FrameworkElement.HeightProperty, DependencyProperty.UnsetValue);
+            _poly.Stretch = Stretch.None;
+            EditorHelper.SetDependencyProperty(_poly, Canvas.LeftProperty, DependencyProperty.UnsetValue);
+            EditorHelper.SetDependencyProperty(_poly, Canvas.TopProperty, DependencyProperty.UnsetValue);
+            EditorHelper.SetDependencyProperty(_poly, FrameworkElement.WidthProperty, DependencyProperty.UnsetValue);
+            EditorHelper.SetDependencyProperty(_poly, FrameworkElement.HeightProperty, DependencyProperty.UnsetValue);
 
-            poly.RenderTransform = null;
+            _poly.RenderTransform = null;
             AdornerLayer.GetAdornerLayer(this).PreviewMouseLeftButtonDown += new System.Windows.Input.MouseButtonEventHandler(PolylineEditManipulantor_PreviewMouseLeftButtonDown);
           
-            poly.UpdateLayout();
+            _poly.UpdateLayout();
             base.Activate();
         }
 
@@ -56,18 +58,20 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         {
             if ((System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Control) == 0)
                 return;
-            Polyline poly = AdornedElement as Polyline;
-            GridManager gridMan=GridManager.GetGridManagerFor(AdornedElement);
-            for (int i = 0; i < poly.Points.Count - 1; i++)
+            
+            if(_poly==null)
+                return;
+            var gridMan=GridManager.GetGridManagerFor(AdornedElement);
+            for (int i = 0; i < _poly.Points.Count - 1; i++)
             {
                 // Hit test
-                LineGeometry lg = new LineGeometry(poly.Points[i], poly.Points[i + 1]);
-                EllipseGeometry eg = new EllipseGeometry(gridMan.GetMousePos(), gridMan.GridDelta, gridMan.GridDelta);
-                IntersectionDetail id = eg.FillContainsWithDetail(lg);
+                var lg = new LineGeometry(_poly.Points[i], _poly.Points[i + 1]);
+                var eg = new EllipseGeometry(gridMan.GetMousePos(), gridMan.GridDelta, gridMan.GridDelta);
+                var id = eg.FillContainsWithDetail(lg);
                 if (id == IntersectionDetail.Intersects)
                 {
                     // Insert point to the polyline
-                    poly.Points.Insert(i + 1, gridMan.GetMousePos());
+                    _poly.Points.Insert(i + 1, gridMan.GetMousePos());
                     // Rendering (new thumbs)
                     AddThumb(gridMan.GetMousePos());
                     e.Handled = true;
@@ -79,29 +83,29 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 
         
 
-        void pd_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        void OnPreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Polyline poly = AdornedElement as Polyline;
-            if (poly.Points.Count > 2 && (System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Shift) != 0)
+            
+            if (_poly.Points.Count > 2 && (System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Shift) != 0)
             {
-                Point p = poly.Points[visualChildren.IndexOf(sender as PointDragThumb)];
-                (sender as PointDragThumb).DragStarted -= pointDragStarted;
-                (sender as PointDragThumb).DragDelta -= pointDragDelta;
-                (sender as PointDragThumb).PreviewMouseLeftButtonUp -= pd_PreviewMouseLeftButtonUp;
+                var  p = _poly.Points[visualChildren.IndexOf(sender as PointDragThumb)];
+                (sender as PointDragThumb).DragStarted -= PointDragStarted;
+                (sender as PointDragThumb).DragDelta -= PointDragDelta;
+                (sender as PointDragThumb).PreviewMouseLeftButtonUp -= OnPreviewMouseLeftButtonUp;
                 visualChildren.Remove((Visual)sender);
-                poly.Points.Remove(p);
-                poly.UpdateLayout();
+                _poly.Points.Remove(p);
+                _poly.UpdateLayout();
             }
         }
 
         public override void Deactivate()
         {
 
-            Polyline poly = AdornedElement as Polyline;
-            Rect b = new Rect();
+            
+            var b = new Rect();
             b.Y = b.X = System.Double.MaxValue;
             b.Width = b.Height = 0;
-            foreach (Point p in poly.Points)
+            foreach (var p in _poly.Points)
             {
                 if (p.X < b.X)
                     b.X = p.X;
@@ -115,7 +119,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             b.Width -= b.X;
             b.Height -= b.Y;
 
-            poly.Stretch = Stretch.Fill;
+            _poly.Stretch = Stretch.Fill;
 
             /*for (int i = 0; i < poly.Points.Count; i++)
             {
@@ -124,42 +128,42 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 pp.Y = poly.Points[i].Y - b.Y;
                 poly.Points[i] = pp; ;
             }*/
-            EditorHelper.SetDependencyProperty(poly, Canvas.LeftProperty, b.X);
-            EditorHelper.SetDependencyProperty(poly, Canvas.TopProperty, b.Y);
-            EditorHelper.SetDependencyProperty(poly, FrameworkElement.WidthProperty, b.Width);
-            EditorHelper.SetDependencyProperty(poly, FrameworkElement.HeightProperty, b.Height);
+            EditorHelper.SetDependencyProperty(_poly, Canvas.LeftProperty, b.X);
+            EditorHelper.SetDependencyProperty(_poly, Canvas.TopProperty, b.Y);
+            EditorHelper.SetDependencyProperty(_poly, FrameworkElement.WidthProperty, b.Width);
+            EditorHelper.SetDependencyProperty(_poly, FrameworkElement.HeightProperty, b.Height);
 
             foreach (PointDragThumb pdt in visualChildren)
             {
-                pdt.DragStarted -= pointDragStarted;
-                pdt.DragDelta -= pointDragDelta;
-                pdt.PreviewMouseLeftButtonUp -= pd_PreviewMouseLeftButtonUp;
+                pdt.DragStarted -= PointDragStarted;
+                pdt.DragDelta -= PointDragDelta;
+                pdt.PreviewMouseLeftButtonUp -= OnPreviewMouseLeftButtonUp;
             }
             AdornerLayer.GetAdornerLayer(this).PreviewMouseLeftButtonDown -= new System.Windows.Input.MouseButtonEventHandler(PolylineEditManipulantor_PreviewMouseLeftButtonDown);
             visualChildren.Clear(); ;
-            poly.UpdateLayout();
+            _poly.UpdateLayout();
             base.Deactivate();
         }
-        void pointDragStarted(object sender, DragStartedEventArgs e)
+        void PointDragStarted(object sender, DragStartedEventArgs e)
         {
-            UndoRedo.BasicUndoBuffer ub = UndoRedo.UndoRedoManager.GetUndoBufferFor(AdornedElement);
-            ub.AddCommand(new UndoRedo.ModifyGraphicsObject(AdornedElement));
+            var ub = UndoRedoManager.GetUndoBufferFor(AdornedElement);
+            ub.AddCommand(new ModifyGraphicsObject(AdornedElement));
         }   
-        void pointDragDelta(object sender, DragDeltaEventArgs e)
+        void PointDragDelta(object sender, DragDeltaEventArgs e)
         {
-            Polyline poly = AdornedElement as Polyline;
             
-            Point p = poly.Points[visualChildren.IndexOf(sender as PointDragThumb)];
             
-            Point dragDelta = new Point(e.HorizontalChange, e.VerticalChange);
+            var p = _poly.Points[visualChildren.IndexOf(sender as PointDragThumb)];
+            
+            var dragDelta = new Point(e.HorizontalChange, e.VerticalChange);
             System.Diagnostics.Trace.WriteLine("Point " + p.ToString() + "Drag delta " + dragDelta.ToString());
-            p= poly.TranslatePoint(p,this );
+            p= _poly.TranslatePoint(p,this );
             System.Diagnostics.Trace.WriteLine("Point " + p.ToString() + "Drag delta " + dragDelta.ToString());
             p.X += dragDelta.X;
             p.Y += dragDelta.Y;
-            p = this.TranslatePoint(p, poly);
+            p = this.TranslatePoint(p, _poly);
             GridManager.GetGridManagerFor(AdornedElement).AdjustPointToGrid(ref p);
-            poly.Points[visualChildren.IndexOf(sender as PointDragThumb)] = p;
+            _poly.Points[visualChildren.IndexOf(sender as PointDragThumb)] = p;
            
             InvalidateArrange();
 
@@ -175,12 +179,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            Polyline poly = AdornedElement as Polyline;
+            
 
             foreach (PointDragThumb pdt in visualChildren)
             {
-                Point p =poly.Points[visualChildren.IndexOf(pdt)];
-                p = poly.TranslatePoint(p, this);
+                var p =_poly.Points[visualChildren.IndexOf(pdt)];
+                p = _poly.TranslatePoint(p, this);
                 
                 p.X -= pdt.DesiredSize.Width / 2;
                 p.Y -= pdt.DesiredSize.Height / 2;
@@ -195,18 +199,17 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         {
             if (el is Polyline)
                 return true;
-            else return false;
+            return false;
         }
 
-        public void AddThumb(Point p)
+        private void AddThumb(Point p)
         {
-            Polyline poly = AdornedElement as Polyline;
-
-            PointDragThumb pd = new PointDragThumb();
-            pd.DragDelta += pointDragDelta;
-            pd.PreviewMouseLeftButtonUp += pd_PreviewMouseLeftButtonUp;
+            
+            var pd = new PointDragThumb();
+            pd.DragDelta += PointDragDelta;
+            pd.PreviewMouseLeftButtonUp += OnPreviewMouseLeftButtonUp;
             visualChildren.Add(pd);
-            poly.UpdateLayout();
+            _poly.UpdateLayout();
         }
 
         

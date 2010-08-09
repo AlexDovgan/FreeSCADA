@@ -151,7 +151,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             }
             else if (documentHit != AdornedElement )
             {
-                FrameworkElement el = (FrameworkElement)EditorHelper.FindTopParentUnder(AdornedElement, documentHit);
+                var el = (FrameworkElement)EditorHelper.FindTopParentUnder(AdornedElement, documentHit);
                 if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.None)
                 {
 
@@ -162,10 +162,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     moveUndoInfo = true;
                     if (!selManeger.SelectedObjects.Contains(el))
                         selManeger.SelectObject(el);
-                    foreach (UIElement elm in selManeger.SelectedObjects)
+                    foreach (var elm in selManeger.SelectedObjects)
                     {
-                        UndoRedo.BasicUndoBuffer ub = UndoRedo.UndoRedoManager.GetUndoBufferFor(elm);
-                        ub.AddCommand(new UndoRedo.ModifyGraphicsObject(elm));
+                        var ub = UndoRedoManager.GetUndoBufferFor(elm);
+                        ub.AddCommand(new ModifyGraphicsObject(elm));
                     }
             
                 }
@@ -192,7 +192,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         protected override Size ArrangeOverride(Size finalSize)
         {
             
-            Rect r = selManeger.CalculateBounds();
+            var r = selManeger.CalculateBounds();
             if (selManeger.SelectedObjects.Count>1&&!r.IsEmpty)
             {
                 boundceRect.Visibility = Visibility.Visible;

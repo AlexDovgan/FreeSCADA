@@ -142,8 +142,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         void control_DragStarted(object sender, DragStartedEventArgs e)
         {
 
-            UndoRedo.BasicUndoBuffer ub=UndoRedo.UndoRedoManager.GetUndoBufferFor(AdornedElement);
-            ub.AddCommand(new UndoRedo.ModifyGraphicsObject(AdornedElement));
+            var ub=UndoRedoManager.GetUndoBufferFor(AdornedElement);
+            ub.AddCommand(new ModifyGraphicsObject(AdornedElement));
             InvalidateArrange();
             
         }
@@ -151,15 +151,16 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         protected override Size ArrangeOverride(Size finalSize)
         {
             //if (Visibility == Visibility.Hidden) return finalSize;
-            Rect ro = new Rect(0, 0, AdornedElement.DesiredSize.Width, AdornedElement.DesiredSize.Height);
+            var ro = new Rect(0, 0, AdornedElement.DesiredSize.Width, AdornedElement.DesiredSize.Height);
             //Rect ro = LayoutInformation.GetLayoutSlot(AdornedElement as FrameworkElement);
             foreach (FrameworkElement control in visualChildren)
             {
-                Rect aligmentRect = new Rect();
-                aligmentRect.Width = control.Width;
-                aligmentRect.Height = control.Height;
-                aligmentRect.Y = ro.Y;
-                aligmentRect.X = ro.X;
+                var aligmentRect = new Rect
+                                       {
+                                           Width = control.Width, 
+                                           Height = control.Height, 
+                                           Y = ro.Y, X = ro.X
+                                       };
                 switch (control.VerticalAlignment)
                 {   
                     case VerticalAlignment.Top: aligmentRect.Y += 0;
@@ -190,7 +191,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 if (control.Cursor == Cursors.SizeAll)
                     control.RenderTransform = AdornedElement.TransformToVisual(this) as System.Windows.Media.MatrixTransform ;
          
-                Point p = AdornedElement.TranslatePoint(new Point(aligmentRect.X, aligmentRect.Y), this);
+                var p = AdornedElement.TranslatePoint(new Point(aligmentRect.X, aligmentRect.Y), this);
                 p.X -= control.RenderTransform.Value.OffsetX;
                 p.Y -= control.RenderTransform.Value.OffsetY;
                 

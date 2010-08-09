@@ -8,6 +8,7 @@ namespace FreeSCADA.Designer
 		static public ICommandContext viewContext;
 		static public ICommandContext fileContext;
 		static public ICommandContext documentMenuContext;
+        static public ICommandContext toolboxContext;
 		static public ICommandContext helpContext;
 
 		public enum Priorities
