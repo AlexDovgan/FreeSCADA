@@ -15,9 +15,10 @@ namespace FreeSCADA.Designer.Views
 
 		Script script;
 	
-		public ScriptView(Script script)
+		public ScriptView(string scriptName):base(scriptName)
 		{
-			this.script = script;
+
+			this.script = Env.Current.ScriptManager.GetScript(scriptName);
 
 			InitializeComponent();
 

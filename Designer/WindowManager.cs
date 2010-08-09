@@ -42,7 +42,7 @@ namespace FreeSCADA.Designer
 
 			//Connect Windows Manager to heleper events
 			dockPanel.ActiveDocumentChanged += new EventHandler(OnActiveDocumentChanged);
-
+            CommandManager.toolboxContext = new ToolboxContext(toolBoxView);
 			Env.Current.ScriptManager.NewScriptCreated += new ScriptManager.NewScriptCreatedHandler(OnOpenScript);
 		}
 
@@ -66,41 +66,30 @@ namespace FreeSCADA.Designer
 
 		public void CreateNewSchema()
 		{
-            string name=Env.Current.Project.GenerateUniqueName(ProjectEntityType.Schema, "Untitled");
-			SchemaView view = new SchemaView();
-
-			if(view.CreateNewDocument() == false)
-			{
-				System.Windows.MessageBox.Show( DialogMessages.CannotCreateSchema,
-												DialogMessages.ErrorCaption,
-												System.Windows.MessageBoxButton.OK,
-												System.Windows.MessageBoxImage.Error);
-				return;
-			}
-
-			//Generate unique name
-			for (int i = 1; i < 1000; i++)
-			{
-				string newName = string.Format("{0}_{1}", StringResources.UntitledSchema, i);
-				bool hasTheSameDocument = false;
-				foreach (DocumentView doc in documentViews)
-				{
-					if (doc is SchemaView && doc.DocumentName == newName)
-					{
-						hasTheSameDocument = true;
-						break;
-					}
-				}
-				if (hasTheSameDocument == false && !Env.Current.Project.ContainsEntity(ProjectEntityType.Schema,newName))
-				{
-					view.DocumentName = newName;
-					break;
-				}
-			}
             
-			view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
-            view.SetCurrentTool += toolBoxView.OnSetCurrentTool;
-            view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
+            string name;
+            var hasTheSameDocument = false;
+            name = Env.Current.Project.GenerateUniqueName(ProjectEntityType.Schema, "Untitled_");
+            do
+            {
+                hasTheSameDocument = false;
+                
+                foreach (DocumentView doc in documentViews)
+                {
+                    if (doc is SchemaView && doc.DocumentName == name)
+                    {
+                        hasTheSameDocument = true;
+                        name = Env.Current.Project.GenerateUniqueName(ProjectEntityType.Schema, name);
+                        break;
+                    }
+                }
+                
+            }while (hasTheSameDocument);
+	
+
+			var view = new SchemaView(name);
+
+			view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
 			documentViews.Add(view);
 			view.Show(dockPanel, DockState.Document);
 		}
@@ -122,7 +111,7 @@ namespace FreeSCADA.Designer
 					return;
 				}
 			}
-            //doc.ToolsCollectionChanged -= toolBoxView.OnToolsCollectionChanged;
+            
             doc.FormClosing -= new FormClosingEventHandler(OnDocumentWindowClosing);
 			documentViews.Remove(doc);
             propertyBrowserView.ShowProperties(new Object());
@@ -146,17 +135,8 @@ namespace FreeSCADA.Designer
                             }
                         }
                     }
-                    view = new SchemaView();
-                    if (view == null || view.LoadDocument(name) == false)
-                    {
-                        System.Windows.MessageBox.Show(DialogMessages.CannotLoadSchema,
-                                                        DialogMessages.ErrorCaption,
-                                                        System.Windows.MessageBoxButton.OK,
-                                                        System.Windows.MessageBoxImage.Error);
-                        return;
-                    }
-                    view.ToolsCollectionChanged += toolBoxView.OnToolsCollectionChanged;
-                    view.SetCurrentTool += toolBoxView.OnSetCurrentTool;
+                    view = new SchemaView(name);
+                    
                     view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
                     documentViews.Add(view);
                     view.Show(dockPanel, DockState.Document);
@@ -165,7 +145,7 @@ namespace FreeSCADA.Designer
                     ShowArchiverSettings();
                     break;
 				case ProjectEntityType.Script:
-					OnOpenScript(this, Env.Current.ScriptManager.GetScript(name));
+					OnOpenScript(this, name);
 					break;
                 // etc....
                 default:
@@ -196,7 +176,7 @@ namespace FreeSCADA.Designer
 				}
 			}
 
-			EventsView view = new EventsView();
+			var view = new EventsView();
 			view.Show(dockPanel, DockState.Document);
 
 			view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
@@ -208,7 +188,7 @@ namespace FreeSCADA.Designer
         /// </summary>
         public void ShowArchiverSettings()
         {
-            foreach (DocumentView doc in documentViews)
+            foreach (var doc in documentViews)
             {
                 if (doc is ArchiverSettingsView)
                 {
@@ -217,7 +197,7 @@ namespace FreeSCADA.Designer
                 }
             }
 
-            ArchiverSettingsView view = new ArchiverSettingsView();
+            var view = new ArchiverSettingsView();
             view.Show(dockPanel, DockState.Document);
 
             view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
@@ -229,7 +209,7 @@ namespace FreeSCADA.Designer
         /// </summary>
         public void ShowVariablesView()
         {
-            foreach (DocumentView doc in documentViews)
+            foreach (var doc in documentViews)
             {
                 if (doc is VariablesView)
                 {
@@ -238,7 +218,7 @@ namespace FreeSCADA.Designer
                 }
             }
 
-            VariablesView view = new VariablesView();
+            var view = new VariablesView();
             view.Show(dockPanel, DockState.Document);
 
             view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
@@ -252,18 +232,19 @@ namespace FreeSCADA.Designer
                 propertyBrowserView.ShowProperties(channel);
         }
 
-        void OnOpenScript(object sender, Script script)
+        void OnOpenScript(object sender, string scriptName)
 		{
-			foreach (DocumentView doc in documentViews)
+            
+			foreach (var doc in documentViews)
 			{
-				if (doc is ScriptView && doc.DocumentName == script.Name)
+				if (doc is ScriptView && doc.DocumentName == scriptName)
 				{
 					doc.Activate();
 					return;
 				}
 			}
 
-			ScriptView view = new ScriptView(script);
+			var view = new ScriptView(scriptName);
 			view.Show(dockPanel, DockState.Document);
 
 			view.FormClosing += new FormClosingEventHandler(OnDocumentWindowClosing);
@@ -285,7 +266,7 @@ namespace FreeSCADA.Designer
 		/// </summary>
 		public void SaveAllDocuments()
 		{
-			foreach(DocumentView documentWindow in documentViews)
+			foreach(var documentWindow in documentViews)
 				if (documentWindow != null && documentWindow.IsModified)
 					documentWindow.SaveDocument();
 			projectContentView.RefreshContent(Env.Current.Project);
@@ -300,13 +281,14 @@ namespace FreeSCADA.Designer
 			string projectFileName = Env.Current.Project.FileName;
 			if (projectFileName == "")
 			{
-				SaveFileDialog fd = new SaveFileDialog();
+				var fd = new SaveFileDialog
+				             {
+				                 Filter = StringResources.FileOpenDialogFilter,
+				                 FilterIndex = 0,
+				                 RestoreDirectory = true
+				             };
 
-				fd.Filter = StringResources.FileOpenDialogFilter;
-				fd.FilterIndex = 0;
-				fd.RestoreDirectory = true;
-
-				if (fd.ShowDialog() == DialogResult.OK)
+			    if (fd.ShowDialog() == DialogResult.OK)
 					projectFileName = fd.FileName;
 				else
 					return false;
@@ -325,13 +307,14 @@ namespace FreeSCADA.Designer
 		/// <returns>Returns true if project was successfully loaded</returns>
 		public bool LoadProject()
 		{
-			OpenFileDialog fd = new OpenFileDialog();
+			var  fd = new OpenFileDialog
+			              {
+			                  Filter = StringResources.FileOpenDialogFilter,
+			                  FilterIndex = 0,
+			                  RestoreDirectory = true
+			              };
 
-			fd.Filter = StringResources.FileOpenDialogFilter;
-			fd.FilterIndex = 0;
-			fd.RestoreDirectory = true;
-
-			if (fd.ShowDialog() != DialogResult.OK)
+		    if (fd.ShowDialog() != DialogResult.OK)
 				return false;
 
             Close();
@@ -356,40 +339,40 @@ namespace FreeSCADA.Designer
 		/// should prevent application closing.</returns>
 		public bool Close()
 		{
-            List<string> unsaved_documents = new List<string>();
-            List<DocumentView> other_documents = new List<DocumentView>();
+            var unsavedDocuments = new List<string>();
+            var otherDocuments = new List<DocumentView>();
 
             if (Env.Current.Project.IsModified)
 			{
 				if(Env.Current.Project.FileName == "")
-					unsaved_documents.Add(StringResources.UnsavedProjectName);
+					unsavedDocuments.Add(StringResources.UnsavedProjectName);
 				else
-					unsaved_documents.Add(Env.Current.Project.FileName);
+					unsavedDocuments.Add(Env.Current.Project.FileName);
 			}
 
-			foreach (DocumentView documentWindow in documentViews)
+			foreach (var documentWindow in documentViews)
 			{
                 if (documentWindow != null && documentWindow.IsModified)
-                    unsaved_documents.Add(documentWindow.DocumentName);
+                    unsavedDocuments.Add(documentWindow.DocumentName);
                 else
-                    other_documents.Add(documentWindow);
+                    otherDocuments.Add(documentWindow);
 			}
 
-            foreach (DocumentView documentWindow in other_documents)
+            foreach (var documentWindow in otherDocuments)
             {
                 documentWindow.Close();
                 documentViews.Remove(documentWindow);
             }
 
-			if (unsaved_documents.Count > 0)
+			if (unsavedDocuments.Count > 0)
 			{
-				SaveDocumentsDialog dlg = new SaveDocumentsDialog(unsaved_documents);
+				var dlg = new SaveDocumentsDialog(unsavedDocuments);
 				System.Windows.Forms.DialogResult res = dlg.ShowDialog(Env.Current.MainWindow);
 				if (res == System.Windows.Forms.DialogResult.No)
 				{
 					while (documentViews.Count > 0)
 					{
-						DocumentView doc = documentViews[0];
+						var doc = documentViews[0];
 						doc.HandleModifiedOnClose = false;
 						doc.Close(); //this window should be removed from documentViews on closing
                         documentViews.Remove(doc);
@@ -405,7 +388,7 @@ namespace FreeSCADA.Designer
 
                     while (documentViews.Count > 0)
                     {
-                        DocumentView doc = documentViews[0];
+                        var doc = documentViews[0];
                         doc.HandleModifiedOnClose = false;
                         doc.Close();
                         documentViews.Remove(doc);
@@ -430,10 +413,7 @@ namespace FreeSCADA.Designer
 			{
                 //toolBoxView.Clean(); 
                 currentDocument.OnActivated();
-				toolBoxView.ToolActivated += currentDocument.OnToolActivated;
     			currentDocument.ObjectSelected += propertyBrowserView.ShowProperties;
-                //(Env.Current.MainWindow as MainForm).undoButton.Tag = currentDocument;
-                //(Env.Current.MainWindow as MainForm).redoButton.Tag = currentDocument;
             }
 		}
 
@@ -443,8 +423,7 @@ namespace FreeSCADA.Designer
 			if (currentDocument != null)
 			{
 				currentDocument.OnDeactivated();
-				toolBoxView.ToolActivated -= currentDocument.OnToolActivated;
-                currentDocument.ObjectSelected -= propertyBrowserView.ShowProperties;
+				currentDocument.ObjectSelected -= propertyBrowserView.ShowProperties;
             }
             propertyBrowserView.ShowProperties(new Object());
         }
@@ -455,15 +434,6 @@ namespace FreeSCADA.Designer
         }
 
       
-
-        public void ExecuteCommand(FreeSCADA.Interfaces.ICommand command, Object param)
-        {
-			//SchemaEditor.SchemaCommands.SchemaCommand cmd = (SchemaEditor.SchemaCommands.SchemaCommand)command;
-			//if(cmd != null)
-			//	cmd.ControlledObject = (param == null) ? currentDocument : param;
-
-			//command.Execute();
-        }
 
 
 		#region IDisposable Members

@@ -179,7 +179,6 @@
     </Compile>
     <Compile Include="SchemaEditor\SelectionManager.cs" />
     <Compile Include="SchemaEditor\StylesLibrary.cs" />
-    <Compile Include="SchemaEditor\ToolDescriptor.cs" />
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
     <Compile Include="SchemaEditor\Tools\ControlCreateTool.cs" />
     <Compile Include="SchemaEditor\Tools\DrawTool.cs" />
@@ -195,6 +194,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StringResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TooloxContext.cs" />
     <Compile Include="Views\ArchiverSettingsView.cs">
       <SubType>Form</SubType>
     </Compile>

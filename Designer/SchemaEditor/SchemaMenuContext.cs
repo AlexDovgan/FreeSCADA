@@ -5,10 +5,11 @@ using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 {
+    
 	class SchemaMenuContext:ICommandContext
 	{
 		ContextMenu menu;
-
+        
 		public SchemaMenuContext(ContextMenu menu)
 		{
 			this.menu = menu;

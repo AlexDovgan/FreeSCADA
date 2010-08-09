@@ -27,12 +27,11 @@ namespace FreeSCADA.Designer.Views
 		private ColumnHeader conditionNameColumn;
 		private ColumnHeader conditionDescriptionColumn;
 		private ListBox channelsList;
-	
-		public ArchiverSettingsView()
+
+
+        public ArchiverSettingsView():base("Archiver Settings")
 		{
 			InitializeComponent();
-
-			TabText = "Archiver Settings";
 			UpdateControlStates();
 		}
 
@@ -518,7 +517,7 @@ namespace FreeSCADA.Designer.Views
 
 		private void rulesList_Resize(object sender, System.EventArgs e)
 		{
-			rulesList.Columns[0].Width = -2;
+			//rulesList.Columns[0].Width = -2;
 		}
 
 		private void conditionsList_SelectedIndexChanged(object sender, EventArgs e)

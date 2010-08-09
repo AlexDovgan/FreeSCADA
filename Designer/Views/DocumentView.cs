@@ -1,25 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using FreeSCADA.Common;
-using FreeSCADA.Designer.SchemaEditor.UndoRedo;
+using FreeSCADA.Designer.SchemaEditor;
 using FreeSCADA.Interfaces;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace FreeSCADA.Designer
+namespace FreeSCADA.Designer.Views
 {
 	class DocumentView : DockContent
 	{
 
-  
-
         public delegate void ObjectSelectedDelegate(object sender);
         public event ObjectSelectedDelegate ObjectSelected;
 
-        public delegate void ToolsCollectionChangedHandler(List<ToolDescriptor> tools, Type defaultTool);
-        public event ToolsCollectionChangedHandler ToolsCollectionChanged;
-        public delegate void SetCurrentToolHandler(ToolDescriptor defaultTool);
-        public event SetCurrentToolHandler SetCurrentTool;
-
+        
         string documentName = "";
 		bool modifiedFlag;
 		bool handleModifiedFlagOnClose = true;
@@ -59,11 +53,11 @@ namespace FreeSCADA.Designer
             protected set;
         }
 
-		public DocumentView()
+		public DocumentView(string documentName)
 		{
 			DocumentCommands = new List<CommandInfo>();
 			DockAreas = DockAreas.Float | DockAreas.Document;
-			documentName = "Document";
+            this.documentName = documentName;
 			UpdateCaption();
 		}
 
@@ -116,16 +110,7 @@ namespace FreeSCADA.Designer
 		{
 			return false;
 		}
-
-		public virtual bool LoadDocument(string name)
-        {
-			return false;
-        }
-
-        public virtual bool CreateNewDocument()
-        {
-			return false;
-        }
+	
 
         public void RaiseObjectSelected(object sender )
         {
@@ -140,25 +125,12 @@ namespace FreeSCADA.Designer
 				TabText += " *";
 		}
 
-        protected void NotifyToolsCollectionChanged(List<ToolDescriptor> tools,Type  currentTool)
-        {
-            if (ToolsCollectionChanged != null)
-                ToolsCollectionChanged(tools,currentTool);
-        }
-
-        protected void NotifySetCurrentTool(ToolDescriptor currentTool)
-        {
-            if (SetCurrentTool != null)
-                SetCurrentTool(currentTool);
-        }
-
+        
         protected override void OnClosed(EventArgs e)
         {
             
             RaiseObjectSelected(null);
-            NotifyToolsCollectionChanged(null, null);
             ObjectSelected = null;
-            ToolsCollectionChanged = null;
             base.OnClosed(e);
         }
 

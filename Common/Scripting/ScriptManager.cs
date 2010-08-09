@@ -8,7 +8,7 @@ namespace FreeSCADA.Common.Scripting
 {
 	public class ScriptManager
 	{
-		public delegate void NewScriptCreatedHandler(Object sender, Script script);
+		public delegate void NewScriptCreatedHandler(Object sender, string name);
 		public event NewScriptCreatedHandler NewScriptCreated;
 		public event EventHandler ScriptsUpdated;
 
@@ -147,7 +147,7 @@ namespace FreeSCADA.Common.Scripting
 				scripts.Add(script);
 
 				if(NewScriptCreated != null)
-					NewScriptCreated(this, script);
+					NewScriptCreated(this, script.Name);
 
 				if (ScriptsUpdated != null)
 					ScriptsUpdated(this, new EventArgs());

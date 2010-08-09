@@ -84,7 +84,7 @@ namespace FreeSCADA.Common.Schema
         /// <returns></returns>
         public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
         {
-            Matrix m = new Matrix();
+            var m = new Matrix();
             m.OffsetX = ((MatrixTransform)transform).Matrix.OffsetX;
             m.OffsetY = ((MatrixTransform)transform).Matrix.OffsetY;
 

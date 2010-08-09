@@ -3,9 +3,9 @@ namespace FreeSCADA.Designer.Views
 {
 	class EventsView:DocumentView
 	{
-		public EventsView()
+        public EventsView(): base("Events")
 		{
-			TabText = "Events";
+			
 		}
 	}
 }

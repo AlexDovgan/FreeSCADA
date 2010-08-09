@@ -49,7 +49,7 @@ namespace FreeSCADA.Common.Schema
         /// <summary>
         /// 
         /// </summary>
-        public BaseTool()
+        protected BaseTool()
             : base(new UIElement())
         {
         }
@@ -57,7 +57,7 @@ namespace FreeSCADA.Common.Schema
         /// 
         /// </summary>
         /// <param name="element"></param>
-        public BaseTool(UIElement element)
+        protected BaseTool(UIElement element)
             : base(element)
         {
             visualChildren = new VisualCollection(this);
@@ -74,41 +74,45 @@ namespace FreeSCADA.Common.Schema
         /// <param name="index"></param>
         /// <returns></returns>
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
+        protected void ReinitTool()
+        {
+            visualChildren.Clear();
+            DrawingVisual drawingVisual = new DrawingVisual();
+            drawingVisual.Opacity = 0;
+
+            Rect rect = new Rect(new Point(0, 0), new Size((AdornedElement as FrameworkElement).ActualWidth, (AdornedElement as FrameworkElement).ActualHeight));
+            DrawingContext drawingContext = drawingVisual.RenderOpen();
+            drawingContext.DrawRectangle(Brushes.Black, new Pen(Brushes.Black, 0.2), rect);
+            drawingContext.Close();
+            visualChildren.Add(drawingVisual);
+            
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <summary>
         /// tool activating on working  Canvas
         /// </summary>
+        /// 
         public virtual void Activate()
         {
-            DrawingVisual drawingVisual = new DrawingVisual();
-            drawingVisual.Opacity = 0;
-
-            visualChildren.Add(drawingVisual);
-            Rect rect = new Rect(new Point(0, 0), new Size((AdornedElement as FrameworkElement).ActualWidth, (AdornedElement as FrameworkElement).ActualHeight));
-            DrawingContext drawingContext = drawingVisual.RenderOpen();
-            drawingContext.DrawRectangle(Brushes.Black, new Pen(Brushes.Black, 0.2), rect);
-            drawingContext.Close();
-            (AdornedElement as FrameworkElement).SizeChanged += new SizeChangedEventHandler(AdornedElementSizeChanged);
-
-
+            ReinitTool();
+            ((FrameworkElement)AdornedElement).Loaded += new RoutedEventHandler(BaseTool_Loaded);
+            ((FrameworkElement) AdornedElement).SizeChanged += new SizeChangedEventHandler(AdornedElementSizeChanged);
             AdornerLayer.GetAdornerLayer(AdornedElement).Add(this);
 
         }
 
+        void BaseTool_Loaded(object sender, RoutedEventArgs e)
+        {
+            ReinitTool();
+        }
+
         void AdornedElementSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            visualChildren.Clear();
-            DrawingVisual drawingVisual = new DrawingVisual();
-            drawingVisual.Opacity = 0;
-
-            visualChildren.Add(drawingVisual);
-            Rect rect = new Rect(new Point(0, 0), new Size((AdornedElement as FrameworkElement).ActualWidth, (AdornedElement as FrameworkElement).ActualHeight));
-            DrawingContext drawingContext = drawingVisual.RenderOpen();
-            drawingContext.DrawRectangle(Brushes.Black, new Pen(Brushes.Black, 0.2), rect);
-            drawingContext.Close();
-            
+         
+            ReinitTool();
         }
 
         /// <summary>
@@ -122,6 +126,7 @@ namespace FreeSCADA.Common.Schema
                 AdornerLayer.GetAdornerLayer(AdornedElement).Remove(this);
                 AdornerLayer.GetAdornerLayer(AdornedElement).UpdateLayout();
             }
+            ((FrameworkElement)AdornedElement).Loaded -= new RoutedEventHandler(BaseTool_Loaded);
             (AdornedElement as FrameworkElement).SizeChanged -= new SizeChangedEventHandler(AdornedElementSizeChanged);
             visualChildren.Clear();
         }
