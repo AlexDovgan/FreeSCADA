@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{047EED80-A3C6-4A7F-BB4C-E4A64F96B210}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -113,12 +113,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ArchiverGraphView.resx">
       <DependentUpon>ArchiverGraphView.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\VariablesView.resx">
       <DependentUpon>VariablesView.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\LogConsoleView.resx">
       <DependentUpon>LogConsoleView.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ProjectContentView.resx">
       <DependentUpon>ProjectContentView.cs</DependentUpon>
@@ -136,9 +139,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ArchiverTableView.resx">
       <DependentUpon>ArchiverTableView.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\QueryView.resx">
       <DependentUpon>QueryView.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

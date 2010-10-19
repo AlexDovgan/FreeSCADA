@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{93466C99-5637-4243-A01A-7AF12F706889}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -221,9 +221,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Dialogs\ProjectMediaDialog.resx">
       <DependentUpon>ProjectMediaDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\RenameSchemaForm.resx">
       <DependentUpon>RenameSchemaForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\SaveDocumentsDialog.resx">
       <DependentUpon>SaveDocumentsDialog.cs</DependentUpon>
@@ -236,6 +238,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\VariablesDialog.resx">
       <DependentUpon>VariablesDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -248,21 +251,27 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\CommonBindingDialog.resx">
       <DependentUpon>CommonBindingDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\PropertyGridTypeEditors\ContentEditorDialog.resx">
       <DependentUpon>ContentEditorDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\SolidBrushBindingPanel.resx">
       <DependentUpon>SolidBrushBindingPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\NumericBindingPanel.resx">
       <DependentUpon>NumericBindingPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\StringBindingPanel.resx">
       <DependentUpon>StringBindingPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\ScriptExpressionBindingPanel.resx">
       <DependentUpon>ScriptExpressionBindingPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="StringResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -271,9 +280,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ArchiverSettingsView.resx">
       <DependentUpon>ArchiverSettingsView.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ScriptView.resx">
       <DependentUpon>ScriptView.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ProjectContentView.resx">
       <DependentUpon>ProjectContentView.cs</DependentUpon>
@@ -281,6 +292,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\VariablesView.resx">
       <DependentUpon>VariablesView.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

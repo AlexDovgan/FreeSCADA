@@ -61,7 +61,9 @@ namespace FreeSCADA.Common.Schema
             : base(element)
         {
             visualChildren = new VisualCollection(this);
-
+            DrawingVisual drawingVisual = new DrawingVisual();
+            drawingVisual.Opacity = 0;
+            visualChildren.Add(drawingVisual);
 
         }
         /// <summary>
@@ -76,16 +78,10 @@ namespace FreeSCADA.Common.Schema
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
         protected void ReinitTool()
         {
-            visualChildren.Clear();
-            DrawingVisual drawingVisual = new DrawingVisual();
-            drawingVisual.Opacity = 0;
-
             Rect rect = new Rect(new Point(0, 0), new Size((AdornedElement as FrameworkElement).ActualWidth, (AdornedElement as FrameworkElement).ActualHeight));
-            DrawingContext drawingContext = drawingVisual.RenderOpen();
+            DrawingContext drawingContext = ((DrawingVisual)visualChildren[0]).RenderOpen();
             drawingContext.DrawRectangle(Brushes.Black, new Pen(Brushes.Black, 0.2), rect);
             drawingContext.Close();
-            visualChildren.Add(drawingVisual);
-            
         }
 
         /// <summary>

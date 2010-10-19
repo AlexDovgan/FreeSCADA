@@ -18,7 +18,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             : base(el)
         {
             _poly = AdornedElement as Polyline;
-            if (_poly!=null)
+            if (_poly==null)
                 throw new ArgumentException();
         }
         public override void Activate()

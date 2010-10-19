@@ -39,15 +39,13 @@ namespace FreeSCADA.Designer.Views
             {
                 tbt = new ToolBoxTab(command.ToolGroup, -1);
                 _toolBox.AddTab(tbt);
-                tbt.Selected = false;
             }
 
             _toolBox.SmallImageList.Images.Add(command.ToolIcon);
             var tbi = new ToolBoxItem(command.ToolName, _toolBox.SmallImageList.Images.Count - 1);
             tbt.AddItem(tbi);
             tbi.Object = command;
-            tbi.Selected = false;
-
+            
             _toolBox.ItemSelectionChanged += new ItemSelectionChangedHandler(ToolChanged);
             _toolBox.TabSelectionChanged += new TabSelectionChangedHandler(ToolChanged);
 
@@ -58,8 +56,14 @@ namespace FreeSCADA.Designer.Views
                     {
                         _toolBox.Tabs[i][j].Selected = true;
                         _toolBox.Tabs[i].Selected = true;
-                        return;
                     }
+                    else
+                    {
+                            _toolBox.Tabs[i][j].Selected = false;
+                            _toolBox.Tabs[i].Selected = false;
+                       
+                    }
+                
 
         }
         public void DeleteTool(ICommand cmd)
