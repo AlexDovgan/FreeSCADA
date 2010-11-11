@@ -4,7 +4,7 @@ using System.Windows.Media;
 using FreeSCADA.Common;
 using FreeSCADA.Common.Schema;
 using FreeSCADA.RunTime.DocumentCommands;
-using FreeSCADA.Common.Schema.Gestures;
+using FreeSCADA.Common.Gestures;
 
 namespace FreeSCADA.RunTime.Views
 {

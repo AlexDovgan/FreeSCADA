@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Controls;
 
-namespace FreeSCADA.Common.Schema.Gestures
+namespace FreeSCADA.Common.Gestures
 {
     /// <summary>
     /// This class provides the ability to draw a rectangle on a zoomable object and zoom into that location.

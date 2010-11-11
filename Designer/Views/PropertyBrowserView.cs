@@ -194,8 +194,8 @@ namespace FreeSCADA.Designer.Views
 				if (obj is DependencyObject)
 				{
 
-                    var ub = SchemaEditor.UndoRedoManager.GetUndoBufferFor(obj as System.Windows.UIElement);
-                    ub.AddCommand(new SchemaEditor.ModifyGraphicsObject(obj as System.Windows.UIElement));
+                    var ub = UndoRedoManager.GetUndoBufferFor(obj as System.Windows.UIElement);
+                    ub.AddCommand(new ModifyGraphicsObject(obj as System.Windows.UIElement));
             
 					if (string.IsNullOrEmpty(value as string))
 					{

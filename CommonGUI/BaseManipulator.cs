@@ -2,7 +2,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace FreeSCADA.Common.Schema
+namespace FreeSCADA.Common
 {
               
     /// <summary>

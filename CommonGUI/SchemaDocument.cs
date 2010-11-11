@@ -68,7 +68,7 @@ namespace FreeSCADA.Common.Schema
             return schema;
         }
 
-        public static void SaveSchema(Canvas c,string name)
+        public static void SaveSchema(Panel c,string name)
         {
             
             //   WPFShemaContainer.ViewGrid(MainCanvas as Canvas, false);    // delete grid before save

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -26,13 +27,13 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         object controlledObject;
         //first stage of refactoring of shcema veiw and commands
 
-        protected SchemaView schemaView;
+        protected DocumentView _view;
 
-        public SchemaCommand(SchemaView sv)
+        public SchemaCommand(DocumentView sv)
         {
             Priority = (int)CommandManager.Priorities.EditCommands;
-            schemaView = sv;
-            schemaView.ObjectSelected += new DocumentView.ObjectSelectedDelegate(schemaView_ObjectSelected);
+            _view = sv;
+            _view.SelectionManager.SelectionChanged+= new ObjectSelectedDelegate(schemaView_ObjectSelected);
         }
 
         void schemaView_ObjectSelected(object sender)
@@ -48,7 +49,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         public void Dispose()
         {
-            schemaView.ObjectSelected -= new DocumentView.ObjectSelectedDelegate(schemaView_ObjectSelected);
+            _view.SelectionManager.SelectionChanged -= new ObjectSelectedDelegate(schemaView_ObjectSelected);
         }
 
         #endregion
@@ -56,7 +57,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
     class ToolCommand : SchemaCommand
     {
-        public ToolCommand(SchemaView sv,string name,string group,Bitmap icon,Type type):base(sv)
+        public ToolCommand(DocumentView sv,string name,string group,Bitmap icon,Type type):base(sv)
         {
             ToolName = name;
             ToolGroup = group;
@@ -89,14 +90,14 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             get
             {
 
-                return schemaView.ActiveTool==null?false:schemaView.ActiveTool.GetType() == ToolType;
+                return _view.ActiveTool==null?false:_view.ActiveTool.GetType() == ToolType;
             }
         }
 
         #region ICommand Members
         public override void Execute()
         {
-            schemaView.ActiveTool=(BaseTool)System.Activator.CreateInstance(ToolType, new object[] { schemaView.MainCanvas });
+            _view.ActiveTool=(BaseTool)System.Activator.CreateInstance(ToolType, new object[] { _view.MainPanel });
         }
 
         public override string Name
@@ -121,15 +122,15 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
     
     class UngroupCommand : SchemaCommand
     {
-        public UngroupCommand(SchemaView sv)
+        public UngroupCommand(DocumentView  sv)
             : base(sv)
         {
         }
         public override void CheckApplicability()
         {
 
-            if (schemaView.SelectionManager.SelectedObjects.Count>0
-                &&schemaView.SelectionManager.SelectedObjects[0] is Viewbox)
+            if (_view.SelectionManager.SelectedObjects.Count>0
+                &&_view.SelectionManager.SelectedObjects[0] is Viewbox)
                 CanExecute = true;
             else
                 CanExecute = false;
@@ -138,7 +139,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         #region ICommand Members
         public override void Execute()
         {
-            EditorHelper.BreakGroup(schemaView);
+            EditorHelper.BreakGroup((SchemaView)_view);
         }
 
         public override string Name
@@ -163,14 +164,14 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
     class GroupCommand : SchemaCommand
     {
-        public GroupCommand(SchemaView sv)
+        public GroupCommand(DocumentView sv)
             : base(sv)
         {
         }
         public override void CheckApplicability()
         {
             
-            if (schemaView.SelectionManager.SelectedObjects.Count > 1)
+            if (_view.SelectionManager.SelectedObjects.Count > 1)
                 CanExecute = true;
             else
                 CanExecute = false;
@@ -180,7 +181,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         public override void Execute()
         {
-            EditorHelper.CreateGroup(schemaView);
+            EditorHelper.CreateGroup((SchemaView)_view);
         }
 
         public override string Name
@@ -205,14 +206,14 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
     class ZMoveTopCommand : SchemaCommand
     {
-        public ZMoveTopCommand(SchemaView sv)
+        public ZMoveTopCommand(DocumentView sv)
             : base(sv)
         {
         }
         public override void CheckApplicability()
         {
             
-            if (schemaView.SelectionManager.SelectedObjects.Count > 0)
+            if (_view.SelectionManager.SelectedObjects.Count > 0)
                 CanExecute = true;
             else
                 CanExecute = false;
@@ -227,17 +228,17 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             
             List<UIElement> sortedList = new List<UIElement>();
 
-            foreach (UIElement uie in schemaView.MainCanvas.Children)
+            foreach (UIElement uie in _view.MainPanel.Children)
             {
-                if (schemaView.SelectionManager.SelectedObjects.Contains(uie))
+                if (_view.SelectionManager.SelectedObjects.Contains(uie))
                 {
                     sortedList.Add(uie);
                 }
             }
             foreach (UIElement suie in sortedList)
             {
-                schemaView.MainCanvas.Children.Remove(suie);
-                schemaView.MainCanvas.Children.Add(suie);
+                _view.MainPanel.Children.Remove(suie);
+                _view.MainPanel.Children.Add(suie);
             }
         }
 
@@ -263,7 +264,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
     class ZMoveBottomCommand : SchemaCommand
     {
-        public ZMoveBottomCommand(SchemaView sv)
+        public ZMoveBottomCommand(DocumentView sv)
             : base(sv)
         {
         }
@@ -271,7 +272,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public override void CheckApplicability()
         {
             
-            if (schemaView.SelectionManager.SelectedObjects.Count > 0)
+            if (_view.SelectionManager.SelectedObjects.Count > 0)
                 CanExecute = true;
             else
                 CanExecute = false;
@@ -283,12 +284,12 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             base.Execute();
 
-            Canvas currCanvas = schemaView.MainCanvas;
+            Panel currCanvas = _view.MainPanel;
             List<UIElement> sortedList = new List<UIElement>();
 
             for (int i = currCanvas.Children.Count - 1; i >= 0; i--)
             {
-                if (schemaView.SelectionManager.SelectedObjects.Contains(currCanvas.Children[i]))
+                if (_view.SelectionManager.SelectedObjects.Contains(currCanvas.Children[i]))
                 {
                     sortedList.Add(currCanvas.Children[i]);
                 }
@@ -322,15 +323,16 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
     class CopyCommand : SchemaCommand
     {
-        public CopyCommand(SchemaView sv)
+        public CopyCommand(DocumentView sv)
             : base(sv)
         {
+
         }
 
         public override void CheckApplicability()
         {
             
-            if (schemaView.SelectionManager.SelectedObjects.Count > 0)
+            if (_view.SelectionManager.SelectedObjects.Count > 0)
                 CanExecute = true;
             else
                 CanExecute = false;
@@ -342,12 +344,13 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             
 
             System.Globalization.CultureInfo ci = System.Globalization.CultureInfo.CreateSpecificCulture("");
-            Rect b = schemaView.SelectionManager.CalculateBounds();
+            Rect b = EditorHelper.CalculateBounds(_view.SelectionManager.SelectedObjects.Cast<UIElement>().ToList(),
+                _view.MainPanel);
             string xaml = string.Format(ci.NumberFormat,
                 "<Canvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Left=\"{0}\" Top=\"{1}\">"
                 , b.X, b.Y);
 
-            foreach (UIElement el in schemaView.SelectionManager.SelectedObjects)
+            foreach (UIElement el in _view.SelectionManager.SelectedObjects)
             {
 
                 xaml += XamlWriter.Save(el);
@@ -379,7 +382,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
     class CutCommand : SchemaCommand
     {
-        public CutCommand(SchemaView sv)
+        public CutCommand(DocumentView sv)
             : base(sv)
         {
         }
@@ -387,7 +390,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         CopyCommand copyCommand;
         public override void CheckApplicability()
         {
-            copyCommand = new CopyCommand(schemaView);
+            copyCommand = new CopyCommand(_view);
             copyCommand.CheckApplicability();
             CanExecute = copyCommand.CanExecute;
         }
@@ -397,13 +400,13 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
          
             copyCommand.Execute();
-            foreach (UIElement el in schemaView.SelectionManager.SelectedObjects)
+            foreach (UIElement el in _view.SelectionManager.SelectedObjects)
             {
-                schemaView.UndoBuff.AddCommand(new DeleteGraphicsObject(el));
+                _view.UndoBuff.AddCommand(new DeleteGraphicsObject(el));
                     //ActiveTool.NotifyObjectDeleted(el);
             }
 
-            schemaView.SelectionManager.SelectObject(null);
+            _view.SelectionManager.SelectObject(null);
         }
 
         public override string Name
@@ -427,13 +430,13 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
     }
     class PasteCommand : SchemaCommand
     {
-        public PasteCommand(SchemaView sv) :
+        public PasteCommand(DocumentView sv) :
             base(sv)
         {
         }
         public override void CheckApplicability()
         {
-            SelectionTool tool = schemaView.ActiveTool as SelectionTool;
+            SelectionTool tool = _view.ActiveTool as SelectionTool;
             if (tool != null && System.Windows.Clipboard.ContainsText(System.Windows.TextDataFormat.Xaml))
                 CanExecute = true;
             else
@@ -443,7 +446,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         #region ICommand Members
         public override void Execute()
         {
-            SelectionTool tool = schemaView.ActiveTool as SelectionTool;
+            SelectionTool tool = _view.ActiveTool as SelectionTool;
             string xaml = System.Windows.Clipboard.GetText(System.Windows.TextDataFormat.Xaml);
             if (tool != null && xaml != null)
             {
@@ -491,9 +494,11 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
     class XamlViewCommand : SchemaCommand
     {
+        SchemaView _scView;
         public XamlViewCommand(SchemaView sv)
             : base(sv)
         {
+            _scView = sv;
         }
 
 
@@ -508,17 +513,18 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             try
             {
-                if (!schemaView.XamlView.Visible)
+                //TODO: косяк с XAMLView не должно быть конкретизации класса DocumentView
+                if (!_scView.XamlView.Visible)
                 {
-				
-                    schemaView.XamlView.Show();
-                    schemaView.UpdateXamlView();
+                    
+                    _scView.XamlView.Show();
+                    _scView.UpdateXamlView();
 
 					
                 }
                 else
                 {
-                    schemaView.XamlView.Hide();
+                    _scView.XamlView.Hide();
                 }
             }
             catch { }
@@ -549,7 +555,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         double level;
         public event EventHandler CurrentChanged;
 
-        public ZoomLevelCommand(SchemaView sv) :
+        public ZoomLevelCommand(DocumentView sv) :
             base(sv)
         {
             Priority = (int)CommandManager.Priorities.ViewCommands;
@@ -559,7 +565,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         void ZoomGesture_ZoomChanged(object sender, EventArgs e)
         {
-            Level = (sender as FreeSCADA.Common.Schema.Gestures.MapZoom).Zoom;
+            Level = (sender as FreeSCADA.Common.Gestures.MapZoom).Zoom;
         }
 
         #region Informational properties
@@ -592,9 +598,9 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public override void Execute()
         {
 
-            schemaView.ZoomManager.Zoom =level ;
+            _view.ZoomManager.Zoom =level ;
 
-            schemaView.Focus();
+            _view.Focus();
         }
 
         public List<object> Items
@@ -645,7 +651,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
     class ZoomInCommand : SchemaCommand
     {
-        public ZoomInCommand(SchemaView sv) :
+        public ZoomInCommand(DocumentView sv) :
             base(sv)
         {
             Priority = (int)CommandManager.Priorities.ViewCommands;
@@ -660,7 +666,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public override void Execute()
         {
 
-            schemaView.ZoomManager.Zoom *= 1.05;
+            _view.ZoomManager.Zoom *= 1.05;
         }
 
         public override string Name
@@ -685,7 +691,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
     class ZoomOutCommand : SchemaCommand
     {
-        public ZoomOutCommand(SchemaView sv) :
+        public ZoomOutCommand(DocumentView sv) :
             base(sv)
         {
             Priority = (int)CommandManager.Priorities.ViewCommands;
@@ -699,7 +705,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public override void Execute()
         {
 
-            schemaView.ZoomManager.Zoom /= 1.05;
+            _view.ZoomManager.Zoom /= 1.05;
         }
 
         #region Informational properties
@@ -725,7 +731,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
     class UndoCommand : SchemaCommand
     {
-        public UndoCommand(SchemaView sv) :
+        public UndoCommand(DocumentView sv) :
             base(sv)
         {
 
@@ -733,7 +739,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         public override void CheckApplicability()
         {
-            DocumentView doc = schemaView;
+            DocumentView doc = _view;
 
             if (doc.UndoBuff.CanUndo())
                 CanExecute = true;
@@ -743,7 +749,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         public override void Execute()
         {
-            DocumentView doc = (DocumentView)schemaView;
+            DocumentView doc = (DocumentView)_view;
             doc.UndoBuff.UndoCommand();
         }
 
@@ -771,7 +777,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
     class RedoCommand : SchemaCommand
     {
-        public RedoCommand(SchemaView sv) :
+        public RedoCommand(DocumentView sv) :
             base(sv)
         {
 
@@ -779,7 +785,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         public override void CheckApplicability()
         {
-            DocumentView doc = schemaView;
+            DocumentView doc = _view;
 
             if (doc != null && doc.UndoBuff.CanRedo())
                 CanExecute = true;
@@ -789,7 +795,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         public override void Execute()
         {
-            DocumentView doc = schemaView;
+            DocumentView doc = _view;
             doc.UndoBuff.RedoCommand();
         }
 
@@ -817,7 +823,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
     class CommonBindingCommand : SchemaCommand
     {
-        public CommonBindingCommand(SchemaView sv) :
+        public CommonBindingCommand(DocumentView sv) :
             base(sv)
         {
             
@@ -826,7 +832,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         public override void CheckApplicability()
         {
             
-            if (schemaView.SelectionManager.SelectedObjects.Count == 1)
+            if (_view.SelectionManager.SelectedObjects.Count == 1)
                 CanExecute = true;
             else
                 CanExecute = false;
@@ -834,24 +840,11 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
         public override void Execute()
         {
-            SelectionTool tool = schemaView.ActiveTool as SelectionTool;
+            SelectionTool tool = _view.ActiveTool as SelectionTool;
             
-            bool found = false;
-            /*foreach (IVisualControlsPlug p in Env.Current.VisualPlugins.Plugins)
-            {
-                foreach (IVisualControlDescriptor d in p.Controls)
-                {
-                    if (schemaView.SelectionManager.SelectedObjects[0].GetType() == d.Type)
-                    {
-                        CommonBindingDialog dlg = new CommonBindingDialog(d.getPropProxy(schemaView.SelectionManager.SelectedObjects[0]));
-                        dlg.ShowDialog(Env.Current.MainWindow);
-                        found = true;
-                    }
-                }
-            }*/
-            CommonBindingDialog dlg = new CommonBindingDialog(new PropProxy(schemaView.SelectionManager.SelectedObjects[0]));
+            
+            CommonBindingDialog dlg = new CommonBindingDialog(new PropProxy(_view.SelectionManager.SelectedObjects[0]));
             dlg.ShowDialog(Env.Current.MainWindow);
-            
         }
 
         #region Informational properties
@@ -884,7 +877,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 
                 CanExecute = true;
         }
-        public ImportElementCommand(SchemaView sv)
+        public ImportElementCommand(DocumentView sv)
             : base(sv)
         {
             Priority = (int)CommandManager.Priorities.EditCommands;
@@ -910,7 +903,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
                  UIElement obj = XamlReader.Load(xmlReader) as UIElement;
                  Canvas.SetTop(obj, 0);
                  Canvas.SetLeft(obj, 0);
-                 schemaView.MainCanvas.Children.Add(obj);
+                 _view.MainPanel.Children.Add(obj);
              }
              else if (filename.Contains("svg"))
              {
@@ -943,7 +936,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
                      Canvas.SetTop(v, 0);
                      Canvas.SetLeft(v, 0);
                      v.Stretch = System.Windows.Media.Stretch.Fill;
-                     schemaView.MainCanvas.Children.Add(v);
+                     _view.MainPanel.Children.Add(v);
                      reader.Close();
 
                  }

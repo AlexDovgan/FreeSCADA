@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 using System.Windows.Media;
 using System.Windows.Input;
 
-namespace FreeSCADA.Common.Schema.Gestures
+namespace FreeSCADA.Common.Gestures
 {
     /// <summary>
     /// This class implements a mouse middle-button auto-scrolling feature over any target view.

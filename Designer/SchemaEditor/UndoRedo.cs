@@ -6,7 +6,7 @@ using FreeSCADA.Common.Schema;
 using FreeSCADA.Designer.Views;
 
 
-namespace FreeSCADA.Designer.SchemaEditor
+namespace FreeSCADA.Designer
 {
     /// <summary>
     /// Interface for undo redo command
@@ -29,13 +29,13 @@ namespace FreeSCADA.Designer.SchemaEditor
     }
     static class UndoRedoManager
     {
-        public static BasicUndoBuffer GetUndoBufferFor(UIElement el)
+        public static BaseUndoBuffer GetUndoBufferFor(UIElement el)
         {
             System.Windows.Controls.Canvas c = SchemaDocument.GetMainCanvas(el);
             return (c.Tag as Views.SchemaView).UndoBuff;
         }
     }
-    class BasicUndoBuffer
+    class BaseUndoBuffer
     {
         DocumentView view;
         bool documentModifiedState;
@@ -47,7 +47,7 @@ namespace FreeSCADA.Designer.SchemaEditor
         }
 
 
-        public BasicUndoBuffer(DocumentView doc)
+        public BaseUndoBuffer(DocumentView doc)
         {
             view = doc;
         }
@@ -135,17 +135,17 @@ namespace FreeSCADA.Designer.SchemaEditor
             if (!(doc is Views.SchemaView))
                 throw new Exception("this is not schema");
             schemaView = doc as Views.SchemaView;
-            schemaView.MainCanvas.Children.Add(addedObject);
+            schemaView.MainPanel.Children.Add(addedObject);
         }
         public void Redo()
         {
-            schemaView.MainCanvas.Children.Add(addedObject);
+            schemaView.MainPanel.Children.Add(addedObject);
          
             
         }
         public void Undo()
         {
-            schemaView.MainCanvas.Children.Remove(addedObject);
+            schemaView.MainPanel.Children.Remove(addedObject);
             if (schemaView.ActiveTool!= null)
                 schemaView.SelectionManager.SelectObject( null);
    
@@ -170,18 +170,18 @@ namespace FreeSCADA.Designer.SchemaEditor
                 throw new Exception("this is not schema");
             schemaView = doc as Views.SchemaView;
 
-            schemaView.MainCanvas.Children.Remove(deletedObject);
+            schemaView.MainPanel.Children.Remove(deletedObject);
             
         }
         public void Redo()
         {
-            schemaView.MainCanvas.Children.Remove(deletedObject);
+            schemaView.MainPanel.Children.Remove(deletedObject);
          
         }
         public void Undo()
         {
 
-            schemaView.MainCanvas.Children.Add(deletedObject);
+            schemaView.MainPanel.Children.Add(deletedObject);
        }
 
     }

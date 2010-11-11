@@ -413,7 +413,7 @@ namespace FreeSCADA.Designer
 			{
                 //toolBoxView.Clean(); 
                 currentDocument.OnActivated();
-    			currentDocument.ObjectSelected += propertyBrowserView.ShowProperties;
+    			currentDocument.SelectionManager.SelectionChanged += propertyBrowserView.ShowProperties;
             }
 		}
 
@@ -423,7 +423,7 @@ namespace FreeSCADA.Designer
 			if (currentDocument != null)
 			{
 				currentDocument.OnDeactivated();
-				currentDocument.ObjectSelected -= propertyBrowserView.ShowProperties;
+                currentDocument.SelectionManager.SelectionChanged -= propertyBrowserView.ShowProperties;
             }
             propertyBrowserView.ShowProperties(new Object());
         }

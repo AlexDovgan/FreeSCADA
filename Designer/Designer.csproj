@@ -112,6 +112,7 @@
     <Compile Include="SchemaEditor\BindingSerializing.cs" />
     <Compile Include="SchemaEditor\EditorHelpers.cs" />
     <Compile Include="SchemaEditor\GridManager.cs" />
+    <Compile Include="SchemaEditor\ISelectionManager.cs" />
     <Compile Include="SchemaEditor\Manipulators\ActionsEditManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\Controlls\PointDragThumb.cs" />
     <Compile Include="SchemaEditor\Manipulators\PolylineEditManipulantor.cs" />
@@ -174,7 +175,7 @@
     <Compile Include="SchemaEditor\PropertiesUtils\ScriptExpressionBindingPanel.Designer.cs">
       <DependentUpon>ScriptExpressionBindingPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="SchemaEditor\SelectionManager.cs" />
+    <Compile Include="SchemaEditor\SchemaSelectionManager.cs" />
     <Compile Include="SchemaEditor\StylesLibrary.cs" />
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
     <Compile Include="SchemaEditor\Tools\ControlCreateTool.cs" />

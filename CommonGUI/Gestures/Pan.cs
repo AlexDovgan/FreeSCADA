@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace FreeSCADA.Common.Schema.Gestures
+namespace FreeSCADA.Common.Gestures
 {
 
     /// <summary>
