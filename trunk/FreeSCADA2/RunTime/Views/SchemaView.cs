@@ -98,10 +98,10 @@ namespace FreeSCADA.RunTime.Views
                     throw new Exception("View has already attached canvas");
                 
                 ZoomGesture = new MapZoom(vCanvas);
-                PanGesture = new Pan(vCanvas, ZoomGesture);
-                RectZoomGesture = new RectangleSelectionGesture(vCanvas, ZoomGesture, System.Windows.Input.ModifierKeys.Control);
-                RectZoomGesture.ZoomSelection = true;
-                AutoScrollGesture = new AutoScroll(vCanvas, ZoomGesture);
+                //PanGesture = new Pan(vCanvas, ZoomGesture);
+                //RectZoomGesture = new RectangleSelectionGesture(vCanvas, ZoomGesture, System.Windows.Input.ModifierKeys.Control);
+                //RectZoomGesture.ZoomSelection = true;
+                //AutoScrollGesture = new AutoScroll(vCanvas, ZoomGesture);
         
 
       		}
@@ -122,7 +122,7 @@ namespace FreeSCADA.RunTime.Views
         public override void OnActivated()
         {
         	base.OnActivated();
-            PanGesture.Activate();
+            //PanGesture.Activate();
 
 			foreach (CommandInfo cmdInfo in DocumentCommands)
 			{

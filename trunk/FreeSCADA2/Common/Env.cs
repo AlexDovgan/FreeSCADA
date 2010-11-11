@@ -11,7 +11,6 @@ namespace FreeSCADA.Common
 		Commands commands;
 		Control mainWindow;
         CommunationPlugs communicationPlugins;
-        VisualControlsPlugs visualPlugins;
         FreeSCADA.Common.Project project;
 		EnvironmentMode mode;
 		Logger logger;
@@ -33,10 +32,8 @@ namespace FreeSCADA.Common
 				environmentInstance.mainWindow = mainWindow;
                 environmentInstance.communicationPlugins = new CommunationPlugs();
                 environmentInstance.scriptManager = new ScriptManager();
-                environmentInstance.visualPlugins = new VisualControlsPlugs();
-
-				environmentInstance.communicationPlugins.Load();
-                environmentInstance.visualPlugins.Load();
+                environmentInstance.communicationPlugins.Load();
+                
 
 				//Should be called after all plugins
 				environmentInstance.scriptManager.Initialize();
@@ -97,10 +94,6 @@ namespace FreeSCADA.Common
 			get { return communicationPlugins; }
 		}
 
-		public VisualControlsPlugs VisualPlugins
-		{
-			get { return visualPlugins; }
-		}
 		
 		public ScriptManager ScriptManager
 		{
