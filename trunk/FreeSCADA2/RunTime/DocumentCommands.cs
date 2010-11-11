@@ -43,7 +43,7 @@ namespace FreeSCADA.RunTime.DocumentCommands
 
         void ZoomGesture_ZoomChanged(object sender, EventArgs e)
         {
-            Level = (sender as FreeSCADA.Common.Schema.Gestures.MapZoom).Zoom;
+            Level = (sender as FreeSCADA.Common.Gestures.MapZoom).Zoom;
         }
 
 		public ZoomLevelCommand()

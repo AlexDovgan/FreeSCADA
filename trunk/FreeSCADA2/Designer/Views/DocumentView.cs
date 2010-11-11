@@ -1,18 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using FreeSCADA.Common;
-using FreeSCADA.Designer.SchemaEditor;
 using FreeSCADA.Interfaces;
+using FreeSCADA.Common.Gestures;
+using FreeSCADA.Designer.SchemaEditor.Tools;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace FreeSCADA.Designer.Views
 {
-	class DocumentView : DockContent
+	abstract class DocumentView : DockContent
 	{
 
-        public delegate void ObjectSelectedDelegate(object sender);
-        public event ObjectSelectedDelegate ObjectSelected;
+        public virtual ISelectionManager SelectionManager
+        {
+            get;
+            protected set;
+        }
+        public virtual BaseTool ActiveTool
+        {
+            get;
+            set;
+        }
 
+        public virtual  MapZoom ZoomManager
+        {
+            get;
+            protected set;
+        }
+        public virtual System.Windows.Controls.Panel MainPanel
+        {
+            get;
+            protected set;
+        }
         
         string documentName = "";
 		bool modifiedFlag;
@@ -47,7 +66,7 @@ namespace FreeSCADA.Designer.Views
             protected set;
         }
 
-        public BasicUndoBuffer UndoBuff
+        public BaseUndoBuffer UndoBuff
         {
             get;
             protected set;
@@ -112,11 +131,7 @@ namespace FreeSCADA.Designer.Views
 		}
 	
 
-        public void RaiseObjectSelected(object sender )
-        {
-			if(ObjectSelected != null)
-				ObjectSelected(sender);
-        }
+        
 
 		protected virtual void UpdateCaption()
 		{
@@ -128,10 +143,8 @@ namespace FreeSCADA.Designer.Views
         
         protected override void OnClosed(EventArgs e)
         {
-            
-            RaiseObjectSelected(null);
-            ObjectSelected = null;
             base.OnClosed(e);
+            SelectionManager.SelectObject(null);    
         }
 
         public virtual void OnPropertiesBrowserChanged(object el)

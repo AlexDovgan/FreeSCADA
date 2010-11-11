@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using FreeSCADA.Common.Schema.Gestures;
+using FreeSCADA.Common.Gestures;
 
 namespace FreeSCADA.Common.Schema
 {   public class WPFShemaContainer : System.Windows.Forms.Integration.ElementHost

@@ -7,11 +7,12 @@ using System.Windows.Markup;
 using System.Xml;
 using FreeSCADA.Common;
 using FreeSCADA.Common.Schema;
-using FreeSCADA.Common.Schema.Gestures;
+using FreeSCADA.Common.Gestures;
+using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.SchemaEditor;
 using FreeSCADA.Designer.SchemaEditor.PropertiesUtils;
 using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
-using FreeSCADA.Designer.SchemaEditor.Tools;
+
 using FreeSCADA.Interfaces;
 
 
@@ -44,34 +45,25 @@ namespace FreeSCADA.Designer.Views
             private set;
         }
 
-        public MapZoom ZoomManager
+        
+        public override  System.Windows.Controls.Panel MainPanel
         {
-            get;
-            private set;
-        }
-
-        public System.Windows.Controls.Canvas MainCanvas
-        {
-            get { return _wpfSchemaContainer.View as System.Windows.Controls.Canvas; }
-            private set
+            get { return _wpfSchemaContainer.View as System.Windows.Controls.Panel; }
+            protected set
             {
                 _wpfSchemaContainer.View = value;
             }
         }
 
-        public SelectionManager SelectionManager
-        {
-            get;
-            private set;
-        }
 
-        public BaseTool ActiveTool
+
+        public override  BaseTool ActiveTool
         {
             get
             {
                 if (_activeTool == null)
 
-                    ActiveTool = new SelectionTool(MainCanvas);
+                    ActiveTool = new SelectionTool(MainPanel,SelectionManager);
 
                 return _activeTool;
 
@@ -112,11 +104,11 @@ namespace FreeSCADA.Designer.Views
             if (canvas == null)
                 throw new Exception("can not create new schema");
 
-            MainCanvas = canvas;
-            MainCanvas.Tag = this;
+            MainPanel = canvas;
+            MainPanel.Tag = this;
 
             InitializeComponent();
-            MainCanvas.Loaded += new RoutedEventHandler(MainCanvas_Loaded);
+            MainPanel.Loaded += new RoutedEventHandler(MainCanvas_Loaded);
         }
 
         private void InitializeComponent()
@@ -151,9 +143,8 @@ namespace FreeSCADA.Designer.Views
 
             this.ResumeLayout(false);
 
-            this.UndoBuff = new BasicUndoBuffer(this);
-            this.SelectionManager = new SelectionManager(this);
-            this.SelectionManager.SelectionChanged += OnObjectSelected;
+            this.UndoBuff = new BaseUndoBuffer(this);
+            this.SelectionManager = new SchemaSelectionManager(this);
             _documentMenuContext = new SchemaMenuContext(contextMenu);
             this.ContextMenu = contextMenu;
             CommandManager.documentMenuContext = _documentMenuContext;
@@ -163,7 +154,7 @@ namespace FreeSCADA.Designer.Views
             this._wpfSchemaContainer.Child.DragEnter += new System.Windows.DragEventHandler(Child_DragEnter);
             this._wpfSchemaContainer.Child.Drop += new System.Windows.DragEventHandler(Child_Drop);
             //this._wpfSchemaContainer.View.ContextMenu = contextMenu;
-            ZoomManager = new MapZoom(MainCanvas);
+            ZoomManager = new MapZoom(MainPanel);
             CreateCommands();
 
         }
@@ -282,13 +273,13 @@ namespace FreeSCADA.Designer.Views
                     typeof(PolylineTool)),
                     CommandManager.toolboxContext));
 
-            DocumentCommands.Add(new CommandInfo(
+            /*DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
                     StringResources.ToolActionEdit,
                     StringResources.ToolEditorGroupName,
                     global::FreeSCADA.Designer.Properties.Resources.cog_edit,
                     typeof(ActionEditTool)),
-                    CommandManager.toolboxContext));
+                    CommandManager.toolboxContext));*/
 
             DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
@@ -367,7 +358,7 @@ namespace FreeSCADA.Designer.Views
 
         void ReInitEditor()
         {
-            _gridManger = GridManager.GetGridManagerFor(MainCanvas);
+            _gridManger = GridManager.GetGridManagerFor(MainPanel);
         }
 
 
@@ -387,35 +378,24 @@ namespace FreeSCADA.Designer.Views
 
         public override bool SaveDocument()
         {
-            MainCanvas.Tag = null;
-            SchemaDocument.SaveSchema(MainCanvas, DocumentName);
+            MainPanel.Tag = null;
+            SchemaDocument.SaveSchema(MainPanel, DocumentName);
             IsModified = false;
-            MainCanvas.Tag = this;
+            MainPanel.Tag = this;
 
             return true;
         }
         protected override void OnClosed(EventArgs e)
         {
-
+            base.OnClosed(e);
             _wpfSchemaContainer.Child.KeyDown -= new System.Windows.Input.KeyEventHandler(WpfKeyDown);
             _wpfSchemaContainer.Dispose();
             _wpfSchemaContainer = null;
-            base.OnClosed(e);
-        }
+         }
 
 
         #endregion
 
-
-        void OnObjectSelected(Object obj)
-        {
-
-            if (obj == null)
-                obj = MainCanvas;
-            
-            RaiseObjectSelected(new PropProxy(obj));
-
-        }
 
 
 
@@ -439,13 +419,13 @@ namespace FreeSCADA.Designer.Views
             System.Windows.Controls.Canvas.SetLeft(content, 0);
             System.Windows.Controls.Canvas.SetTop(content, 0);
             content.Width = 60; content.Height = 50;
-            if (MainCanvas.Resources[typeof(BaseChannel)] == null)
+            if (MainPanel.Resources[typeof(BaseChannel)] == null)
             {
                 var dt = ((DataTemplate)XamlReader.Load(new XmlTextReader(new StringReader(StringResources.ChannelDefaultTemplate))));
                 dt.DataType = typeof(BaseChannel);
                 var dk = new DataTemplateKey(typeof(BaseChannel));
 
-                MainCanvas.Resources[dk] = dt;
+                MainPanel.Resources[dk] = dt;
             }
             UndoBuff.AddCommand(new AddGraphicsObject(content));
 
@@ -470,7 +450,7 @@ namespace FreeSCADA.Designer.Views
         void ActiveToolObjectCreated(object sender, EventArgs e)
         {
             UndoBuff.AddCommand(new AddGraphicsObject(sender as System.Windows.UIElement));
-            MainCanvas.UpdateLayout();
+            MainPanel.UpdateLayout();
             SelectionManager.SelectObject(sender as UIElement);
 
             UpdateXamlView();
@@ -538,10 +518,10 @@ namespace FreeSCADA.Designer.Views
             else if (e.Key == System.Windows.Input.Key.Delete)
             {
                 if (SelectionManager.SelectedObjects.Count > 0)
-                    UndoBuff.AddCommand(new DeleteGraphicsObject(SelectionManager.SelectedObjects[0]));
+                    UndoBuff.AddCommand(new DeleteGraphicsObject(SelectionManager.SelectedObjects.Cast<UIElement>().FirstOrDefault()));
                 else if (_activeTool is SelectionTool && SelectionManager.SelectedObjects.Count > 0)
                 {
-                    foreach (var el in SelectionManager.SelectedObjects)
+                    foreach (var el in SelectionManager.SelectedObjects.Cast<UIElement>())
                     {
                         UndoBuff.AddCommand(new DeleteGraphicsObject(el));
                     }
@@ -589,7 +569,7 @@ namespace FreeSCADA.Designer.Views
             }
 
 
-            MainCanvas.UpdateLayout();
+            MainPanel.UpdateLayout();
             _activeTool.InvalidateVisual();
         }
 
@@ -607,13 +587,13 @@ namespace FreeSCADA.Designer.Views
                         stream.Seek(0, SeekOrigin.Begin);
                         var canvas = XamlReader.Load(stream) as System.Windows.Controls.Canvas;
 
-                        MainCanvas.Children.Clear();
+                        MainPanel.Children.Clear();
                         if (canvas != null)
                             while (canvas.Children.Count > 0)
                             {
                                 var el = canvas.Children[0];
                                 canvas.Children.Remove(canvas.Children[0]); ;
-                                MainCanvas.Children.Add(el);
+                                MainPanel.Children.Add(el);
                             }
                         ReInitEditor();
                     }
@@ -630,9 +610,9 @@ namespace FreeSCADA.Designer.Views
         public void UpdateXamlView()
         {
             if (!XamlView.Visible) return;
-            MainCanvas.Tag = null;
-            XamlView.Text = EditorHelper.SerializeObject(MainCanvas);
-            MainCanvas.Tag = this;
+            MainPanel.Tag = null;
+            XamlView.Text = EditorHelper.SerializeObject(MainPanel);
+            MainPanel.Tag = this;
         }
 
     }

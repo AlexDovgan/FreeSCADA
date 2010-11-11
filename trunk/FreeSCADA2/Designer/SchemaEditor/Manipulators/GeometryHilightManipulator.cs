@@ -2,7 +2,7 @@
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using FreeSCADA.Common.Schema;
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {

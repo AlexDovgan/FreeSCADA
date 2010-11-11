@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
-using FreeSCADA.Common.Schema;
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
@@ -24,7 +25,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         bool isSelectionMoved = false;
         Rectangle boundceRect = new Rectangle();
         DrawingVisual selectionRectangle = new DrawingVisual();
-        SelectionManager selManeger;
+        ISelectionManager _selManeger;
 
         public Point LastClickedPoint
         {
@@ -32,7 +33,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             set;
         }
 
-        public SelectionTool(UIElement element)
+        public SelectionTool(UIElement element,ISelectionManager selManager)
             : base(element)
         {
             boundceRect.Stroke = Brushes.Black;
@@ -43,7 +44,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             selectionRectangle.Opacity = 0.5;
             visualChildren.Add(selectionRectangle);
-            selManeger= SelectionManager.GetSelectionManagerFor(AdornedElement);
+            _selManeger = selManager;
 
             //need in refectoring 
         }
@@ -82,7 +83,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
 
             if (isDragged)
-                SelectionManager.GetSelectionManagerFor(AdornedElement).SelectObject(null);
+                _selManeger.SelectObject(null);
             isDragged = false;
             isSelectionMoved = false;
             ReleaseMouseCapture();
@@ -97,7 +98,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 if (b.Contains(itemBounds))
                 {
 
-                    SelectionManager.GetSelectionManagerFor(AdornedElement).AddObject(el);
+                    _selManeger.AddObject(el);
                 }
 
             }
@@ -116,8 +117,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             if (VisualTreeHelper.HitTest(AdornedElement, pt) != null)
                 documentHit = VisualTreeHelper.HitTest(AdornedElement, pt).VisualHit;
             UIElement selObj = null;
-            if(selManeger.SelectedObjects.Count>0)
-                selObj=selManeger.SelectedObjects[0];
+            if(_selManeger.SelectedObjects.Count>0)
+                selObj=_selManeger.SelectedObjects.Cast<UIElement>().FirstOrDefault();
             if (documentHit == selObj)
             {
                 if (e.ClickCount > 1)
@@ -146,7 +147,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 CaptureMouse();
                 startPos = GridManager.GetGridManagerFor(AdornedElement).GetMousePos();
                 isDragged = true;
-                selManeger.SelectObject(null);
+                _selManeger.SelectObject(null);
 
             }
             else if (documentHit != AdornedElement )
@@ -160,9 +161,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                     movePos = GridManager.GetGridManagerFor(AdornedElement).GetMousePos();
                     System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.SizeAll;
                     moveUndoInfo = true;
-                    if (!selManeger.SelectedObjects.Contains(el))
-                        selManeger.SelectObject(el);
-                    foreach (var elm in selManeger.SelectedObjects)
+                    if (!_selManeger.SelectedObjects.Contains(el))
+                        _selManeger.SelectObject(el);
+                    foreach (var elm in _selManeger.SelectedObjects.Cast<UIElement>())
                     {
                         var ub = UndoRedoManager.GetUndoBufferFor(elm);
                         ub.AddCommand(new ModifyGraphicsObject(elm));
@@ -171,13 +172,13 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 }
                 else
                 {
-                    if (selManeger.SelectedObjects.Contains(el))
+                    if (_selManeger.SelectedObjects.Contains(el))
                     {
-                        selManeger.DeleteObject(el);
+                        _selManeger.DeleteObject(el);
                     }
                     else
                     {
-                        selManeger.AddObject(el);
+                        _selManeger.AddObject(el);
                     }
 
                 }
@@ -191,9 +192,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            
-            var r = selManeger.CalculateBounds();
-            if (selManeger.SelectedObjects.Count>1&&!r.IsEmpty)
+
+            var r = EditorHelper.CalculateBounds(_selManeger.SelectedObjects.Cast<UIElement>().ToList(), AdornedElement);
+            if (_selManeger.SelectedObjects.Count>1&&!r.IsEmpty)
             {
                 boundceRect.Visibility = Visibility.Visible;
                 boundceRect.Arrange(r);
@@ -211,7 +212,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
         public void MoveHelper(double delta_x, double delta_y)
         {
-            foreach (UIElement se in selManeger.SelectedObjects)
+            foreach (UIElement se in _selManeger.SelectedObjects)
             {
                 // undo
                 

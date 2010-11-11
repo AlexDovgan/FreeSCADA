@@ -65,8 +65,7 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 				if (property is PropertyWrapper)
 					propertyList.Items.Add(property);
 			}
-
-			if (propertyList.Items.Count > 0)
+    		if (propertyList.Items.Count > 0)
 				propertyList.SelectedIndex = 0;
 		}
 

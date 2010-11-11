@@ -3,7 +3,7 @@
 //     Copyright (c) Microsoft Corporation.  All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
-namespace FreeSCADA.Common.Schema.Gestures
+namespace FreeSCADA.Common.Gestures
 {
 
     using System;

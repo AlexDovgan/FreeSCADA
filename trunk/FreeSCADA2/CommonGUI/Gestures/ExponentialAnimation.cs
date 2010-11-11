@@ -10,7 +10,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace FreeSCADA.Common.Schema.Gestures
+namespace FreeSCADA.Common.Gestures
 {
     /// <summary>
     /// EdgeBehavior defines what type of exponential animation to do.

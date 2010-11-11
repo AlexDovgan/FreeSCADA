@@ -14,7 +14,7 @@ using System.Windows.Input;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 
-namespace FreeSCADA.Common.Schema.Gestures
+namespace FreeSCADA.Common.Gestures
 {
     /// <summary>
     /// The MapZoom gesture provides animated mouse wheel zooming behavior as well as a

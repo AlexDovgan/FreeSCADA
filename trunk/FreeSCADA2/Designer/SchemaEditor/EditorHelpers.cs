@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -63,7 +64,7 @@ namespace FreeSCADA.Designer.SchemaEditor
         public static void BreakGroup(SchemaView view)
         {
 
-            Canvas parent = view.MainCanvas;
+            Canvas parent = (Canvas)view.MainPanel;
             Viewbox g = view.SelectionManager.SelectedObjects[0] as Viewbox;
             try
             {
@@ -137,14 +138,15 @@ namespace FreeSCADA.Designer.SchemaEditor
             }
 
         }
+
         public static void CreateGroup(SchemaView view)
         {
 
             Viewbox Group = new Viewbox();
             Group.SetValue(Viewbox.StretchProperty, Stretch.Fill);
-            Canvas workCanvas = view.MainCanvas;
+            Canvas workCanvas = (Canvas)view.MainPanel;
             Canvas g = new Canvas();
-            Rect r = view.SelectionManager.CalculateBounds();
+            Rect r = CalculateBounds(view.SelectionManager.SelectedObjects.Cast<UIElement>().ToList(), workCanvas);
             Canvas.SetLeft(Group, r.X);
             Canvas.SetTop(Group, r.Y);
             Group.Width = g.Width = r.Width;
@@ -167,7 +169,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             workCanvas.Children.Add(Group);
             //tool.NotifyObjectCreated(Group);
             view.SelectionManager.SelectObject(null);
-            view.MainCanvas.InvalidateVisual();
+            view.MainPanel.InvalidateVisual();
             view.SelectionManager.SelectObject(Group);
             
             
