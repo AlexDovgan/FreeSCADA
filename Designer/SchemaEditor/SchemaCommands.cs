@@ -837,7 +837,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             SelectionTool tool = schemaView.ActiveTool as SelectionTool;
             
             bool found = false;
-            foreach (IVisualControlsPlug p in Env.Current.VisualPlugins.Plugins)
+            /*foreach (IVisualControlsPlug p in Env.Current.VisualPlugins.Plugins)
             {
                 foreach (IVisualControlDescriptor d in p.Controls)
                 {
@@ -848,13 +848,10 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
                         found = true;
                     }
                 }
-            }
-            if (!found)
-            {
-                CommonBindingDialog dlg = new CommonBindingDialog(new PropProxy(schemaView.SelectionManager.SelectedObjects[0]));
-                dlg.ShowDialog(Env.Current.MainWindow);
-            }
-
+            }*/
+            CommonBindingDialog dlg = new CommonBindingDialog(new PropProxy(schemaView.SelectionManager.SelectedObjects[0]));
+            dlg.ShowDialog(Env.Current.MainWindow);
+            
         }
 
         #region Informational properties

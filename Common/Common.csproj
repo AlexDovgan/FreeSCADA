@@ -76,9 +76,6 @@
     <Compile Include="Scripting\ChannelsScriptHandlers.cs" />
     <Compile Include="Scripting\EventScriptCollection.cs" />
     <Compile Include="Scripting\GenericEventHandler.cs" />
-    <Compile Include="IVisualControlDescriptor.cs" />
-    <Compile Include="IVisualControlsPlug.cs" />
-    <Compile Include="VisualControlsPlugs.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="Env.cs" />
     <Compile Include="IChannel.cs" />

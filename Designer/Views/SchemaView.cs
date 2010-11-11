@@ -412,13 +412,7 @@ namespace FreeSCADA.Designer.Views
 
             if (obj == null)
                 obj = MainCanvas;
-            foreach (var p in Env.Current.VisualPlugins.Plugins)
-                foreach (var d in p.Controls)
-                {
-                    if (obj.GetType() != d.Type) continue;
-                    RaiseObjectSelected(d.getPropProxy(obj));
-                    return;
-                }
+            
             RaiseObjectSelected(new PropProxy(obj));
 
         }
