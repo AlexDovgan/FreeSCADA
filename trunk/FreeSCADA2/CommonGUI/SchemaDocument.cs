@@ -10,11 +10,12 @@ namespace FreeSCADA.Common.Schema
 {
     public static class SchemaDocument
     {
+        //todo: get rid GetMainCanvas
         public static Canvas GetMainCanvas(DependencyObject element)
         {
             if (element == null)
                 return null;
-
+             
             DependencyObject top = element;
             while (!(VisualTreeHelper.GetParent(top) is ScrollContentPresenter) && VisualTreeHelper.GetParent(top)!=null)
             {

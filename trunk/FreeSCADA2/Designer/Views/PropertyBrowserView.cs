@@ -193,9 +193,9 @@ namespace FreeSCADA.Designer.Views
 				object obj = (component as PropProxy).ControlledObject;
 				if (obj is DependencyObject)
 				{
-
-                    var ub = UndoRedoManager.GetUndoBufferFor(obj as System.Windows.UIElement);
-                    ub.AddCommand(new ModifyGraphicsObject(obj as System.Windows.UIElement));
+                    //TODO:  may be need in ubndo redo
+                    //var ub = UndoRedoManager.GetUndoBufferFor(obj as System.Windows.FrameworkElement);
+                    //ub.AddCommand(new ModifyGraphicsObject(obj as System.Windows.FrameworkElement));
             
 					if (string.IsNullOrEmpty(value as string))
 					{
@@ -205,6 +205,7 @@ namespace FreeSCADA.Designer.Views
 					}
 					else
 					{
+                        //todo: get rid GetMainCanvas
 						var c = SchemaDocument.GetMainCanvas(obj as DependencyObject);
 						var callInfo = new ScriptCallInfo();
 						callInfo.HandlerName = value as string;

@@ -16,8 +16,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         PointCollection pointsCollection = new PointCollection();
 
 
-        public PolylineTool(UIElement element)
-            : base(element)
+        public PolylineTool(IDocumentView view )
+            : base(view)
         {
             visualChildren.Add(objectPrview);
         }
@@ -35,7 +35,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                         
                }
 
-                drawingContext.DrawLine(new Pen(Brushes.Black, 1), pointsCollection[pointsCollection.Count - 1], GridManager.GetGridManagerFor(AdornedElement).GetMousePos());
+                drawingContext.DrawLine(new Pen(Brushes.Black, 1), pointsCollection[pointsCollection.Count - 1], ((Views.SchemaView)_view).GridManager.GetMousePos());
 
                 drawingContext.Close();
             }
@@ -53,9 +53,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             if (pointsCollection.Count == 0)
                 base.OnPreviewMouseLeftButtonDown(e);
             CaptureMouse();
-            pointsCollection.Add(GridManager.GetGridManagerFor(AdornedElement).GetMousePos());
+            pointsCollection.Add(((Views.SchemaView)_view).GridManager.GetMousePos());
 
-                
             
             e.Handled = false;
         }
@@ -115,13 +114,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             // We do not want the context menu when closing line
             e.Handled = true;
         }
-
-        public override BaseManipulator CreateToolManipulator(UIElement obj)
+        public override Type GetToolManipulator()
         {
-            if (obj is Polyline)
-                return new PolylineEditManipulantor(obj as Polyline);
-            else return new DragResizeRotateManipulator(obj);
+            return typeof(PolylineEditManipulantor);
+
         }
+        
         public override Type ToolEditingType()
         {
             return typeof(Polyline);

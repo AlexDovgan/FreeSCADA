@@ -10,8 +10,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
     {
         Rectangle hilightRect = new Rectangle();
         Path path = new Path();
-        public GeometryHilightManipulator(UIElement el)
-            : base(el)
+        public GeometryHilightManipulator(IDocumentView view, FrameworkElement el)
+            : base(view, el)
         {
             
             VisualBrush brush = new VisualBrush(AdornedElement);

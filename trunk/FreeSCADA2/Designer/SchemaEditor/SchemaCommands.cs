@@ -97,7 +97,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         #region ICommand Members
         public override void Execute()
         {
-            _view.ActiveTool=(BaseTool)System.Activator.CreateInstance(ToolType, new object[] { _view.MainPanel });
+            _view.ActiveTool=(BaseTool)System.Activator.CreateInstance(ToolType, new object[] { _view});
         }
 
         public override string Name
@@ -226,16 +226,16 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             base.Execute();
             
             
-            List<UIElement> sortedList = new List<UIElement>();
+            List<FrameworkElement> sortedList = new List<FrameworkElement>();
 
-            foreach (UIElement uie in _view.MainPanel.Children)
+            foreach (FrameworkElement uie in _view.MainPanel.Children)
             {
                 if (_view.SelectionManager.SelectedObjects.Contains(uie))
                 {
                     sortedList.Add(uie);
                 }
             }
-            foreach (UIElement suie in sortedList)
+            foreach (FrameworkElement suie in sortedList)
             {
                 _view.MainPanel.Children.Remove(suie);
                 _view.MainPanel.Children.Add(suie);
@@ -294,7 +294,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
                     sortedList.Add(currCanvas.Children[i]);
                 }
             }
-            foreach (UIElement suie in sortedList)
+            foreach (FrameworkElement suie in sortedList)
             {
                 currCanvas.Children.Remove(suie);
                 currCanvas.Children.Insert(0, suie);
@@ -350,7 +350,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
                 "<Canvas xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Left=\"{0}\" Top=\"{1}\">"
                 , b.X, b.Y);
 
-            foreach (UIElement el in _view.SelectionManager.SelectedObjects)
+            foreach (FrameworkElement el in _view.SelectionManager.SelectedObjects)
             {
 
                 xaml += XamlWriter.Save(el);
@@ -400,7 +400,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
          
             copyCommand.Execute();
-            foreach (UIElement el in _view.SelectionManager.SelectedObjects)
+            foreach (FrameworkElement el in _view.SelectionManager.SelectedObjects)
             {
                 _view.UndoBuff.AddCommand(new DeleteGraphicsObject(el));
                     //ActiveTool.NotifyObjectDeleted(el);
@@ -457,13 +457,13 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
                         sw.Write(xaml);
                         sw.Flush();
                         stream.Seek(0, SeekOrigin.Begin);
-                        Canvas uielements = XamlReader.Load(stream) as Canvas;
-                        while (uielements.Children.Count != 0)
+                        Canvas elements = XamlReader.Load(stream) as Canvas;
+                        while (elements.Children.Count != 0)
                         {
-                            UIElement el = uielements.Children[0];
-                            uielements.Children.Remove(el);
-                            Canvas.SetLeft(el, Canvas.GetLeft(el) - Canvas.GetLeft(uielements) + tool.LastClickedPoint.X);
-                            Canvas.SetTop(el, Canvas.GetTop(el) - Canvas.GetTop(uielements) + tool.LastClickedPoint.Y);
+                            UIElement el = elements.Children[0];
+                            elements.Children.Remove(el);
+                            Canvas.SetLeft(el, Canvas.GetLeft(el) - Canvas.GetLeft(elements) + tool.LastClickedPoint.X);
+                            Canvas.SetTop(el, Canvas.GetTop(el) - Canvas.GetTop(elements) + tool.LastClickedPoint.Y);
                             tool.NotifyObjectCreated(el);
                         }
 
@@ -900,7 +900,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
              if (filename.Contains("xaml"))
              {
                  XmlReader xmlReader = XmlReader.Create(filename);
-                 UIElement obj = XamlReader.Load(xmlReader) as UIElement;
+                 FrameworkElement obj = XamlReader.Load(xmlReader) as FrameworkElement;
                  Canvas.SetTop(obj, 0);
                  Canvas.SetLeft(obj, 0);
                  _view.MainPanel.Children.Add(obj);

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using System.Reflection;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
+using FreeSCADA.Designer.Views;
 using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
@@ -33,8 +35,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             set;
         }
 
-        public SelectionTool(UIElement element,ISelectionManager selManager)
-            : base(element)
+        public SelectionTool(DocumentView view)
+            : base(view)
         {
             boundceRect.Stroke = Brushes.Black;
             boundceRect.Opacity = 0.25;
@@ -44,9 +46,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             selectionRectangle.Opacity = 0.5;
             visualChildren.Add(selectionRectangle);
-            _selManeger = selManager;
+            _selManeger = view.SelectionManager;
 
-            //need in refectoring 
+            //need in refactoring 
         }
 
         protected override void OnPreviewMouseMove(MouseEventArgs e)
@@ -57,7 +59,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 DrawingContext drawingContext = selectionRectangle.RenderOpen();
 
                 // Create a rectangle and draw it in the DrawingContext.
-                finalSize = GridManager.GetGridManagerFor(AdornedElement).GetMousePos() - startPos;
+                finalSize = ((Views.SchemaView)_view).GridManager.GetMousePos() - startPos;
                 Rect rect = new Rect(startPos, finalSize);
 
                 drawingContext.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 0.2), rect);
@@ -70,8 +72,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             if (isSelectionMoved)
             {
                 Vector newPosDelta;
-                newPosDelta = GridManager.GetGridManagerFor(AdornedElement).GetMousePos() - movePos;
-                movePos = GridManager.GetGridManagerFor(AdornedElement).GetMousePos();
+                newPosDelta = ((Views.SchemaView)_view).GridManager.GetMousePos() - movePos;
+                movePos = ((Views.SchemaView)_view).GridManager.GetMousePos();
                 MoveHelper(newPosDelta.X, newPosDelta.Y);
                 
                 System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.SizeAll;
@@ -104,7 +106,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             }
             selectionRectangle.RenderOpen().Close();
             InvalidateVisual();
-            LastClickedPoint = GridManager.GetGridManagerFor(AdornedElement).GetMousePos();
+            LastClickedPoint = ((Views.SchemaView)_view).GridManager.GetMousePos();
         }
 
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -116,28 +118,24 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             DependencyObject documentHit = null;
             if (VisualTreeHelper.HitTest(AdornedElement, pt) != null)
                 documentHit = VisualTreeHelper.HitTest(AdornedElement, pt).VisualHit;
-            UIElement selObj = null;
+            FrameworkElement selObj = null;
             if(_selManeger.SelectedObjects.Count>0)
-                selObj=_selManeger.SelectedObjects.Cast<UIElement>().FirstOrDefault();
+                selObj=_selManeger.SelectedObjects.Cast<FrameworkElement>().FirstOrDefault();
             if (documentHit == selObj)
             {
                 if (e.ClickCount > 1)
                 {
-                    //createDeffManipulator
-                    //SelectionManager.GetSelectionManagerFor(AdornedElement)
-                    //Assembly archiverAssembly = this.GetType().Assembly;
-                    //foreach (Type type in archiverAssembly.GetTypes())
-                    //{
-                    //    if (type.IsSubclassOf(typeof(BaseTool)))
-                    //    {
-                    //        BaseBindingPanelFactory factory = (BaseBindingPanelFactory)Activator.CreateInstance(type);
-                    //        if (factory != null && factory.CheckApplicability(element, property))
-                    //            result.Add(factory);
-                    //    }
-                    //}
-                    //((AdornedElement as FrameworkElement).Tag as Views.SchemaView).CurrentTool = ObjectsFactory.CreateDefaultManipulator(selObj); 
+                    
+                    Assembly archiverAssembly = this.GetType().Assembly;
+                    foreach (Type type in archiverAssembly.GetTypes())
+                    {
+                        if (type.IsSubclassOf(typeof(BaseTool))&& type.Name==(String)selObj.Tag)
+                        {
+                            BaseTool bt = (BaseTool)Activator.CreateInstance(type, new object[] { _view });
+                            _view.ActiveTool = bt;
 
-
+                        }
+                    }
                     return;
                 }
             }
@@ -145,7 +143,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             {
 
                 CaptureMouse();
-                startPos = GridManager.GetGridManagerFor(AdornedElement).GetMousePos();
+                startPos = ((Views.SchemaView)_view).GridManager.GetMousePos();
                 isDragged = true;
                 _selManeger.SelectObject(null);
 
@@ -158,16 +156,15 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
                     isSelectionMoved = true;
 
-                    movePos = GridManager.GetGridManagerFor(AdornedElement).GetMousePos();
+                    movePos = ((Views.SchemaView)_view).GridManager.GetMousePos();
                     System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.SizeAll;
                     moveUndoInfo = true;
                     if (!_selManeger.SelectedObjects.Contains(el))
                         _selManeger.SelectObject(el);
-                    foreach (var elm in _selManeger.SelectedObjects.Cast<UIElement>())
+                    /*foreach (var elm in _selManeger.SelectedObjects.Cast<FrameworkElement>())
                     {
-                        var ub = UndoRedoManager.GetUndoBufferFor(elm);
-                        ub.AddCommand(new ModifyGraphicsObject(elm));
-                    }
+                        RaiseObjectChanged(new ModifyGraphicsObject(elm));
+                    }*/
             
                 }
                 else
@@ -205,14 +202,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             
         }
 
-        public override BaseManipulator CreateToolManipulator(UIElement obj)
+        public override Type GetToolManipulator()
         {
-            return new DragResizeRotateManipulator(obj as FrameworkElement);
+            return typeof(DragResizeRotateManipulator);
         }
 
         public void MoveHelper(double delta_x, double delta_y)
         {
-            foreach (UIElement se in _selManeger.SelectedObjects)
+            foreach (FrameworkElement se in _selManeger.SelectedObjects)
             {
                 // undo
                 

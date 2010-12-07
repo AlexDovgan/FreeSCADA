@@ -14,8 +14,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 		FrameworkElement createdObject;
         DrawingVisual boundce = new DrawingVisual();
 
-        public ControlCreateTool(UIElement element)
-            : base(element)
+        public ControlCreateTool(IDocumentView view)
+            : base(view)
 		{
             if(!typeof(T).IsSubclassOf(typeof(FrameworkElement)))
                 throw new Exception();
@@ -43,10 +43,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
 			return finalSize;
 		}
-        public override BaseManipulator CreateToolManipulator(UIElement obj)
+        public override Type GetToolManipulator()
         {
-            //return ObjectsFactory.CreateDefaultManipulator(obj);
-            return new DragResizeRotateManipulator(obj);
+            return typeof(DragResizeRotateManipulator);
+
         }
 
 
@@ -54,7 +54,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             context.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 1), rect);
         }
-        protected override UIElement DrawEnded(Rect rect)
+        protected override FrameworkElement DrawEnded(Rect rect)
         {
             createdObject = (FrameworkElement)System.Activator.CreateInstance(typeof(T));
             createdObject.Opacity = 0.75;
@@ -65,6 +65,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             Canvas.SetTop(createdObject, rect.Y);
             createdObject.Width = rect.Width;
             createdObject.Height = rect.Height;
+            createdObject.Tag=this.GetType().Name;
             return createdObject;
         }
         public override Type ToolEditingType()

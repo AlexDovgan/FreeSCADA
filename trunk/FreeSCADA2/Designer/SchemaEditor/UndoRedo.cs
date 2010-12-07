@@ -2,135 +2,26 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
-using FreeSCADA.Common.Schema;
+using FreeSCADA.Common;
 using FreeSCADA.Designer.Views;
 
 
 namespace FreeSCADA.Designer
 {
-    /// <summary>
-    /// Interface for undo redo command
-    /// </summary>
-    interface IUndoCommand
-    {
-        /// <summary>
-        /// exexute command 
-        /// exexuted when comman add to undo redo buffer
-        /// </summary>
-        void Do(DocumentView doc);
-        /// <summary>
-        /// executed when undo redo buffer execute redo for document
-        /// </summary>
-        void Redo();
-        /// <summary>
-        /// executed when undo redo buffer execute undo for document
-        /// </summary>
-        void Undo();
-    }
-    static class UndoRedoManager
-    {
-        public static BaseUndoBuffer GetUndoBufferFor(UIElement el)
-        {
-            System.Windows.Controls.Canvas c = SchemaDocument.GetMainCanvas(el);
-            return (c.Tag as Views.SchemaView).UndoBuff;
-        }
-    }
-    class BaseUndoBuffer
-    {
-        DocumentView view;
-        bool documentModifiedState;
-        public event EventHandler CanExecuteChanged;
-        public void RaiseCanExecuteChanged()
-        {
-            if (CanExecuteChanged != null)
-                CanExecuteChanged(this, new EventArgs());
-        }
-
-
-        public BaseUndoBuffer(DocumentView doc)
-        {
-            view = doc;
-        }
-        public void AddCommand(IUndoCommand command)
-        {
-             redoStack.Clear();
-             command.Do(view);
-             documentModifiedState = view.IsModified;
-             view.IsModified = true;
-
-             undoStack.Push(command);
-             RaiseCanExecuteChanged();
-        }
-
-        public void UndoCommand()
-        {
-            if(undoStack.Count==0)
-                return;
-            IUndoCommand cmd = undoStack.Pop();
-            
-            try
-            {
-                cmd.Undo();
-                view.IsModified = documentModifiedState;
-                
-            }
-            finally
-            {
-                redoStack.Push(cmd);
-                RaiseCanExecuteChanged();
-              
-            }
-        }
-
-
-        public void RedoCommand()
-        {
-            if(redoStack.Count==0) 
-                return;
-            IUndoCommand cmd = redoStack.Pop();
-            try
-            {
-                cmd.Redo();
-                //if (!CanRedo()) (Env.Current.MainWindow as MainForm).redoButton.Enabled = false;
-                documentModifiedState = view.IsModified;
-                view.IsModified = true;
-
-            }
-            finally
-            {
-                undoStack.Push(cmd);
-                RaiseCanExecuteChanged();
-                //(Env.Current.MainWindow as MainForm).undoButton.Enabled = true;
-            }
-        }
-
-        public bool CanUndo()
-        {
-            return undoStack.Count > 0;
-        }
-
-        public bool CanRedo()
-        {
-            return redoStack.Count > 0;
-        }
-
-        private Stack<IUndoCommand> undoStack = new Stack<IUndoCommand>();
-        private Stack<IUndoCommand> redoStack = new Stack<IUndoCommand>();
-    }
-    
+      
     /// <summary>
     /// add graphics element command for undo redo buffer
     /// </summary>
     class AddGraphicsObject : IUndoCommand
     {
-        UIElement addedObject;
+        FrameworkElement addedObject;
         protected bool documentModifiedState;
         Views.SchemaView schemaView;
-        public AddGraphicsObject(UIElement el)
+        public AddGraphicsObject(FrameworkElement el)
         {
             addedObject = el;
         }
-        public void Do(DocumentView doc)
+        public void Do(IDocumentView doc)
         {
             if (!(doc is Views.SchemaView))
                 throw new Exception("this is not schema");
@@ -154,16 +45,16 @@ namespace FreeSCADA.Designer
     }
     class DeleteGraphicsObject : IUndoCommand
     {
-        UIElement deletedObject;
+        FrameworkElement deletedObject;
 
         protected bool documentModifiedState;
         Views.SchemaView schemaView;
 
-        public DeleteGraphicsObject(UIElement el)
+        public DeleteGraphicsObject(FrameworkElement el)
         {
             deletedObject = el;
         }
-        public void Do(DocumentView doc)
+        public void Do(IDocumentView doc)
         {
 
             if (!(doc is Views.SchemaView))
@@ -203,7 +94,7 @@ namespace FreeSCADA.Designer
 
 
         }
-        public void Do(DocumentView doc)
+        public void Do(IDocumentView doc)
         {
         
             schemaView = doc as Views.SchemaView;
@@ -284,13 +175,13 @@ namespace FreeSCADA.Designer
    // /// </summary>
    //class ChangeGraphicsObject : IUndoCommand
    // {
-   //     UIElement modifiedObject;
-   //     UIElement oldObject;
-   //     UIElement restoredObject;
+   //     FrameworkElement modifiedObject;
+   //     FrameworkElement oldObject;
+   //     FrameworkElement restoredObject;
    //     string objectCopy;
    //     SchemaDocument schemaDocument;
    //     protected bool documentModifiedState;
-   //     public ChangeGraphicsObject(UIElement old, UIElement el)
+   //     public ChangeGraphicsObject(FrameworkElement old, FrameworkElement el)
    //     {
    //         oldObject = old;
    //         modifiedObject = el;
@@ -309,7 +200,7 @@ namespace FreeSCADA.Designer
    //     public void Redo()
    //     {
 
-   //         modifiedObject = (UIElement)XamlReader.Load(new XmlTextReader(new StringReader(objectCopy)));
+   //         modifiedObject = (FrameworkElement)XamlReader.Load(new XmlTextReader(new StringReader(objectCopy)));
    //         objectCopy = XamlWriter.Save(restoredObject);
 
    //         int i = schemaDocument.MainCanvas.Children.IndexOf(restoredObject);
@@ -321,7 +212,7 @@ namespace FreeSCADA.Designer
    //     }
    //     public void Undo()
    //     {
-   //         restoredObject = (UIElement)XamlReader.Load(new XmlTextReader(new StringReader(objectCopy)));
+   //         restoredObject = (FrameworkElement)XamlReader.Load(new XmlTextReader(new StringReader(objectCopy)));
    //         objectCopy = XamlWriter.Save(modifiedObject);
 
    //         int i = schemaDocument.MainCanvas.Children.IndexOf(modifiedObject);

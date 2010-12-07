@@ -45,26 +45,28 @@ namespace FreeSCADA.Common
         /// </summary>
         public event EventHandler ObjectDeleted;
 
+        protected IDocumentView _view;
 
         /// <summary>
         /// 
         /// </summary>
         protected BaseTool()
-            : base(new UIElement())
+            : base(new FrameworkElement())
         {
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="element"></param>
-        protected BaseTool(UIElement element)
-            : base(element)
+        protected BaseTool(IDocumentView view)
+            : base(view.MainPanel)
         {
+            _view = view;
             visualChildren = new VisualCollection(this);
             DrawingVisual drawingVisual = new DrawingVisual();
             drawingVisual.Opacity = 0;
             visualChildren.Add(drawingVisual);
-
+            
         }
         /// <summary>
         /// 
@@ -97,7 +99,7 @@ namespace FreeSCADA.Common
             ((FrameworkElement)AdornedElement).Loaded += new RoutedEventHandler(BaseTool_Loaded);
             ((FrameworkElement) AdornedElement).SizeChanged += new SizeChangedEventHandler(AdornedElementSizeChanged);
             AdornerLayer.GetAdornerLayer(AdornedElement).Add(this);
-
+            _view.SelectionManager.UpdateManipulator();
         }
 
         void BaseTool_Loaded(object sender, RoutedEventArgs e)
@@ -156,6 +158,8 @@ namespace FreeSCADA.Common
         /// <param name="obj"></param>
         public void NotifyObjectCreated(UIElement obj)
         {
+
+            ((FrameworkElement)obj).Tag = this.GetType().Name;
             if (ObjectCreated != null)
                 ObjectCreated(obj, new EventArgs());
 
@@ -166,7 +170,7 @@ namespace FreeSCADA.Common
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public abstract BaseManipulator CreateToolManipulator(UIElement obj);
+        public abstract Type GetToolManipulator();
 
 
         /// <summary>

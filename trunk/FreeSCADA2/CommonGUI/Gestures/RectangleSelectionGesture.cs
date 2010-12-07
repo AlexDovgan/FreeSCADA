@@ -38,11 +38,11 @@ namespace FreeSCADA.Common.Gestures
         /// </summary>
         /// <param name="target">A FrameworkElement</param>
         /// <param name="zoom">The MapZoom object that wraps this same target object</param>
-        public RectangleSelectionGesture(FrameworkElement target, MapZoom zoom, ModifierKeys mods):base(target)
+        public RectangleSelectionGesture(IDocumentView view, MapZoom zoom, ModifierKeys mods):base(view)
         {
             _mods = mods;
-            _target = target;
-            _container = target.Parent as ScrollViewer;
+            _target = view.MainPanel;
+            _container = _target.Parent as ScrollViewer;
             if (_container == null)
             {
                 throw new ArgumentException("Target object must live in a Panel");
@@ -168,9 +168,10 @@ namespace FreeSCADA.Common.Gestures
             return _container.TransformToDescendant(_target).TransformBounds(r);
         }
 
-        public override BaseManipulator CreateToolManipulator(UIElement obj)
+        public override Type GetToolManipulator()
         {
-            throw new NotImplementedException();
+                throw new NotImplementedException();
         }
+
     }
 }

@@ -15,25 +15,39 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         
         //public DragThumb dragControl = new DragThumb();
         Rectangle dragControl = new Rectangle();
-        RotateThumb rotateTopLeft = new RotateThumb();
-        RotateThumb rotateBottomLeft = new RotateThumb();
-        RotateThumb rotateTopRight = new RotateThumb();
-        RotateThumb rotateBottomRight = new RotateThumb();
-        ResizeThumb resizeTopLeft = new ResizeThumb();
-        ResizeThumb resizeBottomLeft = new ResizeThumb();
-        ResizeThumb resizeTopRight = new ResizeThumb();
-        ResizeThumb resizeBottomRight = new ResizeThumb();
-        ResizeThumb resizeLeft = new ResizeThumb();   
-        ResizeThumb resizeRight = new ResizeThumb();
-        ResizeThumb resizeTop = new ResizeThumb();
-        ResizeThumb resizeBottom = new ResizeThumb();
-        Rectangle visualCopy = new Rectangle();
+        RotateThumb rotateTopLeft ;
+        RotateThumb rotateBottomLeft;
+        RotateThumb rotateTopRight ;
+        RotateThumb rotateBottomRight;
+        ResizeThumb resizeTopLeft ;
+        ResizeThumb resizeBottomLeft;
+        ResizeThumb resizeTopRight;
+        ResizeThumb resizeBottomRight;
+        ResizeThumb resizeLeft ;
+        ResizeThumb resizeRight ;
+        ResizeThumb resizeTop ;
+        ResizeThumb resizeBottom ;
+        Rectangle visualCopy =new Rectangle();
 
-        
-        public DragResizeRotateManipulator(UIElement element)
-            : base(element)
+
+        public DragResizeRotateManipulator(IDocumentView view, FrameworkElement el)
+            : base(view, el)
         {
+
+            rotateTopLeft = new RotateThumb(view,el);
+            rotateBottomLeft = new RotateThumb(view,el);
+            rotateTopRight = new RotateThumb(view, el);
+            rotateBottomRight = new RotateThumb(view, el);
+            resizeTopLeft = new ResizeThumb(view, el);
+            resizeBottomLeft = new ResizeThumb(view, el);
+            resizeTopRight = new ResizeThumb(view, el);
+            resizeBottomRight = new ResizeThumb(view, el);
+            resizeLeft = new ResizeThumb(view, el);
+            resizeRight = new ResizeThumb(view, el);
+            resizeTop = new ResizeThumb(view, el);
+            resizeBottom = new ResizeThumb(view, el);
             
+
 
             dragControl.VerticalAlignment = VerticalAlignment.Stretch;
             dragControl.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -142,8 +156,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         void control_DragStarted(object sender, DragStartedEventArgs e)
         {
 
-            var ub=UndoRedoManager.GetUndoBufferFor(AdornedElement);
-            ub.AddCommand(new ModifyGraphicsObject(AdornedElement));
+            RaiseObjectChanged(new ModifyGraphicsObject(AdornedElement));
             InvalidateArrange();
             
         }
@@ -208,7 +221,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         {
             base.OnMouseLeftButtonDown(e);
         }
-
+        
        
     }
 }

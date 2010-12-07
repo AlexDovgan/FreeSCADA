@@ -133,7 +133,7 @@
         &lt;/Border&gt;
       &lt;/Viewbox&gt;
       &lt;DataTemplate.Triggers&gt;
-        &lt;Trigger Property="UIElement.IsMouseOver" SourceName="bdr"&gt;
+        &lt;Trigger Property="FrameworkElement.IsMouseOver" SourceName="bdr"&gt;
           &lt;Setter Property="Panel.Background" TargetName="bdr"&gt;
             &lt;Setter.Value&gt;
               &lt;SolidColorBrush&gt;#FFD3D3D3&lt;/SolidColorBrush&gt;

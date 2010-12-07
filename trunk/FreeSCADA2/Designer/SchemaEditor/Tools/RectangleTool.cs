@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using FreeSCADA.Common;
+using FreeSCADA.Designer.SchemaEditor.Manipulators;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
@@ -12,8 +13,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     /// </summary>
     class RectangleTool : DrawTool
     {
-        public RectangleTool(UIElement element)
-            : base(element)
+        public RectangleTool(IDocumentView view)
+            : base(view)
         {
 
         }
@@ -22,7 +23,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             context.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black, 1), rect);
         }
-        protected override UIElement DrawEnded(Rect rect)
+        protected override FrameworkElement DrawEnded(Rect rect)
         {
             Rectangle recttangle = new Rectangle();
             Canvas.SetLeft(recttangle, rect.X);
@@ -38,9 +39,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             return typeof(Rectangle);
         }
-        public override BaseManipulator CreateToolManipulator(UIElement obj)
+        public override Type GetToolManipulator()
         {
-            return new Manipulators.DragResizeRotateManipulator(obj as FrameworkElement);
+            return typeof(DragResizeRotateManipulator);
+
         }
     }
 

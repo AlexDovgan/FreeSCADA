@@ -8,29 +8,27 @@ using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer.SchemaEditor
 {
-    class SchemaSelectionManager : FreeSCADA.Designer.ISelectionManager
+    class SchemaSelectionManager : ISelectionManager
     {
-        BaseManipulator manipulator;
+        BaseManipulator _manipulator;
 
-        
-
+        public Type ManipulatorType
+        {
+            get;
+            set;
+        }
         public event ObjectSelectedDelegate SelectionChanged;
 
         Views.SchemaView _view;
 
-
+        
         public List<Object> SelectedObjects
         {
             get;
             protected set;
         }
 
-        /*public static ISelectionManager GetSelectionManagerFor(UIElement el)
-        {
-            AdornerLayer al = AdornerLayer.GetAdornerLayer(el);
-            Canvas c = Common.Schema.SchemaDocument.GetMainCanvas(el);
-            return (c.Tag as Views.SchemaView).SelectionManager;
-        }*/
+    
         public SchemaSelectionManager(Views.SchemaView view)
         {
             _view = view;
@@ -59,17 +57,21 @@ namespace FreeSCADA.Designer.SchemaEditor
         
         public void UpdateManipulator()
         {
-            if (manipulator != null)
+            if (_manipulator != null)
             {
-                manipulator.Deactivate();
-                AdornerLayer.GetAdornerLayer(_view.MainPanel).Remove(manipulator);
+                _manipulator.Deactivate();
+                AdornerLayer.GetAdornerLayer(_view.MainPanel).Remove(_manipulator);
             }
             if (SelectedObjects.Count > 0)
             {
                 try
                 {
-                    AdornerLayer.GetAdornerLayer(_view.MainPanel).Add(manipulator = _view.ActiveTool.CreateToolManipulator(SelectedObjects.Cast<UIElement>().FirstOrDefault()));
-                    manipulator.Activate();
+                    _manipulator=(BaseManipulator)Activator.CreateInstance(
+                        _view.ActiveTool.GetToolManipulator(), 
+                        new object[] {_view, SelectedObjects.Cast<FrameworkElement>().FirstOrDefault()});
+                    
+                    AdornerLayer.GetAdornerLayer(_view.MainPanel).Add(_manipulator);
+                    _manipulator.Activate();
                 }catch(Exception)
                 {
                     SelectObject(null);
@@ -82,7 +84,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             if (obj == null)
                 obj = _view.MainPanel;
             if (SelectionChanged != null)
-                SelectionChanged(obj);
+                SelectionChanged(new PropertiesUtils.PropProxy( obj));
         }
     }
 }

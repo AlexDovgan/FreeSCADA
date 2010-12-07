@@ -8,19 +8,27 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace FreeSCADA.Designer.Views
 {
-	abstract class DocumentView : DockContent
+	abstract class DocumentView : DockContent, IDocumentView
 	{
 
+        ISelectionManager _selManager;
         public virtual ISelectionManager SelectionManager
         {
-            get;
-            protected set;
+            get
+            {
+                if (_selManager==null)
+                   _selManager=new DummySelectionManager();
+                return _selManager;
+            }
+            protected set { _selManager = value; }
         }
+        
         public virtual BaseTool ActiveTool
         {
             get;
             set;
         }
+
 
         public virtual  MapZoom ZoomManager
         {
@@ -39,34 +47,14 @@ namespace FreeSCADA.Designer.Views
 
         public event EventHandler IsModifiedChanged;
 
-
       
-        
-        public struct CommandInfo
-		{
-			public ICommand command;
-			public ICommandContext defaultContext;
-
-			public CommandInfo(ICommand command)
-			{
-				this.command = command;
-				this.defaultContext = null;
-			}
-
-			public CommandInfo(ICommand command, ICommandContext defaultContext)
-			{
-				this.command = command;
-				this.defaultContext = defaultContext;
-			}
-		}
-
 		public virtual List<CommandInfo> DocumentCommands
         {
             get;
             protected set;
         }
 
-        public BaseUndoBuffer UndoBuff
+        public IUndoBuffer UndoBuff
         {
             get;
             protected set;

@@ -9,10 +9,9 @@ namespace FreeSCADA.Common
     /// Base Class for manipulators
     /// 
     /// /// </summary>
-        
-    public class BaseManipulator :Adorner
-    {
-        
+
+    public class BaseManipulator : Adorner,IObjectEditor
+    {   
         /// <summary>
         /// Container for manipulator controlls
         /// </summary>
@@ -20,16 +19,20 @@ namespace FreeSCADA.Common
         /// <summary>
         /// 
         /// </summary>
-        protected System.Windows.Controls.Canvas mainCanvas;
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="element"></param>
-        public BaseManipulator(UIElement element)
-            : base(element)
+        //
+        public event ObjectChanged ObjectChangedEvent;
+
+        protected IDocumentView _view;
+
+
+        public BaseManipulator(IDocumentView view,FrameworkElement el)
+            : base(el)
         {
+            _view = view;
             if (!(AdornedElement.RenderTransform is TransformGroup))
             {
+                
                 TransformGroup t = new TransformGroup();
                 t.Children.Add(new MatrixTransform());
                 t.Children.Add(new RotateTransform());
@@ -39,7 +42,7 @@ namespace FreeSCADA.Common
             }
             this.Visibility = Visibility.Collapsed;                       
             visualChildren = new VisualCollection(this);
-            mainCanvas=Common.Schema.SchemaDocument.GetMainCanvas(AdornedElement);
+            
        
     }
         /// <summary>
@@ -73,9 +76,9 @@ namespace FreeSCADA.Common
         /// </summary>
         /// <param name="el"></param>
         /// <returns></returns>
-        public virtual bool IsSelactable(UIElement el)
+        public virtual bool IsApplicableFor(FrameworkElement el)
         {
-            return true;
+            return false;
         }
         /// <summary>
         /// 
@@ -90,6 +93,11 @@ namespace FreeSCADA.Common
 
             return new MatrixTransform();//new MatrixTransform(m); ;// //this code neded for right manipulators zooming
             
+        }
+        protected void RaiseObjectChanged(IUndoCommand cmd)
+        {
+            if (ObjectChangedEvent != null)
+                ObjectChangedEvent(cmd);
         }
      
 

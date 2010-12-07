@@ -15,22 +15,23 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
     {
         TextBox textEditor = new TextBox();
         TextBlock textBlock;
-        public TextBoxManipulator(UIElement el)
-            : base(el)
+        public TextBoxManipulator(IDocumentView view, FrameworkElement el)
+            : base(view, el)
         {
             
-            textBlock = AdornedElement as TextBlock;
-            if (textBlock == null)
-                throw new ArgumentException();
+         
         }
         public override void Activate()
         {
+            textBlock = AdornedElement as TextBlock;
+            if (textBlock == null)
+                throw new ArgumentException();
+
             textEditor.Text = textBlock.Text;
             textEditor.RenderTransform = AdornedElement.RenderTransform;
             textEditor.Focus();
             visualChildren.Add(textEditor);
-            var ub = UndoRedoManager.GetUndoBufferFor(AdornedElement);
-            ub.AddCommand(new ModifyGraphicsObject(AdornedElement));
+            RaiseObjectChanged(new ModifyGraphicsObject(AdornedElement));
             base.Activate();
         }
 
@@ -47,11 +48,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             textEditor.Arrange(new Rect(p, AdornedElement.DesiredSize));
             return finalSize;
         }
-        public override bool IsSelactable(UIElement el)
+        public override bool IsApplicableFor(FrameworkElement el)
         {
             if (el is TextBlock)
                 return true;
             return false;
         }
+        
     }
 }
