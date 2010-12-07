@@ -52,14 +52,14 @@ namespace FreeSCADA.Common.Schema
         /// <summary>
         /// Return the current Visual or null if it has not been created yet.
         /// </summary>
-        UIElement Visual { get; }
+        FrameworkElement Visual { get; }
 
         /// <summary>
         /// Create the WPF visual for this object.
         /// </summary>
         /// <param name="parent">The canvas that is calling this method</param>
         /// <returns>The visual that can be displayed</returns>
-        UIElement CreateVisual(VirtualCanvas parent);
+        FrameworkElement CreateVisual(VirtualCanvas parent);
 
         /// <summary>
         /// Dispose the WPF visual for this object.
@@ -176,7 +176,7 @@ namespace FreeSCADA.Common.Schema
             _visualPositions = null;
             _visible = Rect.Empty;
             _done = false;
-            foreach (UIElement e in Children)
+            foreach (FrameworkElement e in Children)
             {
                 IVirtualChild n = e.GetValue(VirtualChildProperty) as IVirtualChild;
                 if (n != null)
@@ -406,7 +406,7 @@ namespace FreeSCADA.Common.Schema
                 SetViewportSize(availableSize);
             }
 
-            foreach (UIElement child in this.InternalChildren)
+            foreach (FrameworkElement child in this.InternalChildren)
             {
                 IVirtualChild n = child.GetValue(VirtualChildProperty) as IVirtualChild;
                 if (n != null)
@@ -442,7 +442,7 @@ namespace FreeSCADA.Common.Schema
             }
             
 //            base.Arrange(new Rect(0, 0, Width, Height));
-            foreach (UIElement child in this.InternalChildren)
+            foreach (FrameworkElement child in this.InternalChildren)
             {
                 IVirtualChild n = child.GetValue(VirtualChildProperty) as IVirtualChild;
                 if (n != null)
@@ -651,7 +651,7 @@ namespace FreeSCADA.Common.Schema
                 return;
             }
             
-            UIElement e = child.CreateVisual(this);
+            FrameworkElement e = child.CreateVisual(this);
             e.SetValue(VirtualChildProperty, child);
             Rect bounds = child.Bounds;
             Canvas.SetLeft(e, bounds.Left);
@@ -765,7 +765,7 @@ namespace FreeSCADA.Common.Schema
                 // Iterate over the visible range of nodes and make sure they have visuals.
                 foreach (IVirtualChild n in _index.GetNodesInside(dirty))
                 {
-                    UIElement e = n.Visual;
+                    FrameworkElement e = n.Visual;
                     if (e != null)
                     {
                         Rect nrect = n.Bounds;

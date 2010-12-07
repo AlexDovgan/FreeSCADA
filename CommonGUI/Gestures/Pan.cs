@@ -35,10 +35,10 @@ namespace FreeSCADA.Common.Gestures
         /// </summary>
         /// <param name="target">The target to be panned, must live inside a container Panel</param>
         /// <param name="zoom"></param>
-        public Pan(FrameworkElement target, MapZoom zoom):base(target)
+        public Pan(IDocumentView view, MapZoom zoom):base(view)
         {
-            this._target = target;
-            this._container = target.Parent as FrameworkElement;
+            this._target = view.MainPanel;
+            this._container = _target.Parent as FrameworkElement;
             if (this._container == null) {
                 // todo: localization
                 throw new ArgumentException("Target object must live in a Panel");
@@ -116,7 +116,7 @@ namespace FreeSCADA.Common.Gestures
             _zoom.Offset = new Point(-_startTranslate.X - v.X, -_startTranslate.Y - v.Y);
             _target.InvalidateVisual();
         }
-        public override BaseManipulator CreateToolManipulator(UIElement obj)
+        public override Type GetToolManipulator()
         {
             throw new NotImplementedException();
         }

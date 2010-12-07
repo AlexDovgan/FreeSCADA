@@ -13,8 +13,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     /// 
     class EllipseTool : DrawTool
     {
-        public EllipseTool(UIElement element)
-            : base(element)
+        public EllipseTool(IDocumentView view)
+            : base(view)
         {
 
         }
@@ -27,7 +27,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
                 rect.Width / 2,
                 rect.Height / 2);
         }
-        protected override UIElement DrawEnded(Rect rect)
+        protected override FrameworkElement DrawEnded(Rect rect)
         {
             Ellipse ellipse = new Ellipse();
             Canvas.SetLeft(ellipse, rect.X);
@@ -42,9 +42,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             return typeof(Ellipse);
         }
-        public override BaseManipulator CreateToolManipulator(UIElement obj)
+        public override Type GetToolManipulator()
         {
-            return new Manipulators.DragResizeRotateManipulator(obj as FrameworkElement);
+            return typeof(Manipulators.DragResizeRotateManipulator);
+
         }
        
     }

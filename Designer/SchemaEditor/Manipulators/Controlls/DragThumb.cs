@@ -1,31 +1,23 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 {
     /// <summary>
     /// Drag controll for DragResizeRotateManipulator
     /// </summary>
-    class DragThumb : Thumb
+    class DragThumb :BaseControl 
     {
 
-        public DragThumb()
+        public DragThumb(IDocumentView view, FrameworkElement el)
+            : base(view, el)
         {
-            ThumbsResources tr = new ThumbsResources();
-            tr.InitializeComponent();
-            Resources = tr;
-           
-               
-            //base.DragDelta += new DragDeltaEventHandler(DragThumb_DragDelta);
-           
         }
-        
-
         void DragThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            FrameworkElement item = this.DataContext as FrameworkElement;
-
+            FrameworkElement item = _controlledItem;
             if (item != null)
             {
            

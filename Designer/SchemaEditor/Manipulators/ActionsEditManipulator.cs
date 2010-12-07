@@ -19,8 +19,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         BaseTool helperTool;
         
         DrawingVisual helperObject= new DrawingVisual();
-        public ActionsEditManipulator(UIElement element)
-            : base(element)
+        public ActionsEditManipulator(IDocumentView view, FrameworkElement el)
+            : base(view,el)
         {
 
             AddActionPanel.Orientation = Orientation.Vertical;
@@ -170,8 +170,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             
             if ((((RadioButton)sender).Tag as BaseAction).HelperObject == null)
             {
-                helperTool = new Tools.HelperSelectorTool((UIElement)VisualTreeHelper.GetParent(AdornedElement), AdornedElement);
-                helperTool.Activate();
+                //helperTool = new Tools.HelperSelectorTool((FrameworkElement)VisualTreeHelper.GetParent(AdornedElement), AdornedElement);
+                //helperTool.Activate();
               //  helperTool.ObjectSelected += helperSelected;
             }
             else 
@@ -239,8 +239,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                         break;
                 }
 
-                aligmentRect.X = mainCanvas.TranslatePoint(aligmentRect.TopLeft, this).X;
-                aligmentRect.Y = mainCanvas.TranslatePoint(aligmentRect.TopLeft, this).Y;
+                aligmentRect.X = _view.MainPanel.TranslatePoint(aligmentRect.TopLeft, this).X;
+                aligmentRect.Y = _view.MainPanel.TranslatePoint(aligmentRect.TopLeft, this).Y;
 
                 control.Arrange(aligmentRect);
             }

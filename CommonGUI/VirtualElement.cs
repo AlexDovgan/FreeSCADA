@@ -11,9 +11,9 @@ namespace FreeSCADA.Common.Schema
     public class VirtualElement : IVirtualChild
     {
         Rect _bounds;
-        UIElement _visual = null;
+        FrameworkElement _visual = null;
         public event EventHandler BoundsChanged;
-        UIElement _el;
+        FrameworkElement _el;
         static int created = 0;
         static int disposed = 0;
         public VirtualElement(FrameworkElement el)
@@ -29,12 +29,12 @@ namespace FreeSCADA.Common.Schema
 
 
 
-        public UIElement Visual
+        public FrameworkElement Visual
         {
             get { return _visual; }
         }
 
-        public UIElement CreateVisual(VirtualCanvas parent)
+        public FrameworkElement CreateVisual(VirtualCanvas parent)
         {
             if (_visual == null)
             {

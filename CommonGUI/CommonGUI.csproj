@@ -80,12 +80,18 @@
   <ItemGroup>
     <Compile Include="BaseManipulator.cs" />
     <Compile Include="BaseTool.cs" />
+    <Compile Include="BaseUndoBuffer.cs" />
     <Compile Include="Gestures\AutoScroll.cs" />
     <Compile Include="Gestures\ExponentialAnimation.cs" />
     <Compile Include="Gestures\MapZoom.cs" />
     <Compile Include="Gestures\Pan.cs" />
     <Compile Include="Gestures\RectangleSelectionGesture.cs" />
     <Compile Include="Gestures\SelectionRectVisual.cs" />
+    <Compile Include="IBaseUndoBuffer.cs" />
+    <Compile Include="IDocumentView.cs" />
+    <Compile Include="IObjectEditor.cs" />
+    <Compile Include="ISelectionManager.cs" />
+    <Compile Include="IUndoCommand.cs" />
     <Compile Include="PerfTimer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Actions\ActionsCollection.cs" />

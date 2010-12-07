@@ -50,14 +50,14 @@ namespace FreeSCADA.Designer.SchemaEditor
             RegisterAttribute<AnimatedImage>(inst);
            
         }
-        public static UIElement FindTopParentUnder(DependencyObject c, DependencyObject el)
+        public static FrameworkElement FindTopParentUnder(DependencyObject c, DependencyObject el)
         {
             DependencyObject top = el;
             while (VisualTreeHelper.GetParent(top) != c)
             {
                 top = VisualTreeHelper.GetParent(top);  
             }
-            return top as UIElement;
+            return top as FrameworkElement;
         }
         
 
@@ -155,7 +155,7 @@ namespace FreeSCADA.Designer.SchemaEditor
 
 
 
-            foreach (UIElement ch in view.SelectionManager.SelectedObjects)
+            foreach (FrameworkElement ch in view.SelectionManager.SelectedObjects)
             {
                 //tool.NotifyObjectDeleted(ch);
                 Vector off = VisualTreeHelper.GetOffset(ch);
@@ -175,10 +175,10 @@ namespace FreeSCADA.Designer.SchemaEditor
             
         }
 
-        public static Rect CalculateBounds(List<UIElement> elList, UIElement parent)
+        public static Rect CalculateBounds(List<UIElement> elList, UIElement  parent)
         {
             Rect boundce = Rect.Empty;
-            foreach (UIElement el in elList)
+            foreach (FrameworkElement el in elList)
             {
                 Rect r;
                 if (el is Shape)
@@ -318,10 +318,10 @@ namespace FreeSCADA.Designer.SchemaEditor
             }
             else
                 dobj.SetValue(dp, value);
-            //if (dobj is UIElement)
+            //if (dobj is FrameworkElement)
             //{
-            //    (dobj as UIElement).InvalidateVisual();
-            //    AdornerLayer.GetAdornerLayer(dobj as UIElement).InvalidateVisual();
+            //    (dobj as FrameworkElement).InvalidateVisual();
+            //    AdornerLayer.GetAdornerLayer(dobj as FrameworkElement).InvalidateVisual();
             //}
 
         }

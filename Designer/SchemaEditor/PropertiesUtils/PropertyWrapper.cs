@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {
@@ -8,11 +9,13 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 	/// This class wraps given property. Almost all calls go directly to original property, but some of 
 	/// them (customization of user visible strings) are handled by this class.
 	/// </summary>
-	public class PropertyWrapper : PropertyDescriptor
+	public class PropertyWrapper : PropertyDescriptor,IObjectEditor
 	{
 		object controlledObject;
 		PropertyDescriptor controlledProperty;
 		PropertyInfo propertyInfo;
+        public event ObjectChanged ObjectChangedEvent;
+
         /// <summary>
         /// 
         /// </summary>
@@ -151,8 +154,8 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 		{
 			//TODO: probably we need some type convertor here for "compound" properties
 
-            var ub = UndoRedoManager.GetUndoBufferFor(controlledObject as System.Windows.UIElement);
-            ub.AddCommand(new ModifyGraphicsObject(controlledObject as System.Windows.UIElement));
+            if(ObjectChangedEvent!=null)
+                ObjectChangedEvent(new ModifyGraphicsObject(controlledObject as System.Windows.FrameworkElement));
             
             if (controlledObject is System.Windows.DependencyObject && DependencyPropertyDescriptor.FromProperty(controlledProperty) != null)
                 EditorHelper.SetDependencyProperty(controlledObject as System.Windows.DependencyObject, DependencyPropertyDescriptor.FromProperty(controlledProperty).DependencyProperty, value);

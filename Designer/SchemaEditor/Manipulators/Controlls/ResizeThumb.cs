@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 {
@@ -10,30 +11,16 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
     /// resize controll dor DragResizeRotateManipulator
     /// </summary>
     /// 
-    class ResizeThumb : Thumb
+    class ResizeThumb : BaseControl
     {
         private double angle;
         private Point transformOrigin;
-        private FrameworkElement controledItem;
-        private FrameworkElement ControledItem
-        {
-            get
-            {
-                if (controledItem == null)
-                {
-                    controledItem = this.DataContext as FrameworkElement;
-                }
-                return controledItem;
-            }
-        }
+        
 
-        public ResizeThumb()
+        public ResizeThumb(IDocumentView view,FrameworkElement el):base(view,el)
         {
             Width = 10;
             Height = 10;
-            ThumbsResources tr = new ThumbsResources();
-            tr.InitializeComponent();
-            Resources = tr;
                   
             base.DragStarted += new DragStartedEventHandler(ResizeThumb_DragStarted);
             base.DragDelta += new DragDeltaEventHandler(ResizeThumb_DragDelta);
@@ -41,47 +28,47 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 
         void ResizeThumb_DragStarted(object sender, DragStartedEventArgs e)
         {
-            if (ControledItem != null)
+            if (_controlledItem != null)
             {
-                transformOrigin = ControledItem.RenderTransformOrigin;
+                transformOrigin = _controlledItem.RenderTransformOrigin;
 
-                RotateTransform rotateTransform = (ControledItem.RenderTransform as TransformGroup).Children[1] as RotateTransform;
+                RotateTransform rotateTransform = (_controlledItem.RenderTransform as TransformGroup).Children[1] as RotateTransform;
                 if (rotateTransform != null)
                     angle = rotateTransform.Angle * Math.PI / 180.0;   //convert degrees to radians
                 else
                     angle = 0.0d;
             }
-
+            
         }
 
         void ResizeThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            if (ControledItem != null)
+            if (_controlledItem != null)
             {
                 double deltaVertical = 0, deltaHorizontal = 0;
                 Point dragDelta = new Point(e.HorizontalChange, e.VerticalChange);
-                GridManager.GetGridManagerFor(controledItem).AdjustPointToGrid(ref dragDelta);
+                dragDelta =GridManager.AdjustPointToGrid(dragDelta);
 
-                Matrix m =((Transform)this.TransformToVisual(ControledItem)).Value;
+                Matrix m =((Transform)this.TransformToVisual(_controlledItem)).Value;
                 m.OffsetX = 0;
                 m.OffsetY = 0;
                 System.Windows.Media.Transform t = new MatrixTransform(m);
                 dragDelta = t.Transform(dragDelta);
 
-                Rect r = new Rect(Canvas.GetLeft(ControledItem), Canvas.GetTop(ControledItem),
-                                ControledItem.Width,ControledItem.Height );
-                //GridManager.GetGridManagerFor(controledItem).AdjustRectToGrid(ref r);                
+                Rect r = new Rect(Canvas.GetLeft(_controlledItem), Canvas.GetTop(_controlledItem),
+                                _controlledItem.Width, _controlledItem.Height);
+                //r = GridManager.AdjustRectToGrid(r);                
 
                 switch (base.VerticalAlignment)
                 {
                     case System.Windows.VerticalAlignment.Bottom:
-                        deltaVertical = Math.Min(-dragDelta.Y, ControledItem.ActualHeight - Height);
+                        deltaVertical = Math.Min(-dragDelta.Y, _controlledItem.ActualHeight - Height);
 
                         r.Height -= deltaVertical;
                         break;
                     case System.Windows.VerticalAlignment.Top:
-                        deltaVertical = Math.Min(dragDelta.Y, ControledItem.ActualHeight - Height);
-                        Point p = ControledItem.RenderTransform.Transform(new Point(0, deltaVertical));
+                        deltaVertical = Math.Min(dragDelta.Y, _controlledItem.ActualHeight - Height);
+                        Point p = _controlledItem.RenderTransform.Transform(new Point(0, deltaVertical));
                         r.Y += p.Y;
                         r.X += p.X;
                         r.Height -= deltaVertical;
@@ -93,31 +80,31 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
                 switch (base.HorizontalAlignment)
                 {
                     case System.Windows.HorizontalAlignment.Left:
-                        deltaHorizontal = Math.Min(dragDelta.X, ControledItem.ActualWidth - Width);
-                        Point p = ControledItem.RenderTransform.Transform(new Point(deltaHorizontal, 0));
+                        deltaHorizontal = Math.Min(dragDelta.X, _controlledItem.ActualWidth - Width);
+                        Point p = _controlledItem.RenderTransform.Transform(new Point(deltaHorizontal, 0));
                         r.Y += p.Y;
                         r.X += p.X;
                         r.Width -= deltaHorizontal;
                         break;
                     case System.Windows.HorizontalAlignment.Right:
-                        deltaHorizontal = Math.Min(-dragDelta.X, ControledItem.ActualWidth - Width);
+                        deltaHorizontal = Math.Min(-dragDelta.X, _controlledItem.ActualWidth - Width);
                         r.Width -= deltaHorizontal;
                         break;
                     default:
                         break;
                 }
                 Point sizeDelta = new Point(deltaHorizontal, deltaVertical);
-                Point sizeDeltaTrans = ControledItem.RenderTransform.Transform(sizeDelta);
+                Point sizeDeltaTrans = _controlledItem.RenderTransform.Transform(sizeDelta);
                 Vector v = sizeDelta - sizeDeltaTrans;
 
-                r.X = r.X + v.X * controledItem.RenderTransformOrigin.X;
-                r.Y = r.Y + v.Y * controledItem.RenderTransformOrigin.Y;
+                r.X = r.X + v.X * _controlledItem.RenderTransformOrigin.X;
+                r.Y = r.Y + v.Y * _controlledItem.RenderTransformOrigin.Y;
 
 
-                EditorHelper.SetDependencyProperty(ControledItem, Canvas.LeftProperty, r.X);
-                EditorHelper.SetDependencyProperty(ControledItem, Canvas.TopProperty, r.Y);
-                EditorHelper.SetDependencyProperty(ControledItem, FrameworkElement.WidthProperty, r.Width);
-                EditorHelper.SetDependencyProperty(ControledItem, FrameworkElement.HeightProperty, r.Height);
+                EditorHelper.SetDependencyProperty(_controlledItem, Canvas.LeftProperty, r.X);
+                EditorHelper.SetDependencyProperty(_controlledItem, Canvas.TopProperty, r.Y);
+                EditorHelper.SetDependencyProperty(_controlledItem, FrameworkElement.WidthProperty, r.Width);
+                EditorHelper.SetDependencyProperty(_controlledItem, FrameworkElement.HeightProperty, r.Height);
                
 
             }

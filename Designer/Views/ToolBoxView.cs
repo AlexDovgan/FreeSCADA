@@ -13,6 +13,7 @@ namespace FreeSCADA.Designer.Views
     internal class ToolBoxView : ToolWindow
     {
         ToolBox _toolBox;
+        ToolBoxTab _oldTab;
         public ToolBoxView()
         {
             TabText = "ToolBox";
@@ -48,23 +49,33 @@ namespace FreeSCADA.Designer.Views
             
             _toolBox.ItemSelectionChanged += new ItemSelectionChangedHandler(ToolChanged);
             _toolBox.TabSelectionChanged += new TabSelectionChangedHandler(ToolChanged);
+            /*if (command.IsActive)
+            {
+                
+                tbi.Selected = true;
+                tbt.Selected = true;
+            }
+            else
+            {
+                 tbi.Selected = false;
+                 tbt.Selected = false;
+            }*/
 
-
+            
             for (int i = 0; i < _toolBox.Tabs.Count; i++)
                 for (int j = 0; j < _toolBox.Tabs[i].ItemCount; j++)
                     if (((SchemaEditor.SchemaCommands.ToolCommand)_toolBox.Tabs[i][j].Object).IsActive)
                     {
-                        _toolBox.Tabs[i][j].Selected = true;
                         _toolBox.Tabs[i].Selected = true;
+                        _toolBox.Tabs[i][j].Selected = true;
                     }
                     else
                     {
-                            _toolBox.Tabs[i][j].Selected = false;
-                            _toolBox.Tabs[i].Selected = false;
-                       
+                        _toolBox.Tabs[i].Selected = false;
+                        _toolBox.Tabs[i][j].Selected = false;
                     }
-                
-
+            
+            _toolBox.Update();
         }
         public void DeleteTool(ICommand cmd)
         {
@@ -89,22 +100,20 @@ namespace FreeSCADA.Designer.Views
 
         void ToolChanged(object sender, EventArgs e)
         {
-
             if (sender is ToolBoxTab)
             {
                 var tbt = (ToolBoxTab)sender;
                 if (tbt.SelectedItem != null && tbt.SelectedItem.Object != null)
                     ((ICommand)tbt.SelectedItem.Object).Execute();
-            }
-            else if (sender is ToolBoxItem)
+            }else 
+            if (sender is ToolBoxItem)
             {
                 var tbi = (ToolBoxItem)sender;
                 if (tbi.Selected && tbi.Object != null)
                     ((ICommand)tbi.Object).Execute();
-
             }
+            
         }
-
 
         void AddToolBox()
         {

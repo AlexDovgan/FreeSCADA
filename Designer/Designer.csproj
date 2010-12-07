@@ -48,6 +48,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\DataConverters\Kent.Boogaart.Converters.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\EntLib\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\EntLib\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -108,12 +116,13 @@
     <Compile Include="Dialogs\RenameSchemaForm.Designer.cs">
       <DependentUpon>RenameSchemaForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="DummySelectionManager.cs" />
     <Compile Include="HelpCommands.cs" />
     <Compile Include="SchemaEditor\BindingSerializing.cs" />
     <Compile Include="SchemaEditor\EditorHelpers.cs" />
     <Compile Include="SchemaEditor\GridManager.cs" />
-    <Compile Include="SchemaEditor\ISelectionManager.cs" />
     <Compile Include="SchemaEditor\Manipulators\ActionsEditManipulator.cs" />
+    <Compile Include="SchemaEditor\Manipulators\Controlls\BaseControl.cs" />
     <Compile Include="SchemaEditor\Manipulators\Controlls\PointDragThumb.cs" />
     <Compile Include="SchemaEditor\Manipulators\PolylineEditManipulantor.cs" />
     <Compile Include="SchemaEditor\Manipulators\TextBoxManipulator.cs" />

@@ -147,40 +147,25 @@ namespace FreeSCADA.Designer.SchemaEditor
         
         private Vector delta = new Vector();
         bool snapActive = false;
-        /// <summary>
-        /// return grid manager for any object belong to canvas
-        /// </summary>
-        /// <param name="el">any uielement belonged to canvas</param>
-        /// <returns>GridManager instance registerd as adorner</returns>
 
-        public static GridManager GetGridManagerFor(UIElement el)
-        {
-            AdornerLayer al = AdornerLayer.GetAdornerLayer(el);
-            Canvas c = Common.Schema.SchemaDocument.GetMainCanvas(el);
-            if (al.GetAdorners(c) != null)
-                foreach (Adorner ad in al.GetAdorners(c))
-                    if (ad is GridManager)
-                        return ad as GridManager;
-            GridManager gm = new GridManager(c);
-            al.Add(gm);
-            return gm;
-
-        }
         /// <summary>
         /// object can be constructed only with calling  GetGridManagerFor
         /// </summary>
         /// <param name="el"></param>
-        protected GridManager(Canvas el)
+        public GridManager(Panel el)
             : base(el)
         {
+            Canvas c = (Canvas)el;
             if (el.ReadLocalValue(GridOnProperty) == DependencyProperty.UnsetValue)
-                SetGridOn(el, true);
+                SetGridOn(c, true);
             if (el.ReadLocalValue(GridDeltaProperty) == DependencyProperty.UnsetValue)
-                SetGridDelta(el, 10.0);
+                SetGridDelta(c, 10.0);
             if (el.ReadLocalValue(ShowGridProperty) == DependencyProperty.UnsetValue)
-                SetShowGrid(el, true);
+                SetShowGrid(c, true);
             DependencyPropertyDescriptor.FromProperty(ShowGridProperty, typeof(Canvas)).AddValueChanged(el, PropertyChanged);
             DependencyPropertyDescriptor.FromProperty(GridDeltaProperty, typeof(Canvas)).AddValueChanged(el, PropertyChanged);
+            AdornerLayer al = AdornerLayer.GetAdornerLayer(el);
+            al.Add(this);
             //AdornerLayer.GetAdornerLayer(AdornedElement).MouseMove += new MouseEventHandler(GridManager_MouseMove);
         }
         /// <summary>
@@ -193,22 +178,21 @@ namespace FreeSCADA.Designer.SchemaEditor
             
             Point pos = e.GetPosition(AdornedElement);
             Point oldPos = pos;
-            GridManager.GetGridManagerFor(AdornedElement).AdjustPointToGrid(ref pos);
-            delta = (oldPos - pos);
+            pos=AdjustPointToGrid(pos);
+            delta += (oldPos - pos);
             if (!snapActive&& (Math.Abs(delta.X) > GridDelta / 3 || Math.Abs(delta.Y) > GridDelta / 3 ))
             {
                 snapActive = true;
+                
             }
             else if (snapActive && (Math.Abs(delta.X) < GridDelta / 3 || Math.Abs(delta.Y) < GridDelta / 3))
             {
-                GridManager.GetGridManagerFor(AdornedElement).AdjustPointToGrid(ref pos);
+                pos=AdjustPointToGrid(pos);
                 pos = PointToScreen(pos);
+                delta.X = 0; delta.Y = 0;
                 System.Windows.Forms.Cursor.Position = new System.Drawing.Point((int)pos.X, (int)pos.Y);
                 snapActive = false;
-
             }
-
-
         }
 
         private Brush CreateGridBrush()
@@ -275,20 +259,21 @@ namespace FreeSCADA.Designer.SchemaEditor
         public Point GetMousePos()
         {
             Point pos = Mouse.GetPosition(AdornedElement);
-            AdjustPointToGrid(ref pos);
-            return pos;
+
+            return AdjustPointToGrid(pos);
         }
         /// <summary>
         /// Adjusting point to grid 
         /// </summary>
         /// <param name="point">Point reference</param>
 
-        public void AdjustPointToGrid(ref Point point)
+        public Point AdjustPointToGrid(Point point)
         {
             if (!GridOn)
-                return;
+                return point;
             point.X = Math.Round(point.X / GridDelta, 0) * GridDelta;
             point.Y = Math.Round(point.Y / GridDelta, 0) * GridDelta;
+            return point;
         }
         /// <summary>
         /// adjucting size to grid 
@@ -306,22 +291,14 @@ namespace FreeSCADA.Designer.SchemaEditor
         /// adjusting rectangle to grid
         /// </summary>
         /// <param name="rect">Rect reference</param>
-        public void AdjustRectToGrid(ref Rect rect)
+        public Rect AdjustRectToGrid(Rect rect)
         {
             if (!GridOn)
-                return;
+                return rect;
             Point p1 = new Point(rect.X, rect.Y);
             Point p2 = new Point(rect.X + rect.Width, rect.Y + rect.Height);
             //Point p3 = p1;
-
-            AdjustPointToGrid(ref p1);
-
-            //Vector v = p3 - p1;
-            //p2 = p2 - v;
-
-            AdjustPointToGrid(ref p2);
-
-            rect = new Rect(p1, p2);
+            return  new Rect(AdjustPointToGrid(p1), AdjustPointToGrid(p2));
         }
 
 

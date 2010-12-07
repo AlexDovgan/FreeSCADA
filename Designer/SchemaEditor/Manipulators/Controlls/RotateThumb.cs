@@ -3,29 +3,20 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
-
+using FreeSCADA.Common;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 {
     /// <summary>
     /// Rotating controll for DragResizeRotateManipulator
     /// </summary>
-    public class RotateThumb : Thumb
+    public class RotateThumb : BaseControl
     {
         double initialAngle;
         private Vector startVector;
         private Point centerPoint;
 
-        private FrameworkElement controlledItem;
-        private FrameworkElement Controlledtem
-        {
-            get
-            {
-                controlledItem = this.DataContext as FrameworkElement;;
-                
-                return controlledItem;
-            }
-        }
+
         private RotateTransform rotateTransform;
         private MatrixTransform matrixTransform;
 
@@ -33,28 +24,26 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
         {
             get
             {
-                return (rotateTransform = (Controlledtem.RenderTransform as TransformGroup).Children[1] as RotateTransform);
-         
+                return (rotateTransform = (_controlledItem.RenderTransform as TransformGroup).Children[1] as RotateTransform);
+
             }
         }
         private MatrixTransform ItemMatrixTransform
         {
             get
             {
-                return (matrixTransform = (Controlledtem.RenderTransform as TransformGroup).Children[0] as MatrixTransform);
+                return (matrixTransform = (_controlledItem.RenderTransform as TransformGroup).Children[0] as MatrixTransform);
 
             }
         }
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-        public RotateThumb()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public RotateThumb(IDocumentView view, FrameworkElement el)
+            : base(view,el)
         {
-            ThumbsResources tr = new ThumbsResources();
-            tr.InitializeComponent();
-            Resources = tr;
-           
+
             base.DragDelta += new DragDeltaEventHandler(RotateThumb_DragDelta);
             base.DragStarted += new DragStartedEventHandler(RotateThumb_DragStarted);
             base.DragCompleted += new DragCompletedEventHandler(RotateThumb_DragCompleted);
@@ -62,54 +51,50 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
             Height = 50;
 
         }
-        
+
         void RotateThumb_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            
+
         }
 
         void RotateThumb_DragStarted(object sender, DragStartedEventArgs e)
         {
-            Canvas canvas = VisualTreeHelper.GetParent(Controlledtem) as Canvas;
-            if (Controlledtem != null && canvas != null)
-            {
-                // the RenderTransformOrigin property of DesignerItem defines
-                // transformation center relative to its bounds
-              
-                centerPoint = Controlledtem.TranslatePoint(
-                    new Point(Controlledtem.DesiredSize.Width * Controlledtem.RenderTransformOrigin.X,
-                              Controlledtem.DesiredSize.Height * Controlledtem.RenderTransformOrigin.Y),
-                               canvas);
-            
-            
-                // calculate startVector, that is the vector from centerPoint to startPoint
-                Point startPoint = GridManager.GetGridManagerFor(controlledItem).GetMousePos();
-                startVector = Point.Subtract(startPoint, centerPoint);
+            Canvas canvas = _view.MainPanel as Canvas;
+            // the RenderTransformOrigin property of DesignerItem defines
+            // transformation center relative to its bounds
 
-                // check if the DesignerItem already has a RotateTransform set ...
-                initialAngle = ItemRotateTransform.Angle;
-              
-            }
+            centerPoint = _controlledItem.TranslatePoint(
+                new Point(_controlledItem.DesiredSize.Width * _controlledItem.RenderTransformOrigin.X,
+                          _controlledItem.DesiredSize.Height * _controlledItem.RenderTransformOrigin.Y),
+                           canvas);
+
+
+            // calculate startVector, that is the vector from centerPoint to startPoint
+            Point startPoint = GridManager.GetMousePos();
+            startVector = Point.Subtract(startPoint, centerPoint);
+
+            // check if the DesignerItem already has a RotateTransform set ...
+            initialAngle = ItemRotateTransform.Angle;
+
+
         }
 
         void RotateThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            Canvas canvas = VisualTreeHelper.GetParent(Controlledtem) as Canvas;
+            Canvas canvas = _view.MainPanel as Canvas;
 
-            if (Controlledtem != null && canvas != null)
-            {
-                // calculate deltaVector, that is the vector from centerPoint to current mouse position                
-                Point currentPoint = GridManager.GetGridManagerFor(controlledItem).GetMousePos();
-                Vector deltaVector = Point.Subtract(currentPoint, centerPoint);
+            // calculate deltaVector, that is the vector from centerPoint to current mouse position                
+            Point currentPoint = GridManager.GetMousePos();
+            Vector deltaVector = Point.Subtract(currentPoint, centerPoint);
 
-                //calculate the angle between startVector and dragVector
-                double angle = Vector.AngleBetween(startVector, deltaVector);
+            //calculate the angle between startVector and dragVector
+            double angle = Vector.AngleBetween(startVector, deltaVector);
 
-                // and update the transformation
-                EditorHelper.SetDependencyProperty(ItemRotateTransform, RotateTransform.AngleProperty, initialAngle + Math.Round(angle, 0));
+            // and update the transformation
+            EditorHelper.SetDependencyProperty(ItemRotateTransform, RotateTransform.AngleProperty, initialAngle + Math.Round(angle, 0));
 
-                //ItemRotateTransform.Angle = initialAngle + Math.Round(angle, 0);
-           }
+            //ItemRotateTransform.Angle = initialAngle + Math.Round(angle, 0);
+
         }
     }
 }

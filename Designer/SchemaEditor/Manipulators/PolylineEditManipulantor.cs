@@ -14,19 +14,20 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
     class PolylineEditManipulantor : BaseManipulator
     {
         private Polyline _poly;
-        public PolylineEditManipulantor(UIElement el)
-            : base(el)
+        public PolylineEditManipulantor(IDocumentView view,FrameworkElement el)
+            : base(view,el)
         {
-            _poly = AdornedElement as Polyline;
-            if (_poly==null)
-                throw new ArgumentException();
+            
         }
         public override void Activate()
         {
-            
+            _poly = AdornedElement as Polyline;
+            if (_poly == null)
+                throw new ArgumentException();
+
             foreach (var p in _poly.Points)
             {
-                var pd = new PointDragThumb();
+                var pd = new PointDragThumb(_view,AdornedElement as FrameworkElement);
                 pd.DragStarted += PointDragStarted;
                 pd.DragDelta += PointDragDelta;
                 pd.PreviewMouseLeftButtonUp += OnPreviewMouseLeftButtonUp;
@@ -38,7 +39,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 var m = _poly.GeometryTransform.Value;
                
                 var p = m.Transform(_poly.Points[i]);
-                p = _poly.TranslatePoint(p,mainCanvas);
+                p = _poly.TranslatePoint(p,_view.MainPanel);
                 _poly.Points[i] = p;
             }
             _poly.Stretch = Stretch.None;
@@ -61,7 +62,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             
             if(_poly==null)
                 return;
-            var gridMan=GridManager.GetGridManagerFor(AdornedElement);
+            var gridMan = ((Views.SchemaView)_view).GridManager;
             for (int i = 0; i < _poly.Points.Count - 1; i++)
             {
                 // Hit test
@@ -146,8 +147,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         }
         void PointDragStarted(object sender, DragStartedEventArgs e)
         {
-            var ub = UndoRedoManager.GetUndoBufferFor(AdornedElement);
-            ub.AddCommand(new ModifyGraphicsObject(AdornedElement));
+
+            RaiseObjectChanged( new ModifyGraphicsObject(AdornedElement));
         }   
         void PointDragDelta(object sender, DragDeltaEventArgs e)
         {
@@ -162,7 +163,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             p.X += dragDelta.X;
             p.Y += dragDelta.Y;
             p = this.TranslatePoint(p, _poly);
-            GridManager.GetGridManagerFor(AdornedElement).AdjustPointToGrid(ref p);
+            //GridManager.GetGridManagerFor(AdornedElement).AdjustPointToGrid(ref p);
             _poly.Points[visualChildren.IndexOf(sender as PointDragThumb)] = p;
            
             InvalidateArrange();
@@ -195,7 +196,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             return finalSize;
         }
 
-        public override bool IsSelactable(UIElement el)
+        public override bool IsApplicableFor(FrameworkElement el)
         {
             if (el is Polyline)
                 return true;
@@ -205,13 +206,12 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         private void AddThumb(Point p)
         {
             
-            var pd = new PointDragThumb();
+            var pd = new PointDragThumb(_view,AdornedElement as FrameworkElement);
             pd.DragDelta += PointDragDelta;
             pd.PreviewMouseLeftButtonUp += OnPreviewMouseLeftButtonUp;
             visualChildren.Add(pd);
             _poly.UpdateLayout();
         }
-
-        
+       
     }
 }

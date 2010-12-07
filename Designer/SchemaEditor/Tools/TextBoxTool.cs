@@ -14,8 +14,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         bool isDragged;
         DrawingVisual objectPrview = new DrawingVisual();
 
-        public TextBoxTool(UIElement element)
-            : base(element)
+        public TextBoxTool(IDocumentView view)
+            : base(view)
         {
 
             objectPrview.Opacity = 0.5;
@@ -29,7 +29,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
 
             if (isDragged)
             {
-                Vector v = GridManager.GetGridManagerFor(AdornedElement).GetMousePos() - startPos;
+                Vector v = ((Views.SchemaView)_view).GridManager.GetMousePos() - startPos;
                 Point rectStart;
                 DrawingContext drawingContext = objectPrview.RenderOpen();
                 if ((System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Control) != 0)
@@ -83,15 +83,15 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
             if (!e.Handled)
             {
                 CaptureMouse();
-                startPos = GridManager.GetGridManagerFor(AdornedElement).GetMousePos();
+                startPos = ((Views.SchemaView)_view).GridManager.GetMousePos();
                 isDragged = true;
             }
 
             e.Handled = false;
         }
-        public override BaseManipulator CreateToolManipulator(UIElement obj)
+        public override Type GetToolManipulator()
         {
-            return new Manipulators.TextBoxManipulator(obj);
+            return typeof(Manipulators.TextBoxManipulator);
         }
         public override Type ToolEditingType()
         {

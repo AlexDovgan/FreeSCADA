@@ -42,14 +42,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// Constructor
         /// </summary>
         /// <param name="element"></param>
-        public DrawTool(UIElement element)
-            : base(element)
+        public DrawTool(IDocumentView view)
+            : base(view)
         {
             
             objectPrview.Opacity = 0.5;
             visualChildren.Add(objectPrview);
 
-            gridManager = GridManager.GetGridManagerFor(element);
+            gridManager = ((Views.SchemaView)_view).GridManager;
         }
         /// <summary>
         /// 
@@ -109,7 +109,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
              {
                 if (Math.Max(rect.Width, rect.Height) > 2.0)
                 {
-                    UIElement uie = DrawEnded(rect);
+                    FrameworkElement uie = DrawEnded(rect);
                     NotifyObjectCreated(uie);
               
                 }
@@ -148,7 +148,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         /// </summary>
         /// <param name="rect"></param>
         /// <returns></returns>
-        protected abstract UIElement DrawEnded(Rect rect);
+        protected abstract FrameworkElement DrawEnded(Rect rect);
     }
 
 }

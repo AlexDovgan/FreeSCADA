@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System;
 using System.Windows.Input;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
 using FreeSCADA.Common;
@@ -8,14 +9,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     class ActionEditTool:BaseTool
     {
         
-        public ActionEditTool(UIElement elemnet)
-            : base(elemnet)
+        public ActionEditTool(IDocumentView view)
+            : base(view)
         {
             
         }
-        public  override BaseManipulator CreateToolManipulator(UIElement obj)
+        public override Type GetToolManipulator()
         {
-            return new ActionsEditManipulator(obj);
+            return typeof(ActionsEditManipulator);
             
         }
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)

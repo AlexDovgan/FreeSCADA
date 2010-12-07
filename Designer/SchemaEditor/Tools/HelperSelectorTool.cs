@@ -1,11 +1,12 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using FreeSCADA.Common;
-
+using FreeSCADA.Designer.SchemaEditor.Manipulators;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {
@@ -13,11 +14,11 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
     {
         DrawingVisual objectPrview = new DrawingVisual();
 
-        UIElement helperFor;
-        public HelperSelectorTool(UIElement element,UIElement helperfor)
-            : base(element)
+        FrameworkElement helperFor;
+        public HelperSelectorTool(IDocumentView view)
+            : base(view)
         {
-            helperFor = helperfor;
+            //helperFor = helperfor;
             visualChildren.Add(objectPrview);
         }
 
@@ -76,9 +77,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             //SelectedObject = null;
         }
-        public override BaseManipulator CreateToolManipulator(UIElement obj)
+        public override Type GetToolManipulator()
         {
-            return null;
+            return typeof(DragResizeRotateManipulator);
+
         }
         protected Shape ValidateMousePos(Point p)
         {

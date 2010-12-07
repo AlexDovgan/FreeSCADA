@@ -12,7 +12,6 @@ using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.SchemaEditor;
 using FreeSCADA.Designer.SchemaEditor.PropertiesUtils;
 using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
-
 using FreeSCADA.Interfaces;
 
 
@@ -28,8 +27,13 @@ namespace FreeSCADA.Designer.Views
 
         BaseTool _activeTool;
         Type _defaultTool = typeof(SelectionTool);
+        //temp solution
+        public GridManager GridManager
+        {
+            get;
+            set;
+        }
 
-        GridManager _gridManger;
 
         ContextMenu contextMenu = new ContextMenu();
 
@@ -39,6 +43,7 @@ namespace FreeSCADA.Designer.Views
         #endregion
 
         #region properties
+      
         public TextBox XamlView
         {
             get;
@@ -63,7 +68,7 @@ namespace FreeSCADA.Designer.Views
             {
                 if (_activeTool == null)
 
-                    ActiveTool = new SelectionTool(MainPanel,SelectionManager);
+                    ActiveTool = new SelectionTool(this);
 
                 return _activeTool;
 
@@ -84,7 +89,6 @@ namespace FreeSCADA.Designer.Views
                     _activeTool.ToolFinished += ActiveToolToolFinished;
                     _activeTool.ObjectCreated += ActiveToolObjectCreated;
                     _activeTool.Activate();
-                    SelectionManager.UpdateManipulator();
                 }
             }
         }
@@ -105,10 +109,9 @@ namespace FreeSCADA.Designer.Views
                 throw new Exception("can not create new schema");
 
             MainPanel = canvas;
-            MainPanel.Tag = this;
-
+            
             InitializeComponent();
-            MainPanel.Loaded += new RoutedEventHandler(MainCanvas_Loaded);
+           
         }
 
         private void InitializeComponent()
@@ -156,7 +159,7 @@ namespace FreeSCADA.Designer.Views
             //this._wpfSchemaContainer.View.ContextMenu = contextMenu;
             ZoomManager = new MapZoom(MainPanel);
             CreateCommands();
-
+            MainPanel.Loaded += new RoutedEventHandler(MainCanvas_Loaded);
         }
         private void CreateToolList()
         {
@@ -358,7 +361,7 @@ namespace FreeSCADA.Designer.Views
 
         void ReInitEditor()
         {
-            _gridManger = GridManager.GetGridManagerFor(MainPanel);
+            GridManager = new GridManager(MainPanel);
         }
 
 
@@ -449,9 +452,9 @@ namespace FreeSCADA.Designer.Views
 
         void ActiveToolObjectCreated(object sender, EventArgs e)
         {
-            UndoBuff.AddCommand(new AddGraphicsObject(sender as System.Windows.UIElement));
+            UndoBuff.AddCommand(new AddGraphicsObject(sender as System.Windows.FrameworkElement));
             MainPanel.UpdateLayout();
-            SelectionManager.SelectObject(sender as UIElement);
+            SelectionManager.SelectObject(sender as FrameworkElement);
 
             UpdateXamlView();
         }
@@ -518,10 +521,10 @@ namespace FreeSCADA.Designer.Views
             else if (e.Key == System.Windows.Input.Key.Delete)
             {
                 if (SelectionManager.SelectedObjects.Count > 0)
-                    UndoBuff.AddCommand(new DeleteGraphicsObject(SelectionManager.SelectedObjects.Cast<UIElement>().FirstOrDefault()));
+                    UndoBuff.AddCommand(new DeleteGraphicsObject(SelectionManager.SelectedObjects.Cast<FrameworkElement>().FirstOrDefault()));
                 else if (_activeTool is SelectionTool && SelectionManager.SelectedObjects.Count > 0)
                 {
-                    foreach (var el in SelectionManager.SelectedObjects.Cast<UIElement>())
+                    foreach (var el in SelectionManager.SelectedObjects.Cast<FrameworkElement>())
                     {
                         UndoBuff.AddCommand(new DeleteGraphicsObject(el));
                     }
