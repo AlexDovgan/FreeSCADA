@@ -9,7 +9,7 @@ using FreeSCADA.Common;
 using FreeSCADA.Designer.Views;
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 {
-    public class BaseControl: Thumb
+    abstract class BaseControl: Thumb
     {
         protected IDocumentView _view;
         protected FrameworkElement _controlledItem;
@@ -23,6 +23,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
             ThumbsResources tr = new ThumbsResources();
             tr.InitializeComponent();
             Resources = tr;
+            base.DragDelta += new DragDeltaEventHandler(OnDragDelta);
+            base.DragStarted += new DragStartedEventHandler(OnDragStarted);
+            base.DragCompleted += new DragCompletedEventHandler(OnDragCompleted);
         }
         protected GridManager GridManager
         {
@@ -31,7 +34,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
                 return ((SchemaView)_view).GridManager;
             }   
         }
-
+        protected virtual void OnDragDelta(object sender, DragDeltaEventArgs e) 
+        { 
+        }
+        protected virtual void OnDragStarted(object sender, DragStartedEventArgs e)
+        {
+        }
+        protected virtual void OnDragCompleted(object sender, DragCompletedEventArgs e)
+        {
+        }
     }
 }
- 

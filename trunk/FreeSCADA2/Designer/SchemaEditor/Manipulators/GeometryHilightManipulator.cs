@@ -38,6 +38,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             
             return finalSize;
         }
-          
+        public override bool IsApplicable()
+        {
+            return true;
+        }
     }
 }

@@ -124,6 +124,7 @@
     <Compile Include="SchemaEditor\Manipulators\ActionsEditManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\Controlls\BaseControl.cs" />
     <Compile Include="SchemaEditor\Manipulators\Controlls\PointDragThumb.cs" />
+    <Compile Include="SchemaEditor\Manipulators\PolygonManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\PolylineEditManipulantor.cs" />
     <Compile Include="SchemaEditor\Manipulators\TextBoxManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\Controlls\DragThumb.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="SchemaEditor\Tools\ControlCreateTool.cs" />
     <Compile Include="SchemaEditor\Tools\DrawTool.cs" />
     <Compile Include="SchemaEditor\Tools\EllipseTool.cs" />
+    <Compile Include="SchemaEditor\Tools\PolygonTool.cs" />
     <Compile Include="SchemaEditor\Tools\PolylineTool.cs" />
     <Compile Include="SchemaEditor\Tools\RectangleTool.cs" />
     <Compile Include="SchemaEditor\Tools\SelectionTool.cs" />

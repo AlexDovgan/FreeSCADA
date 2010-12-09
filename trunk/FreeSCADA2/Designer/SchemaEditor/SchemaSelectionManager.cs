@@ -36,9 +36,17 @@ namespace FreeSCADA.Designer.SchemaEditor
         }
         public void AddObject(Object el)
         {
-            if(el!=null)
-                SelectedObjects.Insert(0,el);;
-            UpdateManipulator();
+
+            if (el != null)
+            {
+                SelectedObjects.Insert(0, el); ;
+                UpdateManipulator();
+            }
+            else if (_manipulator!=null)
+            {
+                _manipulator.Deactivate();
+                _manipulator = null;
+            }
             RaiseSelectionChanged(el);
             
         }
@@ -53,29 +61,29 @@ namespace FreeSCADA.Designer.SchemaEditor
         {
             SelectedObjects.Clear();
             AddObject(el);
-        }
+         }
         
         public void UpdateManipulator()
         {
             if (_manipulator != null)
-            {
                 _manipulator.Deactivate();
-                AdornerLayer.GetAdornerLayer(_view.MainPanel).Remove(_manipulator);
-            }
             if (SelectedObjects.Count > 0)
             {
                 try
                 {
-                    _manipulator=(BaseManipulator)Activator.CreateInstance(
-                        _view.ActiveTool.GetToolManipulator(), 
-                        new object[] {_view, SelectedObjects.Cast<FrameworkElement>().FirstOrDefault()});
-                    
-                    AdornerLayer.GetAdornerLayer(_view.MainPanel).Add(_manipulator);
-                    _manipulator.Activate();
-                }catch(Exception)
+                    _manipulator = (BaseManipulator)Activator.CreateInstance(
+                        _view.ActiveTool.GetToolManipulator(),
+                        new object[] { _view, SelectedObjects.Cast<FrameworkElement>().FirstOrDefault() });
+                    if (_manipulator.IsApplicable())
+                        _manipulator.Activate();
+                    else
+                        SelectObject(null);
+                }
+                catch (Exception)
                 {
                     SelectObject(null);
                 }
+
             }
             AdornerLayer.GetAdornerLayer(_view.MainPanel).Update();
         }
