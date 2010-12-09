@@ -68,6 +68,7 @@ namespace FreeSCADA.Designer.Views
                     {
                         _toolBox.Tabs[i].Selected = true;
                         _toolBox.Tabs[i][j].Selected = true;
+                        _toolBox.Tabs[i].SelectedItem = _toolBox.Tabs[i][j];
                     }
                     else
                     {

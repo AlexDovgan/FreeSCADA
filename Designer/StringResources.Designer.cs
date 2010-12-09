@@ -625,6 +625,15 @@ namespace FreeSCADA.Designer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Polygon Tool.
+        /// </summary>
+        internal static string ToolPolygon {
+            get {
+                return ResourceManager.GetString("ToolPolygon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Polyline Tool.
         /// </summary>
         internal static string ToolPolyline {

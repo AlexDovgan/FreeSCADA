@@ -80,10 +80,9 @@ namespace FreeSCADA.Common
         protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
         protected void ReinitTool()
         {
-            Rect rect = new Rect(new Point(0, 0), new Size((AdornedElement as FrameworkElement).ActualWidth, (AdornedElement as FrameworkElement).ActualHeight));
-            DrawingContext drawingContext = ((DrawingVisual)visualChildren[0]).RenderOpen();
-            drawingContext.DrawRectangle(Brushes.Black, new Pen(Brushes.Black, 0.2), rect);
-            drawingContext.Close();
+
+            Deactivate();
+            Activate();
         }
 
         /// <summary>
@@ -95,11 +94,16 @@ namespace FreeSCADA.Common
         /// 
         public virtual void Activate()
         {
-            ReinitTool();
+            
+            Rect rect = new Rect(new Point(0, 0), new Size((AdornedElement as FrameworkElement).ActualWidth, (AdornedElement as FrameworkElement).ActualHeight));
+            DrawingContext drawingContext = ((DrawingVisual)visualChildren[0]).RenderOpen();
+            drawingContext.DrawRectangle(Brushes.Black, new Pen(Brushes.Black, 0.2), rect);
+            drawingContext.Close();
             ((FrameworkElement)AdornedElement).Loaded += new RoutedEventHandler(BaseTool_Loaded);
             ((FrameworkElement) AdornedElement).SizeChanged += new SizeChangedEventHandler(AdornedElementSizeChanged);
             AdornerLayer.GetAdornerLayer(AdornedElement).Add(this);
             _view.SelectionManager.UpdateManipulator();
+            
         }
 
         void BaseTool_Loaded(object sender, RoutedEventArgs e)

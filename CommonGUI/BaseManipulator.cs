@@ -40,7 +40,7 @@ namespace FreeSCADA.Common
                 AdornedElement.RenderTransformOrigin = new Point(0.5, 0.5);
                 
             }
-            this.Visibility = Visibility.Collapsed;                       
+            
             visualChildren = new VisualCollection(this);
             
        
@@ -60,7 +60,7 @@ namespace FreeSCADA.Common
         /// </summary>
         public virtual void Activate()
         {
-            this.Visibility = Visibility.Visible;
+            AdornerLayer.GetAdornerLayer(_view.MainPanel).Add(this);
             InvalidateVisual();
         }
         /// <summary>
@@ -68,7 +68,8 @@ namespace FreeSCADA.Common
         /// </summary>
         public virtual void Deactivate()
         {
-            this.Visibility = Visibility.Collapsed;
+            
+            AdornerLayer.GetAdornerLayer(_view.MainPanel).Remove(this);
             InvalidateVisual();
         }
         /// <summary>
@@ -76,7 +77,7 @@ namespace FreeSCADA.Common
         /// </summary>
         /// <param name="el"></param>
         /// <returns></returns>
-        public virtual bool IsApplicableFor(FrameworkElement el)
+        public virtual bool IsApplicable()
         {
             return false;
         }

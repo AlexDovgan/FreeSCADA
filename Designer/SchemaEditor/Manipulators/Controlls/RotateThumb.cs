@@ -10,7 +10,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
     /// <summary>
     /// Rotating controll for DragResizeRotateManipulator
     /// </summary>
-    public class RotateThumb : BaseControl
+    class RotateThumb : BaseControl
     {
         double initialAngle;
         private Vector startVector;
@@ -44,20 +44,18 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
             : base(view,el)
         {
 
-            base.DragDelta += new DragDeltaEventHandler(RotateThumb_DragDelta);
-            base.DragStarted += new DragStartedEventHandler(RotateThumb_DragStarted);
-            base.DragCompleted += new DragCompletedEventHandler(RotateThumb_DragCompleted);
+            
             Width = 50;
             Height = 50;
 
         }
 
-        void RotateThumb_DragCompleted(object sender, DragCompletedEventArgs e)
+        protected  override void OnDragCompleted(object sender, DragCompletedEventArgs e)
         {
 
         }
 
-        void RotateThumb_DragStarted(object sender, DragStartedEventArgs e)
+        protected  override void OnDragStarted(object sender, DragStartedEventArgs e)
         {
             Canvas canvas = _view.MainPanel as Canvas;
             // the RenderTransformOrigin property of DesignerItem defines
@@ -79,7 +77,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 
         }
 
-        void RotateThumb_DragDelta(object sender, DragDeltaEventArgs e)
+        protected  override void OnDragDelta(object sender, DragDeltaEventArgs e)
         {
             Canvas canvas = _view.MainPanel as Canvas;
 
@@ -92,8 +90,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 
             // and update the transformation
             EditorHelper.SetDependencyProperty(ItemRotateTransform, RotateTransform.AngleProperty, initialAngle + Math.Round(angle, 0));
-
-            //ItemRotateTransform.Angle = initialAngle + Math.Round(angle, 0);
 
         }
     }

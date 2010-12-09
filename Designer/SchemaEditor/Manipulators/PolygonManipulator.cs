@@ -9,37 +9,38 @@ using FreeSCADA.Designer.SchemaEditor.Manipulators.Controls;
 using FreeSCADA.Common;
 using FreeSCADA.Designer.Views;
 
+
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
-    class PolylineEditManipulantor : BaseManipulator
+    class PolygonEditManipulantor : BaseManipulator
     {
-        private Polyline _poly;
-        public PolylineEditManipulantor(IDocumentView view,FrameworkElement el)
-            : base(view,el)
+        private Polygon _poly;
+        public PolygonEditManipulantor(IDocumentView view, FrameworkElement el)
+            : base(view, el)
         {
-            
+
         }
         public override void Activate()
         {
-            _poly = AdornedElement as Polyline;
+            _poly = AdornedElement as Polygon;
             if (_poly == null)
                 throw new ArgumentException();
 
             foreach (var p in _poly.Points)
             {
-                var pd = new PointDragThumb(_view,AdornedElement as FrameworkElement);
+                var pd = new PointDragThumb(_view, AdornedElement as FrameworkElement);
                 pd.DragStarted += PointDragStarted;
                 pd.DragDelta += PointDragDelta;
                 pd.PreviewMouseLeftButtonUp += OnPreviewMouseLeftButtonUp;
                 visualChildren.Add(pd);
             }
-            
+
             for (int i = 0; i < _poly.Points.Count; i++)
             {
                 var m = _poly.GeometryTransform.Value;
-               
+
                 var p = m.Transform(_poly.Points[i]);
-                p = _poly.TranslatePoint(p,_view.MainPanel);
+                p = _poly.TranslatePoint(p, _view.MainPanel);
                 _poly.Points[i] = p;
             }
             _poly.Stretch = Stretch.None;
@@ -50,7 +51,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 
             _poly.RenderTransform = null;
             AdornerLayer.GetAdornerLayer(this).PreviewMouseLeftButtonDown += new System.Windows.Input.MouseButtonEventHandler(PolylineEditManipulantor_PreviewMouseLeftButtonDown);
-          
+
             _poly.UpdateLayout();
             base.Activate();
         }
@@ -59,8 +60,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         {
             if ((System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Control) == 0)
                 return;
-            
-            if(_poly==null)
+
+            if (_poly == null)
                 return;
             var gridMan = ((Views.SchemaView)_view).GridManager;
             for (int i = 0; i < _poly.Points.Count - 1; i++)
@@ -82,14 +83,14 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             InvalidateVisual();
         }
 
-        
+
 
         void OnPreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            
+
             if (_poly.Points.Count > 2 && (System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Shift) != 0)
             {
-                var  p = _poly.Points[visualChildren.IndexOf(sender as PointDragThumb)];
+                var p = _poly.Points[visualChildren.IndexOf(sender as PointDragThumb)];
                 (sender as PointDragThumb).DragStarted -= PointDragStarted;
                 (sender as PointDragThumb).DragDelta -= PointDragDelta;
                 (sender as PointDragThumb).PreviewMouseLeftButtonUp -= OnPreviewMouseLeftButtonUp;
@@ -139,24 +140,24 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         void PointDragStarted(object sender, DragStartedEventArgs e)
         {
 
-            RaiseObjectChanged( new ModifyGraphicsObject(AdornedElement));
-        }   
+            RaiseObjectChanged(new ModifyGraphicsObject(AdornedElement));
+        }
         void PointDragDelta(object sender, DragDeltaEventArgs e)
         {
-            
-            
+
+
             var p = _poly.Points[visualChildren.IndexOf(sender as PointDragThumb)];
-            
+
             var dragDelta = new Point(e.HorizontalChange, e.VerticalChange);
             System.Diagnostics.Trace.WriteLine("Point " + p.ToString() + "Drag delta " + dragDelta.ToString());
-            p= _poly.TranslatePoint(p,this );
+            p = _poly.TranslatePoint(p, this);
             System.Diagnostics.Trace.WriteLine("Point " + p.ToString() + "Drag delta " + dragDelta.ToString());
             p.X += dragDelta.X;
             p.Y += dragDelta.Y;
             p = this.TranslatePoint(p, _poly);
             p=((SchemaView)_view).GridManager.AdjustPointToGrid(p);
             _poly.Points[visualChildren.IndexOf(sender as PointDragThumb)] = p;
-           
+
             InvalidateArrange();
 
         }
@@ -171,17 +172,17 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            
+
 
             foreach (PointDragThumb pdt in visualChildren)
             {
-                var p =_poly.Points[visualChildren.IndexOf(pdt)];
+                var p = _poly.Points[visualChildren.IndexOf(pdt)];
                 p = _poly.TranslatePoint(p, this);
-                
+
                 p.X -= pdt.DesiredSize.Width / 2;
                 p.Y -= pdt.DesiredSize.Height / 2;
-                
-                
+
+
                 pdt.Arrange(new Rect(p, pdt.DesiredSize));
             }
             return finalSize;
@@ -189,20 +190,20 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 
         public override bool IsApplicable()
         {
-            if (AdornedElement is Polyline)
+            if (AdornedElement is Polygon)
                 return true;
             return false;
         }
 
         private void AddThumb(Point p)
         {
-            
-            var pd = new PointDragThumb(_view,AdornedElement as FrameworkElement);
+
+            var pd = new PointDragThumb(_view, AdornedElement as FrameworkElement);
             pd.DragDelta += PointDragDelta;
             pd.PreviewMouseLeftButtonUp += OnPreviewMouseLeftButtonUp;
             visualChildren.Add(pd);
             _poly.UpdateLayout();
         }
-       
+
     }
 }

@@ -275,6 +275,13 @@ namespace FreeSCADA.Designer.Views
                     global::FreeSCADA.Designer.Properties.Resources.shape_line_add,
                     typeof(PolylineTool)),
                     CommandManager.toolboxContext));
+            DocumentCommands.Add(new CommandInfo(
+                new ToolCommand(this,
+                    StringResources.ToolPolygon,
+                    StringResources.ToolGrphicsGroupName,
+                    global::FreeSCADA.Designer.Properties.Resources.shape_line_add,
+                    typeof(PolygonTool)),
+                    CommandManager.toolboxContext));
 
             /*DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
@@ -367,7 +374,9 @@ namespace FreeSCADA.Designer.Views
 
         void MainCanvas_Loaded(object sender, RoutedEventArgs e)
         {
+        
             ReInitEditor();
+            base.OnActivated();
         }
 
         #endregion
@@ -376,7 +385,7 @@ namespace FreeSCADA.Designer.Views
         #region DocumentBehavior
         public override void OnActivated()
         {
-            base.OnActivated();
+            
         }
 
         public override bool SaveDocument()

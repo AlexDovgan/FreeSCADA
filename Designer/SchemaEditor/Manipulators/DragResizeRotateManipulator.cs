@@ -221,7 +221,10 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         {
             base.OnMouseLeftButtonDown(e);
         }
-        
+        public override bool IsApplicable()
+        {
+            return true;
+        }
        
     }
 }

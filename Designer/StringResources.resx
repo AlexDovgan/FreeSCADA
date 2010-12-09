@@ -389,4 +389,7 @@
   <data name="ProjectContextMenuRemove" xml:space="preserve">
     <value>Remove</value>
   </data>
+  <data name="ToolPolygon" xml:space="preserve">
+    <value>Polygon Tool</value>
+  </data>
 </root>

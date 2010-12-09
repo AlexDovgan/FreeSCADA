@@ -48,9 +48,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             textEditor.Arrange(new Rect(p, AdornedElement.DesiredSize));
             return finalSize;
         }
-        public override bool IsApplicableFor(FrameworkElement el)
+        public override bool IsApplicable()
         {
-            if (el is TextBlock)
+            if (AdornedElement is TextBlock)
                 return true;
             return false;
         }
