@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -13,8 +13,11 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-    <TargetFrameworkSubset>
-    </TargetFrameworkSubset>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -98,7 +101,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandManager.cs" />
     <Compile Include="DialogMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -116,12 +118,20 @@
     <Compile Include="Dialogs\RenameSchemaForm.Designer.cs">
       <DependentUpon>RenameSchemaForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="DummySelectionManager.cs" />
-    <Compile Include="HelpCommands.cs" />
+    <Compile Include="Infrastructure\DummySelectionManager.cs" />
+    <Compile Include="Infrastructure\HelpCommands.cs" />
+    <Compile Include="Infrastructure\BaseUndoBuffer.cs" />
+    <Compile Include="Infrastructure\DesignerCommands.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SchemaEditor\BindingSerializing.cs" />
     <Compile Include="SchemaEditor\EditorHelpers.cs" />
     <Compile Include="SchemaEditor\GridManager.cs" />
     <Compile Include="SchemaEditor\Manipulators\ActionsEditManipulator.cs" />
+    <Compile Include="SchemaEditor\Manipulators\BaseManipulator.cs" />
     <Compile Include="SchemaEditor\Manipulators\Controlls\BaseControl.cs" />
     <Compile Include="SchemaEditor\Manipulators\Controlls\PointDragThumb.cs" />
     <Compile Include="SchemaEditor\Manipulators\PolygonManipulator.cs" />
@@ -188,6 +198,7 @@
     <Compile Include="SchemaEditor\SchemaSelectionManager.cs" />
     <Compile Include="SchemaEditor\StylesLibrary.cs" />
     <Compile Include="SchemaEditor\Tools\ActionEditTool.cs" />
+    <Compile Include="SchemaEditor\Tools\BaseTool.cs" />
     <Compile Include="SchemaEditor\Tools\ControlCreateTool.cs" />
     <Compile Include="SchemaEditor\Tools\DrawTool.cs" />
     <Compile Include="SchemaEditor\Tools\EllipseTool.cs" />
@@ -203,11 +214,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StringResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="TooloxContext.cs" />
+    <Compile Include="Infrastructure\ToolboxContext.cs" />
     <Compile Include="Views\ArchiverSettingsView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\ProjectNodes.cs" />
+    <Compile Include="Infrastructure\ProjectNodes.cs" />
     <Compile Include="Views\ScriptView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -253,10 +264,9 @@
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
+    <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SchemaEditor\PropertiesUtils\CommonBindingDialog.resx">
       <DependentUpon>CommonBindingDialog.cs</DependentUpon>
@@ -303,11 +313,6 @@
       <DependentUpon>VariablesView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -344,7 +349,7 @@
     <Compile Include="Views\VariablesView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WindowManager.cs" />
+    <Compile Include="Infrastructure\WindowManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Archiver\Archiver.csproj">
@@ -366,55 +371,9 @@
     <Page Include="SchemaEditor\Manipulators\Controlls\styles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\cut.png" />
-    <None Include="Resources\disk.png" />
-    <None Include="Resources\arrow_undo.png" />
-    <None Include="Resources\arrow_redo.png" />
-    <None Include="Resources\checkmark.png" />
-    <Content Include="Resources\cog_edit.png" />
-    <Content Include="Resources\cursor.png" />
-    <None Include="Resources\db_settings.png" />
-    <None Include="Resources\IronPython.syn" />
-    <None Include="Resources\log_error.png" />
-    <None Include="Resources\log_warning.png" />
-    <Content Include="Resources\move_object_back.png" />
-    <Content Include="Resources\move_object_front.png" />
-    <Content Include="Resources\new_file.png" />
-    <Content Include="Resources\open_events.png" />
-    <Content Include="Resources\open_file.png" />
-    <Content Include="Resources\open_schema.png" />
-    <None Include="Resources\run.png" />
-    <None Include="Resources\page_copy.png" />
-    <None Include="Resources\paste_plain.png" />
-    <None Include="Resources\page_add.png" />
-    <None Include="Resources\page_white_add.png" />
-    <None Include="Resources\page_white_code_red.png" />
-    <Content Include="Resources\save_file.png" />
-    <None Include="Resources\table_add.png" />
-    <None Include="Resources\script.png" />
-    <None Include="Resources\script_add.png" />
-    <None Include="Resources\script_remove.png" />
-    <Content Include="Resources\shape_ellipse_add.png" />
-    <Content Include="Resources\shape_group.png" />
-    <Content Include="Resources\shape_line_add.png" />
-    <Content Include="Resources\shape_square_add.png" />
-    <Content Include="Resources\shape_ungroup.png" />
-    <Content Include="Resources\textfield_add.png" />
-    <None Include="Resources\tree_archiver.png" />
-    <None Include="Resources\tree_channels.png" />
-    <None Include="Resources\tree_plugin.png" />
-    <None Include="Resources\tree_project.png" />
-    <None Include="Resources\tree_rule.png" />
-    <None Include="Resources\tree_schema.png" />
-    <None Include="Resources\tree_schemas.png" />
-    <None Include="Resources\tree_script.png" />
-    <None Include="Resources\tree_scripts.png" />
-    <None Include="Resources\tree_variable.png" />
-    <Content Include="Resources\zoom_in.png" />
-    <None Include="Resources\zoom_out.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

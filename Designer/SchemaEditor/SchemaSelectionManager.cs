@@ -5,12 +5,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using FreeSCADA.Common;
+using FreeSCADA.CommonUI.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor
 {
     class SchemaSelectionManager : ISelectionManager
     {
-        BaseManipulator _manipulator;
+        IManipulator _manipulator;
 
         public Type ManipulatorType
         {
@@ -69,20 +70,14 @@ namespace FreeSCADA.Designer.SchemaEditor
                 _manipulator.Deactivate();
             if (SelectedObjects.Count > 0)
             {
-                try
-                {
-                    _manipulator = (BaseManipulator)Activator.CreateInstance(
-                        _view.ActiveTool.GetToolManipulator(),
-                        new object[] { _view, SelectedObjects.Cast<FrameworkElement>().FirstOrDefault() });
-                    if (_manipulator.IsApplicable())
-                        _manipulator.Activate();
-                    else
-                        SelectObject(null);
-                }
-                catch (Exception)
-                {
-                    SelectObject(null);
-                }
+                _manipulator = (IManipulator)Activator.CreateInstance(
+                     _view.ActiveTool.GetToolManipulator(),
+                     new object[] { _view, SelectedObjects.Cast<FrameworkElement>().FirstOrDefault() });
+                if (_manipulator.IsApplicable())
+                    _manipulator.Activate();
+                else
+                    _manipulator = null;
+                
 
             }
             AdornerLayer.GetAdornerLayer(_view.MainPanel).Update();
@@ -92,7 +87,7 @@ namespace FreeSCADA.Designer.SchemaEditor
             if (obj == null)
                 obj = _view.MainPanel;
             if (SelectionChanged != null)
-                SelectionChanged(new PropertiesUtils.PropProxy( obj));
+                SelectionChanged(new PropertiesUtils.PropProxy( obj,_view.Document));
         }
     }
 }

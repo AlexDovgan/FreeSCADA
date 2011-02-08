@@ -10,13 +10,14 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace FreeSCADA.Common.Gestures
 {
     /// <summary>
     /// This class provides the ability to draw a rectangle on a zoomable object and zoom into that location.
     /// </summary>
-    public  class RectangleSelectionGesture:BaseTool
+    public  class RectangleSelectionGesture:Adorner
     {
         SelectionRectVisual _selectionRectVisual;
         Point _start;
@@ -38,10 +39,11 @@ namespace FreeSCADA.Common.Gestures
         /// </summary>
         /// <param name="target">A FrameworkElement</param>
         /// <param name="zoom">The MapZoom object that wraps this same target object</param>
-        public RectangleSelectionGesture(IDocumentView view, MapZoom zoom, ModifierKeys mods):base(view)
+        public RectangleSelectionGesture(FrameworkElement target, MapZoom zoom, ModifierKeys mods)
+            : base(target)
         {
             _mods = mods;
-            _target = view.MainPanel;
+            _target = target;
             _container = _target.Parent as ScrollViewer;
             if (_container == null)
             {
@@ -166,11 +168,6 @@ namespace FreeSCADA.Common.Gestures
         {
             Rect r = new Rect(_start, p);
             return _container.TransformToDescendant(_target).TransformBounds(r);
-        }
-
-        public override Type GetToolManipulator()
-        {
-                throw new NotImplementedException();
         }
 
     }

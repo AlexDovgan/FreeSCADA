@@ -16,6 +16,7 @@ using FreeSCADA.Designer.SchemaEditor.Tools;
 using FreeSCADA.Designer.Views;
 using FreeSCADA.Interfaces;
 using FreeSCADA.Interfaces.Plugins;
+using FreeSCADA.CommonUI;
 
 
 namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
@@ -156,7 +157,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             get
             {
-                return global::FreeSCADA.Designer.Properties.Resources.shape_ungroup;
+                return global::FreeSCADA.Designer.Resources.shape_ungroup;
             }
         }
         #endregion ICommand Members
@@ -198,7 +199,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             get
             {
-                return global::FreeSCADA.Designer.Properties.Resources.shape_group;
+                return global::FreeSCADA.Designer.Resources.shape_group;
             }
         }
         #endregion ICommand Members
@@ -256,7 +257,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             get
             {
-                return global::FreeSCADA.Designer.Properties.Resources.move_object_front;
+                return global::FreeSCADA.Designer.Resources.move_object_front;
             }
         }
         #endregion
@@ -315,7 +316,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             get
             {
-                return global::FreeSCADA.Designer.Properties.Resources.move_object_back;
+                return global::FreeSCADA.Designer.Resources.move_object_back;
             }
         }
         #endregion ICommand Members
@@ -374,7 +375,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             get
             {
-                return global::FreeSCADA.Designer.Properties.Resources.page_copy;
+                return global::FreeSCADA.Designer.Resources.page_copy;
             }
         }
         #endregion ICommand Members
@@ -423,7 +424,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             get
             {
-                return global::FreeSCADA.Designer.Properties.Resources.cut;
+                return global::FreeSCADA.Designer.Resources.cut;
             }
         }
         #endregion ICommand Members
@@ -486,7 +487,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             get
             {
-                return global::FreeSCADA.Designer.Properties.Resources.paste_plain;
+                return global::FreeSCADA.Designer.Resources.paste_plain;
             }
         }
         #endregion ICommand Members
@@ -544,7 +545,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             get
             {
-                return global::FreeSCADA.Designer.Properties.Resources.page_white_code_red;
+                return global::FreeSCADA.Designer.Resources.page_white_code_red;
             }
         }
         #endregion ICommand Members
@@ -683,7 +684,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             get
             {
-                return global::FreeSCADA.Designer.Properties.Resources.zoom_in;
+                return global::FreeSCADA.Designer.Resources.zoom_in;
             }
         }
         #endregion ICommand Members
@@ -723,7 +724,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             get
             {
-                return global::FreeSCADA.Designer.Properties.Resources.zoom_out;
+                return global::FreeSCADA.Designer.Resources.zoom_out;
             }
         }
         #endregion ICommand Members
@@ -769,7 +770,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             get
             {
-                return global::FreeSCADA.Designer.Properties.Resources.arrow_undo;
+                return global::FreeSCADA.Designer.Resources.arrow_undo;
             }
         }
         #endregion
@@ -815,7 +816,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             get
             {
-                return global::FreeSCADA.Designer.Properties.Resources.arrow_redo;
+                return global::FreeSCADA.Designer.Resources.arrow_redo;
             }
         }
         #endregion Informational properties
@@ -843,7 +844,7 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
             SelectionTool tool = _view.ActiveTool as SelectionTool;
             
             
-            CommonBindingDialog dlg = new CommonBindingDialog(new PropProxy(_view.SelectionManager.SelectedObjects[0]));
+            CommonBindingDialog dlg = new CommonBindingDialog(new PropProxy(_view.SelectionManager.SelectedObjects[0],_view.Document));
             dlg.ShowDialog(Env.Current.MainWindow);
         }
 
@@ -872,15 +873,12 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
         {
             get { return "Import Graphics"; }
         }
-        public override void CheckApplicability()
-        {
-
-                CanExecute = true;
-        }
+        
         public ImportElementCommand(DocumentView sv)
             : base(sv)
         {
-            Priority = (int)CommandManager.Priorities.EditCommands;
+            CanExecute = true;
+            Priority = (int)CommandManager.Priorities.FileCommandsEnd;
         }
         public override void Execute()
         {

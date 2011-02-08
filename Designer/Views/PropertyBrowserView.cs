@@ -95,7 +95,7 @@ namespace FreeSCADA.Designer.Views
 
 		public override System.Drawing.Bitmap Bitmap
 		{
-			get { return Properties.Resources.open_events; }
+			get { return Resources.open_events; }
 		}
 	}
 
@@ -206,13 +206,11 @@ namespace FreeSCADA.Designer.Views
 					else
 					{
                         //todo: get rid GetMainCanvas
-						var c = SchemaDocument.GetMainCanvas(obj as DependencyObject);
 						var callInfo = new ScriptCallInfo();
 						callInfo.HandlerName = value as string;
-						if (c != null)
-							callInfo.ScriptName = (c.Tag as DocumentView).DocumentName;
-						else
-							callInfo.ScriptName = "unnamed";
+						callInfo.ScriptName = (component as PropProxy).Document.Name;
+                        //else
+                        //    callInfo.ScriptName = "unnamed";
 
 						var events = EventScriptCollection.GetEventScriptCollection(obj as DependencyObject);
 						events.AddAssociation(name, callInfo);

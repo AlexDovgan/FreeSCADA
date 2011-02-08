@@ -9,11 +9,17 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
     /// </summary>
     public class PropProxy : ICustomTypeDescriptor
     {
+
         /// <summary>
         /// 
         /// </summary>
         object controlledObject;
-        
+
+        public Interfaces.IDocument Document
+        {
+            get;
+            protected set;
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -27,8 +33,9 @@ namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
         /// 
         /// </summary>
         /// <param name="controlledObject"></param>
-        public PropProxy(object controlledObject)
+        public PropProxy(object controlledObject,Interfaces.IDocument doc)
         {
+            this.Document = doc;
             this.controlledObject = controlledObject;
         }
 

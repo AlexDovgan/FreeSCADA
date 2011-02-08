@@ -12,7 +12,7 @@ namespace FreeSCADA.Common.Tests
 		[SetUp]
 		public void Init()
 		{
-			Env.Initialize(new Control(), new MenuStrip(), null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			Env.Initialize(new Control(), new Commands(new MenuStrip(), null), FreeSCADA.Interfaces.EnvironmentMode.Designer);
 
 			projectFile = System.IO.Path.GetTempFileName();
 
@@ -72,7 +72,7 @@ namespace FreeSCADA.Common.Tests
 			Assert.IsFalse(p.IsModified);
 
 			Env.Deinitialize();
-			Env.Initialize(new Control(), new MenuStrip(), null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			Env.Initialize(new Control(), new Commands(new MenuStrip(), null), FreeSCADA.Interfaces.EnvironmentMode.Designer);
 			p = Env.Current.Project;
 
 			bool loadEventCalled = false;
@@ -120,7 +120,7 @@ namespace FreeSCADA.Common.Tests
 			p.Save(projectFile);
 
 			Env.Deinitialize();
-			Env.Initialize(new Control(), new MenuStrip(), null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			Env.Initialize(new Control(), new Commands(new MenuStrip(), null), FreeSCADA.Interfaces.EnvironmentMode.Designer);
 			p = Env.Current.Project;
 			p.Load(projectFile);
 			for (int i = 0; i < files; i++)

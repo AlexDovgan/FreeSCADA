@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using Alsing.SourceCode;
 using FreeSCADA.Common;
+using FreeSCADA.Common.Documents;
 using FreeSCADA.Common.Scripting;
+using FreeSCADA.CommonUI.Interfaces;
+using FreeSCADA.CommonUI;
+using FreeSCADA.CommonUI.GlobalCommands;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -15,7 +19,7 @@ namespace FreeSCADA.Designer.Views
 
 		Script script;
 	
-		public ScriptView(string scriptName):base(scriptName)
+		public ScriptView(string scriptName):base(new DummyDocument(scriptName))
 		{
 
 			this.script = Env.Current.ScriptManager.GetScript(scriptName);
@@ -24,7 +28,7 @@ namespace FreeSCADA.Designer.Views
 
 			DocumentName = script.Name;
 
-            string iPyFormatXML = (new StreamReader(new MemoryStream(global::FreeSCADA.Designer.Properties.Resources.IronPython))).ReadToEnd();
+            string iPyFormatXML = (new StreamReader(new MemoryStream(global::FreeSCADA.Designer.Resources.IronPython))).ReadToEnd();
             SyntaxDefinition syntax = SyntaxDefinition.FromSyntaxXml(iPyFormatXML);
             syntaxBoxControl.Document.Parser.Init(syntax);
 
@@ -41,8 +45,8 @@ namespace FreeSCADA.Designer.Views
 		private void InitializeEditor()
 		{
 			System.Windows.Forms.ImageList imageList = new System.Windows.Forms.ImageList();
-			imageList.Images.Add(global::FreeSCADA.Designer.Properties.Resources.log_warning);
-			imageList.Images.Add(global::FreeSCADA.Designer.Properties.Resources.log_error);
+			imageList.Images.Add(global::FreeSCADA.Designer.Resources.log_warning);
+			imageList.Images.Add(global::FreeSCADA.Designer.Resources.log_error);
 
 			syntaxBoxControl.GutterIcons = imageList;
 
@@ -221,7 +225,7 @@ namespace FreeSCADA.Designer.Views
 		{
 			get
 			{
-				return global::FreeSCADA.Designer.Properties.Resources.checkmark;
+				return global::FreeSCADA.Designer.Resources.checkmark;
 			}
 		}
 		#endregion ICommand Members

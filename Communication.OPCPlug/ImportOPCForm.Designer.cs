@@ -73,7 +73,7 @@
 			// button3
 			// 
 			this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button3.Image = global::FreeSCADA.Communication.OPCPlug.Properties.Resources.refresh;
+			this.button3.Image = global::FreeSCADA.Communication.OPCPlug.Resources.refresh;
 			this.button3.Location = new System.Drawing.Point(419, 47);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size(28, 21);

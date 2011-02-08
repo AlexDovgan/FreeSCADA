@@ -2,25 +2,37 @@
 
 namespace FreeSCADA.Interfaces
 {
-	public enum PredefinedContexts
-	{
-		Global,
-		Communication,
-        VisualControls,
-		Project
-	}
-	public interface ICommands
-	{
-		void AddCommand(ICommandContext context, ICommand cmd);
-		void RemoveCommand(ICommand cmd);
+    public static class PredefinedContexts
+    {
+        static public string GlobalMenu
+        {
+            get { return "GlobalMenu"; }
+        }
+        static public string GlobalToolbar
+        {
+            get { return "GlobalToolbar"; }
+        }
+        static public string Communication
+        {
+            get { return "Communication"; }
+        }
+        static public string VisualControls
+        {
+            get { return "VisualControls"; }
+        }
+        static public string Project
+        {
+            get{return "Project";}
+        }
+    }
+    public interface ICommands
+    {
+        //void RemoveCommand(ICommand cmd);
 
-		ICommandContext GetPredefinedContext(PredefinedContexts type);
-
-		List<ICommand> GetCommands(ICommandContext context);
-
-		/// <summary>
-		/// This method is only for testing and should not be used normally
-		/// </summary>
-		ICommand FindCommandByName(ICommandContext context, string name);
-	}
+        ICommandContext GetContext(string contextName);
+        ICommands RegisterContext(string contextName, ICommandContext context);
+        ICommand FindCommandByName(string contextName,string name);
+        List<string> GetRegisteredContextes();
+    }
+    
 }

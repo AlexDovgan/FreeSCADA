@@ -4,6 +4,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
 using FreeSCADA.Common;
+using FreeSCADA.CommonUI.Interfaces;
+
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {

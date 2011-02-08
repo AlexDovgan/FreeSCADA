@@ -17,7 +17,7 @@ namespace Communication.SimulatorPlug.Tests
 		public override void Setup()
 		{
 			System.Windows.Forms.MenuStrip menu = new System.Windows.Forms.MenuStrip();
-			Env.Initialize(null, menu, null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			Env.Initialize(null, new Commands(menu, null), FreeSCADA.Interfaces.EnvironmentMode.Designer);
 			plugin = (Plugin)Env.Current.CommunicationPlugins["data_simulator_plug"];
 
 			projectFile = System.IO.Path.GetTempFileName();
@@ -41,8 +41,7 @@ namespace Communication.SimulatorPlug.Tests
 		{
 			ExpectModal("SettingsForm", "AddingNewChannelsHandler");
 			
-			ICommandContext context = Env.Current.Commands.GetPredefinedContext(PredefinedContexts.Communication);
-			Env.Current.Commands.FindCommandByName(context, StringConstants.PropertyCommandName).Execute();
+            Env.Current.Commands.FindCommandByName(PredefinedContexts.Communication, StringConstants.PropertyCommandName).Execute();
 
 			Assert.AreEqual(3, plugin.Channels.Length);
 		}
@@ -75,8 +74,8 @@ namespace Communication.SimulatorPlug.Tests
 		{
 			ExpectModal("SettingsForm", "CreateRandomChannels");
 
-			ICommandContext context = Env.Current.Commands.GetPredefinedContext(PredefinedContexts.Communication);
-			Env.Current.Commands.FindCommandByName(context, StringConstants.PropertyCommandName).Execute();
+			
+            Env.Current.Commands.FindCommandByName(PredefinedContexts.Communication, StringConstants.PropertyCommandName).Execute();
 
 			Assert.AreEqual(3, plugin.Channels.Length);
 			Assert.IsFalse(plugin.IsConnected);
@@ -137,8 +136,8 @@ namespace Communication.SimulatorPlug.Tests
 			ExpectModal("SettingsForm", "CreateTestChannels");
 
 			//Plugin should save its channels in the project
-			ICommandContext context = Env.Current.Commands.GetPredefinedContext(PredefinedContexts.Communication);
-			Env.Current.Commands.FindCommandByName(context, StringConstants.PropertyCommandName).Execute();
+			
+            Env.Current.Commands.FindCommandByName(PredefinedContexts.Communication, StringConstants.PropertyCommandName).Execute();
 
 			Assert.AreEqual(ChannelTypes.Length, plugin.Channels.Length);
 
@@ -177,8 +176,8 @@ namespace Communication.SimulatorPlug.Tests
 			ExpectModal("SettingsForm", "CreateTestChannels");
 
 			//Plugin should save its channels in the project
-			ICommandContext context = Env.Current.Commands.GetPredefinedContext(PredefinedContexts.Communication);
-			Env.Current.Commands.FindCommandByName(context, StringConstants.PropertyCommandName).Execute();
+			
+            Env.Current.Commands.FindCommandByName(PredefinedContexts.Communication, StringConstants.PropertyCommandName).Execute();
 
 			Assert.AreEqual(ChannelTypes.Length, plugin.Channels.Length);
 			Env.Current.Project.Save(projectFile);
@@ -186,7 +185,7 @@ namespace Communication.SimulatorPlug.Tests
 			//Plugin should load its channels from the project on its loading
 			Env.Deinitialize();
 			System.Windows.Forms.MenuStrip menu = new System.Windows.Forms.MenuStrip();
-			Env.Initialize(null, menu, null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			Env.Initialize(null, new Commands(menu, null), FreeSCADA.Interfaces.EnvironmentMode.Designer);
 			plugin = (Plugin)Env.Current.CommunicationPlugins["data_simulator_plug"];
 			Env.Current.Project.Load(projectFile); 
 

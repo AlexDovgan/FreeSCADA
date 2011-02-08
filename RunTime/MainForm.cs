@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
 using FreeSCADA.Archiver;
 using FreeSCADA.Common;
+using FreeSCADA.CommonUI;
 
 
 namespace FreeSCADA.RunTime
@@ -12,26 +13,23 @@ namespace FreeSCADA.RunTime
 		public MainForm()
 		{
 			InitializeComponent();
-			Env.Initialize(this, mainMenu, mainToolbar, FreeSCADA.Interfaces.EnvironmentMode.Runtime);
+			Env.Initialize(this, new Commands(mainMenu, mainToolbar), FreeSCADA.Interfaces.EnvironmentMode.Runtime);
 			ArchiverMain.Initialize();
 
-			CommandManager.viewContext = new BaseCommandContext(viewSubMenu.DropDown, mainToolbar);
-
-			MRUManager mruManager = new MRUManager(mRUstartToolStripMenuItem, toolStripSeparator3);
-			windowManager = new WindowManager(dockPanel, mruManager);
+			CommandManager.viewContext = new MenuCommandContext(viewSubMenu.DropDown);
+            windowManager = new WindowManager(dockPanel);
 			UpdateCaption();
 		}
 
         public MainForm(string fileToLoad)
         {
             InitializeComponent();
-			Env.Initialize(this, mainMenu, mainToolbar, FreeSCADA.Interfaces.EnvironmentMode.Runtime);
+			Env.Initialize(this,new Commands( mainMenu, mainToolbar), FreeSCADA.Interfaces.EnvironmentMode.Runtime);
 			ArchiverMain.Initialize();
 
-			CommandManager.viewContext = new BaseCommandContext(viewSubMenu.DropDown, mainToolbar);
+			CommandManager.viewContext = new MenuCommandContext(viewSubMenu.DropDown);
 
-			MRUManager mruManager = new MRUManager(mRUstartToolStripMenuItem, toolStripSeparator3);
-			windowManager = new WindowManager(dockPanel, mruManager);
+			windowManager = new WindowManager(dockPanel);
             if (fileToLoad != "")
                 windowManager.LoadProject(fileToLoad);
             UpdateCaption();

@@ -6,6 +6,7 @@ namespace FreeSCADA.Interfaces
 	public enum CommandType
 	{
 		Separator,
+        Submenu,
 		Standard,
 		DropDownBox
 	}

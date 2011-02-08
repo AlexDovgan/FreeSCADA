@@ -33,9 +33,9 @@ namespace FreeSCADA.RunTime.Views
 			DocumentName = "Console";
 			InitializeComponent();
 
-			imageList1.Images.Add(global::FreeSCADA.RunTime.Properties.Resources.log_info);
-			imageList1.Images.Add(global::FreeSCADA.RunTime.Properties.Resources.log_warning);
-			imageList1.Images.Add(global::FreeSCADA.RunTime.Properties.Resources.log_error);
+			imageList1.Images.Add(global::FreeSCADA.CommonUI.Resources.log_info);
+            imageList1.Images.Add(global::FreeSCADA.CommonUI.Resources.log_warning);
+            imageList1.Images.Add(global::FreeSCADA.CommonUI.Resources.log_error);
 
 			CustomLogger logger = new CustomLogger();
 			logger.OnMessage += new CustomLogger.OnMessageHandler(logger_OnMessage);

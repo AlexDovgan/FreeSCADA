@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using FreeSCADA.Common;
+using FreeSCADA.CommonUI.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.PropertiesUtils
 {

@@ -54,7 +54,7 @@
 			// toolStripButton1
 			// 
 			toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			toolStripButton1.Image = global::FreeSCADA.RunTime.Properties.Resources.open_file;
+            toolStripButton1.Image = global::FreeSCADA.CommonUI.Resources.open_file;
 			toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
 			toolStripButton1.Name = "toolStripButton1";
 			toolStripButton1.Size = new System.Drawing.Size(23, 22);
@@ -81,7 +81,7 @@
 			// refreshButton
 			// 
 			this.refreshButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.refreshButton.Image = global::FreeSCADA.RunTime.Properties.Resources.refresh;
+            this.refreshButton.Image = global::FreeSCADA.CommonUI.Resources.refresh;
 			this.refreshButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.refreshButton.Name = "refreshButton";
 			this.refreshButton.Size = new System.Drawing.Size(23, 22);
@@ -96,7 +96,7 @@
 			// runButton
 			// 
 			this.runButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.runButton.Image = global::FreeSCADA.RunTime.Properties.Resources.run;
+            this.runButton.Image = global::FreeSCADA.CommonUI.Resources.run;
 			this.runButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.runButton.Name = "runButton";
 			this.runButton.Size = new System.Drawing.Size(23, 22);
@@ -107,7 +107,7 @@
 			// 
 			this.stopButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.stopButton.Enabled = false;
-			this.stopButton.Image = global::FreeSCADA.RunTime.Properties.Resources.stop;
+            this.stopButton.Image = global::FreeSCADA.CommonUI.Resources.stop;
 			this.stopButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.stopButton.Name = "stopButton";
 			this.stopButton.Size = new System.Drawing.Size(23, 22);
@@ -122,7 +122,7 @@
 			// showTableButton
 			// 
 			this.showTableButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.showTableButton.Image = global::FreeSCADA.RunTime.Properties.Resources.db_table;
+            this.showTableButton.Image = global::FreeSCADA.CommonUI.Resources.db_table;
 			this.showTableButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.showTableButton.Name = "showTableButton";
 			this.showTableButton.Size = new System.Drawing.Size(23, 22);
@@ -162,7 +162,7 @@
 			// 
 			// loadToolStripMenuItem
 			// 
-			this.loadToolStripMenuItem.Image = global::FreeSCADA.RunTime.Properties.Resources.open_file;
+            this.loadToolStripMenuItem.Image = global::FreeSCADA.CommonUI.Resources.open_file;
 			this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
 			this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.loadToolStripMenuItem.Text = "Load project...";

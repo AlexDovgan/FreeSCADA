@@ -51,8 +51,8 @@ namespace FreeSCADA.Archiver
 
 			if (Env.Current.Mode == EnvironmentMode.Designer)
 			{
-				ICommandContext context = Env.Current.Commands.GetPredefinedContext(PredefinedContexts.Project);
-				Env.Current.Commands.AddCommand(context, new PropertyCommand());
+				ICommandContext context = Env.Current.Commands.GetContext(PredefinedContexts.Project);
+                context.AddCommand(new PropertyCommand());
 			}
 		}
 

@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Windows;
 using FreeSCADA.Common;
 using FreeSCADA.Designer.Views;
-
+using FreeSCADA.CommonUI.Interfaces;
 
 namespace FreeSCADA.Designer
 {

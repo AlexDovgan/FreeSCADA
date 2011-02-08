@@ -6,73 +6,74 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Xml;
 using System.Collections.Generic;
-namespace FreeSCADA.Common.Schema
+
+namespace FreeSCADA.Common.Documents
 {
-    public static class SchemaDocument
+    public class SchemaDocument : FreeSCADA.Interfaces.IDocument
     {
-        //todo: get rid GetMainCanvas
-        public static Canvas GetMainCanvas(DependencyObject element)
+        public ProjectEntityType Type
         {
-            if (element == null)
-                return null;
-             
-            DependencyObject top = element;
-            while (!(VisualTreeHelper.GetParent(top) is ScrollContentPresenter) && VisualTreeHelper.GetParent(top)!=null)
-            {
-                top = VisualTreeHelper.GetParent(top);
-            }
-            return top as Canvas;
+            get { return ProjectEntityType.Schema; }
+        }
+        public String Name
+        {
+            get;
+            protected set;
 
         }
+        public object Content
+        {
+            get;
+            protected set;
+        }
+        public SchemaDocument()
+        {
+            Canvas c=new Canvas();
+            c.Background = Brushes.White;
+            Content = c;
+           
+            Name = Env.Current.Project.GenerateUniqueName(ProjectEntityType.Schema, "Untitled_");
+            Save(Name,Content);
+        }
+        public SchemaDocument(string name)
+        {
+            Name = name;
+            Load(Name);
+        }
 
-        public static Canvas LoadSchema(string schemaName)
+        public Object Load(string name)
         {
             System.Globalization.CultureInfo originalCulture = System.Windows.Forms.Application.CurrentCulture;
             try
             {
 
-                using (Stream ms = Env.Current.Project.GetData("Schemas/" + schemaName + "/xaml"))
+                using (Stream ms = Env.Current.Project.GetData("Schemas/" + name + "/xaml"))
                 using (XmlReader xmlReader = XmlReader.Create(ms))
                 {
 
                     System.Windows.Forms.Application.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
                     ms.Seek(0, SeekOrigin.Begin);
-                    Object obj = XamlReader.Load(ms);
+                    Object obj= XamlReader.Load(ms);
                     System.Windows.Forms.Application.CurrentCulture = originalCulture;
-                    if (obj is Canvas)
-                        return obj as Canvas;
-                    else
-                        return null;
+                    Content = obj as Canvas;
                 }
             }
             catch (Exception e)
             {
                 System.Windows.Forms.Application.CurrentCulture = originalCulture;
                 Env.Current.Logger.LogError(string.Format("Cannot load schema: {0}", e.Message));
-                return null;
+                Content = null;
             }
-            
-            
+            return Content;  
         }
 
-
-
-        public static Canvas CreateNewSchema()
+        public void Save(String name)
         {
-            Canvas schema = null;
-
-            schema = new Canvas();
-            schema.ClipToBounds = true;
-            schema.Background = System.Windows.Media.Brushes.White;
-            schema.Width = 800;	//TODO: Get default values from application settings
-            schema.Height = 600;	//TODO: Get default values from application settings
-            return schema;
+            Save(name,Content);
         }
-
-        public static void SaveSchema(Panel c,string name)
+        public void Save(String name,object content)
         {
             
-            //   WPFShemaContainer.ViewGrid(MainCanvas as Canvas, false);    // delete grid before save
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
             settings.OmitXmlDeclaration = true;
@@ -80,8 +81,10 @@ namespace FreeSCADA.Common.Schema
             {
                 XamlDesignerSerializationManager dsm = new XamlDesignerSerializationManager(XmlWriter.Create(ms, settings));
                 dsm.XamlWriterMode = XamlWriterMode.Expression;
-                XamlWriter.Save(c, dsm);
+                XamlWriter.Save(content, dsm);
                 Env.Current.Project.SetData("Schemas/" + name + "/xaml", ms);
+                Name = name;
+                Content = content;
             }
 
         }

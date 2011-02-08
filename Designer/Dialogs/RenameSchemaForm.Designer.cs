@@ -1,6 +1,6 @@
 ﻿namespace FreeSCADA.Designer.Dialogs
 {
-	partial class RenameSchemaForm
+	partial class RenameEntityForm
 	{
 		/// <summary>
 		/// Required designer variable.

@@ -20,6 +20,8 @@ namespace FreeSCADA.Communication.OPCPlug
 			Async,
 			Sync
 		};
+
+        
 		ServerWriteCapabilities serverWriteCapabilities = ServerWriteCapabilities.Unknown;
 
 
@@ -40,22 +42,25 @@ namespace FreeSCADA.Communication.OPCPlug
 			int updateRate = 0;
 			object group_obj;
 			Guid tmp_guid = typeof(IOPCItemMgt).GUID;
-			server.AddGroup("", 1, updateRate, groupClientId, new IntPtr(), new IntPtr(), 0, out groupId, out updateRate, ref tmp_guid, out group_obj);
-    		group = (IOPCItemMgt)group_obj;
-            
-			OPCITEMDEF[] items = new OPCITEMDEF[channels.Count];
+			server.AddGroup("fscdg", 1, updateRate, groupClientId, new IntPtr(), new IntPtr(), 0, out groupId, out updateRate, ref tmp_guid, out group_obj);
+            group = (IOPCItemMgt)group_obj;
+            IntPtr addResult = new IntPtr();
+            IntPtr addErrors = new IntPtr();
+
+
+			OPCITEMDEF[] items = new OPCITEMDEF[2];
 			for (int i = 0; i < channels.Count; i++)
 			{
-				items[i].bActive = 1;
-				items[i].szItemID = channels[i].OpcChannel;
-				items[i].hClient = channels[i].GetHashCode();
+                items[0].bActive = 1;
+				items[0].szItemID = channels[i].OpcChannel;
+				items[0].hClient = channels[i].GetHashCode();
+                group.AddItems(1, items, out addResult, out addErrors);    
 			}
-			IntPtr addResult;
-			IntPtr addErrors;
-			group.AddItems(items.Length, items, out addResult, out addErrors);
+
+            
 			for (int i = 0; i < channels.Count; i++)
 			{
-				IntPtr pos = new IntPtr(addResult.ToInt32() + Marshal.SizeOf(typeof(OPCITEMRESULT)) * i);
+				IntPtr pos = new IntPtr(addResult.ToInt32() + Marshal.SizeOf(   typeof(OPCITEMRESULT)) * i);
 				OPCITEMRESULT res = (OPCITEMRESULT)Marshal.PtrToStructure(pos, typeof(OPCITEMRESULT));
 
 				bool readOnly = (res.dwAccessRights & OPC_WRITEABLE) != OPC_WRITEABLE;

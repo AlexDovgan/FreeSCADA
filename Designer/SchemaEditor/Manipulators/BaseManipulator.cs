@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
-using FreeSCADA.Designer.SchemaEditor.Manipulators.Controls;
+using FreeSCADA.CommonUI.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
@@ -10,10 +10,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
     /// Base Class for manipulators
     /// 
     /// /// </summary>
-        
-    public class BaseManipulator :Adorner
-    {
-        
+
+    public class BaseManipulator : Adorner,CommonUI.Interfaces.IObjectEditor, FreeSCADA.CommonUI.Interfaces.IManipulator
+    {   
         /// <summary>
         /// Container for manipulator controlls
         /// </summary>
@@ -21,16 +20,20 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         /// <summary>
         /// 
         /// </summary>
-        protected System.Windows.Controls.Canvas mainCanvas;
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="element"></param>
-        public BaseManipulator(UIElement element)
-            : base(element)
+        //
+        public event ObjectChanged ObjectChangedEvent;
+
+        protected IDocumentView _view;
+
+
+        public BaseManipulator(IDocumentView view,FrameworkElement el)
+            : base(el)
         {
+            _view = view;
             if (!(AdornedElement.RenderTransform is TransformGroup))
             {
+                
                 TransformGroup t = new TransformGroup();
                 t.Children.Add(new MatrixTransform());
                 t.Children.Add(new RotateTransform());
@@ -38,12 +41,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 AdornedElement.RenderTransformOrigin = new Point(0.5, 0.5);
                 
             }
-            ThumbsResources tr = new ThumbsResources();
-            tr.InitializeComponent();
-            Resources = tr;
-            this.Visibility = Visibility.Collapsed;                       
+            
             visualChildren = new VisualCollection(this);
-            mainCanvas=Common.Schema.SchemaDocument.GetMainCanvas(AdornedElement);
+            
        
     }
         /// <summary>
@@ -61,7 +61,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         /// </summary>
         public virtual void Activate()
         {
-            this.Visibility = Visibility.Visible;
+            AdornerLayer.GetAdornerLayer(_view.MainPanel).Add(this);
             InvalidateVisual();
         }
         /// <summary>
@@ -69,7 +69,8 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         /// </summary>
         public virtual void Deactivate()
         {
-            this.Visibility = Visibility.Collapsed;
+            
+            AdornerLayer.GetAdornerLayer(_view.MainPanel).Remove(this);
             InvalidateVisual();
         }
         /// <summary>
@@ -77,9 +78,9 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         /// </summary>
         /// <param name="el"></param>
         /// <returns></returns>
-        public virtual bool IsSelactable(UIElement el)
+        public virtual bool IsApplicable()
         {
-            return true;
+            return false;
         }
         /// <summary>
         /// 
@@ -88,12 +89,17 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         /// <returns></returns>
         public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
         {
-            Matrix m = new Matrix();
+            var m = new Matrix();
             m.OffsetX = ((MatrixTransform)transform).Matrix.OffsetX;
             m.OffsetY = ((MatrixTransform)transform).Matrix.OffsetY;
 
             return new MatrixTransform();//new MatrixTransform(m); ;// //this code neded for right manipulators zooming
             
+        }
+        protected void RaiseObjectChanged(IUndoCommand cmd)
+        {
+            if (ObjectChangedEvent != null)
+                ObjectChangedEvent(cmd);
         }
      
 

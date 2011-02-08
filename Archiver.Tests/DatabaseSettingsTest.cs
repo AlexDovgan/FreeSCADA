@@ -10,7 +10,7 @@ namespace FreeSCADA.Archiver.Tests
 		[SetUp]
 		public void Init()
 		{
-			Env.Initialize(new Control(), new MenuStrip(), null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			Env.Initialize(new Control(), new Commands(new MenuStrip(), null), FreeSCADA.Interfaces.EnvironmentMode.Designer);
 		}
 		[TearDown]
 		public void DeInit()

@@ -9,16 +9,16 @@ using System.Windows.Forms;
 
 namespace FreeSCADA.Designer.Dialogs
 {
-	public partial class RenameSchemaForm : Form
+	public partial class RenameEntityForm : Form
 	{
 		string schemaName = "";
 
-		public string SchemaName
+		public string EntityName
 		{
 			get { return schemaName; }
 		}
 
-		public RenameSchemaForm(string schemaName)
+		public RenameEntityForm(string schemaName)
 		{
 			this.schemaName = schemaName;
 
