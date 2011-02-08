@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using FreeSCADA.Archiver;
 using FreeSCADA.Common;
+using FreeSCADA.CommonUI;
 using FreeSCADA.Designer.Dialogs;
+using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer
 {
@@ -20,23 +22,22 @@ namespace FreeSCADA.Designer
 		public MainForm()
 		{
 			InitializeComponent();
-			Env.Initialize(this, mainMenu, mainToolbar, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			Env.Initialize(this, new Common.Commands(mainMenu, mainToolbar),FreeSCADA.Interfaces.EnvironmentMode.Designer);
 			ArchiverMain.Initialize();
-
-			CommandManager.fileContext = new BaseCommandContext(fileToolStripMenuItem.DropDown, mainToolbar);
-			CommandManager.viewContext = new BaseCommandContext(viewSubMenu.DropDown, mainToolbar);
-			CommandManager.documentContext = new BaseCommandContext(editSubMenu.DropDown, mainToolbar);
             
 
-			ToolStripMenuItem newItem = new ToolStripMenuItem(StringResources.CommandContextHelp);
+            Env.Current.Commands.RegisterContext("FileContext", new MenuCommandContext(fileToolStripMenuItem.DropDown));
+            Env.Current.Commands.RegisterContext("ViewContext",new MenuCommandContext(viewSubMenu.DropDown));
+			Env.Current.Commands.RegisterContext("DocumentContext" ,new MenuCommandContext(editSubMenu.DropDown));
+            
+
+           	ToolStripMenuItem newItem = new ToolStripMenuItem(StringResources.CommandContextHelp);
 			mainMenu.Items.Add(newItem);
-			CommandManager.helpContext = new BaseCommandContext(newItem.DropDown, null);
-			CommandManager.helpContext.AddCommand(new CheckForUpdatesCommand());
+			Env.Current.Commands.RegisterContext("HelpContext",new MenuCommandContext(newItem.DropDown));
+			Env.Current.Commands.GetContext("HelpContext").AddCommand(new CheckForUpdatesCommand());
 
-			MRUManager mruManager = new MRUManager(mRU1ToolStripMenuItem, toolStripSeparator2);
-			windowManager = new WindowManager(dockPanel, mruManager);
-
-			Env.Current.Project.ProjectLoaded += new EventHandler(OnProjectLoaded);
+            windowManager = new WindowManager(dockPanel);
+            Env.Current.Project.ProjectLoaded += new EventHandler(OnProjectLoaded);
 			UpdateCaptionAndCommands();
 		}
 
@@ -57,44 +58,20 @@ namespace FreeSCADA.Designer
 			frm.ShowDialog(this);
 		}
 
-		private void OnMenuExitClick(object sender, System.EventArgs e)
-		{
-			Close();
-		}
 
-		private void OnSchemaItemClick(object sender, System.EventArgs e)
-		{
-			windowManager.CreateNewSchema();
-		}
+		
 
 		private void OnEventsItemClick(object sender, System.EventArgs e)
 		{
-			windowManager.ShowEvents();
+			//windowManager.ShowEvents();
 		}
 
 		private void OnVariablesSettingsClick(object sender, EventArgs e)
 		{
-            windowManager.ShowVariablesView();
+            //windowManager.ShowVariablesView();
 		}
 
-		private void OnSaveProjectClick(object sender, System.EventArgs e)
-		{
-			windowManager.SaveProject();
-			UpdateCaptionAndCommands();
-		}
-
-		private void OnLoadProjectClick(object sender, System.EventArgs e)
-		{
-			windowManager.LoadProject();
-			UpdateCaptionAndCommands();
-		}
-
-		private void OnSaveFileClick(object sender, System.EventArgs e)
-		{
-			//windowManager.SaveDocument();
-            windowManager.SaveProject();
-            UpdateCaptionAndCommands();
-        }
+		
 
 		private void OnFormClosing(object sender, FormClosingEventArgs e)
 		{
@@ -113,37 +90,12 @@ namespace FreeSCADA.Designer
 			else
 				Text = string.Format(StringResources.MainWindowNameEx, Env.Current.Project.FileName);
 
-			if (string.IsNullOrEmpty(Env.Current.Project.FileName))
-				runButton.Enabled = false;
-			else
-				runButton.Enabled = !Env.Current.Project.IsModified;
 		}
 
-		private void OnNewProjectClick(object sender, System.EventArgs e)
-		{
-			if (windowManager.Close())
-			{
-				windowManager.ForceWindowsClose();
-				windowManager.Dispose();
-				Env.Current.CreateNewProject();
-				
-				MRUManager mruManager = new MRUManager(mRU1ToolStripMenuItem, toolStripSeparator2);
-				windowManager = new WindowManager(dockPanel, mruManager);
+		
 
-				Env.Current.CreateNewProject();
-                UpdateCaptionAndCommands();
-				System.GC.Collect();
-			}
-		}
-
-        private void runButton_Click(object sender, EventArgs e)
-        {
-
-            ProcessStartInfo psi = new ProcessStartInfo(Application.StartupPath + @"\\RunTime.exe");
-            psi.Arguments = "\""+Env.Current.Project.FileName+"\"";
-            Process.Start(psi);
-        }
-
+      
+        /*
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveFileDialog sfd = new SaveFileDialog();
@@ -160,10 +112,10 @@ namespace FreeSCADA.Designer
                 UpdateCaptionAndCommands();
             }
         }
-
+        */
         private void OnArchiverSettingsClick(object sender, EventArgs e)
         {
-            windowManager.ShowArchiverSettings();
+            //windowManager.ShowArchiverSettings();
         }
 
 		private void OnAddNewScriptClick(object sender, EventArgs e)
@@ -174,7 +126,7 @@ namespace FreeSCADA.Designer
 
         private void OnVariablesViewClick(object sender, EventArgs e)
         {
-            windowManager.ShowVariablesView();
+            //\windowManager.ShowVariablesView();
         }
     }
 }

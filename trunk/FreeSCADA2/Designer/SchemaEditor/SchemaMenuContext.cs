@@ -4,8 +4,7 @@ using System.Windows.Forms;
 using FreeSCADA.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
-{
-    
+{/*
 	class SchemaMenuContext:ICommandContext
 	{
 		ContextMenu menu;
@@ -110,5 +109,5 @@ namespace FreeSCADA.Designer.SchemaEditor.SchemaCommands
 					cmd.Execute();
 			}
 		}
-	}
+	}*/
 }

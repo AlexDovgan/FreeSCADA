@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Documents;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
@@ -18,7 +19,7 @@ namespace FreeSCADA.Common.Gestures
     /// <summary>
     /// This class provides the ability to pan the target object when dragging the mouse 
     /// </summary>
-    public class Pan:BaseTool
+    public class Pan:Adorner
     {
 
         bool _dragging;
@@ -35,9 +36,9 @@ namespace FreeSCADA.Common.Gestures
         /// </summary>
         /// <param name="target">The target to be panned, must live inside a container Panel</param>
         /// <param name="zoom"></param>
-        public Pan(IDocumentView view, MapZoom zoom):base(view)
+        public Pan(FrameworkElement target,MapZoom zoom):base(target)
         {
-            this._target = view.MainPanel;
+            this._target = target;
             this._container = _target.Parent as FrameworkElement;
             if (this._container == null) {
                 // todo: localization
@@ -115,10 +116,6 @@ namespace FreeSCADA.Common.Gestures
         public void MoveBy(Vector v) {
             _zoom.Offset = new Point(-_startTranslate.X - v.X, -_startTranslate.Y - v.Y);
             _target.InvalidateVisual();
-        }
-        public override Type GetToolManipulator()
-        {
-            throw new NotImplementedException();
         }
     }
 }

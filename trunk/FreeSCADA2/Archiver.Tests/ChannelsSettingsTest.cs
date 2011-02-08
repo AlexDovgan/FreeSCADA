@@ -14,7 +14,7 @@ namespace FreeSCADA.Archiver.Tests
 	{
 		public override void Setup()
 		{
-			Env.Initialize(new Control(), new MenuStrip(), new ToolStrip(), FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			Env.Initialize(new Control(), new Commands(new MenuStrip(), new ToolStrip()), FreeSCADA.Interfaces.EnvironmentMode.Designer);
 			ArchiverMain.Initialize();
 		}
 		public override void TearDown()
@@ -73,9 +73,7 @@ namespace FreeSCADA.Archiver.Tests
 		void CreateFewChannels()
 		{
 			ExpectModal("SettingsForm", "CreateRandomChannels");
-
-			ICommandContext context = Env.Current.Commands.GetPredefinedContext(PredefinedContexts.Communication);
-			Env.Current.Commands.FindCommandByName(context, StringConstants.PropertyCommandName).Execute();
+            Env.Current.Commands.FindCommandByName(PredefinedContexts.Communication, StringConstants.PropertyCommandName).Execute();
 		}
 
 		private void CreateRandomChannels()

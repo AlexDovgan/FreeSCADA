@@ -8,7 +8,7 @@ namespace FreeSCADA.Common
 	{
 		const string version = "2.0.0.9";
 
-		Commands commands;
+		ICommands commands;
 		Control mainWindow;
         CommunationPlugs communicationPlugins;
         FreeSCADA.Common.Project project;
@@ -19,7 +19,7 @@ namespace FreeSCADA.Common
 
 		#region Initialization and singleton implementation
 		static Env environmentInstance = null;
-		public static void Initialize(Control mainWindow, MenuStrip mainMenu, ToolStrip mainToolbar,  EnvironmentMode mode)
+		public static void Initialize(Control mainWindow, ICommands commands,  EnvironmentMode mode)
 		{
 			if (environmentInstance == null)
 			{
@@ -28,7 +28,7 @@ namespace FreeSCADA.Common
 				environmentInstance.mode = mode;
 				environmentInstance.logger = new Logger();
 				environmentInstance.CreateNewProject();
-				environmentInstance.commands = new Commands(mainMenu, mainToolbar);
+				environmentInstance.commands = commands;
 				environmentInstance.mainWindow = mainWindow;
                 environmentInstance.communicationPlugins = new CommunationPlugs();
                 environmentInstance.scriptManager = new ScriptManager();

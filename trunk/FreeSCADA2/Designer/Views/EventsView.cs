@@ -1,9 +1,8 @@
-﻿
-namespace FreeSCADA.Designer.Views
+﻿namespace FreeSCADA.Designer.Views
 {
 	class EventsView:DocumentView
 	{
-        public EventsView(): base("Events")
+        public EventsView(): base(new Common.Documents.DummyDocument("Events"))
 		{
 			
 		}

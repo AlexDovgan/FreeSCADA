@@ -58,10 +58,36 @@ namespace FreeSCADA.Communication.OPCPlug
 				channelsTree.Nodes.Clear();
 				ImportOPCChannels(srv, channelsTree.Nodes);
 			}
-
+            channelsTree.AfterCheck += new TreeViewEventHandler(channelsTree_AfterCheck);
 			groupBox1.Enabled = false;
 			connectButton.Enabled = false;
 		}
+        private void CheckAllChildNodes(TreeNode treeNode, bool nodeChecked)
+        {
+            foreach (TreeNode node in treeNode.Nodes)
+            {
+                node.Checked = nodeChecked;
+                if (node.Nodes.Count > 0)
+                {
+                    // If the current node has child nodes, call the CheckAllChildsNodes method recursively.
+                    this.CheckAllChildNodes(node, nodeChecked);
+                }
+            }
+        }
+
+        void channelsTree_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            if (e.Action != TreeViewAction.Unknown)
+            {
+                if (e.Node.Nodes.Count > 0)
+                {
+                    /* Calls the CheckAllChildNodes method, passing in the current 
+                    Checked value of the TreeNode whose checked state changed. */
+                    this.CheckAllChildNodes(e.Node, e.Node.Checked);
+                }
+            }
+
+        }
 
 		void ImportOPCChannels(IOPCBrowseServerAddressSpace srv, TreeNodeCollection root)
 		{
@@ -136,15 +162,16 @@ namespace FreeSCADA.Communication.OPCPlug
 		{
 			string hostName = localServerButton.Checked ? "localhost" : serverTextBox.Text;
 			serversComboBox.Items.Clear();
-
-			try
+            
+            try
 			{
 				Type serverListType = Type.GetTypeFromProgID("OPC.ServerList", hostName);
-				IOPCServerList serverList = (IOPCServerList)Activator.CreateInstance(serverListType);
-				Guid[] categories = { typeof(CATID_OPCDAServer20).GUID };
-				IEnumGUID enumGuids;
+                IOPCServerList2 serverList = (IOPCServerList2)Activator.CreateInstance(serverListType);
+				Guid[] categories = { typeof(CATID_OPCDAServer10).GUID };
+				IOPCEnumGUID enumGuids;
 				serverList.EnumClassesOfCategories(categories.Length, categories, 0, null, out enumGuids);
 				int fetched;
+                enumGuids.Reset();
 				do
 				{
 					Guid[] ids = new Guid[10];
@@ -153,7 +180,8 @@ namespace FreeSCADA.Communication.OPCPlug
 					{
 						string progId;
 						string name;
-						serverList.GetClassDetails(ref ids[i], out progId, out name);
+                        string vendorId;
+						serverList.GetClassDetails(ref ids[i], out progId, out name,out vendorId);
 						serversComboBox.Items.Add(progId);
 					}
 				} while (fetched > 0);

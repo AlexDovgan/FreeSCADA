@@ -1,0 +1,395 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ArchiverItemName" xml:space="preserve">
+    <value>Archiver</value>
+  </data>
+  <data name="ChannelDefaultTemplate" xml:space="preserve">
+    <value>&lt;DataTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" &gt;
+      &lt;Viewbox&gt;
+        &lt;Border BorderThickness="1,1,1,1" BorderBrush="#FF0000FF" Name="bdr"&gt;
+          &lt;StackPanel Orientation="Vertical"&gt;
+            &lt;TextBlock Text="{Binding Path=Name}" Name="txt1" Margin="0,0,10,0" ToolTip="{Binding Path=Type}" /&gt;
+            &lt;TextBlock Text="{Binding Path=Value}" Name="txt2" Margin="0,0,10,0" /&gt;
+            &lt;TextBlock Text="{Binding Path=ModifyTime}" Name="txt3" Margin="0,0,10,0" /&gt;
+            &lt;TextBlock Text="{Binding Path=Status}" Name="txt4" /&gt;
+          &lt;/StackPanel&gt;
+        &lt;/Border&gt;
+      &lt;/Viewbox&gt;
+      &lt;DataTemplate.Triggers&gt;
+        &lt;Trigger Property="FrameworkElement.IsMouseOver" SourceName="bdr"&gt;
+          &lt;Setter Property="Panel.Background" TargetName="bdr"&gt;
+            &lt;Setter.Value&gt;
+              &lt;SolidColorBrush&gt;#FFD3D3D3&lt;/SolidColorBrush&gt;
+            &lt;/Setter.Value&gt;
+          &lt;/Setter&gt;
+          &lt;Setter Property="TextElement.Foreground" TargetName="txt1"&gt;
+            &lt;Setter.Value&gt;
+              &lt;SolidColorBrush&gt;#FFFF0000&lt;/SolidColorBrush&gt;
+            &lt;/Setter.Value&gt;
+          &lt;/Setter&gt;
+          &lt;Setter Property="TextElement.Foreground" TargetName="txt2"&gt;
+            &lt;Setter.Value&gt;
+              &lt;SolidColorBrush&gt;#FFFF0000&lt;/SolidColorBrush&gt;
+            &lt;/Setter.Value&gt;
+          &lt;/Setter&gt;
+          &lt;Setter Property="TextElement.Foreground" TargetName="txt3"&gt;
+            &lt;Setter.Value&gt;
+              &lt;SolidColorBrush&gt;#FFFF0000&lt;/SolidColorBrush&gt;
+            &lt;/Setter.Value&gt;
+          &lt;/Setter&gt;
+          &lt;Setter Property="TextElement.Foreground" TargetName="txt4"&gt;
+            &lt;Setter.Value&gt;
+              &lt;SolidColorBrush&gt;#FFFF0000&lt;/SolidColorBrush&gt;
+            &lt;/Setter.Value&gt;
+          &lt;/Setter&gt;
+          &lt;Trigger.Value&gt;
+            &lt;s:Boolean&gt;True&lt;/s:Boolean&gt;
+          &lt;/Trigger.Value&gt;
+        &lt;/Trigger&gt;
+      &lt;/DataTemplate.Triggers&gt;
+    &lt;/DataTemplate&gt;</value>
+  </data>
+  <data name="ChannelsItemName" xml:space="preserve">
+    <value>Channels Tree</value>
+  </data>
+  <data name="CheckBox" xml:space="preserve">
+    <value>CheckBox Tool</value>
+  </data>
+  <data name="CommandCommonBindingName" xml:space="preserve">
+    <value>Associate with data...</value>
+  </data>
+  <data name="CommandCopyDescription" xml:space="preserve">
+    <value>Copy to clipboard</value>
+  </data>
+  <data name="CommandCopyName" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="CommandCutDescription" xml:space="preserve">
+    <value>Move to clipboard</value>
+  </data>
+  <data name="CommandCutName" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="CommandGroupDescription" xml:space="preserve">
+    <value>Group selected items</value>
+  </data>
+  <data name="CommandGroupName" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="CommandPasteDescription" xml:space="preserve">
+    <value>Paste from clipboard</value>
+  </data>
+  <data name="CommandPasteName" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="CommandRedoDescription" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="CommandRedoName" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="CommandUndoDescription" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="CommandUndoName" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="CommandUngroupDescription" xml:space="preserve">
+    <value>Remove grouping from curently selected item</value>
+  </data>
+  <data name="CommandUngroupName" xml:space="preserve">
+    <value>UnGroup</value>
+  </data>
+  <data name="CommandXamlViewDescription" xml:space="preserve">
+    <value>Show XAML code of current document</value>
+  </data>
+  <data name="CommandXamlViewName" xml:space="preserve">
+    <value>XAML representation</value>
+  </data>
+  <data name="CommandZoomDescription" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="CommandZoomInDescription" xml:space="preserve">
+    <value>Zoom in</value>
+  </data>
+  <data name="CommandZoomInName" xml:space="preserve">
+    <value>Zoom in</value>
+  </data>
+  <data name="CommandZoomName" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="CommandZoomOutDescription" xml:space="preserve">
+    <value>Zoom out</value>
+  </data>
+  <data name="CommandZoomOutName" xml:space="preserve">
+    <value>Zoom out</value>
+  </data>
+  <data name="FileImportDialogFilter" xml:space="preserve">
+    <value>All vector graphics (*.xaml;*.svg)|*.xaml;*.svg|XAML  files (*.xaml)|*.xaml|svg files (*.svg)|*.svg|All files (*.*)|*.*</value>
+  </data>
+  <data name="FileOpenDialogFilter" xml:space="preserve">
+    <value>FreeSCADA 2 files (*.fs2)|*.fs2|All files (*.*)|*.*</value>
+  </data>
+  <data name="HelperSelectingToolTooltip" xml:space="preserve">
+    <value>Please select trajectory object 
+    (line,rectangle,ellipse)</value>
+  </data>
+  <data name="MainWindowName" xml:space="preserve">
+    <value>Designer</value>
+  </data>
+  <data name="MainWindowNameEx" xml:space="preserve">
+    <value>[{0}] - Designer</value>
+  </data>
+  <data name="NumericBindingPanelName" xml:space="preserve">
+    <value>Bind to numeric value</value>
+  </data>
+  <data name="NumExpressionBindingPanelName" xml:space="preserve">
+    <value>Numeric expression binding</value>
+  </data>
+  <data name="OpenMediaDialogFilter" xml:space="preserve">
+    <value>Media files|*.gif;*.BMP;*.PNG;*.JPEG;*.JPG;*.TIFF|All files (*.*)|*.*</value>
+  </data>
+  <data name="SchemasItemName" xml:space="preserve">
+    <value>Schemas</value>
+  </data>
+  <data name="ScriptsItemName" xml:space="preserve">
+    <value>Scripts</value>
+  </data>
+  <data name="StringBindingPanelName" xml:space="preserve">
+    <value>Bind to string value</value>
+  </data>
+  <data name="ToolActionEdit" xml:space="preserve">
+    <value>Action Edit Tool</value>
+  </data>
+  <data name="ToolButton" xml:space="preserve">
+    <value>Button Tool</value>
+  </data>
+  <data name="ToolContentControl" xml:space="preserve">
+    <value>ContentControl Tool</value>
+  </data>
+  <data name="ToolControlsGroupName" xml:space="preserve">
+    <value>Controls Tools</value>
+  </data>
+  <data name="ToolEditorGroupName" xml:space="preserve">
+    <value>Editor Tools</value>
+  </data>
+  <data name="ToolEllipse" xml:space="preserve">
+    <value>Ellipse Tool</value>
+  </data>
+  <data name="ToolGrphicsGroupName" xml:space="preserve">
+    <value>Graphics Tools</value>
+  </data>
+  <data name="ToolImageControl" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="ToolPolyline" xml:space="preserve">
+    <value>Polyline Tool</value>
+  </data>
+  <data name="ToolProgressbar" xml:space="preserve">
+    <value>ProgressBar Tool</value>
+  </data>
+  <data name="ToolRectangle" xml:space="preserve">
+    <value>Rectangle Tool</value>
+  </data>
+  <data name="ToolScrollbar" xml:space="preserve">
+    <value>ScrollBar Tool</value>
+  </data>
+  <data name="ToolSelection" xml:space="preserve">
+    <value>Selection Tool</value>
+  </data>
+  <data name="ToolSlider" xml:space="preserve">
+    <value>Slider Tool</value>
+  </data>
+  <data name="ToolTextbox" xml:space="preserve">
+    <value>TextBox Tool</value>
+  </data>
+  <data name="UnsavedProjectName" xml:space="preserve">
+    <value>{unsaved project file}</value>
+  </data>
+  <data name="UntitledSchema" xml:space="preserve">
+    <value>Untitled</value>
+  </data>
+  <data name="CommandValidateDescription" xml:space="preserve">
+    <value>Validate syntax of active script</value>
+  </data>
+  <data name="CommandValidateName" xml:space="preserve">
+    <value>Check syntax</value>
+  </data>
+  <data name="CommandZMoveTopName" xml:space="preserve">
+    <value>To front</value>
+  </data>
+  <data name="CommandZMoveTopDescription" xml:space="preserve">
+    <value>Move the object to the front of the schema</value>
+  </data>
+  <data name="CommandZMoveBottomDescription" xml:space="preserve">
+    <value>Move the object to the back of the schema</value>
+  </data>
+  <data name="CommandZMoveBottomName" xml:space="preserve">
+    <value>To back</value>
+  </data>
+  <data name="SolidColorBindingPanelName" xml:space="preserve">
+    <value>Solid Color Binding</value>
+  </data>
+  <data name="UntitledScript" xml:space="preserve">
+    <value>script_</value>
+  </data>
+  <data name="ToolChart" xml:space="preserve">
+    <value>Chart Tool</value>
+  </data>
+  <data name="CommandCheckForUpdatesDescription" xml:space="preserve">
+    <value>Connect to FreeSCADA web site to look for newer versions</value>
+  </data>
+  <data name="CommandCheckForUpdatesName" xml:space="preserve">
+    <value>Check for updates...</value>
+  </data>
+  <data name="CommandContextHelp" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="UpdatesHaveTheLatestVersion" xml:space="preserve">
+    <value>You have the latest version of FreeSCADA</value>
+  </data>
+  <data name="UpdatesNewVersionAvailable" xml:space="preserve">
+    <value>New version of FreeSCADA is available. Would you like to go to web site and download it?</value>
+  </data>
+  <data name="UpdatesFailToCheckForNewVersion" xml:space="preserve">
+    <value>Fail to connect to web site: {0}</value>
+  </data>
+  <data name="StringValueBindingPanelName" xml:space="preserve">
+    <value>Two way string to value binding</value>
+  </data>
+  <data name="TextBox" xml:space="preserve">
+    <value>TextBox Tool</value>
+  </data>
+  <data name="ToolToggleButton" xml:space="preserve">
+    <value>ToggleButton</value>
+  </data>
+  <data name="ProjectContextMenuOpen" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="ProjectContextMenuRename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="ProjectContextMenuRemove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="ToolPolygon" xml:space="preserve">
+    <value>Polygon Tool</value>
+  </data>
+</root>

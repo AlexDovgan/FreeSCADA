@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using FreeSCADA.Common;
+using FreeSCADA.CommonUI.Interfaces;
 using FreeSCADA.Designer.Views.ProjectNodes;
 using FreeSCADA.Designer.Dialogs;
 
@@ -14,7 +15,7 @@ namespace FreeSCADA.Designer.Views
 		/// Notify that user double clicked on some node
 		/// </summary>
 		
-        public delegate void OpenEntityHandler(ProjectEntityType entity_type, string entity_name);
+        public delegate void OpenEntityHandler(DocumentView view);
 		/// <summary>Occurs when user double clicks a node from the list</summary>
 		public event OpenEntityHandler OpenEntity;
 
@@ -51,15 +52,17 @@ namespace FreeSCADA.Designer.Views
         }
 
         #endregion
-        
 
-		public ProjectContentView()
+        IWindowManager _windowManager;
+
+		public ProjectContentView(IWindowManager wm)
 		{
+            _windowManager = wm;
 			InitializeComponent();
 
 			TabText = "Project Content";
 
-			projectTree.ImageList = Resources.TreeIcons;
+            projectTree.ImageList = TreeResources.TreeIcons;
 
 			RefreshContent(Env.Current.Project);
             AllowDrop = true;
@@ -120,14 +123,13 @@ namespace FreeSCADA.Designer.Views
 
 		private void OnNodeDblClick(object sender, TreeNodeMouseClickEventArgs e)
 		{
-			if (OpenEntity != null && e.Node.Tag != null)
-			{
-				if (e.Node.Tag is BaseEntityNode)
-				{
-					BaseEntityNode n = e.Node.Tag as BaseEntityNode;
-					OpenEntity(n.EntityType, n.Name);
-				}
-			}
+            BaseNode node= e.Node.Tag as BaseNode;
+            _windowManager.ActivateDocument(node.GetView());
+            //foreach( BaseCommand act in node.GetActions())
+            //    if(act.IsDoubleClicked())
+              //      act.Execute();
+
+
         }
 
 		private void projectTree_AfterSelect(object sender, TreeViewEventArgs e)
@@ -149,61 +151,28 @@ namespace FreeSCADA.Designer.Views
 
 				if (e.Node.Tag != null && e.Node.Tag is BaseEntityNode)
 				{
-					ToolStripItem item;
+                    foreach (BaseCommand act in (e.Node.Tag as BaseEntityNode).GetActions())
+                    {
+                        ToolStripItem item;
 
-					item = menu.Items.Add(StringResources.ProjectContextMenuOpen);
-					item.Tag = e.Node;
-					item.Click += new EventHandler(OnOpenNodeClick);
-
-					if ((e.Node.Tag as BaseEntityNode).CanRename)
-					{
-						item = menu.Items.Add(StringResources.ProjectContextMenuRename);
-						item.Tag = e.Node;
-						item.Click += new EventHandler(OnRenameNodeClick);
-					}
-
-					if ((e.Node.Tag as BaseEntityNode).CanRemove)
-					{
-						item = menu.Items.Add(StringResources.ProjectContextMenuRemove);
-						item.Tag = e.Node;
-						item.Click += new EventHandler(OnRemoveNodeClick);
-					}
-				}
+                        item = menu.Items.Add(act.Name);
+                        item.Tag = act;
+                        item.Click += new EventHandler(OnNodeCommandClick);
+                    }
+               	}
 				
 				if(menu.Items.Count > 0)
 					menu.Show(projectTree,e.Location);
 			}
 		}
 
-		void OnRemoveNodeClick(object sender, EventArgs e)
+        void OnNodeCommandClick(object sender, EventArgs e)
 		{
 			ToolStripItem item = sender as ToolStripItem;
-			TreeNode treeNode = item.Tag as TreeNode;
-			BaseEntityNode node = treeNode.Tag as BaseEntityNode;
-
-			node.Remove(treeNode);
+			BaseCommand act = item.Tag as BaseCommand;
+			act.Execute();
 		}
 
-		void OnRenameNodeClick(object sender, EventArgs e)
-		{
-			ToolStripItem item = sender as ToolStripItem;
-			TreeNode treeNode = item.Tag as TreeNode;
-			BaseEntityNode node = treeNode.Tag as BaseEntityNode;
-
-			RenameSchemaForm dlg = new RenameSchemaForm(node.Name);
-			if (dlg.ShowDialog(this) == DialogResult.OK)
-			{
-				node.Rename(dlg.SchemaName, treeNode);
-			}
-		}
-
-		void OnOpenNodeClick(object sender, EventArgs e)
-		{
-			ToolStripItem item = sender as ToolStripItem;
-			TreeNode treeNode = item.Tag as TreeNode;
-			BaseEntityNode node = treeNode.Tag as BaseEntityNode;
-
-			OpenEntity(node.EntityType, node.Name);
-		}
+		
 	}
 }

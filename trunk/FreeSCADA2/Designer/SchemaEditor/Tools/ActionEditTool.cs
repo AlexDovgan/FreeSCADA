@@ -3,6 +3,7 @@ using System;
 using System.Windows.Input;
 using FreeSCADA.Designer.SchemaEditor.Manipulators;
 using FreeSCADA.Common;
+using FreeSCADA.CommonUI.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.Tools
 {

@@ -7,6 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using FreeSCADA.Common;
 using FreeSCADA.Designer.Views;
+using FreeSCADA.CommonUI.Interfaces;
+
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 {
     abstract class BaseControl: Thumb

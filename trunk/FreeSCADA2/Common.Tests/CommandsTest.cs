@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using FreeSCADA.CommonUI;
+using System.Windows.Forms;
 using FreeSCADA.Interfaces;
 using NUnit.Framework;
 
@@ -17,13 +18,13 @@ namespace FreeSCADA.Common.Tests
 			CommandMock testCommand1 = new CommandMock("Test command 1");
 			CommandMock testCommand2 = new CommandMock("Test command 2");
 
-			ICommandContext context = commands.GetPredefinedContext(FreeSCADA.Interfaces.PredefinedContexts.Communication);
+			ICommandContext context = commands.GetContext(FreeSCADA.Interfaces.PredefinedContexts.Communication);
 			Assert.IsNotNull(context);
 
-			commands.AddCommand(context, testCommand1);
-			commands.AddCommand(context, testCommand2);
+			context.AddCommand( testCommand1);
+            context.AddCommand( testCommand2);
 
-			Assert.AreEqual(2, commands.GetCommands(context).Count);
+            Assert.AreEqual(2, context.GetCommands().Count);
 
 			ToolStripMenuItem group = (ToolStripMenuItem)menu.Items[0];
 			Assert.AreEqual("Test command 1", group.DropDown.Items[0].Text);
@@ -39,10 +40,10 @@ namespace FreeSCADA.Common.Tests
 
 			CommandMock testCommand = new CommandMock("Test command 1");
 
-			ICommandContext context = commands.GetPredefinedContext(FreeSCADA.Interfaces.PredefinedContexts.Global);
-			commands.AddCommand(context, testCommand);
+			ICommandContext context = commands.GetContext(FreeSCADA.Interfaces.PredefinedContexts.GlobalMenu);
+            context.AddCommand( testCommand);
 
-			foreach (ICommand cmd in commands.GetCommands(context))
+            foreach (ICommand cmd in context.GetCommands())
 				cmd.Execute();
 
 			Assert.IsTrue(testCommand.isExecuted);

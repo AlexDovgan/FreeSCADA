@@ -13,7 +13,9 @@ using FreeSCADA.Designer.SchemaEditor;
 using FreeSCADA.Designer.SchemaEditor.PropertiesUtils;
 using FreeSCADA.Designer.SchemaEditor.SchemaCommands;
 using FreeSCADA.Interfaces;
-
+using FreeSCADA.CommonUI.Interfaces;
+using FreeSCADA.CommonUI;
+using FreeSCADA.CommonUI.GlobalCommands;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -25,7 +27,7 @@ namespace FreeSCADA.Designer.Views
         WPFShemaContainer _wpfSchemaContainer;
 
 
-        BaseTool _activeTool;
+        ITool _activeTool;
         Type _defaultTool = typeof(SelectionTool);
         //temp solution
         public GridManager GridManager
@@ -35,10 +37,9 @@ namespace FreeSCADA.Designer.Views
         }
 
 
-        ContextMenu contextMenu = new ContextMenu();
-
+        ContextMenuStrip contextMenu = new ContextMenuStrip();
         ICommandContext _documentMenuContext;
-        ICommandContext _toolboxContext;
+
         SchemaCommand _undoCommand, _redoCommand;
         #endregion
 
@@ -62,7 +63,7 @@ namespace FreeSCADA.Designer.Views
 
 
 
-        public override  BaseTool ActiveTool
+        public override  ITool ActiveTool
         {
             get
             {
@@ -95,20 +96,14 @@ namespace FreeSCADA.Designer.Views
         #endregion
 
         #region Initialization
-        public SchemaView(string docName)
-            : base(docName)
+        public SchemaView(IDocument doc)
+            : base(doc)
         {
-            this._wpfSchemaContainer = new WPFShemaContainer();
-            var canvas = SchemaDocument.LoadSchema(DocumentName);
-            if (canvas == null)
-            {
-                canvas = SchemaDocument.CreateNewSchema();
-                IsModified = true;
-            }
-            if (canvas == null)
-                throw new Exception("can not create new schema");
+            Document = doc;
 
-            MainPanel = canvas;
+            this._wpfSchemaContainer = new WPFShemaContainer();
+            IsModified = true;
+            MainPanel =Document.Content as System.Windows.Controls.Panel;
             
             InitializeComponent();
            
@@ -148,15 +143,15 @@ namespace FreeSCADA.Designer.Views
 
             this.UndoBuff = new BaseUndoBuffer(this);
             this.SelectionManager = new SchemaSelectionManager(this);
-            _documentMenuContext = new SchemaMenuContext(contextMenu);
-            this.ContextMenu = contextMenu;
-            CommandManager.documentMenuContext = _documentMenuContext;
+            _documentMenuContext = new MenuCommandContext(contextMenu);
+            this.ContextMenuStrip = contextMenu;
+            //CommandManager.documentMenuContext = _documentMenuContext;////????????????????????????????
 
 
             this._wpfSchemaContainer.Child.AllowDrop = true;
             this._wpfSchemaContainer.Child.DragEnter += new System.Windows.DragEventHandler(Child_DragEnter);
             this._wpfSchemaContainer.Child.Drop += new System.Windows.DragEventHandler(Child_Drop);
-            //this._wpfSchemaContainer.View.ContextMenu = contextMenu;
+            
             ZoomManager = new MapZoom(MainPanel);
             CreateCommands();
             MainPanel.Loaded += new RoutedEventHandler(MainCanvas_Loaded);
@@ -203,91 +198,111 @@ namespace FreeSCADA.Designer.Views
             var blankBitmap = new System.Drawing.Bitmap(10, 10);
 
             // Commands to ToolStrip
-            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
-            DocumentCommands.Add(new CommandInfo(_undoCommand = new UndoCommand(this)));
-            DocumentCommands.Add(new CommandInfo(_redoCommand = new RedoCommand(this)));
-            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
-            DocumentCommands.Add(new CommandInfo(cutCommand));
-            DocumentCommands.Add(new CommandInfo(copyCommand));
-            DocumentCommands.Add(new CommandInfo(pasteCommand));
-            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
-            DocumentCommands.Add(new CommandInfo(new XamlViewCommand(this)));
-            DocumentCommands.Add(new CommandInfo(new GroupCommand(this)));
-            DocumentCommands.Add(new CommandInfo(new UngroupCommand(this)));
-            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
+            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands),
+                new string[]{ "DocumentContext",PredefinedContexts.GlobalToolbar}));    // Separator
+            DocumentCommands.Add(new CommandInfo(_undoCommand = new UndoCommand(this),
+                new string[] { "DocumentContext", PredefinedContexts.GlobalToolbar }));
+            DocumentCommands.Add(new CommandInfo(_redoCommand = new RedoCommand(this),
+                new string[] { "DocumentContext", PredefinedContexts.GlobalToolbar }));
+            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands),
+                new string[] { "DocumentContext", PredefinedContexts.GlobalToolbar }));    // Separator
+            DocumentCommands.Add(new CommandInfo(cutCommand, 
+                new string[] { "DocumentContext", PredefinedContexts.GlobalToolbar }));
+            DocumentCommands.Add(new CommandInfo(copyCommand, 
+                new string[] { "DocumentContext", PredefinedContexts.GlobalToolbar }));
+            DocumentCommands.Add(new CommandInfo(pasteCommand, 
+                new string[] { "DocumentContext", PredefinedContexts.GlobalToolbar }));
+            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands),
+                new string[] { "DocumentContext", PredefinedContexts.GlobalToolbar }));    // Separator
+            DocumentCommands.Add(new CommandInfo(new XamlViewCommand(this),
+                new string[] { "DocumentContext", PredefinedContexts.GlobalToolbar }));
+            DocumentCommands.Add(new CommandInfo(new GroupCommand(this),
+                new string[] { "DocumentContext", PredefinedContexts.GlobalToolbar }));
+            DocumentCommands.Add(new CommandInfo(new UngroupCommand(this),
+                new string[] { "DocumentContext", PredefinedContexts.GlobalToolbar }));
+            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands),
+                new string[] { "DocumentContext", PredefinedContexts.GlobalToolbar }));    // Separator
 
-            DocumentCommands.Add(new CommandInfo(new ZMoveTopCommand(this)));
-            DocumentCommands.Add(new CommandInfo(new ZMoveBottomCommand(this)));
-            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
-            DocumentCommands.Add(new CommandInfo(bindingCommand));
+            DocumentCommands.Add(new CommandInfo(new ZMoveTopCommand(this),
+                new string[] { "DocumentContext", PredefinedContexts.GlobalToolbar }));
+            DocumentCommands.Add(new CommandInfo(new ZMoveBottomCommand(this),
+                new string[] { "DocumentContext", PredefinedContexts.GlobalToolbar }));
+            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands),
+                 new string[] { "DocumentContext", PredefinedContexts.GlobalToolbar }));    // Separator
+            DocumentCommands.Add(new CommandInfo(bindingCommand,
+                new string[] { "DocumentContext", PredefinedContexts.GlobalToolbar }));
 
 
-            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.ViewCommands), CommandManager.viewContext));    // Separator
-            DocumentCommands.Add(new CommandInfo(new ZoomLevelCommand(this), CommandManager.viewContext));
-            DocumentCommands.Add(new CommandInfo(new ZoomOutCommand(this), CommandManager.viewContext));
-            DocumentCommands.Add(new CommandInfo(new ZoomInCommand(this), CommandManager.viewContext));
+            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.ViewCommands), 
+                new string[] { "ViewContext"}));    
+            DocumentCommands.Add(new CommandInfo(new ZoomLevelCommand(this),
+                new string[] { "ViewContext" }));
+            DocumentCommands.Add(new CommandInfo(new ZoomOutCommand(this),
+                new string[] { "ViewContext" }));
+            DocumentCommands.Add(new CommandInfo(new ZoomInCommand(this),
+                new string[] { "ViewContext" }));
 
-            DocumentCommands.Add(new CommandInfo(cutCommand, CommandManager.documentMenuContext));
-            DocumentCommands.Add(new CommandInfo(copyCommand, CommandManager.documentMenuContext));
-            DocumentCommands.Add(new CommandInfo(pasteCommand, CommandManager.documentMenuContext));
-            DocumentCommands.Add(new CommandInfo(bindingCommand, CommandManager.documentMenuContext));
-            DocumentCommands.Add(new CommandInfo(new ImportElementCommand(this), CommandManager.fileContext));
-
-            DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.EditCommands)));    // Separator
-            DocumentCommands.Add(new CommandInfo(new ImportElementCommand(this), CommandManager.documentContext));
-
+            /*DocumentCommands.Add(new CommandInfo(cutCommand, _documentMenuContext));
+            DocumentCommands.Add(new CommandInfo(copyCommand, _documentMenuContext));
+            DocumentCommands.Add(new CommandInfo(pasteCommand, _documentMenuContext));
+            DocumentCommands.Add(new CommandInfo(bindingCommand, _documentMenuContext));
+             * */
+            DocumentCommands.Add(new CommandInfo(new ImportElementCommand(this),
+                new string[] { "FileContext" }));
+            
+            
             DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
                     StringResources.ToolSelection,
                 StringResources.ToolEditorGroupName,
-                global::FreeSCADA.Designer.Properties.Resources.cursor,
+                global::FreeSCADA.Designer.Resources.cursor,
                 typeof(SelectionTool)),
-                CommandManager.toolboxContext));
+                new string[] { "ToolboxContext" }));
 
             DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
                     StringResources.ToolRectangle,
                     StringResources.ToolGrphicsGroupName,
-                    global::FreeSCADA.Designer.Properties.Resources.shape_square_add,
+                    global::FreeSCADA.Designer.Resources.shape_square_add,
                     typeof(RectangleTool)),
-                    CommandManager.toolboxContext));
+                    new string[] { "ViewContext" }));
 
             DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
                     StringResources.ToolEllipse,
                     StringResources.ToolGrphicsGroupName,
-                    global::FreeSCADA.Designer.Properties.Resources.shape_ellipse_add,
+                    global::FreeSCADA.Designer.Resources.shape_ellipse_add,
                     typeof(EllipseTool)),
-                    CommandManager.toolboxContext));
+                    new string[] { "ToolboxContext" }));
 
             DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
                     StringResources.ToolTextbox,
                     StringResources.ToolGrphicsGroupName,
-                    global::FreeSCADA.Designer.Properties.Resources.textfield_add,
+                    global::FreeSCADA.Designer.Resources.textfield_add,
                     typeof(TextBoxTool)),
-                    CommandManager.toolboxContext));
+                    new string[] { "ToolboxContext" }));
 
             DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
                     StringResources.ToolPolyline,
                     StringResources.ToolGrphicsGroupName,
-                    global::FreeSCADA.Designer.Properties.Resources.shape_line_add,
+                    global::FreeSCADA.Designer.Resources.shape_line_add,
                     typeof(PolylineTool)),
-                    CommandManager.toolboxContext));
+                    new string[] { "ToolboxContext" }));
             DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
                     StringResources.ToolPolygon,
                     StringResources.ToolGrphicsGroupName,
-                    global::FreeSCADA.Designer.Properties.Resources.shape_line_add,
+                    global::FreeSCADA.Designer.Resources.shape_line_add,
                     typeof(PolygonTool)),
-                    CommandManager.toolboxContext));
+                    new string[] { "ToolboxContext" }));
 
             /*DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
                     StringResources.ToolActionEdit,
                     StringResources.ToolEditorGroupName,
-                    global::FreeSCADA.Designer.Properties.Resources.cog_edit,
+                    global::FreeSCADA.Designer.Resources.cog_edit,
                     typeof(ActionEditTool)),
                     CommandManager.toolboxContext));*/
 
@@ -297,7 +312,7 @@ namespace FreeSCADA.Designer.Views
                     StringResources.ToolControlsGroupName,
                     blankBitmap,
                     typeof(ControlCreateTool<System.Windows.Controls.Button>)),
-                    CommandManager.toolboxContext));
+                    new string[] { "ToolboxContext" }));
 
             DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
@@ -305,7 +320,7 @@ namespace FreeSCADA.Designer.Views
                     StringResources.ToolControlsGroupName,
                     blankBitmap,
                     typeof(ControlCreateTool<System.Windows.Controls.Primitives.ToggleButton>)),
-                    CommandManager.toolboxContext));
+                    new string[] { "ToolboxContext" }));
 
             DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
@@ -313,7 +328,7 @@ namespace FreeSCADA.Designer.Views
                     StringResources.ToolControlsGroupName,
                     blankBitmap,
                     typeof(ControlCreateTool<System.Windows.Controls.ProgressBar>)),
-                    CommandManager.toolboxContext));
+                    new string[] { "ToolboxContext" }));
 
             DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
@@ -321,7 +336,7 @@ namespace FreeSCADA.Designer.Views
                     StringResources.ToolControlsGroupName,
                     blankBitmap,
                     typeof(ControlCreateTool<System.Windows.Controls.Primitives.ScrollBar>)),
-                    CommandManager.toolboxContext));
+                    new string[] { "ToolboxContext" }));
 
             DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
@@ -329,7 +344,7 @@ namespace FreeSCADA.Designer.Views
                     StringResources.ToolControlsGroupName,
                     blankBitmap,
                     typeof(ControlCreateTool<FreeSCADA.Common.Schema.AnimatedImage>)),
-                    CommandManager.toolboxContext));
+                    new string[] { "ToolboxContext" }));
 
             DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
@@ -337,7 +352,7 @@ namespace FreeSCADA.Designer.Views
                     StringResources.ToolControlsGroupName,
                     blankBitmap,
                     typeof(ControlCreateTool<System.Windows.Controls.Slider>)),
-                    CommandManager.toolboxContext));
+                    new string[] { "ToolboxContext"}));
 
             DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
@@ -345,7 +360,7 @@ namespace FreeSCADA.Designer.Views
                     StringResources.ToolControlsGroupName,
                     blankBitmap,
                     typeof(ControlCreateTool<System.Windows.Controls.CheckBox>)),
-                    CommandManager.toolboxContext));
+                    new string[] { "ToolboxContext" }));
 
             DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
@@ -353,7 +368,7 @@ namespace FreeSCADA.Designer.Views
                     StringResources.ToolControlsGroupName,
                     blankBitmap,
                     typeof(ControlCreateTool<System.Windows.Controls.TextBox>)),
-                    CommandManager.toolboxContext));
+                    new string[] { "ToolboxContext" }));
 
             DocumentCommands.Add(new CommandInfo(
                 new ToolCommand(this,
@@ -361,7 +376,7 @@ namespace FreeSCADA.Designer.Views
                     StringResources.ToolControlsGroupName,
                     blankBitmap,
                     typeof(ControlCreateTool<TimeChartControl>)),
-                    CommandManager.toolboxContext));
+                    new string[] { "ToolboxContext" }));
 
 
         }
@@ -376,7 +391,7 @@ namespace FreeSCADA.Designer.Views
         {
         
             ReInitEditor();
-            base.OnActivated();
+            
         }
 
         #endregion
@@ -385,16 +400,13 @@ namespace FreeSCADA.Designer.Views
         #region DocumentBehavior
         public override void OnActivated()
         {
-            
+            base.OnActivated();
         }
 
         public override bool SaveDocument()
         {
-            MainPanel.Tag = null;
-            SchemaDocument.SaveSchema(MainPanel, DocumentName);
+            Document.Save(DocumentName,MainPanel);
             IsModified = false;
-            MainPanel.Tag = this;
-
             return true;
         }
         protected override void OnClosed(EventArgs e)
@@ -582,7 +594,6 @@ namespace FreeSCADA.Designer.Views
 
 
             MainPanel.UpdateLayout();
-            _activeTool.InvalidateVisual();
         }
 
         private void UpdateCanvasByXaml()
@@ -622,9 +633,8 @@ namespace FreeSCADA.Designer.Views
         public void UpdateXamlView()
         {
             if (!XamlView.Visible) return;
-            MainPanel.Tag = null;
             XamlView.Text = EditorHelper.SerializeObject(MainPanel);
-            MainPanel.Tag = this;
+            
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿using System.Windows.Controls.Primitives;
 using FreeSCADA.Common;
 using System.Windows;
+using FreeSCADA.CommonUI.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators.Controls
 {

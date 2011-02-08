@@ -3,6 +3,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using FreeSCADA.Common;
 using FreeSCADA.Common.Schema;
+using FreeSCADA.CommonUI.GlobalCommands;
+using FreeSCADA.Common.Documents;
 using FreeSCADA.RunTime.DocumentCommands;
 using FreeSCADA.Common.Gestures;
 
@@ -46,6 +48,8 @@ namespace FreeSCADA.RunTime.Views
 		
         public SchemaView()
 		{
+            Document = new SchemaDocument();
+
 			InitializeComponent();
 
 			DocumentCommands.Add(new CommandInfo(new NullCommand((int)CommandManager.Priorities.ViewCommands), CommandManager.viewContext));    // Separator
@@ -110,12 +114,7 @@ namespace FreeSCADA.RunTime.Views
 		public bool LoadDocument(string name)
 		{
 
-			System.Windows.Controls.Canvas canvas = SchemaDocument.LoadSchema(name);
-			if (canvas == null)
-				return false;
-
-			MainCanvas = canvas;
-            DocumentName = name;
+			Document.Load(name) ;
 			return true;
 		}
 

@@ -22,7 +22,6 @@ namespace FreeSCADA.Designer.Views
 
         }
 
-
         public void AddTool(ICommand cmd)
         {
             var command = cmd as SchemaEditor.SchemaCommands.ToolCommand;
@@ -49,20 +48,8 @@ namespace FreeSCADA.Designer.Views
             
             _toolBox.ItemSelectionChanged += new ItemSelectionChangedHandler(ToolChanged);
             _toolBox.TabSelectionChanged += new TabSelectionChangedHandler(ToolChanged);
-            /*if (command.IsActive)
-            {
-                
-                tbi.Selected = true;
-                tbt.Selected = true;
-            }
-            else
-            {
-                 tbi.Selected = false;
-                 tbt.Selected = false;
-            }*/
-
             
-            for (int i = 0; i < _toolBox.Tabs.Count; i++)
+            /*for (int i = 0; i < _toolBox.Tabs.Count; i++)
                 for (int j = 0; j < _toolBox.Tabs[i].ItemCount; j++)
                     if (((SchemaEditor.SchemaCommands.ToolCommand)_toolBox.Tabs[i][j].Object).IsActive)
                     {
@@ -75,7 +62,7 @@ namespace FreeSCADA.Designer.Views
                         _toolBox.Tabs[i].Selected = false;
                         _toolBox.Tabs[i][j].Selected = false;
                     }
-            
+            */
             _toolBox.Update();
         }
         public void DeleteTool(ICommand cmd)
@@ -85,6 +72,8 @@ namespace FreeSCADA.Designer.Views
             _toolBox.TabSelectionChanged -= new TabSelectionChangedHandler(ToolChanged);
 
             var tbt = _toolBox[command.ToolGroup];
+            if (tbt == null)
+                return;
             for (var i = 0; i < tbt.ItemCount; i++)
                 if (tbt[i].Object == cmd)
                 {
@@ -136,6 +125,15 @@ namespace FreeSCADA.Designer.Views
             _toolBox.DeleteAllTabs();
             _toolBox.SmallImageList = new ImageList();
             Controls.Add(_toolBox);
+        }
+        public List<ICommand> GetTools()
+        {
+            List<ICommand> tl = new List<ICommand>();
+
+            for (int i = 0; i < _toolBox.Tabs.Count; i++)
+                for (int j = 0; j < _toolBox.Tabs[i].ItemCount; j++)
+                   tl.Add(_toolBox.Tabs[i][j].Object as ICommand);
+            return tl;
         }
     }
 }

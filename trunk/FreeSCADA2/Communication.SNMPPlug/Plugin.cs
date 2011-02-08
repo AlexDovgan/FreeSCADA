@@ -80,8 +80,8 @@ namespace FreeSCADA.Communication.SNMPPlug
 
             if (environment.Mode == EnvironmentMode.Designer)
             {
-                ICommandContext context = environment.Commands.GetPredefinedContext(PredefinedContexts.Communication);
-                environment.Commands.AddCommand(context, new PropertyCommand(this));
+                ICommandContext context = environment.Commands.GetContext(PredefinedContexts.Communication);
+                context.AddCommand(new PropertyCommand(this));
             }
         }
 

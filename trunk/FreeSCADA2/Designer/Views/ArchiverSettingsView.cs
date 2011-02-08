@@ -29,7 +29,7 @@ namespace FreeSCADA.Designer.Views
 		private ListBox channelsList;
 
 
-        public ArchiverSettingsView():base("Archiver Settings")
+        public ArchiverSettingsView():base(new Common.Documents.DummyDocument("Archiver Settings"))
 		{
 			InitializeComponent();
 			UpdateControlStates();

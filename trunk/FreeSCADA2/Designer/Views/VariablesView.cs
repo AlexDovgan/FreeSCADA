@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using FreeSCADA.Common;
+using FreeSCADA.Common.Documents;
 using FreeSCADA.Interfaces;
 using System.Threading;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace FreeSCADA.Designer.Views
         private List<chnlListMember> channels = new List<chnlListMember>();
         //private System.ComponentModel.IContainer components;
 
-        public VariablesView():base("Variables view [table]")
+        public VariablesView():base(new DummyDocument("Variables view [table]"))
         {
             
             InitializeComponent();

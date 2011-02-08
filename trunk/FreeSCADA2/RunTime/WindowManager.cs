@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using FreeSCADA.Archiver;
 using FreeSCADA.Common;
+using FreeSCADA.CommonUI;
 using FreeSCADA.RunTime.Views;
 using WeifenLuo.WinFormsUI.Docking;
+using FreeSCADA.CommonUI.Interfaces;
 
 namespace FreeSCADA.RunTime
 {
-    class WindowManager : IDisposable
+    class WindowManager : IDisposable,IWindowManager
     {
         WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel;
         MRUManager mruManager;
@@ -19,12 +21,11 @@ namespace FreeSCADA.RunTime
 
         DocumentView currentDocument;
 
-        public WindowManager(DockPanel dockPanel, MRUManager mruManager)
+        public WindowManager(DockPanel dockPanel)
         {
             this.dockPanel = dockPanel;
-            this.mruManager = mruManager;
-            mruManager.ItemClicked += new MRUManager.ItemClickedDelegate(OnMRUItemClicked);
-
+            
+            mruManager = new MRUManager(CommandManager.viewContext,this);
             //Create toolwindows
             dockPanel.SuspendLayout();
             projectContentView = new ProjectContentView();
@@ -251,7 +252,6 @@ namespace FreeSCADA.RunTime
         {
             Close();
 
-            mruManager.ItemClicked -= new MRUManager.ItemClickedDelegate(OnMRUItemClicked);
             projectContentView.OpenEntity -= new ProjectContentView.OpenEntityHandler(OnOpenProjectEntity);
             dockPanel.ActiveDocumentChanged -= new EventHandler(OnActiveDocumentChanged);
 			Env.Current.ScriptManager.ScriptApplication.OpenEntity -= new FreeSCADA.Common.Scripting.Application.OpenEntityHandler(OnOpenProjectEntity);
@@ -260,6 +260,40 @@ namespace FreeSCADA.RunTime
             logConsoleView.Dispose();
             dockPanel.Dispose();
             mruManager.Dispose();
+        }
+
+        #endregion
+
+        #region IWindowManager Members
+
+        bool IWindowManager.Close()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ActivateDocument(IDocumentView view)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ForceWindowsClose()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveAllDocuments()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveDocument()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Refresh()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

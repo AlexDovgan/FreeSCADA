@@ -42,22 +42,30 @@ namespace FreeSCADA.RunTime.Views
 			UpdateCaption();
 		}
 
+        public IDocument Document
+        {
+            get;
+            protected set;
+        }
 		public string DocumentName
 		{
-			get { return documentName; }
-			set { documentName = value; UpdateCaption();}
+			get { return Document.Name; }
+			set { 
+                Document.Save(value); 
+                UpdateCaption();
+            }
 		}
 
 		public virtual void OnActivated()
 		{
-			foreach (CommandInfo cmdInfo in DocumentCommands)
-				Env.Current.Commands.AddCommand(cmdInfo.defaultContext, cmdInfo.command);
+			//foreach (CommandInfo cmdInfo in DocumentCommands)
+			//	Env.Current.Commands.AddCommand(cmdInfo.defaultContext, cmdInfo.command);
 		}
 
 		public virtual void OnDeactivated()
 		{
-			foreach (CommandInfo cmdInfo in DocumentCommands)
-				Env.Current.Commands.RemoveCommand(cmdInfo.command);
+			//foreach (CommandInfo cmdInfo in DocumentCommands)
+			//	Env.Current.Commands.RemoveCommand(cmdInfo.command);
                  
         }
 

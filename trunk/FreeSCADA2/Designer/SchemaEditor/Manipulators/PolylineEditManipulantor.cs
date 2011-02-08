@@ -8,6 +8,7 @@ using System.Windows.Shapes;
 using FreeSCADA.Designer.SchemaEditor.Manipulators.Controls;
 using FreeSCADA.Common;
 using FreeSCADA.Designer.Views;
+using FreeSCADA.CommonUI.Interfaces;
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {
@@ -49,7 +50,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
             EditorHelper.SetDependencyProperty(_poly, FrameworkElement.HeightProperty, DependencyProperty.UnsetValue);
 
             _poly.RenderTransform = null;
-            AdornerLayer.GetAdornerLayer(this).PreviewMouseLeftButtonDown += new System.Windows.Input.MouseButtonEventHandler(PolylineEditManipulantor_PreviewMouseLeftButtonDown);
+            AdornerLayer.GetAdornerLayer(AdornedElement).PreviewMouseLeftButtonDown += new System.Windows.Input.MouseButtonEventHandler(PolylineEditManipulantor_PreviewMouseLeftButtonDown);
           
             _poly.UpdateLayout();
             base.Activate();
@@ -131,7 +132,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
                 pdt.DragDelta -= PointDragDelta;
                 pdt.PreviewMouseLeftButtonUp -= OnPreviewMouseLeftButtonUp;
             }
-            AdornerLayer.GetAdornerLayer(this).PreviewMouseLeftButtonDown -= new System.Windows.Input.MouseButtonEventHandler(PolylineEditManipulantor_PreviewMouseLeftButtonDown);
+            AdornerLayer.GetAdornerLayer(AdornedElement).PreviewMouseLeftButtonDown -= new System.Windows.Input.MouseButtonEventHandler(PolylineEditManipulantor_PreviewMouseLeftButtonDown);
             visualChildren.Clear(); ;
             _poly.UpdateLayout();
             base.Deactivate();
@@ -139,7 +140,7 @@ namespace FreeSCADA.Designer.SchemaEditor.Manipulators
         void PointDragStarted(object sender, DragStartedEventArgs e)
         {
 
-            RaiseObjectChanged( new ModifyGraphicsObject(AdornedElement));
+            RaiseObjectChanged(new ModifyGraphicsObject(AdornedElement));
         }   
         void PointDragDelta(object sender, DragDeltaEventArgs e)
         {

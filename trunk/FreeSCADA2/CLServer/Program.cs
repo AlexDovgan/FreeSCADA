@@ -5,6 +5,44 @@ using FreeSCADA.Common;
 
 namespace FreeSCADA.CLServer
 {
+    class Commands:Interfaces.ICommands
+    {
+        #region ICommands Members
+        public Commands()
+        {
+        }
+        public FreeSCADA.Interfaces.ICommandContext GetContext(string contextName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RegisterContext(string contextName, FreeSCADA.Interfaces.ICommandContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public FreeSCADA.Interfaces.ICommand FindCommandByName(string contextName, string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region ICommands Members
+
+
+        FreeSCADA.Interfaces.ICommands FreeSCADA.Interfaces.ICommands.RegisterContext(string contextName, FreeSCADA.Interfaces.ICommandContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public System.Collections.Generic.List<string> GetRegisteredContextes()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
 	class Program
 	{
 		static int Main(string[] args)
@@ -27,7 +65,7 @@ namespace FreeSCADA.CLServer
 			}
 
 			Console.Write("Initializing communication plugins... ");
-			Env.Initialize(null, null, null, FreeSCADA.Interfaces.EnvironmentMode.Runtime);
+			Env.Initialize(null, new Commands(), FreeSCADA.Interfaces.EnvironmentMode.Runtime);
 			Env.Current.Project.Load(options.ProjectFile);
 			CommunationPlugs plugs = Env.Current.CommunicationPlugins;
 			if (plugs.Connect() == false)

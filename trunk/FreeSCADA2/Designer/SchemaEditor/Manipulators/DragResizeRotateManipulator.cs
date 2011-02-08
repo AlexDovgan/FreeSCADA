@@ -5,6 +5,8 @@ using System.Windows.Input;
 using System.Windows.Shapes;
 using FreeSCADA.Designer.SchemaEditor.Manipulators.Controls;
 using FreeSCADA.Common;
+using FreeSCADA.CommonUI.Interfaces;
+
 
 namespace FreeSCADA.Designer.SchemaEditor.Manipulators
 {

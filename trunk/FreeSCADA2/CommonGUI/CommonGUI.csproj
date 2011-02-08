@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -12,6 +12,11 @@
     <AssemblyName>CommonGUI</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -78,20 +83,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseManipulator.cs" />
-    <Compile Include="BaseTool.cs" />
-    <Compile Include="BaseUndoBuffer.cs" />
+    <Compile Include="DummyDocument.cs" />
+    <Compile Include="Infrstructure\CommandManager.cs" />
+    <Compile Include="Infrstructure\Commands.cs" />
+    <Compile Include="Infrstructure\GlobalCommands.cs" />
+    <Compile Include="Infrstructure\SubMenuCommand.cs" />
+    <Compile Include="Infrstructure\MenuCommandContext.cs" />
+    <Compile Include="Infrstructure\MRUManager.cs" />
+    <Compile Include="Infrstructure\ToolbarCommandContext.cs" />
     <Compile Include="Gestures\AutoScroll.cs" />
     <Compile Include="Gestures\ExponentialAnimation.cs" />
     <Compile Include="Gestures\MapZoom.cs" />
     <Compile Include="Gestures\Pan.cs" />
     <Compile Include="Gestures\RectangleSelectionGesture.cs" />
     <Compile Include="Gestures\SelectionRectVisual.cs" />
-    <Compile Include="IBaseUndoBuffer.cs" />
-    <Compile Include="IDocumentView.cs" />
-    <Compile Include="IObjectEditor.cs" />
-    <Compile Include="ISelectionManager.cs" />
-    <Compile Include="IUndoCommand.cs" />
+    <Compile Include="Interfaces\IBaseManipulator.cs" />
+    <Compile Include="Interfaces\IBaseTool.cs" />
+    <Compile Include="Interfaces\IBaseUndoBuffer.cs" />
+    <Compile Include="Interfaces\IDocumentView.cs" />
+    <Compile Include="Interfaces\IObjectEditor.cs" />
+    <Compile Include="Interfaces\ISelectionManager.cs" />
+    <Compile Include="Interfaces\IUndoCommand.cs" />
+    <Compile Include="Interfaces\IWindowManager.cs" />
     <Compile Include="PerfTimer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Actions\ActionsCollection.cs" />
@@ -100,20 +113,29 @@
     <Compile Include="Actions\RotateAction.cs" />
     <Compile Include="Actions\ShowAction.cs" />
     <Compile Include="Actions\ValueAction.cs" />
-    <Compile Include="AnimatedImage.cs" />
-    <Compile Include="ChannelDataProvider.cs" />
-    <Compile Include="ChannelDataSource.cs" />
-    <Compile Include="Commands\SchemaCommands.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SchemaElements\AnimatedImage.cs" />
+    <Compile Include="SchemaElements\ChannelDataProvider.cs" />
+    <Compile Include="SchemaElements\ChannelDataSource.cs" />
     <Compile Include="Converters\ComposingConverter.cs" />
     <Compile Include="Converters\RangeConverter.cs" />
     <Compile Include="Converters\ScriptConverter.cs" />
-    <Compile Include="MediaProvider.cs" />
-    <Compile Include="QuadTree.cs" />
+    <Compile Include="SchemaElements\MediaProvider.cs" />
+    <Compile Include="SchemaElements\QuadTree.cs" />
     <Compile Include="SchemaDocument.cs" />
-    <Compile Include="SolidBrushConverter.cs" />
-    <Compile Include="TimeChartControl.cs" />
-    <Compile Include="VirtualCanvas.cs" />
-    <Compile Include="VirtualElement.cs" />
+    <Compile Include="SchemaElements\SolidBrushConverter.cs" />
+    <Compile Include="SchemaElements\TimeChartControl.cs" />
+    <Compile Include="SchemaElements\VirtualCanvas.cs" />
+    <Compile Include="SchemaElements\VirtualElement.cs" />
+    <Compile Include="StringResources.Designer.cs">
+      <DependentUpon>StringResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="WPFShemaContainer.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +147,17 @@
       <Project>{A3D91CED-553F-4433-AD67-8706E0127D8D}</Project>
       <Name>Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StringResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StringResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -45,7 +45,7 @@ namespace FreeSCADA.Communication.SimulatorPlug
 			grid[0, 1] = new SourceGrid.Cells.ColumnHeader("Type");
 			grid[0, 2] = new SourceGrid.Cells.ColumnHeader("Read only");
 
-            string iPyFormatXML = (new StreamReader(new MemoryStream(global::FreeSCADA.Communication.SimulatorPlug.Properties.Resources.IronPython))).ReadToEnd();
+            string iPyFormatXML = (new StreamReader(new MemoryStream(global::FreeSCADA.Communication.SimulatorPlug.Resources.IronPython))).ReadToEnd();
             SyntaxDefinition syntax = SyntaxDefinition.FromSyntaxXml(iPyFormatXML);
             expressionEditBox.Document.Parser.Init(syntax);
 

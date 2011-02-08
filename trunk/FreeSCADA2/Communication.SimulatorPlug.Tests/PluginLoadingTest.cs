@@ -11,13 +11,14 @@ namespace Communication.SimulatorPlug.Tests
 		[Test]
 		public void Initialization()
 		{
+            
 			System.Windows.Forms.MenuStrip menu = new System.Windows.Forms.MenuStrip();
-			Env.Initialize(null, menu, null, FreeSCADA.Interfaces.EnvironmentMode.Designer);
+			Env.Initialize(null, new Commands(menu, null), FreeSCADA.Interfaces.EnvironmentMode.Designer);
 
 			Plugin plugin = (Plugin)Env.Current.CommunicationPlugins["data_simulator_plug"];
 
-			ICommandContext context = Env.Current.Commands.GetPredefinedContext(PredefinedContexts.Communication);
-			Assert.IsNotEmpty(Env.Current.Commands.GetCommands(context));
+			ICommandContext context = Env.Current.Commands.GetContext(PredefinedContexts.Communication);
+            Assert.IsNotEmpty(context.GetCommands());
 
 			Env.Deinitialize();
 		}

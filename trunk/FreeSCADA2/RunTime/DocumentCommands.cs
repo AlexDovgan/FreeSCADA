@@ -165,7 +165,7 @@ namespace FreeSCADA.RunTime.DocumentCommands
 		{
 			get
 			{
-				return global::FreeSCADA.RunTime.Properties.Resources.zoom_in;
+                return global::FreeSCADA.CommonUI.Resources.zoom_in;
 			}
 		}
 		#endregion ICommand Members
@@ -205,7 +205,7 @@ namespace FreeSCADA.RunTime.DocumentCommands
 		{
 			get
 			{
-				return global::FreeSCADA.RunTime.Properties.Resources.zoom_out;
+                return global::FreeSCADA.CommonUI.Resources.zoom_out;
 			}
 		}
 		#endregion ICommand Members

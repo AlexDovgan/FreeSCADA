@@ -5,6 +5,7 @@ using FreeSCADA.Interfaces;
 using FreeSCADA.Common.Gestures;
 using FreeSCADA.Designer.SchemaEditor.Tools;
 using WeifenLuo.WinFormsUI.Docking;
+using FreeSCADA.CommonUI.Interfaces;
 
 namespace FreeSCADA.Designer.Views
 {
@@ -23,7 +24,7 @@ namespace FreeSCADA.Designer.Views
             protected set { _selManager = value; }
         }
         
-        public virtual BaseTool ActiveTool
+        public virtual ITool ActiveTool
         {
             get;
             set;
@@ -60,19 +61,27 @@ namespace FreeSCADA.Designer.Views
             protected set;
         }
 
-		public DocumentView(string documentName)
+		public DocumentView(IDocument doc)
 		{
 			DocumentCommands = new List<CommandInfo>();
 			DockAreas = DockAreas.Float | DockAreas.Document;
-            this.documentName = documentName;
+            this.Document = doc ;
 			UpdateCaption();
 		}
-
-		public virtual string DocumentName
-		{
-			get { return documentName; }
-			set { documentName = value; UpdateCaption();}
-		}
+        public IDocument Document
+        {
+            get;
+            protected set;
+        }
+        public string DocumentName
+        {
+            get { return Document.Name; }
+            set
+            {
+                Document.Save(value);
+                UpdateCaption();
+            }
+        }
 
 		/// <summary>
 		/// This property should be set to "true" for new documents and set to "false" after saving the document.
@@ -99,18 +108,16 @@ namespace FreeSCADA.Designer.Views
 		public virtual void OnActivated()
 		{
 			foreach (CommandInfo cmdInfo in DocumentCommands)
-			{
-				if(cmdInfo.defaultContext != null)
-					Env.Current.Commands.AddCommand(cmdInfo.defaultContext, cmdInfo.command);
-				else
-					Env.Current.Commands.AddCommand(CommandManager.documentContext, cmdInfo.command);
-			}
+                foreach(string c in cmdInfo.defaultContextes)
+                    Env.Current.Commands.GetContext(c).AddCommand(cmdInfo.command);
 		}
 
 		public virtual void OnDeactivated()
 		{
-			foreach (CommandInfo cmdInfo in DocumentCommands)
-				Env.Current.Commands.RemoveCommand(cmdInfo.command);
+            foreach (CommandInfo cmdInfo in DocumentCommands)
+                foreach (string c in cmdInfo.defaultContextes)
+                    Env.Current.Commands.GetContext(c).RemoveCommand(cmdInfo.command);
+			
         }
 
 		public virtual bool SaveDocument()

@@ -113,8 +113,6 @@ namespace FreeSCADA.Designer.SchemaEditor.Tools
         {
             //base.OnPreviewMouseLeftButtonDown(e);
             Point pt = e.GetPosition(this);
-        
-
             DependencyObject documentHit = null;
             if (VisualTreeHelper.HitTest(AdornedElement, pt) != null)
                 documentHit = VisualTreeHelper.HitTest(AdornedElement, pt).VisualHit;

@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1B03906B-2421-4A52-86EE-842D90CA642C}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -12,6 +12,11 @@
     <AssemblyName>Communication.OPCPlug</AssemblyName>
     <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -39,13 +45,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\SourceGrid4_11\DevAge.Windows.Forms.dll</HintPath>
     </Reference>
-    <Reference Include="OpcRcw.Comn, Version=1.10.1.20, Culture=neutral, PublicKeyToken=9a40e993cbface53">
+    <Reference Include="OpcRcw.Comn, Version=1.10.2.0, Culture=neutral, PublicKeyToken=9a40e993cbface53, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\OPC\OpcRcw.Comn.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Common Files\OPC Foundation\Bin\OpcRcw.Comn.dll</HintPath>
     </Reference>
-    <Reference Include="OpcRcw.Da, Version=3.0.2.2, Culture=neutral, PublicKeyToken=9a40e993cbface53">
+    <Reference Include="OpcRcw.Da, Version=3.0.3.0, Culture=neutral, PublicKeyToken=9a40e993cbface53, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\OPC\OpcRcw.Da.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Common Files\OPC Foundation\Bin\OpcRcw.Da.dll</HintPath>
     </Reference>
     <Reference Include="SourceGrid, Version=4.11.2887.1415, Culture=neutral, PublicKeyToken=df6f5e538749e85d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -68,9 +74,10 @@
       <DependentUpon>ImportOPCForm.cs</DependentUpon>
     </Compile>
     <Compile Include="OPCDataCallback.cs" />
+    <Compile Include="OpcServerBrowser.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
+    <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -89,7 +96,7 @@
       <DependentUpon>ImportOPCForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
+    <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
@@ -107,6 +114,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
