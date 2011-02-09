@@ -159,6 +159,38 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\db_settings.png" />
+    <Content Include="Resources\db_table.png" />
+    <Content Include="Resources\log_error.png" />
+    <Content Include="Resources\log_info.png" />
+    <Content Include="Resources\log_warning.png" />
+    <Content Include="Resources\move_object_back.png" />
+    <Content Include="Resources\move_object_front.png" />
+    <Content Include="Resources\new_file.png" />
+    <Content Include="Resources\open_events.png" />
+    <Content Include="Resources\open_file.png" />
+    <Content Include="Resources\open_schema.png" />
+    <Content Include="Resources\refresh.png" />
+    <Content Include="Resources\run.png" />
+    <Content Include="Resources\save_file.png" />
+    <Content Include="Resources\script.png" />
+    <Content Include="Resources\script_add.png" />
+    <Content Include="Resources\script_remove.png" />
+    <Content Include="Resources\stop.png" />
+    <Content Include="Resources\tree_archiver.png" />
+    <Content Include="Resources\tree_channels.png" />
+    <Content Include="Resources\tree_plugin.png" />
+    <Content Include="Resources\tree_project.png" />
+    <Content Include="Resources\tree_rule.png" />
+    <Content Include="Resources\tree_schema.png" />
+    <Content Include="Resources\tree_schemas.png" />
+    <Content Include="Resources\tree_script.png" />
+    <Content Include="Resources\tree_scripts.png" />
+    <Content Include="Resources\tree_variable.png" />
+    <Content Include="Resources\zoom_in.png" />
+    <Content Include="Resources\zoom_out.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
